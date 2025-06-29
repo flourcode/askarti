@@ -49,8 +49,8 @@
         <!-- Header -->
         <div class="text-center my-6">
             <div class="flex justify-center items-center gap-3">
-                <img src="images/arti_right.png" alt="AskArti Logo" class="w-12 h-12">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800">AskArti!</h1>
+                <img src="https://storage.googleapis.com/garden-prod/uploaded/arti_right.png-4c0c84aa-2fc3-48d1-8fbd-fc05e9c5c676" alt="AskArti Logo" class="w-12 h-12">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800">AskArti</h1>
             </div>
             <p class="text-slate-600 mt-2 text-base md:text-lg">Your Artificial Federal Sales Coach</p>
         </div>
@@ -59,23 +59,23 @@
         <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg max-w-2xl mx-auto">
             <div class="space-y-6">
                  <div>
-                    <label for="deal-objective" class="block text-base font-semibold text-slate-800">Sales Objective</label>
+                    <label for="deal-objective" class="block text-base font-semibold text-slate-800">1. Deal Objective</label>
                     <input type="text" id="deal-objective" class="mt-2 bg-slate-50 border border-slate-300 text-slate-900 text-base rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3" placeholder="e.g., Win the $500M DHS Cloud Modernization Contract..." required>
                 </div>
                 
                 <!-- Collapsible Optional Inputs -->
                 <div>
                     <button id="toggle-optional-btn" class="text-indigo-600 font-semibold text-sm flex items-center gap-1">
-                        <span id="toggle-text">Add More Context (for better results)</span>
+                        <span id="toggle-text">Add More Context (for smarter results)</span>
                         <svg id="toggle-icon" class="w-4 h-4 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
                     </button>
                     <div id="optional-inputs" class="space-y-6 pt-4">
                         <div>
-                           <label for="value-prop" class="block text-base font-semibold text-slate-800">Your Value Proposition</label>
+                           <label for="value-prop" class="block text-base font-semibold text-slate-800">2. Your Value Proposition</label>
                            <textarea id="value-prop" rows="3" class="mt-2 bg-slate-50 border border-slate-300 text-slate-900 text-base rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3" placeholder="e.g., We provide a FedRAMP High, multi-cloud data analytics platform that reduces data egress fees..."></textarea>
                        </div>
                        <div>
-                           <label for="target-intel" class="block text-base font-semibold text-slate-800">Additional Background</label>
+                           <label for="target-intel" class="block text-base font-semibold text-slate-800">3. Specific Intel on Target</label>
                            <textarea id="target-intel" rows="3" class="mt-2 bg-slate-50 border border-slate-300 text-slate-900 text-base rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3" placeholder="e.g., Target CIO is under pressure to adopt AI but concerned about data security in a multi-cloud environment..."></textarea>
                        </div>
                     </div>
@@ -83,17 +83,29 @@
             </div>
              <div class="mt-8 text-center">
                 <button id="generate-btn" class="bg-gray-800 hover:bg-gray-900 text-white font-bold py-3 px-8 rounded-lg w-full max-w-sm transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-300 flex items-center justify-center mx-auto">
-                    <span id="btn-text">Get Arti's Advice</span>
+                    <span id="btn-text">Generate Ecosystem Plan</span>
                     <div id="loader" class="loader hidden"></div>
                 </button>
             </div>
         </div>
+        
+        <!-- Sponsorship Banner -->
+        <div id="sponsorship-banner" class="max-w-2xl mx-auto mt-8 text-center">
+            <div class="p-4 bg-white border border-slate-200 rounded-lg shadow-sm">
+                <a href="#" target="_blank" rel="noopener noreferrer" class="text-slate-600 hover:text-indigo-600 group">
+                    <p class="text-xs font-semibold uppercase text-slate-400">Sponsored By</p>
+                    <p class="text-lg font-semibold mt-1 group-hover:underline">Your Sponsor's Name Here</p>
+                    <p class="text-sm text-slate-500">A brief, compelling message from your sponsor.</p>
+                </a>
+            </div>
+        </div>
+        <!-- End Sponsorship Banner -->
 
         <!-- Results -->
         <div id="results-container" class="mt-8">
              <!-- Initial prompt for the user -->
              <div class="text-center p-6 bg-slate-100 rounded-lg max-w-2xl mx-auto">
-                <p class="text-slate-600">Enter your sales objective or problem to get help from Arti.</p>
+                <p class="text-slate-600">Enter your deal objective to get a strategic action plan from Arti.</p>
             </div>
         </div>
     </div>
@@ -146,9 +158,8 @@
         let chatHistory = [];
         let currentPersonaData = {};
         
-        // --- Gemini API Call ---
-        const API_KEY = ""; // Leave blank, handled by environment
-		const API_URL_GENERATE = 'https://nqux5cu205.execute-api.us-east-1.amazonaws.com/default/AskArtiAPI';
+        // --- API URL (This now points to YOUR backend) ---
+        const API_ENDPOINT = 'https://nqux5cu205.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
         
         // --- Functions ---
         const showLoading = (isLoading) => {
@@ -170,87 +181,27 @@
             const valueProp = valuePropInput.value;
             const targetIntel = targetIntelInput.value;
             
-            // ** NEW, EMPATHETIC COACHING PROMPT **
-            let prompt = `
-                You are Arti, an artificial federal sales coach. Embody the persona of a seasoned, empathetic "player coach" who has decades of experience in the trenches of federal sales. Your goal is not to give orders, but to share experienced best practices and help the salesperson think strategically. Your coaching style is supportive, tactical, and focused on helping the user navigate the complexities of their deal.
-
-                ---
-                **PERSONA PROFILES FOR STAKEHOLDER ANALYSIS:**
-
-                1.  **The Economic Buyer:** Priorities: Profitability, financial risk, budget control, FAR compliance.
-                2.  **The Technical Buyer:** Priorities: Cybersecurity (Zero Trust, FedRAMP), IT modernization, compliance.
-                3.  **The User Buyer / Champion:** Priorities: Contract performance (scope, schedule, budget), risk management.
-                4.  **The Decision Maker:** Priorities: Revenue growth, winning contracts, competitive positioning.
-                5.  **The Contracting Officer:** Priorities: Regulatory compliance (FAR), use of contract vehicles, fair competition.
-                6.  **Your Internal Champion:** Priorities: Pipeline growth, deal strategy, executive relationships.
-                
-                ---
-                **DEAL CONTEXT:**
-
-                * **Salesperson's Objective:** ${objective}
-                * **Salesperson's Value Proposition:** ${valueProp || "Not provided."}
-                * **Specific Intel on Target:** ${targetIntel || "Not provided."}
-
-                ---
-                **YOUR TASK:**
-                First, provide a high-level "coaching_advice" section. Frame it as shared experience, like "In situations like this, the first thing I always look at is..." or "A common mistake here is focusing too much on X when the real leverage is Y."
-
-                Second, generate a "stakeholder_plan" array for the 6 key stakeholder archetypes. For each stakeholder, provide:
-                1.  A "persona" field matching the role titles above.
-                2.  A "cold_email" object containing a "subject" and "body" for a direct, plainspoken outreach.
-                3.  An "action_item" string formatted as a SMART goal.
-            `;
-
-            const payload = {
-                contents: [{ role: "user", parts: [{ text: prompt }] }],
-                generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "OBJECT",
-                        properties: {
-                           "coaching_advice": { "type": "STRING" },
-                           "stakeholder_plan": {
-                                type: "ARRAY",
-                                items: {
-                                    type: "OBJECT",
-                                    properties: {
-                                        "persona": { "type": "STRING" },
-                                        "cold_email": {
-                                            type: "OBJECT",
-                                            properties: {
-                                                "subject": { "type": "STRING" },
-                                                "body": { "type": "STRING" }
-                                            },
-                                            required: ["subject", "body"]
-                                        },
-                                        "action_item": { "type": "STRING" }
-                                    },
-                                    required: ["persona", "cold_email", "action_item"]
-                                }
-                           }
-                        },
-                        required: ["coaching_advice", "stakeholder_plan"]
-                    }
-                }
-            };
-            
             try {
-                const response = await fetch(API_URL_GENERATE, {
+                const response = await fetch(API_ENDPOINT, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({
+                        objective: objective,
+                        valueProp: valueProp,
+                        targetIntel: targetIntel
+                    })
                 });
-                if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
-                const result = await response.json();
-                if (result.candidates && result.candidates[0].content) {
-                    const planData = JSON.parse(result.candidates[0].content.parts[0].text);
-                    displayPlan(planData);
-                } else {
-                    throw new Error("Invalid response from API.");
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API Error: ${errorData.error || response.statusText}`);
                 }
+                const planData = await response.json();
+                displayPlan(planData);
+
             } catch (error) {
                 console.error("Error generating plan:", error);
-                resultsContainer.innerHTML = `<p class="text-center text-red-500 p-6">Sorry, something went wrong.</p>`;
+                resultsContainer.innerHTML = `<p class="text-center text-red-500 p-6">Sorry, something went wrong. Please check the browser console for details.</p>`;
             } finally {
                 showLoading(false);
             }
@@ -406,7 +357,7 @@
             `;
 
             try {
-                const response = await fetch(API_URL_GENERATE, {
+                const response = await fetch(API_ENDPOINT, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }] })
