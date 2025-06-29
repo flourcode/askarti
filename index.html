@@ -26,6 +26,11 @@
             height: 24px;
             animation: spin 1s linear infinite;
         }
+        .modal-backdrop {
+            transition: opacity 0.3s ease;
+        }
+        #chat-history::-webkit-scrollbar { display: none; }
+        #chat-history { -ms-overflow-style: none; scrollbar-width: none; }
         #optional-inputs {
             max-height: 0;
             overflow: hidden;
@@ -44,8 +49,8 @@
         <!-- Header -->
         <div class="text-center my-6">
             <div class="flex justify-center items-center gap-3">
-                <img src="https://storage.googleapis.com/garden-prod/uploaded/arti_right.png-4c0c84aa-2fc3-48d1-8fbd-fc05e9c5c676" alt="AskArti Logo" class="w-12 h-12">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800">AskArti</h1>
+                <img src="images/arti_right.png" alt="AskArti Logo" class="w-12 h-12">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800">AskArti!</h1>
             </div>
             <p class="text-slate-600 mt-2 text-base md:text-lg">Your Artificial Federal Sales Coach</p>
         </div>
@@ -54,23 +59,23 @@
         <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg max-w-2xl mx-auto">
             <div class="space-y-6">
                  <div>
-                    <label for="deal-objective" class="block text-base font-semibold text-slate-800">1. Deal Objective</label>
+                    <label for="deal-objective" class="block text-base font-semibold text-slate-800">Sales Objective</label>
                     <input type="text" id="deal-objective" class="mt-2 bg-slate-50 border border-slate-300 text-slate-900 text-base rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3" placeholder="e.g., Win the $500M DHS Cloud Modernization Contract..." required>
                 </div>
                 
                 <!-- Collapsible Optional Inputs -->
                 <div>
                     <button id="toggle-optional-btn" class="text-indigo-600 font-semibold text-sm flex items-center gap-1">
-                        <span id="toggle-text">Add More Context (for smarter results)</span>
+                        <span id="toggle-text">Add More Context (for better results)</span>
                         <svg id="toggle-icon" class="w-4 h-4 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
                     </button>
                     <div id="optional-inputs" class="space-y-6 pt-4">
                         <div>
-                           <label for="value-prop" class="block text-base font-semibold text-slate-800">2. Your Value Proposition</label>
+                           <label for="value-prop" class="block text-base font-semibold text-slate-800">Your Value Proposition</label>
                            <textarea id="value-prop" rows="3" class="mt-2 bg-slate-50 border border-slate-300 text-slate-900 text-base rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3" placeholder="e.g., We provide a FedRAMP High, multi-cloud data analytics platform that reduces data egress fees..."></textarea>
                        </div>
                        <div>
-                           <label for="target-intel" class="block text-base font-semibold text-slate-800">3. Specific Intel on Target</label>
+                           <label for="target-intel" class="block text-base font-semibold text-slate-800">Additional Background</label>
                            <textarea id="target-intel" rows="3" class="mt-2 bg-slate-50 border border-slate-300 text-slate-900 text-base rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3" placeholder="e.g., Target CIO is under pressure to adopt AI but concerned about data security in a multi-cloud environment..."></textarea>
                        </div>
                     </div>
@@ -78,17 +83,38 @@
             </div>
              <div class="mt-8 text-center">
                 <button id="generate-btn" class="bg-gray-800 hover:bg-gray-900 text-white font-bold py-3 px-8 rounded-lg w-full max-w-sm transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-300 flex items-center justify-center mx-auto">
-                    <span id="btn-text">Generate Ecosystem Plan</span>
+                    <span id="btn-text">Get Arti's Advice</span>
                     <div id="loader" class="loader hidden"></div>
                 </button>
             </div>
         </div>
-        
+
         <!-- Results -->
         <div id="results-container" class="mt-8">
              <!-- Initial prompt for the user -->
              <div class="text-center p-6 bg-slate-100 rounded-lg max-w-2xl mx-auto">
-                <p class="text-slate-600">Enter your deal objective to get a strategic action plan from Arti.</p>
+                <p class="text-slate-600">Enter your sales objective or problem to get help from Arti.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Modal -->
+    <div id="chat-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 modal-backdrop flex items-center justify-center p-0 md:p-4">
+        <div class="bg-white rounded-none md:rounded-lg shadow-xl w-full h-full max-w-2xl md:h-[80vh] flex flex-col modal-content scale-95 opacity-0">
+            <div class="p-4 border-b border-slate-200 flex justify-between items-center flex-shrink-0">
+                <h2 id="chat-title" class="text-lg md:text-xl font-bold text-slate-800">Chat</h2>
+                <button id="close-chat-btn" class="text-slate-400 hover:text-slate-700 text-4xl leading-none">&times;</button>
+            </div>
+            <div id="chat-history" class="flex-grow p-4 space-y-4 overflow-y-auto">
+                <!-- Chat messages will be appended here -->
+            </div>
+            <div class="p-4 border-t border-slate-200 bg-white flex-shrink-0">
+                <form id="chat-form" class="flex gap-2">
+                    <input type="text" id="chat-input" class="w-full bg-slate-100 border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500" placeholder="Ask a follow-up question..." autocomplete="off">
+                    <button type="submit" id="send-btn" class="bg-indigo-600 text-white p-3 rounded-lg flex-shrink-0 hover:bg-indigo-700 disabled:bg-indigo-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -106,9 +132,23 @@
         const optionalInputs = document.getElementById('optional-inputs');
         const toggleIcon = document.getElementById('toggle-icon');
         const toggleText = document.getElementById('toggle-text');
+
+        const chatModal = document.getElementById('chat-modal');
+        const chatModalContent = chatModal.querySelector('.modal-content');
+        const chatTitle = document.getElementById('chat-title');
+        const closeChatBtn = document.getElementById('close-chat-btn');
+        const chatHistoryEl = document.getElementById('chat-history');
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
         
-        // --- API URL (This points to YOUR backend endpoint) ---
-        const API_ENDPOINT = 'https://nqux5cu205.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
+        // --- State Management ---
+        let chatHistory = [];
+        let currentPersonaData = {};
+        
+        // --- Gemini API Call ---
+        const API_KEY = ""; // Leave blank, handled by environment
+		const API_URL_GENERATE = 'https://nqux5cu205.execute-api.us-east-1.amazonaws.com/default/AskArtiAPI';
         
         // --- Functions ---
         const showLoading = (isLoading) => {
@@ -119,7 +159,7 @@
 
         const generatePlan = async () => {
             if (!dealObjectiveInput.value.trim()) {
-                resultsContainer.innerHTML = '<div class="text-center p-6 bg-red-50 rounded-lg max-w-2xl mx-auto"><p class="text-red-700">Please enter a deal objective to generate a plan.</p></div>';
+                resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 rounded-lg max-w-2xl mx-auto"><p class="text-red-700">Please enter a deal objective to generate a plan.</p></div>`;
                 return;
             }
 
@@ -129,83 +169,151 @@
             const objective = dealObjectiveInput.value;
             const valueProp = valuePropInput.value;
             const targetIntel = targetIntelInput.value;
+            
+            // ** NEW, EMPATHETIC COACHING PROMPT **
+            let prompt = `
+                You are Arti, an artificial federal sales coach. Embody the persona of a seasoned, empathetic "player coach" who has decades of experience in the trenches of federal sales. Your goal is not to give orders, but to share experienced best practices and help the salesperson think strategically. Your coaching style is supportive, tactical, and focused on helping the user navigate the complexities of their deal.
 
+                ---
+                **PERSONA PROFILES FOR STAKEHOLDER ANALYSIS:**
+
+                1.  **The Economic Buyer:** Priorities: Profitability, financial risk, budget control, FAR compliance.
+                2.  **The Technical Buyer:** Priorities: Cybersecurity (Zero Trust, FedRAMP), IT modernization, compliance.
+                3.  **The User Buyer / Champion:** Priorities: Contract performance (scope, schedule, budget), risk management.
+                4.  **The Decision Maker:** Priorities: Revenue growth, winning contracts, competitive positioning.
+                5.  **The Contracting Officer:** Priorities: Regulatory compliance (FAR), use of contract vehicles, fair competition.
+                6.  **Your Internal Champion:** Priorities: Pipeline growth, deal strategy, executive relationships.
+                
+                ---
+                **DEAL CONTEXT:**
+
+                * **Salesperson's Objective:** ${objective}
+                * **Salesperson's Value Proposition:** ${valueProp || "Not provided."}
+                * **Specific Intel on Target:** ${targetIntel || "Not provided."}
+
+                ---
+                **YOUR TASK:**
+                First, provide a high-level "coaching_advice" section. Frame it as shared experience, like "In situations like this, the first thing I always look at is..." or "A common mistake here is focusing too much on X when the real leverage is Y."
+
+                Second, generate a "stakeholder_plan" array for the 6 key stakeholder archetypes. For each stakeholder, provide:
+                1.  A "persona" field matching the role titles above.
+                2.  A "cold_email" object containing a "subject" and "body" for a direct, plainspoken outreach.
+                3.  An "action_item" string formatted as a SMART goal.
+            `;
+
+            const payload = {
+                contents: [{ role: "user", parts: [{ text: prompt }] }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                           "coaching_advice": { "type": "STRING" },
+                           "stakeholder_plan": {
+                                type: "ARRAY",
+                                items: {
+                                    type: "OBJECT",
+                                    properties: {
+                                        "persona": { "type": "STRING" },
+                                        "cold_email": {
+                                            type: "OBJECT",
+                                            properties: {
+                                                "subject": { "type": "STRING" },
+                                                "body": { "type": "STRING" }
+                                            },
+                                            required: ["subject", "body"]
+                                        },
+                                        "action_item": { "type": "STRING" }
+                                    },
+                                    required: ["persona", "cold_email", "action_item"]
+                                }
+                           }
+                        },
+                        required: ["coaching_advice", "stakeholder_plan"]
+                    }
+                }
+            };
+            
             try {
-                const response = await fetch(API_ENDPOINT, {
+                const response = await fetch(API_URL_GENERATE, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        objective: objective,
-                        valueProp: valueProp,
-                        targetIntel: targetIntel
-                    })
+                    body: JSON.stringify(payload)
                 });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(`API Error: ${errorData.error || response.statusText}`);
+                if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+                const result = await response.json();
+                if (result.candidates && result.candidates[0].content) {
+                    const planData = JSON.parse(result.candidates[0].content.parts[0].text);
+                    displayPlan(planData);
+                } else {
+                    throw new Error("Invalid response from API.");
                 }
-                const planData = await response.json();
-                displayPlan(planData);
-
             } catch (error) {
                 console.error("Error generating plan:", error);
-                resultsContainer.innerHTML = `<p class="text-center text-red-500 p-6">Sorry, something went wrong. Please check the browser console for details.</p>`;
+                resultsContainer.innerHTML = `<p class="text-center text-red-500 p-6">Sorry, something went wrong.</p>`;
             } finally {
                 showLoading(false);
             }
         };
         
         const displayPlan = (planData) => {
-            resultsContainer.innerHTML = 
-                '<div class="max-w-4xl mx-auto mb-8">' +
-                    '<div class="bg-indigo-50 border-l-4 border-indigo-500 text-indigo-800 p-6 rounded-r-lg">' +
-                        '<h2 class="text-2xl font-bold flex items-center gap-2">' +
-                            '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>' +
-                            'Arti\'s Advice' +
-                        '</h2>' +
-                        '<p class="mt-2 text-lg">' + planData.coaching_advice + '</p>' +
-                    '</div>' +
-                '</div>' +
-                '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>';
-
+            resultsContainer.innerHTML = `
+                <div class="max-w-4xl mx-auto mb-8">
+                    <div class="bg-indigo-50 border-l-4 border-indigo-500 text-indigo-800 p-6 rounded-r-lg">
+                        <h2 class="text-2xl font-bold flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                            Arti's Advice
+                        </h2>
+                        <p class="mt-2 text-lg">${planData.coaching_advice}</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            `;
             const grid = resultsContainer.querySelector('.grid');
             const personaColors = { "The Economic Buyer": 'border-green-500', "The Technical Buyer": 'border-purple-500', "The User Buyer / Champion": 'border-blue-500', "The Decision Maker": 'border-gray-800', "The Contracting Officer": 'border-red-500', "Your Internal Champion": 'border-pink-500' };
 
             planData.stakeholder_plan.forEach((item, index) => {
                 const card = document.createElement('div');
-                card.className = 'persona-card bg-white p-6 rounded-lg shadow-md flex flex-col transform transition-all duration-300 opacity-0 translate-y-3 ' + (personaColors[item.persona] || 'border-slate-500');
+                card.className = `persona-card bg-white p-6 rounded-lg shadow-md flex flex-col transform transition-all duration-300 opacity-0 translate-y-3 ${personaColors[item.persona] || 'border-slate-500'}`;
                 
-                const emailText = 'Subject: ' + item.cold_email.subject + '\n\n' + item.cold_email.body;
-                const actionText = 'SMART Action Item for ' + item.persona + ':\n' + item.action_item;
+                const emailText = `Subject: ${item.cold_email.subject}\n\n${item.cold_email.body}`;
+                const actionText = `SMART Action Item for ${item.persona}:\n${item.action_item}`;
 
-                card.innerHTML = 
-                    '<div class="flex-grow">' +
-                        '<h3 class="text-xl font-bold text-slate-800">' + item.persona + '</h3>' +
-                        '<div class="mt-4 space-y-4">' +
-                            '<div>' +
-                                '<p class="text-sm font-semibold text-slate-600 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>Recommended Outreach</p>' +
-                                '<div class="mt-2 pl-6">' +
-                                    '<p class="text-slate-800 font-medium">Subject: ' + item.cold_email.subject + '</p>' +
-                                    '<p class="text-slate-700 mt-1 whitespace-pre-wrap">' + item.cold_email.body + '</p>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="mt-4 pt-4 border-t border-slate-200">' +
-                        '<p class="text-sm font-semibold text-indigo-700 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>SMART Action Plan</p>' +
-                        '<div class="text-indigo-900 mt-2 text-sm space-y-1 pl-6 whitespace-pre-wrap">' + item.action_item + '</div>' +
-                    '</div>' +
-                    '<div class="mt-4 pt-4 border-t border-slate-200 flex justify-end items-center gap-2">' +
-                         '<button class="copy-btn bg-slate-200 hover:bg-slate-300 text-slate-700 p-2 rounded-full" data-text="' + encodeURIComponent(emailText) + '" title="Copy Email">' +
-                            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 2A.5.5 0 0 1 1 1.5h11.586l-2.293 2.293A.5.5 0 0 1 10 4.5h.5a.5.5 0 0 1 .5.5v.5a.5.5 0 0 1-1 0V6H1a.5.5 0 0 1-.5-.5V2zm15-1a.5.5 0 0 1 .5.5V15a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 15V2a.5.5 0 0 1 .5-.5h15zm-1 2H1v11.5a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5V3z"/></svg>' +
-                         '</button>' +
-                         '<button class="copy-btn bg-slate-200 hover:bg-slate-300 text-slate-700 p-2 rounded-full" data-text="' + encodeURIComponent(actionText) + '" title="Copy Plan">' +
-                            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5-.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3z"/></svg>' +
-                         '</button>' +
-                    '</div>';
+                card.innerHTML = `
+                    <div class="flex-grow">
+                        <h3 class="text-xl font-bold text-slate-800">${item.persona}</h3>
+                        <div class="mt-4 space-y-4">
+                            <div>
+                                <p class="text-sm font-semibold text-slate-600 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>Recommended Outreach</p>
+                                <div class="mt-2 pl-6">
+                                    <p class="text-slate-800 font-medium">Subject: ${item.cold_email.subject}</p>
+                                    <p class="text-slate-700 mt-1 whitespace-pre-wrap">${item.cold_email.body}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-200">
+                        <p class="text-sm font-semibold text-indigo-700 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>SMART Action Plan</p>
+                        <div class="text-indigo-900 mt-2 text-sm space-y-1 pl-6 whitespace-pre-wrap">${item.action_item}</div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-200 flex justify-between items-center">
+                         <button class="chat-btn bg-indigo-100 text-indigo-700 font-bold py-2 px-4 rounded-full hover:bg-indigo-200 text-sm">Chat with Persona</button>
+                         <div class="flex items-center gap-2">
+                            <button class="copy-btn bg-slate-200 hover:bg-slate-300 text-slate-700 p-2 rounded-full" data-text="${encodeURIComponent(emailText)}" title="Copy Email">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 2A.5.5 0 0 1 1 1.5h11.586l-2.293 2.293A.5.5 0 0 1 10 4.5h.5a.5.5 0 0 1 .5.5v.5a.5.5 0 0 1-1 0V6H1a.5.5 0 0 1-.5-.5V2zm15-1a.5.5 0 0 1 .5.5V15a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 15V2a.5.5 0 0 1 .5-.5h15zm-1 2H1v11.5a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5V3z"/></svg>
+                            </button>
+                            <button class="copy-btn bg-slate-200 hover:bg-slate-300 text-slate-700 p-2 rounded-full" data-text="${encodeURIComponent(actionText)}" title="Copy Plan">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5-.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3z"/></svg>
+                            </button>
+                         </div>
+                    </div>
+                `;
                 grid.appendChild(card);
                 setTimeout(() => card.classList.remove('opacity-0', 'translate-y-3'), 50 * index);
+                
+                card.querySelector('.chat-btn').addEventListener('click', () => {
+                    openChatModal(item);
+                });
             });
 
              document.querySelectorAll('.copy-btn').forEach(button => {
@@ -214,15 +322,114 @@
                     const textToCopy = decodeURIComponent(btn.dataset.text);
                     navigator.clipboard.writeText(textToCopy).then(() => {
                         const originalContent = btn.innerHTML;
-                        btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-green-600" viewBox="0 0 16 16"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/></svg>';
+                        btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-green-600" viewBox="0 0 16 16"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/></svg>`;
                         setTimeout(() => { btn.innerHTML = originalContent; }, 2000);
                     });
                 });
             });
         };
 
+        const openChatModal = (personaData) => {
+            currentPersonaData = personaData;
+            chatTitle.textContent = `Chat with: ${currentPersonaData.persona}`;
+            
+            const objective = dealObjectiveInput.value;
+            const valueProp = valuePropInput.value;
+            const targetIntel = targetIntelInput.value;
+            
+            let initialSystemMessage = `You are now speaking with the ${currentPersonaData.persona}. Based on their role, how would they likely view the objective to "${objective}"?`;
+            
+            chatHistory = [
+                { role: 'system', context: { objective, valueProp, targetIntel, persona: currentPersonaData.persona, email: currentPersonaData.cold_email.subject } },
+                { role: 'assistant', text: initialSystemMessage }
+            ];
+
+            renderChatHistory();
+            chatModal.classList.remove('hidden');
+            setTimeout(() => {
+                chatModal.classList.remove('opacity-0');
+                chatModalContent.classList.remove('scale-95', 'opacity-0');
+            }, 10);
+        };
+
+        const closeChatModal = () => {
+            chatModal.classList.add('opacity-0');
+            chatModalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => chatModal.classList.add('hidden'), 300);
+        };
+
+        const renderChatHistory = () => {
+            chatHistoryEl.innerHTML = '';
+            chatHistory.forEach(msg => {
+                if (msg.role === 'system') return; // Don't display system messages
+                const msgEl = document.createElement('div');
+                msgEl.className = `flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`;
+                msgEl.innerHTML = `
+                    <div class="max-w-xs md:max-w-md lg:max-w-lg p-3 rounded-2xl ${msg.role === 'user' ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-800'}">
+                        ${msg.text}
+                    </div>`;
+                chatHistoryEl.appendChild(msgEl);
+            });
+            chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
+        };
+
+        const handleSendMessage = async (e) => {
+            e.preventDefault();
+            const userInput = chatInput.value.trim();
+            if (!userInput) return;
+
+            chatHistory.push({ role: 'user', text: userInput });
+            renderChatHistory();
+            chatInput.value = '';
+            sendBtn.disabled = true;
+            
+            const thinkingEl = document.createElement('div');
+            thinkingEl.id = 'thinking';
+            thinkingEl.className = 'flex justify-start';
+            thinkingEl.innerHTML = `<div class="max-w-xs p-3 rounded-2xl bg-slate-200 text-slate-800"><div class="loader"></div></div>`;
+            chatHistoryEl.appendChild(thinkingEl);
+            chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
+
+            const dealContext = chatHistory.find(msg => msg.role === 'system').context;
+            const conversationHistoryText = chatHistory.filter(m => m.role !== 'system').map(m => `${m.role === 'user' ? 'Salesperson' : 'AI Assistant'}: ${m.text}`).join('\n');
+            
+            const prompt = `
+                You are embodying the persona of a **${dealContext.persona}**. Their primary concern is "${dealContext.email}".
+                The overall deal objective is "${dealContext.objective}".
+                The salesperson's value prop is: "${dealContext.valueProp || 'Not provided.'}"
+                Specific intel is: "${dealContext.targetIntel || 'Not provided.'}"
+                You are in a role-playing chat with a salesperson to help them prepare for a meeting.
+                Conversation so far:
+                ${conversationHistoryText}
+                
+                Respond as the persona to the last message from the salesperson. Be direct, concise, and stay in character.
+            `;
+
+            try {
+                const response = await fetch(API_URL_GENERATE, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }] })
+                });
+                 if (!response.ok) throw new Error(`API Error`);
+                const result = await response.json();
+                const aiResponse = result.candidates[0].content.parts[0].text;
+                chatHistory.push({ role: 'assistant', text: aiResponse });
+            } catch (error) {
+                console.error("Chat error:", error);
+                chatHistory.push({ role: 'assistant', text: "Sorry, I encountered an error. Please try again." });
+            } finally {
+                document.getElementById('thinking')?.remove();
+                renderChatHistory();
+                sendBtn.disabled = false;
+                chatInput.focus();
+            }
+        };
+
         // --- Event Listeners ---
         generateBtn.addEventListener('click', generatePlan);
+        closeChatBtn.addEventListener('click', closeChatModal);
+        chatForm.addEventListener('submit', handleSendMessage);
         
         toggleBtn.addEventListener('click', () => {
             const isHidden = optionalInputs.style.maxHeight === '0px' || optionalInputs.style.maxHeight === '';
