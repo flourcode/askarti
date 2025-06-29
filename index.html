@@ -3,38 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AskArti - Federal Ecosystem Compass</title>
+    <title>AskArti - Your Artificial Federal Sales Coach</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #f7f8fc; /* A lighter, cleaner background */
             -webkit-tap-highlight-color: transparent;
-            background-color: #f8fafc; /* slate-50 */
-        }
-        .persona-card {
-            transition: all 0.3s ease-in-out;
-            border-left-width: 4px;
         }
         .loader {
-            border: 4px solid #e5e7eb; /* gray-200 */
-            border-top: 4px solid #4f46e5; /* indigo-600 */
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid #ffffff;
             border-radius: 50%;
             width: 24px;
             height: 24px;
             animation: spin 1s linear infinite;
         }
-        .modal-backdrop {
-            transition: opacity 0.3s ease;
+        .results-loader {
+            border: 4px solid #e5e7eb; /* gray-200 */
+            border-top: 4px solid #4f46e5; /* indigo-600 */
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            animation: spin 1s linear infinite;
         }
         #chat-history::-webkit-scrollbar { display: none; }
         #chat-history { -ms-overflow-style: none; scrollbar-width: none; }
         #optional-inputs {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.5s ease-in-out;
+            transition: max-height 0.5s ease-in-out, padding-top 0.5s ease-in-out;
+        }
+        .modal-backdrop {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .fab {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .font-roboto-mono {
+            font-family: 'Roboto Mono', monospace;
         }
 
         @keyframes spin {
@@ -43,91 +56,85 @@
         }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased text-slate-800">
 
-    <div class="w-full max-w-7xl mx-auto p-4 md:p-8">
-        <!-- Header -->
-        <div class="text-center my-6">
+    <div class="w-full max-w-3xl mx-auto p-4 md:p-6 pb-28"> <header class="text-center my-8">
             <div class="flex justify-center items-center gap-3">
-                <img src="images/arti_right.png" alt="AskArti Logo" class="w-20 h-20">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800">AskArti</h1>
+                <img src="https://i.ibb.co/L8WJc3Y/arti-logo.png" alt="AskArti Logo" class="w-12 h-12">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">AskArti</h1>
             </div>
-            <p class="text-slate-600 mt-2 text-base md:text-lg">Your Artificial Federal Sales Coach</p>
-        </div>
+            <p class="text-slate-500 mt-2">Your Artificial Federal Sales Coach</p>
+        </header>
 
-        <!-- Inputs -->
-        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg max-w-2xl mx-auto">
+        <main class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200/80">
             <div class="space-y-6">
                  <div>
-                    <label for="deal-objective" class="block text-base font-semibold text-slate-800">1. Deal Objective</label>
-                    <input type="text" id="deal-objective" class="mt-2 bg-slate-50 border border-slate-300 text-slate-900 text-base rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3" placeholder="e.g., Win the $500M DHS Cloud Modernization Contract..." required>
+                    <label for="deal-objective" class="block text-sm font-medium text-slate-600 mb-1">Deal Objective</label>
+                    <input type="text" id="deal-objective" class="bg-slate-50 border border-slate-300 text-slate-900 text-base rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 block w-full p-3 transition-colors" placeholder="e.g., Win the DHS Cloud Contract" required>
                 </div>
-                
-                <!-- Collapsible Optional Inputs -->
-                <div>
-                    <button id="toggle-optional-btn" class="text-indigo-600 font-semibold text-sm flex items-center gap-1">
+
+                <div class="border-t border-slate-200/80 pt-4">
+                    <button id="toggle-optional-btn" class="text-indigo-600 font-semibold text-sm flex items-center gap-1.5 w-full text-left">
+                        <svg id="toggle-icon" class="w-5 h-5 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" /></svg>
                         <span id="toggle-text">Add More Context (for smarter results)</span>
-                        <svg id="toggle-icon" class="w-4 h-4 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
                     </button>
-                    <div id="optional-inputs" class="space-y-6 pt-4">
-                        <div>
-                           <label for="value-prop" class="block text-base font-semibold text-slate-800">2. Your Value Proposition</label>
-                           <textarea id="value-prop" rows="3" class="mt-2 bg-slate-50 border border-slate-300 text-slate-900 text-base rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3" placeholder="e.g., We provide a FedRAMP High, multi-cloud data analytics platform that reduces data egress fees..."></textarea>
-                       </div>
-                       <div>
-                           <label for="target-intel" class="block text-base font-semibold text-slate-800">3. Specific Intel on Target</label>
-                           <textarea id="target-intel" rows="3" class="mt-2 bg-slate-50 border border-slate-300 text-slate-900 text-base rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3" placeholder="e.g., Target CIO is under pressure to adopt AI but concerned about data security in a multi-cloud environment..."></textarea>
-                       </div>
+                    <div id="optional-inputs">
+                        <div class="space-y-6 pt-4">
+                            <div>
+                               <label for="value-prop" class="block text-sm font-medium text-slate-600 mb-1">Your Value Proposition</label>
+                               <textarea id="value-prop" rows="3" class="bg-slate-50 border border-slate-300 text-slate-900 text-base rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 block w-full p-3 transition-colors" placeholder="e.g., We provide a FedRAMP High, multi-cloud data analytics platform..."></textarea>
+                           </div>
+                           <div>
+                               <label for="target-intel" class="block text-sm font-medium text-slate-600 mb-1">Specific Intel on Target</label>
+                               <textarea id="target-intel" rows="3" class="bg-slate-50 border border-slate-300 text-slate-900 text-base rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 block w-full p-3 transition-colors" placeholder="e.g., The CIO is under pressure to adopt AI..."></textarea>
+                           </div>
+                        </div>
                     </div>
                 </div>
             </div>
-             <div class="mt-8 text-center">
-                <button id="generate-btn" class="bg-gray-800 hover:bg-gray-900 text-white font-bold py-3 px-8 rounded-lg w-full max-w-sm transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-300 flex items-center justify-center mx-auto">
-                    <span id="btn-text">Generate Ecosystem Plan</span>
-                    <div id="loader" class="loader hidden"></div>
-                </button>
+        </main>
+
+        <div class="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-f7f8fc to-transparent pointer-events-none flex justify-center z-10">
+            <button id="generate-btn" class="fab bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full w-full max-w-xs transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-300 flex items-center justify-center pointer-events-auto">
+                <span id="btn-text">Generate Plan</span>
+                <div id="loader" class="loader hidden"></div>
+            </button>
+        </div>
+
+        <div id="results-container" class="mt-8">
+             <div class="text-center p-6 rounded-lg max-w-2xl mx-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+                <h3 class="mt-2 text-sm font-medium text-slate-700">Ready for your plan?</h3>
+                <p class="mt-1 text-sm text-slate-500">Enter a deal objective above to get started.</p>
             </div>
         </div>
         
-        <!-- Sponsorship Banner -->
-        <div id="sponsorship-banner" class="max-w-2xl mx-auto mt-8 text-center">
-            <div class="p-4 bg-white border border-slate-200 rounded-lg shadow-sm">
-                <a href="#" target="_blank" rel="noopener noreferrer" class="text-slate-600 hover:text-indigo-600 group">
-                    <p class="text-xs font-semibold uppercase text-slate-400">Sponsored By</p>
-                    <p class="text-lg font-semibold mt-1 group-hover:underline">Your Sponsor's Name Here</p>
-                    <p class="text-sm text-slate-500">A brief, compelling message from your sponsor.</p>
+        <footer id="sponsorship-banner" class="max-w-2xl mx-auto mt-12 text-center">
+            <div class="p-3">
+                <a href="#" target="_blank" rel="noopener noreferrer" class="text-slate-500 hover:text-indigo-600 group">
+                    <p class="text-xs font-medium text-slate-400">SPONSORED BY</p>
+                    <p class="text-base font-semibold mt-0.5 group-hover:underline">Your Sponsor's Name</p>
                 </a>
             </div>
-        </div>
-        <!-- End Sponsorship Banner -->
-
-        <!-- Results -->
-        <div id="results-container" class="mt-8">
-             <!-- Initial prompt for the user -->
-             <div class="text-center p-6 bg-slate-100 rounded-lg max-w-2xl mx-auto">
-                <p class="text-slate-600">Enter your deal objective to get a strategic action plan from Arti.</p>
-            </div>
-        </div>
+        </footer>
     </div>
 
-    <!-- Chat Modal -->
-    <div id="chat-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 modal-backdrop flex items-center justify-center p-0 md:p-4">
-        <div class="bg-white rounded-none md:rounded-lg shadow-xl w-full h-full max-w-2xl md:h-[80vh] flex flex-col modal-content scale-95 opacity-0">
-            <div class="p-4 border-b border-slate-200 flex justify-between items-center flex-shrink-0">
-                <h2 id="chat-title" class="text-lg md:text-xl font-bold text-slate-800">Chat</h2>
-                <button id="close-chat-btn" class="text-slate-400 hover:text-slate-700 text-4xl leading-none">&times;</button>
-            </div>
-            <div id="chat-history" class="flex-grow p-4 space-y-4 overflow-y-auto">
-                <!-- Chat messages will be appended here -->
-            </div>
-            <div class="p-4 border-t border-slate-200 bg-white flex-shrink-0">
-                <form id="chat-form" class="flex gap-2">
-                    <input type="text" id="chat-input" class="w-full bg-slate-100 border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500" placeholder="Ask a follow-up question..." autocomplete="off">
-                    <button type="submit" id="send-btn" class="bg-indigo-600 text-white p-3 rounded-lg flex-shrink-0 hover:bg-indigo-700 disabled:bg-indigo-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+    <div id="chat-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 modal-backdrop flex items-center justify-center p-0 z-50">
+        <div class="bg-slate-50 rounded-lg shadow-xl w-full h-full max-w-2xl md:h-[90vh] md:max-h-[700px] flex flex-col modal-content scale-95 opacity-0">
+            <header class="p-4 border-b border-slate-200 flex justify-between items-center flex-shrink-0 bg-white md:rounded-t-lg">
+                <h2 id="chat-title" class="text-lg font-bold text-slate-800">Chat</h2>
+                <button id="close-chat-btn" class="text-slate-400 hover:text-slate-600">&times;</button>
+            </header>
+            <main id="chat-history" class="flex-grow p-4 md:p-6 space-y-6 overflow-y-auto">
+                </main>
+            <footer class="p-3 border-t border-slate-200 bg-white md:rounded-b-lg flex-shrink-0">
+                <form id="chat-form" class="flex gap-2 items-center">
+                    <input type="text" id="chat-input" class="w-full bg-slate-100 border-transparent rounded-lg p-3 focus:ring-2 focus:ring-indigo-400 focus:bg-white transition" placeholder="Ask a follow-up..." autocomplete="off">
+                    <button type="submit" id="send-btn" class="bg-indigo-600 text-white p-3 rounded-full flex-shrink-0 hover:bg-indigo-700 disabled:bg-indigo-400 disabled:cursor-not-allowed transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transform rotate-90"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                     </button>
                 </form>
-            </div>
+            </footer>
         </div>
     </div>
 
@@ -166,16 +173,17 @@
             btnText.classList.toggle('hidden', isLoading);
             loader.classList.toggle('hidden', !isLoading);
             generateBtn.disabled = isLoading;
+            generateBtn.classList.toggle('cursor-not-allowed', isLoading);
         };
 
         const generatePlan = async () => {
             if (!dealObjectiveInput.value.trim()) {
-                resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 rounded-lg max-w-2xl mx-auto"><p class="text-red-700">Please enter a deal objective to generate a plan.</p></div>`;
+                resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 border border-red-200 rounded-lg max-w-2xl mx-auto"><p class="text-red-700 font-medium">Please enter a deal objective to generate a plan.</p></div>`;
                 return;
             }
 
             showLoading(true);
-            resultsContainer.innerHTML = '<div class="flex justify-center items-center p-6"><div class="loader"></div><p class="ml-4 text-slate-500">Arti is analyzing the ecosystem...</p></div>';
+            resultsContainer.innerHTML = '<div class="flex flex-col justify-center items-center p-10 space-y-4"><div class="results-loader"></div><p class="text-slate-500">Arti is analyzing the ecosystem...</p></div>';
             
             const objective = dealObjectiveInput.value;
             const valueProp = valuePropInput.value;
@@ -186,7 +194,7 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        request_type: 'generate_plan', // Identifies this as a plan generation request
+                        request_type: 'generate_plan',
                         objective: objective,
                         valueProp: valueProp,
                         targetIntel: targetIntel
@@ -202,7 +210,7 @@
 
             } catch (error) {
                 console.error("Error generating plan:", error);
-                resultsContainer.innerHTML = `<p class="text-center text-red-500 p-6">Sorry, something went wrong. Please check the browser console for details.</p>`;
+                resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 border border-red-200 rounded-lg max-w-2xl mx-auto"><p class="text-red-700 font-medium">Sorry, something went wrong.</p><p class="text-red-600 text-sm mt-1">Please check the console for details.</p></div>`;
             } finally {
                 showLoading(false);
             }
@@ -210,58 +218,67 @@
         
         const displayPlan = (planData) => {
             resultsContainer.innerHTML = `
-                <div class="max-w-4xl mx-auto mb-8">
-                    <div class="bg-indigo-50 border-l-4 border-indigo-500 text-indigo-800 p-6 rounded-r-lg">
-                        <h2 class="text-2xl font-bold flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                            Arti's Advice
+                <div class="space-y-8">
+                    <div class="bg-indigo-50 border border-indigo-200 text-indigo-900 p-6 rounded-2xl">
+                        <h2 class="text-xl font-bold flex items-center gap-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            Arti's Strategic Advice
                         </h2>
-                        <p class="mt-2 text-lg">${planData.coaching_advice}</p>
+                        <p class="mt-3 text-base">${planData.coaching_advice}</p>
                     </div>
+                    <div class="space-y-4"></div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
             `;
-            const grid = resultsContainer.querySelector('.grid');
+            const grid = resultsContainer.querySelector('.space-y-4');
             const personaColors = { "The Economic Buyer": 'border-green-500', "The Technical Buyer": 'border-purple-500', "The User Buyer / Champion": 'border-blue-500', "The Decision Maker": 'border-gray-800', "The Contracting Officer": 'border-red-500', "Your Internal Champion": 'border-pink-500' };
 
             planData.stakeholder_plan.forEach((item, index) => {
                 const card = document.createElement('div');
-                card.className = `persona-card bg-white p-6 rounded-lg shadow-md flex flex-col transform transition-all duration-300 opacity-0 translate-y-3 ${personaColors[item.persona] || 'border-slate-500'}`;
+                card.className = `persona-card bg-white p-6 rounded-2xl shadow-sm border-l-4 opacity-0 transform translate-y-4 transition-all duration-500 ${personaColors[item.persona] || 'border-slate-500'}`;
                 
                 const emailText = `Subject: ${item.cold_email.subject}\n\n${item.cold_email.body}`;
-                const actionText = `SMART Action Item for ${item.persona}:\n${item.action_item}`;
+                const actionText = `${item.action_item}`;
 
                 card.innerHTML = `
-                    <div class="flex-grow">
-                        <h3 class="text-xl font-bold text-slate-800">${item.persona}</h3>
-                        <div class="mt-4 space-y-4">
-                            <div>
-                                <p class="text-sm font-semibold text-slate-600 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>Recommended Outreach</p>
-                                <div class="mt-2 pl-6">
-                                    <p class="text-slate-800 font-medium">Subject: ${item.cold_email.subject}</p>
-                                    <p class="text-slate-700 mt-1 whitespace-pre-wrap">${item.cold_email.body}</p>
-                                </div>
+                    <header>
+                        <h3 class="text-xl font-bold text-slate-900">${item.persona}</h3>
+                    </header>
+                    <div class="mt-4 space-y-5">
+                        <div>
+                            <p class="text-sm font-semibold text-slate-600 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
+                                Recommended Outreach
+                            </p>
+                            <div class="mt-2 pl-1 font-roboto-mono text-sm bg-slate-50 p-3 rounded-md border border-slate-200 text-slate-700">
+                                <p class="font-medium text-slate-800">Subject: ${item.cold_email.subject}</p>
+                                <p class="mt-2 whitespace-pre-wrap">${item.cold_email.body}</p>
                             </div>
                         </div>
+                        <div>
+                             <p class="text-sm font-semibold text-slate-600 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+                                SMART Action Plan
+                            </p>
+                            <div class="text-slate-800 mt-2 text-base pl-1 whitespace-pre-wrap">${item.action_item}</div>
+                        </div>
                     </div>
-                    <div class="mt-4 pt-4 border-t border-slate-200">
-                        <p class="text-sm font-semibold text-indigo-700 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>SMART Action Plan</p>
-                        <div class="text-indigo-900 mt-2 text-sm space-y-1 pl-6 whitespace-pre-wrap">${item.action_item}</div>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-slate-200 flex justify-between items-center">
-                         <button class="chat-btn bg-indigo-100 text-indigo-700 font-bold py-2 px-4 rounded-full hover:bg-indigo-200 text-sm">Chat with Persona</button>
+                    <footer class="mt-6 pt-4 border-t border-slate-200/80 flex justify-between items-center">
+                         <button class="chat-btn bg-indigo-50 text-indigo-700 font-bold py-2 px-4 rounded-full hover:bg-indigo-100 text-sm transition-colors flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.08-3.239A8.99 8.99 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM4.415 12.91a.072.072 0 00-.015.033L4 14.083l1.196-.342a.072.072 0 00.033-.015.65.65 0 01.243-.154.5.5 0 01.546.022 6.973 6.973 0 005.976 0 .5.5 0 01.546-.022.65.65 0 01.243.154c.01.007.022.016.033.015L16 14.083l-.415-1.16a.072.072 0 00-.015-.033.65.65 0 01-.154-.243.5.5 0 01.022-.546 6.973 6.973 0 000-5.976.5.5 0 01-.022-.546.65.65 0 01.154-.243c.007-.01.016-.022.015-.033L16 3.917l-1.196.342a.072.072 0 00-.033.015.65.65 0 01-.243.154.5.5 0 01-.546-.022 6.973 6.973 0 00-5.976 0 .5.5 0 01-.546.022.65.65 0 01-.243-.154A.072.072 0 004.415 4.26L4 3.917l.415 1.16c.01.028.015.057.015.085a.65.65 0 01-.154.243.5.5 0 01-.022.546 6.973 6.973 0 000 5.976.5.5 0 01.022.546.65.65 0 01-.154.243z" clip-rule="evenodd" /></svg>
+                            Chat with Persona
+                         </button>
                          <div class="flex items-center gap-2">
-                            <button class="copy-btn bg-slate-200 hover:bg-slate-300 text-slate-700 p-2 rounded-full" data-text="${encodeURIComponent(emailText)}" title="Copy Email">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 2A.5.5 0 0 1 1 1.5h11.586l-2.293 2.293A.5.5 0 0 1 10 4.5h.5a.5.5 0 0 1 .5.5v.5a.5.5 0 0 1-1 0V6H1a.5.5 0 0 1-.5-.5V2zm15-1a.5.5 0 0 1 .5.5V15a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 15V2a.5.5 0 0 1 .5-.5h15zm-1 2H1v11.5a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5V3z"/></svg>
+                            <button class="copy-btn bg-slate-100 hover:bg-slate-200 text-slate-600 p-2 rounded-full transition-colors" data-text="${encodeURIComponent(emailText)}" title="Copy Email">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 2A.5.5 0 0 1 1 1.5h11.586l-2.293 2.293A.5.5 0 0 1 10 4.5h.5a.5.5 0 0 1 .5.5v.5a.5.5 0 0 1-1 0V6H1a.5.5 0 0 1-.5-.5V2zm15-1a.5.5 0 0 1 .5.5V15a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 15V2a.5.5 0 0 1 .5-.5h15zM2 3v11.5a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5V3H2z"/></svg>
                             </button>
-                            <button class="copy-btn bg-slate-200 hover:bg-slate-300 text-slate-700 p-2 rounded-full" data-text="${encodeURIComponent(actionText)}" title="Copy Plan">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5-.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3z"/></svg>
+                            <button class="copy-btn bg-slate-100 hover:bg-slate-200 text-slate-600 p-2 rounded-full transition-colors" data-text="${encodeURIComponent(actionText)}" title="Copy Plan">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5-.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3z"/></svg>
                             </button>
                          </div>
-                    </div>
+                    </footer>
                 `;
                 grid.appendChild(card);
-                setTimeout(() => card.classList.remove('opacity-0', 'translate-y-3'), 50 * index);
+                setTimeout(() => card.classList.remove('opacity-0', 'translate-y-4'), 100 * index);
                 
                 card.querySelector('.chat-btn').addEventListener('click', () => {
                     openChatModal(item);
@@ -274,7 +291,7 @@
                     const textToCopy = decodeURIComponent(btn.dataset.text);
                     navigator.clipboard.writeText(textToCopy).then(() => {
                         const originalContent = btn.innerHTML;
-                        btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-green-600" viewBox="0 0 16 16"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/></svg>`;
+                        btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="text-green-500" viewBox="0 0 16 16"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/></svg>`;
                         setTimeout(() => { btn.innerHTML = originalContent; }, 2000);
                     });
                 });
@@ -283,13 +300,13 @@
 
         const openChatModal = (personaData) => {
             currentPersonaData = personaData;
-            chatTitle.textContent = `Chat with: ${currentPersonaData.persona}`;
+            chatTitle.textContent = `Chat with ${currentPersonaData.persona}`;
             
             const objective = dealObjectiveInput.value;
             const valueProp = valuePropInput.value;
             const targetIntel = targetIntelInput.value;
             
-            let initialSystemMessage = `You are now speaking with the ${currentPersonaData.persona}. Based on their role, how would they likely view the objective to "${objective}"?`;
+            const initialSystemMessage = `Hello! As the ${currentPersonaData.persona}, I've reviewed your proposal. Based on my role and the goal to "${objective}", I'd be primarily concerned with "${item.cold_email.subject}". How can you address this?`;
             
             chatHistory = [
                 { role: 'system', context: { objective, valueProp, targetIntel, persona: currentPersonaData.persona, primary_concern: currentPersonaData.cold_email.subject } },
@@ -301,24 +318,32 @@
             setTimeout(() => {
                 chatModal.classList.remove('opacity-0');
                 chatModalContent.classList.remove('scale-95', 'opacity-0');
+                chatInput.focus();
             }, 10);
         };
 
         const closeChatModal = () => {
             chatModal.classList.add('opacity-0');
             chatModalContent.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => chatModal.classList.add('hidden'), 300);
+            setTimeout(() => {
+                chatModal.classList.add('hidden');
+                chatHistoryEl.innerHTML = '';
+                chatHistory = [];
+            }, 300);
         };
 
         const renderChatHistory = () => {
             chatHistoryEl.innerHTML = '';
             chatHistory.forEach(msg => {
-                if (msg.role === 'system') return; // Don't display system messages
+                if (msg.role === 'system') return; 
                 const msgEl = document.createElement('div');
-                msgEl.className = `flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`;
+                msgEl.className = `flex items-end gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`;
+                
+                const bubbleClass = msg.role === 'user' ? 'bg-indigo-600 text-white rounded-tr-none' : 'bg-white text-slate-800 rounded-tl-none border border-slate-200/80';
+                
                 msgEl.innerHTML = `
-                    <div class="max-w-xs md:max-w-md lg:max-w-lg p-3 rounded-2xl ${msg.role === 'user' ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-800'}">
-                        ${msg.text}
+                    <div class="max-w-xs md:max-w-md lg:max-w-lg p-3 px-4 rounded-2xl ${bubbleClass}">
+                        <p class="text-base">${msg.text}</p>
                     </div>`;
                 chatHistoryEl.appendChild(msgEl);
             });
@@ -337,8 +362,8 @@
             
             const thinkingEl = document.createElement('div');
             thinkingEl.id = 'thinking';
-            thinkingEl.className = 'flex justify-start';
-            thinkingEl.innerHTML = `<div class="max-w-xs p-3 rounded-2xl bg-slate-200 text-slate-800"><div class="loader"></div></div>`;
+            thinkingEl.className = 'flex items-end gap-2';
+            thinkingEl.innerHTML = `<div class="p-3 px-4 rounded-2xl bg-white border border-slate-200/80 rounded-tl-none"><div class="flex items-center gap-2"><div class="h-2 w-2 bg-slate-300 rounded-full animate-bounce [animation-delay:-0.3s]"></div><div class="h-2 w-2 bg-slate-300 rounded-full animate-bounce [animation-delay:-0.15s]"></div><div class="h-2 w-2 bg-slate-300 rounded-full animate-bounce"></div></div></div>`;
             chatHistoryEl.appendChild(thinkingEl);
             chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
 
@@ -350,7 +375,7 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        request_type: 'chat_message', // Identifies this as a chat request
+                        request_type: 'chat_message',
                         persona: dealContext.persona,
                         primary_concern: dealContext.primary_concern,
                         objective: dealContext.objective,
@@ -379,13 +404,15 @@
         chatForm.addEventListener('submit', handleSendMessage);
         
         toggleBtn.addEventListener('click', () => {
-            const isHidden = optionalInputs.style.maxHeight === '0px' || optionalInputs.style.maxHeight === '';
+            const isHidden = optionalInputs.style.maxHeight === '0px' || !optionalInputs.style.maxHeight;
             if (isHidden) {
+                optionalInputs.style.paddingTop = '1rem';
                 optionalInputs.style.maxHeight = optionalInputs.scrollHeight + 'px';
-                toggleIcon.style.transform = 'rotate(180deg)';
+                toggleIcon.style.transform = 'rotate(90deg)';
                 toggleText.textContent = 'Hide Additional Context';
             } else {
                 optionalInputs.style.maxHeight = '0px';
+                optionalInputs.style.paddingTop = '0';
                 toggleIcon.style.transform = 'rotate(0deg)';
                 toggleText.textContent = 'Add More Context (for smarter results)';
             }
