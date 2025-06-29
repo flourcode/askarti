@@ -158,8 +158,8 @@
         let chatHistory = [];
         let currentPersonaData = {};
         
-        // --- API URL (This points to YOUR SINGLE backend endpoint) ---
-        const API_ENDPOINT = 'https://nqux5cu205.execute-api.us-east-1.amazonaws.com/default/AskArtiAPI';
+        // --- API URL (This now points to YOUR backend endpoint) ---
+        const API_ENDPOINT = 'https://nqux5cu205.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
         
         // --- Functions ---
         const showLoading = (isLoading) => {
@@ -186,7 +186,7 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        request_type: 'generate_plan', // <-- Tells the backend which logic to run
+                        request_type: 'generate_plan', // Identifies this as a plan generation request
                         objective: objective,
                         valueProp: valueProp,
                         targetIntel: targetIntel
@@ -350,7 +350,7 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        request_type: 'chat_message', // <-- Tells the backend which logic to run
+                        request_type: 'chat_message', // Identifies this as a chat request
                         persona: dealContext.persona,
                         primary_concern: dealContext.primary_concern,
                         objective: dealContext.objective,
