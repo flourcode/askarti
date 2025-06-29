@@ -18,21 +18,22 @@
     </h1>
     <p class="text-lg text-gray-600 mb-6">Your Artificial Federal Sales Coach</p>
 
-    <label class="block font-semibold mb-2">Sales Objective</label>
+    <label for="objective" class="block font-semibold mb-2">Sales Objective</label>
     <input id="objective" class="w-full p-3 border rounded mb-4" placeholder="e.g., Win a big Army contract" />
 
     <button id="toggleContext" class="text-sm text-purple-600 mb-4">Add More Context (for better results)</button>
     <div id="contextFields" class="hidden">
-      <label class="block font-semibold mb-2">Your Value Prop</label>
-      <textarea id="valueProp" class="w-full p-3 border rounded mb-4"></textarea>
+      <label for="valueProp" class="block font-semibold mb-2">Your Value Prop</label>
+      <textarea id="valueProp" class="w-full p-3 border rounded mb-4" placeholder="e.g., We help reduce compliance risk"></textarea>
 
-      <label class="block font-semibold mb-2">Intel on Target</label>
-      <textarea id="targetIntel" class="w-full p-3 border rounded mb-4"></textarea>
+      <label for="targetIntel" class="block font-semibold mb-2">Intel on Target</label>
+      <textarea id="targetIntel" class="w-full p-3 border rounded mb-4" placeholder="e.g., Agency just issued new RFI"></textarea>
     </div>
 
-    <button onclick="generatePlan()" class="bg-gray-900 text-white px-6 py-3 rounded w-full">Get Arti's Advice</button>
+    <button id="generateBtn" class="bg-gray-900 text-white px-6 py-3 rounded w-full">Get Arti's Advice</button>
 
     <div id="error" class="text-red-600 mt-4 hidden">Sorry, something went wrong.</div>
+
     <div id="output" class="mt-6 hidden">
       <h2 class="text-xl font-semibold mb-2">Coaching Advice</h2>
       <p id="coaching" class="mb-6 text-gray-700 whitespace-pre-line"></p>
@@ -43,53 +44,57 @@
   </div>
 
   <script>
-    const API_URL = 'https://nqux5cu205.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
+    document.addEventListener('DOMContentLoaded', () => {
+      const API_URL = 'https://nqux5cu205.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
 
-    document.getElementById('toggleContext').onclick = () => {
-      document.getElementById('contextFields').classList.toggle('hidden');
-    };
+      document.getElementById('toggleContext').addEventListener('click', () => {
+        document.getElementById('contextFields').classList.toggle('hidden');
+      });
 
-    async function generatePlan() {
-      const objective = document.getElementById('objective').value;
-      const valueProp = document.getElementById('valueProp').value;
-      const targetIntel = document.getElementById('targetIntel').value;
+      document.getElementById('generateBtn').addEventListener('click', async () => {
+        const objective = document.getElementById('objective').value.trim();
+        const valueProp = document.getElementById('valueProp').value.trim();
+        const targetIntel = document.getElementById('targetIntel').value.trim();
 
-      document.getElementById('error').classList.add('hidden');
-      document.getElementById('output').classList.add('hidden');
+        document.getElementById('error').classList.add('hidden');
+        document.getElementById('output').classList.add('hidden');
 
-      try {
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ objective, valueProp, targetIntel })
-        });
+        try {
+          const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ objective, valueProp, targetIntel })
+          });
 
-        if (!response.ok) throw new Error('API error');
+          if (!response.ok) throw new Error('API error');
 
-        const data = await response.json();
+          const data = await response.json();
 
-        document.getElementById('coaching').innerText = data.coaching_advice || 'No advice provided.';
+          document.getElementById('coaching').innerText = data.coaching_advice || 'No advice provided.';
 
-        const container = document.getElementById('stakeholders');
-        container.innerHTML = '';
-        (data.stakeholder_plan || []).forEach(stake => {
-          const el = document.createElement('div');
-          el.className = 'p-4 border rounded bg-gray-50';
-          el.innerHTML = `
-            <strong>${stake.persona}</strong><br/>
-            <em>Subject:</em> ${stake.cold_email.subject}<br/>
-            <em>Email:</em><br/>${stake.cold_email.body.replace(/\n/g, '<br/>')}<br/>
-            <em>Action Item:</em> ${stake.action_item}
-          `;
-          container.appendChild(el);
-        });
+          const container = document.getElementById('stakeholders');
+          container.innerHTML = '';
+          (data.stakeholder_plan || []).forEach(stake => {
+            const el = document.createElement('div');
+            el.className = 'p-4 border rounded bg-gray-50';
+            el.innerHTML = `
+              <strong>${stake.persona}</strong><br/>
+              <em>Subject:</em> ${stake.cold_email.subject}<br/>
+              <em>Email:</em><br/>${stake.cold_email.body.replace(/\n/g, '<br/>')}<br/>
+              <em>Action Item:</em> ${stake.action_item}
+            `;
+            container.appendChild(el);
+          });
 
-        document.getElementById('output').classList.remove('hidden');
-      } catch (err) {
-        document.getElementById('error').classList.remove('hidden');
-        console.error('Error generating plan:', err);
-      }
-    }
+          document.getElementById('output').classList.remove('hidden');
+        } catch (err) {
+          console.error('Error generating plan:', err);
+          document.getElementById('error').classList.remove('hidden');
+        }
+      });
+    });
   </script>
 </body>
 </html>
