@@ -158,8 +158,8 @@
         let chatHistory = [];
         let currentPersonaData = {};
         
-        // --- API URL (This now points to YOUR backend) ---
-        const API_ENDPOINT = 'https://nqux5cu205.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
+        // --- API URL (This points to YOUR SINGLE backend endpoint) ---
+        const API_ENDPOINT = 'https://nqux5cu205.execute-api.us-east-1.amazonaws.com/default/AskArtiAPI';
         
         // --- Functions ---
         const showLoading = (isLoading) => {
@@ -180,12 +180,13 @@
             const objective = dealObjectiveInput.value;
             const valueProp = valuePropInput.value;
             const targetIntel = targetIntelInput.value;
-            
+
             try {
                 const response = await fetch(API_ENDPOINT, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
+                        request_type: 'generate_plan', // <-- Tells the backend which logic to run
                         objective: objective,
                         valueProp: valueProp,
                         targetIntel: targetIntel
@@ -291,7 +292,7 @@
             let initialSystemMessage = `You are now speaking with the ${currentPersonaData.persona}. Based on their role, how would they likely view the objective to "${objective}"?`;
             
             chatHistory = [
-                { role: 'system', context: { objective, valueProp, targetIntel, persona: currentPersonaData.persona, email: currentPersonaData.cold_email.subject } },
+                { role: 'system', context: { objective, valueProp, targetIntel, persona: currentPersonaData.persona, primary_concern: currentPersonaData.cold_email.subject } },
                 { role: 'assistant', text: initialSystemMessage }
             ];
 
@@ -344,28 +345,23 @@
             const dealContext = chatHistory.find(msg => msg.role === 'system').context;
             const conversationHistoryText = chatHistory.filter(m => m.role !== 'system').map(m => `${m.role === 'user' ? 'Salesperson' : 'AI Assistant'}: ${m.text}`).join('\n');
             
-            const prompt = `
-                You are embodying the persona of a **${dealContext.persona}**. Their primary concern is "${dealContext.email}".
-                The overall deal objective is "${dealContext.objective}".
-                The salesperson's value prop is: "${dealContext.valueProp || 'Not provided.'}"
-                Specific intel is: "${dealContext.targetIntel || 'Not provided.'}"
-                You are in a role-playing chat with a salesperson to help them prepare for a meeting.
-                Conversation so far:
-                ${conversationHistoryText}
-                
-                Respond as the persona to the last message from the salesperson. Be direct, concise, and stay in character.
-            `;
-
             try {
                 const response = await fetch(API_ENDPOINT, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }] })
+                    body: JSON.stringify({
+                        request_type: 'chat_message', // <-- Tells the backend which logic to run
+                        persona: dealContext.persona,
+                        primary_concern: dealContext.primary_concern,
+                        objective: dealContext.objective,
+                        valueProp: dealContext.valueProp,
+                        targetIntel: dealContext.targetIntel,
+                        history: conversationHistoryText
+                    })
                 });
                  if (!response.ok) throw new Error(`API Error`);
                 const result = await response.json();
-                const aiResponse = result.candidates[0].content.parts[0].text;
-                chatHistory.push({ role: 'assistant', text: aiResponse });
+                chatHistory.push({ role: 'assistant', text: result.reply });
             } catch (error) {
                 console.error("Chat error:", error);
                 chatHistory.push({ role: 'assistant', text: "Sorry, I encountered an error. Please try again." });
