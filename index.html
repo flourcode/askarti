@@ -700,8 +700,6 @@
                 }
             }
         });
-
-        // Sponsor banner close functionality
         document.addEventListener('DOMContentLoaded', function() {
             const sponsorBanner = document.querySelector('.sponsor-banner');
             const closeBtn = sponsorBanner?.querySelector('button');
@@ -713,6 +711,27 @@
                 });
             }
         });
+	document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('copy-share-btn')) {
+        const targetId = e.target.getAttribute('data-target');
+        const textToCopy = document.getElementById(targetId).textContent.trim();
+        
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            const originalText = e.target.textContent;
+            e.target.textContent = 'Copied!';
+            setTimeout(() => {
+                e.target.textContent = originalText;
+            }, 2000);
+        });
+    }
+});
+
+document.getElementById('linkedin-share-btn')?.addEventListener('click', function() {
+    const shareText = encodeURIComponent("Just got killer sales advice from AskArti for my federal deal. This AI tool breaks down stakeholder approaches with specific talking points. Game-changer for gov sales!");
+    const shareUrl = encodeURIComponent(window.location.href);
+    const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}&summary=${shareText}`;
+    window.open(linkedinUrl, '_blank', 'width=600,height=600');
+});
     </script>
 </body>
 </html>
