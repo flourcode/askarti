@@ -58,6 +58,24 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        /* Footer links */
+        .footer-links a {
+            position: relative;
+            transition: color 0.2s;
+        }
+        .footer-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: #4f46e5;
+            transition: width 0.3s;
+        }
+        .footer-links a:hover:after {
+            width: 100%;
+        }
     </style>
 </head>
 <body class="antialiased text-slate-800">
@@ -107,29 +125,34 @@
             </div>
         </div>
 
-        <footer class="text-center mt-12 mb-6">
-            <button id="trust-btn" class="text-sm text-slate-500 hover:text-indigo-600 transition-colors py-2 px-4 rounded-lg hover:bg-slate-100">Trust & Safety</button>
+        <footer class="text-center mt-12 mb-8">
+            <div class="footer-links flex flex-wrap justify-center gap-4 text-sm text-slate-500 mb-2">
+                <button id="trust-btn" class="hover:text-indigo-600 transition-colors">Trust & Safety</button>
+                <button id="about-btn" class="hover:text-indigo-600 transition-colors">About Arti</button>
+                <button id="contact-btn" class="hover:text-indigo-600 transition-colors">Contact</button>
+            </div>
+            <p class="text-xs text-slate-400">© 2025 AskArti. Made with ❤️ for sales teams.</p>
         </footer>
     </div>
 
     <!-- Trust & Safety Modal -->
     <div id="trust-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 modal-backdrop flex items-center justify-center p-4 z-50">
-        <div id="trust-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-md modal-content">
-            <header class="p-4 border-b border-slate-200 flex justify-between items-center">
+        <div id="trust-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-md modal-content overflow-hidden max-h-[90vh]">
+            <header class="p-4 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white z-10">
                 <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                     Trust & Safety
                 </h2>
-                <button id="close-trust-modal-btn" class="text-slate-400 hover:text-slate-600 text-3xl leading-none">&times;</button>
+                <button class="close-modal-btn text-slate-400 hover:text-slate-600 text-3xl leading-none">&times;</button>
             </header>
-            <main class="p-6 space-y-6 text-slate-700">
+            <div class="overflow-y-auto p-6 space-y-6 text-slate-700">
                 <div class="flex items-start gap-4">
                     <div class="flex-shrink-0 h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                     </div>
                     <div>
                         <h3 class="font-semibold text-slate-800">Your Data is Private</h3>
-                        <p class="text-sm mt-1">Your prompts are sent directly to the AI model for processing and are not stored on our servers. We do not keep a history of your requests.</p>
+                        <p class="text-sm mt-1">Your prompts are sent directly to the AI model for processing and are not stored on our servers. We do not keep a history of your requests or use them for future training.</p>
                     </div>
                 </div>
                 <div class="flex items-start gap-4">
@@ -137,11 +160,109 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v6a2 2 0 002 2h14a2 2 0 002-2v-6a2 2 0 00-2-2m-2-4h.01M17 16h.01" /></svg>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-slate-800">AI Model Training</h3>
-                        <p class="text-sm mt-1">AskArti uses Google's Gemini 1.5 AI Model. By default, Google may use API inputs to improve its models.</p>
+                        <h3 class="font-semibold text-slate-800">AI Model Information</h3>
+                        <p class="text-sm mt-1">AskArti uses Google's Gemini 1.5 AI Model. By default, Google may use API inputs to improve its models. For enterprise customers, data protection policies are available.</p>
                     </div>
                 </div>
-            </main>
+                <div class="flex items-start gap-4">
+                    <div class="flex-shrink-0 h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-800">How Recommendations Work</h3>
+                        <p class="text-sm mt-1">Arti is trained on sales methodologies from top-performing sales professionals. It analyzes your situation and provides strategic advice based on proven sales frameworks and tactics that have worked in similar scenarios.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="flex-shrink-0 h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-800">Limitations</h3>
+                        <p class="text-sm mt-1">While Arti provides valuable guidance, it doesn't know your specific company policies or have access to your internal data. Always use your judgment and align recommendations with your organization's practices and values.</p>
+                    </div>
+                </div>
+                <div class="border-t border-slate-200 pt-6">
+                    <p class="text-sm text-slate-500">For more information or to request data deletion, contact us at <a href="mailto:mark@subhoo.com" class="text-indigo-600 hover:underline">mark@subhoo.com</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div id="about-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 modal-backdrop flex items-center justify-center p-4 z-50">
+        <div id="about-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-md modal-content overflow-hidden max-h-[90vh]">
+            <header class="p-4 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white z-10">
+                <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    About AskArti
+                </h2>
+                <button class="close-modal-btn text-slate-400 hover:text-slate-600 text-3xl leading-none">&times;</button>
+            </header>
+            <div class="overflow-y-auto p-6 space-y-6 text-slate-700">
+                <div>
+                    <h3 class="font-semibold text-slate-800">What is AskArti?</h3>
+                    <p class="text-sm mt-1">AskArti is an AI-powered sales coach designed to help sales professionals strategize and overcome obstacles in their deals. Whether you're dealing with tough objections, complex buying committees, or competitive situations, Arti provides actionable, personalized advice.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-slate-800">Our Methodology</h3>
+                    <p class="text-sm mt-1">Arti combines multiple proven sales frameworks including MEDDIC, Challenger Sale, SPIN Selling, and Value Selling to provide a comprehensive approach to your unique situation. Our recommendations are based on strategies that have worked for top performers across industries.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-slate-800">Who Should Use AskArti?</h3>
+                    <p class="text-sm mt-1">AskArti is perfect for:</p>
+                    <ul class="text-sm mt-2 space-y-1 pl-5 list-disc">
+                        <li>Sales reps stuck on challenging deals</li>
+                        <li>Account executives preparing for critical meetings</li>
+                        <li>Sales managers coaching their teams</li>
+                        <li>SDRs crafting outreach strategies</li>
+                        <li>Customer success teams working on expansions</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-slate-800">Our Team</h3>
+                    <p class="text-sm mt-1">AskArti was created by sales professionals for sales professionals. Our team has collective experience across SaaS, enterprise tech, financial services, and healthcare sales, bringing real-world expertise to every recommendation.</p>
+                </div>
+                <div class="border-t border-slate-200 pt-6">
+                    <p class="text-sm text-slate-500">Version 1.0.2 - Last updated June 28, 2025</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 modal-backdrop flex items-center justify-center p-4 z-50">
+        <div id="contact-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-md modal-content overflow-hidden max-h-[90vh]">
+            <header class="p-4 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white z-10">
+                <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                    Contact Us
+                </h2>
+                <button class="close-modal-btn text-slate-400 hover:text-slate-600 text-3xl leading-none">&times;</button>
+            </header>
+            <div class="overflow-y-auto p-6 space-y-6 text-slate-700">
+                <div>
+                    <h3 class="font-semibold text-slate-800">Get in Touch</h3>
+                    <p class="text-sm mt-1">Have questions, feedback, or need help? We'd love to hear from you!</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-slate-800">Email</h3>
+                    <p class="text-sm mt-1">
+                        <a href="mailto:mark@subhoo.com" class="text-indigo-600 hover:underline">mark@subhoo.com</a>
+                    </p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-slate-800">Response Time</h3>
+                    <p class="text-sm mt-1">We typically respond to all inquiries within 24 hours during business days.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-slate-800">Feedback</h3>
+                    <p class="text-sm mt-1">Your feedback helps us improve! Let us know what features you'd like to see or how we can make AskArti even more helpful for your sales challenges.</p>
+                </div>
+                <div class="border-t border-slate-200 pt-6">
+                    <p class="text-sm text-slate-500">For enterprise solutions or custom implementations, please contact us directly.</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -154,14 +275,24 @@
         const btnText = document.getElementById('btn-text');
         const loader = document.getElementById('loader');
         
-        // Trust Modal Elements
+        // Modal Elements
         const trustBtn = document.getElementById('trust-btn');
+        const aboutBtn = document.getElementById('about-btn');
+        const contactBtn = document.getElementById('contact-btn');
+        
         const trustModal = document.getElementById('trust-modal');
+        const aboutModal = document.getElementById('about-modal');
+        const contactModal = document.getElementById('contact-modal');
+        
         const trustModalContent = document.getElementById('trust-modal-content');
-        const closeTrustModalBtn = document.getElementById('close-trust-modal-btn');
+        const aboutModalContent = document.getElementById('about-modal-content');
+        const contactModalContent = document.getElementById('contact-modal-content');
+        
+        const closeModalBtns = document.querySelectorAll('.close-modal-btn');
 
         // --- State Management ---
         let originalSituation = ""; 
+        let currentOpenModal = null;
 
         // --- API URL ---
         const API_ENDPOINT = 'https://nqux5cu205.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
@@ -339,91 +470,3 @@
                     <button id="copy-btn" class="w-full sm:w-auto flex-1 bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors">Copy Plan</button>
                     <button id="reset-btn" class="w-full sm:w-auto flex-1 bg-slate-100 text-slate-700 font-bold py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors">Start Over</button>
                 </div>
-            `;
-            
-            document.getElementById('reset-btn').addEventListener('click', resetForm);
-            document.getElementById('copy-btn').addEventListener('click', copyPlanToClipboard);
-            document.getElementById('red-team-btn').addEventListener('click', (e) => handleRedTeamReview(e.currentTarget));
-            document.querySelectorAll('.scenario-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => handleScenario(e.currentTarget.dataset.scenario, e.currentTarget));
-            });
-        };
-
-        const resetForm = () => {
-            situationInput.value = '';
-            originalSituation = '';
-            resultsContainer.innerHTML = '';
-            resultsContainer.appendChild(initialMessage);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-        
-        const handleApiError = (error) => {
-             console.error("API Error:", error);
-             resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 border border-red-200 rounded-lg max-w-2xl mx-auto"><p class="text-red-700 font-medium">Sorry, something went wrong.</p><p class="text-red-600 text-sm mt-1">Please check the console for details and try again.</p></div>`;
-        };
-
-        const copyPlanToClipboard = () => {
-            const planContainer = document.getElementById('coaching-plan-container');
-            if (!planContainer) return;
-            
-            const recommendation = planContainer.querySelector('.bg-indigo-50 p').textContent.trim();
-            let fullText = `${recommendation}\n\n--- DETAILED PLAN ---\n\n`;
-
-            const personaCards = planContainer.querySelectorAll('.persona-card');
-            personaCards.forEach(card => {
-                const persona = card.querySelector('h2').textContent.trim();
-                const goal = card.querySelector('h3:nth-of-type(1)').nextElementSibling.textContent.trim();
-                const points = Array.from(card.querySelectorAll('ul li span:last-child')).map(span => `- ${span.textContent.trim()}`).join('\n');
-                fullText += `--- ${persona.toUpperCase()} ---\n\n`;
-                fullText += `SMART GOAL:\n${goal}\n\n`;
-                fullText += `KEY TALKING POINTS:\n${points}\n\n`;
-            });
-
-            navigator.clipboard.writeText(fullText.trim()).then(() => {
-                const copyBtn = document.getElementById('copy-btn');
-                copyBtn.textContent = 'Copied!';
-                setTimeout(() => { copyBtn.textContent = 'Copy Plan'; }, 2000);
-            });
-        };
-        
-        // Modal Logic
-        const openModal = () => {
-            trustModal.classList.remove('hidden');
-            setTimeout(() => {
-                trustModal.classList.add('show');
-                trustModalContent.classList.add('show');
-            }, 10);
-        };
-        
-        const closeModal = () => {
-            trustModal.classList.remove('show');
-            trustModalContent.classList.remove('show');
-            setTimeout(() => {
-                trustModal.classList.add('hidden');
-            }, 300);
-        };
-
-        // --- Event Listeners ---
-        generateBtn.addEventListener('click', generatePlan);
-        document.querySelectorAll('.prompt-btn').forEach(btn => {
-            btn.addEventListener('click', handleCannedPrompt);
-        });
-        
-        // Modal Event Listeners
-        trustBtn.addEventListener('click', openModal);
-        closeTrustModalBtn.addEventListener('click', closeModal);
-        trustModal.addEventListener('click', (e) => {
-            if(e.target === trustModal) {
-                closeModal();
-            }
-        });
-
-        // Escape key to close modal
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && !trustModal.classList.contains('hidden')) {
-                closeModal();
-            }
-        });
-    </script>
-</body>
-</html>
