@@ -13,41 +13,15 @@
           theme: {
             extend: {
               colors: {
-                primary: {
-                  50: '#f0f9ff',
-                  100: '#e0f2fe',
-                  200: '#bae6fd',
-                  300: '#7dd3fc',
-                  400: '#38bdf8',
-                  500: '#0ea5e9',
-                  600: '#0284c7',
-                  700: '#0369a1',
-                  800: '#075985',
-                  900: '#0c4a6e',
-                },
+                primary: '#2563eb',
                 accent: {
-                  pink: '#ff70a6',
-                  purple: '#9376e0',
-                  yellow: '#ffd24c',
-                  green: '#52d9ae',
-                  blue: '#4dabf7',
+                  pink: '#ec4899',
+                  purple: '#8b5cf6',
+                  yellow: '#f59e0b',
+                  green: '#10b981',
+                  blue: '#06b6d4',
+                  orange: '#f97316'
                 }
-              },
-              animation: {
-                'gradient-x': 'gradient-x 6s ease infinite',
-                'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-              },
-              keyframes: {
-                'gradient-x': {
-                  '0%, 100%': {
-                    'background-size': '200% 200%',
-                    'background-position': 'left center'
-                  },
-                  '50%': {
-                    'background-size': '200% 200%',
-                    'background-position': 'right center'
-                  },
-                },
               }
             }
           }
@@ -56,87 +30,24 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-            -webkit-tap-highlight-color: transparent;
-            background-image: 
-                radial-gradient(circle at 10% 10%, rgba(147, 118, 224, 0.04) 0%, transparent 20%),
-                radial-gradient(circle at 90% 30%, rgba(82, 217, 174, 0.04) 0%, transparent 25%),
-                radial-gradient(circle at 40% 80%, rgba(255, 112, 166, 0.04) 0%, transparent 15%),
-                radial-gradient(circle at 80% 90%, rgba(77, 171, 247, 0.04) 0%, transparent 20%);
-            background-attachment: fixed;
         }
-        .loader, .spinner {
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid #ffffff;
+        
+        .loader {
+            border: 2px solid #e5e7eb;
+            border-top: 2px solid #2563eb;
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             animation: spin 1s linear infinite;
         }
+        
         .results-loader {
-            border: 4px solid #e5e7eb;
-            border-top: 4px solid #0ea5e9;
+            border: 3px solid #e5e7eb;
+            border-top: 3px solid #2563eb;
             border-radius: 50%;
             width: 32px;
             height: 32px;
             animation: spin 1s linear infinite;
-        }
-        .fab { 
-            box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.3);
-            background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);
-        }
-        .red-team-spinner {
-             border: 3px solid rgba(255, 112, 166, 0.3);
-             border-top-color: #ff70a6;
-             width: 20px;
-             height: 20px;
-        }
-        /* Styles for Modal */
-        .modal-backdrop {
-            transition: opacity 0.3s ease;
-            opacity: 0;
-            backdrop-filter: blur(5px);
-        }
-        .modal-backdrop.show {
-            opacity: 1;
-        }
-        .modal-content {
-            transition: transform 0.3s ease, opacity 0.3s ease;
-            transform: scale(0.95);
-            opacity: 0;
-        }
-        .modal-content.show {
-            transform: scale(1);
-            opacity: 1;
-        }
-        
-        /* Card styles */
-        .card-pink {
-            background: linear-gradient(135deg, #ff70a6 0%, #ff9eb6 100%);
-            box-shadow: 0 10px 15px -3px rgba(255, 112, 166, 0.3);
-        }
-        .card-green {
-            background: linear-gradient(135deg, #52d9ae 0%, #86e6c9 100%);
-            box-shadow: 0 10px 15px -3px rgba(82, 217, 174, 0.3);
-        }
-        .card-purple {
-            background: linear-gradient(135deg, #9376e0 0%, #b4a0e8 100%);
-            box-shadow: 0 10px 15px -3px rgba(147, 118, 224, 0.3);
-        }
-        .card-yellow {
-            background: linear-gradient(135deg, #ffd24c 0%, #ffe083 100%);
-            box-shadow: 0 10px 15px -3px rgba(255, 210, 76, 0.3);
-        }
-        
-        .card-decoration {
-            position: absolute;
-            opacity: 0.5;
-            z-index: 0;
-        }
-        
-        .bg-pattern {
-            background-color: #f8fafc;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e0f2fe' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
         
         @keyframes spin {
@@ -144,195 +55,147 @@
             100% { transform: rotate(360deg); }
         }
         
-        .persona-card {
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .modal-backdrop {
+            transition: opacity 0.2s ease;
+            opacity: 0;
         }
-        
-        .persona-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        .modal-backdrop.show {
+            opacity: 1;
         }
-        
-        /* Footer links */
-        .footer-links a, .footer-links button {
-            position: relative;
-            transition: all 0.2s;
+        .modal-content {
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            transform: scale(0.95);
+            opacity: 0;
         }
-        .footer-links a::after, .footer-links button::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 50%;
-            background-color: #0ea5e9;
-            transition: all 0.3s;
-            transform: translateX(-50%);
-        }
-        .footer-links a:hover::after, .footer-links button:hover::after {
-            width: 70%;
+        .modal-content.show {
+            transform: scale(1);
+            opacity: 1;
         }
     </style>
 </head>
-<body class="antialiased text-slate-800">
+<body class="bg-gray-50 text-gray-900">
 
-    <div class="w-full max-w-3xl mx-auto p-4 md:p-6 pb-28">
-        <header class="text-center my-8">
-            <div class="flex justify-center items-center gap-3">
-                <div class="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-accent-blue to-accent-purple rounded-full flex items-center justify-center p-2 animate-pulse-slow">
-                    <img src="images/arti_right.png" alt="AskArti Logo" class="w-10 h-10 md:w-14 md:h-14">
-                </div>
-                <h1 class="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-accent-purple">AskArti</h1>
+    <div class="max-w-4xl mx-auto px-4 py-8 pb-32">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <div class="flex justify-center items-center gap-3 mb-6">
+                <img src="images/arti_right.png" alt="AskArti Logo" class="w-12 h-12 md:w-16 md:h-16">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">AskArti</h1>
             </div>        
-            <p class="mt-6 text-lg max-w-2xl mx-auto text-slate-700 leading-relaxed">
-                Hey, I'm Arti, your AI Sales Buddy. Whether you're working a tough deal, hitting a wall with an agency, or have an outrageous quota, I'm here to help. Just tell me what's going on and I'll give you some actionable next steps.
-            </p>
         </header>
-
-        <main id="main-form" class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200/80">
+        <!-- Main Input -->
+        <main id="main-form" class="bg-white rounded-2xl border border-gray-200 p-8 mb-8">
             <div class="space-y-6">
                 <div>
-                   <label for="situation-input" class="block text-sm font-medium text-slate-600 mb-1">Describe your sales situation...</label>
-                   <p class="text-xs text-slate-400 mb-2">Drop in your notes, or try an example below.</p>
-                   <textarea id="situation-input" rows="6" class="bg-slate-50 border border-slate-300 text-slate-900 text-base rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 block w-full p-3 transition-colors" placeholder="e.g., Trying to sell our cybersecurity SaaS into DHS. Users love it, but the technical buyer is ghosting me after I sent pricing. Their CIO loves our competitor. My boss thinks I don't know what I'm doing."></textarea>
+                   <label for="situation-input" class="block text-sm font-medium text-gray-700 mb-2">Hit me with your toughest sales problems and I'll give you some free advice to help win the deal and calm your boss.</label>
+                   <textarea id="situation-input" rows="5" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary resize-none" placeholder="e.g., Trying to sell our cybersecurity SaaS to DHS. Users love it, but the technical buyer is ghosting me after I sent pricing. Their CIO loves our competitor. My boss thinks I don't know what I'm doing."></textarea>
                </div>
             </div>
-            <div id="canned-prompts" class="mt-6">
-                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Or, try a common scenario:</p>
-                <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                    <button class="prompt-btn text-left p-4 bg-gradient-to-r from-white to-primary-50 hover:to-primary-100 rounded-lg transition-colors border border-primary-100 flex items-start">
-                        <span class="bg-accent-blue text-white rounded-full w-6 h-6 flex items-center justify-center mr-2 flex-shrink-0">1</span>
-                        <span>"Economic Buyer went dark after a great call."</span>
-                    </button>
-                    <button class="prompt-btn text-left p-4 bg-gradient-to-r from-white to-primary-50 hover:to-primary-100 rounded-lg transition-colors border border-primary-100 flex items-start">
-                        <span class="bg-accent-purple text-white rounded-full w-6 h-6 flex items-center justify-center mr-2 flex-shrink-0">2</span>
-                        <span>"RFP just dropped and is wired for the incumbent."</span>
-                    </button>
-                    <button class="prompt-btn text-left p-4 bg-gradient-to-r from-white to-primary-50 hover:to-primary-100 rounded-lg transition-colors border border-primary-100 flex items-start">
-                        <span class="bg-accent-pink text-white rounded-full w-6 h-6 flex items-center justify-center mr-2 flex-shrink-0">3</span>
-                        <span>"Technical Buyer keeps raising security concerns."</span>
-                    </button>
-                    <button class="prompt-btn text-left p-4 bg-gradient-to-r from-white to-primary-50 hover:to-primary-100 rounded-lg transition-colors border border-primary-100 flex items-start">
-                        <span class="bg-accent-green text-white rounded-full w-6 h-6 flex items-center justify-center mr-2 flex-shrink-0">4</span>
-                        <span>"There's a new CIO who loves our competitor."</span>
-                    </button>
-                </div>
-            </div>
+            
+            <!-- Quick Examples -->
+	<div id="canned-prompts" class="mt-8">
+    <div class="flex flex-wrap justify-center gap-2">
+        <button class="prompt-btn px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full border border-gray-200 transition-colors text-sm text-gray-700">
+            Economic Buyer went dark
+        </button>
+        <button class="prompt-btn px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full border border-gray-200 transition-colors text-sm text-gray-700">
+            RFP is wired for the incumbent
+        </button>
+        <button class="prompt-btn px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full border border-gray-200 transition-colors text-sm text-gray-700">
+            Technical Buyer has security concerns
+        </button>
+        <button class="prompt-btn px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full border border-gray-200 transition-colors text-sm text-gray-700">
+            New CIO loves our competitor
+        </button>
+        <button class="prompt-btn px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full border border-gray-200 transition-colors text-sm text-gray-700">
+            My boss thinks I can't sell
+        </button>
+    </div>
+</div>
         </main>
 
-        <div class="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-f8fafc to-transparent pointer-events-none flex justify-center z-10">
-            <button id="generate-btn" class="fab text-white font-bold py-3 px-8 rounded-full w-full max-w-xs transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300 flex items-center justify-center pointer-events-auto">
-                <span id="btn-text" class="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd" />
-                    </svg>
-                    Ask Arti
-                </span>
+        <!-- Fixed Bottom Button -->
+        <div class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-10">
+            <button id="generate-btn" class="bg-primary hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-full transition-colors flex items-center gap-2 shadow-lg">
+                <span id="btn-text">Ask Arti</span>
                 <div id="loader" class="loader hidden"></div>
             </button>
         </div>
-
-        <div id="results-container" class="mt-8">
-             <div id="initial-message" class="text-center p-8 rounded-2xl max-w-2xl mx-auto bg-gradient-to-br from-white to-primary-50 border border-primary-100/50">
-                <div class="w-16 h-16 mx-auto bg-gradient-to-r from-primary-400 to-primary-600 rounded-full text-white flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-medium text-primary-700 mb-2">Ready to tackle your sales challenge?</h3>
-                <p class="text-slate-500">Describe your situation above or click one of the examples to get personalized advice.</p>
-            </div>
+<!-- More subtle inline version -->
+<div class="sponsor-banner text-center mb-6">
+    <p class="text-xs text-gray-500">
+        <span class="text-blue-600 font-medium">Sponsored by:</span>
+        Find a Prime with mandatory Subcontracting requirements on  
+        <a href="https://subhoo.com" class="text-blue-600 hover:text-blue-700 font-medium underline">Subhoo.com</a>
+        <button class="ml-2 text-gray-400 hover:text-gray-600">×</button>
+    </p>
+</div>
+        <!-- Results Container -->
+        <div id="results-container">
         </div>
 
-        <div class="mt-16 mb-4 text-center">
-            <h3 class="text-lg font-semibold text-primary-700 mb-4">What sales problems can Arti help with?</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
-                    <div class="w-10 h-10 rounded-full bg-accent-pink/20 flex items-center justify-center mb-3 mx-auto">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent-pink" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <p class="text-sm text-slate-700">Deal strategy & positioning</p>
-                </div>
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
-                    <div class="w-10 h-10 rounded-full bg-accent-purple/20 flex items-center justify-center mb-3 mx-auto">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent-purple" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
-                        </svg>
-                    </div>
-                    <p class="text-sm text-slate-700">Stakeholder management</p>
-                </div>
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
-                    <div class="w-10 h-10 rounded-full bg-accent-yellow/20 flex items-center justify-center mb-3 mx-auto">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent-yellow" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <p class="text-sm text-slate-700">Competitor objection handling</p>
-                </div>
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
-                    <div class="w-10 h-10 rounded-full bg-accent-green/20 flex items-center justify-center mb-3 mx-auto">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent-green" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <p class="text-sm text-slate-700">Opportunity timeline acceleration</p>
-                </div>
+        <!-- Footer -->
+        <footer class="text-center pt-8">
+            <div class="flex justify-center gap-6 text-sm mb-4">
+                <button id="trust-btn" class="text-primary hover:text-blue-700 font-medium">Trust & Safety</button>
+                <a href="mailto:mark@subhoo.com" class="text-primary hover:text-blue-700 font-medium">Contact</a>
             </div>
-        </div>
-
-        <footer class="text-center mt-12 mb-6">
-            <div class="footer-links flex flex-wrap justify-center gap-4 text-sm mb-2">
-                <button id="trust-btn" class="text-primary-600 font-medium hover:text-primary-700 transition-colors py-2 px-4 rounded-lg">Trust & Safety</button>
-                <a href="mailto:mark@subhoo.com" class="text-primary-600 font-medium hover:text-primary-700 transition-colors py-2 px-4 rounded-lg">Contact Us</a>
-            </div>
-            <p class="text-xs text-slate-400">© 2025 AskArti. Made with <span class="text-accent-pink">❤️</span> for sales teams.</p>
+            <p class="text-xs text-gray-400">© 2025 AskArti. Made with ❤️ for Federal Sellers.</p>
         </footer>
     </div>
 
     <!-- Trust & Safety Modal -->
-    <div id="trust-modal" class="hidden fixed inset-0 bg-black bg-opacity-40 modal-backdrop flex items-center justify-center p-4 z-50">
+    <div id="trust-modal" class="hidden fixed inset-0 bg-black/50 modal-backdrop flex items-center justify-center p-4 z-50">
         <div id="trust-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-md modal-content">
-            <header class="p-4 border-b border-slate-200 flex justify-between items-center bg-gradient-to-r from-primary-50 to-white">
-                <h2 class="text-lg font-bold text-primary-700 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+            <header class="p-6 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
                     Trust & Safety
                 </h2>
-                <button id="close-trust-modal-btn" class="text-slate-400 hover:text-slate-600 text-3xl leading-none">&times;</button>
+                <button id="close-trust-modal-btn" class="text-gray-400 hover:text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
             </header>
-            <main class="p-6 space-y-6 text-slate-700">
+            <main class="p-6 space-y-6 text-gray-700">
                 <div class="flex items-start gap-4">
-                    <div class="flex-shrink-0 h-8 w-8 rounded-full bg-accent-blue/10 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-slate-800">Your Data is Private</h3>
-                        <p class="text-sm mt-1">Your prompts are sent directly to the AI model for processing and are not stored on our servers. We do not keep a history of your requests.</p>
+                        <h3 class="font-semibold text-gray-900">Your Data is Private</h3>
+                        <p class="text-sm mt-1 text-gray-600">Your prompts are sent directly to the AI model for processing and are not stored on our servers.</p>
                     </div>
                 </div>
                 <div class="flex items-start gap-4">
-                    <div class="flex-shrink-0 h-8 w-8 rounded-full bg-accent-green/10 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v6a2 2 0 002 2h14a2 2 0 002-2v-6a2 2 0 00-2-2m-2-4h.01M17 16h.01" /></svg>
+                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-green-50 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v6a2 2 0 002 2h14a2 2 0 002-2v-6a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+                        </svg>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-slate-800">AI Model Information</h3>
-                        <p class="text-sm mt-1">AskArti uses Google's Gemini 1.5 AI Model. By default, Google may use API inputs to improve its models.</p>
+                        <h3 class="font-semibold text-gray-900">AI Model Information</h3>
+                        <p class="text-sm mt-1 text-gray-600">AskArti uses Google's Gemini 1.5 AI Model. Google may use API inputs to improve its models.</p>
                     </div>
                 </div>
                 <div class="flex items-start gap-4">
-                    <div class="flex-shrink-0 h-8 w-8 rounded-full bg-accent-purple/10 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-purple-50 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-slate-800">How Recommendations Work</h3>
-                        <p class="text-sm mt-1">Arti is trained on sales methodologies from top-performing sales professionals. It analyzes your situation and provides strategic advice based on proven sales frameworks and tactics that have worked in similar scenarios.</p>
+                        <h3 class="font-semibold text-gray-900">How Recommendations Work</h3>
+                        <p class="text-sm mt-1 text-gray-600">Arti analyzes your situation using proven sales methodologies and provides strategic advice based on similar scenarios.</p>
                     </div>
                 </div>
-                <div class="border-t border-slate-200 pt-4 mt-4">
-                    <p class="text-sm text-slate-500">For more information, contact us at <a href="mailto:mark@subhoo.com" class="text-primary-600 hover:underline">mark@subhoo.com</a></p>
+                <div class="border-t border-gray-200 pt-4">
+                    <p class="text-sm text-gray-500">Questions? Contact us at <a href="mailto:mark@subhoo.com" class="text-primary hover:underline">mark@subhoo.com</a></p>
                 </div>
             </main>
         </div>
@@ -364,7 +227,6 @@
             btnText.classList.toggle('hidden', isLoading);
             loader.classList.toggle('hidden', !isLoading);
             generateBtn.disabled = isLoading;
-            generateBtn.classList.toggle('cursor-not-allowed', isLoading);
         };
 
         const fetchCoachingPlan = async (situation, scenario = null) => {
@@ -386,13 +248,13 @@
         const generatePlan = async () => {
             const situation = situationInput.value.trim();
             if (!situation) {
-                resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 border border-red-200 rounded-lg max-w-2xl mx-auto"><p class="text-red-700 font-medium">Please describe your sales problem first.</p></div>`;
+                resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 border border-red-200 rounded-xl"><p class="text-red-700 font-medium">Please describe your sales problem first.</p></div>`;
                 return;
             }
             originalSituation = situation; 
 
             showLoading(true);
-            resultsContainer.innerHTML = '<div class="flex flex-col justify-center items-center p-10 space-y-4"><div class="results-loader"></div><p class="text-slate-500">Arti is analyzing your situation...</p></div>';
+            resultsContainer.innerHTML = '<div class="flex flex-col justify-center items-center py-16"><div class="results-loader mb-4"></div><p class="text-gray-500">Arti is analyzing your situation...</p></div>';
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             try {
@@ -408,12 +270,12 @@
         const handleScenario = async (scenario, btn) => {
             btn.disabled = true;
             const originalHtml = btn.innerHTML;
-            btn.innerHTML = `<span class="spinner red-team-spinner"></span><span class="ml-2">Rethinking...</span>`;
+            btn.innerHTML = `<div class="flex items-center gap-2"><div class="loader"></div><span>Rethinking...</span></div>`;
             
             document.querySelectorAll('.scenario-btn').forEach(b => b.disabled = true);
             
             try {
-                 resultsContainer.innerHTML = '<div class="flex flex-col justify-center items-center p-10 space-y-4"><div class="results-loader"></div><p class="text-slate-500">Arti is rethinking the plan...</p></div>';
+                 resultsContainer.innerHTML = '<div class="flex flex-col justify-center items-center py-16"><div class="results-loader mb-4"></div><p class="text-gray-500">Arti is rethinking the plan...</p></div>';
                 const planData = await fetchCoachingPlan(originalSituation, scenario);
                 displayPlan(planData);
             } catch (error) {
@@ -426,7 +288,7 @@
 
         const handleRedTeamReview = async (btn) => {
             btn.disabled = true;
-            btn.innerHTML = `<span class="spinner red-team-spinner"></span><span class="ml-2">Analyzing Weaknesses...</span>`;
+            btn.innerHTML = `<div class="flex items-center gap-2"><div class="loader"></div><span>Analyzing Weaknesses...</span></div>`;
 
             try {
                 const response = await fetch(API_ENDPOINT, {
@@ -442,30 +304,24 @@
                 
                 const reviewContainer = document.getElementById('red-team-review-container');
                 reviewContainer.innerHTML = `
-                    <h3 class="text-lg font-bold text-red-800 bg-red-50 p-3 rounded-t-lg border-b border-red-200 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-accent-pink" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                        Devil's Advocate Review
-                    </h3>
-                    <div class="p-4 space-y-4 bg-white">
-                        <div class="bg-accent-pink/5 p-3 rounded-lg border border-accent-pink/20">
-                            <h4 class="font-semibold text-slate-800 flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-accent-pink" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                        <div class="bg-red-50 border-b border-red-200 p-4">
+                            <h3 class="font-semibold text-red-900 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                 </svg>
-                                Skeptical Buyer's Angle:
-                            </h4>
-                            <p class="text-slate-600 mt-1">"${redTeamData.devils_advocate_angle}"</p>
+                                Devil's Advocate Review
+                            </h3>
                         </div>
-                        <div class="bg-accent-purple/5 p-3 rounded-lg border border-accent-purple/20">
-                            <h4 class="font-semibold text-slate-800 flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-accent-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                </svg>
-                                Competitor's Attack Vector:
-                            </h4>
-                            <p class="text-slate-600 mt-1">"${redTeamData.competitor_attack_vector}"</p>
+                        <div class="p-4 space-y-4">
+                            <div class="p-4 bg-red-50 rounded-xl border border-red-100">
+                                <h4 class="font-medium text-gray-900 mb-2">Skeptical Buyer's Angle</h4>
+                                <p class="text-gray-700 text-sm">"${redTeamData.devils_advocate_angle}"</p>
+                            </div>
+                            <div class="p-4 bg-orange-50 rounded-xl border border-orange-100">
+                                <h4 class="font-medium text-gray-900 mb-2">Competitor's Attack Vector</h4>
+                                <p class="text-gray-700 text-sm">"${redTeamData.competitor_attack_vector}"</p>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -477,13 +333,13 @@
         
         const handleCannedPrompt = (e) => {
             const button = e.currentTarget;
-            const promptText = button.querySelector('span:last-child').textContent.trim().replace(/^"|"$/g, ''); 
+            const promptText = button.textContent.trim();
             situationInput.value = promptText;
             
             // Add a little animation
-            button.classList.add('scale-95', 'bg-primary-100');
+            button.classList.add('bg-gray-200');
             setTimeout(() => {
-                button.classList.remove('scale-95', 'bg-primary-100');
+                button.classList.remove('bg-gray-200');
                 generateBtn.click();
             }, 200);
         };
@@ -493,158 +349,144 @@
             const recommendation = planData.high_level_recommendation;
 
             // Create color classes for persona cards
-            const colorClasses = [
-                'bg-gradient-to-br from-primary-50 to-white border-primary-200',
-                'bg-gradient-to-br from-accent-purple/10 to-white border-accent-purple/20',
-                'bg-gradient-to-br from-accent-green/10 to-white border-accent-green/20',
-                'bg-gradient-to-br from-accent-blue/10 to-white border-accent-blue/20'
+            const colors = [
+                { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-900', icon: 'bg-blue-500' },
+                { bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-900', icon: 'bg-purple-500' },
+                { bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-900', icon: 'bg-green-500' },
+                { bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-900', icon: 'bg-orange-500' }
             ];
 
             const personaCardsHTML = coachingPlan.map((personaData, index) => {
-                const colorClass = colorClasses[index % colorClasses.length];
-                const iconColor = ['text-primary-500', 'text-accent-purple', 'text-accent-green', 'text-accent-blue'][index % 4];
+                const color = colors[index % colors.length];
                 
                 const talkingPointsHTML = personaData.talking_points.map(point => `
-                    <li class="flex items-start mb-2">
-                        <span class="mr-2 ${iconColor} flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                            </svg>
-                        </span>
-                        <span>${point}</span>
+                    <li class="flex items-start gap-2 mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="text-gray-700">${point}</span>
                     </li>
                 `).join('');
 
                 return `
-                    <div class="persona-card ${colorClass} p-6 rounded-2xl shadow-sm border relative overflow-hidden">
-                        <h2 class="text-xl font-bold text-slate-900 flex items-center">
-                            <span class="w-8 h-8 rounded-full bg-gradient-to-r from-primary-400 to-primary-600 text-white flex items-center justify-center mr-2 text-sm">${personaData.persona.charAt(0)}</span>
-                            ${personaData.persona}
-                        </h2>
-                        <div class="mt-4 space-y-4 relative z-10">
-                            <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl border border-slate-100">
-                                <h3 class="font-semibold text-slate-700 flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 ${iconColor}" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" />
-                                    </svg>
-                                    SMART Goal
-                                </h3>
-                                <p class="mt-1 text-slate-800">${personaData.smart_goal}</p>
+                    <div class="bg-white rounded-xl border border-gray-200 p-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="${color.icon} w-10 h-10 rounded-xl text-white flex items-center justify-center">
+                                <span class="font-bold">${personaData.persona.charAt(0)}</span>
                             </div>
-                            <div>
-                                <h3 class="font-semibold text-slate-700 mb-2 flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 ${iconColor}" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z" />
-                                        <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
-                                    </svg>
-                                    Key Talking Points
-                                </h3>
-                                <ul class="mt-1 space-y-1 text-slate-700">${talkingPointsHTML}</ul>
-                            </div>
+                            <h2 class="text-xl font-semibold text-gray-900">${personaData.persona}</h2>
                         </div>
-                        <div class="absolute top-0 right-0 w-24 h-24 opacity-10 transform translate-x-8 -translate-y-8">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="${iconColor}">
-                                <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
-                            </svg>
+                        
+                        <div class="space-y-4">
+                            <div class="${color.bg} ${color.border} border p-4 rounded-xl">
+                                <h3 class="font-medium ${color.text} mb-2">SMART Goal</h3>
+                                <p class="text-gray-700">${personaData.smart_goal}</p>
+                            </div>
+                            
+                            <div>
+                                <h3 class="font-medium text-gray-900 mb-3">Key Talking Points</h3>
+                                <ul class="space-y-1">${talkingPointsHTML}</ul>
+                            </div>
                         </div>
                     </div>
                 `;
             }).join('');
 
             resultsContainer.innerHTML = `
-                <div id="coaching-plan-container" class="space-y-6">
-                    <div class="bg-gradient-to-r from-primary-500 to-primary-600 text-white p-6 rounded-xl shadow-lg border border-primary-400">
-                        <div class="flex">
-                            <div class="mr-4 flex-shrink-0">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+                <div id="coaching-plan-container" class="space-y-8">
+                    <!-- Strategic Recommendation -->
+                    <div class="bg-primary text-white p-6 rounded-xl">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-white/20 rounded-xl p-2 flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-white mb-1">Strategic Recommendation</h3>
-                                <p class="text-white/90 font-medium">${recommendation}</p>
+                                <h3 class="text-lg font-semibold mb-2">Strategic Recommendation</h3>
+                                <p class="text-blue-100">${recommendation}</p>
                             </div>
                         </div>
                     </div>
 
-                    ${personaCardsHTML}
+                    <!-- Persona Cards -->
+                    <div class="space-y-6">
+                        ${personaCardsHTML}
+                    </div>
                 </div>
                 
-                <div class="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
-                    <h3 class="text-xl font-bold text-slate-900 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-primary-500" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
-                        </svg>
-                        Interactive Wargaming
-                    </h3>
-                    <p class="text-slate-500 text-sm mt-1 mb-4">Test your plan against different scenarios to prepare for all possibilities.</p>
-                    <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <button class="scenario-btn w-full text-left bg-white hover:bg-slate-50 p-4 rounded-lg transition-all border border-slate-200 hover:border-primary-200 hover:shadow-md flex items-center justify-between group" data-scenario="The timeline is cut in half.">
-                            <span class="flex items-center">
-                                <span class="bg-accent-yellow/20 text-accent-yellow p-2 rounded-full mr-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <!-- Interactive Options -->
+                <div class="mt-12 bg-white rounded-xl border border-gray-200 p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Test Your Plan</h3>
+                    <p class="text-gray-600 text-sm mb-6">Prepare for different scenarios that might arise</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <button class="scenario-btn text-left p-4 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-200 transition-colors" data-scenario="The timeline is cut in half.">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-accent-yellow rounded-xl flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
                                     </svg>
-                                </span>
-                                <span>What if the timeline is cut in half?</span>
-                            </span>
-                            <span class="text-primary-500 group-hover:translate-x-1 transition-transform">→</span>
+                                </div>
+                                <span class="font-medium text-gray-900">Timeline cut in half</span>
+                            </div>
                         </button>
-                        <button class="scenario-btn w-full text-left bg-white hover:bg-slate-50 p-4 rounded-lg transition-all border border-slate-200 hover:border-primary-200 hover:shadow-md flex items-center justify-between group" data-scenario="They say there is no new budget available this year.">
-                            <span class="flex items-center">
-                                <span class="bg-accent-green/20 text-accent-green p-2 rounded-full mr-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        
+                        <button class="scenario-btn text-left p-4 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-200 transition-colors" data-scenario="They say there is no new budget available this year.">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-accent-green rounded-xl flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
                                     </svg>
-                                </span>
-                                <span>What if they say 'no new budget'?</span>
-                            </span>
-                            <span class="text-primary-500 group-hover:translate-x-1 transition-transform">→</span>
+                                </div>
+                                <span class="font-medium text-gray-900">No new budget</span>
+                            </div>
                         </button>
-                        <button class="scenario-btn w-full text-left bg-white hover:bg-slate-50 p-4 rounded-lg transition-all border border-slate-200 hover:border-primary-200 hover:shadow-md flex items-center justify-between group" data-scenario="The champion leaves the agency.">
-                            <span class="flex items-center">
-                                <span class="bg-accent-purple/20 text-accent-purple p-2 rounded-full mr-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        
+                        <button class="scenario-btn text-left p-4 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-200 transition-colors" data-scenario="The champion leaves the agency.">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-accent-purple rounded-xl flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" />
                                     </svg>
-                                </span>
-                                <span>What if my champion leaves?</span>
-                            </span>
-                            <span class="text-primary-500 group-hover:translate-x-1 transition-transform">→</span>
+                                </div>
+                                <span class="font-medium text-gray-900">Champion leaves</span>
+                            </div>
                         </button>
-                        <button class="scenario-btn w-full text-left bg-white hover:bg-slate-50 p-4 rounded-lg transition-all border border-slate-200 hover:border-primary-200 hover:shadow-md flex items-center justify-between group" data-scenario="A new, unexpected competitor emerges.">
-                            <span class="flex items-center">
-                                <span class="bg-accent-pink/20 text-accent-pink p-2 rounded-full mr-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        
+                        <button class="scenario-btn text-left p-4 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-200 transition-colors" data-scenario="A new, unexpected competitor emerges.">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-accent-pink rounded-xl flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
                                     </svg>
-                                </span>
-                                <span>What if a new competitor emerges?</span>
-                            </span>
-                            <span class="text-primary-500 group-hover:translate-x-1 transition-transform">→</span>
+                                </div>
+                                <span class="font-medium text-gray-900">New competitor</span>
+                            </div>
                         </button>
                     </div>
 
-                    <div id="red-team-review-container" class="mt-6 bg-gradient-to-r from-accent-pink/5 to-white rounded-lg border border-accent-pink/20 overflow-hidden">
-                         <button id="red-team-btn" class="w-full bg-gradient-to-r from-accent-pink to-accent-purple text-white font-bold py-3 px-4 rounded-lg transition-all hover:shadow-md flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <div id="red-team-review-container">
+                         <button id="red-team-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                             </svg>
-                            Red Team My Plan (Find Weaknesses)
+                            Red Team My Plan
                         </button>
                     </div>
                 </div>
 
+                <!-- Action Buttons -->
                 <div class="mt-8 flex flex-col sm:flex-row gap-3">
-                    <button id="copy-btn" class="w-full sm:w-auto flex-1 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-bold py-3 px-4 rounded-lg hover:shadow-md transition-all flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <button id="copy-btn" class="flex-1 bg-primary hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
                             <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
                         </svg>
                         Copy Plan
                     </button>
-                    <button id="reset-btn" class="w-full sm:w-auto flex-1 bg-white text-slate-700 font-bold py-3 px-4 rounded-lg border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-slate-500" viewBox="0 0 20 20" fill="currentColor">
+                    <button id="reset-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl border border-gray-200 transition-colors flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
                         </svg>
                         Start Over
@@ -670,12 +512,12 @@
         
         const handleApiError = (error) => {
              console.error("API Error:", error);
-             resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 border border-red-200 rounded-xl max-w-2xl mx-auto">
+             resultsContainer.innerHTML = `<div class="text-center p-8 bg-red-50 border border-red-200 rounded-xl">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-red-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <p class="text-red-700 font-medium">Sorry, something went wrong.</p>
-                <p class="text-red-600 text-sm mt-1">Please try again in a moment.</p>
+                <p class="text-red-700 font-medium">Something went wrong</p>
+                <p class="text-red-600 text-sm mt-1">Please try again in a moment</p>
              </div>`;
         };
 
@@ -683,14 +525,14 @@
             const planContainer = document.getElementById('coaching-plan-container');
             if (!planContainer) return;
             
-            const recommendation = planContainer.querySelector('.bg-gradient-to-r p').textContent.trim();
+            const recommendation = planContainer.querySelector('.bg-primary p').textContent.trim();
             let fullText = `${recommendation}\n\n--- DETAILED PLAN ---\n\n`;
 
-            const personaCards = planContainer.querySelectorAll('.persona-card');
+            const personaCards = planContainer.querySelectorAll('.bg-white.rounded-xl.border');
             personaCards.forEach(card => {
                 const persona = card.querySelector('h2').textContent.trim();
-                const goal = card.querySelector('h3:nth-of-type(1)').nextElementSibling.textContent.trim();
-                const points = Array.from(card.querySelectorAll('ul li span:last-child')).map(span => `- ${span.textContent.trim()}`).join('\n');
+                const goal = card.querySelector('.border.p-4 p').textContent.trim();
+                const points = Array.from(card.querySelectorAll('ul li span')).map(span => `- ${span.textContent.trim()}`).join('\n');
                 fullText += `--- ${persona.toUpperCase()} ---\n\n`;
                 fullText += `SMART GOAL:\n${goal}\n\n`;
                 fullText += `KEY TALKING POINTS:\n${points}\n\n`;
@@ -700,7 +542,7 @@
                 const copyBtn = document.getElementById('copy-btn');
                 const originalHtml = copyBtn.innerHTML;
                 copyBtn.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                     </svg>
                     Copied!
@@ -723,7 +565,7 @@
             trustModalContent.classList.remove('show');
             setTimeout(() => {
                 trustModal.classList.add('hidden');
-            }, 300);
+            }, 200);
         };
 
         // --- Event Listeners ---
@@ -747,27 +589,18 @@
                 closeModal();
             }
         });
-
-        // Add nice hover effects to scenario buttons
-        document.addEventListener('mousemove', function(e) {
-            const buttons = document.querySelectorAll('.scenario-btn');
-            buttons.forEach(button => {
-                if (button.matches(':hover')) {
-                    const bounds = button.getBoundingClientRect();
-                    const x = e.clientX - bounds.left;
-                    const y = e.clientY - bounds.top;
-                    
-                    button.style.background = `radial-gradient(circle at ${x}px ${y}px, #f0f9ff, white)`;
-                }
-            });
+		// Add to your existing JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    const sponsorBanner = document.querySelector('.sponsor-banner');
+    const closeBtn = sponsorBanner?.querySelector('button');
+    
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            sponsorBanner.style.animation = 'slideOutToTop 0.3s ease-in forwards';
+            setTimeout(() => sponsorBanner.remove(), 300);
         });
-
-        document.addEventListener('mouseleave', function(e) {
-            const buttons = document.querySelectorAll('.scenario-btn');
-            buttons.forEach(button => {
-                button.style.background = '';
-            });
-        });
+    }
+});
     </script>
 </body>
 </html>
