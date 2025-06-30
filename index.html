@@ -132,7 +132,7 @@
 
             try {
                 const planData = await fetchCoachingPlan(originalSituation);
-                displayPlan(planData.coaching_plan);
+                displayPlan(planData);
             } catch (error) {
                 handleApiError(error);
             } finally {
@@ -144,14 +144,12 @@
             btn.disabled = true;
             btn.innerHTML = `<span class="spinner red-team-spinner"></span><span class="ml-2">Rethinking...</span>`;
             
-            // Temporarily disable all other scenario buttons
             document.querySelectorAll('.scenario-btn').forEach(b => b.disabled = true);
             
             try {
-                // We only need to show the main results loader when regenerating the whole plan
                  resultsContainer.innerHTML = '<div class="flex flex-col justify-center items-center p-10 space-y-4"><div class="results-loader"></div><p class="text-slate-500">Arti is rethinking the plan...</p></div>';
                 const planData = await fetchCoachingPlan(originalSituation, scenario);
-                displayPlan(planData.coaching_plan);
+                displayPlan(planData);
             } catch (error) {
                 handleApiError(error);
             }
@@ -187,15 +185,16 @@
                         </div>
                     </div>
                 `;
-                btn.style.display = 'none'; // Hide the button after use
+                btn.style.display = 'none';
             } catch (error) {
                 handleApiError(error);
-            } finally {
-                // Don't re-enable the button to prevent multiple clicks
             }
         };
 
-        const displayPlan = (coachingPlan) => {
+        const displayPlan = (planData) => {
+            const coachingPlan = planData.coaching_plan;
+            const recommendation = planData.high_level_recommendation;
+
             const personaCardsHTML = coachingPlan.map(personaData => {
                 const talkingPointsHTML = personaData.talking_points.map(point => `
                     <li class="flex items-start">
@@ -222,11 +221,14 @@
             }).join('');
 
             resultsContainer.innerHTML = `
-                <div id="coaching-plan" class="space-y-6">
+                <div id="coaching-plan-container" class="space-y-6">
+                    <div class="bg-indigo-50 border-l-4 border-indigo-400 text-indigo-900 p-6 rounded-r-lg">
+                        <p class="text-base font-medium">${recommendation}</p>
+                    </div>
+
                     ${personaCardsHTML}
                 </div>
                 
-                <!-- Interactive Module -->
                 <div class="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
                     <h3 class="text-xl font-bold text-slate-900">Interactive Wargaming</h3>
                     <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -255,15 +257,12 @@
                     </div>
                 </div>
 
-
-                <!-- Action Buttons -->
                 <div class="mt-8 flex flex-col sm:flex-row gap-3">
                     <button id="copy-btn" class="w-full sm:w-auto flex-1 bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors">Copy Plan</button>
                     <button id="reset-btn" class="w-full sm:w-auto flex-1 bg-slate-100 text-slate-700 font-bold py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors">Start Over</button>
                 </div>
             `;
             
-            // Add event listeners after rendering
             document.getElementById('reset-btn').addEventListener('click', resetForm);
             document.getElementById('copy-btn').addEventListener('click', copyPlanToClipboard);
             document.getElementById('red-team-btn').addEventListener('click', (e) => handleRedTeamReview(e.currentTarget));
@@ -286,9 +285,12 @@
         };
 
         const copyPlanToClipboard = () => {
-            const planContainer = document.getElementById('coaching-plan');
+            const planContainer = document.getElementById('coaching-plan-container');
             if (!planContainer) return;
-            let fullText = 'ARTI COACHING PLAN\n\n';
+            
+            const recommendation = planContainer.querySelector('.bg-indigo-50 p').textContent.trim();
+            let fullText = `${recommendation}\n\n--- DETAILED PLAN ---\n\n`;
+
             const personaCards = planContainer.querySelectorAll('.persona-card');
             personaCards.forEach(card => {
                 const persona = card.querySelector('h2').textContent.trim();
@@ -298,6 +300,7 @@
                 fullText += `SMART GOAL:\n${goal}\n\n`;
                 fullText += `KEY TALKING POINTS:\n${points}\n\n`;
             });
+
             navigator.clipboard.writeText(fullText.trim()).then(() => {
                 const copyBtn = document.getElementById('copy-btn');
                 copyBtn.textContent = 'Copied!';
@@ -305,7 +308,6 @@
             });
         };
 
-        // --- Event Listeners ---
         generateBtn.addEventListener('click', generatePlan);
     </script>
 </body>
