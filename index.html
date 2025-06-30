@@ -79,7 +79,6 @@
 
     <script>
         // --- DOM Elements ---
-        const mainForm = document.getElementById('main-form');
         const situationInput = document.getElementById('situation-input');
         const generateBtn = document.getElementById('generate-btn');
         const resultsContainer = document.getElementById('results-container');
@@ -171,7 +170,9 @@
         };
 
         const resetForm = () => {
-            mainForm.reset();
+            // FIX #1: Explicitly clear the input value.
+            situationInput.value = '';
+            // Clear the results container and restore the initial message.
             resultsContainer.innerHTML = '';
             resultsContainer.appendChild(initialMessage);
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -185,9 +186,10 @@
 
             const personaCards = planContainer.querySelectorAll('.persona-card');
             personaCards.forEach(card => {
-                const persona = card.querySelector('h2').textContent;
-                const goal = card.querySelector('h3:nth-of-type(1)').nextElementSibling.textContent;
-                const points = Array.from(card.querySelectorAll('ul li')).map(li => `- ${li.lastChild.textContent.trim()}`).join('\n');
+                const persona = card.querySelector('h2').textContent.trim();
+                const goal = card.querySelector('h3:nth-of-type(1)').nextElementSibling.textContent.trim();
+                // FIX #2: Use a more specific selector to get the text of the talking points.
+                const points = Array.from(card.querySelectorAll('ul li span:last-child')).map(span => `- ${span.textContent.trim()}`).join('\n');
 
                 fullText += `--- ${persona.toUpperCase()} ---\n\n`;
                 fullText += `SMART GOAL:\n${goal}\n\n`;
