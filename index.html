@@ -40,9 +40,19 @@
         /* Styles for Modal */
         .modal-backdrop {
             transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+        .modal-backdrop.show {
+            opacity: 1;
         }
         .modal-content {
             transition: transform 0.3s ease, opacity 0.3s ease;
+            transform: scale(0.95);
+            opacity: 0;
+        }
+        .modal-content.show {
+            transform: scale(1);
+            opacity: 1;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -61,7 +71,7 @@
             <p class="text-slate-500 mt-2">Your AI Sales Buddy</p>
             
             <p class="mt-6 text-lg max-w-2xl mx-auto text-slate-700 leading-relaxed">
-                Hey, I’m Arti, your AI Sales Buddy. Whether you’re working a tough deal, hitting a wall with an agency, or have an outrageous quota, I’m here to help. Just tell me what’s going on. No need to clean it up or sugar coat it. I’ll take what you give me and give you some actionable next steps. So, what are we working on today?
+                Hey, I'm Arti, your AI Sales Buddy. Whether you're working a tough deal, hitting a wall with an agency, or have an outrageous quota, I'm here to help. Just tell me what's going on and I'll give you some actionable next steps. So, how can I help?
             </p>
         </header>
 
@@ -79,7 +89,7 @@
                     <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"Economic Buyer went dark after a great call."</button>
                     <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"RFP just dropped and is wired for the incumbent."</button>
                     <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"Technical Buyer keeps raising security concerns."</button>
-                    <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"There’s a new CIO who loves our competitor."</button>
+                    <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"There's a new CIO who loves our competitor."</button>
                 </div>
             </div>
         </main>
@@ -99,13 +109,14 @@
             </div>
         </div>
 
-        <footer class="text-center mt-12">
-            <button id="trust-btn" class="text-sm text-slate-500 hover:text-indigo-600 hover:underline">Trust & Safety</button>
+        <footer class="text-center mt-12 mb-6">
+            <button id="trust-btn" class="text-sm text-slate-500 hover:text-indigo-600 transition-colors py-2 px-4 rounded-lg hover:bg-slate-100">Trust & Safety</button>
         </footer>
     </div>
 
+    <!-- Trust & Safety Modal -->
     <div id="trust-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 modal-backdrop flex items-center justify-center p-4 z-50">
-        <div id="trust-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-md modal-content scale-95 opacity-0">
+        <div id="trust-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-md modal-content">
             <header class="p-4 border-b border-slate-200 flex justify-between items-center">
                 <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
@@ -123,13 +134,13 @@
                         <p class="text-sm mt-1">Your prompts are sent directly to the AI model for processing and are not stored on our servers. We do not keep a history of your requests.</p>
                     </div>
                 </div>
-                 <div class="flex items-start gap-4">
+                <div class="flex items-start gap-4">
                     <div class="flex-shrink-0 h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center">
-                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v6a2 2 0 002 2h14a2 2 0 002-2v-6a2 2 0 00-2-2m-2-4h.01M17 16h.01" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v6a2 2 0 002 2h14a2 2 0 002-2v-6a2 2 0 00-2-2m-2-4h.01M17 16h.01" /></svg>
                     </div>
                     <div>
                         <h3 class="font-semibold text-slate-800">AI Model Training</h3>
-                        <p class="text-sm mt-1">AskArti uses Google’s Gemini API. By default, Google may use API inputs to improve its models. However, for enterprise customers with Google Cloud accounts, data is not used for training. Many organizations (like AWS and Azure) using Google's services will have this protection enabled.</p>
+                        <p class="text-sm mt-1">AskArti uses Google's Gemini 1.5 AI Model. By default, Google may use API inputs to improve its models.</p>
                     </div>
                 </div>
             </main>
@@ -145,12 +156,11 @@
         const btnText = document.getElementById('btn-text');
         const loader = document.getElementById('loader');
         
-        // ADDED: Trust Modal Elements
+        // Trust Modal Elements
         const trustBtn = document.getElementById('trust-btn');
         const trustModal = document.getElementById('trust-modal');
         const trustModalContent = document.getElementById('trust-modal-content');
         const closeTrustModalBtn = document.getElementById('close-trust-modal-btn');
-
 
         // --- State Management ---
         let originalSituation = ""; 
@@ -185,13 +195,13 @@
         const generatePlan = async () => {
             const situation = situationInput.value.trim();
             if (!situation) {
-                resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 border border-red-200 rounded-lg max-w-2xl mx-auto"><p class="text-red-700 font-medium">Please describe your sales situation first.</p></div>`;
+                resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 border border-red-200 rounded-lg max-w-2xl mx-auto"><p class="text-red-700 font-medium">Please describe your sales problem first.</p></div>`;
                 return;
             }
             originalSituation = situation; 
 
             showLoading(true);
-            resultsContainer.innerHTML = '<div class="flex flex-col justify-center items-center p-10 space-y-4"><div class="results-loader"></div><p class="text-slate-500">Arti is analyzing your situation...</p></div>';
+            resultsContainer.innerHTML = '<div class="flex flex-col justify-center items-center p-10 space-y-4"><div class="results-loader"></div><p class="text-slate-500">Arti is thinking about your problem...</p></div>';
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             try {
@@ -378,18 +388,18 @@
             });
         };
         
-        // ADDED: Modal Logic
+        // Modal Logic
         const openModal = () => {
             trustModal.classList.remove('hidden');
             setTimeout(() => {
-                trustModal.classList.remove('opacity-0');
-                trustModalContent.classList.remove('scale-95', 'opacity-0');
+                trustModal.classList.add('show');
+                trustModalContent.classList.add('show');
             }, 10);
         };
         
         const closeModal = () => {
-            trustModal.classList.add('opacity-0');
-            trustModalContent.classList.add('scale-95', 'opacity-0');
+            trustModal.classList.remove('show');
+            trustModalContent.classList.remove('show');
             setTimeout(() => {
                 trustModal.classList.add('hidden');
             }, 300);
@@ -401,7 +411,7 @@
             btn.addEventListener('click', handleCannedPrompt);
         });
         
-        // ADDED: Modal Event Listeners
+        // Modal Event Listeners
         trustBtn.addEventListener('click', openModal);
         closeTrustModalBtn.addEventListener('click', closeModal);
         trustModal.addEventListener('click', (e) => {
@@ -410,6 +420,12 @@
             }
         });
 
+        // Escape key to close modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !trustModal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>
