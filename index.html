@@ -280,8 +280,7 @@
             </main>
         </div>
     </div>
-
-    <script>
+<script>
         // --- DOM Elements ---
         const situationInput = document.getElementById('situation-input');
         const generateBtn = document.getElementById('generate-btn');
@@ -412,11 +411,11 @@
                 { bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-900', icon: 'bg-green-500' },
                 { bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-900', icon: 'bg-orange-500' }
             ];
+            
             const personaCardsHTML = coachingPlan.map((personaData, index) => {
                 const color = colors[index % colors.length];
                 const talkingPointsHTML = personaData.talking_points.map(point => `<li class="flex items-start gap-2 mb-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg><span class="text-gray-700">${point}</span></li>`).join('');
                 
-                // ADDED: HTML structure for the new suggested snippet
                 const snippetHTML = `
                     <div class="mt-4 pt-4 border-t border-gray-200">
                         <h3 class="font-medium text-gray-900 mb-2 flex items-center gap-2">
@@ -478,16 +477,25 @@
             </div>
             <div class="mt-8 flex flex-col sm:flex-row gap-3">
                 <button id="copy-btn" class="flex-1 bg-primary hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" /><path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" /></svg>Copy Plan</button>
-                <button id="linkedin-share-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>Share on LinkedIn</button>
                 <button id="reset-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl border border-gray-200 transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>Start Over</button>
             </div>`;
-            setupResultEventListeners();
+            
+            // Set up event listeners for dynamically created elements
+            document.getElementById('reset-btn').addEventListener('click', resetForm);
+            document.getElementById('copy-btn').addEventListener('click', copyPlanToClipboard);
+            document.getElementById('red-team-btn').addEventListener('click', (e) => handleRedTeamReview(e.currentTarget));
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => handleScenario(e.currentTarget.dataset.scenario, e.currentTarget));
+            });
+            document.querySelectorAll('.copy-snippet-btn').forEach(btn => {
+                btn.addEventListener('click', copySnippet);
+            });
         };
 
         const resetForm = () => {
             situationInput.value = '';
             originalSituation = '';
-            resultsContainer.innerHTML = ''; // This should be empty to start fresh
+            resultsContainer.innerHTML = '';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
         
@@ -530,23 +538,25 @@
             });
         };
 
-        const handleShare = (isLinkedIn) => {
-            const shareText = "Just got some insanely good sales advice from this free AI tool, AskArti. Worth checking out if you're in federal sales.";
-            const shareUrl = "https://askarti.com";
+        const handleShare = () => {
+            const shareText = "Just got some good sales advice from AskArti. Not bad for a free tool.";
+            const shareUrl = window.location.href;
             const fullShareText = `${shareText} ${shareUrl}`;
-            if (isLinkedIn) {
-                const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
-                window.open(linkedInUrl, '_blank');
-                return;
-            }
+            
             if (navigator.share) {
-                navigator.share({ title: 'AskArti - AI Sales Coach', text: shareText, url: shareUrl });
+                navigator.share({
+                    title: 'AskArti - AI Sales Advice',
+                    text: shareText,
+                    url: shareUrl
+                });
             } else {
                 navigator.clipboard.writeText(fullShareText).then(() => {
                     const shareBtn = document.getElementById('share-btn');
                     const originalText = shareBtn.textContent;
-                    shareBtn.textContent = 'Link Copied!';
-                    setTimeout(() => { shareBtn.textContent = originalText; }, 2000);
+                    shareBtn.textContent = 'Copied!';
+                    setTimeout(() => {
+                        shareBtn.textContent = originalText;
+                    }, 2000);
                 });
             }
         };
@@ -565,39 +575,49 @@
             setTimeout(() => { modal.classList.add('hidden'); }, 200);
         };
 
-        const setupResultEventListeners = () => {
-            document.getElementById('reset-btn')?.addEventListener('click', resetForm);
-            document.getElementById('copy-btn')?.addEventListener('click', copyPlanToClipboard);
-            document.getElementById('red-team-btn')?.addEventListener('click', (e) => handleRedTeamReview(e.currentTarget));
-            document.querySelectorAll('.scenario-btn').forEach(btn => btn.addEventListener('click', (e) => handleScenario(e.currentTarget.dataset.scenario, e.currentTarget)));
-            document.querySelectorAll('.copy-snippet-btn').forEach(btn => btn.addEventListener('click', copySnippet));
-        };
+        // --- Event Listeners ---
+        generateBtn.addEventListener('click', generatePlan);
+        document.querySelectorAll('.prompt-btn').forEach(btn => {
+            btn.addEventListener('click', handleCannedPrompt);
+        });
         
-        const originalDisplayPlan = displayPlan;
-        displayPlan = (planData) => {
-            originalDisplayPlan(planData);
-            setupResultEventListeners();
-        };
+        // Modal Event Listeners
+        trustBtn.addEventListener('click', () => openModal(trustModal, trustModalContent));
+        closeTrustModalBtn.addEventListener('click', () => closeModal(trustModal, trustModalContent));
+        trustModal.addEventListener('click', (e) => {
+            if(e.target === trustModal) {
+                closeModal(trustModal, trustModalContent);
+            }
+        });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            generateBtn.addEventListener('click', generatePlan);
-            document.querySelectorAll('.prompt-btn').forEach(btn => btn.addEventListener('click', handleCannedPrompt));
-            trustBtn.addEventListener('click', () => openModal(trustModal, trustModalContent));
-            closeTrustModalBtn.addEventListener('click', () => closeModal(trustModal, trustModalContent));
-            trustModal.addEventListener('click', (e) => { if(e.target === trustModal) closeModal(trustModal, trustModalContent); });
-            sponsorBtn.addEventListener('click', () => openModal(sponsorModal, sponsorModalContent));
-            closeSponsorModalBtn.addEventListener('click', () => closeModal(sponsorModal, sponsorModalContent));
-            sponsorModal.addEventListener('click', (e) => { if(e.target === sponsorModal) closeModal(sponsorModal, sponsorModalContent); });
-            document.getElementById('share-btn').addEventListener('click', () => handleShare(false));
-            document.getElementById('linkedin-share-btn').addEventListener('click', () => handleShare(true));
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    if (trustModal.classList.contains('show')) closeModal(trustModal, trustModalContent);
-                    if (sponsorModal.classList.contains('show')) closeModal(sponsorModal, sponsorModalContent);
+        sponsorBtn.addEventListener('click', () => openModal(sponsorModal, sponsorModalContent));
+        closeSponsorModalBtn.addEventListener('click', () => closeModal(sponsorModal, sponsorModalContent));
+        sponsorModal.addEventListener('click', (e) => {
+            if(e.target === sponsorModal) {
+                closeModal(sponsorModal, sponsorModalContent);
+            }
+        });
+
+        // Share button event listener
+        document.getElementById('share-btn').addEventListener('click', handleShare);
+
+        // Escape key to close modals
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (!trustModal.classList.contains('hidden')) {
+                    closeModal(trustModal, trustModalContent);
                 }
-            });
+                if (!sponsorModal.classList.contains('hidden')) {
+                    closeModal(sponsorModal, sponsorModalContent);
+                }
+            }
+        });
+
+        // Sponsor banner close functionality
+        document.addEventListener('DOMContentLoaded', function() {
             const sponsorBanner = document.querySelector('.sponsor-banner');
             const closeBtn = sponsorBanner?.querySelector('button');
+            
             if (closeBtn) {
                 closeBtn.addEventListener('click', function() {
                     sponsorBanner.style.display = 'none';
