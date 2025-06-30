@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AskArti - One-Shot Sales Coaching</title>
+    <title>AskArti - Interactive Sales Coaching</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,7 @@
             background-color: #f7f8fc;
             -webkit-tap-highlight-color: transparent;
         }
-        .loader {
+        .loader, .spinner {
             border: 4px solid rgba(255,255,255,0.3);
             border-top: 4px solid #ffffff;
             border-radius: 50%;
@@ -30,8 +30,12 @@
             height: 32px;
             animation: spin 1s linear infinite;
         }
-        .fab {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        .fab { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .red-team-spinner {
+             border: 3px solid rgba(79, 70, 229, 0.3); /* indigo-600 with opacity */
+             border-top-color: #4f46e5; /* indigo-600 */
+             width: 20px;
+             height: 20px;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -74,7 +78,6 @@
                 <p class="mt-1 text-sm text-slate-500">Describe your situation above to get started.</p>
             </div>
         </div>
-
     </div>
 
     <script>
@@ -85,6 +88,9 @@
         const initialMessage = document.getElementById('initial-message');
         const btnText = document.getElementById('btn-text');
         const loader = document.getElementById('loader');
+
+        // --- State Management ---
+        let originalSituation = ""; // Store the user's input
 
         // --- API URL ---
         const API_ENDPOINT = 'https://nqux5cu205.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
@@ -97,35 +103,95 @@
             generateBtn.classList.toggle('cursor-not-allowed', isLoading);
         };
 
+        const fetchCoachingPlan = async (situation, scenario = null) => {
+            let request_type = 'generate_one_shot_plan';
+            let body = { request_type, situation };
+            if (scenario) {
+                body.scenario = scenario;
+            }
+
+            const response = await fetch(API_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+            return await response.json();
+        };
+
         const generatePlan = async () => {
-            if (!situationInput.value.trim()) {
+            const situation = situationInput.value.trim();
+            if (!situation) {
                 resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 border border-red-200 rounded-lg max-w-2xl mx-auto"><p class="text-red-700 font-medium">Please describe your sales situation first.</p></div>`;
                 return;
             }
+            originalSituation = situation; // Save the initial input
 
             showLoading(true);
             resultsContainer.innerHTML = '<div class="flex flex-col justify-center items-center p-10 space-y-4"><div class="results-loader"></div><p class="text-slate-500">Arti is analyzing your situation...</p></div>';
+
+            try {
+                const planData = await fetchCoachingPlan(originalSituation);
+                displayPlan(planData.coaching_plan);
+            } catch (error) {
+                handleApiError(error);
+            } finally {
+                showLoading(false);
+            }
+        };
+        
+        const handleScenario = async (scenario, btn) => {
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner red-team-spinner"></span><span class="ml-2">Rethinking...</span>`;
+            
+            // Temporarily disable all other scenario buttons
+            document.querySelectorAll('.scenario-btn').forEach(b => b.disabled = true);
+            
+            try {
+                // We only need to show the main results loader when regenerating the whole plan
+                 resultsContainer.innerHTML = '<div class="flex flex-col justify-center items-center p-10 space-y-4"><div class="results-loader"></div><p class="text-slate-500">Arti is rethinking the plan...</p></div>';
+                const planData = await fetchCoachingPlan(originalSituation, scenario);
+                displayPlan(planData.coaching_plan);
+            } catch (error) {
+                handleApiError(error);
+            }
+        };
+
+        const handleRedTeamReview = async (btn) => {
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner red-team-spinner"></span><span class="ml-2">Analyzing Weaknesses...</span>`;
 
             try {
                 const response = await fetch(API_ENDPOINT, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        request_type: 'generate_one_shot_plan',
-                        situation: situationInput.value,
+                        request_type: 'red_team_review',
+                        situation: originalSituation,
                     })
                 });
-
                 if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
-
-                const planData = await response.json();
-                displayPlan(planData.coaching_plan);
-
+                const redTeamData = await response.json();
+                
+                const reviewContainer = document.getElementById('red-team-review-container');
+                reviewContainer.innerHTML = `
+                    <h3 class="text-lg font-bold text-red-800 bg-red-100 p-3 rounded-t-lg border-b border-red-200">Devil's Advocate Review</h3>
+                    <div class="p-4 space-y-4">
+                        <div>
+                            <h4 class="font-semibold text-slate-800">Skeptical Buyer's Angle:</h4>
+                            <p class="text-slate-600 mt-1">"${redTeamData.devils_advocate_angle}"</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-slate-800">Competitor's Attack Vector:</h4>
+                            <p class="text-slate-600 mt-1">"${redTeamData.competitor_attack_vector}"</p>
+                        </div>
+                    </div>
+                `;
+                btn.style.display = 'none'; // Hide the button after use
             } catch (error) {
-                console.error("Error generating plan:", error);
-                resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 border border-red-200 rounded-lg max-w-2xl mx-auto"><p class="text-red-700 font-medium">Sorry, something went wrong.</p><p class="text-red-600 text-sm mt-1">Please check the console for details.</p></div>`;
+                handleApiError(error);
             } finally {
-                showLoading(false);
+                // Don't re-enable the button to prevent multiple clicks
             }
         };
 
@@ -158,44 +224,80 @@
             resultsContainer.innerHTML = `
                 <div id="coaching-plan" class="space-y-6">
                     ${personaCardsHTML}
-                     <div class="pt-6 flex flex-col sm:flex-row gap-3">
-                        <button id="copy-btn" class="w-full sm:w-auto flex-1 bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors">Copy Plan</button>
-                        <button id="reset-btn" class="w-full sm:w-auto flex-1 bg-slate-100 text-slate-700 font-bold py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors">Start Over</button>
+                </div>
+                
+                <!-- Interactive Module -->
+                <div class="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
+                    <h3 class="text-xl font-bold text-slate-900">Interactive Wargaming</h3>
+                    <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button class="scenario-btn w-full text-left bg-slate-50 hover:bg-slate-100 p-4 rounded-lg transition-colors flex items-center justify-between" data-scenario="The timeline is cut in half.">
+                            <span>What if the timeline is cut in half?</span>
+                            <span>&rarr;</span>
+                        </button>
+                        <button class="scenario-btn w-full text-left bg-slate-50 hover:bg-slate-100 p-4 rounded-lg transition-colors flex items-center justify-between" data-scenario="They say there is no new budget available this year.">
+                             <span>What if they say 'no new budget'?</span>
+                             <span>&rarr;</span>
+                        </button>
+                        <button class="scenario-btn w-full text-left bg-slate-50 hover:bg-slate-100 p-4 rounded-lg transition-colors flex items-center justify-between" data-scenario="The champion leaves the agency.">
+                             <span>What if my champion leaves?</span>
+                             <span>&rarr;</span>
+                        </button>
+                        <button class="scenario-btn w-full text-left bg-slate-50 hover:bg-slate-100 p-4 rounded-lg transition-colors flex items-center justify-between" data-scenario="A new, unexpected competitor emerges.">
+                             <span>What if a new competitor emerges?</span>
+                             <span>&rarr;</span>
+                        </button>
+                    </div>
+
+                    <div id="red-team-review-container" class="mt-6 bg-red-50 rounded-lg border border-red-200">
+                         <button id="red-team-btn" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center">
+                            Red Team My Plan (Find Weaknesses)
+                        </button>
                     </div>
                 </div>
-            `;
 
+
+                <!-- Action Buttons -->
+                <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                    <button id="copy-btn" class="w-full sm:w-auto flex-1 bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors">Copy Plan</button>
+                    <button id="reset-btn" class="w-full sm:w-auto flex-1 bg-slate-100 text-slate-700 font-bold py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors">Start Over</button>
+                </div>
+            `;
+            
+            // Add event listeners after rendering
             document.getElementById('reset-btn').addEventListener('click', resetForm);
             document.getElementById('copy-btn').addEventListener('click', copyPlanToClipboard);
+            document.getElementById('red-team-btn').addEventListener('click', (e) => handleRedTeamReview(e.currentTarget));
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => handleScenario(e.currentTarget.dataset.scenario, e.currentTarget));
+            });
         };
 
         const resetForm = () => {
-            // FIX #1: Explicitly clear the input value.
             situationInput.value = '';
-            // Clear the results container and restore the initial message.
+            originalSituation = '';
             resultsContainer.innerHTML = '';
             resultsContainer.appendChild(initialMessage);
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+        
+        const handleApiError = (error) => {
+             console.error("API Error:", error);
+             resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 border border-red-200 rounded-lg max-w-2xl mx-auto"><p class="text-red-700 font-medium">Sorry, something went wrong.</p><p class="text-red-600 text-sm mt-1">Please check the console for details and try again.</p></div>`;
         };
 
         const copyPlanToClipboard = () => {
             const planContainer = document.getElementById('coaching-plan');
             if (!planContainer) return;
-
             let fullText = 'ARTI COACHING PLAN\n\n';
-
             const personaCards = planContainer.querySelectorAll('.persona-card');
             personaCards.forEach(card => {
                 const persona = card.querySelector('h2').textContent.trim();
                 const goal = card.querySelector('h3:nth-of-type(1)').nextElementSibling.textContent.trim();
-                // FIX #2: Use a more specific selector to get the text of the talking points.
                 const points = Array.from(card.querySelectorAll('ul li span:last-child')).map(span => `- ${span.textContent.trim()}`).join('\n');
-
                 fullText += `--- ${persona.toUpperCase()} ---\n\n`;
                 fullText += `SMART GOAL:\n${goal}\n\n`;
                 fullText += `KEY TALKING POINTS:\n${points}\n\n`;
             });
-
             navigator.clipboard.writeText(fullText.trim()).then(() => {
                 const copyBtn = document.getElementById('copy-btn');
                 copyBtn.textContent = 'Copied!';
