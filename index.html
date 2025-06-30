@@ -78,7 +78,6 @@
                 <div class="mt-3 grid grid-cols-1 gap-2 text-sm">
                     <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"Economic Buyer went dark after a great call."</button>
                     <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"RFP just dropped and is wired for the incumbent."</button>
-                    <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"My boss wants and end of month close, but the agency is dragging its feet."</button>
                     <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"Technical Buyer keeps raising security concerns."</button>
                     <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"There’s a new CIO who loves our competitor."</button>
                 </div>
@@ -146,7 +145,7 @@
         const btnText = document.getElementById('btn-text');
         const loader = document.getElementById('loader');
         
-        // Trust Modal Elements
+        // ADDED: Trust Modal Elements
         const trustBtn = document.getElementById('trust-btn');
         const trustModal = document.getElementById('trust-modal');
         const trustModalContent = document.getElementById('trust-modal-content');
@@ -379,7 +378,7 @@
             });
         };
         
-        // --- Modal Logic ---
+        // ADDED: Modal Logic
         const openModal = () => {
             trustModal.classList.remove('hidden');
             setTimeout(() => {
@@ -401,6 +400,8 @@
         document.querySelectorAll('.prompt-btn').forEach(btn => {
             btn.addEventListener('click', handleCannedPrompt);
         });
+        
+        // ADDED: Modal Event Listeners
         trustBtn.addEventListener('click', openModal);
         closeTrustModalBtn.addEventListener('click', closeModal);
         trustModal.addEventListener('click', (e) => {
