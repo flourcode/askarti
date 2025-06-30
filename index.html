@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AskArti - Interactive Sales Coaching</title>
+    <title>AskArti - Your AI Sales Buddy</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,10 +32,17 @@
         }
         .fab { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .red-team-spinner {
-             border: 3px solid rgba(79, 70, 229, 0.3); /* indigo-600 with opacity */
-             border-top-color: #4f46e5; /* indigo-600 */
+             border: 3px solid rgba(79, 70, 229, 0.3);
+             border-top-color: #4f46e5;
              width: 20px;
              height: 20px;
+        }
+        /* Styles for Modal */
+        .modal-backdrop {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease, opacity 0.3s ease;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -51,7 +58,7 @@
                 <img src="images/arti_right.png" alt="AskArti Logo" class="w-20 h-20">
                 <h1 class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">AskArti</h1>
             </div>
-            <p class="text-slate-500 mt-2">Your Artificial Federal Sales Coach</p>
+            <p class="text-slate-500 mt-2">Your AI Sales Buddy</p>
             
             <p class="mt-6 text-lg max-w-2xl mx-auto text-slate-700 leading-relaxed">
                 Hey, I’m Arti, your AI Sales Buddy. Whether you’re working a tough deal, hitting a wall with an agency, or have an outrageous quota, I’m here to help. Just tell me what’s going on. No need to clean it up or sugar coat it. I’ll take what you give me and give you some actionable next steps. So, what are we working on today?
@@ -69,18 +76,18 @@
             <div id="canned-prompts" class="mt-6">
                 <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Or, try a common scenario:</p>
                 <div class="mt-3 grid grid-cols-1 gap-2 text-sm">
-                    <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"Economic Buyer went dark after a great call. No updates from the Champion either."</button>
-                    <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"RFP just dropped. Feels wired for the incumbent."</button>
-                    <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"My boss wants a Q3 close, but the agency is dragging its feet. Need a path to accelerate."</button>
-                    <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"Technical Buyer keeps raising security concerns. Our proposal’s been sitting for weeks."</button>
-                    <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"There’s a new CIO who loves our competitor. Help me win them over."</button>
+                    <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"Economic Buyer went dark after a great call."</button>
+                    <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"RFP just dropped and is wired for the incumbent."</button>
+                    <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"My boss wants and end of month close, but the agency is dragging its feet."</button>
+                    <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"Technical Buyer keeps raising security concerns."</button>
+                    <button class="prompt-btn text-left p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">"There’s a new CIO who loves our competitor."</button>
                 </div>
             </div>
         </main>
 
         <div class="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-f7f8fc to-transparent pointer-events-none flex justify-center z-10">
             <button id="generate-btn" class="fab bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full w-full max-w-xs transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-300 flex items-center justify-center pointer-events-auto">
-                <span id="btn-text">Ask Arti</span>
+                <span id="btn-text">Get Coaching</span>
                 <div id="loader" class="loader hidden"></div>
             </button>
         </div>
@@ -88,9 +95,45 @@
         <div id="results-container" class="mt-8">
              <div id="initial-message" class="text-center p-6 rounded-lg max-w-2xl mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                <h3 class="mt-2 text-sm font-medium text-slate-700">Ready for a few recommendations?</h3>
-                <p class="mt-1 text-sm text-slate-500">Describe your problem or click a scenario to get started.</p>
+                <h3 class="mt-2 text-sm font-medium text-slate-700">Ready for your one-shot coaching plan?</h3>
+                <p class="mt-1 text-sm text-slate-500">Describe your situation above or click a scenario to get started.</p>
             </div>
+        </div>
+
+        <footer class="text-center mt-12">
+            <button id="trust-btn" class="text-sm text-slate-500 hover:text-indigo-600 hover:underline">Trust & Safety</button>
+        </footer>
+    </div>
+
+    <div id="trust-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 modal-backdrop flex items-center justify-center p-4 z-50">
+        <div id="trust-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-md modal-content scale-95 opacity-0">
+            <header class="p-4 border-b border-slate-200 flex justify-between items-center">
+                <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                    Trust & Safety
+                </h2>
+                <button id="close-trust-modal-btn" class="text-slate-400 hover:text-slate-600 text-3xl leading-none">&times;</button>
+            </header>
+            <main class="p-6 space-y-6 text-slate-700">
+                <div class="flex items-start gap-4">
+                    <div class="flex-shrink-0 h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-800">Your Data is Private</h3>
+                        <p class="text-sm mt-1">Your prompts are sent directly to the AI model for processing and are not stored on our servers. We do not keep a history of your requests.</p>
+                    </div>
+                </div>
+                 <div class="flex items-start gap-4">
+                    <div class="flex-shrink-0 h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v6a2 2 0 002 2h14a2 2 0 002-2v-6a2 2 0 00-2-2m-2-4h.01M17 16h.01" /></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-800">AI Model Training</h3>
+                        <p class="text-sm mt-1">AskArti uses Google’s Gemini API. By default, Google may use API inputs to improve its models. However, for enterprise customers with Google Cloud accounts, data is not used for training. Many organizations (like AWS and Azure) using Google's services will have this protection enabled.</p>
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
 
@@ -102,9 +145,16 @@
         const initialMessage = document.getElementById('initial-message');
         const btnText = document.getElementById('btn-text');
         const loader = document.getElementById('loader');
+        
+        // Trust Modal Elements
+        const trustBtn = document.getElementById('trust-btn');
+        const trustModal = document.getElementById('trust-modal');
+        const trustModalContent = document.getElementById('trust-modal-content');
+        const closeTrustModalBtn = document.getElementById('close-trust-modal-btn');
+
 
         // --- State Management ---
-        let originalSituation = ""; // Store the user's input
+        let originalSituation = ""; 
 
         // --- API URL ---
         const API_ENDPOINT = 'https://nqux5cu205.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
@@ -139,7 +189,7 @@
                 resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 border border-red-200 rounded-lg max-w-2xl mx-auto"><p class="text-red-700 font-medium">Please describe your sales situation first.</p></div>`;
                 return;
             }
-            originalSituation = situation; // Save the initial input
+            originalSituation = situation; 
 
             showLoading(true);
             resultsContainer.innerHTML = '<div class="flex flex-col justify-center items-center p-10 space-y-4"><div class="results-loader"></div><p class="text-slate-500">Arti is analyzing your situation...</p></div>';
@@ -207,7 +257,7 @@
         };
         
         const handleCannedPrompt = (e) => {
-            const promptText = e.currentTarget.textContent.trim().replace(/^"|"$/g, ''); // Clean quotes
+            const promptText = e.currentTarget.textContent.trim().replace(/^"|"$/g, ''); 
             situationInput.value = promptText;
             generateBtn.click();
         };
@@ -328,12 +378,37 @@
                 setTimeout(() => { copyBtn.textContent = 'Copy Plan'; }, 2000);
             });
         };
+        
+        // --- Modal Logic ---
+        const openModal = () => {
+            trustModal.classList.remove('hidden');
+            setTimeout(() => {
+                trustModal.classList.remove('opacity-0');
+                trustModalContent.classList.remove('scale-95', 'opacity-0');
+            }, 10);
+        };
+        
+        const closeModal = () => {
+            trustModal.classList.add('opacity-0');
+            trustModalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                trustModal.classList.add('hidden');
+            }, 300);
+        };
 
         // --- Event Listeners ---
         generateBtn.addEventListener('click', generatePlan);
         document.querySelectorAll('.prompt-btn').forEach(btn => {
             btn.addEventListener('click', handleCannedPrompt);
         });
+        trustBtn.addEventListener('click', openModal);
+        closeTrustModalBtn.addEventListener('click', closeModal);
+        trustModal.addEventListener('click', (e) => {
+            if(e.target === trustModal) {
+                closeModal();
+            }
+        });
+
     </script>
 </body>
 </html>
