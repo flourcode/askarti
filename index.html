@@ -80,6 +80,38 @@
             transform: scale(1);
             opacity: 1;
         }
+        
+        /* New styles for feedback states */
+        .prompt-btn {
+            transition: all 0.2s ease;
+            transform: translateY(0);
+        }
+        .prompt-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        /* Success state animation */
+        @keyframes successPulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        
+        .success-pulse {
+            animation: successPulse 1.5s ease-out;
+        }
+        
+        /* Error state animation */
+        @keyframes errorShake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .error-shake {
+            animation: errorShake 0.6s ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
@@ -92,29 +124,29 @@
         </div>
         <p class="text-md text-gray-600">Your friendly Federal Sales bot</p>
     </header>
-    <main id="main-form" class="bg-white rounded-2xl border border-gray-200 p-8 mb-8">
+    <main id="main-form" class="bg-white rounded-2xl border border-gray-200 p-8 mb-8 shadow-sm">
         <div class="space-y-6">
     <div>
        <label for="situation-input" class="block text-sm font-medium text-gray-700 mb-2 text-center">Hit me with your sales challenges and get SMART goals and messaging for the win.</label>
-       <textarea id="situation-input" rows="5" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary resize-none" placeholder="e.g., Trying to sell cyber to DHS but my Champion has ghosted me and their CIO loves our competitor. My boss thinks I don't know what I'm doing and they might be right."></textarea>
+       <textarea id="situation-input" rows="5" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary resize-none" placeholder="e.g., Trying to sell cyber to DHS but my Champion ghosted me and their CIO loves our competitor. Boss thinks I don't know what I'm doing and they might be right."></textarea>
    </div>
 </div>
             
             <div id="canned-prompts" class="mt-8">
     <div class="flex flex-wrap justify-center gap-2">
-        <button class="prompt-btn px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full border border-gray-200 transition-colors text-sm text-gray-700">
+        <button class="prompt-btn px-4 py-2 bg-accent-orange/10 hover:bg-accent-orange/20 rounded-full border border-accent-orange/30 transition-colors text-sm text-accent-orange font-medium">
             Economic Buyer went dark.
         </button>
-        <button class="prompt-btn px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full border border-gray-200 transition-colors text-sm text-gray-700">
+        <button class="prompt-btn px-4 py-2 bg-accent-pink/10 hover:bg-accent-pink/20 rounded-full border border-accent-pink/30 transition-colors text-sm text-accent-pink font-medium">
             RFP is wired for the incumbent.
         </button>
-        <button class="prompt-btn px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full border border-gray-200 transition-colors text-sm text-gray-700">
+        <button class="prompt-btn px-4 py-2 bg-accent-blue/10 hover:bg-accent-blue/20 rounded-full border border-accent-blue/30 transition-colors text-sm text-accent-blue font-medium">
             Technical Buyer has security concerns.
         </button>
-        <button class="prompt-btn px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full border border-gray-200 transition-colors text-sm text-gray-700">
+        <button class="prompt-btn px-4 py-2 bg-accent-purple/10 hover:bg-accent-purple/20 rounded-full border border-accent-purple/30 transition-colors text-sm text-accent-purple font-medium">
             New CIO loves our competitor.
         </button>
-        <button class="prompt-btn px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full border border-gray-200 transition-colors text-sm text-gray-700">
+        <button class="prompt-btn px-4 py-2 bg-accent-green/10 hover:bg-accent-green/20 rounded-full border border-accent-green/30 transition-colors text-sm text-accent-green font-medium">
             My boss thinks I can't sell.
         </button>
     </div>
@@ -127,8 +159,8 @@
                 <div id="loader" class="loader hidden"></div>
             </button>
         </div>
-<div class="sponsor-banner text-center mb-6">
-    <p class="text-xs text-gray-500">
+<div class="sponsor-banner text-center mb-6 py-2 px-3 bg-blue-50 rounded-lg border border-blue-100">
+    <p class="text-xs text-gray-600">
         <span class="text-blue-600 font-medium">Sponsored by:</span>
         Find a Prime with mandatory Subcontracting requirements on  
         <a href="https://subhoo.com" class="text-blue-600 hover:text-blue-700 font-medium underline">Subhoo.com</a>
@@ -234,7 +266,7 @@
                     </svg>
                 </div>
                 <div>
-                    <h3 class="font-semibold text-gray-900">I’ve Been There</h3>
+                    <h3 class="font-semibold text-gray-900">I've Been There</h3>
 <p class="text-sm mt-1 text-gray-600">With over 30 years in federal service...Marines, DISA, SOCOM and sales leadership at AWS, Red Hat, F5, and Western Digital, I know how complex federal deals can get. Sometimes, you just need someone who speaks the same language to talk it through.</p>
 
                 </div>
@@ -377,6 +409,7 @@
             const situation = situationInput.value.trim();
             if (!situation) {
                 resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 border border-red-200 rounded-xl"><p class="text-red-700 font-medium">Please describe your sales problem first.</p></div>`;
+                resultsContainer.firstChild.classList.add('error-shake');
                 return;
             }
             originalSituation = situation; 
@@ -447,9 +480,7 @@
         const handleCannedPrompt = (e) => {
             const button = e.currentTarget;
             situationInput.value = button.textContent.trim();
-            button.classList.add('bg-gray-200');
             setTimeout(() => {
-                button.classList.remove('bg-gray-200');
                 generateBtn.click();
             }, 200);
         };
@@ -487,7 +518,7 @@
                 `;
 
                 return `
-                    <div class="persona-card bg-white rounded-xl border border-gray-200 p-6">
+                    <div class="persona-card bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="${color.icon} w-10 h-10 rounded-xl text-white flex items-center justify-center"><span class="font-bold">${personaData.persona.charAt(0)}</span></div>
                             <h2 class="text-xl font-semibold text-gray-900">${personaData.persona}</h2>
@@ -508,7 +539,7 @@
             }).join('');
 
             resultsContainer.innerHTML = `<div id="coaching-plan-container" class="space-y-8">
-                <div class="bg-primary text-white p-6 rounded-xl">
+                <div class="bg-primary text-white p-6 rounded-xl shadow-md success-pulse">
                     <div class="flex items-start gap-4">
                         <div class="bg-white/20 rounded-xl p-2 flex-shrink-0"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></div>
                         <div><h3 class="text-lg font-semibold mb-2">Strategic Recommendation</h3><p class="text-blue-100">${recommendation}</p></div>
@@ -516,20 +547,20 @@
                 </div>
                 <div class="space-y-6">${personaCardsHTML}</div>
             </div>
-            <div class="mt-12 bg-white rounded-xl border border-gray-200 p-6">
+            <div class="mt-12 bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
                 <h3 class="text-xl font-semibold text-gray-900 mb-2">Test Your Plan</h3>
                 <p class="text-gray-600 text-sm mb-6">Prepare for different scenarios that might arise</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <button class="scenario-btn text-left p-4 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-200 transition-colors" data-scenario="The timeline is cut in half."><div class="flex items-center gap-3"><div class="w-8 h-8 bg-accent-yellow rounded-xl flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" /></svg></div><span class="font-medium text-gray-900">Timeline cut in half</span></div></button>
-                    <button class="scenario-btn text-left p-4 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-200 transition-colors" data-scenario="They say there is no new budget available this year."><div class="flex items-center gap-3"><div class="w-8 h-8 bg-accent-green rounded-xl flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg></div><span class="font-medium text-gray-900">No new budget</span></div></button>
-                    <button class="scenario-btn text-left p-4 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-200 transition-colors" data-scenario="The champion leaves the agency."><div class="flex items-center gap-3"><div class="w-8 h-8 bg-accent-purple rounded-xl flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" /></svg></div><span class="font-medium text-gray-900">Champion leaves</span></div></button>
-                    <button class="scenario-btn text-left p-4 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-200 transition-colors" data-scenario="A new, unexpected competitor emerges."><div class="flex items-center gap-3"><div class="w-8 h-8 bg-accent-pink rounded-xl flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg></div><span class="font-medium text-gray-900">New competitor</span></div></button>
+                    <button class="scenario-btn text-left p-4 bg-accent-yellow/10 hover:bg-accent-yellow/20 rounded-xl border border-accent-yellow/30 transition-colors shadow-sm hover:shadow" data-scenario="The timeline is cut in half."><div class="flex items-center gap-3"><div class="w-8 h-8 bg-accent-yellow rounded-xl flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" /></svg></div><span class="font-medium text-accent-yellow/90">Timeline cut in half</span></div></button>
+                    <button class="scenario-btn text-left p-4 bg-accent-green/10 hover:bg-accent-green/20 rounded-xl border border-accent-green/30 transition-colors shadow-sm hover:shadow" data-scenario="They say there is no new budget available this year."><div class="flex items-center gap-3"><div class="w-8 h-8 bg-accent-green rounded-xl flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg></div><span class="font-medium text-accent-green/90">No new budget</span></div></button>
+                    <button class="scenario-btn text-left p-4 bg-accent-purple/10 hover:bg-accent-purple/20 rounded-xl border border-accent-purple/30 transition-colors shadow-sm hover:shadow" data-scenario="The champion leaves the agency."><div class="flex items-center gap-3"><div class="w-8 h-8 bg-accent-purple rounded-xl flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" /></svg></div><span class="font-medium text-accent-purple/90">Champion leaves</span></div></button>
+                    <button class="scenario-btn text-left p-4 bg-accent-pink/10 hover:bg-accent-pink/20 rounded-xl border border-accent-pink/30 transition-colors shadow-sm hover:shadow" data-scenario="A new, unexpected competitor emerges."><div class="flex items-center gap-3"><div class="w-8 h-8 bg-accent-pink rounded-xl flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg></div><span class="font-medium text-accent-pink/90">New competitor</span></div></button>
                 </div>
-                <div id="red-team-review-container"><button id="red-team-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2">Red Team My Plan</button></div>
+                <div id="red-team-review-container"><button id="red-team-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow">Red Team My Plan</button></div>
             </div>
             <div class="mt-8 flex flex-col sm:flex-row gap-3">
-                <button id="copy-btn" class="flex-1 bg-primary hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" /><path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" /></svg>Copy Plan</button>
-                <button id="reset-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl border border-gray-200 transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>Start Over</button>
+                <button id="copy-btn" class="flex-1 bg-primary hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" /><path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" /></svg>Copy Plan</button>
+                <button id="reset-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl border border-gray-200 transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>Start Over</button>
             </div>`;
             
             // Set up event listeners for dynamically created elements
@@ -554,6 +585,7 @@
         const handleApiError = (error) => {
              console.error("API Error:", error);
              resultsContainer.innerHTML = `<div class="text-center p-8 bg-red-50 border border-red-200 rounded-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-red-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><p class="text-red-700 font-medium">Something went wrong</p><p class="text-red-600 text-sm mt-1">Please try again in a moment</p></div>`;
+             resultsContainer.firstChild.classList.add('error-shake');
         };
 
         const copyPlanToClipboard = () => {
@@ -576,7 +608,11 @@
                 const copyBtn = document.getElementById('copy-btn');
                 const originalHtml = copyBtn.innerHTML;
                 copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>Copied!`;
-                setTimeout(() => { copyBtn.innerHTML = originalHtml; }, 2000);
+                copyBtn.classList.add('success-pulse');
+                setTimeout(() => { 
+                    copyBtn.innerHTML = originalHtml; 
+                    copyBtn.classList.remove('success-pulse');
+                }, 2000);
             });
         };
 
@@ -650,29 +686,29 @@
             }
         });
 		humanBtn.addEventListener('click', () => openModal(humanModal, humanModalContent));
-closeHumanModalBtn.addEventListener('click', () => closeModal(humanModal, humanModalContent));
-humanModal.addEventListener('click', (e) => {
-    if(e.target === humanModal) {
-        closeModal(humanModal, humanModalContent);
-    }
-});
+        closeHumanModalBtn.addEventListener('click', () => closeModal(humanModal, humanModalContent));
+        humanModal.addEventListener('click', (e) => {
+            if(e.target === humanModal) {
+                closeModal(humanModal, humanModalContent);
+            }
+        });
         // Share button event listener
         document.getElementById('share-btn').addEventListener('click', handleShare);
 
         // Escape key to close modals
         document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        if (!trustModal.classList.contains('hidden')) {
-            closeModal(trustModal, trustModalContent);
-        }
-        if (!sponsorModal.classList.contains('hidden')) {
-            closeModal(sponsorModal, sponsorModalContent);
-        }
-        if (!humanModal.classList.contains('hidden')) {
-            closeModal(humanModal, humanModalContent);
-        }
-    }
-});
+            if (e.key === 'Escape') {
+                if (!trustModal.classList.contains('hidden')) {
+                    closeModal(trustModal, trustModalContent);
+                }
+                if (!sponsorModal.classList.contains('hidden')) {
+                    closeModal(sponsorModal, sponsorModalContent);
+                }
+                if (!humanModal.classList.contains('hidden')) {
+                    closeModal(humanModal, humanModalContent);
+                }
+            }
+        });
 
         // Sponsor banner close functionality
         document.addEventListener('DOMContentLoaded', function() {
