@@ -91,7 +91,7 @@
         <header class="text-center mb-3">
             <div class="flex justify-center items-center gap-3 mb-1">
                 <img src="images/arti_right.png" alt="AskArti Logo" class="w-12 h-12 md:w-16 md:h-16">
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">Hi, I'm Arti!</h1>
+                <h1 class="text-3xl md:text-3xl font-bold text-gray-900 tracking-tight">Hi, I'm Arti!</h1>
             </div>
             <p class="text-md text-gray-600">Your Friendly Federal Sales Bot</p>
         </header>
@@ -266,49 +266,63 @@
             }
         };
 
-        const handleRedTeamReview = async (btn) => {
-            btn.disabled = true;
-            btn.innerHTML = `<div class="flex items-center gap-2"><div class="loader"></div><span>Finding vulnerabilities...</span></div>`;
-            
-            try {
-                const response = await fetch(API_ENDPOINT, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        request_type: 'red_team_review',
-                        situation: originalSituation,
-                    })
-                });
-                
-                if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
-                const redTeamData = await response.json();
-                
-                const reviewContainer = document.getElementById('red-team-review-container');
-                reviewContainer.innerHTML = `
-                    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                        <div class="bg-red-50 border-b border-red-200 p-4">
-                            <h3 class="font-semibold text-red-900 flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                                Deal Vulnerabilities
-                            </h3>
-                        </div>
-                        <div class="p-4 space-y-4">
-                            <div class="p-4 bg-red-50 rounded-xl border border-red-100">
-                                <h4 class="font-medium text-gray-900 mb-2">Why Contracting Will Kill This</h4>
-                                <p class="text-gray-700 text-sm">"${redTeamData.devils_advocate_angle}"</p>
-                            </div>
-                            <div class="p-4 bg-orange-50 rounded-xl border border-orange-100">
-                                <h4 class="font-medium text-gray-900 mb-2">How Competitors Will Attack</h4>
-                                <p class="text-gray-700 text-sm">"${redTeamData.competitor_attack_vector}"</p>
-                            </div>
-                        </div>
-                    </div>`;
-                btn.style.display = 'none';
-            } catch (error) {
-                handleApiError(error);
-            }
-        };
+		const handleRedTeamReview = async (btn) => {
+    btn.disabled = true;
+    btn.innerHTML = `<div class="flex items-center gap-2"><div class="loader"></div><span>Finding vulnerabilities...</span></div>`;
+    
+    try {
+        const response = await fetch(API_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                request_type: 'red_team_review',
+                situation: originalSituation,
+            })
+        });
         
+        if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+        const redTeamData = await response.json();
+        
+        // Add error checking for the response
+        if (!redTeamData.devils_advocate_angle || !redTeamData.competitor_attack_vector) {
+            throw new Error('Invalid red team response');
+        }
+        
+        const reviewContainer = document.getElementById('red-team-review-container');
+        reviewContainer.innerHTML = `
+            <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div class="bg-red-50 border-b border-red-200 p-4">
+                    <h3 class="font-semibold text-red-900 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        Deal Vulnerabilities
+                    </h3>
+                </div>
+                <div class="p-4 space-y-4">
+                    <div class="p-4 bg-red-50 rounded-xl border border-red-100">
+                        <h4 class="font-medium text-gray-900 mb-2">Why Contracting Will Kill This</h4>
+                        <p class="text-gray-700 text-sm">${redTeamData.devils_advocate_angle}</p>
+                    </div>
+                    <div class="p-4 bg-orange-50 rounded-xl border border-orange-100">
+                        <h4 class="font-medium text-gray-900 mb-2">How Competitors Will Attack</h4>
+                        <p class="text-gray-700 text-sm">${redTeamData.competitor_attack_vector}</p>
+                    </div>
+                </div>
+            </div>`;
+        btn.style.display = 'none';
+    } catch (error) {
+        console.error('Red Team Error:', error);
+        // Show error message to user
+        const reviewContainer = document.getElementById('red-team-review-container');
+        reviewContainer.innerHTML = `
+            <div class="bg-red-50 rounded-xl border border-red-100 p-4">
+                <p class="text-red-700 text-sm">Failed to analyze vulnerabilities. Please try again.</p>
+            </div>`;
+        btn.innerHTML = 'Find Deal Killers';
+        btn.disabled = false;
+    }
+};
         const handleCannedPrompt = (e) => {
             const button = e.currentTarget;
             situationInput.value = button.textContent.trim();
