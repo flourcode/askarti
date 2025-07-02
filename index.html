@@ -204,9 +204,9 @@
         <button id="human-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Connect</button>
         <button id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Share</button>
     </div>
-    <p class="text-xs text-gray-400">AskArti provides AI-generated sales advice based on common methodologies and scenarios. This tool is for informational and educational purposes only and does not constitute professional business advice. AI can make errors or provide recommendations that may not suit your specific situation. Users should exercise their own judgment and consider consulting qualified professionals before making important business decisions.</p>
-	<br><br>
-	<p class="text-xs text-gray-400">© 2025 AskArti. Made for and by Federal Sellers.</p>
+    <p class="text-xs text-gray-400">AskArti.com results are provided for informational and educational purposes only and do not constitute professional business advice. AI can make errors or provide recommendations that may not suit your specific situation. Please consult qualified professionals before making important business decisions.</p>
+	<br>
+	<p class="text-xs text-gray-400">© 2025 AskArti. Made for Sellers by Sellers.</p>
 </footer>
     </div>
 
@@ -460,14 +460,32 @@
 
        const displayPlan = (planData) => {
            const coachingPlan = planData.coaching_plan;
-           const recommendation = planData.high_level_recommendation;
+			const recommendation = planData.high_level_recommendation;
+			const eli5 = planData.eli5_summary;
+			const tldr = planData.tldr_summary;
            const colors = [
                { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-500' },
                { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-700' },
                { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-500' },
                { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-700' }
            ];
-           
+           const summaryBlocksHTML = `
+  <div class="space-y-4 mb-6">
+    <div class="bg-customPurple-100/20 border border-customPurple-100/40 rounded-xl p-4">
+      <h3 class="text-sm font-semibold text-customPurple-800 mb-1">🧸 ELI5 Summary</h3>
+      <p class="text-sm text-customPurple-900">${eli5}</p>
+    </div>
+    <div class="bg-customPurple-100/20 border border-customPurple-100/40 rounded-xl p-4">
+      <h3 class="text-sm font-semibold text-customPurple-800 mb-1">📘 TL;DR</h3>
+      <p class="text-sm text-customPurple-900">${tldr}</p>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-xl p-4">
+      <h3 class="text-sm font-semibold text-gray-900 mb-2">💡 High-Level Recommendation</h3>
+      <p class="text-sm text-gray-700">${marked.parse(recommendation)}</p>
+    </div>
+  </div>
+`;
+
            const personaCardsHTML = coachingPlan.map((personaData, index) => {
                const color = colors[index % colors.length];
                const talkingPointsHTML = personaData.talking_points.map(point => `<li class="flex items-start gap-2 mb-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg><span class="text-gray-700">${marked.parse(point)}</span></li>`).join('');
@@ -513,14 +531,27 @@
 
            resultsContainer.innerHTML = `
    <div id="coaching-plan-container" class="space-y-8">
-       <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 p-5 rounded-xl shadow-md success-pulse border border-customPurple-100/50">
-           <img src="images/arti_right.png" alt="Arti" class="float-left h-12 w-12 mr-4 mb-2">
-           <h3 class="text-lg font-semibold mb-1.5 text-customPurple-900">A few thoughts...</h3>
-           <div class="text-gray-800">${marked.parse(recommendation)}</div>
-           <div class="clear-both"></div>
+       <div class="space-y-4">
+           <div class="bg-customPurple-100/20 border border-customPurple-100/40 rounded-xl p-4">
+               <h3 class="text-sm font-semibold text-customPurple-800 mb-1">🧸 ELI5 Summary</h3>
+               <p class="text-sm text-customPurple-900">${eli5}</p>
+           </div>
+           <div class="bg-customPurple-100/20 border border-customPurple-100/40 rounded-xl p-4">
+               <h3 class="text-sm font-semibold text-customPurple-800 mb-1">📘 TL;DR</h3>
+               <p class="text-sm text-customPurple-900">${tldr}</p>
+           </div>
+           <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 p-5 rounded-xl shadow-md border border-customPurple-100/50 success-pulse">
+               <img src="images/arti_right.png" alt="Arti" class="float-left h-12 w-12 mr-4 mb-2">
+               <h3 class="text-lg font-semibold mb-1.5 text-customPurple-900">A few thoughts...</h3>
+               <div class="text-gray-800">${marked.parse(recommendation)}</div>
+               <div class="clear-both"></div>
+           </div>
        </div>
+
        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">${personaCardsHTML}</div>
    </div>
+`;
+
    
    <div class="mt-8 flex flex-col sm:flex-row gap-3">
        <button id="copy-btn" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" /><path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" /></svg>Copy Plan</button>
