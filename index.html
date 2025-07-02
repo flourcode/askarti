@@ -688,5 +688,343 @@
            }
        });
    </script>
+   <!-- Bonus Sales Tools Section -->
+<div id="bonus-tools-modal" class="hidden fixed inset-0 bg-black/50 modal-backdrop flex items-center justify-center p-4 z-50">
+    <div id="bonus-tools-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-md modal-content">
+        <header class="p-6 border-b border-gray-200 flex justify-between items-center">
+            <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 5z" />
+                </svg>
+                Sales Tools
+            </h2>
+            <button id="close-bonus-tools-modal-btn" class="text-gray-400 hover:text-gray-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </header>
+        <main class="p-4">
+            <!-- Tabs -->
+            <div class="flex border-b border-slate-200">
+                <button class="widget-tab flex-1 py-3 px-2 text-sm font-semibold text-slate-600 border-b-2 border-transparent active" data-widget="fy-countdown">FY Countdown</button>
+                <button class="widget-tab flex-1 py-3 px-2 text-sm font-semibold text-slate-600 border-b-2 border-transparent" data-widget="qual-scorecard">Qual Scorecard</button>
+                <button class="widget-tab flex-1 py-3 px-2 text-sm font-semibold text-slate-600 border-b-2 border-transparent" data-widget="golden-hour">Golden Hour</button>
+            </div>
+            
+            <!-- Widget Content -->
+            <div class="p-4">
+                <!-- FY Countdown Widget -->
+                <div id="fy-countdown" class="widget-content">
+                    <div class="text-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-800 tracking-tight">Q4 Spending Season</h3>
+                        <p id="fy-fiscal-year" class="text-customPurple-500 font-semibold text-lg"></p>
+                    </div>
+                    <div id="fy-countdown-wrapper">
+                        <p class="text-center text-gray-600 mb-3">Time remaining until Fiscal Year-End (Sept 30):</p>
+                        <div class="grid grid-cols-4 gap-2 md:gap-4 text-center mb-6">
+                            <div><div class="fy-timer-box rounded-lg p-3 bg-gray-50 border border-gray-200"><div id="fy-days" class="text-3xl font-black text-slate-800">00</div></div><div class="text-xs text-gray-500 mt-2">Days</div></div>
+                            <div><div class="fy-timer-box rounded-lg p-3 bg-gray-50 border border-gray-200"><div id="fy-hours" class="text-3xl font-black text-slate-800">00</div></div><div class="text-xs text-gray-500 mt-2">Hours</div></div>
+                            <div><div class="fy-timer-box rounded-lg p-3 bg-gray-50 border border-gray-200"><div id="fy-minutes" class="text-3xl font-black text-slate-800">00</div></div><div class="text-xs text-gray-500 mt-2">Minutes</div></div>
+                            <div><div class="fy-timer-box rounded-lg p-3 bg-gray-50 border border-gray-200"><div id="fy-seconds" class="text-3xl font-black text-slate-800">00</div></div><div class="text-xs text-gray-500 mt-2">Seconds</div></div>
+                        </div>
+                    </div>
+                    <div id="fy-yearend-message" class="hidden text-center py-8"><h2 class="text-2xl font-bold text-green-600">FY-End Complete!</h2><p class="text-gray-600 mt-2">Time to start planning for the new Fiscal Year.</p></div>
+                    <div class="mb-6"><div class="flex justify-between mb-1"><span class="text-sm font-medium text-gray-700">Q4 Progress</span><span id="fy-progress-percent" class="text-sm font-medium text-gray-700">0%</span></div><div class="w-full bg-gray-200 rounded-full h-2.5"><div id="fy-progress-bar" class="bg-customPurple-500 h-2.5 rounded-full" style="width: 0%"></div></div></div>
+                    <div class="bg-customPurple-100/20 p-4 rounded-lg border border-customPurple-200/30"><h3 class="font-bold text-customPurple-700 mb-2">Strategic Focus</h3><p id="fy-pro-tip" class="text-sm text-gray-700">Loading tip...</p></div>
+                </div>
+                
+                <!-- Qual Scorecard Widget -->
+                <div id="qual-scorecard" class="widget-content hidden">
+                    <div class="text-center mb-6"><h3 class="text-xl font-bold text-gray-800">Lead Qualification Scorecard</h3><p class="text-gray-600 mt-2">Quickly score leads to prioritize your pipeline.</p></div>
+                    <div id="qual-form" class="space-y-4">
+                        <div><p class="font-semibold text-gray-700 mb-2">Budget: Is there an allocated budget?</p><div class="grid grid-cols-3 gap-2"><label class="qual-option-label cursor-pointer text-center py-2 px-1 rounded-md text-sm font-medium border border-gray-300"><input type="radio" name="budget" value="3" class="sr-only"> Yes</label><label class="qual-option-label cursor-pointer text-center py-2 px-1 rounded-md text-sm font-medium border border-gray-300"><input type="radio" name="budget" value="1" class="sr-only"> Maybe</label><label class="qual-option-label cursor-pointer text-center py-2 px-1 rounded-md text-sm font-medium border border-gray-300"><input type="radio" name="budget" value="0" class="sr-only" checked> No</label></div></div>
+                        <div><p class="font-semibold text-gray-700 mb-2">Authority: Are they the decision-maker?</p><div class="grid grid-cols-3 gap-2"><label class="qual-option-label cursor-pointer text-center py-2 px-1 rounded-md text-sm font-medium border border-gray-300"><input type="radio" name="authority" value="3" class="sr-only"> Yes</label><label class="qual-option-label cursor-pointer text-center py-2 px-1 rounded-md text-sm font-medium border border-gray-300"><input type="radio" name="authority" value="2" class="sr-only"> Influencer</label><label class="qual-option-label cursor-pointer text-center py-2 px-1 rounded-md text-sm font-medium border border-gray-300"><input type="radio" name="authority" value="0" class="sr-only" checked> No</label></div></div>
+                        <div><p class="font-semibold text-gray-700 mb-2">Need: How strong is their pain point?</p><div class="grid grid-cols-3 gap-2"><label class="qual-option-label cursor-pointer text-center py-2 px-1 rounded-md text-sm font-medium border border-gray-300"><input type="radio" name="need" value="3" class="sr-only"> High</label><label class="qual-option-label cursor-pointer text-center py-2 px-1 rounded-md text-sm font-medium border border-gray-300"><input type="radio" name="need" value="2" class="sr-only" checked> Medium</label><label class="qual-option-label cursor-pointer text-center py-2 px-1 rounded-md text-sm font-medium border border-gray-300"><input type="radio" name="need" value="0" class="sr-only"> Low</label></div></div>
+                        <div><p class="font-semibold text-gray-700 mb-2">Timeline: How soon do they need it?</p><div class="grid grid-cols-3 gap-2"><label class="qual-option-label cursor-pointer text-center py-2 px-1 rounded-md text-sm font-medium border border-gray-300"><input type="radio" name="timeline" value="3" class="sr-only"> &lt; 3 Mos</label><label class="qual-option-label cursor-pointer text-center py-2 px-1 rounded-md text-sm font-medium border border-gray-300"><input type="radio" name="timeline" value="1" class="sr-only"> 3-6 Mos</label><label class="qual-option-label cursor-pointer text-center py-2 px-1 rounded-md text-sm font-medium border border-gray-300"><input type="radio" name="timeline" value="0" class="sr-only" checked> 6+ Mos</label></div></div>
+                    </div>
+                    <div id="qual-result-card" class="hidden mt-6 rounded-xl p-6 text-center"><div id="qual-result-icon" class="text-5xl mb-3 mx-auto"></div><h2 id="qual-result-title" class="text-2xl font-bold mb-1"></h2><p id="qual-result-description" class="text-lg font-medium"></p></div>
+                </div>
+                
+                <!-- Golden Hour Widget -->
+                <div id="golden-hour" class="widget-content hidden">
+                    <div class="text-center mb-6"><h3 class="text-xl font-bold text-gray-800">Prospect Golden Hour</h3><p class="text-gray-600 mt-2">Find the best time to contact your prospect.</p></div>
+                    <div class="mb-4"><label for="gh-timezone-select" class="block mb-2 text-sm font-medium text-slate-700">Prospect's Time Zone:</label><select id="gh-timezone-select" class="bg-gray-50 border border-gray-300 text-slate-900 text-sm rounded-lg focus:ring-customPurple-500 focus:border-customPurple-500 block w-full p-2.5"></select></div>
+                    <div id="gh-status-card" class="rounded-xl p-6 text-center"><div id="gh-status-icon" class="text-5xl mb-3 mx-auto"></div><h2 id="gh-status-text" class="text-2xl font-bold mb-1"></h2><p id="gh-prospect-time" class="text-lg font-medium text-slate-600"></p><div class="mt-4 pt-4 border-t border-gray-200"><p id="gh-next-golden-hour" class="text-slate-600"></p><p id="gh-your-time-equivalent" class="text-sm text-slate-500"></p></div></div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<style>
+    .widget-tab {
+        transition: all 0.2s ease-in-out;
+    }
+    .widget-tab.active {
+        background-color: rgba(151, 139, 196, 0.3); /* customPurple-100/30 */
+        color: #41327e; /* customPurple-700 */
+        border-color: #523f9e; /* customPurple-500 */
+    }
+    .qual-option-label:has(input:checked) {
+        background-color: #523f9e; /* customPurple-500 */
+        color: white;
+        border-color: #523f9e;
+    }
+</style>
+
+<script>
+// Add the Bonus Tools functionality
+(function() {
+    // Add the Tools button to footer if it doesn't exist
+    if (!document.getElementById('tools-btn')) {
+        const footerDiv = document.querySelector('footer div.flex');
+        if (footerDiv) {
+            const toolsBtn = document.createElement('button');
+            toolsBtn.id = 'tools-btn';
+            toolsBtn.className = 'text-customPurple-500 hover:text-customPurple-700 font-medium';
+            toolsBtn.textContent = 'Tools';
+            footerDiv.appendChild(toolsBtn);
+        }
+    }
+    
+    // Set up tools modal functionality
+    const toolsBtn = document.getElementById('tools-btn');
+    const bonusToolsModal = document.getElementById('bonus-tools-modal');
+    const bonusToolsModalContent = document.getElementById('bonus-tools-modal-content');
+    const closeBonusToolsModalBtn = document.getElementById('close-bonus-tools-modal-btn');
+    
+    // Specific open/close functions for the tools modal
+    function openToolsModal() {
+        bonusToolsModal.classList.remove('hidden');
+        setTimeout(() => {
+            bonusToolsModal.classList.add('show');
+            bonusToolsModalContent.classList.add('show');
+        }, 10);
+    }
+    
+    function closeToolsModal() {
+        bonusToolsModal.classList.remove('show');
+        bonusToolsModalContent.classList.remove('show');
+        setTimeout(() => { bonusToolsModal.classList.add('hidden'); }, 200);
+    }
+    
+    // Add event listeners for modal open/close
+    if (toolsBtn && bonusToolsModal && bonusToolsModalContent && closeBonusToolsModalBtn) {
+        toolsBtn.addEventListener('click', openToolsModal);
+        closeBonusToolsModalBtn.addEventListener('click', closeToolsModal);
+        bonusToolsModal.addEventListener('click', (e) => {
+            if(e.target === bonusToolsModal) {
+                closeToolsModal();
+            }
+        });
+    }
+    
+    // Add tools modal to escape key handler
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !bonusToolsModal.classList.contains('hidden')) {
+            closeToolsModal();
+        }
+    });
+    
+    // Tab switching logic
+    const tabs = document.querySelectorAll('.widget-tab');
+    const widgetContents = document.querySelectorAll('.widget-content');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            const widgetId = tab.dataset.widget;
+            widgetContents.forEach(content => {
+                content.classList.toggle('hidden', content.id !== widgetId);
+            });
+        });
+    });
+    
+    // Activate the first tab by default
+    if (tabs.length > 0) {
+        tabs[0].classList.add('active');
+    }
+
+    // --- FY Countdown Widget JS ---
+    const fy_fiscalYearEl = document.getElementById('fy-fiscal-year');
+    const fy_daysEl = document.getElementById('fy-days');
+    const fy_hoursEl = document.getElementById('fy-hours');
+    const fy_minutesEl = document.getElementById('fy-minutes');
+    const fy_secondsEl = document.getElementById('fy-seconds');
+    const fy_proTipEl = document.getElementById('fy-pro-tip');
+    const fy_countdownWrapper = document.getElementById('fy-countdown-wrapper');
+    const fy_yearendMessage = document.getElementById('fy-yearend-message');
+    const fy_progressBar = document.getElementById('fy-progress-bar');
+    const fy_progressPercent = document.getElementById('fy-progress-percent');
+    
+    function fy_getFiscalYearData(date) {
+        const year = date.getUTCFullYear();
+        const month = date.getUTCMonth();
+        const fiscalYear = month >= 9 ? year + 1 : year;
+        return { fiscalYear, endDate: new Date(`September 30, ${fiscalYear} 23:59:59 GMT-0400`) };
+    }
+
+    function fy_updateTimer() {
+        if (!fy_fiscalYearEl) return; // Don't run if element not on page
+        const now = new Date();
+        const { fiscalYear, endDate } = fy_getFiscalYearData(now);
+        fy_fiscalYearEl.textContent = `Fiscal Year ${fiscalYear}`;
+        const totalSeconds = (endDate - now) / 1000;
+        if (totalSeconds > 0) {
+            fy_daysEl.textContent = String(Math.floor(totalSeconds / 3600 / 24)).padStart(2, '0');
+            fy_hoursEl.textContent = String(Math.floor(totalSeconds / 3600) % 24).padStart(2, '0');
+            fy_minutesEl.textContent = String(Math.floor(totalSeconds / 60) % 60).padStart(2, '0');
+            fy_secondsEl.textContent = String(Math.floor(totalSeconds) % 60).padStart(2, '0');
+            const q4StartDate = new Date(`July 1, ${fiscalYear} 00:00:00 GMT-0400`);
+            const progress = Math.min(100, Math.max(0, ((now - q4StartDate) / (endDate - q4StartDate)) * 100));
+            fy_progressBar.style.width = `${progress}%`;
+            fy_progressPercent.textContent = `${Math.round(progress)}%`;
+        } else {
+            fy_countdownWrapper.classList.add('hidden');
+            fy_yearendMessage.classList.remove('hidden');
+            fy_progressBar.style.width = '100%';
+            fy_progressPercent.textContent = '100%';
+            clearInterval(fy_timerInterval);
+        }
+        fy_updateStrategicTip(now.getUTCMonth());
+    }
+
+    function fy_updateStrategicTip(month) {
+        let tip = '';
+        switch (month) {
+            case 6: tip = "Agencies are finalizing requirements. Focus on RFIs/Sources Sought notices and solidify relationships."; break;
+            case 7: tip = "The buying season is in full swing. RFPs are dropping daily. Prioritize high-PWin opportunities."; break;
+            case 8: tip = "It's award season! Follow up on submitted proposals and watch for last-minute simplified acquisitions."; break;
+            default: tip = "Focus on building your pipeline and strategy for the next fiscal year. Analyze wins and losses.";
+        }
+        fy_proTipEl.textContent = tip;
+    }
+    const fy_timerInterval = setInterval(fy_updateTimer, 1000);
+    fy_updateTimer();
+
+    // --- Qual Scorecard Widget JS ---
+    const qual_form = document.getElementById('qual-form');
+    const qual_resultCard = document.getElementById('qual-result-card');
+    const qual_resultIcon = document.getElementById('qual-result-icon');
+    const qual_resultTitle = document.getElementById('qual-result-title');
+    const qual_resultDescription = document.getElementById('qual-result-description');
+    const qual_scoreThresholds = { hot: 9, warm: 5 };
+
+    function qual_calculateScore() {
+        if (!qual_form) return;
+        const budget = parseInt(qual_form.querySelector('input[name="budget"]:checked').value);
+        const authority = parseInt(qual_form.querySelector('input[name="authority"]:checked').value);
+        const need = parseInt(qual_form.querySelector('input[name="need"]:checked').value);
+        const timeline = parseInt(qual_form.querySelector('input[name="timeline"]:checked').value);
+        qual_updateResult(budget + authority + need + timeline);
+    }
+
+    function qual_updateResult(score) {
+        if (!qual_resultCard) return;
+        qual_resultCard.classList.remove('hidden', 'bg-red-100', 'text-red-800', 'bg-yellow-100', 'text-yellow-800', 'bg-green-100', 'text-green-800');
+        if (score >= qual_scoreThresholds.hot) {
+            qual_resultCard.classList.add('bg-customPurple-100/30', 'text-customPurple-700');
+            qual_resultIcon.textContent = '🔥';
+            qual_resultTitle.textContent = `Hot Lead (Score: ${score})`;
+            qual_resultDescription.textContent = "Pursue this lead immediately. They are a great fit.";
+        } else if (score >= qual_scoreThresholds.warm) {
+            qual_resultCard.classList.add('bg-yellow-100', 'text-yellow-800');
+            qual_resultIcon.textContent = '🤔';
+            qual_resultTitle.textContent = `Warm Lead (Score: ${score})`;
+            qual_resultDescription.textContent = "Good potential. Nurture and develop this relationship.";
+        } else {
+            qual_resultCard.classList.add('bg-red-100', 'text-red-800');
+            qual_resultIcon.textContent = '❄️';
+            qual_resultTitle.textContent = `Cold Lead (Score: ${score})`;
+            qual_resultDescription.textContent = "Low priority. Add to a long-term nurture campaign.";
+        }
+        qual_resultCard.classList.remove('hidden');
+    }
+    if (qual_form) {
+        qual_form.addEventListener('change', qual_calculateScore);
+        qual_calculateScore();
+    }
+    
+    // --- Golden Hour Widget JS ---
+    const gh_timezoneSelect = document.getElementById('gh-timezone-select');
+    const gh_statusCard = document.getElementById('gh-status-card');
+    const gh_statusIcon = document.getElementById('gh-status-icon');
+    const gh_statusText = document.getElementById('gh-status-text');
+    const gh_prospectTime = document.getElementById('gh-prospect-time');
+    const gh_nextGoldenHour = document.getElementById('gh-next-golden-hour');
+    const gh_yourTimeEquivalent = document.getElementById('gh-your-time-equivalent');
+    const gh_timezones = {"USA & Canada": ["America/New_York", "America/Chicago", "America/Denver", "America/Phoenix", "America/Los_Angeles", "America/Anchorage", "Pacific/Honolulu"], "Europe": ["Europe/London", "Europe/Paris", "Europe/Berlin", "Europe/Helsinki"], "Asia & Australia": ["Asia/Dubai", "Asia/Kolkata", "Asia/Singapore", "Asia/Tokyo", "Australia/Sydney", "Australia/Perth"]};
+    const gh_GOLDEN_HOURS = [{ start: 8, end: 9 }, { start: 13, end: 14 }];
+
+    function gh_populateTimezones() {
+        if (!gh_timezoneSelect) return;
+        for (const region in gh_timezones) {
+            const optgroup = document.createElement('optgroup');
+            optgroup.label = region;
+            gh_timezones[region].forEach(tz => {
+                const option = document.createElement('option');
+                option.value = tz;
+                option.textContent = tz.replace(/_/g, ' ');
+                optgroup.appendChild(option);
+            });
+            gh_timezoneSelect.appendChild(optgroup);
+        }
+        try {
+            const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            if (Object.values(gh_timezones).flat().includes(userTz)) gh_timezoneSelect.value = userTz;
+            else gh_timezoneSelect.value = "America/New_York";
+        } catch(e) { gh_timezoneSelect.value = "America/New_York"; }
+    }
+
+    function gh_analyzeTime() {
+        if (!gh_timezoneSelect || !gh_statusText) return;
+        const selectedTz = gh_timezoneSelect.value;
+        const now = new Date();
+        const prospectHour = parseInt(now.toLocaleTimeString('en-US', { timeZone: selectedTz, hour: '2-digit', hourCycle: 'h23' }), 10);
+        gh_prospectTime.textContent = `Their time: ${now.toLocaleTimeString('en-US', { timeZone: selectedTz, hour: '2-digit', minute: '2-digit', hour12: true })}`;
+        const isGoldenHour = gh_GOLDEN_HOURS.some(w => prospectHour >= w.start && prospectHour <= w.end);
+        if (isGoldenHour) {
+            gh_updateUI('golden');
+        } else {
+            let nextStartHour = gh_GOLDEN_HOURS.find(w => prospectHour < w.start)?.start ?? gh_GOLDEN_HOURS[0].start;
+            gh_updateUI('wait', { nextStartHour, selectedTz, now });
+        }
+    }
+
+    function gh_updateUI(status, data = {}) {
+        if (!gh_statusCard) return;
+        gh_statusCard.className = 'rounded-xl p-6 text-center';
+        if (status === 'golden') {
+            gh_statusCard.classList.add('bg-customPurple-100/30');
+            gh_statusIcon.textContent = '✅';
+            gh_statusText.textContent = "It's a Golden Hour!";
+            gh_statusText.className = 'text-2xl font-bold mb-1 text-customPurple-700';
+            gh_nextGoldenHour.textContent = 'A great time to make contact.';
+            gh_yourTimeEquivalent.textContent = '';
+        } else {
+            gh_statusCard.classList.add('bg-amber-100');
+            gh_statusIcon.textContent = '⏳';
+            gh_statusText.textContent = 'Hold Off For Now';
+            gh_statusText.className = 'text-2xl font-bold mb-1 text-amber-800';
+            const { nextStartHour, selectedTz, now } = data;
+            const nextDate = new Date(now);
+            nextDate.toLocaleString('en-US', {timeZone: selectedTz});
+            nextDate.setHours(nextStartHour, 0, 0, 0);
+            if (nextDate < now) nextDate.setDate(nextDate.getDate() + 1);
+            gh_nextGoldenHour.textContent = `The next golden hour starts at ${nextDate.toLocaleTimeString('en-US', { timeZone: selectedTz, hour: 'numeric', hour12: true })}.`;
+            gh_yourTimeEquivalent.textContent = `(That's ${nextDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZoneName: 'short' })} your time)`;
+        }
+    }
+    
+    // Initialize Golden Hour widget
+    if (gh_timezoneSelect) {
+        gh_populateTimezones();
+        gh_analyzeTime();
+        gh_timezoneSelect.addEventListener('change', gh_analyzeTime);
+        setInterval(gh_analyzeTime, 60000);
+    }
+})();
+</script>
 </body>
 </html>
