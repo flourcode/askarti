@@ -324,7 +324,7 @@
                     </div>
                     <div>
                         <h3 class="font-semibold text-gray-900">AI Model Information</h3>
-                        <p class="text-sm mt-1 text-gray-600">AskArti uses advanced AI models for generating coaching responses. We don't store your conversations or use them for model training.</p>
+                        <p class="text-sm mt-1 text-gray-600">AskArti uses Gemini and/or Claude for generating coaching responses.</p>
                     </div>
                 </div>
                 <div class="flex items-start gap-4">
@@ -504,171 +504,184 @@
     }, 200);
 };
 
-        const displayPlan = (planData) => {
-            const coachingPlan = planData.coaching_plan;
-            const recommendation = planData.high_level_recommendation;
-            
-            const colors = [
-                { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-500' },
-                { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-700' },
-                { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-500' },
-                { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-700' }
-            ];
-            
-            const personaCardsHTML = coachingPlan.map((personaData, index) => {
-                const color = colors[index % colors.length];
-                const talkingPointsHTML = personaData.talking_points.map(point => 
-                    `<li class="flex items-start gap-2 mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+const displayPlan = (planData) => {
+    const coachingPlan = planData.coaching_plan;
+    const recommendation = planData.high_level_recommendation;
+    
+    // Detect if this is interview mode
+    const isInterviewMode = originalSituation.toLowerCase().includes('interview') || 
+                           originalSituation.toLowerCase().includes('aws') && originalSituation.toLowerCase().includes('role');
+    
+    const colors = [
+        { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-500' },
+        { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-700' },
+        { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-500' },
+        { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-700' }
+    ];
+    
+    const personaCardsHTML = coachingPlan.map((personaData, index) => {
+        const color = colors[index % colors.length];
+        const talkingPointsHTML = personaData.talking_points.map(point => 
+            `<li class="flex items-start gap-2 mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+                <span class="text-gray-700">${point}</span>
+            </li>`
+        ).join('');
+        
+        const snippetHTML = `
+            <div class="mt-4 pt-4 border-t border-gray-200">
+                <h3 class="font-medium text-gray-900 mb-2 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
+                        <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" />
+                    </svg>
+                    Copy/Paste Template
+                </h3>
+                <div class="relative bg-gray-50 p-3 rounded-lg border border-gray-200">
+                    <p class="text-sm text-gray-700 snippet-text">${personaData.suggested_snippet}</p>
+                    <button class="copy-snippet-btn absolute top-2 right-2 p-1.5 bg-white/50 hover:bg-gray-200/80 rounded-full transition-colors" 
+                        data-text="${personaData.suggested_snippet}" title="Copy Template">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                         </svg>
-                        <span class="text-gray-700">${point}</span>
-                    </li>`
-                ).join('');
-                
-                const snippetHTML = `
-                    <div class="mt-4 pt-4 border-t border-gray-200">
-                        <h3 class="font-medium text-gray-900 mb-2 flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
-                                <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" />
-                            </svg>
-                            Copy/Paste Template
-                        </h3>
-                        <div class="relative bg-gray-50 p-3 rounded-lg border border-gray-200">
-                            <p class="text-sm text-gray-700 snippet-text">${personaData.suggested_snippet}</p>
-                            <button class="copy-snippet-btn absolute top-2 right-2 p-1.5 bg-white/50 hover:bg-gray-200/80 rounded-full transition-colors" 
-                                data-text="${personaData.suggested_snippet}" title="Copy Template">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                `;
-
-                return `
-                    <div class="persona-card bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="flex items-start gap-3 mb-4">
-                            <div class="${color.icon} w-10 h-10 rounded-xl text-white flex-shrink-0 flex items-center justify-center">
-                                <span class="font-bold">${personaData.persona.charAt(0)}</span>
-                            </div>
-                            <h2 class="text-xl font-semibold text-gray-900 break-words">${personaData.persona}</h2>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="${color.bg} ${color.border} border p-4 rounded-xl">
-                                <h3 class="font-medium text-customPurple-700 mb-2">Next 72 Hours</h3>
-                                <p class="text-gray-700">${personaData.smart_goal}</p>
-                            </div>
-                            <div>
-                                <h3 class="font-medium text-gray-900 mb-3">Exact Tactics</h3>
-                                <ul class="space-y-1">${talkingPointsHTML}</ul>
-                            </div>
-                            ${snippetHTML}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            resultsContainer.innerHTML = `
-                <div id="coaching-plan-container" class="space-y-8">
-                    <div class="bg-customPurple-100/20 p-5 rounded-xl shadow-md success-pulse">
-                        <div class="relative">
-                            <img src="images/arti_right.png" alt="Arti" class="absolute top-0 left-0 h-10 w-10 flex-shrink-0">
-                            <div class="pl-14">
-                                <h3 class="text-lg font-semibold mb-1.5">Here's the play...</h3>
-                                <p class="text-gray-800">${recommendation}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="space-y-6">${personaCardsHTML}</div>
+                    </button>
                 </div>
-                
-                <div class="mt-12 bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Stress Test Your Strategy</h3>
-                    <p class="text-gray-600 text-sm mb-6">What curveballs might kill this deal?</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <button class="scenario-btn text-left p-4 bg-customPurple-100/20 hover:bg-customPurple-100/40 rounded-xl border border-customPurple-100/40 transition-colors shadow-sm hover:shadow" 
-                            data-scenario="Continuing Resolution hits - all new contracts frozen">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 bg-customPurple-500 rounded-xl flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <span class="font-medium text-customPurple-700">CR freezes everything</span>
-                            </div>
-                        </button>
-                        <button class="scenario-btn text-left p-4 bg-customPurple-100/20 hover:bg-customPurple-100/40 rounded-xl border border-customPurple-100/40 transition-colors shadow-sm hover:shadow" 
-                            data-scenario="SBA protests - says this should be small business set-aside">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 bg-customPurple-500 rounded-xl flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <span class="font-medium text-customPurple-700">Small business protest</span>
-                            </div>
-                        </button>
-                        <button class="scenario-btn text-left p-4 bg-customPurple-100/20 hover:bg-customPurple-100/40 rounded-xl border border-customPurple-100/40 transition-colors shadow-sm hover:shadow" 
-                            data-scenario="Champion gets detailed to another agency for 6 months">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 bg-customPurple-500 rounded-xl flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <span class="font-medium text-customPurple-700">Champion detailed out</span>
-                            </div>
-							</button>
-                       <button class="scenario-btn text-left p-4 bg-customPurple-100/20 hover:bg-customPurple-100/40 rounded-xl border border-customPurple-100/40 transition-colors shadow-sm hover:shadow" 
-                           data-scenario="IG audit finds we need higher security certification">
-                           <div class="flex items-center gap-3">
-                               <div class="w-8 h-8 bg-customPurple-500 rounded-xl flex items-center justify-center">
-                                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
-                                       <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                                   </svg>
-                               </div>
-                               <span class="font-medium text-customPurple-700">IG demands higher cert</span>
-                           </div>
-                       </button>
-                   </div>
-                   <div id="red-team-review-container">
-                       <button id="red-team-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow">
-                           Find Deal Killers
-                       </button>
-                   </div>
-               </div>
-               
-               <div class="mt-8 flex flex-col sm:flex-row gap-3">
-                   <button id="copy-btn" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow">
-                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                           <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
-                           <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
-                       </svg>
-                       Copy Full Strategy
-                   </button>
-                   <button id="reset-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl border border-gray-200 transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow">
-                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                           <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
-                       </svg>
-                       New Situation
-                   </button>
-               </div>
-           `;
-           
-           // Set up event listeners for dynamically created elements
-           document.getElementById('reset-btn').addEventListener('click', resetForm);
-           document.getElementById('copy-btn').addEventListener('click', copyPlanToClipboard);
-           document.getElementById('red-team-btn').addEventListener('click', (e) => handleRedTeamReview(e.currentTarget));
-           document.querySelectorAll('.scenario-btn').forEach(btn => {
-               btn.addEventListener('click', (e) => handleScenario(e.currentTarget.dataset.scenario, e.currentTarget));
-           });
-           document.querySelectorAll('.copy-snippet-btn').forEach(btn => {
-               btn.addEventListener('click', copySnippet);
-           });
-       };
+            </div>
+        `;
 
+        return `
+            <div class="persona-card bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-start gap-3 mb-4">
+                    <div class="${color.icon} w-10 h-10 rounded-xl text-white flex-shrink-0 flex items-center justify-center">
+                        <span class="font-bold">${personaData.persona.charAt(0)}</span>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900 break-words">${personaData.persona}</h2>
+                </div>
+                <div class="space-y-4">
+                    <div class="${color.bg} ${color.border} border p-4 rounded-xl">
+                        <h3 class="font-medium text-customPurple-700 mb-2">Next 72 Hours</h3>
+                        <p class="text-gray-700">${personaData.smart_goal}</p>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-3">Exact Tactics</h3>
+                        <ul class="space-y-1">${talkingPointsHTML}</ul>
+                    </div>
+                    ${snippetHTML}
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // Only show stress test section if NOT in interview mode
+    const stressTestSection = !isInterviewMode ? `
+        <div class="mt-12 bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Stress Test Your Strategy</h3>
+            <p class="text-gray-600 text-sm mb-6">What curveballs might kill this deal?</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <button class="scenario-btn text-left p-4 bg-customPurple-100/20 hover:bg-customPurple-100/40 rounded-xl border border-customPurple-100/40 transition-colors shadow-sm hover:shadow" 
+                    data-scenario="Continuing Resolution hits - all new contracts frozen">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-customPurple-500 rounded-xl flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <span class="font-medium text-customPurple-700">CR freezes everything</span>
+                    </div>
+                </button>
+                <button class="scenario-btn text-left p-4 bg-customPurple-100/20 hover:bg-customPurple-100/40 rounded-xl border border-customPurple-100/40 transition-colors shadow-sm hover:shadow" 
+                    data-scenario="SBA protests - says this should be small business set-aside">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-customPurple-500 rounded-xl flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <span class="font-medium text-customPurple-700">Small business protest</span>
+                    </div>
+                </button>
+                <button class="scenario-btn text-left p-4 bg-customPurple-100/20 hover:bg-customPurple-100/40 rounded-xl border border-customPurple-100/40 transition-colors shadow-sm hover:shadow" 
+                    data-scenario="Champion gets detailed to another agency for 6 months">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-customPurple-500 rounded-xl flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <span class="font-medium text-customPurple-700">Champion detailed out</span>
+                    </div>
+                </button>
+                <button class="scenario-btn text-left p-4 bg-customPurple-100/20 hover:bg-customPurple-100/40 rounded-xl border border-customPurple-100/40 transition-colors shadow-sm hover:shadow" 
+                    data-scenario="IG audit finds we need higher security certification">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-customPurple-500 rounded-xl flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <span class="font-medium text-customPurple-700">IG demands higher cert</span>
+                    </div>
+                </button>
+            </div>
+            <div id="red-team-review-container">
+                <button id="red-team-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow">
+                    Find Deal Killers
+                </button>
+            </div>
+        </div>
+    ` : '';
+
+    resultsContainer.innerHTML = `
+        <div id="coaching-plan-container" class="space-y-8">
+            <div class="bg-customPurple-100/20 p-5 rounded-xl shadow-md success-pulse">
+                <div class="relative">
+                    <img src="images/arti_right.png" alt="Arti" class="absolute top-0 left-0 h-10 w-10 flex-shrink-0">
+                    <div class="pl-14">
+                        <h3 class="text-lg font-semibold mb-1.5">Here's the play...</h3>
+                        <p class="text-gray-800">${recommendation}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-6">${personaCardsHTML}</div>
+        </div>
+        
+        ${stressTestSection}
+        
+        <div class="mt-8 flex flex-col sm:flex-row gap-3">
+            <button id="copy-btn" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
+                    <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
+                </svg>
+                Copy Full Strategy
+            </button>
+            <button id="reset-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl border border-gray-200 transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                </svg>
+                New Situation
+            </button>
+        </div>
+    `;
+    
+    // Set up event listeners for dynamically created elements
+    document.getElementById('reset-btn').addEventListener('click', resetForm);
+    document.getElementById('copy-btn').addEventListener('click', copyPlanToClipboard);
+    
+    // Only set up stress test event listeners if NOT in interview mode
+    if (!isInterviewMode) {
+        document.getElementById('red-team-btn').addEventListener('click', (e) => handleRedTeamReview(e.currentTarget));
+        document.querySelectorAll('.scenario-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => handleScenario(e.currentTarget.dataset.scenario, e.currentTarget));
+        });
+    }
+    
+    document.querySelectorAll('.copy-snippet-btn').forEach(btn => {
+        btn.addEventListener('click', copySnippet);
+    });
+};
        const resetForm = () => {
            situationInput.value = '';
            originalSituation = '';
