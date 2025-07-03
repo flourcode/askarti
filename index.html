@@ -585,7 +585,7 @@ const displayProspectingResults = (prospectData) => {
     <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 p-5 rounded-xl shadow-md border border-customPurple-100/50">
         <img src="images/arti_right.png" alt="Arti" class="float-left h-12 w-12 mr-4 mb-2">
         <h3 class="text-lg font-semibold mb-2 text-customPurple-900">Prospecting Research Results</h3>
-        <p class="text-gray-800">${summary}</p>
+        <div class="text-gray-800">${marked.parse(summary)}</div>
         <div class="clear-both"></div>
     </div>
     
@@ -598,7 +598,7 @@ const displayProspectingResults = (prospectData) => {
                 NAICS Codes
             </h3>
             <ul class="space-y-1">
-                ${naics_codes.map(code => `<li class="text-sm text-gray-700 flex items-start gap-2"><span class="text-customPurple-500">•</span>${code}</li>`).join('')}
+                ${naics_codes.map(code => `<li class="text-sm text-gray-700 flex items-start gap-2"><span class="text-customPurple-500">•</span><span>${marked.parse(code).replace(/<\/?p>/g, '')}</span></li>`).join('')}
             </ul>
         </div>
         
@@ -610,7 +610,7 @@ const displayProspectingResults = (prospectData) => {
                 Related Vendors
             </h3>
             <ul class="space-y-1">
-                ${related_vendors.map(vendor => `<li class="text-sm text-gray-700 flex items-start gap-2"><span class="text-customPurple-500">•</span>${vendor}</li>`).join('')}
+                ${related_vendors.map(vendor => `<li class="text-sm text-gray-700 flex items-start gap-2"><span class="text-customPurple-500">•</span><span>${marked.parse(vendor).replace(/<\/?p>/g, '')}</span></li>`).join('')}
             </ul>
         </div>
         
@@ -622,7 +622,7 @@ const displayProspectingResults = (prospectData) => {
                 Prime Contractors & Resellers
             </h3>
             <div class="flex flex-wrap gap-2">
-                ${suggested_primes_or_resellers.map(prime => `<span class="px-3 py-1 bg-customPurple-100/30 rounded-full text-sm text-customPurple-700 border border-customPurple-200/30">${prime}</span>`).join('')}
+                ${suggested_primes_or_resellers.map(prime => `<span class="px-3 py-1 bg-customPurple-100/30 rounded-full text-sm text-customPurple-700 border border-customPurple-200/30">${marked.parse(prime).replace(/<\/?p>/g, '')}</span>`).join('')}
             </div>
         </div>
     </div>
@@ -647,29 +647,6 @@ const displayProspectingResults = (prospectData) => {
     // Set up event listeners for dynamically created elements
     document.getElementById('reset-btn').addEventListener('click', resetForm);
     document.getElementById('copy-prospecting-btn').addEventListener('click', copyProspectingResults);
-};
-
-const copyProspectingResults = () => {
-    const container = document.getElementById('prospecting-results-container');
-    if (!container) return;
-    
-    const summary = container.querySelector('.bg-gradient-to-r p').textContent.trim();
-    const naicsCodes = Array.from(container.querySelectorAll('ul li')).slice(0, 5).map(li => li.textContent.trim()).join('\n');
-    const vendors = Array.from(container.querySelectorAll('ul li')).slice(5, 10).map(li => li.textContent.trim()).join('\n');
-    const primes = Array.from(container.querySelectorAll('.flex-wrap span')).map(span => span.textContent.trim()).join(', ');
-    
-    const fullText = `PROSPECTING RESEARCH RESULTS\n\n${summary}\n\nNAICS CODES:\n${naicsCodes}\n\nRELATED VENDORS:\n${vendors}\n\nPRIME CONTRACTORS & RESELLERS:\n${primes}`;
-    
-    navigator.clipboard.writeText(fullText).then(() => {
-        const copyBtn = document.getElementById('copy-prospecting-btn');
-        const originalHtml = copyBtn.innerHTML;
-        copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>Copied!`;
-        copyBtn.classList.add('success-pulse');
-        setTimeout(() => { 
-            copyBtn.innerHTML = originalHtml; 
-            copyBtn.classList.remove('success-pulse');
-        }, 2000);
-    });
 };
        const resetForm = () => {
            situationInput.value = '';
