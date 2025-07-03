@@ -460,9 +460,9 @@
     }, 200);
 };
 
-       const displayPlan = (planData) => {
-    // Check if this is a prospecting response
-    if (planData.naics_codes && planData.related_vendors) {
+     const displayPlan = (planData) => {
+    // Check if this is a prospecting response (either old or new format)
+    if (planData.naics_codes || planData.federal_competitors) {
         displayProspectingResults(planData);
         return;
     }
@@ -577,17 +577,29 @@
            });
        };
 
-// First, define copyProspectingResults
 const copyProspectingResults = () => {
     const container = document.getElementById('prospecting-results-container');
     if (!container) return;
     
-    const summary = container.querySelector('.bg-gradient-to-r div').textContent.trim();
-    const naicsCodes = Array.from(container.querySelectorAll('ul li')).slice(0, container.querySelectorAll('ul')[0].children.length).map(li => li.textContent.trim()).join('\n');
-    const vendors = Array.from(container.querySelectorAll('ul')[1].children).map(li => li.textContent.trim()).join('\n');
-    const primes = Array.from(container.querySelectorAll('.flex-wrap span')).map(span => span.textContent.trim()).join(', ');
+    let fullText = 'PROSPECT RESEARCH & COMPETITIVE INTELLIGENCE\n\n';
     
-    const fullText = `PROSPECTING RESEARCH RESULTS\n\n${summary}\n\nNAICS CODES:\n${naicsCodes}\n\nRELATED VENDORS:\n${vendors}\n\nPRIME CONTRACTORS & RESELLERS:\n${primes}`;
+    // Get summary
+    const summary = container.querySelector('.bg-gradient-to-r div').textContent.trim();
+    fullText += summary + '\n\n';
+    
+    // Get all sections
+    const sections = container.querySelectorAll('.bg-white, .bg-customPurple-100\\/20');
+    sections.forEach(section => {
+        const title = section.querySelector('h3')?.textContent.trim();
+        if (title) {
+            fullText += title.toUpperCase() + '\n';
+            const content = section.querySelectorAll('li, .border-l-4, .flex.items-start, p');
+            content.forEach(item => {
+                fullText += '• ' + item.textContent.trim() + '\n';
+            });
+            fullText += '\n';
+        }
+    });
     
     navigator.clipboard.writeText(fullText).then(() => {
         const copyBtn = document.getElementById('copy-prospecting-btn');
@@ -600,19 +612,39 @@ const copyProspectingResults = () => {
         }, 2000);
     });
 };
-
-// Then define displayProspectingResults
 const displayProspectingResults = (prospectData) => {
-    const { summary, naics_codes, related_vendors, suggested_primes_or_resellers } = prospectData;
+    const { 
+        summary, 
+        company_capabilities,
+        naics_codes, 
+        federal_competitors, 
+        prime_contractors,
+        prospect_recommendations,
+        market_insights 
+    } = prospectData;
     
     resultsContainer.innerHTML = `
 <div id="prospecting-results-container" class="space-y-6">
     <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 p-5 rounded-xl shadow-md border border-customPurple-100/50">
         <img src="images/arti_right.png" alt="Arti" class="float-left h-12 w-12 mr-4 mb-2">
-        <h3 class="text-lg font-semibold mb-2 text-customPurple-900">Prospecting Research Results</h3>
+        <h3 class="text-lg font-semibold mb-2 text-customPurple-900">Prospect Research & Competitive Intelligence</h3>
         <div class="text-gray-800">${marked.parse(summary)}</div>
         <div class="clear-both"></div>
     </div>
+    
+    ${company_capabilities ? `
+    <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+        <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm2 6a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+            Core Capabilities
+        </h3>
+        <div class="flex flex-wrap gap-2">
+            ${company_capabilities.map(cap => `<span class="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">${marked.parse(cap).replace(/<\/?p>/g, '')}</span>`).join('')}
+        </div>
+    </div>
+    ` : ''}
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
@@ -620,37 +652,77 @@ const displayProspectingResults = (prospectData) => {
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
                 </svg>
-                NAICS Codes
+                Relevant NAICS Codes
             </h3>
             <ul class="space-y-1">
-                ${naics_codes.map(code => `<li class="text-sm text-gray-700 flex items-start gap-2"><span class="text-customPurple-500">•</span><span>${marked.parse(code).replace(/<\/?p>/g, '')}</span></li>`).join('')}
+                ${naics_codes.map(code => `<li class="text-sm text-gray-700"><span class="font-medium">${marked.parse(code).replace(/<\/?p>/g, '')}</span></li>`).join('')}
             </ul>
         </div>
         
         <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
             <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                    <path d="M13 7H7v6h6V7z" />
+                    <path fill-rule="evenodd" d="M7 2a1 1 0 012 0v1h2V2a1 1 0 112 0v1h2a2 2 0 012 2v2h1a1 1 0 110 2h-1v2h1a1 1 0 110 2h-1v2a2 2 0 01-2 2h-2v1a1 1 0 11-2 0v-1H9v1a1 1 0 11-2 0v-1H5a2 2 0 01-2-2v-2H2a1 1 0 110-2h1V9H2a1 1 0 010-2h1V5a2 2 0 012-2h2V2z" clip-rule="evenodd" />
                 </svg>
-                Related Vendors
+                Prospect Recommendations
             </h3>
-            <ul class="space-y-1">
-                ${related_vendors.map(vendor => `<li class="text-sm text-gray-700 flex items-start gap-2"><span class="text-customPurple-500">•</span><span>${marked.parse(vendor).replace(/<\/?p>/g, '')}</span></li>`).join('')}
+            <ul class="space-y-2">
+                ${prospect_recommendations.map(rec => `<li class="text-sm text-gray-700 flex items-start gap-2"><span class="text-customPurple-500">•</span><span>${marked.parse(rec).replace(/<\/?p>/g, '')}</span></li>`).join('')}
             </ul>
         </div>
-        
-        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm md:col-span-2">
-            <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-                </svg>
-                Prime Contractors & Resellers
-            </h3>
-            <div class="flex flex-wrap gap-2">
-                ${suggested_primes_or_resellers.map(prime => `<span class="px-3 py-1 bg-customPurple-100/30 rounded-full text-sm text-customPurple-700 border border-customPurple-200/30">${marked.parse(prime).replace(/<\/?p>/g, '')}</span>`).join('')}
-            </div>
+    </div>
+    
+    ${federal_competitors ? `
+    <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+        <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+            </svg>
+            Federal Competitors & Similar Companies
+        </h3>
+        <div class="space-y-3">
+            ${federal_competitors.map(comp => `
+                <div class="border-l-4 border-customPurple-200 pl-3">
+                    <h4 class="font-medium text-gray-900">${comp.company}</h4>
+                    <p class="text-sm text-gray-600 mt-1">${marked.parse(comp.strengths).replace(/<\/?p>/g, '')}</p>
+                    ${comp.contract_vehicles ? `<p class="text-xs text-gray-500 mt-1">Vehicles: ${comp.contract_vehicles}</p>` : ''}
+                </div>
+            `).join('')}
         </div>
     </div>
+    ` : ''}
+    
+    ${prime_contractors ? `
+    <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+        <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+            </svg>
+            Prime Contractors & Partners
+        </h3>
+        <div class="space-y-2">
+            ${prime_contractors.map(prime => `
+                <div class="flex items-start gap-2">
+                    <span class="font-medium text-gray-900">${prime.company}:</span>
+                    <span class="text-sm text-gray-600">${marked.parse(prime.relationship).replace(/<\/?p>/g, '')}</span>
+                </div>
+            `).join('')}
+        </div>
+    </div>
+    ` : ''}
+    
+    ${market_insights ? `
+    <div class="bg-customPurple-100/20 rounded-xl border border-customPurple-100/40 p-4">
+        <h3 class="text-sm font-semibold text-customPurple-800 mb-2 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+            </svg>
+            Market Insight
+        </h3>
+        <p class="text-sm text-customPurple-900">${marked.parse(market_insights).replace(/<\/?p>/g, '')}</p>
+    </div>
+    ` : ''}
     
     <div class="mt-6 flex flex-col sm:flex-row gap-3">
         <button id="copy-prospecting-btn" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow">
@@ -658,7 +730,7 @@ const displayProspectingResults = (prospectData) => {
                 <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
                 <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
             </svg>
-            Copy Results
+            Copy Research
         </button>
         <button id="reset-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl border border-gray-200 transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
