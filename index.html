@@ -461,10 +461,16 @@
 };
 
        const displayPlan = (planData) => {
-           const coachingPlan = planData.coaching_plan;
-			const recommendation = planData.high_level_recommendation;
-			const eli5 = planData.eli5_summary;
-			const tldr = planData.tldr_summary;
+    // Check if this is a prospecting response
+    if (planData.naics_codes && planData.related_vendors) {
+        displayProspectingResults(planData);
+        return;
+    }
+    
+    const coachingPlan = planData.coaching_plan;
+    const recommendation = planData.high_level_recommendation;
+    const eli5 = planData.eli5_summary;
+    const tldr = planData.tldr_summary;
            const colors = [
                { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-500' },
                { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-700' },
@@ -571,6 +577,100 @@
            });
        };
 
+const displayProspectingResults = (prospectData) => {
+    const { summary, naics_codes, related_vendors, suggested_primes_or_resellers } = prospectData;
+    
+    resultsContainer.innerHTML = `
+<div id="prospecting-results-container" class="space-y-6">
+    <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 p-5 rounded-xl shadow-md border border-customPurple-100/50">
+        <img src="images/arti_right.png" alt="Arti" class="float-left h-12 w-12 mr-4 mb-2">
+        <h3 class="text-lg font-semibold mb-2 text-customPurple-900">Prospecting Research Results</h3>
+        <p class="text-gray-800">${summary}</p>
+        <div class="clear-both"></div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+            <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+                </svg>
+                NAICS Codes
+            </h3>
+            <ul class="space-y-1">
+                ${naics_codes.map(code => `<li class="text-sm text-gray-700 flex items-start gap-2"><span class="text-customPurple-500">•</span>${code}</li>`).join('')}
+            </ul>
+        </div>
+        
+        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+            <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                </svg>
+                Related Vendors
+            </h3>
+            <ul class="space-y-1">
+                ${related_vendors.map(vendor => `<li class="text-sm text-gray-700 flex items-start gap-2"><span class="text-customPurple-500">•</span>${vendor}</li>`).join('')}
+            </ul>
+        </div>
+        
+        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm md:col-span-2">
+            <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                </svg>
+                Prime Contractors & Resellers
+            </h3>
+            <div class="flex flex-wrap gap-2">
+                ${suggested_primes_or_resellers.map(prime => `<span class="px-3 py-1 bg-customPurple-100/30 rounded-full text-sm text-customPurple-700 border border-customPurple-200/30">${prime}</span>`).join('')}
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-6 flex flex-col sm:flex-row gap-3">
+        <button id="copy-prospecting-btn" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
+                <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
+            </svg>
+            Copy Results
+        </button>
+        <button id="reset-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl border border-gray-200 transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+            </svg>
+            Start Over
+        </button>
+    </div>
+</div>`;
+    
+    // Set up event listeners for dynamically created elements
+    document.getElementById('reset-btn').addEventListener('click', resetForm);
+    document.getElementById('copy-prospecting-btn').addEventListener('click', copyProspectingResults);
+};
+
+const copyProspectingResults = () => {
+    const container = document.getElementById('prospecting-results-container');
+    if (!container) return;
+    
+    const summary = container.querySelector('.bg-gradient-to-r p').textContent.trim();
+    const naicsCodes = Array.from(container.querySelectorAll('ul li')).slice(0, 5).map(li => li.textContent.trim()).join('\n');
+    const vendors = Array.from(container.querySelectorAll('ul li')).slice(5, 10).map(li => li.textContent.trim()).join('\n');
+    const primes = Array.from(container.querySelectorAll('.flex-wrap span')).map(span => span.textContent.trim()).join(', ');
+    
+    const fullText = `PROSPECTING RESEARCH RESULTS\n\n${summary}\n\nNAICS CODES:\n${naicsCodes}\n\nRELATED VENDORS:\n${vendors}\n\nPRIME CONTRACTORS & RESELLERS:\n${primes}`;
+    
+    navigator.clipboard.writeText(fullText).then(() => {
+        const copyBtn = document.getElementById('copy-prospecting-btn');
+        const originalHtml = copyBtn.innerHTML;
+        copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>Copied!`;
+        copyBtn.classList.add('success-pulse');
+        setTimeout(() => { 
+            copyBtn.innerHTML = originalHtml; 
+            copyBtn.classList.remove('success-pulse');
+        }, 2000);
+    });
+};
        const resetForm = () => {
            situationInput.value = '';
            originalSituation = '';
