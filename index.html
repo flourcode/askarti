@@ -640,24 +640,29 @@
         generateBtn.disabled = isLoading;
     };
     const fetchCoachingPlan = async (situation) => {
-        const response = await fetch(API_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                request_type: 'generate_one_shot_plan',
-                situation: situation
-            })
-        });
-        if (!response.ok) throw new Error(API Error: ${response.statusText});
-        return await response.json();
-    };
-    const generatePlan = async () => {
-        const situation = situationInput.value.trim();
-        if (!situation) {
-            resultsContainer.innerHTML = <div class="text-center p-6 bg-red-50 border border-red-200 rounded-xl"><p class="text-red-700 font-medium">Please describe your sales problem first.</p></div>;
-            resultsContainer.firstChild.classList.add('error-shake');
-            return;
-        }
+    const response = await fetch(API_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            request_type: 'generate_one_shot_plan',
+            situation: situation
+        })
+    });
+    if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+    return await response.json();
+};
+
+const generatePlan = async () => {
+    const situation = situationInput.value.trim();
+    if (!situation) {
+        resultsContainer.innerHTML = `
+            <div class="text-center p-6 bg-red-50 border border-red-200 rounded-xl">
+                <p class="text-red-700 font-medium">Please describe your sales problem first.</p>
+            </div>
+        `;
+        resultsContainer.firstChild.classList.add('error-shake');
+        return;
+    }
         originalSituation = situation;
         showLoading(true);
 
