@@ -1000,37 +1000,40 @@ const generatePlan = async () => {
     };
 
     const copyPlanToClipboard = () => {
-        const planContainer = document.getElementById('coaching-plan-container');
-        if (!planContainer) return;
-        
-        // Get the full text content from "A few thoughts..." section
-        const thoughtsSection = planContainer.querySelector('.bg-gradient-to-r div');
-        const recommendation = thoughtsSection ? thoughtsSection.textContent.trim() : '';
-        
-        let fullText = `ARTI'S THOUGHTS:\n${recommendation}\n\n--- DETAILED PLAN ---\n\n`;
-        
-        const personaCards = document.querySelectorAll('.persona-card');
-        personaCards.forEach(card => {
-            const persona = card.querySelector('h2').textContent.trim();
-            const goal = card.querySelector('.border.p-4 p').textContent.trim();
-            const points = Array.from(card.querySelectorAll('ul li span')).map(span => `- ${span.textContent.trim()}`).join('\n');
-            const snippet = card.querySelector('.snippet-text')?.textContent.trim() || 'No snippet available.';
-            fullText += `--- ${persona.toUpperCase()} ---\n\n`;
-            fullText += `SMART GOAL:\n${goal}\n\n`;
-            fullText += `KEY TALKING POINTS:\n${points}\n\n`;
-            fullText += `SUGGESTED SNIPPET:\n${snippet}\n\n`;
-        });
-        navigator.clipboard.writeText(fullText.trim()).then(() => {
-            const copyBtn = document.getElementById('copy-btn');
-            const originalHtml = copyBtn.innerHTML;
-            copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>Copied!`;
-            copyBtn.classList.add('success-pulse');
-            setTimeout(() => { 
-                copyBtn.innerHTML = originalHtml; 
-                copyBtn.classList.remove('success-pulse');
-            }, 2000);
-        });
-    };
+    const planContainer = document.getElementById('coaching-plan-container');
+    if (!planContainer) return;
+    
+    // Get the full text content from "A few thoughts..." section
+    const thoughtsSection = planContainer.querySelector('.bg-gradient-to-r div');
+    const recommendation = thoughtsSection ? thoughtsSection.textContent.trim() : '';
+    
+    let fullText = `ARTI'S THOUGHTS:\n${recommendation}\n\n--- DETAILED PLAN ---\n\n`;
+    
+    const personaCards = document.querySelectorAll('.persona-card');
+    personaCards.forEach(card => {
+        const persona = card.querySelector('h2').textContent.trim();
+        // The problem is here - your selector for the goal is incorrect
+        // Fixed selector to find the SMART goal paragraph
+        const goalSection = card.querySelector('.rounded-xl p');
+        const goal = goalSection ? goalSection.textContent.trim() : 'No goal available.';
+        const points = Array.from(card.querySelectorAll('ul li span')).map(span => `- ${span.textContent.trim()}`).join('\n');
+        const snippet = card.querySelector('.snippet-text')?.textContent.trim() || 'No snippet available.';
+        fullText += `--- ${persona.toUpperCase()} ---\n\n`;
+        fullText += `SMART GOAL:\n${goal}\n\n`;
+        fullText += `KEY TALKING POINTS:\n${points}\n\n`;
+        fullText += `SUGGESTED SNIPPET:\n${snippet}\n\n`;
+    });
+    navigator.clipboard.writeText(fullText.trim()).then(() => {
+        const copyBtn = document.getElementById('copy-btn');
+        const originalHtml = copyBtn.innerHTML;
+        copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>Copied!`;
+        copyBtn.classList.add('success-pulse');
+        setTimeout(() => { 
+            copyBtn.innerHTML = originalHtml; 
+            copyBtn.classList.remove('success-pulse');
+        }, 2000);
+    });
+};
 
     const copySnippet = (e) => {
         const button = e.currentTarget;
