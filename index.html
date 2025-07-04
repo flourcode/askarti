@@ -1234,18 +1234,6 @@ const displayProspectingResults = (prospectData) => {
         }
     });
 
-    // Sponsor banner close functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        const sponsorBanner = document.querySelector('.sponsor-banner');
-        const closeBtn = sponsorBanner?.querySelector('button');
-        
-        if (closeBtn) {
-            closeBtn.addEventListener('click', function() {
-                sponsorBanner.style.display = 'none';
-            });
-        }
-    });
-
     // Tab switching logic for tools
     const tabs = document.querySelectorAll('.widget-tab');
     const widgetContents = document.querySelectorAll('.widget-content');
@@ -1281,7 +1269,7 @@ const displayProspectingResults = (prospectData) => {
         const year = date.getUTCFullYear();
         const month = date.getUTCMonth();
         const fiscalYear = month >= 9 ? year + 1 : year;
-        return { fiscalYear, endDate: new Date(`September 30, ${fiscalYear} 23:59:59 GMT-0400`) };
+        return { fiscalYear, endDate: new Date(`October 1, ${fiscalYear} 03:59:59 GMT`) }; 
     }
 
     function fy_updateTimer() {
@@ -1431,7 +1419,7 @@ const displayProspectingResults = (prospectData) => {
             nextDate.toLocaleString('en-US', {timeZone: selectedTz});
             nextDate.setHours(nextStartHour, 0, 0, 0);
             if (nextDate < now) nextDate.setDate(nextDate.getDate() + 1);
-            gh_nextGoldenHour.textContent = `The next golden hour starts at ${nextDate.toLocaleTimeString('en-US', { timeZone: selectedTz, hour: 'numeric', hour12: true })}.`;
+            gh_nextGoldenHour.textContent = `Next golden hour at ${nextDate.toLocaleTimeString('en-US', { timeZone: selectedTz, hour: 'numeric', hour12: true })}.`;
             gh_yourTimeEquivalent.textContent = `(That's ${nextDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZoneName: 'short' })} your time)`;
         }
     }
