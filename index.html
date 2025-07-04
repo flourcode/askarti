@@ -634,7 +634,7 @@
 
     const API_ENDPOINT = 'https://nqux5cu205.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
 
-  const showLoading = (isLoading) => {
+   const showLoading = (isLoading) => {
     btnText.classList.toggle('hidden', isLoading);
     loader.classList.toggle('hidden', !isLoading);
     generateBtn.disabled = isLoading;
@@ -666,19 +666,13 @@ const generatePlan = async () => {
     // Enhanced loading experience
     let loadingStage = 0;
     const loadingMessages = [
-        "Working backwards...",
-		"Diving deep...",
-		"Escalating this...",
-		"Circling back...",
-		"Unpacking this...",
-		"Putting a pin in it...",
-		"Aligning with stakeholders...",
-		"Getting buy-in...",
-		"Thinking big...",
+        "Arti is analyzing your situation...",
+        "Researching best practices...",
+        "Crafting your personalized plan..."
     ];
     
-    // Changed order: message ABOVE loader
-    resultsContainer.innerHTML = '<div class="flex flex-col justify-center items-center py-8"><p id="loading-message" class="text-gray-500 mb-4">Arti is analyzing your situation...</p><div class="results-loader"></div></div>';
+    // Reduced vertical padding (py-8 instead of py-16) and added margin adjustments
+    resultsContainer.innerHTML = '<div class="flex flex-col justify-center items-center py-8 mt-2"><p id="loading-message" class="text-gray-500 mb-4">Arti is analyzing your situation...</p><div class="results-loader"></div></div>';
     
     const loadingInterval = setInterval(() => {
         loadingStage = (loadingStage + 1) % loadingMessages.length;
