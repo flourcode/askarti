@@ -841,7 +841,7 @@ const displayPlan = (planData) => {
         </div>
 
        <!-- STARTER SPONSOR AD - Start -->
-<div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs">
+<div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 mt-8 text-xs">
     <div class="flex items-center gap-2">
         <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
         <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">DeepPockets Funding</a>
@@ -1031,7 +1031,7 @@ const displayProspectingResults = (prospectData) => {
             ` : ''}
             
             <!-- STARTER SPONSOR AD - Start -->
-<div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs" style="margin-top: 1.5rem;">
+<div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 mt-8 text-xs">
     <div class="flex items-center gap-2">
         <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
         <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">ClearSpeak Consulting</a>
@@ -1089,13 +1089,17 @@ const displayProspectingResults = (prospectData) => {
     personaCards.forEach(card => {
         const persona = card.querySelector('h2').textContent.trim();
         
-        // Find the SMART goal - look for the div with custom purple classes, then find the p tag inside it
-        const smartGoalDiv = card.querySelector('div[class*="bg-customPurple-100"][class*="border-customPurple-100"]');
+        // The SMART goal is in a div with these exact classes, then find the p tag after the h3
+        const smartGoalContainer = card.querySelector('div.border.p-4.rounded-xl');
         let goal = 'No goal available.';
-        if (smartGoalDiv) {
-            const goalP = smartGoalDiv.querySelector('p');
-            if (goalP) {
-                goal = goalP.textContent.trim();
+        if (smartGoalContainer) {
+            // Get the p tag that comes after the h3 with "SMART Goal"
+            const smartGoalH3 = smartGoalContainer.querySelector('h3');
+            if (smartGoalH3 && smartGoalH3.textContent.includes('SMART Goal')) {
+                const goalP = smartGoalContainer.querySelector('p');
+                if (goalP) {
+                    goal = goalP.textContent.trim();
+                }
             }
         }
         
