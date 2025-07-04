@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AskArti - AI Federal Sales Coach | Free Sales Strategy Tool</title>
+    <title>AskArti - Your Federal Sales Buddy | Free Sales Strategy Tool</title>
     
     <!-- Primary Meta Tags -->
     <meta name="description" content="Get personalized federal sales advice from AskArti. Free AI tool provides SMART goals, customer messaging, and deal strategies for government contractors and sales professionals.">
@@ -15,7 +15,7 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://askarti.com/">
-    <meta property="og:title" content="AskArti - AI Federal Sales Coach">
+    <meta property="og:title" content="AskArti - Your Federal Sales Buddy">
     <meta property="og:description" content="Get personalized federal sales advice from AskArti. Free AI tool provides SMART goals, customer messaging, and deal strategies for government contractors and sales professionals.">
     <meta property="og:image" content="https://askarti.com/images/asklite.png">
     <meta property="og:image:alt" content="AskArti Logo">
@@ -23,7 +23,7 @@
     <!-- Twitter -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:url" content="https://askarti.com/">
-    <meta name="twitter:title" content="AskArti - AI Federal Sales Coach">
+    <meta name="twitter:title" content="AskArti - Your Federal Sales Buddy">
     <meta name="twitter:description" content="Get personalized federal sales advice from AskArti. Free AI tool provides SMART goals, customer messaging, and deal strategies for government contractors and sales professionals.">
     <meta name="twitter:image" content="https://askarti.com/images/asklite.png">
     <meta name="twitter:image:alt" content="AskArti Logo">
@@ -1040,27 +1040,28 @@ const generatePlan = async () => {
     };
 
     const handleShare = () => {
-        const shareText = "Just got some good sales advice from AskArti. Not bad for a free tool.";
-        const shareUrl = window.location.href;
-        const fullShareText = `${shareText} ${shareUrl}`;
-        
-        if (navigator.share) {
-            navigator.share({
-                title: 'AskArti - AI Sales Advice',
-                text: shareText,
-                url: shareUrl
-            });
-        } else {
-            navigator.clipboard.writeText(fullShareText).then(() => {
-                const shareBtn = document.getElementById('share-btn');
-                const originalText = shareBtn.textContent;
-                shareBtn.textContent = 'Copied!';
-                setTimeout(() => {
-                    shareBtn.textContent = originalText;
-                }, 2000);
-            });
-        }
-    };
+    const shareText = "Just got some good advice from AskArti.";
+    const shareUrl = "https://askarti.com/";
+    const fullShareText = `${shareText} ${shareUrl}`;
+    
+    if (navigator.share) {
+        navigator.share({
+            // Match this title exactly to your og:title meta tag
+            title: 'AskArti - Your Federal Sales Buddy', 
+            text: shareText,
+            url: shareUrl
+        });
+    } else {
+        navigator.clipboard.writeText(fullShareText).then(() => {
+            const shareBtn = document.getElementById('share-btn');
+            const originalText = shareBtn.textContent;
+            shareBtn.textContent = 'Copied!';
+            setTimeout(() => {
+                shareBtn.textContent = originalText;
+            }, 2000);
+        });
+    }
+};
     
     const openModal = (modal, content) => {
         modal.classList.remove('hidden');
