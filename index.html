@@ -655,48 +655,51 @@
 const generatePlan = async () => {
     const situation = situationInput.value.trim();
     if (!situation) {
-        resultsContainer.innerHTML = `
-            <div class="text-center p-6 bg-red-50 border border-red-200 rounded-xl">
-                <p class="text-red-700 font-medium">Please describe your sales problem first.</p>
-            </div>
-        `;
+        resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 border border-red-200 rounded-xl"><p class="text-red-700 font-medium">Please describe your sales problem first.</p></div>`;
         resultsContainer.firstChild.classList.add('error-shake');
         return;
     }
-        originalSituation = situation;
-        showLoading(true);
-
-        // Enhanced loading experience
-        let loadingStage = 0;
-        const loadingMessages = [
-            "Arti is analyzing your situation...",
-            "Researching best practices...",
-            "Crafting your personalized plan..."
-        ];
-
-        resultsContainer.innerHTML = '<div class="flex flex-col justify-center items-center py-16"><div class="results-loader mb-4"></div><p id="loading-message" class="text-gray-500">Arti is analyzing your situation...</p></div>';
-
-        const loadingInterval = setInterval(() => {
-            loadingStage = (loadingStage + 1) % loadingMessages.length;
-            const messageEl = document.getElementById('loading-message');
-            if (messageEl) {
-                messageEl.textContent = loadingMessages[loadingStage];
-            }
-        }, 2000);
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        try {
-            const planData = await fetchCoachingPlan(originalSituation);
-            clearInterval(loadingInterval);
-            displayPlan(planData);
-        } catch (error) {
-            clearInterval(loadingInterval);
-            handleApiError(error);
-        } finally {
-            showLoading(false);
+    originalSituation = situation;
+    showLoading(true);
+    
+    // Enhanced loading experience
+    let loadingStage = 0;
+    const loadingMessages = [
+"Working backwards...",
+		"Diving deep...",
+		"Escalating this...",
+		"Circling back...",
+		"Unpacking this...",
+		"Putting a pin in it...",
+		"Aligning with stakeholders...",
+		"Getting buy-in...",
+		"Thinking big..."
+    ];
+    
+    // Reduced vertical padding (py-8 instead of py-16) and added margin adjustments
+    resultsContainer.innerHTML = '<div class="flex flex-col justify-center items-center py-8 mt-2"><p id="loading-message" class="text-gray-500 mb-4">Arti is analyzing your situation...</p><div class="results-loader"></div></div>';
+    
+    const loadingInterval = setInterval(() => {
+        loadingStage = (loadingStage + 1) % loadingMessages.length;
+        const messageEl = document.getElementById('loading-message');
+        if (messageEl) {
+            messageEl.textContent = loadingMessages[loadingStage];
         }
-    };
+    }, 2000);
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    try {
+        const planData = await fetchCoachingPlan(originalSituation);
+        clearInterval(loadingInterval);
+        displayPlan(planData);
+    } catch (error) {
+        clearInterval(loadingInterval);
+        handleApiError(error);
+    } finally {
+        showLoading(false);
+    }
+};
        
     const handleCannedPrompt = (e) => {
         const button = e.currentTarget;
