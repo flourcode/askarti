@@ -841,7 +841,7 @@ const displayPlan = (planData) => {
         </div>
 
        <!-- STARTER SPONSOR AD - Start -->
-<div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 mt-8 text-xs">
+<div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 mt-6 text-xs">
     <div class="flex items-center gap-2">
         <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
         <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">DeepPockets Funding</a>
@@ -1031,7 +1031,7 @@ const displayProspectingResults = (prospectData) => {
             ` : ''}
             
             <!-- STARTER SPONSOR AD - Start -->
-<div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 mt-8 text-xs">
+<div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 mt-6 text-xs">
     <div class="flex items-center gap-2">
         <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
         <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">ClearSpeak Consulting</a>
@@ -1076,53 +1076,55 @@ const displayProspectingResults = (prospectData) => {
     };
 
     const copyPlanToClipboard = () => {
-    const planContainer = document.getElementById('coaching-plan-container');
-    if (!planContainer) return;
-    
-    // Get the full text content from "A few thoughts..." section
-    const thoughtsSection = planContainer.querySelector('.bg-gradient-to-r div');
-    const recommendation = thoughtsSection ? thoughtsSection.textContent.trim() : '';
-    
-    let fullText = `ARTI'S THOUGHTS:\n${recommendation}\n\n--- DETAILED PLAN ---\n\n`;
-    
-    const personaCards = document.querySelectorAll('.persona-card');
-    personaCards.forEach(card => {
-        const persona = card.querySelector('h2').textContent.trim();
-        
-        // The SMART goal is in a div with these exact classes, then find the p tag after the h3
-        const smartGoalContainer = card.querySelector('div.border.p-4.rounded-xl');
-        let goal = 'No goal available.';
-        if (smartGoalContainer) {
-            // Get the p tag that comes after the h3 with "SMART Goal"
-            const smartGoalH3 = smartGoalContainer.querySelector('h3');
-            if (smartGoalH3 && smartGoalH3.textContent.includes('SMART Goal')) {
-                const goalP = smartGoalContainer.querySelector('p');
-                if (goalP) {
+        const planContainer = document.getElementById('coaching-plan-container');
+        if (!planContainer) return;
+
+        // Get the full text content from "A few thoughts..." section
+        const thoughtsSection = planContainer.querySelector('.bg-gradient-to-r div');
+        const recommendation = thoughtsSection ? thoughtsSection.textContent.trim() : '';
+
+        let fullText = `ARTI'S THOUGHTS:\n${recommendation}\n\n--- DETAILED PLAN ---\n\n`;
+
+        const personaCards = document.querySelectorAll('.persona-card');
+        personaCards.forEach(card => {
+            const persona = card.querySelector('h2').textContent.trim();
+            let goal = 'No goal available.';
+            const snippet = card.querySelector('.snippet-text')?.textContent.trim() || 'No snippet available.';
+
+            // --- CORRECTED LOGIC ---
+            // Find the H3 element with the exact text "SMART Goal". This is more reliable than using CSS classes.
+            const allH3s = card.querySelectorAll('h3');
+            const smartGoalH3 = Array.from(allH3s).find(h3 => h3.textContent.trim() === 'SMART Goal');
+
+            // If the H3 is found, the goal's <p> tag is the very next element in the HTML structure.
+            if (smartGoalH3) {
+                const goalP = smartGoalH3.nextElementSibling;
+                // Verify the next element is a paragraph before grabbing its text content.
+                if (goalP && goalP.tagName === 'P') {
                     goal = goalP.textContent.trim();
                 }
             }
-        }
-        
-        const points = Array.from(card.querySelectorAll('ul li span')).map(span => `- ${span.textContent.trim()}`).join('\n');
-        const snippet = card.querySelector('.snippet-text')?.textContent.trim() || 'No snippet available.';
-        
-        fullText += `--- ${persona.toUpperCase()} ---\n\n`;
-        fullText += `SMART GOAL:\n${goal}\n\n`;
-        fullText += `KEY TALKING POINTS:\n${points}\n\n`;
-        fullText += `SUGGESTED SNIPPET:\n${snippet}\n\n`;
-    });
-    
-    navigator.clipboard.writeText(fullText.trim()).then(() => {
-        const copyBtn = document.getElementById('copy-btn');
-        const originalHtml = copyBtn.innerHTML;
-        copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>Copied!`;
-        copyBtn.classList.add('success-pulse');
-        setTimeout(() => { 
-            copyBtn.innerHTML = originalHtml; 
-            copyBtn.classList.remove('success-pulse');
-        }, 2000);
-    });
-};
+            // --- END CORRECTION ---
+
+            const points = Array.from(card.querySelectorAll('ul li span')).map(span => `- ${span.textContent.trim()}`).join('\n');
+
+            fullText += `--- ${persona.toUpperCase()} ---\n\n`;
+            fullText += `SMART GOAL:\n${goal}\n\n`;
+            fullText += `KEY TALKING POINTS:\n${points}\n\n`;
+            fullText += `SUGGESTED SNIPPET:\n${snippet}\n\n`;
+        });
+
+        navigator.clipboard.writeText(fullText.trim()).then(() => {
+            const copyBtn = document.getElementById('copy-btn');
+            const originalHtml = copyBtn.innerHTML;
+            copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>Copied!`;
+            copyBtn.classList.add('success-pulse');
+            setTimeout(() => {
+                copyBtn.innerHTML = originalHtml;
+                copyBtn.classList.remove('success-pulse');
+            }, 2000);
+        });
+    };
 
     const copySnippet = (e) => {
         const button = e.currentTarget;
