@@ -683,11 +683,11 @@ const generatePlan = async () => {
     originalSituation = situation;
     showLoading(true);
     
-    // Enhanced loading experience with your updated messages
+    // Enhanced loading experience with better branding and federal sales messaging
     let loadingStage = 0;
     const loadingMessages = [
         "Diving Deep...",
-        "Escalating...",
+        "Connecting the Dots...",
         "Circling Back...",
         "Unpacking This...",
         "Putting a Pin in it...",
@@ -695,8 +695,22 @@ const generatePlan = async () => {
         "Thinking Big..."
     ];
     
-    // Removed the loader div while keeping your messages with improved styling
-    resultsContainer.innerHTML = '<div class="text-center py-6 mt-2"><p id="loading-message" class="text-customPurple-500 text-lg font-medium">Arti is Working Backwards...</p></div>';
+    // Improved loading UI with Arti's avatar and better styling
+    resultsContainer.innerHTML = `
+        <div class="text-center py-8 mt-2">
+            <div class="flex justify-center items-center mb-4">
+                <img src="images/arti_right.png" alt="Arti" class="h-16 w-16 animate-pulse">
+            </div>
+            <p id="loading-message" class="text-customPurple-500 text-xl font-semibold mb-2">Working Backwards...</p>
+            <p class="text-gray-500 text-sm">Arti is analyzing your situation</p>
+            <div class="mt-4">
+                <div class="inline-flex items-center px-4 py-2 bg-customPurple-100/20 rounded-full">
+                    <div class="loader mr-3"></div>
+                    <span class="text-customPurple-600 text-sm font-medium">Processing</span>
+                </div>
+            </div>
+        </div>
+    `;
     
     const loadingInterval = setInterval(() => {
         loadingStage = (loadingStage + 1) % loadingMessages.length;
