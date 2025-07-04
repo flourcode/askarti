@@ -1088,10 +1088,9 @@ const displayProspectingResults = (prospectData) => {
     const personaCards = document.querySelectorAll('.persona-card');
     personaCards.forEach(card => {
         const persona = card.querySelector('h2').textContent.trim();
-        // The problem is here - your selector for the goal is incorrect
-        // Fixed selector to find the SMART goal paragraph
-        const goalSection = card.querySelector('.rounded-xl p');
-        const goal = goalSection ? goalSection.textContent.trim() : 'No goal available.';
+        // Fixed selector to find the SMART goal - look for the colored box with "SMART Goal" heading
+        const goalSection = card.querySelector('.bg-customPurple-100\\/20 p, .border-customPurple-100\\/40 p');
+        const goal = goalSection ? goalSection.textContent.replace('SMART Goal', '').trim() : 'No goal available.';
         const points = Array.from(card.querySelectorAll('ul li span')).map(span => `- ${span.textContent.trim()}`).join('\n');
         const snippet = card.querySelector('.snippet-text')?.textContent.trim() || 'No snippet available.';
         fullText += `--- ${persona.toUpperCase()} ---\n\n`;
