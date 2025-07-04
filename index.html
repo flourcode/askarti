@@ -924,20 +924,64 @@ const displayPlan = (planData) => {
         }, 2000);
     });
 };
+const copyProspectingResults = () => {
+    const container = document.getElementById('prospecting-results-container');
+    if (!container) return;
 
+    // Helper to get text from a section
+    const getText = (selector, title) => {
+        const element = container.querySelector(selector);
+        if (!element) return "";
+        let text = `--- ${title.toUpperCase()} ---\n`;
+        // This querySelectorAll will grab text from lists, divs, etc.
+        const items = element.querySelectorAll('li, p, .flex-wrap > span, .space-y-3 > div, .space-y-2 > div');
+        if (items.length > 0) {
+            items.forEach(item => {
+                text += `- ${item.textContent.trim().replace(/\s+/g, ' ')}\n`;
+            });
+        } else {
+            text += `${element.textContent.trim().replace(/\s+/g, ' ')}\n`;
+        }
+        return text + '\n';
+    };
+
+    let fullText = "ARTI'S PROSPECTING RESEARCH\n\n";
+
+    // Extract text from all sections
+    fullText += getText('div:has(> h3:first-child)', 'Summary');
+    fullText += getText('div:has(h3:first-child:containing("Core Capabilities"))', 'Core Capabilities');
+    fullText += getText('div:has(h3:first-child:containing("NAICS"))', 'Relevant NAICS Codes');
+    fullText += getText('div:has(h3:first-child:containing("Prospect Rec"))', 'Prospect Recommendations');
+    fullText += getText('div:has(h3:first-child:containing("Competitors"))', 'Federal Competitors');
+    fullText += getText('div:has(h3:first-child:containing("Prime"))', 'Prime Contractors & Partners');
+    fullText += getText('div:has(h3:first-child:containing("Market Insight"))', 'Market Insight');
+
+
+    navigator.clipboard.writeText(fullText.trim()).then(() => {
+        const copyBtn = document.getElementById('copy-prospecting-btn');
+        const originalHtml = copyBtn.innerHTML;
+        copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>Copied!`;
+        copyBtn.classList.add('success-pulse');
+        setTimeout(() => {
+            copyBtn.innerHTML = originalHtml;
+            copyBtn.classList.remove('success-pulse');
+        }, 2000);
+    });
+};
 const displayProspectingResults = (prospectData) => {
+    // By adding "= []", we ensure these are always arrays, preventing mapping errors.
     const { 
         summary, 
-        company_capabilities,
-        naics_codes, 
-        federal_competitors, 
-        prime_contractors,
-        prospect_recommendations,
+        company_capabilities = [],
+        naics_codes = [], 
+        federal_competitors = [], 
+        prime_contractors = [],
+        prospect_recommendations = [],
         market_insights 
     } = prospectData;
     
+    // The rest of the function remains the same, but is now safe from errors.
     resultsContainer.innerHTML = `
-        <!-- PREMIUM SPONSOR AD - Start -->
         <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs">
             <div class="flex items-center gap-2">
                 <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
@@ -945,17 +989,15 @@ const displayProspectingResults = (prospectData) => {
             </div>
             <p class="text-gray-600 text-xs mt-1">Helping you avoid teaming partners who still fax NDAs.</p>
         </div>
-        <!-- PREMIUM SPONSOR AD - End -->
-        
         <div id="prospecting-results-container" class="space-y-6">
             <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 p-5 rounded-xl shadow-md border border-customPurple-100/50">
                 <img src="images/arti_right.png" alt="Arti" class="float-left h-12 w-12 mr-4 mb-2">
                 <h3 class="text-lg font-semibold mb-2 text-customPurple-900">Prospect Research & Competitive Intelligence</h3>
-                <div class="text-gray-800">${marked.parse(summary)}</div>
+                <div class="text-gray-800">${marked.parse(summary || '')}</div>
                 <div class="clear-both"></div>
             </div>
             
-            ${company_capabilities ? `
+            ${company_capabilities.length > 0 ? `
             <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
                 <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
@@ -996,17 +1038,14 @@ const displayProspectingResults = (prospectData) => {
                 </div>
             </div>
             
-            <!-- STANDARD SPONSOR AD - Start -->
-<div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs">
-    <div class="flex items-center gap-2">
-        <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
-        <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">FaxLess Solutions</a>
-    </div>
-    <p class="text-gray-600 text-xs mt-1">Finally, a contractor who emails instead of sending carrier pigeons.</p>
-</div>
-<!-- STANDARD SPONSOR AD - End -->
-            
-            ${federal_competitors ? `
+            <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
+                    <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">FaxLess Solutions</a>
+                </div>
+                <p class="text-gray-600 text-xs mt-1">Finally, a contractor who emails instead of sending carrier pigeons.</p>
+            </div>
+            ${federal_competitors.length > 0 ? `
             <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
                 <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
@@ -1026,7 +1065,7 @@ const displayProspectingResults = (prospectData) => {
             </div>
             ` : ''}
             
-            ${prime_contractors ? `
+            ${prime_contractors.length > 0 ? `
             <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
                 <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
@@ -1057,16 +1096,13 @@ const displayProspectingResults = (prospectData) => {
             </div>
             ` : ''}
             
-            <!-- STARTER SPONSOR AD - Start -->
-<div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 mt-6 text-xs">
-    <div class="flex items-center gap-2">
-        <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
-        <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">ClearSpeak Consulting</a>
-    </div>
-    <p class="text-gray-600 text-xs mt-1">We translate government requirements from ancient hieroglyphics to English.</p>
-</div>
-<!-- STARTER SPONSOR AD - End -->
-            
+            <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 mt-6 text-xs">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
+                    <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">ClearSpeak Consulting</a>
+                </div>
+                <p class="text-gray-600 text-xs mt-1">We translate government requirements from ancient hieroglyphics to English.</p>
+            </div>
             <div class="mt-6 flex flex-col sm:flex-row gap-3">
                 <button id="copy-prospecting-btn" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -1083,8 +1119,6 @@ const displayProspectingResults = (prospectData) => {
             </div>
         </div>`;
     
-
-    // Set up event listeners for dynamically created elements
     document.getElementById('reset-btn').addEventListener('click', resetForm);
     document.getElementById('copy-prospecting-btn').addEventListener('click', copyProspectingResults);
 };
