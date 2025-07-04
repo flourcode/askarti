@@ -227,27 +227,6 @@
                 <div id="loader" class="loader hidden"></div>
             </button>
         </div>
-        <div class="sponsor-banner text-center mb-3 py-2 px-3 bg-customPurple-100/20 rounded-lg border border-customPurple-100/40">
-            <p class="text-xs text-gray-600" id="sponsor-text">
-                <span class="text-customPurple-500 font-medium">Sponsored by:</span>
-                <a href="https://subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium underline">Subhoo.com</a> —
-                <span id="sponsor-tagline">Helping you avoid teaming partners who still fax NDAs.</span>
-                <button class="ml-2 text-gray-400 hover:text-gray-600" aria-label="Close sponsor banner">×</button>
-            </p>
-        </div>
-
-        <script>
-            const taglines = [
-                "Proudly brought to you by the same folks who designed your comp plan… in Comic Sans.",
-                "Brought to you by the people who say 'looping back' and 'lets unpack that'.",
-                "Proud partner of federal sellers who've clicked 'Reply All' one too many times.",
-                "Helping you avoid teaming partners who still fax NDAs.",
-                "Trusted by people who've survived three reorgs and still don't have Salesforce access."
-            ];
-
-            const tagline = taglines[Math.floor(Math.random() * taglines.length)];
-            document.getElementById("sponsor-tagline").textContent = tagline;
-        </script>
 
         <div id="results-container">
         </div>
@@ -266,67 +245,133 @@
         </footer>
     </div>
 
-    <!-- Sponsor Modal -->
-    <div id="sponsor-modal" class="hidden fixed inset-0 bg-black/50 modal-backdrop flex items-center justify-center p-4 z-50">
-        <div id="sponsor-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-md modal-content">
-            <header class="p-6 border-b border-gray-200 flex justify-between items-center">
-                <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    <!-- SPONSOR MODAL - Matches other modals with monochromatic design -->
+<div id="sponsor-modal" class="hidden fixed inset-0 bg-black/50 modal-backdrop flex items-center justify-center p-4 z-50">
+    <div id="sponsor-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-md modal-content">
+        <header class="p-6 border-b border-gray-200 flex justify-between items-center">
+            <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Sponsor AskArti
+            </h2>
+            <button id="close-sponsor-modal-btn" class="text-gray-400 hover:text-gray-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </header>
+        <main class="p-6 space-y-6 text-gray-700">
+            <div class="flex items-start gap-4">
+                <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-customPurple-100/30 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
-                    Sponsor AskArti
-                </h2>
-                <button id="close-sponsor-modal-btn" class="text-gray-400 hover:text-gray-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-900">Reach Federal Sales Professionals</h3>
+                    <p class="text-sm mt-1 text-gray-600">Connect with IT sales reps, business development professionals, and decision-makers selling to federal agencies.</p>
+                </div>
+            </div>
+            
+            <!-- Sponsorship Plans -->
+            <div class="space-y-4">
+                <!-- Premium Plan -->
+                <div class="bg-customPurple-100/10 border border-customPurple-100/40 rounded-xl p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="font-semibold text-customPurple-900">Premium Sponsor</h4>
+                        <span class="text-customPurple-700 font-semibold">$299/mo</span>
+                    </div>
+                    <ul class="space-y-1.5 text-sm text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <span>Top banner position with "Premium Sponsor" status</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <span>Featured above results content</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <span>Category exclusivity (no competitors in your space)</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Standard Plan -->
+                <div class="bg-gray-50 border border-gray-200 rounded-xl p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="font-semibold text-gray-900">Standard Sponsor</h4>
+                        <span class="text-customPurple-500 font-semibold">$199/mo</span>
+                    </div>
+                    <ul class="space-y-1.5 text-sm text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <span>Placement after ELI5 section in results</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <span>Non-intrusive mid-content visibility</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <span>Monthly performance report with engagement metrics</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Starter Plan -->
+                <div class="bg-gray-50 border border-gray-200 rounded-xl p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="font-semibold text-gray-900">Starter Sponsor</h4>
+                        <span class="text-customPurple-500 font-semibold">$99/mo</span>
+                    </div>
+                    <ul class="space-y-1.5 text-sm text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <span>Footer placement before action buttons</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <span>Perfect for testing before upgrading</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <span>10% discount for annual commitment</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 pt-4">
+                <a href="mailto:mark@subhoo.com?subject=AskArti Sponsorship Inquiry" class="w-full inline-flex items-center justify-center gap-2 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
-                </button>
-            </header>
-            <main class="p-6 space-y-6 text-gray-700">
-                <div class="flex items-start gap-4">
-                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-customPurple-100/30 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-gray-900">Reach Federal Sales Professionals</h3>
-                        <p class="text-sm mt-1 text-gray-600">Connect with IT sales reps, business development professionals, and decision-makers selling to federal agencies.</p>
-                    </div>
-                </div>
-                <div class="flex items-start gap-4">
-                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-customPurple-100/30 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-gray-900">Prime Placement & Clean Ads</h3>
-                        <p class="text-sm mt-1 text-gray-600">Your non-intrusive text-based ads appear above results with monthly performance reports. Perfect for federal contractors, sales tools, and training providers.</p>
-                    </div>
-                </div>
-                <div class="flex items-start gap-4">
-                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-customPurple-100/30 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-gray-900">$299/month</h3>
-                        <p class="text-sm mt-1 text-gray-600">Help cover infrastructure costs and reach this engaged federal sales community. Annual discounts available.</p>
-                    </div>
-                </div>
-                <div class="border-t border-gray-200 pt-4">
-                    <a href="mailto:mark@subhoo.com?subject=AskArti Sponsorship Inquiry" class="w-full inline-flex items-center justify-center gap-2 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        Get Started - mark@subhoo.com
-                    </a>
-                </div>
-            </main>
-        </div>
+                    Contact mark@subhoo.com
+                </a>
+            </div>
+        </main>
     </div>
+</div>
     
     <!-- Human Consultation Modal -->
     <div id="human-modal" class="hidden fixed inset-0 bg-black/50 modal-backdrop flex items-center justify-center p-4 z-50">
@@ -1352,6 +1397,175 @@ const generatePlan = async () => {
         gh_timezoneSelect.addEventListener('change', gh_analyzeTime);
         setInterval(gh_analyzeTime, 60000);
     }
+	// Updated function to create sponsor elements with monochromatic design
+function createSponsorElement(sponsorData) {
+    const { type, name, url, tagline } = sponsorData;
+    
+    const element = document.createElement('div');
+    
+    if (type === 'premium') {
+        // Premium sponsor with monochromatic design
+        element.className = 'bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs';
+        element.innerHTML = `
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
+                <a href="${url}" class="text-customPurple-700 font-medium hover:text-customPurple-900">${name}</a>
+            </div>
+            <p class="text-gray-600 text-xs mt-1">${tagline}</p>
+        `;
+    }
+    
+    return element;
+}
+
+// Updated function for adding sponsors with monochromatic design
+function addSponsorsToResults(resultsContainer) {
+    if (!resultsContainer) return;
+    
+    // 1. PREMIUM SPONSOR: Add just before the results content
+    const premiumSponsor = createSponsorElement({
+        type: 'premium',
+        name: 'Subhoo.com',
+        url: 'https://subhoo.com',
+        tagline: 'Helping you avoid teaming partners who still fax NDAs.'
+    });
+    
+    // Insert at the beginning of results container
+    if (resultsContainer.firstChild) {
+        resultsContainer.insertBefore(premiumSponsor, resultsContainer.firstChild);
+    } else {
+        resultsContainer.appendChild(premiumSponsor);
+    }
+    
+    // 2. STANDARD SPONSORS: Add after the ELI5 section
+    const mainContent = resultsContainer.querySelector('#coaching-plan-container .space-y-6');
+    if (mainContent) {
+        // Find the ELI5 section (third div in the container)
+        const sections = mainContent.querySelectorAll(':scope > div');
+        
+        if (sections.length >= 3) {
+            const eli5Section = sections[2]; // The third section is ELI5
+            
+            // Create standard sponsors element with monochromatic design
+            const standardSponsors = document.createElement('div');
+            standardSponsors.className = 'bg-gray-50 rounded-lg border border-gray-200 p-3 mt-6 mb-0';
+            standardSponsors.innerHTML = `
+                <p class="text-xs text-gray-500 mb-2">
+                    <span class="text-xs font-medium text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">SPONSORED</span>
+                </p>
+                <div class="flex flex-wrap gap-3 text-xs">
+                    <a href="https://example1.com" class="text-gray-600 hover:text-customPurple-500 font-medium">GovCRM Solutions</a>
+                    <a href="https://example2.com" class="text-gray-600 hover:text-customPurple-500 font-medium">FedTech Advisors</a>
+                </div>
+            `;
+            
+            // Insert after the ELI5 section
+            if (eli5Section.nextSibling) {
+                mainContent.insertBefore(standardSponsors, eli5Section.nextSibling);
+            } else {
+                mainContent.appendChild(standardSponsors);
+            }
+        }
+    }
+    
+    // 3. STARTER SPONSOR: Add at the very end before buttons
+    const buttonsContainer = resultsContainer.querySelector('.mt-8');
+    if (buttonsContainer) {
+        // Create starter sponsor element with monochromatic design
+        const starterSponsor = document.createElement('div');
+        starterSponsor.className = 'border-t border-gray-200 pt-4 pb-2 text-center';
+        starterSponsor.innerHTML = `
+            <span class="text-xs text-gray-500">Also check out:</span>
+            <a href="https://example3.com" class="ml-2 text-xs text-customPurple-500 hover:text-customPurple-700 font-medium">CyberFed Security</a>
+        `;
+        
+        // Insert before the buttons
+        resultsContainer.insertBefore(starterSponsor, buttonsContainer);
+    }
+}
+
+// Similarly update the prospecting results display function with monochromatic styling
+// Modify the displayPlan function to include sponsors at specific locations
+const originalDisplayPlan = displayPlan;
+displayPlan = function(planData) {
+    // Call the original function first
+    originalDisplayPlan(planData);
+    
+    // Add sponsors at strategic positions
+    const resultsContainer = document.getElementById('results-container');
+    addSponsorsToResults(resultsContainer);
+};
+
+// Also update prospecting results display to include sponsors
+const originalDisplayProspectingResults = displayProspectingResults;
+displayProspectingResults = function(prospectData) {
+    // Call the original function first
+    originalDisplayProspectingResults(prospectData);
+    
+    // For prospecting results, we'll need a slightly different approach
+    // as the structure is different, but the concept is the same
+    const resultsContainer = document.getElementById('results-container');
+    const prospectingContainer = resultsContainer.querySelector('#prospecting-results-container');
+    
+    if (prospectingContainer) {
+        // 1. PREMIUM SPONSOR: Add before the prospecting content
+        const premiumSponsor = createSponsorElement({
+            type: 'premium',
+            name: 'Subhoo.com',
+            url: 'https://subhoo.com',
+            tagline: 'Helping you avoid teaming partners who still fax NDAs.'
+        });
+        
+        // Insert at the beginning
+        if (prospectingContainer.firstChild) {
+            prospectingContainer.insertBefore(premiumSponsor, prospectingContainer.firstChild);
+        } else {
+            prospectingContainer.appendChild(premiumSponsor);
+        }
+        
+        // 2. STANDARD SPONSORS: Add in the middle of the content
+        const sections = prospectingContainer.querySelectorAll('.bg-white, .bg-customPurple-100\\/20');
+        if (sections.length >= 3) {
+            // Place after the third section
+            const thirdSection = sections[2];
+            
+            // Create standard sponsors element with monochromatic design
+            const standardSponsors = document.createElement('div');
+            standardSponsors.className = 'bg-gray-50 rounded-lg border border-gray-200 p-3 mt-4 mb-0';
+            standardSponsors.innerHTML = `
+                <p class="text-xs text-gray-500 mb-2">
+                    <span class="text-xs font-medium text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">SPONSORED</span>
+                </p>
+                <div class="flex flex-wrap gap-3 text-xs">
+                    <a href="https://example1.com" class="text-gray-600 hover:text-customPurple-500 font-medium">GovCRM Solutions</a>
+                    <a href="https://example2.com" class="text-gray-600 hover:text-customPurple-500 font-medium">FedTech Advisors</a>
+                </div>
+            `;
+            
+            // Insert after the third section
+            if (thirdSection.nextSibling) {
+                prospectingContainer.insertBefore(standardSponsors, thirdSection.nextSibling);
+            } else {
+                prospectingContainer.appendChild(standardSponsors);
+            }
+        }
+        
+        // 3. STARTER SPONSOR: Add at the very end before buttons
+        const buttonsContainer = resultsContainer.querySelector('.mt-6');
+        if (buttonsContainer) {
+            // Create starter sponsor element with monochromatic design
+            const starterSponsor = document.createElement('div');
+            starterSponsor.className = 'border-t border-gray-200 pt-4 pb-2 text-center';
+            starterSponsor.innerHTML = `
+                <span class="text-xs text-gray-500">Also check out:</span>
+                <a href="https://example3.com" class="ml-2 text-xs text-customPurple-500 hover:text-customPurple-700 font-medium">CyberFed Security</a>
+            `;
+            
+            // Insert before the buttons
+            resultsContainer.insertBefore(starterSponsor, buttonsContainer);
+        }
+    }
+};
     </script>
 </body>
 </html>
