@@ -778,7 +778,7 @@ const displayPlan = (planData) => {
                 <div class="space-y-4">
                     <div class="${color.bg} ${color.border} border p-4 rounded-xl">
                         <h3 class="font-medium text-customPurple-700 mb-2">SMART Goal</h3>
-                        <p class="text-gray-700">${marked.parse(personaData.smart_goal)}</p>
+                        <div class="text-gray-700">${marked.parse(personaData.smart_goal)}</div>
                     </div>
                     <div>
                         <h3 class="font-medium text-gray-900 mb-3">Key Talking Points</h3>
@@ -862,41 +862,54 @@ const displayPlan = (planData) => {
         btn.addEventListener('click', copySnippet);
     });
 };
-    const copyProspectingResults = () => {
-        const container = document.getElementById('prospecting-results-container');
-        if (!container) return;
-        
-        let fullText = 'PROSPECT RESEARCH & COMPETITIVE INTELLIGENCE\n\n';
-        
-        // Get summary
-        const summary = container.querySelector('.bg-gradient-to-r div').textContent.trim();
-        fullText += summary + '\n\n';
-        
-        // Get all sections
-        const sections = container.querySelectorAll('.bg-white, .bg-customPurple-100\\/20');
-        sections.forEach(section => {
-            const title = section.querySelector('h3')?.textContent.trim();
-            if (title) {
-                fullText += title.toUpperCase() + '\n';
-                const content = section.querySelectorAll('li, .border-l-4, .flex.items-start, p');
-                content.forEach(item => {
-                    fullText += '• ' + item.textContent.trim() + '\n';
-                });
-                fullText += '\n';
+    const copyPlanToClipboard = () => {
+    const planContainer = document.getElementById('coaching-plan-container');
+    if (!planContainer) return;
+
+    const thoughtsSection = planContainer.querySelector('.bg-gradient-to-r div');
+    const recommendation = thoughtsSection ? thoughtsSection.textContent.trim() : '';
+
+    let fullText = `ARTI'S THOUGHTS:\n${recommendation}\n\n--- DETAILED PLAN ---\n\n`;
+
+    const personaCards = document.querySelectorAll('.persona-card');
+    personaCards.forEach(card => {
+        const persona = card.querySelector('h2').textContent.trim();
+        let goal = 'No goal available.';
+        const snippet = card.querySelector('.snippet-text')?.textContent.trim() || 'No snippet available.';
+
+        // --- DEFINITIVE GOAL-COPYING LOGIC ---
+        // Find the H3 element with the text "SMART Goal"
+        const allH3s = card.querySelectorAll('h3');
+        const smartGoalH3 = Array.from(allH3s).find(h3 => h3.textContent.trim() === 'SMART Goal');
+
+        // If the H3 is found, the div containing the goal text is its direct sibling.
+        if (smartGoalH3) {
+            const goalContainerDiv = smartGoalH3.nextElementSibling;
+            if (goalContainerDiv) {
+                // Get all text from within the container, which correctly handles paragraphs, lists, etc.
+                goal = goalContainerDiv.textContent.trim();
             }
-        });
-        
-        navigator.clipboard.writeText(fullText).then(() => {
-            const copyBtn = document.getElementById('copy-prospecting-btn');
-            const originalHtml = copyBtn.innerHTML;
-            copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>Copied!`;
-            copyBtn.classList.add('success-pulse');
-            setTimeout(() => { 
-                copyBtn.innerHTML = originalHtml; 
-                copyBtn.classList.remove('success-pulse');
-            }, 2000);
-        });
-    };
+        }
+
+        const points = Array.from(card.querySelectorAll('ul li span')).map(span => `- ${span.textContent.trim()}`).join('\n');
+
+        fullText += `--- ${persona.toUpperCase()} ---\n\n`;
+        fullText += `SMART GOAL:\n${goal}\n\n`; // This will now have the correct text
+        fullText += `KEY TALKING POINTS:\n${points}\n\n`;
+        fullText += `SUGGESTED SNIPPET:\n${snippet}\n\n`;
+    });
+
+    navigator.clipboard.writeText(fullText.trim()).then(() => {
+        const copyBtn = document.getElementById('copy-btn');
+        const originalHtml = copyBtn.innerHTML;
+        copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>Copied!`;
+        copyBtn.classList.add('success-pulse');
+        setTimeout(() => {
+            copyBtn.innerHTML = originalHtml;
+            copyBtn.classList.remove('success-pulse');
+        }, 2000);
+    });
+};
 
 const displayProspectingResults = (prospectData) => {
     const { 
