@@ -1102,56 +1102,6 @@ const displayProspectingResults = (prospectData) => {
         resultsContainer.firstChild.classList.add('error-shake');
     };
 
-    const copyPlanToClipboard = () => {
-        const planContainer = document.getElementById('coaching-plan-container');
-        if (!planContainer) return;
-
-        // Get the full text content from "A few thoughts..." section
-        const thoughtsSection = planContainer.querySelector('.bg-gradient-to-r div');
-        const recommendation = thoughtsSection ? thoughtsSection.textContent.trim() : '';
-
-        let fullText = `ARTI'S THOUGHTS:\n${recommendation}\n\n--- DETAILED PLAN ---\n\n`;
-
-        const personaCards = document.querySelectorAll('.persona-card');
-        personaCards.forEach(card => {
-            const persona = card.querySelector('h2').textContent.trim();
-            let goal = 'No goal available.';
-            const snippet = card.querySelector('.snippet-text')?.textContent.trim() || 'No snippet available.';
-
-            // --- CORRECTED LOGIC ---
-            // Find the H3 element with the exact text "SMART Goal". This is more reliable than using CSS classes.
-            const allH3s = card.querySelectorAll('h3');
-            const smartGoalH3 = Array.from(allH3s).find(h3 => h3.textContent.trim() === 'SMART Goal');
-
-            // If the H3 is found, the goal's <p> tag is the very next element in the HTML structure.
-            if (smartGoalH3) {
-                const goalP = smartGoalH3.nextElementSibling;
-                // Verify the next element is a paragraph before grabbing its text content.
-                if (goalP && goalP.tagName === 'P') {
-                    goal = goalP.textContent.trim();
-                }
-            }
-            // --- END CORRECTION ---
-
-            const points = Array.from(card.querySelectorAll('ul li span')).map(span => `- ${span.textContent.trim()}`).join('\n');
-
-            fullText += `--- ${persona.toUpperCase()} ---\n\n`;
-            fullText += `SMART GOAL:\n${goal}\n\n`;
-            fullText += `KEY TALKING POINTS:\n${points}\n\n`;
-            fullText += `SUGGESTED SNIPPET:\n${snippet}\n\n`;
-        });
-
-        navigator.clipboard.writeText(fullText.trim()).then(() => {
-            const copyBtn = document.getElementById('copy-btn');
-            const originalHtml = copyBtn.innerHTML;
-            copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>Copied!`;
-            copyBtn.classList.add('success-pulse');
-            setTimeout(() => {
-                copyBtn.innerHTML = originalHtml;
-                copyBtn.classList.remove('success-pulse');
-            }, 2000);
-        });
-    };
 
     const copySnippet = (e) => {
         const button = e.currentTarget;
