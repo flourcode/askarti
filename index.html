@@ -697,8 +697,8 @@ const generatePlan = async () => {
     
     // Enhanced loading UI with Arti's avatar and better styling
     resultsContainer.innerHTML = `
-        <div class="text-center py-4 mt-2">
-            <div class="flex justify-center items-center mb-4">
+        <div class="text-center py-2 mt-2">
+            <div class="flex justify-center items-center mb-2">
                 <img src="images/arti_right.png" alt="Arti" class="h-16 w-16 animate-pulse">
             </div>
             <p id="loading-message" class="text-customPurple-500 text-xl font-semibold mb-2">Arti is Working Backwards...</p>
@@ -921,35 +921,50 @@ const copyProspectingResults = () => {
     const container = document.getElementById('prospecting-results-container');
     if (!container) return;
 
-    // Helper to get text from a section
-    const getText = (selector, title) => {
-        const element = container.querySelector(selector);
-        if (!element) return "";
-        let text = `--- ${title.toUpperCase()} ---\n`;
-        // This querySelectorAll will grab text from lists, divs, etc.
-        const items = element.querySelectorAll('li, p, .flex-wrap > span, .space-y-3 > div, .space-y-2 > div');
-        if (items.length > 0) {
-            items.forEach(item => {
-                text += `- ${item.textContent.trim().replace(/\s+/g, ' ')}\n`;
-            });
-        } else {
-            text += `${element.textContent.trim().replace(/\s+/g, ' ')}\n`;
-        }
-        return text + '\n';
-    };
-
     let fullText = "ARTI'S PROSPECTING RESEARCH\n\n";
 
-    // Extract text from all sections
-    fullText += getText('div:has(> h3:first-child)', 'Summary');
-    fullText += getText('div:has(h3:first-child:containing("Core Capabilities"))', 'Core Capabilities');
-    fullText += getText('div:has(h3:first-child:containing("NAICS"))', 'Relevant NAICS Codes');
-    fullText += getText('div:has(h3:first-child:containing("Prospect Rec"))', 'Prospect Recommendations');
-    fullText += getText('div:has(h3:first-child:containing("Competitors"))', 'Federal Competitors');
-    fullText += getText('div:has(h3:first-child:containing("Prime"))', 'Prime Contractors & Partners');
-    fullText += getText('div:has(h3:first-child:containing("Market Insight"))', 'Market Insight');
+    // A robust helper function to find a section by its title and get its text
+    const addSectionToText = (title) => {
+        const allH3s = Array.from(container.querySelectorAll('h3'));
+        const titleH3 = allH3s.find(h3 => h3.textContent.trim().includes(title));
 
+        if (!titleH3) return; // Skip if section doesn't exist
 
+        // Find the parent 'card' element for the section
+        const card = titleH3.closest('.bg-white, .bg-gradient-to-r, .bg-customPurple-100\\/20');
+        if (!card) return;
+
+        fullText += `--- ${title.toUpperCase()} ---\n`;
+        
+        // Special case for the main summary, which has a different structure
+        if (title === "Prospect Research") {
+            const summaryContent = card.querySelector('.text-gray-800');
+            if (summaryContent) {
+                 fullText += `${summaryContent.textContent.trim().replace(/\s+/g, ' ')}\n\n`;
+            }
+            return;
+        }
+
+        // Find all list items, tags, or content blocks within the card
+        const items = card.querySelectorAll('li, .flex-wrap > span, .space-y-3 > div, .space-y-2 > div, p.text-customPurple-900');
+        if (items.length > 0) {
+            items.forEach(item => {
+                fullText += `- ${item.textContent.trim().replace(/\s+/g, ' ')}\n`;
+            });
+        }
+        fullText += '\n';
+    };
+
+    // Process each section using the helper
+    addSectionToText("Prospect Research");
+    addSectionToText("Core Capabilities");
+    addSectionToText("Relevant NAICS Codes");
+    addSectionToText("Prospect Recommendations");
+    addSectionToText("Federal Competitors");
+    addSectionToText("Prime Contractors");
+    addSectionToText("Market Insight");
+
+    // Copy the final text to the clipboard and provide user feedback
     navigator.clipboard.writeText(fullText.trim()).then(() => {
         const copyBtn = document.getElementById('copy-prospecting-btn');
         const originalHtml = copyBtn.innerHTML;
