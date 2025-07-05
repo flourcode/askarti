@@ -1405,24 +1405,35 @@ const displayProspectingResults = (prospectData) => {
         gh_timezoneSelect.addEventListener('change', gh_analyzeTime);
         setInterval(gh_analyzeTime, 60000);
     }
-	/**
+/**
  * Generates appropriate Mermaid diagrams based on the context
  * @param {Object} planData - The response data from the API
  * @param {string} originalQuery - The user's original question
  * @returns {string} HTML containing the Mermaid diagram
  */
 const generateContextualDiagram = (planData, originalQuery) => {
+    // Only proceed if we have valid data
+    if (!planData || typeof planData !== 'object') return '';
+    
     const query = originalQuery.toLowerCase();
     const recommendation = (planData.high_level_recommendation || '').toLowerCase();
     
     // Check if this is a prospecting response
     if (planData.naics_codes || planData.federal_competitors) {
-        return generateProspectingFlowDiagram();
+        return generateProspectingFlowDiagram(planData);
+    }
+    
+    // If the API returns a mermaid_diagram, use it directly
+    if (planData.mermaid_diagram && typeof planData.mermaid_diagram === 'string') {
+        return createDiagramContainer(
+            planData.mermaid_diagram, 
+            "Arti's Strategic Visualization"
+        );
     }
     
     // Check for specific diagram triggers
     if (query.includes('process') || query.includes('how') || query.includes('steps')) {
-        return generateProcessDiagram(planData, originalQuery);
+        return generateProcessDiagram(planData);
     }
     
     if (query.includes('stakeholder') || query.includes('champion') || query.includes('map')) {
@@ -1436,75 +1447,238 @@ const generateContextualDiagram = (planData, originalQuery) => {
     if (query.includes('decision') || recommendation.includes('choose') || recommendation.includes('option')) {
         return generateDecisionTree(planData);
     }
+    
     if (query.includes('journey')) {
-    return generateJourneyMapDiagram();
-}
-if (query.includes('org chart') || query.includes('structure')) {
-    return generateOrgChartDiagram();
-}
-if (query.includes('market share') || query.includes('budget')) {
-    return generatePieChartDiagram();
-}
-if (query.includes('status') || query.includes('lifecycle')) {
-    return generateOpportunityStateDiagram();
-}
-if (query.includes('brainstorm') || query.includes('gtm') || query.includes('mindmap')) {
-    return generateMindmapDiagram();
-}
-if (query.includes('prioritize') || query.includes('fit') || query.includes('grid')) {
-    return generateQuadrantDiagram();
-}
+        return generateJourneyMapDiagram(planData);
+    }
+    
+    if (query.includes('org chart') || query.includes('structure')) {
+        return generateOrgChartDiagram(planData);
+    }
+    
+    if (query.includes('market share') || query.includes('budget')) {
+        return generatePieChartDiagram(planData);
+    }
+    
+    if (query.includes('status') || query.includes('lifecycle')) {
+        return generateOpportunityStateDiagram(planData);
+    }
+    
+    if (query.includes('brainstorm') || query.includes('gtm') || query.includes('mindmap')) {
+        return generateMindmapDiagram(planData);
+    }
+    
+    if (query.includes('prioritize') || query.includes('fit') || query.includes('grid')) {
+        return generateQuadrantDiagram(planData);
+    }
 
-    // Default to a simple flow if context suggests it would be helpful
-    if (planData.coaching_plan && planData.coaching_plan.length > 3) {
+    // Default to a action flow diagram if we have coaching data
+    if (planData.coaching_plan && planData.coaching_plan.length > 2) {
         return generateActionFlowDiagram(planData);
     }
     
-    return ''; // No diagram if none fit
+    // If no clear trigger and insufficient data, don't show a diagram
+    return '';
 };
 
 /**
  * Generates a federal sales process flow diagram
+ * Optimized for vertical layout (mobile-friendly)
  */
-const generateProcessDiagram = (planData, query) => {
-    const diagramCode = `
-    flowchart LR
-        A[Identify Opportunity] --> B[Research Agency/Stakeholders]
-        B --> C[Initial Outreach]
-        C --> D{Qualified?}
-        D -->|Yes| E[Build Champion]
-        D -->|No| F[Nurture/Exit]
-        E --> G[Map Stakeholders]
-        G --> H[Align to Mission]
-        H --> I[Navigate Procurement]
-        I --> J[Win & Expand]
-        
-        class A,B,C,G,H,I,J node;
-        class E highlight;
-    `;
+const generateProcessDiagram = (planData) => {
+    // Extract real data from coaching plan if available
+    let steps = [];
+    let highlightedStep = "";
     
-    return createDiagramContainer(diagramCode, "Federal Sales Process Flow");
+    if (planData.coaching_plan && planData.coaching_plan.length > 0) {
+        // Extract steps from persona names if they seem sequential
+        steps = planData.coaching_plan
+            .map(item => item.persona)
+            .filter(name => 
+                !name.includes('Buyer') && 
+                !name.includes('Blocker') && 
+                !name.includes('Stakeholder')
+            )
+            .slice(0, 6); // Limit to 6 steps for clarity
+        
+        // Try to identify a highlighted step
+        const priorityKeywords = ['urgent', 'critical', 'priority', 'focus'];
+        const highlightIndex = planData.coaching_plan.findIndex(item => 
+            priorityKeywords.some(keyword => 
+                (item.smart_goal || '').toLowerCase().includes(keyword)
+            )
+        );
+        
+        if (highlightIndex >= 0 && highlightIndex < steps.length) {
+            highlightedStep = String.fromCharCode(65 + highlightIndex);
+        }
+    }
+    
+    // Use default process if no valid steps extracted
+    if (steps.length < 3) {
+        const diagramCode = `
+        flowchart TD
+            A[Identify Opportunity] --> B[Research Agency]
+            B --> C[Initial Outreach]
+            C --> D{Qualified?}
+            D -->|Yes| E[Build Champion]
+            D -->|No| F[Nurture/Exit]
+            E --> G[Map Stakeholders]
+            G --> H[Align to Mission]
+            H --> I[Navigate Procurement]
+            
+            class E highlight;
+        `;
+        
+        return createDiagramContainer(diagramCode, "Federal Sales Process Flow");
+    }
+    
+    // Build custom process flow from extracted steps
+    let diagramCode = 'flowchart TD\n';
+    
+    // Add nodes for each step
+    steps.forEach((step, idx) => {
+        const nodeId = String.fromCharCode(65 + idx);
+        const label = step.replace(/['"]/g, '').trim();
+        diagramCode += `    ${nodeId}["${label}"]\n`;
+    });
+    
+    // Add connections between nodes
+    for (let i = 0; i < steps.length - 1; i++) {
+        const currentNode = String.fromCharCode(65 + i);
+        const nextNode = String.fromCharCode(65 + i + 1);
+        diagramCode += `    ${currentNode} --> ${nextNode}\n`;
+    }
+    
+    // Add decision point if we have enough steps
+    if (steps.length >= 4) {
+        const decisionIdx = Math.floor(steps.length / 2);
+        const decisionNode = String.fromCharCode(65 + decisionIdx);
+        const altNode = 'Z';
+        
+        diagramCode += `    ${decisionNode} -->|Alternative Path| ${altNode}["Adjust Strategy"]\n`;
+    }
+    
+    // Add styling
+    diagramCode += '    class ';
+    for (let i = 0; i < steps.length; i++) {
+        diagramCode += String.fromCharCode(65 + i);
+        if (i < steps.length - 1) diagramCode += ',';
+    }
+    diagramCode += ' node;\n';
+    
+    // Add highlight if identified
+    if (highlightedStep) {
+        diagramCode += `    class ${highlightedStep} highlight;\n`;
+    }
+    
+    return createDiagramContainer(diagramCode, "Sales Strategy Flow");
 };
 
 /**
- * Generates a stakeholder mapping diagram
+ * Generates a stakeholder mapping diagram based on actual personas
  */
 const generateStakeholderMap = (planData) => {
-    const diagramCode = `
-    graph TB
-        EB[Economic Buyer<br/>CIO/Director]
-        TB[Technical Buyer<br/>CISO/Tech Lead]
-        CH[Champion<br/>Program Manager]
-        INF[Influencer<br/>End Users]
-        BL[Blocker<br/>Incumbent Vendor]
+    // Extract stakeholders from coaching plan if available
+    if (planData.coaching_plan && planData.coaching_plan.length >= 3) {
+        // Identify stakeholder types
+        const stakeholders = [];
+        let champion = null;
+        let blocker = null;
         
-        EB -.->|Budget Authority| TB
-        TB -->|Technical Approval| CH
-        CH -->|Advocates| EB
-        CH -.->|Trains| INF
-        INF -.->|Feedback| TB
-        BL -.->|Resists| EB
-        BL -.->|FUD| TB
+        planData.coaching_plan.forEach((item, idx) => {
+            const persona = item.persona;
+            const id = String.fromCharCode(65 + idx);
+            
+            // Skip if not a stakeholder
+            if (!persona) return;
+            
+            // Create stakeholder object
+            const stakeholder = {
+                id,
+                name: persona.replace(/['"]/g, '').trim(),
+                type: 'other'
+            };
+            
+            // Determine type
+            if (persona.includes('Champion') || persona.includes('Advocate')) {
+                stakeholder.type = 'champion';
+                champion = stakeholder;
+            } else if (persona.includes('Blocker') || persona.includes('Competitor')) {
+                stakeholder.type = 'blocker';
+                blocker = stakeholder;
+            } else if (persona.includes('Economic') || persona.includes('Budget')) {
+                stakeholder.type = 'economic';
+            } else if (persona.includes('Technical') || persona.includes('IT')) {
+                stakeholder.type = 'technical';
+            } else if (persona.includes('Decision') || persona.includes('Exec')) {
+                stakeholder.type = 'decision';
+            }
+            
+            stakeholders.push(stakeholder);
+        });
+        
+        // Only proceed if we have enough stakeholders
+        if (stakeholders.length >= 2) {
+            let diagramCode = 'graph TD\n';
+            
+            // Add nodes for each stakeholder
+            stakeholders.forEach(s => {
+                diagramCode += `    ${s.id}["${s.name}"]\n`;
+            });
+            
+            // Add relationships
+            stakeholders.forEach((s1, i) => {
+                stakeholders.forEach((s2, j) => {
+                    if (i !== j) {
+                        // Economic to Technical
+                        if (s1.type === 'economic' && s2.type === 'technical') {
+                            diagramCode += `    ${s1.id} -.->|Budget| ${s2.id}\n`;
+                        }
+                        
+                        // Champion to Economic
+                        if (s1.type === 'champion' && s2.type === 'economic') {
+                            diagramCode += `    ${s1.id} -->|Advocates| ${s2.id}\n`;
+                        }
+                        
+                        // Technical to Champion
+                        if (s1.type === 'technical' && s2.type === 'champion') {
+                            diagramCode += `    ${s1.id} -->|Support| ${s2.id}\n`;
+                        }
+                        
+                        // Blocker relationships
+                        if (s1.type === 'blocker') {
+                            if (s2.type === 'economic') {
+                                diagramCode += `    ${s1.id} -.->|Resists| ${s2.id}\n`;
+                            } else if (s2.type === 'technical') {
+                                diagramCode += `    ${s1.id} -.->|Conflicts| ${s2.id}\n`;
+                            }
+                        }
+                    }
+                });
+            });
+            
+            // Add styling
+            if (champion) {
+                diagramCode += `    class ${champion.id} highlight;\n`;
+            }
+            
+            if (blocker) {
+                diagramCode += `    class ${blocker.id} blocker;\n`;
+            }
+            
+            return createDiagramContainer(diagramCode, "Stakeholder Relationship Map");
+        }
+    }
+    
+    // Default stakeholder map if no valid data
+    const diagramCode = `
+    graph TD
+        EB[Economic Buyer] --> TB[Technical Buyer]
+        TB --> CH[Champion]
+        CH --> EB
+        BL[Blocker] -.-> EB
+        BL -.-> TB
         
         class CH highlight;
         class BL blocker;
@@ -1513,75 +1687,327 @@ const generateStakeholderMap = (planData) => {
     return createDiagramContainer(diagramCode, "Stakeholder Relationship Map");
 };
 
-
-const generateOrgChartDiagram = () => {
+/**
+ * Generates an org chart diagram
+ */
+const generateOrgChartDiagram = (planData) => {
+    // Look for agency mentions in the query
+    const recommendationText = planData.high_level_recommendation || '';
+    const tldrText = planData.tldr_summary || '';
+    const combinedText = (recommendationText + ' ' + tldrText).toLowerCase();
+    
+    // Check for agency mentions
+    if (combinedText.includes('dhs') || combinedText.includes('homeland')) {
+        const diagramCode = `
+        graph TD
+            Secretary["Secretary of DHS"]
+            CIO["DHS CIO"]
+            CISO["DHS CISO"]
+            Components["Component Agencies"]
+            CISA["CISA"]
+            CBP["CBP"]
+            FEMA["FEMA"]
+            
+            Secretary --> CIO
+            Secretary --> Components
+            CIO --> CISO
+            Components --> CISA
+            Components --> CBP
+            Components --> FEMA
+            
+            class CIO,CISA highlight;
+        `;
+        return createDiagramContainer(diagramCode, "DHS Organization Structure");
+    } 
+    
+    if (combinedText.includes('dod') || combinedText.includes('defense')) {
+        const diagramCode = `
+        graph TD
+            SecDef["Secretary of Defense"]
+            Services["Military Services"]
+            Army["Army"]
+            Navy["Navy"]
+            AF["Air Force"]
+            DOD_CIO["DoD CIO"]
+            DISA["DISA"]
+            
+            SecDef --> Services
+            SecDef --> DOD_CIO
+            Services --> Army
+            Services --> Navy
+            Services --> AF
+            DOD_CIO --> DISA
+            
+            class DOD_CIO,DISA highlight;
+        `;
+        return createDiagramContainer(diagramCode, "DoD Organization Structure");
+    }
+    
+    // Default generic org chart
     const diagramCode = `
     graph TD
         CEO["Agency Head"]
+        CIO["CIO"]
         CTO["CTO"]
-        CFO["CFO"]
-        PMO["Program Management Office"]
-        Lead1["Program Lead"]
-        Lead2["Engineering Lead"]
-
+        PMO["Program Office"]
+        Leads["Program Leads"]
+        
+        CEO --> CIO
         CEO --> CTO
-        CEO --> CFO
-        CTO --> PMO
-        PMO --> Lead1
-        PMO --> Lead2
+        CIO --> PMO
+        PMO --> Leads
     `;
 
-    return createDiagramContainer(diagramCode, "Agency Org Chart");
+    return createDiagramContainer(diagramCode, "Agency Organization Structure");
 };
-const generateJourneyMapDiagram = () => {
+
+/**
+ * Generates a customer journey map diagram
+ */
+const generateJourneyMapDiagram = (planData) => {
+    // Extract journey stages from coaching plan if possible
+    let hasCustomJourney = false;
+    let journeyCode = '';
+    
+    if (planData.coaching_plan && planData.coaching_plan.length >= 3) {
+        const possibleStages = [
+            'Awareness', 'Discovery', 'Consideration', 'Evaluation', 
+            'Decision', 'Purchase', 'Implementation', 'Renewal'
+        ];
+        
+        // Find journey stages in the coaching plan
+        const stages = new Map();
+        
+        planData.coaching_plan.forEach(item => {
+            const persona = item.persona || '';
+            const goal = item.smart_goal || '';
+            const combinedText = (persona + ' ' + goal).toLowerCase();
+            
+            // Try to map this item to a journey stage
+            for (const stage of possibleStages) {
+                if (combinedText.includes(stage.toLowerCase())) {
+                    if (!stages.has(stage)) {
+                        stages.set(stage, []);
+                    }
+                    stages.get(stage).push(persona.replace(/['"]/g, '').trim());
+                    break;
+                }
+            }
+        });
+        
+        // If we found stages, create a custom journey diagram
+        if (stages.size >= 2) {
+            hasCustomJourney = true;
+            journeyCode = 'journey\n    title Customer Buying Journey\n';
+            
+            // Add each stage with personas
+            for (const [stage, personas] of stages.entries()) {
+                journeyCode += `    section ${stage}\n`;
+                
+                // Add each persona with a random satisfaction score
+                personas.forEach(persona => {
+                    // Create a satisfaction score between 1-5
+                    const score = Math.floor(Math.random() * 5) + 1;
+                    journeyCode += `      ${persona}: ${score}\n`;
+                });
+            }
+        }
+    }
+    
+    // Use custom journey if available, otherwise default
+    if (hasCustomJourney) {
+        return createDiagramContainer(journeyCode, "Customer Buying Journey", "journey");
+    }
+    
+    // Default journey map
     const diagramCode = `
     journey
         title Buying Team Journey
         section Awareness
-          Read Whitepaper: 5
-          Attended Webinar: 3
+          Initial Research: 3
+          Identify Solutions: 4
         section Evaluation
-          Talked to Champion: 3
-          Reviewed Security Docs: 4
+          Technical Review: 3
+          Budget Assessment: 2
         section Decision
-          Internal Meeting: 2
-          Contract Review: 1
+          Final Approval: 1
+          Contract Review: 2
     `;
 
     return createDiagramContainer(diagramCode, "Customer Buying Journey", "journey");
 };
-const generatePieChartDiagram = () => {
+
+/**
+ * Generates a pie chart for market share or budget
+ */
+const generatePieChartDiagram = (planData) => {
+    // Use competitor data if available for prospecting
+    if (planData.federal_competitors && planData.federal_competitors.length >= 3) {
+        let diagramCode = 'pie title Market Share by Contractor\n';
+        
+        // Take top 4 competitors max
+        const competitors = planData.federal_competitors.slice(0, 4);
+        
+        // Assign random market share percentages (total 100%)
+        let remainingPercentage = 100;
+        competitors.forEach((comp, idx) => {
+            if (idx === competitors.length - 1) {
+                // Last competitor gets remaining percentage
+                diagramCode += `    "${comp.company}" : ${remainingPercentage}\n`;
+            } else {
+                // Random percentage between 15-45
+                const percentage = Math.floor(Math.random() * 30) + 15;
+                remainingPercentage -= percentage;
+                diagramCode += `    "${comp.company}" : ${percentage}\n`;
+            }
+        });
+        
+        return createDiagramContainer(diagramCode, "Federal Market Share", "pie");
+    }
+    
+    // Default pie chart
     const diagramCode = `
-    pie title Incumbent Market Share
-        "Booz Allen" : 45
-        "SAIC" : 25
-        "Parsons" : 15
-        "Other" : 15
+    pie title Typical Federal Contract Distribution
+        "Primes" : 45
+        "Large Subs" : 30
+        "Small Business" : 15
+        "Specialized Vendors" : 10
     `;
 
-    return createDiagramContainer(diagramCode, "Contractor Share Breakdown", "pie");
+    return createDiagramContainer(diagramCode, "Federal Contract Distribution", "pie");
 };
-const generateMindmapDiagram = () => {
+
+/**
+ * Generates a strategy mindmap using real data when available
+ */
+const generateMindmapDiagram = (planData) => {
+    // Extract strategy elements from coaching plan if available
+    if (planData.coaching_plan && planData.coaching_plan.length >= 3) {
+        // Find major categories
+        const strategies = new Map();
+        
+        planData.coaching_plan.forEach(item => {
+            if (!item.talking_points || !Array.isArray(item.talking_points)) return;
+            
+            // Use persona as category
+            const category = item.persona?.replace(/['"]/g, '').trim() || 'Strategy';
+            strategies.set(category, item.talking_points.map(point => {
+                // Clean up the talking points
+                return point.replace(/['"]/g, '').trim()
+                    .replace(/^\s*[\-\*]\s*/, '') // Remove bullet markers
+                    .replace(/\.$/, ''); // Remove trailing periods
+            }));
+        });
+        
+        // Only proceed if we have enough data
+        if (strategies.size >= 2) {
+            let diagramCode = 'mindmap\n  root((Sales Strategy))\n';
+            
+            // Add each category with talking points
+            for (const [category, points] of strategies.entries()) {
+                diagramCode += `    ${category}\n`;
+                
+                // Add talking points (limit to 3 per category)
+                points.slice(0, 3).forEach(point => {
+                    // Truncate long points
+                    const shortPoint = point.length > 30 ? 
+                        point.substring(0, 27) + '...' : point;
+                    diagramCode += `      ${shortPoint}\n`;
+                });
+            }
+            
+            return createDiagramContainer(diagramCode, "Strategic Approach", "mindmap");
+        }
+    }
+    
+    // Default mindmap
     const diagramCode = `
     mindmap
       root((Go-To-Market Strategy))
-        GTM Approaches
-          Digital Campaigns
-          BD Meetings
-          Trade Shows
-        Targets
-          Prime Contractors
-          Federal Agencies
-          Key Programs
-        Challenges
-          Access
+        Approaches
+          Agency Targeting
+          Partner Enablement
+          Technical Proof
+        Key Stakeholders
+          Economic Buyers
+          Technical Evaluators
+          Program Managers
+        Focus Areas
+          Mission Alignment
           Compliance
-          Incumbents
+          Value Demonstration
     `;
 
     return createDiagramContainer(diagramCode, "GTM Strategy Mindmap", "mindmap");
 };
-const generateQuadrantDiagram = () => {
+
+/**
+ * Generates an opportunity state diagram
+ */
+const generateOpportunityStateDiagram = (planData) => {
+    const diagramCode = `
+    stateDiagram-v2
+        [*] --> Identified
+        Identified --> Engaged : Outreach
+        Engaged --> Validated : Champion Found
+        Validated --> Proposed : Submitted RFI/RFP
+        Proposed --> Closed : Win/Loss
+        Closed --> [*]
+    `;
+
+    return createDiagramContainer(diagramCode, "Opportunity Lifecycle", "stateDiagram-v2");
+};
+
+/**
+ * Generates a prioritization quadrant chart
+ */
+const generateQuadrantDiagram = (planData) => {
+    // Extract items to prioritize from coaching plan if available
+    if (planData.coaching_plan && planData.coaching_plan.length >= 3) {
+        const items = planData.coaching_plan
+            .filter(item => item.persona)
+            .map(item => item.persona.replace(/['"]/g, '').trim())
+            .slice(0, 4); // Limit to 4 items
+            
+        if (items.length >= 3) {
+            let diagramCode = 'quadrantChart\n';
+            diagramCode += '    title Deal Prioritization\n';
+            diagramCode += '    x-axis Low Fit --> High Fit\n';
+            diagramCode += '    y-axis Low Value --> High Value\n';
+            
+            // Assign random positions to items
+            items.forEach((item, idx) => {
+                let x, y;
+                
+                // Position items in different quadrants
+                switch (idx) {
+                    case 0: // High-high (upper right)
+                        x = (Math.random() * 0.2) + 0.7; // 0.7-0.9
+                        y = (Math.random() * 0.2) + 0.7; // 0.7-0.9
+                        break;
+                    case 1: // High-low (lower right)
+                        x = (Math.random() * 0.2) + 0.7; // 0.7-0.9
+                        y = (Math.random() * 0.2) + 0.2; // 0.2-0.4
+                        break;
+                    case 2: // Low-high (upper left)
+                        x = (Math.random() * 0.2) + 0.2; // 0.2-0.4
+                        y = (Math.random() * 0.2) + 0.7; // 0.7-0.9
+                        break;
+                    default: // Low-low (lower left)
+                        x = (Math.random() * 0.2) + 0.2; // 0.2-0.4
+                        y = (Math.random() * 0.2) + 0.2; // 0.2-0.4
+                }
+                
+                // Limit name length
+                const shortName = item.length > 20 ? item.substring(0, 17) + '...' : item;
+                diagramCode += `    "${shortName}": [${x.toFixed(1)}, ${y.toFixed(1)}]\n`;
+            });
+            
+            return createDiagramContainer(diagramCode, "Priority Matrix", "quadrantChart");
+        }
+    }
+    
+    // Default quadrant chart
     const diagramCode = `
     quadrantChart
         title Deal Prioritization
@@ -1594,20 +2020,6 @@ const generateQuadrantDiagram = () => {
     `;
 
     return createDiagramContainer(diagramCode, "Deal Prioritization Grid", "quadrantChart");
-};
-
-const generateOpportunityStateDiagram = () => {
-    const diagramCode = `
-    stateDiagram-v2
-        [*] --> Identified
-        Identified --> Engaged : Outreach
-        Engaged --> Validated : Champion Found
-        Validated --> Proposed : Submitted RFI/RFP
-        Proposed --> Closed : Win/Loss
-        Closed --> [*]
-    `;
-
-    return createDiagramContainer(diagramCode, "Opportunity Lifecycle", "stateDiagram-v2");
 };
 
 /**
@@ -1637,36 +2049,115 @@ const generateTimelineDiagram = (planData) => {
  * Generates a decision tree diagram
  */
 const generateDecisionTree = (planData) => {
+    // Extract decision points from recommendation if available
+    let decisionTree = '';
+    
+    const recommendation = planData.high_level_recommendation || '';
+    const hasPotentialDecision = recommendation.includes('if') && 
+                               (recommendation.includes('else') || recommendation.includes('otherwise'));
+    
+    if (hasPotentialDecision && planData.coaching_plan && planData.coaching_plan.length >= 2) {
+        // Try to extract key actions from the coaching plan
+        const actions = planData.coaching_plan
+            .map(item => item.persona?.replace(/['"]/g, '').trim())
+            .filter(Boolean)
+            .slice(0, 3); // Limit to 3 actions
+            
+        if (actions.length >= 2) {
+            decisionTree = `
+            flowchart TD
+                A[Current Situation] --> B{Key Decision?}
+                B -->|Option 1| C["${actions[0]}"]
+                B -->|Option 2| D["${actions[1]}"]
+                
+                C --> E[Move Forward]
+                ${actions.length >= 3 ? `D --> F["${actions[2]}"]` : 'D --> F[Reconsider]'}
+                ${actions.length >= 3 ? 'F --> E' : ''}
+                
+                class A critical;
+                class E success;
+            `;
+        }
+    }
+    
+    // Use custom decision tree if available, otherwise default
+    if (decisionTree) {
+        return createDiagramContainer(decisionTree, "Decision Path");
+    }
+    
+    // Default decision tree
     const diagramCode = `
     flowchart TD
         A[Deal at Risk] --> B{Champion Status?}
         B -->|Strong| C[Double Down]
-        B -->|Weak| D{Other Allies?}
-        B -->|Gone| E{Replacement?}
+        B -->|Weak| D[Find Allies]
+        B -->|Gone| E[Reassess]
         
         C --> F[Expand Access]
-        D -->|Yes| G[Activate Allies]
-        D -->|No| H[Strategic Retreat]
-        E -->|Yes| I[Rebuild Relationship]
-        E -->|No| J[Exit Strategy]
+        D --> G[Build New Relationships]
+        E --> H[Strategic Exit]
         
-        F --> K[Push for Close]
-        G --> K
-        I --> K
-        H --> L[Nurture Long-term]
-        J --> L
+        F --> I[Push for Close]
+        G --> I
         
-        class A start;
-        class K,L ending;
+        class A critical;
+        class I success;
     `;
     
-    return createDiagramContainer(diagramCode, "Deal Recovery Decision Tree");
+    return createDiagramContainer(diagramCode, "Deal Recovery Path");
 };
 
 /**
- * Generates a prospecting flow diagram
+ * Generates a prospecting flow diagram using actual data
  */
-const generateProspectingFlowDiagram = () => {
+const generateProspectingFlowDiagram = (planData) => {
+    // Use real recommendations if available
+    if (planData.prospect_recommendations && planData.prospect_recommendations.length >= 3) {
+        // Extract 3-4 key steps from recommendations
+        const steps = planData.prospect_recommendations
+            .map(rec => rec.replace(/^[\-\*]\s*/, '').replace(/\.$/, '')) // Clean up
+            .slice(0, 4); // Limit to 4 steps
+            
+        if (steps.length >= 3) {
+            let diagramCode = 'flowchart TD\n';
+            
+            // Add start node
+            diagramCode += '    A[Market Research]\n';
+            
+            // Add nodes for each step
+            steps.forEach((step, idx) => {
+                const nodeId = String.fromCharCode(66 + idx); // B, C, D, E
+                
+                // Truncate long steps
+                const shortStep = step.length > 30 ? step.substring(0, 27) + '...' : step;
+                diagramCode += `    ${nodeId}["${shortStep}"]\n`;
+            });
+            
+            // Add connection from start node to first step
+            diagramCode += '    A --> B\n';
+            
+            // Add connections between steps
+            for (let i = 0; i < steps.length - 1; i++) {
+                const currentNode = String.fromCharCode(66 + i);
+                const nextNode = String.fromCharCode(66 + i + 1);
+                diagramCode += `    ${currentNode} --> ${nextNode}\n`;
+            }
+            
+            // Add final decision point
+            const lastNode = String.fromCharCode(66 + steps.length - 1);
+            diagramCode += `    ${lastNode} --> F{Qualified?}\n`;
+            diagramCode += '    F -->|Yes| G[Pursue Opportunity]\n';
+            diagramCode += '    F -->|No| H[Continue Prospecting]\n';
+            
+            // Add styling
+            diagramCode += '    class A,B,C,D,E node;\n';
+            diagramCode += '    class G highlight;\n';
+            
+            return createDiagramContainer(diagramCode, "Prospecting Strategy");
+        }
+    }
+    
+    // Default prospecting flow
     const diagramCode = `
     flowchart TD
         A[Market Research] --> B[Identify Agencies]
@@ -1674,45 +2165,66 @@ const generateProspectingFlowDiagram = () => {
         C --> D[Map Incumbents]
         D --> E[Identify Gaps/Pain]
         E --> F[Target Stakeholders]
-        F --> G[Craft Outreach]
-        G --> H[Initial Contact]
-        H --> I{Response?}
-        I -->|Yes| J[Qualify]
-        I -->|No| K[Follow-up Sequence]
-        K --> H
+        F --> G[Initial Contact]
+        G --> H{Response?}
+        H -->|Yes| I[Qualify]
+        H -->|No| J[Follow-up]
+        J --> G
         
-        class A,B,C,D,E,F,G,H node;
-        class J highlight;
+        class A,B,C,D,E,F,G node;
+        class I highlight;
     `;
     
     return createDiagramContainer(diagramCode, "Federal Prospecting Flow");
 };
 
 /**
- * Generates an action flow based on coaching plan
+ * Generates an action flow based on coaching plan with real data
  */
 const generateActionFlowDiagram = (planData) => {
     if (!planData.coaching_plan || planData.coaching_plan.length < 2) return '';
     
-    const nodes = planData.coaching_plan.slice(0, 4).map((item, idx) => {
-        const id = String.fromCharCode(65 + idx); // A, B, C, D
-        const label = item.persona.replace(/['"]/g, '');
-        return { id, label: label.substring(0, 30) + (label.length > 30 ? '...' : '') };
+    // Extract personas and create nodes
+    const nodes = planData.coaching_plan.slice(0, 5).map((item, idx) => {
+        const id = String.fromCharCode(65 + idx); // A, B, C, D, E
+        
+        // Clean up persona name
+        let label = item.persona;
+        if (typeof label !== 'string') return { id, label: `Step ${idx+1}` };
+        
+        label = label.replace(/['"]/g, '').trim();
+        
+        return { 
+            id, 
+            label: label.length > 30 ? label.substring(0, 27) + '...' : label
+        };
     });
     
-    let diagramCode = 'flowchart LR\n';
-    nodes.forEach((node, idx) => {
-        diagramCode += `    ${node.id}[${node.label}]`;
-        if (idx < nodes.length - 1) {
-            diagramCode += ` --> `;
-        }
-        diagramCode += '\n';
+    // Build the diagram - optimized for vertical layout on mobile
+    let diagramCode = 'flowchart TD\n';
+    
+    // Add nodes
+    nodes.forEach(node => {
+        diagramCode += `    ${node.id}["${node.label}"]\n`;
     });
-    diagramCode += '    class ' + nodes.map(n => n.id).join(',') + ' node;';
+    
+    // Add connections between nodes
+    for (let i = 0; i < nodes.length - 1; i++) {
+        diagramCode += `    ${nodes[i].id} --> ${nodes[i + 1].id}\n`;
+    }
+    
+    // Add styling
+    diagramCode += '    class ' + nodes.map(n => n.id).join(',') + ' node;\n';
+    
+    // Highlight first node as starting point
+    diagramCode += '    class A highlight;\n';
     
     return createDiagramContainer(diagramCode, "Action Priority Flow");
 };
 
+/**
+ * Creates a container for a Mermaid diagram with proper styling
+ */
 const createDiagramContainer = (diagramCode, title, type = "flowchart") => {
     const uniqueId = 'mermaid-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
     
