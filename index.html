@@ -95,7 +95,6 @@
 	<script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
     window.mermaid = mermaid;
-    // This is the NEW, updated code
 mermaid.initialize({
     startOnLoad: false,
     theme: 'base',
@@ -254,7 +253,6 @@ mermaid.initialize({
             stroke: #523f9e !important;
             stroke-width: 2px !important;
         }
-        
         .mermaid .edgeLabel {
             background-color: white !important;
             padding: 0.25rem !important;
@@ -1097,19 +1095,16 @@ const handleFollowUpClick = (e) => {
     }, 300);
 };
 
-	const displayPlan = (planData) => {
-    // Check if this is a prospecting response
+const displayPlan = (planData) => {
+    // Check if this is a prospecting response (either old or new format)
     if (planData.naics_codes || planData.federal_competitors) {
         displayProspectingResults(planData);
         return;
     }
     
-    // Get all data from the API response, including the new mermaid code
     const coachingPlan = planData.coaching_plan;
     const recommendation = planData.high_level_recommendation;
     const tldr = planData.tldr_summary;
-    const mermaidCode = planData.stakeholder_map_mermaid; // <-- Get the new diagram code
-
     const colors = [
         { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-500' },
         { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-700' },
@@ -1161,8 +1156,19 @@ const handleFollowUpClick = (e) => {
     }).join('');
 
     resultsContainer.innerHTML = `
+        <!-- PREMIUM SPONSOR AD - Start -->
+        <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs">
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
+                <a href="https://subhoo.com" class="text-customPurple-700 font-medium hover:text-customPurple-900">Subhoo.com</a>
+            </div>
+            <p class="text-gray-600 text-xs mt-1">Helping you avoid teaming partners who still fax NDAs.</p>
+        </div>
+        <!-- PREMIUM SPONSOR AD - End -->
+        
         <div id="coaching-plan-container" class="space-y-6">
             <div class="space-y-6">
+                <!-- Main Recommendation First -->
                 <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 p-5 rounded-xl shadow-md border border-customPurple-100/50 success-pulse">
                     <img src="images/arti_right.png" alt="Arti" class="float-left h-12 w-12 mr-4 mb-2">
                     <h3 class="text-lg font-semibold mb-1.5 text-customPurple-900">A few thoughts...</h3>
@@ -1170,58 +1176,62 @@ const handleFollowUpClick = (e) => {
                     <div class="clear-both"></div>
                 </div>
                 
-                <div id="mermaid-container" class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"></div>
-
+                <!-- TL;DR Section -->
                 <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
                     <h3 class="font-semibold text-gray-900 mb-1 flex items-center gap-2">
                         <span class="bg-customPurple-500 text-white text-xs font-bold px-2 py-1 rounded">TL;DR</span>
                     </h3>
                     <div class="text-sm text-gray-700">${marked.parse(tldr)}</div>
                 </div>
+                
+                <!-- Mermaid Diagram -->
+                ${generateContextualDiagram(planData, originalSituation)}
+                
+                <!-- STANDARD SPONSOR AD - Start -->
+                <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
+                        <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">FastTrack Compliance</a>
+                    </div>
+                    <p class="text-gray-600 text-xs mt-1">Because waiting 18 months for security clearance is so last century.</p>
+                </div>
+                <!-- STANDARD SPONSOR AD - End -->
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">${personaCardsHTML}</div>
         </div>
+
+        <!-- STARTER SPONSOR AD - Start -->
+        <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 mt-6 text-xs">
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
+                <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">DeepPockets Funding</a>
+            </div>
+            <p class="text-gray-600 text-xs mt-1">We find money hiding in the couch cushions of Congress.</p>
+        </div>
+        <!-- STARTER SPONSOR AD - End -->
 
         <div class="mt-8 flex flex-col sm:flex-row gap-3">
             <button id="copy-btn" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" /><path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" /></svg>Copy Plan</button>
             <button id="reset-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl border border-gray-200 transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>Start Over</button>
         </div>
+        
+        <!-- Smart Follow-Ups -->
+        ${generateSmartFollowUps(planData, originalSituation)}
     `;
-
-    // --- NEW: Mermaid Rendering Logic ---
-    // This block checks if the AI provided a diagram. If so, it creates and renders it.
-    const mermaidContainer = document.getElementById('mermaid-container');
-    if (mermaidCode && mermaidContainer) {
-        const diagramTitle = document.createElement('h3');
-        diagramTitle.className = 'font-semibold text-gray-900 mb-3';
-        diagramTitle.innerText = 'Stakeholder Map';
-        
-        const diagramDiv = document.createElement('div');
-        diagramDiv.className = 'mermaid';
-        diagramDiv.textContent = mermaidCode;
-        
-        // Clear previous content and add the new elements
-        mermaidContainer.innerHTML = ''; 
-        mermaidContainer.appendChild(diagramTitle);
-        mermaidContainer.appendChild(diagramDiv);
-        mermaidContainer.style.display = 'block';
-
-        // Tell Mermaid to render the new diagram we just added to the page
-        mermaid.run({
-            nodes: [diagramDiv]
-        });
-    } else if (mermaidContainer) {
-        // If no diagram was provided for this response, hide the container
-        mermaidContainer.style.display = 'none';
-    }
             
-    // Set up event listeners for dynamically created buttons
+    // Set up event listeners for dynamically created elements
     document.getElementById('reset-btn').addEventListener('click', resetForm);
     document.getElementById('copy-btn').addEventListener('click', copyPlanToClipboard);
     document.querySelectorAll('.copy-snippet-btn').forEach(btn => {
         btn.addEventListener('click', copySnippet);
     });
+    
+    // Initialize Mermaid diagrams
+    setTimeout(() => {
+        initializeMermaidDiagrams();
+    }, 100);
 };
+	
 	const copyPlanToClipboard = () => {
     const planContainer = document.getElementById('coaching-plan-container');
     if (!planContainer) return;
@@ -1820,229 +1830,82 @@ document.addEventListener('click', (e) => {
         gh_timezoneSelect.addEventListener('change', gh_analyzeTime);
         setInterval(gh_analyzeTime, 60000);
     }
-	/**
- * Generates appropriate Mermaid diagrams based on the context
- * @param {Object} planData - The response data from the API
- * @param {string} originalQuery - The user's original question
- * @returns {string} HTML containing the Mermaid diagram
+/**
+ * Renders a dynamic Mermaid diagram if provided in the API response.
+ * @param {string|undefined} mermaidCode - The Mermaid diagram definition from the AI.
+ * @param {string} defaultTitle - The title to display above the diagram.
  */
-const generateContextualDiagram = (planData, originalQuery) => {
-    const query = originalQuery.toLowerCase();
-    const recommendation = (planData.high_level_recommendation || '').toLowerCase();
-    
+const renderDynamicDiagram = (mermaidCode, defaultTitle = 'Strategic Overview') => {
+    const mermaidContainer = document.getElementById('mermaid-container');
+    if (!mermaidContainer) return;
+
+    if (mermaidCode) {
+        const diagramTitle = document.createElement('h3');
+        diagramTitle.className = 'text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2';
+        diagramTitle.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+            </svg>
+            ${defaultTitle}`;
+        
+        const diagramDiv = document.createElement('div');
+        diagramDiv.className = 'mermaid';
+        diagramDiv.textContent = mermaidCode;
+        
+        mermaidContainer.innerHTML = ''; // Clear previous content
+        mermaidContainer.appendChild(diagramTitle);
+        mermaidContainer.appendChild(diagramDiv);
+        mermaidContainer.style.display = 'block';
+
+        // Tell Mermaid to render the new diagram
+        mermaid.run({ nodes: [diagramDiv] });
+    } else {
+        // If no diagram was provided, hide the container
+        mermaidContainer.style.display = 'none';
+    }
+};
+
+const displayPlan = (planData) => {
     // Check if this is a prospecting response
     if (planData.naics_codes || planData.federal_competitors) {
-        return generateProspectingFlowDiagram();
+        displayProspectingResults(planData);
+        return;
     }
     
-    // Check for specific diagram triggers
-    if (query.includes('process') || query.includes('how') || query.includes('steps')) {
-        return generateProcessDiagram(planData, originalQuery);
-    }
+    const { coaching_plan, high_level_recommendation, tldr_summary, mermaid_diagram } = planData;
+    const colors = [
+        { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', icon: 'bg-customPurple-500' },
+        { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', icon: 'bg-customPurple-700' }
+    ];
+
+    const personaCardsHTML = coaching_plan.map((personaData, index) => {
+        const color = colors[index % colors.length];
+        const talkingPointsHTML = personaData.talking_points.map(point => `<li class="flex items-start gap-2 mb-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg><span class="text-gray-700">${marked.parse(point)}</span></li>`).join('');
+        const snippetHTML = `<div class="mt-4 pt-4 border-t border-gray-200"><h3 class="font-medium text-gray-900 mb-2 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" /><path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" /></svg>Shareable Snippet</h3><div class="relative bg-gray-50 p-3 rounded-lg border border-gray-200"><p class="text-sm text-gray-700 snippet-text">${personaData.suggested_snippet}</p><button class="copy-snippet-btn absolute top-2 right-2 p-1.5 bg-white/50 hover:bg-gray-200/80 rounded-full" data-text="${personaData.suggested_snippet}" title="Copy Snippet"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg></button></div></div>`;
+        return `<div class="persona-card bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow"><div class="flex items-start gap-3 mb-4"><div class="${color.icon} w-10 h-10 rounded-xl text-white flex-shrink-0 flex items-center justify-center"><span class="font-bold">${personaData.persona.charAt(0)}</span></div><h2 class="text-lg md:text-xl font-semibold text-gray-900 break-words">${personaData.persona}</h2></div><div class="space-y-4"><div class="${color.bg} ${color.border} border p-4 rounded-xl"><h3 class="font-medium text-customPurple-700 mb-2">SMART Goal</h3><div class="text-gray-700">${marked.parse(personaData.smart_goal)}</div></div><div><h3 class="font-medium text-gray-900 mb-3">Key Talking Points</h3><ul class="space-y-1">${talkingPointsHTML}</ul></div>${snippetHTML}</div></div>`;
+    }).join('');
+
+    resultsContainer.innerHTML = `<div id="coaching-plan-container" class="space-y-6"><div class="space-y-6"><div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 p-5 rounded-xl shadow-md border border-customPurple-100/50"><img src="images/arti_right.png" alt="Arti" class="float-left h-12 w-12 mr-4 mb-2"><h3 class="text-lg font-semibold mb-1.5 text-customPurple-900">A few thoughts...</h3><div class="text-gray-800">${marked.parse(high_level_recommendation)}</div><div class="clear-both"></div></div><div id="mermaid-container" class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"></div><div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"><h3 class="font-semibold text-gray-900 mb-1 flex items-center gap-2"><span class="bg-customPurple-500 text-white text-xs font-bold px-2 py-1 rounded">TL;DR</span></h3><div class="text-sm text-gray-700">${marked.parse(tldr_summary)}</div></div></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6">${personaCardsHTML}</div>${generateSmartFollowUps(planData, originalSituation)}<div class="mt-8 flex flex-col sm:flex-row gap-3"><button id="copy-btn" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" /><path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" /></svg>Copy Plan</button><button id="reset-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl border-gray-200 transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>Start Over</button></div></div>`;
     
-    if (query.includes('stakeholder') || query.includes('champion') || query.includes('map')) {
-        return generateStakeholderMap(planData);
-    }
+    // Call the helper to render the diagram
+    renderDynamicDiagram(mermaid_diagram, 'Stakeholder Map');
     
-    if (query.includes('timeline') || query.includes('schedule') || query.includes('milestone')) {
-        return generateTimelineDiagram(planData);
-    }
-    
-    if (query.includes('decision') || recommendation.includes('choose') || recommendation.includes('option')) {
-        return generateDecisionTree(planData);
-    }
-    
-    // Default to a simple flow if context suggests it would be helpful
-    if (planData.coaching_plan && planData.coaching_plan.length > 3) {
-        return generateActionFlowDiagram(planData);
-    }
-    
-    return ''; // No diagram if none fit
+    // Set up event listeners
+    document.getElementById('reset-btn').addEventListener('click', resetForm);
+    document.getElementById('copy-btn').addEventListener('click', copyPlanToClipboard);
+    document.querySelectorAll('.copy-snippet-btn').forEach(btn => btn.addEventListener('click', copySnippet));
 };
 
-/**
- * Generates a federal sales process flow diagram
- */
-const generateProcessDiagram = (planData, query) => {
-    const diagramCode = `
-    flowchart TD
-        A[Identify Opportunity] --> B[Research Agency/Stakeholders]
-        B --> C[Initial Outreach]
-        C --> D{Qualified?}
-        D -->|Yes| E[Build Champion]
-        D -->|No| F[Nurture/Exit]
-        E --> G[Map Stakeholders]
-        G --> H[Align to Mission]
-        H --> I[Navigate Procurement]
-        I --> J[Win & Expand]
-        
-        class A,B,C,G,H,I,J node;
-        class E highlight;
-    `;
+const displayProspectingResults = (prospectData) => {
+    const { summary, company_capabilities = [], naics_codes = [], federal_competitors = [], prime_contractors = [], prospect_recommendations = [], market_insights, mermaid_diagram } = prospectData;
     
-    return createDiagramContainer(diagramCode, "Federal Sales Process Flow");
-};
+    resultsContainer.innerHTML = `<div id="prospecting-results-container" class="space-y-6"><div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 p-5 rounded-xl shadow-md border border-customPurple-100/50"><img src="images/arti_right.png" alt="Arti" class="float-left h-12 w-12 mr-4 mb-2"><h3 class="text-lg font-semibold mb-2 text-customPurple-900">Prospect Research & Competitive Intelligence</h3><div class="text-gray-800">${marked.parse(summary || '')}</div><div class="clear-both"></div></div><div id="mermaid-container" class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"></div>${company_capabilities.length > 0 ? `<div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"><h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm2 6a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1z" clip-rule="evenodd" /></svg>Core Capabilities</h3><div class="flex flex-wrap gap-2">${company_capabilities.map(cap => `<span class="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">${marked.parse(cap).replace(/<\/?p>/g, '')}</span>`).join('')}</div></div>` : ''}<div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"><h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" /></svg>Relevant NAICS Codes</h3><ul class="space-y-1">${naics_codes.map(code => `<li class="text-sm text-gray-700"><span class="font-medium">${marked.parse(code).replace(/<\/?p>/g, '')}</span></li>`).join('')}</ul></div><div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"><h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor"><path d="M13 7H7v6h6V7z" /><path fill-rule="evenodd" d="M7 2a1 1 0 012 0v1h2V2a1 1 0 112 0v1h2a2 2 0 012 2v2h1a1 1 0 110 2h-1v2h1a1 1 0 110 2h-1v2a2 2 0 01-2 2h-2v1a1 1 0 11-2 0v-1H9v1a1 1 0 11-2 0v-1H5a2 2 0 01-2-2v-2H2a1 1 0 110-2h1V9H2a1 1 0 010-2h1V5a2 2 0 012-2h2V2z" clip-rule="evenodd" /></svg>Prospect Recommendations</h3><ul class="space-y-2">${prospect_recommendations.map(rec => `<li class="text-sm text-gray-700 flex items-start gap-2"><span class="text-customPurple-500">•</span><span>${marked.parse(rec).replace(/<\/?p>/g, '')}</span></li>`).join('')}</ul></div></div>${federal_competitors.length > 0 ? `<div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"><h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" /></svg>Federal Competitors & Similar Companies</h3><div class="space-y-3">${federal_competitors.map(comp => `<div class="border-l-4 border-customPurple-200 pl-3"><h4 class="font-medium text-gray-900">${comp.company}</h4><p class="text-sm text-gray-600 mt-1">${marked.parse(comp.strengths).replace(/<\/?p>/g, '')}</p>${comp.contract_vehicles ? `<p class="text-xs text-gray-500 mt-1">Vehicles: ${comp.contract_vehicles}</p>` : ''}</div>`).join('')}</div></div>` : ''}${prime_contractors.length > 0 ? `<div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"><h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" /></svg>Prime Contractors & Partners</h3><div class="space-y-2">${prime_contractors.map(prime => `<div class="flex items-start gap-2"><span class="font-medium text-gray-900">${prime.company}:</span><span class="text-sm text-gray-600">${marked.parse(prime.relationship).replace(/<\/?p>/g, '')}</span></div>`).join('')}</div></div>` : ''}${market_insights ? `<div class="bg-customPurple-100/20 rounded-xl border border-customPurple-100/40 p-4"><h3 class="text-sm font-semibold text-customPurple-800 mb-2 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>Market Insight</h3><p class="text-sm text-customPurple-900">${marked.parse(market_insights).replace(/<\/?p>/g, '')}</p></div>` : ''}${generateSmartFollowUps(prospectData, originalSituation)}<div class="mt-6 flex flex-col sm:flex-row gap-3"><button id="copy-prospecting-btn" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" /><path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" /></svg>Copy Research</button><button id="reset-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl border border-gray-200 transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>Start Over</button></div></div>`;
+    
+    // Call the helper to render the diagram for prospecting results
+    renderDynamicDiagram(mermaid_diagram, 'Ecosystem Map');
 
-/**
- * Generates a stakeholder mapping diagram
- */
-const generateStakeholderMap = (planData) => {
-    const diagramCode = `
-    graph TB
-        EB[Economic Buyer<br/>CIO/Director]
-        TB[Technical Buyer<br/>CISO/Tech Lead]
-        CH[Champion<br/>Program Manager]
-        INF[Influencer<br/>End Users]
-        BL[Blocker<br/>Incumbent Vendor]
-        
-        EB -.->|Budget Authority| TB
-        TB -->|Technical Approval| CH
-        CH -->|Advocates| EB
-        CH -.->|Trains| INF
-        INF -.->|Feedback| TB
-        BL -.->|Resists| EB
-        BL -.->|FUD| TB
-        
-        class CH highlight;
-        class BL blocker;
-    `;
-    
-    return createDiagramContainer(diagramCode, "Stakeholder Relationship Map");
-};
-
-/**
- * Generates a timeline/gantt diagram
- */
-const generateTimelineDiagram = (planData) => {
-    const diagramCode = `
-    gantt
-        title Federal Sales Timeline
-        dateFormat  YYYY-MM-DD
-        section Discovery
-        Initial Research    :active, a1, 2024-01-01, 7d
-        Stakeholder Mapping :        a2, after a1, 14d
-        section Engagement
-        Champion Building   :        b1, after a2, 30d
-        Technical Validation:        b2, after b1, 21d
-        section Procurement
-        RFP Response       :crit,    c1, after b2, 14d
-        Contract Negotiation:crit,   c2, after c1, 30d
-        Award              :milestone, after c2, 0d
-    `;
-    
-    return createDiagramContainer(diagramCode, "Typical Federal Sales Timeline", "gantt");
-};
-
-/**
- * Generates a decision tree diagram
- */
-const generateDecisionTree = (planData) => {
-    const diagramCode = `
-    flowchart TD
-        A[Deal at Risk] --> B{Champion Status?}
-        B -->|Strong| C[Double Down]
-        B -->|Weak| D{Other Allies?}
-        B -->|Gone| E{Replacement?}
-        
-        C --> F[Expand Access]
-        D -->|Yes| G[Activate Allies]
-        D -->|No| H[Strategic Retreat]
-        E -->|Yes| I[Rebuild Relationship]
-        E -->|No| J[Exit Strategy]
-        
-        F --> K[Push for Close]
-        G --> K
-        I --> K
-        H --> L[Nurture Long-term]
-        J --> L
-        
-        class A start;
-        class K,L ending;
-    `;
-    
-    return createDiagramContainer(diagramCode, "Deal Recovery Decision Tree");
-};
-
-/**
- * Generates a prospecting flow diagram
- */
-const generateProspectingFlowDiagram = () => {
-    const diagramCode = `
-    flowchart TD
-        A[Market Research] --> B[Identify Agencies]
-        B --> C[Find Contract Vehicles]
-        C --> D[Map Incumbents]
-        D --> E[Identify Gaps/Pain]
-        E --> F[Target Stakeholders]
-        F --> G[Craft Outreach]
-        G --> H[Initial Contact]
-        H --> I{Response?}
-        I -->|Yes| J[Qualify]
-        I -->|No| K[Follow-up Sequence]
-        K --> H
-        
-        class A,B,C,D,E,F,G,H node;
-        class J highlight;
-    `;
-    
-    return createDiagramContainer(diagramCode, "Federal Prospecting Flow");
-};
-
-/**
- * Generates an action flow based on coaching plan
- */
-// Find and update this function
-const generateActionFlowDiagram = (planData) => {
-    if (!planData.coaching_plan || planData.coaching_plan.length < 2) return '';
-    
-    const nodes = planData.coaching_plan.slice(0, 4).map((item, idx) => {
-        const id = String.fromCharCode(65 + idx); // A, B, C, D
-        const label = item.persona.replace(/['"]/g, '');
-        return { id, label: label.substring(0, 30) + (label.length > 30 ? '...' : '') };
-    });
-    
-    let diagramCode = 'flowchart TD\n'; // Changed from LR to TD
-    nodes.forEach((node, idx) => {
-        diagramCode += `    ${node.id}[${node.label}]`;
-        if (idx < nodes.length - 1) {
-            diagramCode += ` --> `;
-        }
-        diagramCode += '\n';
-    });
-    diagramCode += '    class ' + nodes.map(n => n.id).join(',') + ' node;';
-    
-    return createDiagramContainer(diagramCode, "Action Priority Flow");
-};
-
-/**
- * Creates a container with the Mermaid diagram
- */
-const createDiagramContainer = (diagramCode, title, type = "flowchart") => {
-    const uniqueId = 'mermaid-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-    
-    return `
-        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm mt-6">
-            <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
-                </svg>
-                ${title}
-            </h3>
-            <div class="mermaid" id="${uniqueId}">
-                ${diagramCode}
-            </div>
-        </div>
-    `;
-};
-
-/**
- * Initializes Mermaid diagrams after they're added to the DOM
- */
-const initializeMermaidDiagrams = () => {
-    if (typeof window.mermaid !== 'undefined') {
-        // Re-initialize mermaid for new content
-        window.mermaid.init();
-    }
+    document.getElementById('reset-btn').addEventListener('click', resetForm);
+    document.getElementById('copy-prospecting-btn').addEventListener('click', copyProspectingResults);
 };
     </script>
 </body>
