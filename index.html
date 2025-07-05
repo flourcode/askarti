@@ -754,62 +754,76 @@ mermaid.initialize({
 
     const API_ENDPOINT = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
 
-    // --- Core Functions ---
     const showLoading = (isLoading) => {
         btnText.classList.toggle('hidden', isLoading);
         loader.classList.toggle('hidden', !isLoading);
         generateBtn.disabled = isLoading;
     };
-
     const fetchCoachingPlan = async (situation) => {
-        const response = await fetch(API_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                request_type: 'generate_one_shot_plan',
-                situation: situation
-            })
-        });
-        if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
-        return await response.json();
-    };
+    const response = await fetch(API_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            request_type: 'generate_one_shot_plan',
+            situation: situation
+        })
+    });
+    if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+    return await response.json();
+};
 
-    const generatePlan = async () => {
-        const situation = situationInput.value.trim();
-        if (!situation) {
-            resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 border border-red-200 rounded-xl"><p class="text-red-700 font-medium">Please describe your sales problem first.</p></div>`;
-            resultsContainer.firstChild.classList.add('error-shake');
-            return;
+const generatePlan = async () => {
+    const situation = situationInput.value.trim();
+    if (!situation) {
+        resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 border border-red-200 rounded-xl"><p class="text-red-700 font-medium">Please describe your sales problem first.</p></div>`;
+        resultsContainer.firstChild.classList.add('error-shake');
+        return;
+    }
+    originalSituation = situation;
+    showLoading(true);
+    
+    // Enhanced loading experience with your updated messages
+    let loadingStage = 0;
+    const loadingMessages = [
+        "Diving Deep...",
+        "Escalating...",
+        "Unpacking This...",
+        "Putting a Pin in it...",
+        "Circling Back...",
+        "Thinking Big..."
+    ];
+    
+    // Enhanced loading UI with Arti's avatar and better styling
+    resultsContainer.innerHTML = `
+        <div class="text-center py-2 mt-2">
+            <div class="flex justify-center items-center mb-2">
+                <img src="images/arti_right.png" alt="Arti" class="h-16 w-16 animate-pulse">
+            </div>
+            <p id="loading-message" class="text-customPurple-500 text-lg font-semibold mb-2">Hang on, I'm Working Backwards...</p>
+        </div>
+    `;
+    
+    const loadingInterval = setInterval(() => {
+        loadingStage = (loadingStage + 1) % loadingMessages.length;
+        const messageEl = document.getElementById('loading-message');
+        if (messageEl) {
+            messageEl.textContent = loadingMessages[loadingStage];
         }
-        originalSituation = situation;
-        showLoading(true);
-        
-        let loadingStage = 0;
-        const loadingMessages = ["Diving Deep...","Escalating...","Unpacking This...","Putting a Pin in it...","Circling Back...","Thinking Big..."];
-        
-        resultsContainer.innerHTML = `<div class="text-center py-2 mt-2"><div class="flex justify-center items-center mb-2"><img src="images/arti_right.png" alt="Arti" class="h-16 w-16 animate-pulse"></div><p id="loading-message" class="text-customPurple-500 text-lg font-semibold mb-2">Hang on, I'm Working Backwards...</p></div>`;
-        
-        const loadingInterval = setInterval(() => {
-            loadingStage = (loadingStage + 1) % loadingMessages.length;
-            const messageEl = document.getElementById('loading-message');
-            if (messageEl) {
-                messageEl.textContent = loadingMessages[loadingStage];
-            }
-        }, 2000);
-        
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        
-        try {
-            const planData = await fetchCoachingPlan(originalSituation);
-            clearInterval(loadingInterval);
-            displayPlan(planData);
-        } catch (error) {
-            clearInterval(loadingInterval);
-            handleApiError(error);
-        } finally {
-            showLoading(false);
-        }
-    };
+    }, 2000);
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    try {
+        const planData = await fetchCoachingPlan(originalSituation);
+        clearInterval(loadingInterval);
+        displayPlan(planData);
+    } catch (error) {
+        clearInterval(loadingInterval);
+        handleApiError(error);
+    } finally {
+        showLoading(false);
+    }
+};
        
     const handleCannedPrompt = (e) => {
         const button = e.currentTarget;
@@ -819,99 +833,678 @@ mermaid.initialize({
             generateBtn.click();
         }, 200);
     };
+// ADD THIS BLOCK AFTER LINE 747
 
-    /**
-     * Renders a dynamic Mermaid diagram if provided in the API response.
-     */
-    const renderDynamicDiagram = (mermaidCode, defaultTitle = 'Strategic Overview') => {
-        const mermaidContainer = document.getElementById('mermaid-container');
-        if (!mermaidContainer) return;
+/**
+ * Analyzes the response and generates smart follow-up suggestions
+ * @param {Object} planData - The response data from the API
+ * @param {string} originalQuery - The user's original question
+ * @returns {string} HTML for the follow-up suggestions
+ */
+const generateSmartFollowUps = (planData, originalQuery) => {
+    const suggestions = getContextualFollowUps(planData, originalQuery);
+    
+    if (suggestions.length === 0) return '';
+    
+    const suggestionHTML = suggestions.map((suggestion, index) => `
+        <button class="follow-up-suggestion follow-up-btn flex-1 bg-white hover:bg-customPurple-50 text-customPurple-700 font-medium py-3 px-4 rounded-xl border-2 border-customPurple-200 hover:border-customPurple-400 transition-all flex items-center justify-center gap-2 text-sm"
+                style="--animation-delay: ${index * 0.1}s"
+                data-question="${suggestion.question.replace(/"/g, '&quot;')}">
+            <span class="text-lg">${suggestion.icon}</span>
+            <span class="text-left">${suggestion.label}</span>
+        </button>
+    `).join('');
+    
+    return `
+        <div class="mt-8 bg-customPurple-50/30 rounded-xl p-6 border border-customPurple-100/50">
+            <h3 class="text-sm font-semibold text-customPurple-900 mb-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                </svg>
+                Smart Follow-Ups
+            </h3>
+            <p class="text-xs text-gray-600 mb-4">Based on your situation, you might also want to ask:</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                ${suggestionHTML}
+            </div>
+        </div>
+    `;
+};
 
-        if (mermaidCode) {
-            const diagramTitle = document.createElement('h3');
-            diagramTitle.className = 'text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2';
-            diagramTitle.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" /></svg>${defaultTitle}`;
-            
-            const diagramDiv = document.createElement('div');
-            diagramDiv.className = 'mermaid';
-            diagramDiv.textContent = mermaidCode;
-            
-            mermaidContainer.innerHTML = ''; // Clear previous content
-            mermaidContainer.appendChild(diagramTitle);
-            mermaidContainer.appendChild(diagramDiv);
-            mermaidContainer.style.display = 'block';
-
-            // Tell Mermaid to render the new diagram
-            mermaid.run({ nodes: [diagramDiv] });
-        } else {
-            // If no diagram was provided, hide the container
-            mermaidContainer.style.display = 'none';
+/**
+ * Determines contextual follow-up questions based on the response content
+ * @param {Object} planData - The response data
+ * @param {string} originalQuery - The original query
+ * @returns {Array} Array of follow-up suggestion objects
+ */
+const getContextualFollowUps = (planData, originalQuery) => {
+    const query = originalQuery.toLowerCase();
+    const recommendations = planData.high_level_recommendation?.toLowerCase() || '';
+    const suggestions = [];
+    
+    // Check if this was a prospecting response
+    if (planData.naics_codes || planData.federal_competitors) {
+        suggestions.push(
+            {
+                icon: "✉️",
+                label: "Craft outreach email",
+                question: `Help me write a cold outreach email for ${extractAgencyOrTech(originalQuery)} prospects`
+            },
+            {
+                icon: "🎯",
+                label: "Qualify these leads",
+                question: "What questions should I ask to qualify federal prospects in our first meeting?"
+            },
+            {
+                icon: "🏛️",
+                label: "Contract vehicles",
+                question: `What are the main contract vehicles for ${extractAgencyOrTech(originalQuery)}?`
+            }
+        );
+        return suggestions.slice(0, 3);
+    }
+    
+    // Check if this was an interview prep response
+    if (query.includes('interview') || query.includes('job')) {
+        suggestions.push(
+            {
+                icon: "💰",
+                label: "Negotiation prep",
+                question: "How do I negotiate salary for a federal sales role?"
+            },
+            {
+                icon: "📋",
+                label: "30-60-90 plan",
+                question: "Help me create a 30-60-90 day plan for a new federal sales role"
+            },
+            {
+                icon: "🎯",
+                label: "Mock questions",
+                question: "Give me 5 more behavioral questions for federal sales interviews"
+            }
+        );
+        return suggestions.slice(0, 3);
+    }
+    
+    // Check if this was a meeting prep response
+    if (query.includes('meeting') || query.includes('qbr') || query.includes('briefing')) {
+        suggestions.push(
+            {
+                icon: "📊",
+                label: "Slide outline",
+                question: "Create an executive briefing slide outline for my federal customer"
+            },
+            {
+                icon: "🎬",
+                label: "Demo script",
+                question: "Help me script a 15-minute demo for federal stakeholders"
+            },
+            {
+                icon: "📧",
+                label: "Follow-up email",
+                question: "Write a follow-up email template after an executive briefing"
+            }
+        );
+        return suggestions.slice(0, 3);
+    }
+    
+    // General sales situation follow-ups based on content analysis
+    
+    // If deal is stalled or ghosted
+    if (query.includes('ghost') || query.includes('dark') || query.includes('stall') || 
+        recommendations.includes('re-engage') || recommendations.includes('resurrect')) {
+        suggestions.push({
+            icon: "🔄",
+            label: "Re-engagement strategy",
+            question: "Give me 5 creative ways to re-engage a ghosted federal buyer"
+        });
+    }
+    
+    // If competition mentioned
+    if (query.includes('compet') || query.includes('rival') || query.includes('incumbent') ||
+        recommendations.includes('differentiat')) {
+        suggestions.push({
+            icon: "⚔️",
+            label: "Competitive positioning",
+            question: "How do I position against an entrenched incumbent in federal?"
+        });
+    }
+    
+    // If pricing or budget issues
+    if (query.includes('pric') || query.includes('budget') || query.includes('cost') ||
+        query.includes('expensive')) {
+        suggestions.push({
+            icon: "💵",
+            label: "Value justification",
+            question: "Help me build an ROI story for my federal customer"
+        });
+    }
+    
+    // If stakeholder or champion issues
+    if (query.includes('champion') || query.includes('stakeholder') || query.includes('cotr') ||
+        recommendations.includes('stakeholder')) {
+        suggestions.push({
+            icon: "🗺️",
+            label: "Stakeholder mapping",
+            question: "How do I identify and map all stakeholders in a federal deal?"
+        });
+    }
+    
+    // If contract or procurement mentioned
+    if (query.includes('contract') || query.includes('procurement') || query.includes('rfp')) {
+        suggestions.push({
+            icon: "📜",
+            label: "Procurement strategy",
+            question: "What's the best procurement vehicle for my federal solution?"
+        });
+    }
+    
+    // If partner or prime mentioned
+    if (query.includes('partner') || query.includes('prime') || query.includes('teaming')) {
+        suggestions.push({
+            icon: "🤝",
+            label: "Partner evaluation",
+            question: "How do I evaluate and choose the right federal prime partner?"
+        });
+    }
+    
+    // Add some always-relevant options if we don't have 3 yet
+    const genericFollowUps = [
+        {
+            icon: "📅",
+            label: "Next steps checklist",
+            question: "Create a 72-hour action plan based on my situation"
+        },
+        {
+            icon: "📊",
+            label: "Forecast confidence",
+            question: "How do I accurately forecast this federal opportunity?"
+        },
+        {
+            icon: "✉️",
+            label: "Email templates",
+            question: "Give me email templates for common federal sales scenarios"
+        },
+        {
+            icon: "🎯",
+            label: "Qualification deep-dive",
+            question: "Help me fully qualify this federal opportunity with MEDDPICC"
+        },
+        {
+            icon: "🚫",
+            label: "Objection handling",
+            question: "What are common federal buyer objections and how do I handle them?"
         }
-    };
+    ];
+    
+    // Add generic follow-ups if needed to reach 3 suggestions
+    while (suggestions.length < 3 && genericFollowUps.length > 0) {
+        const randomIndex = Math.floor(Math.random() * genericFollowUps.length);
+        suggestions.push(genericFollowUps.splice(randomIndex, 1)[0]);
+    }
+    
+    return suggestions.slice(0, 3);
+};
 
-    const displayPlan = (planData) => {
-        if (planData.naics_codes || planData.federal_competitors) {
-            displayProspectingResults(planData);
+/**
+ * Helper function to extract agency or technology from query
+ * @param {string} query - The user's query
+ * @returns {string} The extracted agency/tech or a generic term
+ */
+const extractAgencyOrTech = (query) => {
+    const agencies = ['dhs', 'dod', 'va', 'treasury', 'faa', 'nasa', 'army', 'navy', 'air force', 'gsa'];
+    const techs = ['cloud', 'cyber', 'ai', 'ml', 'data', 'analytics', 'security'];
+    
+    const lowerQuery = query.toLowerCase();
+    
+    // Check for agencies
+    for (const agency of agencies) {
+        if (lowerQuery.includes(agency)) {
+            return agency.toUpperCase();
+        }
+    }
+    
+    // Check for technologies
+    for (const tech of techs) {
+        if (lowerQuery.includes(tech)) {
+            return tech;
+        }
+    }
+    
+    return 'federal';
+};
+
+/**
+ * Handles follow-up button clicks
+ * @param {Event} e - Click event
+ */
+const handleFollowUpClick = (e) => {
+    const button = e.target.closest('.follow-up-btn');
+    if (!button) return;
+    
+    const question = button.dataset.question;
+    situationInput.value = question;
+    
+    // Smooth scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Brief delay then submit
+    setTimeout(() => {
+        generateBtn.click();
+    }, 300);
+};
+
+const displayPlan = (planData) => {
+    // Check if this is a prospecting response (either old or new format)
+    if (planData.naics_codes || planData.federal_competitors) {
+        displayProspectingResults(planData);
+        return;
+    }
+    
+    const coachingPlan = planData.coaching_plan;
+    const recommendation = planData.high_level_recommendation;
+    const tldr = planData.tldr_summary;
+    const colors = [
+        { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-500' },
+        { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-700' },
+        { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-500' },
+        { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-700' }
+    ];
+
+    const personaCardsHTML = coachingPlan.map((personaData, index) => {
+        const color = colors[index % colors.length];
+        const talkingPointsHTML = personaData.talking_points.map(point => `<li class="flex items-start gap-2 mb-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg><span class="text-gray-700">${marked.parse(point)}</span></li>`).join('');
+        
+        const snippetHTML = `
+            <div class="mt-4 pt-4 border-t border-gray-200">
+                <h3 class="font-medium text-gray-900 mb-2 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
+                        <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" />
+                    </svg>
+                    Shareable Snippet
+                </h3>
+                <div class="relative bg-gray-50 p-3 rounded-lg border border-gray-200">
+                    <p class="text-sm text-gray-700 snippet-text">${personaData.suggested_snippet}</p>
+                    <button class="copy-snippet-btn absolute top-2 right-2 p-1.5 bg-white/50 hover:bg-gray-200/80 rounded-full transition-colors" data-text="${personaData.suggested_snippet}" title="Copy Snippet">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        return `
+            <div class="persona-card bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-start gap-3 mb-4">
+                    <div class="${color.icon} w-10 h-10 rounded-xl text-white flex-shrink-0 flex items-center justify-center"><span class="font-bold">${personaData.persona.charAt(0)}</span></div>
+                    <h2 class="text-lg md:text-xl font-semibold text-gray-900 break-words">${personaData.persona}</h2>
+                </div>
+                <div class="space-y-4">
+                    <div class="${color.bg} ${color.border} border p-4 rounded-xl">
+                        <h3 class="font-medium text-customPurple-700 mb-2">SMART Goal</h3>
+                        <div class="text-gray-700">${marked.parse(personaData.smart_goal)}</div>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-3">Key Talking Points</h3>
+                        <ul class="space-y-1">${talkingPointsHTML}</ul>
+                    </div>
+                    ${snippetHTML}
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    resultsContainer.innerHTML = `
+        <!-- PREMIUM SPONSOR AD - Start -->
+        <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs">
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
+                <a href="https://subhoo.com" class="text-customPurple-700 font-medium hover:text-customPurple-900">Subhoo.com</a>
+            </div>
+            <p class="text-gray-600 text-xs mt-1">Helping you avoid teaming partners who still fax NDAs.</p>
+        </div>
+        <!-- PREMIUM SPONSOR AD - End -->
+        
+        <div id="coaching-plan-container" class="space-y-6">
+            <div class="space-y-6">
+                <!-- Main Recommendation First -->
+                <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 p-5 rounded-xl shadow-md border border-customPurple-100/50 success-pulse">
+                    <img src="images/arti_right.png" alt="Arti" class="float-left h-12 w-12 mr-4 mb-2">
+                    <h3 class="text-lg font-semibold mb-1.5 text-customPurple-900">A few thoughts...</h3>
+                    <div class="text-gray-800">${marked.parse(recommendation)}</div>
+                    <div class="clear-both"></div>
+                </div>
+                
+                <!-- TL;DR Section -->
+                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+                    <h3 class="font-semibold text-gray-900 mb-1 flex items-center gap-2">
+                        <span class="bg-customPurple-500 text-white text-xs font-bold px-2 py-1 rounded">TL;DR</span>
+                    </h3>
+                    <div class="text-sm text-gray-700">${marked.parse(tldr)}</div>
+                </div>
+                
+                <!-- Mermaid Diagram -->
+                ${generateContextualDiagram(planData, originalSituation)}
+                
+                <!-- STANDARD SPONSOR AD - Start -->
+                <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
+                        <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">FastTrack Compliance</a>
+                    </div>
+                    <p class="text-gray-600 text-xs mt-1">Because waiting 18 months for security clearance is so last century.</p>
+                </div>
+                <!-- STANDARD SPONSOR AD - End -->
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">${personaCardsHTML}</div>
+        </div>
+
+        <!-- STARTER SPONSOR AD - Start -->
+        <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 mt-6 text-xs">
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
+                <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">DeepPockets Funding</a>
+            </div>
+            <p class="text-gray-600 text-xs mt-1">We find money hiding in the couch cushions of Congress.</p>
+        </div>
+        <!-- STARTER SPONSOR AD - End -->
+
+        <div class="mt-8 flex flex-col sm:flex-row gap-3">
+            <button id="copy-btn" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" /><path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" /></svg>Copy Plan</button>
+            <button id="reset-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl border border-gray-200 transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>Start Over</button>
+        </div>
+        
+        <!-- Smart Follow-Ups -->
+        ${generateSmartFollowUps(planData, originalSituation)}
+    `;
+            
+    // Set up event listeners for dynamically created elements
+    document.getElementById('reset-btn').addEventListener('click', resetForm);
+    document.getElementById('copy-btn').addEventListener('click', copyPlanToClipboard);
+    document.querySelectorAll('.copy-snippet-btn').forEach(btn => {
+        btn.addEventListener('click', copySnippet);
+    });
+    
+    // Initialize Mermaid diagrams
+    setTimeout(() => {
+        initializeMermaidDiagrams();
+    }, 100);
+};
+	
+	const copyPlanToClipboard = () => {
+    const planContainer = document.getElementById('coaching-plan-container');
+    if (!planContainer) return;
+
+    const thoughtsSection = planContainer.querySelector('.bg-gradient-to-r div');
+    const recommendation = thoughtsSection ? thoughtsSection.textContent.trim() : '';
+
+    let fullText = `ARTI'S THOUGHTS:\n${recommendation}\n\n--- DETAILED PLAN ---\n\n`;
+
+    const personaCards = document.querySelectorAll('.persona-card');
+    personaCards.forEach(card => {
+        const persona = card.querySelector('h2').textContent.trim();
+        let goal = 'No goal available.';
+        const snippet = card.querySelector('.snippet-text')?.textContent.trim() || 'No snippet available.';
+
+        // --- DEFINITIVE GOAL-COPYING LOGIC ---
+        // Find the H3 element with the text "SMART Goal"
+        const allH3s = card.querySelectorAll('h3');
+        const smartGoalH3 = Array.from(allH3s).find(h3 => h3.textContent.trim() === 'SMART Goal');
+
+        // If the H3 is found, the div containing the goal text is its direct sibling.
+        if (smartGoalH3) {
+            const goalContainerDiv = smartGoalH3.nextElementSibling;
+            if (goalContainerDiv) {
+                // Get all text from within the container, which correctly handles paragraphs, lists, etc.
+                goal = goalContainerDiv.textContent.trim();
+            }
+        }
+
+        const points = Array.from(card.querySelectorAll('ul li span')).map(span => `- ${span.textContent.trim()}`).join('\n');
+
+        fullText += `--- ${persona.toUpperCase()} ---\n\n`;
+        fullText += `SMART GOAL:\n${goal}\n\n`; // This will now have the correct text
+        fullText += `KEY TALKING POINTS:\n${points}\n\n`;
+        fullText += `SUGGESTED SNIPPET:\n${snippet}\n\n`;
+    });
+
+    navigator.clipboard.writeText(fullText.trim()).then(() => {
+        const copyBtn = document.getElementById('copy-btn');
+        const originalHtml = copyBtn.innerHTML;
+        copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>Copied!`;
+        copyBtn.classList.add('success-pulse');
+        setTimeout(() => {
+            copyBtn.innerHTML = originalHtml;
+            copyBtn.classList.remove('success-pulse');
+        }, 2000);
+    });
+};
+const copyProspectingResults = () => {
+    const container = document.getElementById('prospecting-results-container');
+    if (!container) return;
+
+    let fullText = "ARTI'S PROSPECTING RESEARCH\n\n";
+
+    // A robust helper function to find a section by its title and get its text
+    const addSectionToText = (title) => {
+        const allH3s = Array.from(container.querySelectorAll('h3'));
+        const titleH3 = allH3s.find(h3 => h3.textContent.trim().includes(title));
+
+        if (!titleH3) return; // Skip if section doesn't exist
+
+        // Find the parent 'card' element for the section
+        const card = titleH3.closest('.bg-white, .bg-gradient-to-r, .bg-customPurple-100\\/20');
+        if (!card) return;
+
+        fullText += `--- ${title.toUpperCase()} ---\n`;
+        
+        // Special case for the main summary, which has a different structure
+        if (title === "Prospect Research") {
+            const summaryContent = card.querySelector('.text-gray-800');
+            if (summaryContent) {
+                 fullText += `${summaryContent.textContent.trim().replace(/\s+/g, ' ')}\n\n`;
+            }
             return;
         }
-        
-        const { coaching_plan, high_level_recommendation, tldr_summary, mermaid_diagram } = planData;
-        const colors = [
-            { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-500' },
-            { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-700' }
-        ];
 
-        const personaCardsHTML = coaching_plan.map((personaData, index) => {
-            const color = colors[index % colors.length];
-            const talkingPointsHTML = personaData.talking_points.map(point => `<li class="flex items-start gap-2 mb-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg><span class="text-gray-700">${marked.parse(point)}</span></li>`).join('');
-            const snippetHTML = `<div class="mt-4 pt-4 border-t border-gray-200"><h3 class="font-medium text-gray-900 mb-2 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" /><path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" /></svg>Shareable Snippet</h3><div class="relative bg-gray-50 p-3 rounded-lg border border-gray-200"><p class="text-sm text-gray-700 snippet-text">${personaData.suggested_snippet}</p><button class="copy-snippet-btn absolute top-2 right-2 p-1.5 bg-white/50 hover:bg-gray-200/80 rounded-full" data-text="${personaData.suggested_snippet}" title="Copy Snippet"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg></button></div></div>`;
-            return `<div class="persona-card bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow"><div class="flex items-start gap-3 mb-4"><div class="${color.icon} w-10 h-10 rounded-xl text-white flex-shrink-0 flex items-center justify-center"><span class="font-bold">${personaData.persona.charAt(0)}</span></div><h2 class="text-lg md:text-xl font-semibold text-gray-900 break-words">${personaData.persona}</h2></div><div class="space-y-4"><div class="${color.bg} ${color.border} border p-4 rounded-xl"><h3 class="font-medium text-customPurple-700 mb-2">SMART Goal</h3><div class="text-gray-700">${marked.parse(personaData.smart_goal)}</div></div><div><h3 class="font-medium text-gray-900 mb-3">Key Talking Points</h3><ul class="space-y-1">${talkingPointsHTML}</ul></div>${snippetHTML}</div></div>`;
-        }).join('');
-
-        resultsContainer.innerHTML = `
-            <div id="coaching-plan-container" class="space-y-6">
-                <div class="space-y-6">
-                    <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 p-5 rounded-xl shadow-md border border-customPurple-100/50">
-                        <img src="images/arti_right.png" alt="Arti" class="float-left h-12 w-12 mr-4 mb-2">
-                        <h3 class="text-lg font-semibold mb-1.5 text-customPurple-900">A few thoughts...</h3>
-                        <div class="text-gray-800">${marked.parse(high_level_recommendation)}</div>
-                        <div class="clear-both"></div>
-                    </div>
-                    <div id="mermaid-container" class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"></div>
-                    <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-1 flex items-center gap-2">
-                            <span class="bg-customPurple-500 text-white text-xs font-bold px-2 py-1 rounded">TL;DR</span>
-                        </h3>
-                        <div class="text-sm text-gray-700">${marked.parse(tldr_summary)}</div>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">${personaCardsHTML}</div>
-                ${generateSmartFollowUps(planData, originalSituation)}
-                <div class="mt-8 flex flex-col sm:flex-row gap-3">
-                    <button id="copy-btn" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" /><path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" /></svg>Copy Plan</button>
-                    <button id="reset-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl border-gray-200 transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>Start Over</button>
-                </div>
-            </div>`;
-        
-        renderDynamicDiagram(mermaid_diagram, 'Stakeholder Map');
-        
-        document.getElementById('reset-btn').addEventListener('click', resetForm);
-        document.getElementById('copy-btn').addEventListener('click', copyPlanToClipboard);
-        document.querySelectorAll('.copy-snippet-btn').forEach(btn => btn.addEventListener('click', copySnippet));
+        // Find all list items, tags, or content blocks within the card
+        const items = card.querySelectorAll('li, .flex-wrap > span, .space-y-3 > div, .space-y-2 > div, p.text-customPurple-900');
+        if (items.length > 0) {
+            items.forEach(item => {
+                fullText += `- ${item.textContent.trim().replace(/\s+/g, ' ')}\n`;
+            });
+        }
+        fullText += '\n';
     };
 
-    const displayProspectingResults = (prospectData) => {
-        const { summary, company_capabilities = [], naics_codes = [], federal_competitors = [], prime_contractors = [], prospect_recommendations = [], market_insights, mermaid_diagram } = prospectData;
-        
-        resultsContainer.innerHTML = `<div id="prospecting-results-container" class="space-y-6"><div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 p-5 rounded-xl shadow-md border border-customPurple-100/50"><img src="images/arti_right.png" alt="Arti" class="float-left h-12 w-12 mr-4 mb-2"><h3 class="text-lg font-semibold mb-2 text-customPurple-900">Prospect Research & Competitive Intelligence</h3><div class="text-gray-800">${marked.parse(summary || '')}</div><div class="clear-both"></div></div><div id="mermaid-container" class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"></div>${company_capabilities.length > 0 ? `<div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"><h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm2 6a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1z" clip-rule="evenodd" /></svg>Core Capabilities</h3><div class="flex flex-wrap gap-2">${company_capabilities.map(cap => `<span class="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">${marked.parse(cap).replace(/<\/?p>/g, '')}</span>`).join('')}</div></div>` : ''}<div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"><h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" /></svg>Relevant NAICS Codes</h3><ul class="space-y-1">${naics_codes.map(code => `<li class="text-sm text-gray-700"><span class="font-medium">${marked.parse(code).replace(/<\/?p>/g, '')}</span></li>`).join('')}</ul></div><div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"><h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor"><path d="M13 7H7v6h6V7z" /><path fill-rule="evenodd" d="M7 2a1 1 0 012 0v1h2V2a1 1 0 112 0v1h2a2 2 0 012 2v2h1a1 1 0 110 2h-1v2h1a1 1 0 110 2h-1v2a2 2 0 01-2 2h-2v1a1 1 0 11-2 0v-1H9v1a1 1 0 11-2 0v-1H5a2 2 0 01-2-2v-2H2a1 1 0 110-2h1V9H2a1 1 0 010-2h1V5a2 2 0 012-2h2V2z" clip-rule="evenodd" /></svg>Prospect Recommendations</h3><ul class="space-y-2">${prospect_recommendations.map(rec => `<li class="text-sm text-gray-700 flex items-start gap-2"><span class="text-customPurple-500">•</span><span>${marked.parse(rec).replace(/<\/?p>/g, '')}</span></li>`).join('')}</ul></div></div>${federal_competitors.length > 0 ? `<div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"><h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" /></svg>Federal Competitors & Similar Companies</h3><div class="space-y-3">${federal_competitors.map(comp => `<div class="border-l-4 border-customPurple-200 pl-3"><h4 class="font-medium text-gray-900">${comp.company}</h4><p class="text-sm text-gray-600 mt-1">${marked.parse(comp.strengths).replace(/<\/?p>/g, '')}</p>${comp.contract_vehicles ? `<p class="text-xs text-gray-500 mt-1">Vehicles: ${comp.contract_vehicles}</p>` : ''}</div>`).join('')}</div></div>` : ''}${prime_contractors.length > 0 ? `<div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"><h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" /></svg>Prime Contractors & Partners</h3><div class="space-y-2">${prime_contractors.map(prime => `<div class="flex items-start gap-2"><span class="font-medium text-gray-900">${prime.company}:</span><span class="text-sm text-gray-600">${marked.parse(prime.relationship).replace(/<\/?p>/g, '')}</span></div>`).join('')}</div></div>` : ''}${market_insights ? `<div class="bg-customPurple-100/20 rounded-xl border border-customPurple-100/40 p-4"><h3 class="text-sm font-semibold text-customPurple-800 mb-2 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>Market Insight</h3><p class="text-sm text-customPurple-900">${marked.parse(market_insights).replace(/<\/?p>/g, '')}</p></div>` : ''}${generateSmartFollowUps(prospectData, originalSituation)}<div class="mt-6 flex flex-col sm:flex-row gap-3"><button id="copy-prospecting-btn" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" /><path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" /></svg>Copy Research</button><button id="reset-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl border-gray-200 transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>Start Over</button></div></div>`;
-        
-        renderDynamicDiagram(mermaid_diagram, 'Ecosystem Map');
+    // Process each section using the helper
+    addSectionToText("Prospect Research");
+    addSectionToText("Core Capabilities");
+    addSectionToText("Relevant NAICS Codes");
+    addSectionToText("Prospect Recommendations");
+    addSectionToText("Federal Competitors");
+    addSectionToText("Prime Contractors");
+    addSectionToText("Market Insight");
 
-        document.getElementById('reset-btn').addEventListener('click', resetForm);
-        document.getElementById('copy-prospecting-btn').addEventListener('click', copyProspectingResults);
-    };
+    // Copy the final text to the clipboard and provide user feedback
+    navigator.clipboard.writeText(fullText.trim()).then(() => {
+        const copyBtn = document.getElementById('copy-prospecting-btn');
+        const originalHtml = copyBtn.innerHTML;
+        copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>Copied!`;
+        copyBtn.classList.add('success-pulse');
+        setTimeout(() => {
+            copyBtn.innerHTML = originalHtml;
+            copyBtn.classList.remove('success-pulse');
+        }, 2000);
+    });
+};
+const displayProspectingResults = (prospectData) => {
+    // By adding "= []", we ensure these are always arrays, preventing mapping errors.
+    const { 
+        summary, 
+        company_capabilities = [],
+        naics_codes = [], 
+        federal_competitors = [], 
+        prime_contractors = [],
+        prospect_recommendations = [],
+        market_insights 
+    } = prospectData;
+    
+    resultsContainer.innerHTML = `
+        <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs">
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
+                <a href="https://subhoo.com" class="text-customPurple-700 font-medium hover:text-customPurple-900">Subhoo.com</a>
+            </div>
+            <p class="text-gray-600 text-xs mt-1">Helping you avoid teaming partners who still fax NDAs.</p>
+        </div>
+        <div id="prospecting-results-container" class="space-y-6">
+            <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 p-5 rounded-xl shadow-md border border-customPurple-100/50">
+                <img src="images/arti_right.png" alt="Arti" class="float-left h-12 w-12 mr-4 mb-2">
+                <h3 class="text-lg font-semibold mb-2 text-customPurple-900">Prospect Research & Competitive Intelligence</h3>
+                <div class="text-gray-800">${marked.parse(summary || '')}</div>
+                <div class="clear-both"></div>
+            </div>
+            
+            <!-- Mermaid Diagram -->
+            ${generateContextualDiagram(prospectData, originalSituation)}
+            
+            ${company_capabilities.length > 0 ? `
+            <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+                <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm2 6a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1z" clip-rule="evenodd" />
+                    </svg>
+                    Core Capabilities
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                    ${company_capabilities.map(cap => `<span class="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">${marked.parse(cap).replace(/<\/?p>/g, '')}</span>`).join('')}
+                </div>
+            </div>
+            ` : ''}
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+                    <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+                        </svg>
+                        Relevant NAICS Codes
+                    </h3>
+                    <ul class="space-y-1">
+                        ${naics_codes.map(code => `<li class="text-sm text-gray-700"><span class="font-medium">${marked.parse(code).replace(/<\/?p>/g, '')}</span></li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+                    <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M13 7H7v6h6V7z" />
+                            <path fill-rule="evenodd" d="M7 2a1 1 0 012 0v1h2V2a1 1 0 112 0v1h2a2 2 0 012 2v2h1a1 1 0 110 2h-1v2h1a1 1 0 110 2h-1v2a2 2 0 01-2 2h-2v1a1 1 0 11-2 0v-1H9v1a1 1 0 11-2 0v-1H5a2 2 0 01-2-2v-2H2a1 1 0 110-2h1V9H2a1 1 0 010-2h1V5a2 2 0 012-2h2V2z" clip-rule="evenodd" />
+                        </svg>
+                        Prospect Recommendations
+                    </h3>
+                    <ul class="space-y-2">
+                        ${prospect_recommendations.map(rec => `<li class="text-sm text-gray-700 flex items-start gap-2"><span class="text-customPurple-500">•</span><span>${marked.parse(rec).replace(/<\/?p>/g, '')}</span></li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
+                    <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">FaxLess Solutions</a>
+                </div>
+                <p class="text-gray-600 text-xs mt-1">Finally, a contractor who emails instead of sending carrier pigeons.</p>
+            </div>
+            
+            ${federal_competitors.length > 0 ? `
+            <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+                <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                    </svg>
+                    Federal Competitors & Similar Companies
+                </h3>
+                <div class="space-y-3">
+                    ${federal_competitors.map(comp => `
+                        <div class="border-l-4 border-customPurple-200 pl-3">
+                            <h4 class="font-medium text-gray-900">${comp.company}</h4>
+                            <p class="text-sm text-gray-600 mt-1">${marked.parse(comp.strengths).replace(/<\/?p>/g, '')}</p>
+                            ${comp.contract_vehicles ? `<p class="text-xs text-gray-500 mt-1">Vehicles: ${comp.contract_vehicles}</p>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            ` : ''}
+            
+            ${prime_contractors.length > 0 ? `
+            <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+                <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                    </svg>
+                    Prime Contractors & Partners
+                </h3>
+                <div class="space-y-2">
+                    ${prime_contractors.map(prime => `
+                        <div class="flex items-start gap-2">
+                            <span class="font-medium text-gray-900">${prime.company}:</span>
+                            <span class="text-sm text-gray-600">${marked.parse(prime.relationship).replace(/<\/?p>/g, '')}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            ` : ''}
+            
+            ${market_insights ? `
+            <div class="bg-customPurple-100/20 rounded-xl border border-customPurple-100/40 p-4">
+                <h3 class="text-sm font-semibold text-customPurple-800 mb-2 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                    </svg>
+                    Market Insight
+                </h3>
+                <p class="text-sm text-customPurple-900">${marked.parse(market_insights).replace(/<\/?p>/g, '')}</p>
+            </div>
+            ` : ''}
+            
+            <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 mt-6 text-xs">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
+                    <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">ClearSpeak Consulting</a>
+                </div>
+                <p class="text-gray-600 text-xs mt-1">We translate government requirements from ancient hieroglyphics to English.</p>
+            </div>
+            
+            <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                <button id="copy-prospecting-btn" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
+                        <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
+                    </svg>
+                    Copy Research
+                </button>
+                <button id="reset-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl border border-gray-200 transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>
+                    Start Over
+                </button>
+            </div>
+            
+            <!-- Smart Follow-Ups -->
+            ${generateSmartFollowUps(prospectData, originalSituation)}
+        </div>`;
+    
+    document.getElementById('reset-btn').addEventListener('click', resetForm);
+    document.getElementById('copy-prospecting-btn').addEventListener('click', copyProspectingResults);
+    
+    // Initialize Mermaid diagrams
+    setTimeout(() => {
+        initializeMermaidDiagrams();
+    }, 100);
+};
 
-    // --- Utility and Helper Functions ---
     const resetForm = () => {
         situationInput.value = '';
         originalSituation = '';
@@ -925,6 +1518,7 @@ mermaid.initialize({
         resultsContainer.firstChild.classList.add('error-shake');
     };
 
+
     const copySnippet = (e) => {
         const button = e.currentTarget;
         const textToCopy = button.dataset.text;
@@ -936,25 +1530,35 @@ mermaid.initialize({
     };
 
     const handleShare = () => {
-        const shareText = "Just got some good advice from AskArti.";
-        const shareUrl = "https://askarti.com/";
-        const fullShareText = `${shareText} ${shareUrl}`;
-        
-        if (navigator.share) {
-            navigator.share({ title: 'AskArti - Your Federal Sales Buddy', text: shareText, url: shareUrl });
-        } else {
-            navigator.clipboard.writeText(fullShareText).then(() => {
-                const shareBtn = document.getElementById('share-btn');
-                const originalText = shareBtn.textContent;
-                shareBtn.textContent = 'Copied!';
-                setTimeout(() => { shareBtn.textContent = originalText; }, 2000);
-            });
-        }
-    };
+    const shareText = "Just got some good advice from AskArti.";
+    const shareUrl = "https://askarti.com/";
+    const fullShareText = `${shareText} ${shareUrl}`;
+    
+    if (navigator.share) {
+        navigator.share({
+            // Match this title exactly to your og:title meta tag
+            title: 'AskArti - Your Federal Sales Buddy', 
+            text: shareText,
+            url: shareUrl
+        });
+    } else {
+        navigator.clipboard.writeText(fullShareText).then(() => {
+            const shareBtn = document.getElementById('share-btn');
+            const originalText = shareBtn.textContent;
+            shareBtn.textContent = 'Copied!';
+            setTimeout(() => {
+                shareBtn.textContent = originalText;
+            }, 2000);
+        });
+    }
+};
     
     const openModal = (modal, content) => {
         modal.classList.remove('hidden');
-        setTimeout(() => { modal.classList.add('show'); content.classList.add('show'); }, 10);
+        setTimeout(() => {
+            modal.classList.add('show');
+            content.classList.add('show');
+        }, 10);
     };
     
     const closeModal = (modal, content) => {
@@ -963,181 +1567,71 @@ mermaid.initialize({
         setTimeout(() => { modal.classList.add('hidden'); }, 200);
     };
 
-    // --- Smart Follow-Up Functions ---
-    const generateSmartFollowUps = (planData, originalQuery) => {
-        const suggestions = getContextualFollowUps(planData, originalQuery);
-        if (suggestions.length === 0) return '';
-        const suggestionHTML = suggestions.map((suggestion, index) => `<button class="follow-up-suggestion follow-up-btn flex-1 bg-white hover:bg-customPurple-50 text-customPurple-700 font-medium py-3 px-4 rounded-xl border-2 border-customPurple-200 hover:border-customPurple-400 transition-all flex items-center justify-center gap-2 text-sm" style="--animation-delay: ${index * 0.1}s" data-question="${suggestion.question.replace(/"/g, '&quot;')}"><span class="text-lg">${suggestion.icon}</span><span class="text-left">${suggestion.label}</span></button>`).join('');
-        return `<div class="mt-8 bg-customPurple-50/30 rounded-xl p-6 border border-customPurple-100/50"><h3 class="text-sm font-semibold text-customPurple-900 mb-3 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" /></svg>Smart Follow-Ups</h3><p class="text-xs text-gray-600 mb-4">Based on your situation, you might also want to ask:</p><div class="grid grid-cols-1 md:grid-cols-3 gap-3">${suggestionHTML}</div></div>`;
-    };
-
-    const getContextualFollowUps = (planData, originalQuery) => {
-        const query = originalQuery.toLowerCase();
-        const recommendations = planData.high_level_recommendation?.toLowerCase() || '';
-        const suggestions = [];
-        if (planData.naics_codes || planData.federal_competitors) {
-            suggestions.push({ icon: "✉️", label: "Craft outreach email", question: `Help me write a cold outreach email for ${extractAgencyOrTech(originalQuery)} prospects` }, { icon: "🎯", label: "Qualify these leads", question: "What questions should I ask to qualify federal prospects in our first meeting?" }, { icon: "🏛️", label: "Contract vehicles", question: `What are the main contract vehicles for ${extractAgencyOrTech(originalQuery)}?` });
-            return suggestions.slice(0, 3);
-        }
-        if (query.includes('interview') || query.includes('job')) {
-            suggestions.push({ icon: "💰", label: "Negotiation prep", question: "How do I negotiate salary for a federal sales role?" }, { icon: "📋", label: "30-60-90 plan", question: "Help me create a 30-60-90 day plan for a new federal sales role" }, { icon: "🎯", label: "Mock questions", question: "Give me 5 more behavioral questions for federal sales interviews" });
-            return suggestions.slice(0, 3);
-        }
-        if (query.includes('meeting') || query.includes('qbr') || query.includes('briefing')) {
-            suggestions.push({ icon: "📊", label: "Slide outline", question: "Create an executive briefing slide outline for my federal customer" }, { icon: "🎬", label: "Demo script", question: "Help me script a 15-minute demo for federal stakeholders" }, { icon: "📧", label: "Follow-up email", question: "Write a follow-up email template after an executive briefing" });
-            return suggestions.slice(0, 3);
-        }
-        if (query.includes('ghost') || query.includes('dark') || query.includes('stall') || recommendations.includes('re-engage') || recommendations.includes('resurrect')) {
-            suggestions.push({ icon: "🔄", label: "Re-engagement strategy", question: "Give me 5 creative ways to re-engage a ghosted federal buyer" });
-        }
-        if (query.includes('compet') || query.includes('rival') || query.includes('incumbent') || recommendations.includes('differentiat')) {
-            suggestions.push({ icon: "⚔️", label: "Competitive positioning", question: "How do I position against an entrenched incumbent in federal?" });
-        }
-        if (query.includes('pric') || query.includes('budget') || query.includes('cost') || query.includes('expensive')) {
-            suggestions.push({ icon: "💵", label: "Value justification", question: "Help me build an ROI story for my federal customer" });
-        }
-        if (query.includes('champion') || query.includes('stakeholder') || query.includes('cotr') || recommendations.includes('stakeholder')) {
-            suggestions.push({ icon: "🗺️", label: "Stakeholder mapping", question: "How do I identify and map all stakeholders in a federal deal?" });
-        }
-        if (query.includes('contract') || query.includes('procurement') || query.includes('rfp')) {
-            suggestions.push({ icon: "📜", label: "Procurement strategy", question: "What's the best procurement vehicle for my federal solution?" });
-        }
-        if (query.includes('partner') || query.includes('prime') || query.includes('teaming')) {
-            suggestions.push({ icon: "🤝", label: "Partner evaluation", question: "How do I evaluate and choose the right federal prime partner?" });
-        }
-        const genericFollowUps = [{ icon: "📅", label: "Next steps checklist", question: "Create a 72-hour action plan based on my situation" }, { icon: "📊", label: "Forecast confidence", question: "How do I accurately forecast this federal opportunity?" }, { icon: "✉️", label: "Email templates", question: "Give me email templates for common federal sales scenarios" }, { icon: "🎯", label: "Qualification deep-dive", question: "Help me fully qualify this federal opportunity with MEDDPICC" }, { icon: "🚫", label: "Objection handling", question: "What are common federal buyer objections and how do I handle them?" }];
-        while (suggestions.length < 3 && genericFollowUps.length > 0) {
-            const randomIndex = Math.floor(Math.random() * genericFollowUps.length);
-            suggestions.push(genericFollowUps.splice(randomIndex, 1)[0]);
-        }
-        return suggestions.slice(0, 3);
-    };
-
-    const extractAgencyOrTech = (query) => {
-        const agencies = ['dhs', 'dod', 'va', 'treasury', 'faa', 'nasa', 'army', 'navy', 'air force', 'gsa'];
-        const techs = ['cloud', 'cyber', 'ai', 'ml', 'data', 'analytics', 'security'];
-        const lowerQuery = query.toLowerCase();
-        for (const agency of agencies) if (lowerQuery.includes(agency)) return agency.toUpperCase();
-        for (const tech of techs) if (lowerQuery.includes(tech)) return tech;
-        return 'federal';
-    };
-
-    const handleFollowUpClick = (e) => {
-        const button = e.target.closest('.follow-up-btn');
-        if (!button) return;
-        const question = button.dataset.question;
-        situationInput.value = question;
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setTimeout(() => { generateBtn.click(); }, 300);
-    };
-
-    const copyPlanToClipboard = () => {
-        const planContainer = document.getElementById('coaching-plan-container');
-        if (!planContainer) return;
-        const thoughtsSection = planContainer.querySelector('.bg-gradient-to-r div');
-        const recommendation = thoughtsSection ? thoughtsSection.textContent.trim() : '';
-        let fullText = `ARTI'S THOUGHTS:\n${recommendation}\n\n--- DETAILED PLAN ---\n\n`;
-        const personaCards = document.querySelectorAll('.persona-card');
-        personaCards.forEach(card => {
-            const persona = card.querySelector('h2').textContent.trim();
-            let goal = 'No goal available.';
-            const snippet = card.querySelector('.snippet-text')?.textContent.trim() || 'No snippet available.';
-            const allH3s = card.querySelectorAll('h3');
-            const smartGoalH3 = Array.from(allH3s).find(h3 => h3.textContent.trim() === 'SMART Goal');
-            if (smartGoalH3) {
-                const goalContainerDiv = smartGoalH3.nextElementSibling;
-                if (goalContainerDiv) goal = goalContainerDiv.textContent.trim();
-            }
-            const points = Array.from(card.querySelectorAll('ul li span')).map(span => `- ${span.textContent.trim()}`).join('\n');
-            fullText += `--- ${persona.toUpperCase()} ---\n\nSMART GOAL:\n${goal}\n\nKEY TALKING POINTS:\n${points}\n\nSUGGESTED SNIPPET:\n${snippet}\n\n`;
-        });
-        navigator.clipboard.writeText(fullText.trim()).then(() => {
-            const copyBtn = document.getElementById('copy-btn');
-            const originalHtml = copyBtn.innerHTML;
-            copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>Copied!`;
-            copyBtn.classList.add('success-pulse');
-            setTimeout(() => { copyBtn.innerHTML = originalHtml; }, 2000);
-        });
-    };
-    
-    const copyProspectingResults = () => {
-        const container = document.getElementById('prospecting-results-container');
-        if (!container) return;
-        let fullText = "ARTI'S PROSPECTING RESEARCH\n\n";
-        const addSectionToText = (title) => {
-            const allH3s = Array.from(container.querySelectorAll('h3'));
-            const titleH3 = allH3s.find(h3 => h3.textContent.trim().includes(title));
-            if (!titleH3) return;
-            const card = titleH3.closest('.bg-white, .bg-gradient-to-r, .bg-customPurple-100\\/20');
-            if (!card) return;
-            fullText += `--- ${title.toUpperCase()} ---\n`;
-            if (title === "Prospect Research") {
-                const summaryContent = card.querySelector('.text-gray-800');
-                if (summaryContent) fullText += `${summaryContent.textContent.trim().replace(/\s+/g, ' ')}\n\n`;
-                return;
-            }
-            const items = card.querySelectorAll('li, .flex-wrap > span, .space-y-3 > div, .space-y-2 > div, p.text-customPurple-900');
-            if (items.length > 0) {
-                items.forEach(item => { fullText += `- ${item.textContent.trim().replace(/\s+/g, ' ')}\n`; });
-            }
-            fullText += '\n';
-        };
-        addSectionToText("Prospect Research");
-        addSectionToText("Core Capabilities");
-        addSectionToText("Relevant NAICS Codes");
-        addSectionToText("Prospect Recommendations");
-        addSectionToText("Federal Competitors");
-        addSectionToText("Prime Contractors");
-        addSectionToText("Market Insight");
-        navigator.clipboard.writeText(fullText.trim()).then(() => {
-            const copyBtn = document.getElementById('copy-prospecting-btn');
-            const originalHtml = copyBtn.innerHTML;
-            copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>Copied!`;
-            copyBtn.classList.add('success-pulse');
-            setTimeout(() => {
-                copyBtn.innerHTML = originalHtml;
-                copyBtn.classList.remove('success-pulse');
-            }, 2000);
-        });
-    };
-
     // --- Event Listeners ---
     generateBtn.addEventListener('click', generatePlan);
-    document.querySelectorAll('.prompt-btn').forEach(btn => btn.addEventListener('click', handleCannedPrompt));
+    document.querySelectorAll('.prompt-btn').forEach(btn => {
+        btn.addEventListener('click', handleCannedPrompt);
+    });
     
+    // Modal Event Listeners
     trustBtn.addEventListener('click', () => openModal(trustModal, trustModalContent));
     closeTrustModalBtn.addEventListener('click', () => closeModal(trustModal, trustModalContent));
-    trustModal.addEventListener('click', (e) => { if(e.target === trustModal) closeModal(trustModal, trustModalContent); });
+    trustModal.addEventListener('click', (e) => {
+        if(e.target === trustModal) {
+            closeModal(trustModal, trustModalContent);
+        }
+    });
 
     sponsorBtn.addEventListener('click', () => openModal(sponsorModal, sponsorModalContent));
     closeSponsorModalBtn.addEventListener('click', () => closeModal(sponsorModal, sponsorModalContent));
-    sponsorModal.addEventListener('click', (e) => { if(e.target === sponsorModal) closeModal(sponsorModal, sponsorModalContent); });
+    sponsorModal.addEventListener('click', (e) => {
+        if(e.target === sponsorModal) {
+            closeModal(sponsorModal, sponsorModalContent);
+        }
+    });
 
     humanBtn.addEventListener('click', () => openModal(humanModal, humanModalContent));
     closeHumanModalBtn.addEventListener('click', () => closeModal(humanModal, humanModalContent));
-    humanModal.addEventListener('click', (e) => { if(e.target === humanModal) closeModal(humanModal, humanModalContent); });
+    humanModal.addEventListener('click', (e) => {
+        if(e.target === humanModal) {
+            closeModal(humanModal, humanModalContent);
+        }
+    });
 
     toolsBtn.addEventListener('click', () => openModal(bonusToolsModal, bonusToolsModalContent));
     closeBonusToolsModalBtn.addEventListener('click', () => closeModal(bonusToolsModal, bonusToolsModalContent));
-    bonusToolsModal.addEventListener('click', (e) => { if(e.target === bonusToolsModal) closeModal(bonusToolsModal, bonusToolsModalContent); });
+    bonusToolsModal.addEventListener('click', (e) => {
+        if(e.target === bonusToolsModal) {
+            closeModal(bonusToolsModal, bonusToolsModalContent);
+        }
+    });
 
+    // Share button event listener
     document.getElementById('share-btn').addEventListener('click', handleShare);
 
+    // Escape key to close modals
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            if (!trustModal.classList.contains('hidden')) closeModal(trustModal, trustModalContent);
-            if (!sponsorModal.classList.contains('hidden')) closeModal(sponsorModal, sponsorModalContent);
-            if (!humanModal.classList.contains('hidden')) closeModal(humanModal, humanModalContent);
-            if (!bonusToolsModal.classList.contains('hidden')) closeModal(bonusToolsModal, bonusToolsModalContent);
+            if (!trustModal.classList.contains('hidden')) {
+                closeModal(trustModal, trustModalContent);
+            }
+            if (!sponsorModal.classList.contains('hidden')) {
+                closeModal(sponsorModal, sponsorModalContent);
+            }
+            if (!humanModal.classList.contains('hidden')) {
+                closeModal(humanModal, humanModalContent);
+            }
+            if (!bonusToolsModal.classList.contains('hidden')) {
+                closeModal(bonusToolsModal, bonusToolsModalContent);
+            }
         }
     });
 
-    document.addEventListener('click', (e) => {
-        if (e.target.closest('.follow-up-btn')) {
-            handleFollowUpClick(e);
-        }
-    });
-
+document.addEventListener('click', (e) => {
+    if (e.target.closest('.follow-up-btn')) {
+        handleFollowUpClick(e);
+    }
+});
     // Tab switching logic for tools
     const tabs = document.querySelectorAll('.widget-tab');
     const widgetContents = document.querySelectorAll('.widget-content');
@@ -1152,7 +1646,10 @@ mermaid.initialize({
         });
     });
     
-    if (tabs.length > 0) tabs[0].classList.add('active');
+    // Activate the first tab by default
+    if (tabs.length > 0) {
+        tabs[0].classList.add('active');
+    }
 
     // --- FY Countdown Widget JS ---
     const fy_fiscalYearEl = document.getElementById('fy-fiscal-year');
