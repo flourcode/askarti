@@ -197,6 +197,32 @@
                 font-size: 1.1rem;
             }
         }
+		/* Animation for follow-up suggestions appearing */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.follow-up-suggestion {
+    animation: slideUp 0.3s ease-out forwards;
+    animation-delay: var(--animation-delay);
+    opacity: 0;
+}
+
+.follow-up-btn {
+    transition: all 0.2s ease;
+}
+
+.follow-up-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(82, 63, 158, 0.3);
+}
 		 /* Mermaid diagram styling */
         .mermaid {
             display: flex;
@@ -815,7 +841,268 @@ const generatePlan = async () => {
             generateBtn.click();
         }, 200);
     };
+// ADD THIS BLOCK AFTER LINE 747
 
+/**
+ * Analyzes the response and generates smart follow-up suggestions
+ * @param {Object} planData - The response data from the API
+ * @param {string} originalQuery - The user's original question
+ * @returns {string} HTML for the follow-up suggestions
+ */
+const generateSmartFollowUps = (planData, originalQuery) => {
+    const suggestions = getContextualFollowUps(planData, originalQuery);
+    
+    if (suggestions.length === 0) return '';
+    
+    const suggestionHTML = suggestions.map((suggestion, index) => `
+        <button class="follow-up-suggestion follow-up-btn flex-1 bg-white hover:bg-customPurple-50 text-customPurple-700 font-medium py-3 px-4 rounded-xl border-2 border-customPurple-200 hover:border-customPurple-400 transition-all flex items-center justify-center gap-2 text-sm"
+                style="--animation-delay: ${index * 0.1}s"
+                data-question="${suggestion.question.replace(/"/g, '&quot;')}">
+            <span class="text-lg">${suggestion.icon}</span>
+            <span class="text-left">${suggestion.label}</span>
+        </button>
+    `).join('');
+    
+    return `
+        <div class="mt-8 bg-customPurple-50/30 rounded-xl p-6 border border-customPurple-100/50">
+            <h3 class="text-sm font-semibold text-customPurple-900 mb-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                </svg>
+                Smart Follow-Ups
+            </h3>
+            <p class="text-xs text-gray-600 mb-4">Based on your situation, you might also want to ask:</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                ${suggestionHTML}
+            </div>
+        </div>
+    `;
+};
+
+/**
+ * Determines contextual follow-up questions based on the response content
+ * @param {Object} planData - The response data
+ * @param {string} originalQuery - The original query
+ * @returns {Array} Array of follow-up suggestion objects
+ */
+const getContextualFollowUps = (planData, originalQuery) => {
+    const query = originalQuery.toLowerCase();
+    const recommendations = planData.high_level_recommendation?.toLowerCase() || '';
+    const suggestions = [];
+    
+    // Check if this was a prospecting response
+    if (planData.naics_codes || planData.federal_competitors) {
+        suggestions.push(
+            {
+                icon: "✉️",
+                label: "Craft outreach email",
+                question: `Help me write a cold outreach email for ${extractAgencyOrTech(originalQuery)} prospects`
+            },
+            {
+                icon: "🎯",
+                label: "Qualify these leads",
+                question: "What questions should I ask to qualify federal prospects in our first meeting?"
+            },
+            {
+                icon: "🏛️",
+                label: "Contract vehicles",
+                question: `What are the main contract vehicles for ${extractAgencyOrTech(originalQuery)}?`
+            }
+        );
+        return suggestions.slice(0, 3);
+    }
+    
+    // Check if this was an interview prep response
+    if (query.includes('interview') || query.includes('job')) {
+        suggestions.push(
+            {
+                icon: "💰",
+                label: "Negotiation prep",
+                question: "How do I negotiate salary for a federal sales role?"
+            },
+            {
+                icon: "📋",
+                label: "30-60-90 plan",
+                question: "Help me create a 30-60-90 day plan for a new federal sales role"
+            },
+            {
+                icon: "🎯",
+                label: "Mock questions",
+                question: "Give me 5 more behavioral questions for federal sales interviews"
+            }
+        );
+        return suggestions.slice(0, 3);
+    }
+    
+    // Check if this was a meeting prep response
+    if (query.includes('meeting') || query.includes('qbr') || query.includes('briefing')) {
+        suggestions.push(
+            {
+                icon: "📊",
+                label: "Slide outline",
+                question: "Create an executive briefing slide outline for my federal customer"
+            },
+            {
+                icon: "🎬",
+                label: "Demo script",
+                question: "Help me script a 15-minute demo for federal stakeholders"
+            },
+            {
+                icon: "📧",
+                label: "Follow-up email",
+                question: "Write a follow-up email template after an executive briefing"
+            }
+        );
+        return suggestions.slice(0, 3);
+    }
+    
+    // General sales situation follow-ups based on content analysis
+    
+    // If deal is stalled or ghosted
+    if (query.includes('ghost') || query.includes('dark') || query.includes('stall') || 
+        recommendations.includes('re-engage') || recommendations.includes('resurrect')) {
+        suggestions.push({
+            icon: "🔄",
+            label: "Re-engagement strategy",
+            question: "Give me 5 creative ways to re-engage a ghosted federal buyer"
+        });
+    }
+    
+    // If competition mentioned
+    if (query.includes('compet') || query.includes('rival') || query.includes('incumbent') ||
+        recommendations.includes('differentiat')) {
+        suggestions.push({
+            icon: "⚔️",
+            label: "Competitive positioning",
+            question: "How do I position against an entrenched incumbent in federal?"
+        });
+    }
+    
+    // If pricing or budget issues
+    if (query.includes('pric') || query.includes('budget') || query.includes('cost') ||
+        query.includes('expensive')) {
+        suggestions.push({
+            icon: "💵",
+            label: "Value justification",
+            question: "Help me build an ROI story for my federal customer"
+        });
+    }
+    
+    // If stakeholder or champion issues
+    if (query.includes('champion') || query.includes('stakeholder') || query.includes('cotr') ||
+        recommendations.includes('stakeholder')) {
+        suggestions.push({
+            icon: "🗺️",
+            label: "Stakeholder mapping",
+            question: "How do I identify and map all stakeholders in a federal deal?"
+        });
+    }
+    
+    // If contract or procurement mentioned
+    if (query.includes('contract') || query.includes('procurement') || query.includes('rfp')) {
+        suggestions.push({
+            icon: "📜",
+            label: "Procurement strategy",
+            question: "What's the best procurement vehicle for my federal solution?"
+        });
+    }
+    
+    // If partner or prime mentioned
+    if (query.includes('partner') || query.includes('prime') || query.includes('teaming')) {
+        suggestions.push({
+            icon: "🤝",
+            label: "Partner evaluation",
+            question: "How do I evaluate and choose the right federal prime partner?"
+        });
+    }
+    
+    // Add some always-relevant options if we don't have 3 yet
+    const genericFollowUps = [
+        {
+            icon: "📅",
+            label: "Next steps checklist",
+            question: "Create a 72-hour action plan based on my situation"
+        },
+        {
+            icon: "📊",
+            label: "Forecast confidence",
+            question: "How do I accurately forecast this federal opportunity?"
+        },
+        {
+            icon: "✉️",
+            label: "Email templates",
+            question: "Give me email templates for common federal sales scenarios"
+        },
+        {
+            icon: "🎯",
+            label: "Qualification deep-dive",
+            question: "Help me fully qualify this federal opportunity with MEDDPICC"
+        },
+        {
+            icon: "🚫",
+            label: "Objection handling",
+            question: "What are common federal buyer objections and how do I handle them?"
+        }
+    ];
+    
+    // Add generic follow-ups if needed to reach 3 suggestions
+    while (suggestions.length < 3 && genericFollowUps.length > 0) {
+        const randomIndex = Math.floor(Math.random() * genericFollowUps.length);
+        suggestions.push(genericFollowUps.splice(randomIndex, 1)[0]);
+    }
+    
+    return suggestions.slice(0, 3);
+};
+
+/**
+ * Helper function to extract agency or technology from query
+ * @param {string} query - The user's query
+ * @returns {string} The extracted agency/tech or a generic term
+ */
+const extractAgencyOrTech = (query) => {
+    const agencies = ['dhs', 'dod', 'va', 'treasury', 'faa', 'nasa', 'army', 'navy', 'air force', 'gsa'];
+    const techs = ['cloud', 'cyber', 'ai', 'ml', 'data', 'analytics', 'security'];
+    
+    const lowerQuery = query.toLowerCase();
+    
+    // Check for agencies
+    for (const agency of agencies) {
+        if (lowerQuery.includes(agency)) {
+            return agency.toUpperCase();
+        }
+    }
+    
+    // Check for technologies
+    for (const tech of techs) {
+        if (lowerQuery.includes(tech)) {
+            return tech;
+        }
+    }
+    
+    return 'federal';
+};
+
+/**
+ * Handles follow-up button clicks
+ * @param {Event} e - Click event
+ */
+const handleFollowUpClick = (e) => {
+    const button = e.target.closest('.follow-up-btn');
+    if (!button) return;
+    
+    const question = button.dataset.question;
+    situationInput.value = question;
+    
+    // Smooth scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Brief delay then submit
+    setTimeout(() => {
+        generateBtn.click();
+    }, 300);
+};
+
+// ADD THIS BEFORE THE displayPlan FUNCTION
 const displayPlan = (planData) => {
     // Check if this is a prospecting response (either old or new format)
     if (planData.naics_codes || planData.federal_competitors) {
@@ -1348,6 +1635,11 @@ const displayProspectingResults = (prospectData) => {
         }
     });
 
+document.addEventListener('click', (e) => {
+    if (e.target.closest('.follow-up-btn')) {
+        handleFollowUpClick(e);
+    }
+});
     // Tab switching logic for tools
     const tabs = document.querySelectorAll('.widget-tab');
     const widgetContents = document.querySelectorAll('.widget-content');
