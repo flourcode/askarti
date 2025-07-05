@@ -839,71 +839,102 @@
         elements.generateBtn.disabled = isLoading;
     };
     
-    // Fetch coaching plan from API
-    const fetchCoachingPlan = async (situation) => {
+const fetchCoachingPlan = async (situation) => {
+    try {
+        const response = await fetch(API_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                request_type: 'generate_one_shot_plan',
+                situation: situation
+            })
+        });
+        
+        // Check if the response is actually ok before proceeding
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("API Response not OK:", response.status, errorText);
+            throw new Error(`API Error: Status ${response.status}`);
+        }
+        
+        // Try to parse the response
         try {
-            const response = await fetch(API_ENDPOINT, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    request_type: 'generate_one_shot_plan',
-                    situation: situation
-                })
-            });
-            
-            if (!response.ok) {
-                throw new Error(`API Error: ${response.statusText}`);
-            }
-            
             return await response.json();
-        } catch (error) {
-            console.error("API Error:", error);
-            throw error;
+        } catch (parseError) {
+            console.error("JSON Parse Error:", parseError);
+            throw new Error("Failed to parse API response");
         }
-    };
+    } catch (error) {
+        console.error("API Request Error:", error);
+        // Re-throw to let the main error handler deal with it
+        throw new Error(`API Error: ${error.message}`);
+    }
+};
     
-    // Generate the coaching plan
     const generatePlan = async () => {
-        const situation = elements.situationInput.value.trim();
+    const situation = elements.situationInput.value.trim();
+    
+    if (!situation) {
+        elements.resultsContainer.innerHTML = `
+            <div class="text-center p-6 bg-red-50 border border-red-200 rounded-xl">
+                <p class="text-red-700 font-medium">Please describe your sales problem first.</p>
+            </div>`;
         
-        if (!situation) {
-            elements.resultsContainer.innerHTML = `
-                <div class="text-center p-6 bg-red-50 border border-red-200 rounded-xl">
-                    <p class="text-red-700 font-medium">Please describe your sales problem first.</p>
-                </div>`;
-            elements.resultsContainer.firstChild.classList.add('error-shake');
-            return;
-        }
-        
-        state.originalSituation = situation;
-        showLoading(true);
-        
-        // Show loading UI
-        elements.resultsContainer.innerHTML = templates.loadingIndicator;
-        
-        // Cycle through loading messages
-        state.loadingStage = 0;
-        state.loadingInterval = setInterval(() => {
-            state.loadingStage = (state.loadingStage + 1) % state.loadingMessages.length;
-            const messageEl = document.getElementById('loading-message');
-            if (messageEl) {
-                messageEl.textContent = state.loadingMessages[state.loadingStage];
+        // Safely add animation class
+        setTimeout(() => {
+            const errorDiv = elements.resultsContainer.firstChild;
+            if (errorDiv && errorDiv.classList) {
+                errorDiv.classList.add('error-shake');
             }
-        }, 2000);
-        
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        
-        try {
-            const planData = await fetchCoachingPlan(state.originalSituation);
-            clearInterval(state.loadingInterval);
-            displayPlan(planData);
-        } catch (error) {
-            clearInterval(state.loadingInterval);
-            handleApiError(error);
-        } finally {
-            showLoading(false);
+        }, 10);
+        return;
+    }
+    
+    state.originalSituation = situation;
+    showLoading(true);
+    
+    // Show loading UI
+    elements.resultsContainer.innerHTML = templates.loadingIndicator;
+    
+    // Cycle through loading messages
+    state.loadingStage = 0;
+    state.loadingInterval = setInterval(() => {
+        state.loadingStage = (state.loadingStage + 1) % state.loadingMessages.length;
+        const messageEl = document.getElementById('loading-message');
+        if (messageEl) {
+            messageEl.textContent = state.loadingMessages[state.loadingStage];
         }
-    };
+    }, 2000);
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    try {
+        // Add timeout to prevent hanging
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error("Request timed out after 30 seconds")), 30000)
+        );
+        
+        // Race the API call against the timeout
+        const planData = await Promise.race([
+            fetchCoachingPlan(state.originalSituation),
+            timeoutPromise
+        ]);
+        
+        clearInterval(state.loadingInterval);
+        
+        // Check if we got valid data
+        if (!planData || typeof planData !== 'object') {
+            throw new Error("Received invalid data from API");
+        }
+        
+        displayPlan(planData);
+    } catch (error) {
+        clearInterval(state.loadingInterval);
+        handleApiError(error);
+    } finally {
+        showLoading(false);
+    }
+};
     
     // Handle canned prompt clicks
     const handleCannedPrompt = (e) => {
@@ -1132,19 +1163,27 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
     
-    // Handle API errors
-    const handleApiError = (error) => {
-        console.error("API Error:", error);
-        elements.resultsContainer.innerHTML = `
-            <div class="text-center p-8 bg-red-50 border border-red-200 rounded-xl">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-red-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <p class="text-red-700 font-medium">Something went wrong</p>
-                <p class="text-red-600 text-sm mt-1">Please try again in a moment</p>
-            </div>`;
-        elements.resultsContainer.firstChild.classList.add('error-shake');
-    };
+    // Fix the handleApiError function to safely check for the existence of the element
+const handleApiError = (error) => {
+    console.error("API Error:", error);
+    
+    elements.resultsContainer.innerHTML = `
+        <div class="text-center p-8 bg-red-50 border border-red-200 rounded-xl">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-red-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p class="text-red-700 font-medium">Something went wrong</p>
+            <p class="text-red-600 text-sm mt-1">Please try again in a moment</p>
+        </div>`;
+        
+    // Safely add the error-shake class
+    setTimeout(() => {
+        const errorDiv = elements.resultsContainer.firstChild;
+        if (errorDiv && errorDiv.classList) {
+            errorDiv.classList.add('error-shake');
+        }
+    }, 10);
+};
     
     // Copy snippet to clipboard
     const copySnippet = (e) => {
