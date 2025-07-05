@@ -1468,7 +1468,7 @@ if (query.includes('prioritize') || query.includes('fit') || query.includes('gri
  */
 const generateProcessDiagram = (planData, query) => {
     const diagramCode = `
-    flowchart LR
+    flowchart TD
         A[Identify Opportunity] --> B[Research Agency/Stakeholders]
         B --> C[Initial Outreach]
         C --> D{Qualified?}
@@ -1700,7 +1700,7 @@ const generateActionFlowDiagram = (planData) => {
         return { id, label: label.substring(0, 30) + (label.length > 30 ? '...' : '') };
     });
     
-    let diagramCode = 'flowchart LR\n';
+    let diagramCode = 'flowchart TD\n';
     nodes.forEach((node, idx) => {
         diagramCode += `    ${node.id}[${node.label}]`;
         if (idx < nodes.length - 1) {
