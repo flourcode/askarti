@@ -1436,7 +1436,25 @@ const generateContextualDiagram = (planData, originalQuery) => {
     if (query.includes('decision') || recommendation.includes('choose') || recommendation.includes('option')) {
         return generateDecisionTree(planData);
     }
-    
+    if (query.includes('journey')) {
+    return generateJourneyMapDiagram();
+}
+if (query.includes('org chart') || query.includes('structure')) {
+    return generateOrgChartDiagram();
+}
+if (query.includes('market share') || query.includes('budget')) {
+    return generatePieChartDiagram();
+}
+if (query.includes('status') || query.includes('lifecycle')) {
+    return generateOpportunityStateDiagram();
+}
+if (query.includes('brainstorm') || query.includes('gtm') || query.includes('mindmap')) {
+    return generateMindmapDiagram();
+}
+if (query.includes('prioritize') || query.includes('fit') || query.includes('grid')) {
+    return generateQuadrantDiagram();
+}
+
     // Default to a simple flow if context suggests it would be helpful
     if (planData.coaching_plan && planData.coaching_plan.length > 3) {
         return generateActionFlowDiagram(planData);
@@ -1493,6 +1511,103 @@ const generateStakeholderMap = (planData) => {
     `;
     
     return createDiagramContainer(diagramCode, "Stakeholder Relationship Map");
+};
+
+
+const generateOrgChartDiagram = () => {
+    const diagramCode = `
+    graph TD
+        CEO["Agency Head"]
+        CTO["CTO"]
+        CFO["CFO"]
+        PMO["Program Management Office"]
+        Lead1["Program Lead"]
+        Lead2["Engineering Lead"]
+
+        CEO --> CTO
+        CEO --> CFO
+        CTO --> PMO
+        PMO --> Lead1
+        PMO --> Lead2
+    `;
+
+    return createDiagramContainer(diagramCode, "Agency Org Chart");
+};
+const generateJourneyMapDiagram = () => {
+    const diagramCode = `
+    journey
+        title Buying Team Journey
+        section Awareness
+          Read Whitepaper: 5
+          Attended Webinar: 3
+        section Evaluation
+          Talked to Champion: 3
+          Reviewed Security Docs: 4
+        section Decision
+          Internal Meeting: 2
+          Contract Review: 1
+    `;
+
+    return createDiagramContainer(diagramCode, "Customer Buying Journey", "journey");
+};
+const generatePieChartDiagram = () => {
+    const diagramCode = `
+    pie title Incumbent Market Share
+        "Booz Allen" : 45
+        "SAIC" : 25
+        "Parsons" : 15
+        "Other" : 15
+    `;
+
+    return createDiagramContainer(diagramCode, "Contractor Share Breakdown", "pie");
+};
+const generateMindmapDiagram = () => {
+    const diagramCode = `
+    mindmap
+      root((Go-To-Market Strategy))
+        GTM Approaches
+          Digital Campaigns
+          BD Meetings
+          Trade Shows
+        Targets
+          Prime Contractors
+          Federal Agencies
+          Key Programs
+        Challenges
+          Access
+          Compliance
+          Incumbents
+    `;
+
+    return createDiagramContainer(diagramCode, "GTM Strategy Mindmap", "mindmap");
+};
+const generateQuadrantDiagram = () => {
+    const diagramCode = `
+    quadrantChart
+        title Deal Prioritization
+        x-axis Low Fit --> High Fit
+        y-axis Low Value --> High Value
+        "Quick Win": [0.8, 0.9]
+        "Strategic Bet": [0.9, 0.5]
+        "Low Priority": [0.3, 0.4]
+        "Avoid": [0.2, 0.1]
+    `;
+
+    return createDiagramContainer(diagramCode, "Deal Prioritization Grid", "quadrantChart");
+};
+
+const generateOpportunityStateDiagram = () => {
+    const diagramCode = `
+    stateDiagram-v2
+        [*] --> Identified
+        Identified --> Engaged : Outreach
+        Engaged --> Validated : Champion Found
+        Validated --> Proposed : Submitted RFI/RFP
+        Proposed --> Closed : Win/Loss
+        Closed --> [*]
+    `;
+
+    return createDiagramContainer(diagramCode, "Opportunity Lifecycle", "stateDiagram-v2");
 };
 
 /**
@@ -1598,9 +1713,6 @@ const generateActionFlowDiagram = (planData) => {
     return createDiagramContainer(diagramCode, "Action Priority Flow");
 };
 
-/**
- * Creates a container with the Mermaid diagram
- */
 const createDiagramContainer = (diagramCode, title, type = "flowchart") => {
     const uniqueId = 'mermaid-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
     
