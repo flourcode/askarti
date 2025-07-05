@@ -95,22 +95,16 @@
 	<script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
     window.mermaid = mermaid;
-mermaid.initialize({
+    mermaid.initialize({
     startOnLoad: false,
     theme: 'base',
     themeVariables: {
-        primaryColor: '#e9e5f5',       // Lightest purple for regular nodes
-        primaryTextColor: '#31255e',      // Darkest purple for text
-        primaryBorderColor: '#523f9e',  // Main brand purple for borders
-        lineColor: '#7465b1',           // Mid-purple for lines
-        secondaryColor: '#f3f4f6',      // A light gray
+        primaryColor: '#e9e5f5',
+        primaryTextColor: '#31255e',
+        primaryBorderColor: '#523f9e',
+        lineColor: '#7465b1',
+        secondaryColor: '#f3f4f6',
         tertiaryColor: '#e9e5f5'
-    },
-    // This new section defines custom styles for specific classes
-    flowchart: {
-        classDef: {
-            'highlight': 'fill:#7465b1,stroke:#31255e,stroke-width:2px,color:#ffffff'
-        }
     }
 });
 </script>
@@ -253,6 +247,7 @@ mermaid.initialize({
             stroke: #523f9e !important;
             stroke-width: 2px !important;
         }
+        
         .mermaid .edgeLabel {
             background-color: white !important;
             padding: 0.25rem !important;
@@ -722,7 +717,8 @@ mermaid.initialize({
             border-color: #523f9e;
         }
     </style>
-<script>
+
+    <script>
     // --- DOM Elements ---
     const situationInput = document.getElementById('situation-input');
     const generateBtn = document.getElementById('generate-btn');
@@ -1094,6 +1090,7 @@ const handleFollowUpClick = (e) => {
     }, 300);
 };
 
+// ADD THIS BEFORE THE displayPlan FUNCTION
 const displayPlan = (planData) => {
     // Check if this is a prospecting response (either old or new format)
     if (planData.naics_codes || planData.federal_competitors) {
@@ -1230,7 +1227,6 @@ const displayPlan = (planData) => {
         initializeMermaidDiagrams();
     }, 100);
 };
-	
 	const copyPlanToClipboard = () => {
     const planContainer = document.getElementById('coaching-plan-container');
     if (!planContainer) return;
@@ -1829,6 +1825,229 @@ document.addEventListener('click', (e) => {
         gh_timezoneSelect.addEventListener('change', gh_analyzeTime);
         setInterval(gh_analyzeTime, 60000);
     }
+	/**
+ * Generates appropriate Mermaid diagrams based on the context
+ * @param {Object} planData - The response data from the API
+ * @param {string} originalQuery - The user's original question
+ * @returns {string} HTML containing the Mermaid diagram
+ */
+const generateContextualDiagram = (planData, originalQuery) => {
+    const query = originalQuery.toLowerCase();
+    const recommendation = (planData.high_level_recommendation || '').toLowerCase();
+    
+    // Check if this is a prospecting response
+    if (planData.naics_codes || planData.federal_competitors) {
+        return generateProspectingFlowDiagram();
+    }
+    
+    // Check for specific diagram triggers
+    if (query.includes('process') || query.includes('how') || query.includes('steps')) {
+        return generateProcessDiagram(planData, originalQuery);
+    }
+    
+    if (query.includes('stakeholder') || query.includes('champion') || query.includes('map')) {
+        return generateStakeholderMap(planData);
+    }
+    
+    if (query.includes('timeline') || query.includes('schedule') || query.includes('milestone')) {
+        return generateTimelineDiagram(planData);
+    }
+    
+    if (query.includes('decision') || recommendation.includes('choose') || recommendation.includes('option')) {
+        return generateDecisionTree(planData);
+    }
+    
+    // Default to a simple flow if context suggests it would be helpful
+    if (planData.coaching_plan && planData.coaching_plan.length > 3) {
+        return generateActionFlowDiagram(planData);
+    }
+    
+    return ''; // No diagram if none fit
+};
+
+/**
+ * Generates a federal sales process flow diagram
+ */
+const generateProcessDiagram = (planData, query) => {
+    const diagramCode = `
+    flowchart TD
+        A[Identify Opportunity] --> B[Research Agency/Stakeholders]
+        B --> C[Initial Outreach]
+        C --> D{Qualified?}
+        D -->|Yes| E[Build Champion]
+        D -->|No| F[Nurture/Exit]
+        E --> G[Map Stakeholders]
+        G --> H[Align to Mission]
+        H --> I[Navigate Procurement]
+        I --> J[Win & Expand]
+        
+        class A,B,C,G,H,I,J node;
+        class E highlight;
+    `;
+    
+    return createDiagramContainer(diagramCode, "Federal Sales Process Flow");
+};
+
+/**
+ * Generates a stakeholder mapping diagram
+ */
+const generateStakeholderMap = (planData) => {
+    const diagramCode = `
+    graph TB
+        EB[Economic Buyer<br/>CIO/Director]
+        TB[Technical Buyer<br/>CISO/Tech Lead]
+        CH[Champion<br/>Program Manager]
+        INF[Influencer<br/>End Users]
+        BL[Blocker<br/>Incumbent Vendor]
+        
+        EB -.->|Budget Authority| TB
+        TB -->|Technical Approval| CH
+        CH -->|Advocates| EB
+        CH -.->|Trains| INF
+        INF -.->|Feedback| TB
+        BL -.->|Resists| EB
+        BL -.->|FUD| TB
+        
+        class CH highlight;
+        class BL blocker;
+    `;
+    
+    return createDiagramContainer(diagramCode, "Stakeholder Relationship Map");
+};
+
+/**
+ * Generates a timeline/gantt diagram
+ */
+const generateTimelineDiagram = (planData) => {
+    const diagramCode = `
+    gantt
+        title Federal Sales Timeline
+        dateFormat  YYYY-MM-DD
+        section Discovery
+        Initial Research    :active, a1, 2024-01-01, 7d
+        Stakeholder Mapping :        a2, after a1, 14d
+        section Engagement
+        Champion Building   :        b1, after a2, 30d
+        Technical Validation:        b2, after b1, 21d
+        section Procurement
+        RFP Response       :crit,    c1, after b2, 14d
+        Contract Negotiation:crit,   c2, after c1, 30d
+        Award              :milestone, after c2, 0d
+    `;
+    
+    return createDiagramContainer(diagramCode, "Typical Federal Sales Timeline", "gantt");
+};
+
+/**
+ * Generates a decision tree diagram
+ */
+const generateDecisionTree = (planData) => {
+    const diagramCode = `
+    flowchart TD
+        A[Deal at Risk] --> B{Champion Status?}
+        B -->|Strong| C[Double Down]
+        B -->|Weak| D{Other Allies?}
+        B -->|Gone| E{Replacement?}
+        
+        C --> F[Expand Access]
+        D -->|Yes| G[Activate Allies]
+        D -->|No| H[Strategic Retreat]
+        E -->|Yes| I[Rebuild Relationship]
+        E -->|No| J[Exit Strategy]
+        
+        F --> K[Push for Close]
+        G --> K
+        I --> K
+        H --> L[Nurture Long-term]
+        J --> L
+        
+        class A start;
+        class K,L ending;
+    `;
+    
+    return createDiagramContainer(diagramCode, "Deal Recovery Decision Tree");
+};
+
+/**
+ * Generates a prospecting flow diagram
+ */
+const generateProspectingFlowDiagram = () => {
+    const diagramCode = `
+    flowchart TD
+        A[Market Research] --> B[Identify Agencies]
+        B --> C[Find Contract Vehicles]
+        C --> D[Map Incumbents]
+        D --> E[Identify Gaps/Pain]
+        E --> F[Target Stakeholders]
+        F --> G[Craft Outreach]
+        G --> H[Initial Contact]
+        H --> I{Response?}
+        I -->|Yes| J[Qualify]
+        I -->|No| K[Follow-up Sequence]
+        K --> H
+        
+        class A,B,C,D,E,F,G,H node;
+        class J highlight;
+    `;
+    
+    return createDiagramContainer(diagramCode, "Federal Prospecting Flow");
+};
+
+/**
+ * Generates an action flow based on coaching plan
+ */
+const generateActionFlowDiagram = (planData) => {
+    if (!planData.coaching_plan || planData.coaching_plan.length < 2) return '';
+    
+    const nodes = planData.coaching_plan.slice(0, 4).map((item, idx) => {
+        const id = String.fromCharCode(65 + idx); // A, B, C, D
+        const label = item.persona.replace(/['"]/g, '');
+        return { id, label: label.substring(0, 30) + (label.length > 30 ? '...' : '') };
+    });
+    
+    let diagramCode = 'flowchart TD\n'; // Changed from LR to TD
+    nodes.forEach((node, idx) => {
+        diagramCode += `    ${node.id}[${node.label}]`;
+        if (idx < nodes.length - 1) {
+            diagramCode += ` --> `;
+        }
+        diagramCode += '\n';
+    });
+    diagramCode += '    class ' + nodes.map(n => n.id).join(',') + ' node;';
+    
+    return createDiagramContainer(diagramCode, "Action Priority Flow");
+};
+
+/**
+ * Creates a container with the Mermaid diagram
+ */
+const createDiagramContainer = (diagramCode, title, type = "flowchart") => {
+    const uniqueId = 'mermaid-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    
+    return `
+        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm mt-6">
+            <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                </svg>
+                ${title}
+            </h3>
+            <div class="mermaid" id="${uniqueId}">
+                ${diagramCode}
+            </div>
+        </div>
+    `;
+};
+
+/**
+ * Initializes Mermaid diagrams after they're added to the DOM
+ */
+const initializeMermaidDiagrams = () => {
+    if (typeof window.mermaid !== 'undefined') {
+        // Re-initialize mermaid for new content
+        window.mermaid.init();
+    }
+};
     </script>
-	</body>
-	</html>
+</body>
+</html>
