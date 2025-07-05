@@ -95,19 +95,25 @@
 	<script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
     window.mermaid = mermaid;
-    mermaid.initialize({ 
-        startOnLoad: true,
-        theme: 'base',
-        themeVariables: {
-            primaryColor: '#e9e5f5',
-            primaryTextColor: '#31255e',
-            primaryBorderColor: '#523f9e',
-            lineColor: '#7465b1',
-            secondaryColor: '#f3f4f6',
-            tertiaryColor: '#e5e7eb',
-            fontFamily: 'Inter, sans-serif'
+    // This is the NEW, updated code
+mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+        primaryColor: '#e9e5f5',       // Lightest purple for regular nodes
+        primaryTextColor: '#31255e',      // Darkest purple for text
+        primaryBorderColor: '#523f9e',  // Main brand purple for borders
+        lineColor: '#7465b1',           // Mid-purple for lines
+        secondaryColor: '#f3f4f6',      // A light gray
+        tertiaryColor: '#e9e5f5'
+    },
+    // This new section defines custom styles for specific classes
+    flowchart: {
+        classDef: {
+            'highlight': 'fill:#7465b1,stroke:#31255e,stroke-width:2px,color:#ffffff'
         }
-    });
+    }
+});
 </script>
     <style>
         /* Critical CSS inlined for faster rendering */
@@ -248,17 +254,6 @@
             stroke: #523f9e !important;
             stroke-width: 2px !important;
         }
-       
-.mermaid .node.highlight rect,
-.mermaid .node.highlight circle,
-.mermaid .node.highlight ellipse {
-    fill: #7465b1 !important; /* A lighter purple from your palette */
-    stroke: #31255e !important;
-}
-
-.mermaid .node.highlight text {
-    fill: #ffffff !important; /* Keep text white for contrast */
-}
         
         .mermaid .edgeLabel {
             background-color: white !important;
