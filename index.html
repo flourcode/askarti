@@ -92,6 +92,23 @@
             }
         }
     </script>
+	<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    window.mermaid = mermaid;
+    mermaid.initialize({ 
+        startOnLoad: true,
+        theme: 'base',
+        themeVariables: {
+            primaryColor: '#e9e5f5',
+            primaryTextColor: '#31255e',
+            primaryBorderColor: '#523f9e',
+            lineColor: '#7465b1',
+            secondaryColor: '#f3f4f6',
+            tertiaryColor: '#e5e7eb',
+            fontFamily: 'Inter, sans-serif'
+        }
+    });
+</script>
     <style>
         /* Critical CSS inlined for faster rendering */
         body {
@@ -178,6 +195,60 @@
             }
             .responsive-heading {
                 font-size: 1.1rem;
+            }
+        }
+		 /* Mermaid diagram styling */
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            background: #f9fafb;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        .mermaid svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* Custom Mermaid theme colors to match AskArti brand */
+        .mermaid .node rect,
+        .mermaid .node circle,
+        .mermaid .node ellipse,
+        .mermaid .node polygon {
+            fill: #e9e5f5 !important;
+            stroke: #523f9e !important;
+            stroke-width: 2px !important;
+        }
+        
+        .mermaid .node.highlight rect,
+        .mermaid .node.highlight circle,
+        .mermaid .node.highlight ellipse {
+            fill: #523f9e !important;
+            stroke: #31255e !important;
+        }
+        
+        .mermaid .node.highlight text {
+            fill: white !important;
+        }
+        
+        .mermaid .edgeLabel {
+            background-color: white !important;
+            padding: 0.25rem !important;
+            border-radius: 0.25rem !important;
+        }
+        
+        .mermaid .flowchart-link {
+            stroke: #7465b1 !important;
+            stroke-width: 2px !important;
+        }
+        
+        @media (max-width: 640px) {
+            .mermaid {
+                padding: 1rem;
+                font-size: 0.875rem;
             }
         }
     </style>
@@ -834,33 +905,40 @@ const displayPlan = (planData) => {
                     <div class="text-sm text-gray-700">${marked.parse(tldr)}</div>
                 </div>
                 
+                <!-- Mermaid Diagram -->
+                ${generateContextualDiagram(planData, originalSituation)}
+                
                 <!-- STANDARD SPONSOR AD - Start -->
-<div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs">
-    <div class="flex items-center gap-2">
-        <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
-        <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">FastTrack Compliance</a>
-    </div>
-    <p class="text-gray-600 text-xs mt-1">Because waiting 18 months for security clearance is so last century.</p>
-</div>
-<!-- STANDARD SPONSOR AD - End -->
+                <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
+                        <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">FastTrack Compliance</a>
+                    </div>
+                    <p class="text-gray-600 text-xs mt-1">Because waiting 18 months for security clearance is so last century.</p>
+                </div>
+                <!-- STANDARD SPONSOR AD - End -->
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">${personaCardsHTML}</div>
         </div>
 
-       <!-- STARTER SPONSOR AD - Start -->
-<div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 mt-6 text-xs">
-    <div class="flex items-center gap-2">
-        <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
-        <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">DeepPockets Funding</a>
-    </div>
-    <p class="text-gray-600 text-xs mt-1">We find money hiding in the couch cushions of Congress.</p>
-</div>
-<!-- STARTER SPONSOR AD - End -->
+        <!-- STARTER SPONSOR AD - Start -->
+        <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 mt-6 text-xs">
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
+                <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">DeepPockets Funding</a>
+            </div>
+            <p class="text-gray-600 text-xs mt-1">We find money hiding in the couch cushions of Congress.</p>
+        </div>
+        <!-- STARTER SPONSOR AD - End -->
 
         <div class="mt-8 flex flex-col sm:flex-row gap-3">
             <button id="copy-btn" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" /><path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" /></svg>Copy Plan</button>
             <button id="reset-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl border border-gray-200 transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>Start Over</button>
-        </div>`;
+        </div>
+        
+        <!-- Smart Follow-Ups -->
+        ${generateSmartFollowUps(planData, originalSituation)}
+    `;
             
     // Set up event listeners for dynamically created elements
     document.getElementById('reset-btn').addEventListener('click', resetForm);
@@ -868,8 +946,13 @@ const displayPlan = (planData) => {
     document.querySelectorAll('.copy-snippet-btn').forEach(btn => {
         btn.addEventListener('click', copySnippet);
     });
+    
+    // Initialize Mermaid diagrams
+    setTimeout(() => {
+        initializeMermaidDiagrams();
+    }, 100);
 };
-    const copyPlanToClipboard = () => {
+	const copyPlanToClipboard = () => {
     const planContainer = document.getElementById('coaching-plan-container');
     if (!planContainer) return;
 
@@ -988,7 +1071,6 @@ const displayProspectingResults = (prospectData) => {
         market_insights 
     } = prospectData;
     
-    // The rest of the function remains the same, but is now safe from errors.
     resultsContainer.innerHTML = `
         <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs">
             <div class="flex items-center gap-2">
@@ -1004,6 +1086,9 @@ const displayProspectingResults = (prospectData) => {
                 <div class="text-gray-800">${marked.parse(summary || '')}</div>
                 <div class="clear-both"></div>
             </div>
+            
+            <!-- Mermaid Diagram -->
+            ${generateContextualDiagram(prospectData, originalSituation)}
             
             ${company_capabilities.length > 0 ? `
             <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
@@ -1053,6 +1138,7 @@ const displayProspectingResults = (prospectData) => {
                 </div>
                 <p class="text-gray-600 text-xs mt-1">Finally, a contractor who emails instead of sending carrier pigeons.</p>
             </div>
+            
             ${federal_competitors.length > 0 ? `
             <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
                 <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
@@ -1111,6 +1197,7 @@ const displayProspectingResults = (prospectData) => {
                 </div>
                 <p class="text-gray-600 text-xs mt-1">We translate government requirements from ancient hieroglyphics to English.</p>
             </div>
+            
             <div class="mt-6 flex flex-col sm:flex-row gap-3">
                 <button id="copy-prospecting-btn" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -1125,10 +1212,18 @@ const displayProspectingResults = (prospectData) => {
                     Start Over
                 </button>
             </div>
+            
+            <!-- Smart Follow-Ups -->
+            ${generateSmartFollowUps(prospectData, originalSituation)}
         </div>`;
     
     document.getElementById('reset-btn').addEventListener('click', resetForm);
     document.getElementById('copy-prospecting-btn').addEventListener('click', copyProspectingResults);
+    
+    // Initialize Mermaid diagrams
+    setTimeout(() => {
+        initializeMermaidDiagrams();
+    }, 100);
 };
 
     const resetForm = () => {
@@ -1450,7 +1545,229 @@ const displayProspectingResults = (prospectData) => {
         gh_timezoneSelect.addEventListener('change', gh_analyzeTime);
         setInterval(gh_analyzeTime, 60000);
     }
-	
+	/**
+ * Generates appropriate Mermaid diagrams based on the context
+ * @param {Object} planData - The response data from the API
+ * @param {string} originalQuery - The user's original question
+ * @returns {string} HTML containing the Mermaid diagram
+ */
+const generateContextualDiagram = (planData, originalQuery) => {
+    const query = originalQuery.toLowerCase();
+    const recommendation = (planData.high_level_recommendation || '').toLowerCase();
+    
+    // Check if this is a prospecting response
+    if (planData.naics_codes || planData.federal_competitors) {
+        return generateProspectingFlowDiagram();
+    }
+    
+    // Check for specific diagram triggers
+    if (query.includes('process') || query.includes('how') || query.includes('steps')) {
+        return generateProcessDiagram(planData, originalQuery);
+    }
+    
+    if (query.includes('stakeholder') || query.includes('champion') || query.includes('map')) {
+        return generateStakeholderMap(planData);
+    }
+    
+    if (query.includes('timeline') || query.includes('schedule') || query.includes('milestone')) {
+        return generateTimelineDiagram(planData);
+    }
+    
+    if (query.includes('decision') || recommendation.includes('choose') || recommendation.includes('option')) {
+        return generateDecisionTree(planData);
+    }
+    
+    // Default to a simple flow if context suggests it would be helpful
+    if (planData.coaching_plan && planData.coaching_plan.length > 3) {
+        return generateActionFlowDiagram(planData);
+    }
+    
+    return ''; // No diagram if none fit
+};
+
+/**
+ * Generates a federal sales process flow diagram
+ */
+const generateProcessDiagram = (planData, query) => {
+    const diagramCode = `
+    flowchart LR
+        A[Identify Opportunity] --> B[Research Agency/Stakeholders]
+        B --> C[Initial Outreach]
+        C --> D{Qualified?}
+        D -->|Yes| E[Build Champion]
+        D -->|No| F[Nurture/Exit]
+        E --> G[Map Stakeholders]
+        G --> H[Align to Mission]
+        H --> I[Navigate Procurement]
+        I --> J[Win & Expand]
+        
+        class A,B,C,G,H,I,J node;
+        class E highlight;
+    `;
+    
+    return createDiagramContainer(diagramCode, "Federal Sales Process Flow");
+};
+
+/**
+ * Generates a stakeholder mapping diagram
+ */
+const generateStakeholderMap = (planData) => {
+    const diagramCode = `
+    graph TB
+        EB[Economic Buyer<br/>CIO/Director]
+        TB[Technical Buyer<br/>CISO/Tech Lead]
+        CH[Champion<br/>Program Manager]
+        INF[Influencer<br/>End Users]
+        BL[Blocker<br/>Incumbent Vendor]
+        
+        EB -.->|Budget Authority| TB
+        TB -->|Technical Approval| CH
+        CH -->|Advocates| EB
+        CH -.->|Trains| INF
+        INF -.->|Feedback| TB
+        BL -.->|Resists| EB
+        BL -.->|FUD| TB
+        
+        class CH highlight;
+        class BL blocker;
+    `;
+    
+    return createDiagramContainer(diagramCode, "Stakeholder Relationship Map");
+};
+
+/**
+ * Generates a timeline/gantt diagram
+ */
+const generateTimelineDiagram = (planData) => {
+    const diagramCode = `
+    gantt
+        title Federal Sales Timeline
+        dateFormat  YYYY-MM-DD
+        section Discovery
+        Initial Research    :active, a1, 2024-01-01, 7d
+        Stakeholder Mapping :        a2, after a1, 14d
+        section Engagement
+        Champion Building   :        b1, after a2, 30d
+        Technical Validation:        b2, after b1, 21d
+        section Procurement
+        RFP Response       :crit,    c1, after b2, 14d
+        Contract Negotiation:crit,   c2, after c1, 30d
+        Award              :milestone, after c2, 0d
+    `;
+    
+    return createDiagramContainer(diagramCode, "Typical Federal Sales Timeline", "gantt");
+};
+
+/**
+ * Generates a decision tree diagram
+ */
+const generateDecisionTree = (planData) => {
+    const diagramCode = `
+    flowchart TD
+        A[Deal at Risk] --> B{Champion Status?}
+        B -->|Strong| C[Double Down]
+        B -->|Weak| D{Other Allies?}
+        B -->|Gone| E{Replacement?}
+        
+        C --> F[Expand Access]
+        D -->|Yes| G[Activate Allies]
+        D -->|No| H[Strategic Retreat]
+        E -->|Yes| I[Rebuild Relationship]
+        E -->|No| J[Exit Strategy]
+        
+        F --> K[Push for Close]
+        G --> K
+        I --> K
+        H --> L[Nurture Long-term]
+        J --> L
+        
+        class A start;
+        class K,L ending;
+    `;
+    
+    return createDiagramContainer(diagramCode, "Deal Recovery Decision Tree");
+};
+
+/**
+ * Generates a prospecting flow diagram
+ */
+const generateProspectingFlowDiagram = () => {
+    const diagramCode = `
+    flowchart TD
+        A[Market Research] --> B[Identify Agencies]
+        B --> C[Find Contract Vehicles]
+        C --> D[Map Incumbents]
+        D --> E[Identify Gaps/Pain]
+        E --> F[Target Stakeholders]
+        F --> G[Craft Outreach]
+        G --> H[Initial Contact]
+        H --> I{Response?}
+        I -->|Yes| J[Qualify]
+        I -->|No| K[Follow-up Sequence]
+        K --> H
+        
+        class A,B,C,D,E,F,G,H node;
+        class J highlight;
+    `;
+    
+    return createDiagramContainer(diagramCode, "Federal Prospecting Flow");
+};
+
+/**
+ * Generates an action flow based on coaching plan
+ */
+const generateActionFlowDiagram = (planData) => {
+    if (!planData.coaching_plan || planData.coaching_plan.length < 2) return '';
+    
+    const nodes = planData.coaching_plan.slice(0, 4).map((item, idx) => {
+        const id = String.fromCharCode(65 + idx); // A, B, C, D
+        const label = item.persona.replace(/['"]/g, '');
+        return { id, label: label.substring(0, 30) + (label.length > 30 ? '...' : '') };
+    });
+    
+    let diagramCode = 'flowchart LR\n';
+    nodes.forEach((node, idx) => {
+        diagramCode += `    ${node.id}[${node.label}]`;
+        if (idx < nodes.length - 1) {
+            diagramCode += ` --> `;
+        }
+        diagramCode += '\n';
+    });
+    diagramCode += '    class ' + nodes.map(n => n.id).join(',') + ' node;';
+    
+    return createDiagramContainer(diagramCode, "Action Priority Flow");
+};
+
+/**
+ * Creates a container with the Mermaid diagram
+ */
+const createDiagramContainer = (diagramCode, title, type = "flowchart") => {
+    const uniqueId = 'mermaid-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    
+    return `
+        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm mt-6">
+            <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                </svg>
+                ${title}
+            </h3>
+            <div class="mermaid" id="${uniqueId}">
+                ${diagramCode}
+            </div>
+        </div>
+    `;
+};
+
+/**
+ * Initializes Mermaid diagrams after they're added to the DOM
+ */
+const initializeMermaidDiagrams = () => {
+    if (typeof window.mermaid !== 'undefined') {
+        // Re-initialize mermaid for new content
+        window.mermaid.init();
+    }
+};
     </script>
 </body>
 </html>
