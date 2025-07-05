@@ -1533,26 +1533,28 @@ const handleApiError = (error) => {
         return createDiagramContainer(diagramCode, "Stakeholder Relationship Map");
     };
     
-    // Generate a timeline diagram
     const generateTimelineDiagram = () => {
-        const diagramCode = `
-        gantt
-            title Federal Sales Timeline
-            dateFormat  YYYY-MM-DD
-            section Discovery
-            Initial Research    :active, a1, 2024-01-01, 7d
-            Stakeholder Mapping :        a2, after a1, 14d
-            section Engagement
-            Champion Building   :        b1, after a2, 30d
-            Technical Validation:        b2, after b1, 21d
-            section Procurement
-            RFP Response       :crit,    c1, after b2, 14d
-            Contract Negotiation:crit,   c2, after c1, 30d
-            Award              :milestone, after c2, 0d
-        `;
+    return `
+    gantt
+        title Federal Sales Timeline
+        dateFormat  YYYY-MM-DD
+        axisFormat %b
+        tickInterval 1month
         
-        return createDiagramContainer(diagramCode, "Typical Federal Sales Timeline", "gantt");
-    };
+        section Discovery
+        Initial Research    :a1, 2024-01-01, 30d
+        Stakeholder Mapping :a2, after a1, 45d
+        
+        section Engagement
+        Champion Building   :b1, after a2, 60d
+        Technical Validation:b2, after b1, 45d
+        
+        section Procurement
+        RFP Response       :crit, c1, after b2, 30d
+        Contract Negotiation:crit, c2, after c1, 45d
+        Award              :milestone, after c2, 0d
+    `;
+};
     
     // Generate a decision tree
     const generateDecisionTree = () => {
