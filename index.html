@@ -330,99 +330,99 @@
     };
 
     // Display advice
-    const displayAdvice = (data) => {
-        const { response_type, quick_take, key_moves, talking_points, email_template, next_steps } = data;
+const displayAdvice = (data) => {
+    const { response_type, quick_take, key_moves, talking_points, email_template, next_steps } = data;
 
-        // Determine response type styling
-        const typeStyles = {
-            deal: { label: 'Deal Strategy', class: 'type-deal' },
-            meeting: { label: 'Meeting Prep', class: 'type-meeting' },
-            prospect: { label: 'Prospecting Intel', class: 'type-prospect' },
-            interview: { label: 'Interview Prep', class: 'type-interview' }
-        };
-        const typeStyle = typeStyles[response_type] || typeStyles.deal;
-
-        let html = `
-            <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 rounded-xl p-6 mb-6 border border-customPurple-100/50 flow-root">
-    <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
-    <div>
-        <div class="flex items-center gap-2 mb-2">
-            <h3 class="text-lg font-bold text-customPurple-900">Here's what I'd do</h3>
-        </div>
-        <div class="text-gray-800 space-y-2">${marked.parse(quick_take || '')}</div>
-    </div>
-
-</div>
-
-            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
-                <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <span class="text-2xl">🎯</span> Your Next 3 Moves
-                </h3>
-                <div class="space-y-3">
-                    ${(key_moves || []).map((move, i) => `
-                        <div class="flex gap-3">
-                            <span class="flex-shrink-0 w-7 h-7 bg-customPurple-100 text-customPurple-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span>
-                            <div class="flex-1">
-                                <p class="font-medium text-gray-900">${move.action}</p>
-                                <p class="text-sm text-gray-600 mt-1">${move.why}</p>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-
-            ${talking_points && talking_points.length > 0 ? `
-            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
-                <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <span class="text-2xl">💬</span> What to Say
-                </h3>
-                <ul class="space-y-2">
-                    ${talking_points.map(point => `
-                        <li class="flex items-start gap-2">
-                            <svg class="w-5 h-5 text-customPurple-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                            </svg>
-                            <span class="text-gray-700">${point}</span>
-                        </li>
-                    `).join('')}
-                </ul>
-            </div>
-            ` : ''}
-
-            ${email_template ? `
-            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
-                <div class="flex justify-between items-start mb-4">
-                    <h3 class="font-bold text-gray-900 flex items-center gap-2">
-                        <span class="text-2xl">📧</span> Email Template
-                    </h3>
-                    <button onclick="copyEmail()" class="text-customPurple-500 hover:text-customPurple-700 text-sm font-medium">
-                        Copy
-                    </button>
-                </div>
-                <div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap" id="email-content">${email_template}</div>
-            </div>
-            ` : ''}
-
-            ${next_steps ? `
-            <div class="bg-customPurple-100/20 rounded-xl border border-customPurple-100/40 p-6">
-                <h3 class="font-bold text-customPurple-900 mb-2">Remember:</h3>
-                <p class="text-customPurple-800">${next_steps}</p>
-            </div>
-            ` : ''}
-
-            <div class="mt-8 flex flex-col sm:flex-row gap-3">
-                <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
-                    Copy Everything
-                </button>
-                <button onclick="startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">
-                    Ask Another Question
-                </button>
-            </div>
-        `;
-
-        resultsContainer.innerHTML = html;
-        resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Determine response type styling
+    const typeStyles = {
+        deal: { label: 'Deal Strategy', class: 'type-deal' },
+        meeting: { label: 'Meeting Prep', class: 'type-meeting' },
+        prospect: { label: 'Prospecting Intel', class: 'type-prospect' },
+        interview: { label: 'Interview Prep', class: 'type-interview' }
     };
+    const typeStyle = typeStyles[response_type] || typeStyles.deal;
+
+    let html = `
+        <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 rounded-xl p-6 mb-6 border border-customPurple-100/50 flow-root">
+            <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
+            <div>
+                <div class="flex items-center gap-2 mb-2">
+                    <h3 class="text-lg font-bold text-customPurple-900">Here's what I'd do</h3>
+                    <span class="response-type ${typeStyle.class}">${typeStyle.label}</span>
+                </div>
+                <div class="text-gray-800 space-y-2">${marked.parse(quick_take || '')}</div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
+            <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <span class="text-2xl">🎯</span> Your Next 3 Moves
+            </h3>
+            <div class="space-y-3">
+                ${(key_moves || []).map((move, i) => `
+                    <div class="flex gap-3">
+                        <span class="flex-shrink-0 w-7 h-7 bg-customPurple-100 text-customPurple-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span>
+                        <div class="flex-1">
+                            <p class="font-medium text-gray-900">${move.action}</p>
+                            <p class="text-sm text-gray-600 mt-1">${move.why}</p>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+
+        ${talking_points && talking_points.length > 0 ? `
+        <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
+            <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <span class="text-2xl">💬</span> What to Say
+            </h3>
+            <ul class="space-y-2">
+                ${talking_points.map(point => `
+                    <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-customPurple-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="text-gray-700">${point}</span>
+                    </li>
+                `).join('')}
+            </ul>
+        </div>
+        ` : ''}
+
+        ${email_template ? `
+        <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
+            <div class="flex justify-between items-start mb-4">
+                <h3 class="font-bold text-gray-900 flex items-center gap-2">
+                    <span class="text-2xl">📧</span> Email Template
+                </h3>
+                <button onclick="copyEmail()" class="text-customPurple-500 hover:text-customPurple-700 text-sm font-medium">
+                    Copy
+                </button>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap" id="email-content">${email_template}</div>
+        </div>
+        ` : ''}
+
+        ${next_steps ? `
+        <div class="bg-customPurple-100/20 rounded-xl border border-customPurple-100/40 p-6">
+            <h3 class="font-bold text-customPurple-900 mb-2">Remember:</h3>
+            <p class="text-customPurple-800">${next_steps}</p>
+        </div>
+        ` : ''}
+
+        <div class="mt-8 flex flex-col sm:flex-row gap-3">
+            <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                Copy Everything
+            </button>
+            <button onclick="startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">
+                Ask Another Question
+            </button>
+        </div>
+    `;
+
+    resultsContainer.innerHTML = html;
+    resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
 
     // Helper functions
     window.copyEmail = () => {
