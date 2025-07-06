@@ -37,6 +37,7 @@
     <link rel="preload" href="/images/arti_right.png" as="image">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WLGEPY5H4G"></script>
@@ -129,14 +130,12 @@
 </head>
 <body class="bg-gray-50 text-gray-900">
     <div class="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-20">
-        <!-- Header -->
         <header class="text-center mb-4">
             <a href="/" aria-label="AskArti Home" class="inline-block">
                 <img src="/images/asklite.png" alt="AskArti" class="h-16 w-auto md:h-20 lg:h-24">
             </a>
         </header>
 
-        <!-- Main Input Section -->
         <main class="bg-white rounded-xl border border-gray-200 p-6 mb-3 shadow-sm">
             <div class="mb-4">
                 <label for="situation-input" class="block text-lg font-semibold text-gray-900 mb-2 text-center">
@@ -149,7 +148,6 @@
                     placeholder="Champion ghosted me after seeing pricing. $2M deal at DHS. Q4 commit."></textarea>
             </div>
 
-            <!-- Quick Prompts - More Realistic -->
             <div class="flex flex-wrap gap-2 justify-center mb-4">
                 <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
                         data-text="My champion at VA went dark after I sent our SOW. It's a $1.5M cloud migration deal. The CISO loves our competitor and I think he's poisoning the well. Q4 is shot if I lose this.">
@@ -173,7 +171,6 @@
                 </button>
             </div>
 
-            <!-- Ask Button -->
             <div class="text-center">
                 <button id="ask-btn" class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-semibold py-3 px-8 rounded-full transition-all inline-flex items-center gap-2 shadow-lg hover:shadow-xl">
                     <span id="btn-text">Ask Arti</span>
@@ -182,10 +179,8 @@
             </div>
         </main>
 
-        <!-- Results Container -->
         <div id="results-container" class="fade-in"></div>
 
-        <!-- Footer - Simplified -->
         <footer class="text-center mt-12 space-y-4">
             <div class="flex justify-center gap-6 text-sm">
                 <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">About</button>
@@ -204,7 +199,6 @@
         </footer>
     </div>
 
-    <!-- About Modal - Simplified -->
     <div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
             <div class="flex justify-between items-start mb-4">
@@ -245,6 +239,10 @@
     
     // Define loading interval variable in a broader scope
     let loadingInterval;
+
+    // 2. INITIALIZE MERMAID.JS
+    // We set startOnLoad to false to control rendering manually
+    mermaid.initialize({ startOnLoad: false });
 
     // Quick prompt handling
     document.querySelectorAll('.quick-prompt').forEach(btn => {
@@ -330,8 +328,9 @@
     };
 
 // Display advice
-const displayAdvice = (data) => {
-    const { response_type, quick_take, key_moves, talking_points, email_template, next_steps } = data;
+const displayAdvice = async (data) => {
+    // 3. DESTRUCTURE THE NEW MERMAID_CHART FIELD
+    const { response_type, quick_take, key_moves, mermaid_chart, talking_points, email_template, next_steps } = data;
 
     // Determine response type styling
     const typeStyles = {
@@ -370,6 +369,17 @@ const displayAdvice = (data) => {
                 `).join('')}
             </div>
         </div>
+        
+        ${mermaid_chart ? `
+        <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
+            <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <span class="text-2xl">🗺️</span> Your Game Plan
+            </h3>
+            <div class="flex justify-center text-center">
+                <pre class="mermaid">${mermaid_chart}</pre>
+            </div>
+        </div>
+        ` : ''}
 
         ${talking_points && talking_points.length > 0 ? `
         <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
@@ -422,6 +432,13 @@ const displayAdvice = (data) => {
 
     resultsContainer.innerHTML = html;
     resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // 5. RENDER THE MERMAID CHART
+    try {
+        await mermaid.run();
+    } catch (e) {
+        console.error("Mermaid chart rendering error:", e);
+    }
 };
 
     // Helper functions
