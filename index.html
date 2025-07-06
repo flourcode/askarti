@@ -55,8 +55,8 @@
                     colors: {
                         primary: '#523f9e',
                         customPurple: {
-                            100: '#978bc4',
-                            200: '#7465b1',
+                            100: '#f4f2fa',
+                            200: '#e9e5f5',
                             500: '#523f9e',
                             700: '#41327e',
                             900: '#31255e'
@@ -67,10 +67,7 @@
         }
     </script>
     <style>
-        /* Critical CSS */
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
+        body { font-family: 'Inter', sans-serif; }
         .loader {
             border: 2px solid #e5e7eb;
             border-top: 2px solid #523f9e;
@@ -83,62 +80,32 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        /* Response type pills */
-        .response-type {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .type-deal { background-color: #e9e5f5; color: #523f9e; }
-        .type-meeting { background-color: #fef3c7; color: #92400e; }
-        .type-prospect { background-color: #dbeafe; color: #1e40af; }
-        .type-interview { background-color: #d1fae5; color: #065f46; }
-        /* Smooth transitions */
-        .fade-in {
-            animation: fadeIn 0.3s ease-in;
-        }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        /* Action card hover */
-        .action-card {
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-        .action-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-        /* Quick prompt buttons */
-        .quick-prompt {
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
         .quick-prompt:hover {
             background-color: rgba(82, 63, 158, 0.1);
-            transform: scale(1.05);
+            transform: scale(1.02);
+        }
+        
+        /* --- NEW TAB STYLES --- */
+        .tab-button {
+            transition: all 0.2s ease-in-out;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-button.active {
+            color: #523f9e;
+            border-bottom-color: #523f9e;
+            font-weight: 600;
         }
 
-       .mermaid {
-            width: 100%;
-            display: center;
-        }
-        .mermaid > div {
-            width: 100% !important;
-            max-width: 100% !important;
-        }
-        .mermaid svg {
-            width: 100% !important;
-            height: auto !important;
-        }
-        @media (max-width: 640px) {
-            .response-type { font-size: 0.625rem; padding: 0.2rem 0.5rem; }
-        }
+        /* --- Mermaid Chart Sizing & Centering --- */
+        .mermaid-container { text-align: center; }
+        .mermaid { display: inline-block; }
+        .mermaid svg { max-width: 100%; height: auto; }
+        .mermaid > div { width: 100%; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
@@ -162,17 +129,13 @@
             </div>
 
             <div class="flex flex-wrap gap-2 justify-center mb-4">
-                <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
+                 <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
                         data-text="My champion at VA went dark after I sent our SOW. It's a $1.5M cloud migration deal. The CISO loves our competitor and I think he's poisoning the well. Q4 is shot if I lose this.">
                     Champion went dark
                 </button>
                 <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
                         data-text="Our demo crashed during the technical evaluation at DOJ. The whole team saw it fail. My champion looks like an idiot and the lead engineer called our solution 'vaporware'. This was supposed to close this quarter.">
                     Demo crashed
-                </button>
-                <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
-                        data-text="Our Large SI Partner is asking for deeper discounts on a DHS deal but not passing savings on to government. Government knows they're overcharging. SI threatening to go with a competitor. My DHS team wants to go around the SI but my Partner team is saying SI owns the contract and we can't go direct or around them. How can I make everyone work together and save the deal?">
-                    Partner drama
                 </button>
                 <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
                         data-text="Final interview at AWS for Fed Account Exec role next week. Need to learn about the Amazon Leadership Principles and prep STAR stories about closing complex deals and handling technical objections. What should I emphasize?">
@@ -192,7 +155,7 @@
             </div>
         </main>
 
-        <div id="results-container" class="fade-in"></div>
+        <div id="results-container"></div>
 
         <footer class="text-center mt-12 space-y-4">
             <div class="flex justify-center gap-6 text-sm">
@@ -217,9 +180,7 @@
             <div class="flex justify-between items-start mb-4">
                 <h2 class="text-xl font-bold text-gray-900">Hey, I'm Mark</h2>
                 <button id="close-about" class="text-gray-400 hover:text-gray-600">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
             </div>
             <div class="space-y-4 text-gray-700">
@@ -227,8 +188,7 @@
                 <p>I built AskArti to help federal sales people get comfortable using AI to better support their customers.</p>
                 <p>Arti can make mistakes but is available 24/7 when you can't sleep and need someone to talk through a deal blocker.</p>
                 <div class="pt-4 border-t">
-                    <a href="https://calendly.com/markflournoy/30min" target="_blank" 
-                       class="block w-full bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-lg text-center transition-colors">
+                    <a href="https://calendly.com/markflournoy/30min" target="_blank" class="block w-full bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-lg text-center transition-colors">
                         Rather talk to a real person about Fed Sales? Let's chat →
                     </a>
                 </div>
@@ -237,7 +197,6 @@
     </div>
 
 <script>
-    // DOM Elements
     const situationInput = document.getElementById('situation-input');
     const askBtn = document.getElementById('ask-btn');
     const btnText = document.getElementById('btn-text');
@@ -254,15 +213,25 @@
 
     mermaid.initialize({ startOnLoad: false });
 
-    // Quick prompt handling
-    document.querySelectorAll('.quick-prompt').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            situationInput.value = e.target.dataset.text;
-            askBtn.click();
-        });
-    });
+    const setupTabs = () => {
+        const tabLists = document.querySelectorAll('[role="tablist"]');
+        tabLists.forEach(tabList => {
+            const tabs = tabList.querySelectorAll('[role="tab"]');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const parent = tab.closest('.tab-container');
+                    const targetPanel = parent.querySelector(`#${tab.getAttribute('aria-controls')}`);
 
-    // Show/hide loader
+                    parent.querySelectorAll('[role="tab"]').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    parent.querySelectorAll('[role="tabpanel"]').forEach(p => p.classList.add('hidden'));
+                    targetPanel.classList.remove('hidden');
+                });
+            });
+        });
+    };
+
     const setLoading = (loading) => {
         btnText.style.display = loading ? 'none' : 'inline';
         loader.style.display = loading ? 'block' : 'none';
@@ -272,40 +241,20 @@
     const getAdvice = async () => {
         const situation = situationInput.value.trim();
         if (!situation) {
-            resultsContainer.innerHTML = `
-                <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
-                    <p class="text-red-700 font-medium">Drop your situation in the box above 👆</p>
-                </div>`;
+            resultsContainer.innerHTML = `<div class="bg-red-50 border border-red-200 rounded-lg p-4 text-center"><p class="text-red-700 font-medium">Drop your situation in the box above 👆</p></div>`;
             return;
         }
 
         setLoading(true);
-
-        const loadingMessages = [
-            "Hang on. I'm...Working Backwards",
-            "...Diving Deep",
-            "...Unpacking This",
-            "...Putting a Pin in it",
-            "...Circling Back",
-            "...Thinking Big"
-        ];
+        const loadingMessages = ["Hang on. I'm...Working Backwards", "...Diving Deep", "...Unpacking This", "...Putting a Pin in it", "...Circling Back", "...Thinking Big"];
         let loadingStage = 0;
-
-        resultsContainer.innerHTML = `
-            <div class="text-center py-3">
-                <p id="loading-message" class="text-gray-600"></p>
-            </div>`;
-        
+        resultsContainer.innerHTML = `<div class="text-center py-3"><p id="loading-message" class="text-gray-600"></p></div>`;
         const messageEl = document.getElementById('loading-message');
-        if (messageEl) {
-            messageEl.textContent = loadingMessages[0];
-        }
+        if (messageEl) { messageEl.textContent = loadingMessages[0]; }
 
         loadingInterval = setInterval(() => {
             loadingStage = (loadingStage + 1) % loadingMessages.length;
-            if (messageEl) {
-                messageEl.textContent = loadingMessages[loadingStage];
-            }
+            if (messageEl) { messageEl.textContent = loadingMessages[loadingStage]; }
         }, 2000);
 
         try {
@@ -314,235 +263,136 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ situation })
             });
-
             if (!response.ok) throw new Error('API Error');
-            
             const data = await response.json();
             displayAdvice(data);
         } catch (error) {
             console.error('Error:', error);
-            resultsContainer.innerHTML = `
-                <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-                    <p class="text-red-700 font-medium mb-2">Couldn't connect to Arti</p>
-                    <p class="text-red-600 text-sm">Try again in a second</p>
-                </div>`;
+            resultsContainer.innerHTML = `<div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center"><p class="text-red-700 font-medium mb-2">Couldn't connect to Arti</p><p class="text-red-600 text-sm">Try again in a second</p></div>`;
         } finally {
             clearInterval(loadingInterval);
             setLoading(false);
         }
     };
 
-const displayAdvice = async (data) => {
-    const { response_type } = data;
+    const displayAdvice = async (data) => {
+        const { response_type } = data;
+        let html = '';
 
-    let html = '';
-
-    if (response_type === 'prospect') {
-        // --- NEW RENDER LOGIC FOR PROSPECTING ---
-        const {
-            summary,
-            company_capabilities,
-            naics_codes,
-            federal_competitors,
-            prime_contractors,
-            prospect_recommendations,
-            market_insights
-        } = data;
-
-        html = `
-            <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 rounded-xl p-6 mb-6 border border-customPurple-100/50">
-                <div class="flex items-start gap-4">
-                    <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 flex-shrink-0">
-                    <div>
-                        <h3 class="text-lg font-bold text-customPurple-900 mb-2">Intelligence Briefing</h3>
-                        <div class="text-gray-800 space-y-2">${marked.parse(summary || '')}</div>
+        if (response_type === 'prospect') {
+            const { summary, company_capabilities, naics_codes, federal_competitors, prime_contractors, prospect_recommendations, market_insights } = data;
+            html = `
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-1 tab-container fade-in">
+                <div class="border-b border-gray-200" role="tablist">
+                    <div class="flex space-x-4 px-6">
+                        <button role="tab" class="tab-button active py-3 px-1" aria-controls="panel-briefing">Briefing</button>
+                        <button role="tab" class="tab-button py-3 px-1" aria-controls="panel-competitors">Competitors</button>
+                        <button role="tab" class="tab-button py-3 px-1" aria-controls="panel-partners">Partners</button>
+                        <button role="tab" class="tab-button py-3 px-1" aria-controls="panel-plan">Action Plan</button>
                     </div>
                 </div>
-            </div>
 
-            <div class="grid md:grid-cols-2 gap-6 mb-6">
-                <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                    <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">Capabilities</h3>
-                    <ul class="space-y-2">
-                        ${(company_capabilities || []).map(cap => `
-                            <li class="flex items-start gap-2"><span class="text-customPurple-500 mt-1">✓</span><span>${cap}</span></li>
-                        `).join('')}
-                    </ul>
-                </div>
-                <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                    <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">Relevant NAICS Codes</h3>
-                    <ul class="space-y-2">
-                        ${(naics_codes || []).map(code => `
-                             <li class="flex items-start gap-2"><span class="text-customPurple-500 mt-1">✓</span><span>${code}</span></li>
-                        `).join('')}
-                    </ul>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
-                <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">Federal Competitors</h3>
-                <div class="space-y-4">
-                    ${(federal_competitors || []).map(comp => `
-                        <div class="border-b border-gray-100 pb-3 last:border-b-0">
-                            <p class="font-semibold text-gray-800">${comp.company}</p>
-                            <p class="text-sm text-gray-600 mt-1">${comp.strengths}</p>
-                            <p class="text-xs text-gray-500 mt-2"><b>Vehicles:</b> ${comp.contract_vehicles || 'N/A'}</p>
+                <div class="p-6">
+                    <div role="tabpanel" id="panel-briefing">
+                        <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 rounded-lg p-6">
+                            <h3 class="font-bold text-customPurple-900 mb-2 text-lg">Intelligence Summary</h3>
+                            <div class="text-gray-800 space-y-2">${marked.parse(summary || '')}</div>
                         </div>
-                    `).join('')}
-                </div>
-            </div>
-            
-            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
-                <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">Potential Prime Contractors</h3>
-                 <div class="space-y-4">
-                    ${(prime_contractors || []).map(prime => `
-                        <div class="border-b border-gray-100 pb-3 last:border-b-0">
-                            <p class="font-semibold text-gray-800">${prime.company}</p>
-                            <p class="text-sm text-gray-600 mt-1">${prime.relationship}</p>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-6 mb-6">
-                <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                    <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">Recommendations</h3>
-                    <ul class="space-y-2">
-                        ${(prospect_recommendations || []).map(rec => `
-                            <li class="flex items-start gap-2"><span class="text-green-500 mt-1">→</span><span>${rec}</span></li>
-                        `).join('')}
-                    </ul>
-                </div>
-                <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                    <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">Key Insight</h3>
-                    <p class="text-gray-700">${market_insights || ''}</p>
-                </div>
-            </div>
-        `;
-    } else {
-        // --- EXISTING RENDER LOGIC FOR OTHER TYPES ---
-        const { quick_take, key_moves, mermaid_chart, talking_points, email_template, next_steps } = data;
-        const typeStyle = { deal: { label: 'Deal Strategy', class: 'type-deal' }, meeting: { label: 'Meeting Prep', class: 'type-meeting' }, prospect: { label: 'Prospecting Intel', class: 'type-prospect' }, interview: { label: 'Interview Prep', class: 'type-interview' } }[response_type] || { label: 'Deal Strategy', class: 'type-deal' };
-
-        html = `
-            <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 rounded-xl p-6 mb-6 border border-customPurple-100/50 flow-root">
-                <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
-                <div>
-                    <div class="flex items-center gap-2 mb-2">
-                        <h3 class="text-lg font-bold text-customPurple-900">Here's what I'd do</h3>
-                        <span class="response-type ${typeStyle.class} hidden">${typeStyle.label}</span>
-                    </div>
-                    <div class="text-gray-800 space-y-2">${marked.parse(quick_take || '')}</div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
-                <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    Your Next 3 Moves
-                </h3>
-                <div class="space-y-3">
-                    ${(key_moves || []).map((move, i) => `
-                        <div class="flex gap-3">
-                            <span class="flex-shrink-0 w-7 h-7 bg-customPurple-100 text-customPurple-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span>
-                            <div class="flex-1">
-                                <p class="font-medium text-gray-900">${move.action}</p>
-                                <p class="text-sm text-gray-600 mt-1">${move.why}</p>
+                        <div class="grid md:grid-cols-2 gap-6 mt-6">
+                            <div>
+                                <h4 class="font-semibold text-gray-800 mb-3">Relevant Capabilities</h4>
+                                <ul class="space-y-2 text-sm">${(company_capabilities || []).map(c => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800 mb-3">NAICS Codes</h4>
+                                <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${n}</li>`).join('')}</ul>
                             </div>
                         </div>
-                    `).join('')}
+                    </div>
+                    <div role="tabpanel" id="panel-competitors" class="hidden">
+                        <div class="space-y-4">${(federal_competitors || []).map(c => `<div class="border-b border-gray-100 pb-3 last:border-b-0"><p class="font-semibold text-gray-800">${c.company}</p><p class="text-sm text-gray-600 mt-1">${c.strengths}</p><p class="text-xs text-gray-500 mt-2"><b>Vehicles:</b> ${c.contract_vehicles || 'N/A'}</p></div>`).join('')}</div>
+                    </div>
+                    <div role="tabpanel" id="panel-partners" class="hidden">
+                        <div class="space-y-4">${(prime_contractors || []).map(p => `<div class="border-b border-gray-100 pb-3 last:border-b-0"><p class="font-semibold text-gray-800">${p.company}</p><p class="text-sm text-gray-600 mt-1">${p.relationship}</p></div>`).join('')}</div>
+                    </div>
+                    <div role="tabpanel" id="panel-plan" class="hidden">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-semibold text-gray-800 mb-3">Recommendations</h4>
+                                <ul class="space-y-2 text-sm">${(prospect_recommendations || []).map(r => `<li class="flex gap-2"><span class="text-customPurple-500 font-bold flex-shrink-0 mt-1">→</span><span>${r}</span></li>`).join('')}</ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800 mb-3">Key Market Insight</h4>
+                                <p class="text-sm text-gray-700">${market_insights || 'N/A'}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            
-            ${mermaid_chart ? `
-            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
-                <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    Motion Map
-                </h3>
-                <div class="text-center">
-                    <pre class="mermaid inline-block">${mermaid_chart}</pre>
+            </div>`;
+        } else {
+            const { quick_take, key_moves, mermaid_chart, talking_points, email_template, next_steps } = data;
+            html = `
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-1 tab-container fade-in">
+                <div class="border-b border-gray-200" role="tablist">
+                    <div class="flex space-x-4 px-6">
+                        <button role="tab" class="tab-button active py-3 px-1" aria-controls="panel-quick-take">Quick Take</button>
+                        <button role="tab" class="tab-button py-3 px-1" aria-controls="panel-game-plan">Game Plan</button>
+                        <button role="tab" class="tab-button py-3 px-1" aria-controls="panel-comms">Communications</button>
+                    </div>
                 </div>
-            </div>
-            ` : ''}
 
-            ${talking_points && talking_points.length > 0 ? `
-            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
-                <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    What to Say
-                </h3>
-                <ul class="space-y-2">
-                    ${talking_points.map(point => `
-                        <li class="flex items-start gap-2">
-                            <svg class="w-5 h-5 text-customPurple-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                            </svg>
-                            <span class="text-gray-700">${point}</span>
-                        </li>
-                    `).join('')}
-                </ul>
-            </div>
-            ` : ''}
+                <div class="p-6">
+                    <div role="tabpanel" id="panel-quick-take">
+                        <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 rounded-lg p-6 flow-root">
+                            <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
+                            <div class="text-gray-800 space-y-2">${marked.parse(quick_take || '')}</div>
+                        </div>
+                        ${next_steps ? `<div class="mt-4 bg-customPurple-100/40 p-4 rounded-lg text-sm text-customPurple-900"><b class="font-semibold">Remember:</b> ${next_steps}</div>` : ''}
+                    </div>
 
-            ${email_template ? `
-            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
-                <div class="flex justify-between items-start mb-4">
-                    <h3 class="font-bold text-gray-900 flex items-center gap-2">
-                        Email Template
-                    </h3>
-                    <button onclick="copyEmail()" class="text-customPurple-500 hover:text-customPurple-700 text-sm font-medium">
-                        Copy
-                    </button>
+                    <div role="tabpanel" id="panel-game-plan" class="hidden">
+                         <div class="space-y-3 mb-6">${(key_moves || []).map((m, i) => `<div class="flex gap-3"><span class="flex-shrink-0 w-7 h-7 bg-customPurple-200 text-customPurple-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span><div class="flex-1"><p class="font-medium text-gray-900">${m.action}</p><p class="text-sm text-gray-600 mt-1">${m.why}</p></div></div>`).join('')}</div>
+                         ${mermaid_chart ? `<div class="mermaid-container"><pre class="mermaid">${mermaid_chart}</pre></div>` : ''}
+                    </div>
+
+                    <div role="tabpanel" id="panel-comms" class="hidden">
+                        ${talking_points && talking_points.length > 0 ? `<div class="mb-6"><h4 class="font-semibold text-gray-800 mb-3">What to Say</h4><ul class="space-y-2 text-sm">${talking_points.map(t => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${t}</li>`).join('')}</ul></div>` : ''}
+                        ${email_template ? `<div><h4 class="font-semibold text-gray-800 mb-3">Email Template</h4><div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap border">${email_template}</div></div>` : ''}
+                    </div>
                 </div>
-                <div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap" id="email-content">${email_template}</div>
-            </div>
-            ` : ''}
-
-            ${next_steps ? `
-            <div class="bg-customPurple-100/20 rounded-xl border border-customPurple-100/40 p-6">
-                <h3 class="font-bold text-customPurple-900 mb-2">Remember:</h3>
-                <p class="text-customPurple-800">${next_steps}</p>
-            </div>
-            ` : ''}
-        `;
-    }
-
-    // This block of code is now outside the conditional, so it applies to both layouts
-    html += `
-        <div class="mt-8 flex flex-col sm:flex-row gap-3">
-            <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
-                Copy Everything
-            </button>
-            <button onclick="startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">
-                Ask Another Question
-            </button>
-        </div>
-    `;
-
-    resultsContainer.innerHTML = html;
-    resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-    // Only run mermaid if a mermaid chart is expected in the layout
-    if (response_type !== 'prospect') {
-        try {
-            await mermaid.run();
-        } catch (e) {
-            console.error("Mermaid chart rendering error:", e);
+            </div>`;
         }
-    }
-};
 
-    // Helper functions
-    window.copyEmail = () => {
-        const email = document.getElementById('email-content').textContent;
-        navigator.clipboard.writeText(email);
-        alert('Email copied to clipboard!');
+        html += `
+            <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">Copy to Clipboard</button>
+                <button onclick="startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">Ask Another Question</button>
+            </div>`;
+
+        resultsContainer.innerHTML = html;
+        resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        setupTabs();
+
+        if (response_type !== 'prospect') {
+            try {
+                await mermaid.run();
+            } catch (e) {
+                console.error("Mermaid chart rendering error:", e);
+            }
+        }
     };
 
+    window.copyEmail = () => { /* This function is no longer needed with copyAll */ };
     window.copyAll = () => {
-        const content = resultsContainer.innerText;
-        navigator.clipboard.writeText(content);
-        alert('Advice copied to clipboard!');
+        const contentEl = document.getElementById('results-container');
+        // A more robust way to get text content from complex layouts
+        const textToCopy = Array.from(contentEl.querySelectorAll('[role^="tabpanel"]'))
+            .map(panel => panel.innerText)
+            .join('\n\n---\n\n');
+        navigator.clipboard.writeText(textToCopy);
+        alert('Results copied to clipboard!');
     };
-
     window.startOver = () => {
         situationInput.value = '';
         resultsContainer.innerHTML = '';
@@ -550,11 +400,9 @@ const displayAdvice = async (data) => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    // Share functionality
     shareBtn.addEventListener('click', () => {
         const text = "Just got unstuck on a federal deal with AskArti:";
         const url = "https://askarti.com";
-        
         if (navigator.share) {
             navigator.share({ title: 'AskArti', text, url });
         } else {
@@ -564,14 +412,12 @@ const displayAdvice = async (data) => {
         }
     });
 
-    // Modal handling
     aboutBtn.addEventListener('click', () => aboutModal.classList.remove('hidden'));
     closeAbout.addEventListener('click', () => aboutModal.classList.add('hidden'));
     aboutModal.addEventListener('click', (e) => {
         if (e.target === aboutModal) aboutModal.classList.add('hidden');
     });
 
-    // Event listeners
     askBtn.addEventListener('click', getAdvice);
     situationInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -580,7 +426,6 @@ const displayAdvice = async (data) => {
         }
     });
 
-    // Focus input on load
     situationInput.focus();
 </script>
 </body>
