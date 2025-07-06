@@ -124,27 +124,15 @@
             transform: scale(1.05);
         }
 
-       .mermaid {
+.mermaid {
     width: 100%;
-    display: center;
+    display: block;
 }
 .mermaid > div {
     width: 100% !important;
     max-width: 100% !important;
 }
 .mermaid svg {
-    width: 100% !important;
-    height: auto !important;
-}
-#results .mermaid {
-    display: block;
-    max-width: 100%;
-    width: 100%;
-    margin: 0 auto;
-    text-align: center;
-}
-
-#results svg {
     width: 100% !important;
     height: auto !important;
 }
@@ -392,56 +380,58 @@ const displayAdvice = async (data) => {
                 `).join('')}
             </div>
         </div>
-        
-        ${mermaid_chart ? `
-    <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
-        <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-            Motion Map
-        </h3>
-        <div class="text-center">
-            <pre class="mermaid inline-block">${mermaid_chart}</pre>
-        </div>
-    </div>
-` : ''}
 
-        ${talking_points && talking_points.length > 0 ? `
+        ${mermaid_chart ? `
         <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
             <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                What to Say
+                Motion Map
             </h3>
-            <ul class="space-y-2">
-                ${talking_points.map(point => `
-                    <li class="flex items-start gap-2">
-                        <svg class="w-5 h-5 text-customPurple-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                        <span class="text-gray-700">${point}</span>
-                    </li>
-                `).join('')}
+            <div class="text-center">
+                <pre class="mermaid inline-block w-full max-w-4xl mx-auto">${mermaid_chart}</pre>
+            </div>
+        </div>
+        ` : ''}
+
+        ${talking_points ? `
+        <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
+            <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                Talking Points
+            </h3>
+            <ul class="list-disc list-inside text-gray-800 space-y-2">
+                ${talking_points.map(tp => `<li>${tp}</li>`).join('')}
             </ul>
         </div>
         ` : ''}
 
         ${email_template ? `
         <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
-            <div class="flex justify-between items-start mb-4">
-                <h3 class="font-bold text-gray-900 flex items-center gap-2">
-                    Email Template
-                </h3>
-                <button onclick="copyEmail()" class="text-customPurple-500 hover:text-customPurple-700 text-sm font-medium">
-                    Copy
-                </button>
-            </div>
-            <div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap" id="email-content">${email_template}</div>
+            <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                Email Template
+            </h3>
+            <div class="text-gray-800 whitespace-pre-line bg-gray-50 p-4 rounded-md border border-gray-100">${email_template}</div>
         </div>
         ` : ''}
 
         ${next_steps ? `
-        <div class="bg-customPurple-100/20 rounded-xl border border-customPurple-100/40 p-6">
-            <h3 class="font-bold text-customPurple-900 mb-2">Remember:</h3>
-            <p class="text-customPurple-800">${next_steps}</p>
+        <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
+            <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                Next Steps
+            </h3>
+            <div class="text-gray-800 space-y-2">${marked.parse(next_steps)}</div>
         </div>
         ` : ''}
+    `;
+
+    // Inject HTML into results container
+    const results = document.getElementById('results');
+    results.innerHTML = html;
+
+    // Re-render Mermaid charts after injection
+    if (window.mermaid) {
+        mermaid.init(undefined, results.querySelectorAll(".mermaid"));
+    }
+};
+
 
         <div class="mt-8 flex flex-col sm:flex-row gap-3">
             <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
