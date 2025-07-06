@@ -90,7 +90,7 @@
             transform: scale(1.02);
         }
         
-        /* --- NEW TAB STYLES --- */
+        /* --- TAB STYLES --- */
         .tab-button {
             transition: all 0.2s ease-in-out;
             border-bottom: 2px solid transparent;
@@ -212,6 +212,14 @@
     let loadingInterval;
 
     mermaid.initialize({ startOnLoad: false });
+
+    // --- THIS BLOCK WAS MISSING AND HAS BEEN RESTORED ---
+    document.querySelectorAll('.quick-prompt').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            situationInput.value = e.target.dataset.text;
+            askBtn.click();
+        });
+    });
 
     const setupTabs = () => {
         const tabLists = document.querySelectorAll('[role="tablist"]');
