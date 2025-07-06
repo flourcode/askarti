@@ -124,19 +124,18 @@
             transform: scale(1.05);
         }
 
-.mermaid {
-    width: 100%;
-    display: block;
-}
-.mermaid > div {
-    width: 100% !important;
-    max-width: 100% !important;
-}
-.mermaid svg {
-    width: 100% !important;
-    height: auto !important;
-}
-
+       .mermaid {
+            width: 100%;
+            display: center;
+        }
+        .mermaid > div {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+        .mermaid svg {
+            width: 100% !important;
+            height: auto !important;
+        }
         @media (max-width: 640px) {
             .response-type { font-size: 0.625rem; padding: 0.2rem 0.5rem; }
         }
@@ -172,7 +171,7 @@
                     Demo crashed
                 </button>
                 <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
-                        data-text="Our Large SI Partner is asking for deeper discounts on a DHS deal but is not passing savings to the government. The government suspects they're overcharging. The SI is threatening to go with a competitor. My DHS team wants to bypass the SI, but my Partner team insists the SI owns the contract and we can't go around them. How can I preserve the relationship, align the internal teams, and save the deal — without violating any procurement rules?">
+                        data-text="Our Large SI Partner is asking for deeper discounts on a DHS deal but not passing savings on to government. Government knows they're overcharging. SI threatening to go with a competitor. My DHS team wants to go around the SI but my Partner team is saying SI owns the contract and we can't go direct or around them. How can I make everyone work together and save the deal?">
                     Partner drama
                 </button>
                 <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
@@ -251,10 +250,8 @@
 
     const API_ENDPOINT = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
     
-    // Define loading interval variable in a broader scope
     let loadingInterval;
 
-    // We set startOnLoad to false to control rendering manually
     mermaid.initialize({ startOnLoad: false });
 
     // Quick prompt handling
@@ -272,7 +269,6 @@
         askBtn.disabled = loading;
     };
 
-    // Get advice with integrated dynamic loading messages
     const getAdvice = async () => {
         const situation = situationInput.value.trim();
         if (!situation) {
@@ -295,7 +291,6 @@
         ];
         let loadingStage = 0;
 
-        // Set the initial loading UI with a target for message updates
         resultsContainer.innerHTML = `
             <div class="text-center py-3">
                 <p id="loading-message" class="text-gray-600"></p>
@@ -303,10 +298,9 @@
         
         const messageEl = document.getElementById('loading-message');
         if (messageEl) {
-            messageEl.textContent = loadingMessages[0]; // Set initial message
+            messageEl.textContent = loadingMessages[0];
         }
 
-        // Start cycling through the messages
         loadingInterval = setInterval(() => {
             loadingStage = (loadingStage + 1) % loadingMessages.length;
             if (messageEl) {
@@ -333,15 +327,12 @@
                     <p class="text-red-600 text-sm">Try again in a second</p>
                 </div>`;
         } finally {
-            // IMPORTANT: Clear the interval and reset loading state
             clearInterval(loadingInterval);
             setLoading(false);
         }
     };
 
-// Display advice
 const displayAdvice = async (data) => {
-    // This function now has two distinct rendering paths based on response_type
     const { response_type } = data;
 
     let html = '';
@@ -538,6 +529,7 @@ const displayAdvice = async (data) => {
         }
     }
 };
+
     // Helper functions
     window.copyEmail = () => {
         const email = document.getElementById('email-content').textContent;
