@@ -99,7 +99,7 @@
                     Champion went dark
                 </button>
                 <button class="quick-prompt px-3 py-1.5 bg-gray-100 rounded-full text-sm text-gray-700 font-medium"
-                        data-text="Our demo crashed during the technical evaluation at DOJ. The whole team saw it fail. My champion looks like an idiot and the lead engineer called our solution 'vaporware'. This was supposed to close this quarter.">
+                        data-text="Our demo crashed in front of the customer's CTO. My champion is embarrased and the lead engineer called our solution 'vaporware'.">
                     Demo crashed
                 </button>
 				<button class="quick-prompt px-3 py-1.5 bg-gray-100 rounded-full text-sm text-gray-700 font-medium"
@@ -123,8 +123,14 @@
                 </button>
             </div>
         </main>
+
+<!-- Loading Message Area -->
+<div id="loading-message-container" class="text-center py-8 hidden">
+    <p id="loading-message" class="text-gray-600"></p>
+</div>
+
 <!-- Sponsor Ad (Top of Page or Midsection) -->
- <div class="sponsor-ad rounded-lg p-3 mb-4 text-sm bg-white border border-gray-200 not-italic text-left leading-normal text-gray-700">
+<div class="sponsor-ad rounded-lg p-3 mb-4 text-sm bg-white border border-gray-200 not-italic text-left leading-normal text-gray-700">
     <div class="flex items-center gap-2 mb-2">
         <span class="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded-full">SPONSOR</span>
         <span class="text-gray-800 font-semibold">YOUR AD HERE</span>
@@ -133,13 +139,12 @@
         Well well well… look who finally started usin' AI. Come on now — let's close that deal.
     </p>
     <p class="mt-2 text-xs italic text-gray-500">
-        This could be your ad — just $199/mo. That's cheaper than your RTO lunch money.
+        This could be your ad — just $199/mo. That's cheaper than your RTO gas money.
     </p>
-<p class="mt-2 text-xs text-customPurple-600 font-medium">
+    <p class="mt-2 text-xs text-customPurple-600 font-medium">
         <a href="mailto:mark@subhoo.com" class="hover:underline">Contact me to reserve this premium spot →</a>
     </p>
 </div>
-
 
 <!-- Results Area -->
 <div id="results-container"></div>
@@ -213,6 +218,7 @@
     const askBtn = document.getElementById('ask-btn');
     const btnText = document.getElementById('btn-text');
     const loader = document.getElementById('loader');
+    const loadingMessageContainer = document.getElementById('loading-message-container');
     const resultsContainer = document.getElementById('results-container');
     const aboutBtn = document.getElementById('about-btn');
     const aboutModal = document.getElementById('about-modal');
@@ -248,9 +254,14 @@
         setLoading(true);
         const loadingMessages = ["Hang on. I'm...Working Backwards", "...Diving Deep", "...Unpacking This", "...Putting a Pin in it", "...Circling Back", "...Thinking Big"];
         let loadingStage = 0;
-        resultsContainer.innerHTML = `<div class="text-center py-8"><p id="loading-message" class="text-gray-600"></p></div>`;
+        
+        // Show loading message above the sponsor ad
+        loadingMessageContainer.classList.remove('hidden');
         const messageEl = document.getElementById('loading-message');
         if (messageEl) { messageEl.textContent = loadingMessages[0]; }
+        
+        // Clear previous results
+        resultsContainer.innerHTML = '';
 
         loadingInterval = setInterval(() => {
             loadingStage = (loadingStage + 1) % loadingMessages.length;
@@ -265,9 +276,15 @@
             });
             if (!response.ok) throw new Error('API Error');
             const data = await response.json();
+            
+            // Hide loading message
+            loadingMessageContainer.classList.add('hidden');
+            
+            // Display results
             displayAdvice(data);
         } catch (error) {
             console.error('Error:', error);
+            loadingMessageContainer.classList.add('hidden');
             resultsContainer.innerHTML = `<div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center"><p class="text-red-700 font-medium mb-2">Couldn't connect to Arti</p><p class="text-red-600 text-sm">Try again in a second</p></div>`;
         } finally {
             clearInterval(loadingInterval);
@@ -393,6 +410,7 @@
     window.startOver = () => {
         situationInput.value = '';
         resultsContainer.innerHTML = '';
+        loadingMessageContainer.classList.add('hidden');
         situationInput.focus();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
