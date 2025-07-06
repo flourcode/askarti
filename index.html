@@ -52,16 +52,16 @@
             background-color: rgba(124, 107, 190, 0.1);
             transform: scale(1.02);
         }
-		.sponsor-ad {
-    background: linear-gradient(135deg, rgba(124, 107, 190, 0.05) 0%, rgba(124, 107, 190, 0.02) 100%);
-    border: 1px solid rgba(124, 107, 190, 0.1);
-    transition: all 0.3s ease;
-}
-.sponsor-ad:hover {
-    background: linear-gradient(135deg, rgba(124, 107, 190, 0.08) 0%, rgba(124, 107, 190, 0.04) 100%);
-    border-color: rgba(124, 107, 190, 0.2);
-    transform: translateY(-1px);
-}
+        .sponsor-ad {
+            background: linear-gradient(135deg, rgba(124, 107, 190, 0.05) 0%, rgba(124, 107, 190, 0.02) 100%);
+            border: 1px solid rgba(124, 107, 190, 0.1);
+            transition: all 0.3s ease;
+        }
+        .sponsor-ad:hover {
+            background: linear-gradient(135deg, rgba(124, 107, 190, 0.08) 0%, rgba(124, 107, 190, 0.04) 100%);
+            border-color: rgba(124, 107, 190, 0.2);
+            transform: translateY(-1px);
+        }
         .dashboard-card {
              background-color: white;
              border-radius: 0.75rem;
@@ -90,7 +90,9 @@
                     id="situation-input" 
                     rows="3" 
                     class="w-full p-4 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary resize-none placeholder-gray-500"
-                    placeholder="Champion ghosted me after seeing pricing. $2M deal at DHS. Q4 commit."></textarea>
+                    placeholder="Champion ghosted me after seeing pricing. $2M deal at DHS. Q4 commit."
+                    maxlength="500"></textarea>
+                <div id="char-count" class="text-xs text-gray-500 text-right mt-1 hidden">0/500</div>
             </div>
 
            <div class="flex flex-wrap gap-2 justify-center mb-4">
@@ -114,7 +116,7 @@
                         data-text="Final interview for a Fed Account Exec role at AWS next week. They're focused on Leadership Principles and the STAR method. How do I prep?">
                     Interview Prep
                 </button>
-				<button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
+                <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
                         data-text="How do I prospect my AI/ML services into the Department of Veterans Affairs (VA)?">
                     Prospecting
                 </button>
@@ -148,6 +150,15 @@
     <p class="mt-2 text-xs text-customPurple-600 font-medium">
         <a href="mailto:mark@subhoo.com" class="hover:underline">Contact me to reserve this premium spot →</a>
     </p>
+</div>
+
+<!-- Error Message Area -->
+<div id="error-message" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center mb-4 hidden">
+    <p class="text-red-700 font-medium mb-2">Something went wrong</p>
+    <p class="text-red-600 text-sm" id="error-details">We're having trouble connecting to Arti. Please try again in a moment.</p>
+    <button id="retry-btn" class="mt-3 bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg text-sm">
+        Try Again
+    </button>
 </div>
 
 <!-- Results Area -->
@@ -218,244 +229,652 @@
     </div>
 
 <script>
-    const situationInput = document.getElementById('situation-input');
-    const askBtn = document.getElementById('ask-btn');
-    const btnText = document.getElementById('btn-text');
-    const loader = document.getElementById('loader');
-    const loadingMessageContainer = document.getElementById('loading-message-container');
-    const resultsContainer = document.getElementById('results-container');
-    const aboutBtn = document.getElementById('about-btn');
-    const aboutModal = document.getElementById('about-modal');
-    const closeAbout = document.getElementById('close-about');
-    const shareBtn = document.getElementById('share-btn');
-
-    const API_ENDPOINT = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
-    
-    let loadingInterval;
-
-    mermaid.initialize({ startOnLoad: false });
-
-    document.querySelectorAll('.quick-prompt').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            situationInput.value = e.target.dataset.text;
-            askBtn.click();
-        });
-    });
-
-    const setLoading = (loading) => {
-        btnText.style.display = loading ? 'none' : 'inline';
-        loader.style.display = loading ? 'block' : 'none';
-        askBtn.disabled = loading;
+    // Configuration
+    const CONFIG = {
+        API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
+        REQUEST_TIMEOUT: 25000, // 25 seconds timeout
+        MAX_RETRIES: 2,
+        RETRY_DELAY: 2000, // 2 seconds between retries
+        MAX_INPUT_LENGTH: 500,
+        DEFAULT_LOADING_MESSAGES: [
+            "Hang on. I'm...Working Backwards", 
+            "...Diving Deep", 
+            "...Unpacking This", 
+            "...Putting a Pin in it", 
+            "...Circling Back", 
+            "...Thinking Big"
+        ],
+        ERROR_FALLBACK_MESSAGE: "We're having trouble with Arti right now. Please try again in a moment."
     };
 
-    const getAdvice = async () => {
-    const situation = situationInput.value.trim();
-    if (!situation) {
-        // Change this line - instead of writing directly to resultsContainer
-        loadingMessageContainer.classList.remove('hidden');
-        const messageEl = document.getElementById('loading-message');
-        if (messageEl) { 
-            messageEl.textContent = "Drop your situation in the box above 👆"; 
-            messageEl.classList.add('text-red-700', 'font-medium');
-        }
-        return;
+    // DOM Elements
+    const elements = {
+        situationInput: document.getElementById('situation-input'),
+        charCount: document.getElementById('char-count'),
+        askBtn: document.getElementById('ask-btn'),
+        btnText: document.getElementById('btn-text'),
+        loader: document.getElementById('loader'),
+        loadingMessageContainer: document.getElementById('loading-message-container'),
+        loadingMessage: document.getElementById('loading-message'),
+        errorMessage: document.getElementById('error-message'),
+        errorDetails: document.getElementById('error-details'),
+        retryBtn: document.getElementById('retry-btn'),
+        resultsContainer: document.getElementById('results-container'),
+        aboutBtn: document.getElementById('about-btn'),
+        aboutModal: document.getElementById('about-modal'),
+        closeAbout: document.getElementById('close-about'),
+        shareBtn: document.getElementById('share-btn'),
+        quickPromptBtns: document.querySelectorAll('.quick-prompt')
+    };
+
+    // Global state
+    let state = {
+        currentRequest: null,
+        loadingInterval: null,
+        loadingStage: 0,
+        retryCount: 0,
+        lastQuery: '',
+        abortController: null,
+        pendingRequest: false
+    };
+
+    // Initialize Mermaid with safe default config and error handling
+    try {
+        mermaid.initialize({ 
+            startOnLoad: false,
+            securityLevel: 'strict',
+            logLevel: 'fatal',
+            errorFn: (errorMsg, id) => {
+                console.error(`Mermaid error in diagram ${id}: ${errorMsg}`);
+                const element = document.getElementById(id);
+                if (element) {
+                    element.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Diagram could not be displayed</div>';
+                }
+            }
+        });
+    } catch (e) {
+        console.error('Failed to initialize mermaid:', e);
     }
 
-        setLoading(true);
-        const loadingMessages = ["Hang on. I'm...Working Backwards", "...Diving Deep", "...Unpacking This", "...Putting a Pin in it", "...Circling Back", "...Thinking Big"];
-        let loadingStage = 0;
-        
-        // Show loading message above the sponsor ad
-        loadingMessageContainer.classList.remove('hidden');
-        const messageEl = document.getElementById('loading-message');
-        if (messageEl) { messageEl.textContent = loadingMessages[0]; }
-        
-        // Clear previous results
-        resultsContainer.innerHTML = '';
+    // Input validation and character count
+    function setupInputValidation() {
+        elements.situationInput.addEventListener('input', function() {
+            const maxLength = CONFIG.MAX_INPUT_LENGTH;
+            const currentLength = this.value.length;
+            
+            // Update character count
+            elements.charCount.textContent = `${currentLength}/${maxLength}`;
+            elements.charCount.classList.remove('hidden');
+            
+            // Visual feedback when approaching limit
+            if (currentLength >= maxLength * 0.9) {
+                elements.charCount.classList.add('text-orange-500');
+            } else {
+                elements.charCount.classList.remove('text-orange-500');
+            }
+            
+            // Enforce max length (backup for maxlength attribute)
+            if (currentLength > maxLength) {
+                this.value = this.value.substring(0, maxLength);
+                elements.charCount.textContent = `${maxLength}/${maxLength}`;
+                elements.charCount.classList.add('text-red-500');
+            }
+        });
+    }
 
-        loadingInterval = setInterval(() => {
-            loadingStage = (loadingStage + 1) % loadingMessages.length;
-            if (messageEl) { messageEl.textContent = loadingMessages[loadingStage]; }
-        }, 2000);
+    // Show/hide loading state
+    function setLoading(loading) {
+        elements.btnText.style.display = loading ? 'none' : 'inline';
+        elements.loader.style.display = loading ? 'block' : 'none';
+        elements.askBtn.disabled = loading;
+        elements.errorMessage.classList.add('hidden');
+        
+        if (loading) {
+            elements.loadingMessageContainer.classList.remove('hidden');
+            if (elements.loadingMessage) {
+                elements.loadingMessage.textContent = CONFIG.DEFAULT_LOADING_MESSAGES[0];
+                elements.loadingMessage.classList.remove('text-red-700', 'font-medium');
+            }
+            
+            // Clear any existing interval
+            clearInterval(state.loadingInterval);
+            
+            // Start new loading message rotation
+            state.loadingStage = 0;
+            state.loadingInterval = setInterval(() => {
+                state.loadingStage = (state.loadingStage + 1) % CONFIG.DEFAULT_LOADING_MESSAGES.length;
+                if (elements.loadingMessage) {
+                    elements.loadingMessage.textContent = CONFIG.DEFAULT_LOADING_MESSAGES[state.loadingStage];
+                }
+            }, 2000);
+        } else {
+            clearInterval(state.loadingInterval);
+        }
+    }
 
+    // Show error message
+    function showError(message, isRetryable = true) {
+        elements.loadingMessageContainer.classList.add('hidden');
+        elements.errorMessage.classList.remove('hidden');
+        elements.errorDetails.textContent = message || CONFIG.ERROR_FALLBACK_MESSAGE;
+        elements.retryBtn.style.display = isRetryable ? 'inline-block' : 'none';
+        setLoading(false);
+    }
+
+    // Make the API request with timeout and retry logic
+    async function makeRequest(situation, retryCount = 0) {
+        if (state.pendingRequest) {
+            return; // Prevent duplicate requests
+        }
+        
+        state.pendingRequest = true;
+        state.lastQuery = situation;
+        state.abortController = new AbortController();
+        
         try {
-            const response = await fetch(API_ENDPOINT, {
+            // Set up timeout
+            const timeoutId = setTimeout(() => {
+                state.abortController.abort();
+            }, CONFIG.REQUEST_TIMEOUT);
+            
+            const response = await fetch(CONFIG.API_ENDPOINT, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ situation })
+                body: JSON.stringify({ situation }),
+                signal: state.abortController.signal
             });
-            if (!response.ok) throw new Error('API Error');
+            
+            clearTimeout(timeoutId);
+            
+            if (!response.ok) {
+                throw new Error(`API returned status: ${response.status}`);
+            }
+            
             const data = await response.json();
+            state.pendingRequest = false;
+            return data;
+        } catch (error) {
+            state.pendingRequest = false;
+            console.error('Request error:', error);
+            
+            // Handle timeout or network errors
+            if (error.name === 'AbortError') {
+                throw new Error('Request timed out. The server might be busy.');
+            }
+            
+            // Retry logic
+            if (retryCount < CONFIG.MAX_RETRIES) {
+                await new Promise(resolve => setTimeout(resolve, CONFIG.RETRY_DELAY));
+                return makeRequest(situation, retryCount + 1);
+            }
+            
+            throw error;
+        }
+    }
+
+    // Generate fallback advice when API fails
+    function generateFallbackAdvice(situation) {
+        // Simplified context detection
+        const context = {
+            agency: situation.match(/dhs|va|dod|army|navy|usaf|air force|marines|uscis/i)?.[0]?.toUpperCase() || 'Unknown Agency',
+            amount: situation.match(/\$(\d+)([kmb])?/i) ? 'Specified' : 'Unknown',
+            blocker: 'Unknown Issue'
+        };
+        
+        // Determine response type based on keywords
+        let responseType = 'deal';
+        if (situation.match(/interview|job|hiring|resume|star/i)) responseType = 'interview';
+        if (situation.match(/prospect|lead|naics|sell into/i)) responseType = 'prospect';
+        if (situation.match(/meeting|presentation|qbr|brief/i)) responseType = 'meeting';
+        
+        // Basic fallback responses by type
+        const fallbacks = {
+            deal: {
+                response_type: 'deal',
+                quick_take: "Let's get your deal unstuck. I'm working with limited connectivity right now, but here are proven tactics for federal deals.",
+                key_moves: [
+                    { action: "Test your champion with a specific request", why: "If they won't make introductions or share information, they're not a real champion" },
+                    { action: "Create urgency with fiscal year timeline", why: "Federal money has a shelf life - remind them when funds expire" },
+                    { action: "Find multiple paths to power", why: "Never single-thread a federal deal" }
+                ],
+                mermaid_chart: "graph TD\n    A[Test Champion] --> B{Real Champion?}\n    B -->|Yes| C[Leverage Relationship]\n    B -->|No| D[Find New Champion]\n    C --> E[Close Deal]\n    D --> A",
+                next_steps: "Federal deals move at their own pace. Stay professional, be persistent, and keep multiple options open."
+            },
+            meeting: {
+                response_type: 'meeting',
+                quick_take: "Federal meetings require thorough preparation. Here's what works based on decades of government experience.",
+                key_moves: [
+                    { action: "Research every attendee's role and tenure", why: "Know who has power vs. who has influence" },
+                    { action: "Prepare 3 mission-focused success stories", why: "They care about outcomes, not features" },
+                    { action: "Plan your specific asks and next steps", why: "Never leave without clear commitments" }
+                ],
+                talking_points: [
+                    "What would make this meeting a success from your perspective?",
+                    "Who else should be involved in these discussions?",
+                    "How does this align with your mission priorities this fiscal year?"
+                ],
+                next_steps: "Make their job easier and you'll win their business."
+            },
+            prospect: {
+                response_type: 'prospect',
+                summary: "Here's a starting point for your federal prospecting strategy. When connectivity improves, ask again for more detailed intelligence.",
+                top_s_is: [
+                    {company: "Booz Allen Hamilton", value: "$1B+"},
+                    {company: "GDIT", value: "$800M+"},
+                    {company: "Leidos", value: "$750M+"}
+                ],
+                top_software_and_cloud: [
+                    {company: "Microsoft", value: "$600M+"},
+                    {company: "Amazon Web Services", value: "$500M+"},
+                    {company: "Oracle", value: "$400M+"}
+                ],
+                company_capabilities: [
+                    "Custom application development",
+                    "Data management and analytics",
+                    "Cloud migration services"
+                ],
+                naics_codes: [
+                    "541512 - Computer Systems Design Services",
+                    "541511 - Custom Computer Programming Services",
+                    "518210 - Data Processing, Hosting, and Related Services"
+                ],
+                prospect_recommendations: [
+                    "Research GWACs and IDIQs that your target agency uses most frequently",
+                    "Identify key incumbent contractors at your target agency",
+                    "Connect with Small Business Liaison Officers at large primes for partnership opportunities"
+                ],
+                market_insights: "Federal fiscal year-end (July-September) represents 30-40% of annual contract awards. Time your outreach accordingly."
+            },
+            interview: {
+                response_type: 'interview',
+                quick_take: "Federal sales interviews test your ability to navigate complexity. Here's how to showcase your expertise.",
+                key_moves: [
+                    { action: "Quantify your achievements with dollar amounts and timeframes", why: "Shows you understand federal scale and timing" },
+                    { action: "Prepare STAR stories about navigating procurement challenges", why: "Demonstrates you can handle the unique federal sales cycle" },
+                    { action: "Research their current federal contracts and clients", why: "Shows you did your homework and understand their business" }
+                ],
+                talking_points: [
+                    "What does success look like for this role in the first 90 days?",
+                    "How does your team collaborate with partners and federal contracting officers?",
+                    "What are the most common roadblocks your federal customers face in the procurement process?"
+                ],
+                next_steps: "Your federal experience is a differentiator. Own it, quantify it, and explain how it transfers to this role."
+            }
+        };
+        
+        return fallbacks[responseType] || fallbacks.deal;
+    }
+
+    // Main function to get advice
+    async function getAdvice() {
+        const situation = elements.situationInput.value.trim();
+        
+        // Validate input
+        if (!situation) {
+            elements.loadingMessageContainer.classList.remove('hidden');
+            elements.loadingMessage.textContent = "Drop your situation in the box above 👆"; 
+            elements.loadingMessage.classList.add('text-red-700', 'font-medium');
+            return;
+        }
+        
+        // Clear previous results and show loading state
+        setLoading(true);
+        elements.resultsContainer.innerHTML = '';
+        state.retryCount = 0;
+        
+        try {
+            // Make API request
+            const data = await makeRequest(situation);
             
             // Hide loading message
-            loadingMessageContainer.classList.add('hidden');
+            elements.loadingMessageContainer.classList.add('hidden');
             
             // Display results
             displayAdvice(data);
         } catch (error) {
             console.error('Error:', error);
-            loadingMessageContainer.classList.add('hidden');
-            resultsContainer.innerHTML = `<div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center"><p class="text-red-700 font-medium mb-2">Couldn't connect to Arti</p><p class="text-red-600 text-sm">Try again in a second</p></div>`;
+            
+            // Try fallback if API fails completely
+            try {
+                const fallbackData = generateFallbackAdvice(situation);
+                elements.loadingMessageContainer.classList.add('hidden');
+                displayAdvice(fallbackData);
+                
+                // Show a subtle notice that we're using fallback data
+                const fallbackNotice = document.createElement('div');
+                fallbackNotice.className = 'text-center text-sm text-orange-600 mt-2 mb-4';
+                fallbackNotice.textContent = "Using backup advice while our servers catch up. Refresh for full insights.";
+                elements.resultsContainer.insertAdjacentElement('afterbegin', fallbackNotice);
+            } catch (fallbackError) {
+                // If even fallback fails, show a generic error
+                showError("We're having trouble generating advice right now. Please try again in a moment.");
+            }
         } finally {
-            clearInterval(loadingInterval);
             setLoading(false);
         }
-    };
+    }
 
-    const displayAdvice = async (data) => {
+    // Display the advice with error handling for Mermaid
+    async function displayAdvice(data) {
         const { response_type } = data;
         let html = '';
 
-        if (response_type === 'prospect') {
-            const { summary, top_s_is, top_software_and_cloud, company_capabilities, naics_codes, prospect_recommendations, market_insights } = data;
-            
-            const renderRankedList = (items) => {
-                if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No specific companies found.</p>';
-                return `<ul class="space-y-1">${items.map((item, index) => `
-                    <li class="flex items-center gap-3 py-2 border-t border-gray-100 first:border-t-0 first:pt-0">
-                        <span class="text-xs font-bold text-customPurple-700 bg-customPurple-100 w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">${index + 1}</span>
-                        <span class="flex-1 font-medium text-gray-800">${item.company}</span>
-                        <span class="text-sm font-semibold text-gray-600">${item.value}</span>
-                    </li>
-                `).join('')}</ul>`;
-            };
+        try {
+            if (response_type === 'prospect') {
+                // Prospect response rendering with fallbacks for each section
+                const { 
+                    summary = "Strategic insight for your federal prospecting efforts.",
+                    top_s_is = [],
+                    top_software_and_cloud = [],
+                    company_capabilities = [],
+                    naics_codes = [],
+                    prospect_recommendations = [],
+                    market_insights = "Focus on relationship building and understanding agency mission needs."
+                } = data;
+                
+                const renderRankedList = (items) => {
+                    if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No specific companies found.</p>';
+                    return `<ul class="space-y-1">${items.map((item, index) => `
+                        <li class="flex items-center gap-3 py-2 border-t border-gray-100 first:border-t-0 first:pt-0">
+                            <span class="text-xs font-bold text-customPurple-700 bg-customPurple-100 w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">${index + 1}</span>
+                            <span class="flex-1 font-medium text-gray-800">${item.company || 'Company'}</span>
+                            <span class="text-sm font-semibold text-gray-600">${item.value || 'N/A'}</span>
+                        </li>
+                    `).join('')}</ul>`;
+                };
 
-            html = `
-            <div class="fade-in space-y-6">
-                <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6">
-                    <h3 class="text-xl font-bold text-customPurple-900 mb-2">Intelligence Briefing</h3>
-                    <div class="text-customPurple-900/80">${marked.parse(summary || '')}</div>
-                </div>
+                html = `
+                <div class="fade-in space-y-6">
+                    <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6">
+                        <h3 class="text-xl font-bold text-customPurple-900 mb-2">Intelligence Briefing</h3>
+                        <div class="text-customPurple-900/80">${marked.parse(summary || '')}</div>
+                    </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 space-y-6">
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Top Systems Integrators (SIs)</h3>
-                            ${renderRankedList(top_s_is)}
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 space-y-6">
+                            <div class="dashboard-card">
+                                <h3 class="font-bold text-gray-900 mb-3">Top Systems Integrators (SIs)</h3>
+                                ${renderRankedList(top_s_is)}
+                            </div>
+                            <div class="dashboard-card">
+                                <h3 class="font-bold text-gray-900 mb-3">Top Software & Cloud Providers</h3>
+                                ${renderRankedList(top_software_and_cloud)}
+                            </div>
                         </div>
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Top Software & Cloud Providers</h3>
-                            ${renderRankedList(top_software_and_cloud)}
+                        <div class="lg:col-span-1 space-y-6">
+                            <div class="dashboard-card">
+                                <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
+                                <ul class="space-y-2 text-sm">${(company_capabilities || []).map(c => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
+                            </div>
+                            <div class="dashboard-card">
+                                <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
+                                <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${n}</li>`).join('')}</ul>
+                            </div>
                         </div>
                     </div>
-                    <div class="lg:col-span-1 space-y-6">
+                     <div class="dashboard-card">
+                        <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
+                        <ul class="space-y-2 text-sm">${(prospect_recommendations || []).map(r => `<li class="flex gap-3"><span class="text-customPurple-500 font-bold text-lg flex-shrink-0 -mt-1">→</span><span>${r}</span></li>`).join('')}</ul>
+                    </div>
+                     <div class="dashboard-card">
+                         <h3 class="font-bold text-gray-900 mb-2">Key Market Insight</h3>
+                         <p class="text-gray-700">${market_insights || 'N/A'}</p>
+                    </div>
+                </div>`;
+            } else {
+                // Deal, meeting, or interview response with fallbacks for each field
+                const { 
+                    quick_take = "Here are tactical steps to move your federal sales situation forward.",
+                    key_moves = [],
+                    mermaid_chart = '',
+                    talking_points = [],
+                    email_template = '',
+                    next_steps = ''
+                } = data;
+
+                // Ensure key_moves has valid structure
+                const safeKeyMoves = Array.isArray(key_moves) && key_moves.length > 0 ? 
+                    key_moves : [
+                        { action: "Clarify the true decision criteria", why: "Federal decisions rarely match the stated requirements" },
+                        { action: "Map the full stakeholder landscape", why: "Identify all influencers, not just the formal decision makers" },
+                        { action: "Document your federal past performance", why: "Proof of government success is your strongest selling point" }
+                    ];
+
+                html = `
+                <div class="fade-in space-y-6">
+                    <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6 flow-root">
+                        <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
+                        <div class="text-customPurple-900/80 space-y-2">${marked.parse(quick_take || '')}</div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
-                            <ul class="space-y-2 text-sm">${(company_capabilities || []).map(c => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
+                            <h3 class="font-bold text-gray-900 mb-4">Your Next 3 Moves</h3>
+                            <div class="space-y-3">${safeKeyMoves.slice(0, 3).map((m, i) => `<div class="flex gap-3"><span class="flex-shrink-0 w-7 h-7 bg-customPurple-200 text-customPurple-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span><div class="flex-1"><p class="font-medium text-gray-900">${m.action || 'Take strategic action'}</p><p class="text-sm text-gray-600 mt-1">${m.why || 'To improve your position'}</p></div></div>`).join('')}</div>
                         </div>
                         <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
-                            <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${n}</li>`).join('')}</ul>
+                            <h3 class="font-bold text-gray-900 mb-4">Game Plan</h3>
+                            ${mermaid_chart ? 
+                                `<div class="mermaid-container"><div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div></div>` : 
+                                `<div class="p-4 bg-gray-50 rounded-lg text-center">
+                                    <p class="text-gray-600">A visual game plan is not available for this scenario.</p>
+                                </div>`
+                            }
                         </div>
                     </div>
-                </div>
-                 <div class="dashboard-card">
-                    <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
-                    <ul class="space-y-2 text-sm">${(prospect_recommendations || []).map(r => `<li class="flex gap-3"><span class="text-customPurple-500 font-bold text-lg flex-shrink-0 -mt-1">→</span><span>${r}</span></li>`).join('')}</ul>
-                </div>
-                 <div class="dashboard-card">
-                     <h3 class="font-bold text-gray-900 mb-2">Key Market Insight</h3>
-                     <p class="text-gray-700">${market_insights || 'N/A'}</p>
-                </div>
-            </div>`;
-        } else {
-            const { quick_take, key_moves, mermaid_chart, talking_points, email_template, next_steps } = data;
-            html = `
-            <div class="fade-in space-y-6">
-                <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6 flow-root">
-                    <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
-                    <div class="text-customPurple-900/80 space-y-2">${marked.parse(quick_take || '')}</div>
-                </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    ${(talking_points && talking_points.length > 0) || email_template ? `
                     <div class="dashboard-card">
-                        <h3 class="font-bold text-gray-900 mb-4">Your Next 3 Moves</h3>
-                        <div class="space-y-3">${(key_moves || []).map((m, i) => `<div class="flex gap-3"><span class="flex-shrink-0 w-7 h-7 bg-customPurple-200 text-customPurple-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span><div class="flex-1"><p class="font-medium text-gray-900">${m.action}</p><p class="text-sm text-gray-600 mt-1">${m.why}</p></div></div>`).join('')}</div>
+                        <h3 class="font-bold text-gray-900 mb-4">Communications</h3>
+                        <div class="grid grid-cols-1 ${email_template && talking_points && talking_points.length > 0 ? 'md:grid-cols-2' : ''} gap-6">
+                            ${talking_points && talking_points.length > 0 ? `<div><h4 class="font-semibold text-gray-800 mb-3">What to Ask</h4><ul class="space-y-2 text-sm">${talking_points.map(t => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${t}</li>`).join('')}</ul></div>` : ''}
+                            ${email_template ? `<div><h4 class="font-semibold text-gray-800 mb-3">Email Template</h4><div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap border">${email_template}</div></div>` : ''}
+                        </div>
                     </div>
-                    <div class="dashboard-card">
-                        <h3 class="font-bold text-gray-900 mb-4">Game Plan</h3>
-                        ${mermaid_chart ? `<div class="mermaid-container"><pre class="mermaid">${mermaid_chart}</pre></div>` : '<p class="text-sm text-gray-500">No visual plan available.</p>'}
-                    </div>
-                </div>
+                    ` : ''}
 
-                ${(talking_points && talking_points.length > 0) || email_template ? `
-                <div class="dashboard-card">
-                    <h3 class="font-bold text-gray-900 mb-4">Communications</h3>
-                    <div class="grid grid-cols-1 ${email_template && talking_points && talking_points.length > 0 ? 'md:grid-cols-2' : ''} gap-6">
-                        ${talking_points && talking_points.length > 0 ? `<div><h4 class="font-semibold text-gray-800 mb-3">What to Ask</h4><ul class="space-y-2 text-sm">${talking_points.map(t => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${t}</li>`).join('')}</ul></div>` : ''}
-                        ${email_template ? `<div><h4 class="font-semibold text-gray-800 mb-3">Email Template</h4><div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap border">${email_template}</div></div>` : ''}
-                    </div>
-                </div>
-                ` : ''}
+                     ${next_steps ? `<div class="bg-customPurple-200/60 p-4 rounded-lg text-sm text-customPurple-900"><b class="font-semibold">Remember:</b> ${next_steps}</div>` : ''}
+                </div>`;
+            }
 
-                 ${next_steps ? `<div class="bg-customPurple-200/60 p-4 rounded-lg text-sm text-customPurple-900"><b class="font-semibold">Remember:</b> ${next_steps}</div>` : ''}
-            </div>`;
-        }
+            // Add action buttons
+            html += `
+                <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                    <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">Copy to Clipboard</button>
+                    <button onclick="startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">Ask Another Question</button>
+                </div>`;
 
-        html += `
-            <div class="mt-8 flex flex-col sm:flex-row gap-3">
-                <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">Copy to Clipboard</button>
-                <button onclick="startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">Ask Another Question</button>
-            </div>`;
+            elements.resultsContainer.innerHTML = html;
+            elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-        resultsContainer.innerHTML = html;
-        resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-        if (response_type !== 'prospect') {
-             if (data.mermaid_chart) {
+            // Try to render mermaid chart if present
+            if (response_type !== 'prospect' && data.mermaid_chart) {
                 try {
+                    // Wrap in try-catch to handle mermaid errors
                     await mermaid.run();
                 } catch (e) {
                     console.error("Mermaid chart rendering error:", e);
+                    // Replace with error message
+                    const diagramElement = document.getElementById('mermaid-diagram');
+                    if (diagramElement) {
+                        diagramElement.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Game plan visualization couldn\'t be displayed</div>';
+                    }
                 }
             }
+        } catch (error) {
+            // Handle general display errors
+            console.error('Display error:', error);
+            elements.resultsContainer.innerHTML = `
+                <div class="bg-white border border-gray-200 rounded-lg p-6 text-center">
+                    <h3 class="font-bold text-gray-900 mb-3">Federal Sales Advice</h3>
+                    <p class="text-gray-700 mb-4">We've got insights for you, but had trouble formatting them. Here's the core advice:</p>
+                    <div class="p-4 bg-gray-50 rounded-lg text-left mb-4">
+                        <p class="font-medium">${data.quick_take || 'Focus on understanding the true needs behind the stated requirements.'}</p>
+                    </div>
+                    <button onclick="startOver()" class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">Ask Another Question</button>
+                </div>
+            `;
         }
-    };
-
-    window.copyAll = () => {
-        const contentEl = document.getElementById('results-container');
-        navigator.clipboard.writeText(contentEl.innerText);
-        alert('Results copied to clipboard!');
-    };
-    window.startOver = () => {
-    situationInput.value = '';
-    resultsContainer.innerHTML = '';
-    loadingMessageContainer.classList.add('hidden');
-    const messageEl = document.getElementById('loading-message');
-    if (messageEl) {
-        messageEl.classList.remove('text-red-700', 'font-medium');
     }
-    situationInput.focus();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-};
 
-    shareBtn.addEventListener('click', () => {
-        const text = "Just got unstuck on a federal deal with AskArti:";
-        const url = "https://askarti.com";
-        if (navigator.share) {
-            navigator.share({ title: 'AskArti', text, url });
-        } else {
-            navigator.clipboard.writeText(`${text} ${url}`);
-            shareBtn.textContent = 'Link Copied!';
-            setTimeout(() => { shareBtn.textContent = 'Share'; }, 2000);
+    // Copy all results to clipboard
+    window.copyAll = () => {
+        try {
+            const contentEl = document.getElementById('results-container');
+            const text = contentEl.innerText;
+            
+            if (!text || text.trim() === '') {
+                alert('No content to copy');
+                return;
+            }
+            
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    // Visual feedback for successful copy
+                    const copyBtn = document.querySelector('#results-container button');
+                    if (copyBtn) {
+                        const originalText = copyBtn.textContent;
+                        copyBtn.textContent = 'Copied!';
+                        setTimeout(() => copyBtn.textContent = originalText, 2000);
+                    } else {
+                        alert('Results copied to clipboard!');
+                    }
+                })
+                .catch(err => {
+                    console.error('Copy failed:', err);
+                    alert('Copy failed. Please try again.');
+                });
+        } catch (error) {
+            console.error('Copy error:', error);
+            alert('Could not copy the results. Please try selecting and copying manually.');
         }
-    });
+    };
 
-    aboutBtn.addEventListener('click', () => aboutModal.classList.remove('hidden'));
-    closeAbout.addEventListener('click', () => aboutModal.classList.add('hidden'));
-    aboutModal.addEventListener('click', (e) => {
-        if (e.target === aboutModal) aboutModal.classList.add('hidden');
-    });
-
-    askBtn.addEventListener('click', getAdvice);
-    situationInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            getAdvice();
+    // Reset for a new question
+    window.startOver = () => {
+        // Cancel any pending requests
+        if (state.abortController) {
+            state.abortController.abort();
         }
-    });
+        
+        // Clear state and UI
+        elements.situationInput.value = '';
+        elements.resultsContainer.innerHTML = '';
+        elements.loadingMessageContainer.classList.add('hidden');
+        elements.errorMessage.classList.add('hidden');
+        elements.charCount.classList.add('hidden');
+        
+        if (elements.loadingMessage) {
+            elements.loadingMessage.classList.remove('text-red-700', 'font-medium');
+        }
+        
+        clearInterval(state.loadingInterval);
+        state.pendingRequest = false;
+        
+        // Focus on input
+        elements.situationInput.focus();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
-    situationInput.focus();
+    // Set up event listeners
+    function setupEventListeners() {
+        // Quick prompt buttons
+        elements.quickPromptBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                elements.situationInput.value = e.currentTarget.dataset.text;
+                elements.askBtn.click();
+            });
+        });
+
+        // Share button
+        elements.shareBtn.addEventListener('click', () => {
+            const text = "Just got unstuck on a federal deal with AskArti:";
+            const url = "https://askarti.com";
+            
+            try {
+                if (navigator.share) {
+                    navigator.share({ title: 'AskArti', text, url })
+                        .catch(err => console.error('Share failed:', err));
+                } else {
+                    navigator.clipboard.writeText(`${text} ${url}`)
+                        .then(() => {
+                            elements.shareBtn.textContent = 'Link Copied!';
+                            setTimeout(() => { elements.shareBtn.textContent = 'Share'; }, 2000);
+                        })
+                        .catch(err => console.error('Copy failed:', err));
+                }
+            } catch (error) {
+                console.error('Share error:', error);
+                alert('Could not share. Please copy the URL manually.');
+            }
+        });
+
+        // About modal
+        elements.aboutBtn.addEventListener('click', () => elements.aboutModal.classList.remove('hidden'));
+        elements.closeAbout.addEventListener('click', () => elements.aboutModal.classList.add('hidden'));
+        elements.aboutModal.addEventListener('click', (e) => {
+            if (e.target === elements.aboutModal) elements.aboutModal.classList.add('hidden');
+        });
+
+        // Main action button
+        elements.askBtn.addEventListener('click', getAdvice);
+        
+        // Retry button
+        elements.retryBtn.addEventListener('click', () => {
+            elements.errorMessage.classList.add('hidden');
+            if (state.lastQuery) {
+                elements.situationInput.value = state.lastQuery;
+                getAdvice();
+            }
+        });
+
+        // Enter key in textarea
+        elements.situationInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                getAdvice();
+            }
+        });
+
+        // Keyboard shortcut to escape modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                elements.aboutModal.classList.add('hidden');
+            }
+        });
+    }
+
+    // Initialize everything
+    function init() {
+        setupInputValidation();
+        setupEventListeners();
+        elements.situationInput.focus();
+        
+        // Check for saved query in session storage
+        try {
+            const savedQuery = sessionStorage.getItem('lastQuery');
+            if (savedQuery && savedQuery.trim() !== '') {
+                elements.situationInput.value = savedQuery;
+            }
+        } catch (e) {
+            console.warn('Could not access session storage:', e);
+        }
+        
+        // Setup window event handlers
+        window.addEventListener('beforeunload', () => {
+            try {
+                // Save current query before unload
+                if (elements.situationInput.value.trim() !== '') {
+                    sessionStorage.setItem('lastQuery', elements.situationInput.value);
+                }
+            } catch (e) {
+                console.warn('Could not save to session storage:', e);
+            }
+        });
+    }
+
+    // Start the application
+    init();
 </script>
 </body>
 </html>
