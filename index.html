@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AskArti - Your Federal Sales Buddy | Free Sales Strategy Tool</title>
-    <meta name="description" content="Get personalized federal sales advice from AskArti. Free AI tool provides SMART goals, customer messaging, and deal strategies for government contractors and sales professionals.">
-    <meta name="keywords" content="federal sales, government sales, AI sales coach, sales strategy, federal contractors, govcon, sales advice">
+    <title>AskArti - Federal Sales Coach | Get Unstuck in 60 Seconds</title>
+    <meta name="description" content="Real federal sales advice from someone who's actually sold to the government. Get unstuck on deals, prep for meetings, crush interviews. No BS, just tactics that work.">
+    <meta name="keywords" content="federal sales, government sales, deal coaching, sales tactics, federal contractors, govcon">
     <meta name="author" content="Mark">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://askarti.com">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://askarti.com/">
-    <meta property="og:title" content="AskArti - Your Federal Sales Buddy">
-    <meta property="og:description" content="Get personalized federal sales advice from AskArti. Free AI tool provides SMART goals, customer messaging, and deal strategies for government contractors and sales professionals.">
+    <meta property="og:title" content="AskArti - Federal Sales Coach">
+    <meta property="og:description" content="Real federal sales advice from someone who's actually sold to the government. Get unstuck in 60 seconds.">
     <meta property="og:image" content="https://askarti.com/images/asklite.png">
     <meta property="og:image:alt" content="AskArti Logo">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:url" content="https://askarti.com/">
-    <meta name="twitter:title" content="AskArti - Your Federal Sales Buddy">
-    <meta name="twitter:description" content="Get personalized federal sales advice from AskArti. Free AI tool provides SMART goals, customer messaging, and deal strategies for government contractors and sales professionals.">
+    <meta name="twitter:title" content="AskArti - Federal Sales Coach">
+    <meta name="twitter:description" content="Real federal sales advice. Get unstuck in 60 seconds.">
     <meta name="twitter:image" content="https://askarti.com/images/asklite.png">
     <meta name="twitter:image:alt" content="AskArti Logo">
     <link rel="icon" href="/images/favicon.ico" sizes="any">
@@ -62,41 +62,11 @@
                         }
                     }
                 }
-            },
-            variants: {
-                extend: {},
-            },
-            plugins: [],
-            corePlugins: {
-                container: false,
-                objectFit: false
             }
         }
     </script>
-<script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-    window.mermaid = mermaid;
-   mermaid.initialize({
-    startOnLoad: false,
-    theme: 'base',
-    themeVariables: {
-        primaryColor: '#e9e5f5',
-        primaryTextColor: '#31255e',
-        primaryBorderColor: '#523f9e',
-        lineColor: '#7465b1', 
-        secondaryColor: '#f3f4f6',
-        tertiaryColor: '#e9e5f5'
-    },
-    // This new section defines custom styles for specific classes
-    flowchart: {
-        classDef: {
-            'highlight': 'fill:#7465b1,stroke:#31255e,stroke-width:2px,color:#ffffff'
-        }
-    }
-});
-</script>
     <style>
-        /* Critical CSS inlined for faster rendering */
+        /* Critical CSS */
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
@@ -108,1330 +78,418 @@
             height: 20px;
             animation: spin 1s linear infinite;
         }
-        .results-loader {
-            border: 3px solid #e5e7eb;
-            border-top: 3px solid #523f9e;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            animation: spin 1s linear infinite;
-        }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .modal-backdrop {
-            transition: opacity 0.2s ease;
-            opacity: 0;
+        /* Response type pills */
+        .response-type {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
-        .modal-backdrop.show {
-            opacity: 1;
+        .type-deal { background-color: #e9e5f5; color: #523f9e; }
+        .type-meeting { background-color: #fef3c7; color: #92400e; }
+        .type-prospect { background-color: #dbeafe; color: #1e40af; }
+        .type-interview { background-color: #d1fae5; color: #065f46; }
+        /* Smooth transitions */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
         }
-        .modal-content {
-            transition: transform 0.2s ease, opacity 0.2s ease;
-            transform: scale(0.95);
-            opacity: 0;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .modal-content.show {
-            transform: scale(1);
-            opacity: 1;
-        }
-        /* Styles for feedback states */
-        .prompt-btn {
+        /* Action card hover */
+        .action-card {
             transition: all 0.2s ease;
-            transform: translateY(0);
+            cursor: pointer;
         }
-        .prompt-btn:hover {
+        .action-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
-        /* Success state animation */
-        @keyframes successPulse {
-            0% { box-shadow: 0 0 0 0 rgba(82, 63, 158, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(82, 63, 158, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(82, 63, 158, 0); }
+        /* Quick prompt buttons */
+        .quick-prompt {
+            transition: all 0.2s ease;
+            white-space: nowrap;
         }
-        .success-pulse {
-            animation: successPulse 1.5s ease-out;
-        }
-        /* Error state animation */
-        @keyframes errorShake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-        .error-shake {
-            animation: errorShake 0.6s ease-in-out;
-        }
-        .clear-none {
-            clear: none;
+        .quick-prompt:hover {
+            background-color: rgba(82, 63, 158, 0.1);
+            transform: scale(1.05);
         }
         @media (max-width: 640px) {
-            .responsive-text {
-                font-size: 0.9rem;
-            }
-            .responsive-heading {
-                font-size: 1.1rem;
-            }
+            .response-type { font-size: 0.625rem; padding: 0.2rem 0.5rem; }
         }
-		/* Mermaid diagram styling */
-.mermaid {
-    display: flex;
-    justify-content: center;
-    background: #f9fafb;
-    border-radius: 0.75rem;
-    padding: 1.5rem;
-    margin: 1rem 0;
-    overflow-x: auto;
-}
-
-.mermaid svg {
-    max-width: 100%;
-    height: auto;
-}
-
-/* Custom Mermaid theme colors to match AskArti brand */
-.mermaid .node rect,
-.mermaid .node circle,
-.mermaid .node ellipse,
-.mermaid .node polygon {
-    fill: #e9e5f5 !important;
-    stroke: #523f9e !important;
-    stroke-width: 2px !important;
-}
-
-.mermaid .edgeLabel {
-    background-color: white !important;
-    padding: 0.25rem !important;
-    border-radius: 0.25rem !important;
-}
-
-.mermaid .flowchart-link {
-    stroke: #7465b1 !important;
-    stroke-width: 2px !important;
-}
-
-@media (max-width: 640px) {
-    .mermaid {
-        padding: 1rem;
-        font-size: 0.875rem;
-    }
-}
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
-    <div class="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-32">
-        <header class="text-center mb-3">
-            <div class="flex justify-center items-center mb-1">
-               <a href="/" aria-label="Refresh AskArti"><img src="/images/asklite.png" alt="AskArti Logo" class="h-16 w-auto md:h-20 lg:h-24 max-w-full"></a>
-            </div>
+    <div class="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-20">
+        <!-- Header -->
+        <header class="text-center mb-6">
+            <a href="/" aria-label="AskArti Home" class="inline-block">
+                <img src="/images/asklite.png" alt="AskArti" class="h-16 w-auto md:h-20 lg:h-24">
+            </a>
+            <p class="text-gray-600 mt-2 text-sm md:text-base">Real federal sales advice. Get unstuck in 60 seconds.</p>
         </header>
-        <main id="main-form" class="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 mb-4 shadow-sm">
-            <div class="space-y-3">
-                <div>
-                    <label for="situation-input" class="block text-sm font-medium text-gray-700 mb-1 text-center">Hi, I'm Arti, your 24/7 sales buddy. Tough quarter? Ghosted? Big interview? Let's crush it.</label>
-                    <textarea id="situation-input" rows="4" class="w-full p-3 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary resize-none placeholder-gray-400" placeholder="Stuck selling cyber to DHS. Champion went dark. CIO loves a rival. Or try: 'Find prospects for Cloud at DHS' or 'Help me prep for an interview with XYZ.'"></textarea>
-                </div>
+
+        <!-- Main Input Section -->
+        <main class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
+            <div class="mb-4">
+                <label for="situation-input" class="block text-lg font-semibold text-gray-900 mb-2 text-center">
+                    What's blocking your deal?
+                </label>
+                <textarea 
+                    id="situation-input" 
+                    rows="3" 
+                    class="w-full p-4 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary resize-none placeholder-gray-500"
+                    placeholder="Champion ghosted me after seeing pricing. $2M deal at DHS. Q4 commit."></textarea>
             </div>
-            <div id="canned-prompts" class="mt-4">
-    <div class="flex flex-wrap justify-center gap-1.5">
-        <button class="prompt-btn px-3 py-1.5 bg-customPurple-100/30 hover:bg-customPurple-100/50 rounded-full border border-customPurple-200/30 transition-colors text-sm text-customPurple-500 font-medium" 
-                data-full-text="The COTR at Treasury has gone completely dark after seeing our final pricing. It's a $3M deal in my commit forecast for this quarter, and my boss is grilling me on whether the champion I identified is real or just a friend.">
-            Buyer went dark...
-        </button>
-        <button class="prompt-btn px-3 py-1.5 bg-customPurple-100/30 hover:bg-customPurple-100/50 rounded-full border border-customPurple-200/30 transition-colors text-sm text-customPurple-500 font-medium"
-                data-full-text="We just had a catastrophic demo failure during a FedRAMP technical review with the CISO's team at DOJ. Our champion looks foolish, and the lead engineer thinks our solution is vaporware. We have one shot to fix this.">
-            Demo disaster...
-        </button>
-        <button class="prompt-btn px-3 py-1.5 bg-customPurple-100/30 hover:bg-customPurple-100/50 rounded-full border border-customPurple-200/30 transition-colors text-sm text-customPurple-500 font-medium"
-                data-full-text="Our prime contractor (a large SI) is trying to squeeze us for more margin on a major DHS contract. The government customer knows the price is inflated and is angry. Now the prime is threatening to replace us with a cheaper, inferior competitor.">
-            Partner drama...
-        </button>
-        <button class="prompt-btn px-3 py-1.5 bg-customPurple-100/30 hover:bg-customPurple-100/50 rounded-full border border-customPurple-200/30 transition-colors text-sm text-customPurple-500 font-medium"
-                data-full-text="I have a final loop interview for a Senior Account Executive role at AWS focused on the Navy. I need help framing my biggest win from last year—a complex cloud migration deal—using the STAR format to show both my sales acumen and leadership principles.">
-            Job Interview...
-        </button>
-        <button class="prompt-btn px-3 py-1.5 bg-customPurple-100/30 hover:bg-customPurple-100/50 rounded-full border border-customPurple-200/30 transition-colors text-sm text-customPurple-500 font-medium"
-                data-full-text="I'm preparing for a critical QBR with my DHS customer. User adoption is low, a key director is skeptical and loves our incumbent competitor, and our prime partner is not being helpful. I need a plan to show value and save the renewal.">
-            Meeting Prep...
-        </button>
-        <button class="prompt-btn px-3 py-1.5 bg-customPurple-100/30 hover:bg-customPurple-100/50 rounded-full border border-customPurple-200/30 transition-colors text-sm text-customPurple-500 font-medium"
-                data-full-text="I'm a cloud seller trying to prospect our AI/ML services into the Department of Veterans Affairs (VA). Identify 2-3 specific programs at the VA that are investing in artificial intelligence, who the likely prime SI contractors are, and what major contract vehicles they use.">
-            Prospecting...
-        </button>
-    </div>
-</div>
+
+            <!-- Quick Prompts - More Realistic -->
+            <div class="flex flex-wrap gap-2 justify-center mb-4">
+                <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
+                        data-text="My champion at VA went dark after I sent our SOW. It's a $1.5M cloud migration deal. The CISO loves our competitor and I think he's poisoning the well. Q4 is shot if I lose this.">
+                    Champion went dark
+                </button>
+                <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
+                        data-text="Our demo crashed during the technical evaluation at DOJ. The whole team saw it fail. My champion looks like an idiot and the lead engineer called our solution 'vaporware'. This was supposed to close this quarter.">
+                    Demo crashed & burned
+                </button>
+                <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
+                        data-text="Large SI is squeezing us for 30% margin on a DHS deal. Government knows they're overcharging. SI threatening to go with a competitor if we don't cave. Contract starts in 3 weeks.">
+                    Prime squeezing margin
+                </button>
+                <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
+                        data-text="Final interview at Microsoft for Fed Account Exec role next week. Need to prep STAR stories about closing complex deals and handling technical objections. What should I emphasize?">
+                    Interview prep
+                </button>
+            </div>
+
+            <!-- Ask Button -->
+            <div class="text-center">
+                <button id="ask-btn" class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-semibold py-3 px-8 rounded-full transition-all inline-flex items-center gap-2 shadow-lg hover:shadow-xl">
+                    <span id="btn-text">Get Arti's Take</span>
+                    <div id="loader" class="loader hidden"></div>
+                </button>
+            </div>
         </main>
-        <div class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-10">
-            <button id="generate-btn" class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-8 rounded-full transition-colors flex items-center gap-2 shadow-lg">
-                <span id="btn-text">Ask Arti</span>
-                <div id="loader" class="loader hidden"></div>
-            </button>
+
+        <!-- What I Can Help With -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="action-card bg-white rounded-lg border border-gray-200 p-4 text-center" data-action="deal">
+                <div class="text-3xl mb-2">🎯</div>
+                <h3 class="font-semibold text-gray-900 mb-1">Stuck Deals</h3>
+                <p class="text-sm text-gray-600">Unblock stalled opportunities</p>
+            </div>
+            <div class="action-card bg-white rounded-lg border border-gray-200 p-4 text-center" data-action="meeting">
+                <div class="text-3xl mb-2">📊</div>
+                <h3 class="font-semibold text-gray-900 mb-1">Meeting Prep</h3>
+                <p class="text-sm text-gray-600">Nail your next QBR or pitch</p>
+            </div>
+            <div class="action-card bg-white rounded-lg border border-gray-200 p-4 text-center" data-action="prospect">
+                <div class="text-3xl mb-2">🔍</div>
+                <h3 class="font-semibold text-gray-900 mb-1">Find Prospects</h3>
+                <p class="text-sm text-gray-600">Target the right agencies</p>
+            </div>
+            <div class="action-card bg-white rounded-lg border border-gray-200 p-4 text-center" data-action="interview">
+                <div class="text-3xl mb-2">💼</div>
+                <h3 class="font-semibold text-gray-900 mb-1">Interview Prep</h3>
+                <p class="text-sm text-gray-600">Land your next fed sales role</p>
+            </div>
         </div>
-        <div id="results-container">
-        </div>
-        <footer class="text-center pt-3">
-    <div class="flex justify-center gap-4 text-sm mb-2">
-        <button id="trust-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Privacy</button>
-        <button id="sponsor-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Sponsor</button>
-        <button id="human-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Connect</button>
-        <button id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Share</button>
-        <button id="tools-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Tools</button>
-    </div>
-    <p class="text-xs text-gray-400">AskArti.com results are provided for informational and educational purposes only and do not constitute professional business advice. AI can make errors or provide recommendations that may not suit your specific situation. Please consult qualified professionals before making important business decisions.</p>
-    <br>
-    <p class="text-xs text-gray-400">© 2025 AskArti. Made for Sellers by Sellers.</p>
-    <div class="mt-4 flex justify-center">
-        <a href="https://aws.amazon.com/what-is-cloud-computing" target="_blank" rel="noopener noreferrer">
-            <img src="https://d0.awsstatic.com/logos/powered-by-aws.png" alt="Powered by AWS Cloud Computing" style="width: 80px; height: auto;">
-        </a>
-    </div>
-    </footer>
-    </div>
-    <div id="sponsor-modal" class="hidden fixed inset-0 bg-black/50 modal-backdrop flex items-center justify-center p-4 z-50">
-    <div id="sponsor-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-md modal-content max-h-[80vh] overflow-y-auto">
-        <header class="p-4 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white z-10">
-            <h2 class="text-base font-bold text-gray-900 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Sponsor AskArti
-            </h2>
-            <button id="close-sponsor-modal-btn" class="text-gray-400 hover:text-gray-600">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </header>
-        <main class="p-4 space-y-4 text-sm">
-            <p class="text-xs text-gray-600">Reach federal sales professionals with our tiered sponsorship options:</p>
-            <div class="bg-customPurple-100/10 border border-customPurple-100/40 rounded-lg p-3">
-                <div class="flex justify-between items-center mb-1">
-                    <h4 class="font-semibold text-customPurple-900">Premium</h4>
-                    <span class="text-customPurple-700 font-semibold">$299/mo</span>
-                </div>
-                <ul class="space-y-0.5 text-xs text-gray-700">
-                    <li class="flex items-start gap-1.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                        <span>Top banner position</span>
-                    </li>
-                    <li class="flex items-start gap-1.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                        <span>Category exclusivity</span>
-                    </li>
-                </ul>
+
+        <!-- Results Container -->
+        <div id="results-container" class="fade-in"></div>
+
+        <!-- Footer - Simplified -->
+        <footer class="text-center mt-12 space-y-4">
+            <div class="flex justify-center gap-6 text-sm">
+                <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">About</button>
+                <button id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Share</button>
+                <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Contact</a>
             </div>
-            <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
-                <div class="flex justify-between items-center mb-1">
-                    <h4 class="font-semibold text-gray-900">Standard</h4>
-                    <span class="text-customPurple-500 font-semibold">$199/mo</span>
-                </div>
-                <ul class="space-y-0.5 text-xs text-gray-700">
-                    <li class="flex items-start gap-1.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                        <span>Mid-content placement</span>
-                    </li>
-                    <li class="flex items-start gap-1.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                        <span>Monthly performance report</span>
-                    </li>
-                </ul>
-            </div>
-            <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
-                <div class="flex justify-between items-center mb-1">
-                    <h4 class="font-semibold text-gray-900">Starter</h4>
-                    <span class="text-customPurple-500 font-semibold">$99/mo</span>
-                </div>
-                <ul class="space-y-0.5 text-xs text-gray-700">
-                    <li class="flex items-start gap-1.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                        <span>Footer placement</span>
-                    </li>
-                    <li class="flex items-start gap-1.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                        <span>10% off yearly</span>
-                    </li>
-                </ul>
-            </div>
-            <div class="border-t border-gray-200 pt-3">
-                <a href="mailto:mark@subhoo.com?subject=AskArti Sponsorship Inquiry" class="w-full inline-flex items-center justify-center gap-2 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors text-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    Contact mark@subhoo.com
+            <p class="text-xs text-gray-400 max-w-2xl mx-auto">
+                AskArti provides tactical advice based on real federal sales experience. Not legal or procurement advice. 
+                Your data isn't stored. Built by federal sellers for federal sellers.
+            </p>
+            <div class="mt-4">
+                <a href="https://aws.amazon.com" target="_blank" rel="noopener noreferrer">
+                    <img src="https://d0.awsstatic.com/logos/powered-by-aws.png" alt="Powered by AWS" class="h-10 mx-auto opacity-50 hover:opacity-100 transition-opacity">
                 </a>
             </div>
-        </main>
+        </footer>
     </div>
-</div>
-    <div id="human-modal" class="hidden fixed inset-0 bg-black/50 modal-backdrop flex items-center justify-center p-4 z-50">
-        <div id="human-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-md modal-content">
-            <header class="p-6 border-b border-gray-200 flex justify-between items-center">
-                <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
-                    <img src="images/mark.png" alt="Mark Flournoy" class="w-6 h-6 rounded-full object-cover">
-                    Hi, I'm Mark, creator of AskArti.
-                </h2>
-                <button id="close-human-modal-btn" class="text-gray-400 hover:text-gray-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+
+    <!-- About Modal - Simplified -->
+    <div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+            <div class="flex justify-between items-start mb-4">
+                <h2 class="text-xl font-bold text-gray-900">Hey, I'm Mark</h2>
+                <button id="close-about" class="text-gray-400 hover:text-gray-600">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
-            </header>
-            <main class="p-6 space-y-6 text-gray-700">
-                <div class="flex items-start gap-4">
-                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-customPurple-100/30 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-gray-900">I've Been There</h3>
-                        <p class="text-sm mt-1 text-gray-600">I've worked federal deals for decades as a mission-owner, COTR, and seller.</p>
-                    </div>
-                </div>
-                <div class="flex items-start gap-4">
-                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-customPurple-100/30 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-gray-900">Strategy & Deal Reviews</h3>
-                        <p class="text-sm mt-1 text-gray-600">Get help with deal strategy, GTM planning, competitive positioning, or just talk through what's blocking your federal sales.</p>
-                    </div>
-                </div>
-                <div class="flex items-start gap-4">
-                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-customPurple-100/30 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-gray-900">Free 30-Minute Intro Call</h3>
-                        <p class="text-sm mt-1 text-gray-600">No strings attached. Just a conversation about your federal sales challenges and how I might be able to help.</p>
-                    </div>
-                </div>
-                <div class="border-t border-gray-200 pt-4">
-                    <a href="https://calendly.com/markflournoy/30min" target="_blank" class="w-full inline-flex items-center justify-center gap-2 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        Schedule Free Call
+            </div>
+            <div class="space-y-4 text-gray-700">
+                <p>I've sold to the federal government for 20+ years. Been the mission owner, the COTR, and the seller.</p>
+                <p>Built AskArti because I got tired of generic sales advice that doesn't understand how federal actually works.</p>
+                <p>This is the coach I wish I had when I was grinding out deals at 11:47pm on September 30th.</p>
+                <div class="pt-4 border-t">
+                    <a href="https://calendly.com/markflournoy/30min" target="_blank" 
+                       class="block w-full bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-lg text-center transition-colors">
+                        Want to talk federal sales? Let's chat →
                     </a>
                 </div>
-            </main>
+            </div>
         </div>
     </div>
-    <div id="trust-modal" class="hidden fixed inset-0 bg-black/50 modal-backdrop flex items-center justify-center p-4 z-50">
-        <div id="trust-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-md modal-content">
-            <header class="p-6 border-b border-gray-200 flex justify-between items-center">
-                <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                    Privacy
-                </h2>
-                <button id="close-trust-modal-btn" class="text-gray-400 hover:text-gray-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </header>
-            <main class="p-6 space-y-6 text-gray-700">
-                <div class="flex items-start gap-4">
-                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-customPurple-100/30 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-gray-900">Your Data</h3>
-                        <p class="text-sm mt-1 text-gray-600">We do not store, log, or persist any prompt or response data. All processing occurs in-memory using AWS Lambda and is discarded after execution.</p>
-                    </div>
-                </div>
-                <div class="flex items-start gap-4">
-                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-customPurple-100/30 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v6a2 2 0 002 2h14a2 2 0 002-2v-6a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-gray-900">AI Model Information</h3>
-                        <p class="text-sm mt-1 text-gray-600">AskArti uses models that may include Gemini, Claude, and ChatGPT. These models may use API inputs to improve responses.</p>
-                    </div>
-                </div>
-                <div class="flex items-start gap-4">
-                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-customPurple-100/30 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-gray-900">How Recommendations Work</h3>
-                        <p class="text-sm mt-1 text-gray-600">AskArti provides AI-generated sales advice for informational and educational purposes only and do not constitute professional business advice. Users should exercise their own judgment and consider consulting qualified professionals before making important business decisions.</p>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </div>
-    <div id="bonus-tools-modal" class="hidden fixed inset-0 bg-black/50 modal-backdrop flex items-center justify-center p-4 z-50">
-        <div id="bonus-tools-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-md modal-content">
-            <header class="p-6 border-b border-gray-200 flex justify-between items-center">
-                <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 5z" />
-                    </svg>
-                    Sales Tools
-                </h2>
-                <button id="close-bonus-tools-modal-btn" class="text-gray-400 hover:text-gray-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </header>
-            <main class="p-4">
-                <div class="flex border-b border-slate-200">
-                    <button class="widget-tab flex-1 py-3 px-2 text-sm font-semibold text-slate-600 border-b-2 border-transparent active" data-widget="fy-countdown">FY Countdown</button>
-                    <button class="widget-tab flex-1 py-3 px-2 text-sm font-semibold text-slate-600 border-b-2 border-transparent" data-widget="qual-scorecard">Qual Scorecard</button>
-                    <button class="widget-tab flex-1 py-3 px-2 text-sm font-semibold text-slate-600 border-b-2 border-transparent" data-widget="golden-hour">Golden Hour</button>
-                </div>
-                <div class="p-4">
-                    <div id="fy-countdown" class="widget-content">
-                        <div class="text-center mb-6">
-                            <h3 class="text-xl font-bold text-gray-800 tracking-tight">Q4 Spending Season</h3>
-                            <p id="fy-fiscal-year" class="text-customPurple-500 font-semibold text-lg"></p>
-                        </div>
-                        <div id="fy-countdown-wrapper">
-                            <p class="text-center text-gray-600 mb-3">Days Remaining</p>
-                            <div class="grid grid-cols-4 gap-2 md:gap-4 text-center mb-6">
-                                <div><div class="fy-timer-box rounded-lg p-3 bg-gray-50 border border-gray-200"><div id="fy-days" class="text-3xl font-black text-slate-800">00</div></div><div class="text-xs text-gray-500 mt-2">Days</div></div>
-                                <div><div class="fy-timer-box rounded-lg p-3 bg-gray-50 border border-gray-200"><div id="fy-hours" class="text-3xl font-black text-slate-800">00</div></div><div class="text-xs text-gray-500 mt-2">Hours</div></div>
-                                <div><div class="fy-timer-box rounded-lg p-3 bg-gray-50 border border-gray-200"><div id="fy-minutes" class="text-3xl font-black text-slate-800">00</div></div><div class="text-xs text-gray-500 mt-2">Minutes</div></div>
-                                <div><div class="fy-timer-box rounded-lg p-3 bg-gray-50 border border-gray-200"><div id="fy-seconds" class="text-3xl font-black text-slate-800">00</div></div><div class="text-xs text-gray-500 mt-2">Seconds</div></div>
-                            </div>
-                        </div>
-                        <div id="fy-yearend-message" class="hidden text-center py-8"><h2 class="text-2xl font-bold text-green-600">FY-End Complete!</h2><p class="text-gray-600 mt-2">Time to start planning for the new Fiscal Year.</p></div>
-                        <div class="mb-6"><div class="flex justify-between mb-1"><span class="text-sm font-medium text-gray-700">Q4 Progress</span><span id="fy-progress-percent" class="text-sm font-medium text-gray-700">0%</span></div><div class="w-full bg-gray-200 rounded-full h-2.5"><div id="fy-progress-bar" class="bg-customPurple-500 h-2.5 rounded-full" style="width: 0%"></div></div></div>
-                        <div class="bg-customPurple-100/20 p-4 rounded-lg border border-customPurple-200/30"><h3 class="font-bold text-customPurple-700 mb-2">Strategic Focus</h3><p id="fy-pro-tip" class="text-sm text-gray-700">Loading tip...</p></div>
-                    </div>
-                    <div id="qual-scorecard" class="widget-content hidden">
-                        <div class="text-center mb-3">
-                            <h3 class="text-lg font-bold text-gray-800">Lead Qualification Scorecard</h3>
-                            <p class="text-xs text-gray-600 mt-1">Score leads to prioritize your pipeline</p>
-                        </div>
-                        <div id="qual-form" class="space-y-3">
-                            <div class="border-b pb-2 border-gray-100">
-                                <div class="flex justify-between items-center mb-1">
-                                    <p class="text-sm font-medium text-gray-700">Budget</p>
-                                    <div class="flex space-x-1">
-                                        <label class="qual-option-label cursor-pointer text-center py-1 px-2 rounded text-xs font-medium border border-gray-300 min-w-[40px]">
-                                            <input type="radio" name="budget" value="3" class="sr-only"> Yes
-                                        </label>
-                                        <label class="qual-option-label cursor-pointer text-center py-1 px-2 rounded text-xs font-medium border border-gray-300 min-w-[40px]">
-                                            <input type="radio" name="budget" value="1" class="sr-only"> Maybe
-                                        </label>
-                                        <label class="qual-option-label cursor-pointer text-center py-1 px-2 rounded text-xs font-medium border border-gray-300 min-w-[40px]">
-                                            <input type="radio" name="budget" value="0" class="sr-only" checked> No
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border-b pb-2 border-gray-100">
-                                <div class="flex justify-between items-center mb-1">
-                                    <p class="text-sm font-medium text-gray-700">Authority</p>
-                                    <div class="flex space-x-1">
-                                        <label class="qual-option-label cursor-pointer text-center py-1 px-2 rounded text-xs font-medium border border-gray-300 min-w-[40px]">
-                                            <input type="radio" name="authority" value="3" class="sr-only"> Yes
-                                        </label>
-                                        <label class="qual-option-label cursor-pointer text-center py-1 px-2 rounded text-xs font-medium border border-gray-300 min-w-[60px]">
-                                            <input type="radio" name="authority" value="2" class="sr-only"> Influencer
-                                        </label>
-                                        <label class="qual-option-label cursor-pointer text-center py-1 px-2 rounded text-xs font-medium border border-gray-300 min-w-[40px]">
-                                            <input type="radio" name="authority" value="0" class="sr-only" checked> No
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border-b pb-2 border-gray-100">
-                                <div class="flex justify-between items-center mb-1">
-                                    <p class="text-sm font-medium text-gray-700">Need</p>
-                                    <div class="flex space-x-1">
-                                        <label class="qual-option-label cursor-pointer text-center py-1 px-2 rounded text-xs font-medium border border-gray-300 min-w-[40px]">
-                                            <input type="radio" name="need" value="3" class="sr-only"> High
-                                        </label>
-                                        <label class="qual-option-label cursor-pointer text-center py-1 px-2 rounded text-xs font-medium border border-gray-300 min-w-[40px]">
-                                            <input type="radio" name="need" value="2" class="sr-only" checked> Med
-                                        </label>
-                                        <label class="qual-option-label cursor-pointer text-center py-1 px-2 rounded text-xs font-medium border border-gray-300 min-w-[40px]">
-                                            <input type="radio" name="need" value="0" class="sr-only"> Low
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="pb-1">
-                                <div class="flex justify-between items-center mb-1">
-                                    <p class="text-sm font-medium text-gray-700">Timeline</p>
-                                    <div class="flex space-x-1">
-                                        <label class="qual-option-label cursor-pointer text-center py-1 px-2 rounded text-xs font-medium border border-gray-300 min-w-[55px]">
-                                            <input type="radio" name="timeline" value="3" class="sr-only"> < 3 Mos
-                                        </label>
-                                        <label class="qual-option-label cursor-pointer text-center py-1 px-2 rounded text-xs font-medium border border-gray-300 min-w-[55px]">
-                                            <input type="radio" name="timeline" value="1" class="sr-only"> 3-6 Mos
-                                        </label>
-                                        <label class="qual-option-label cursor-pointer text-center py-1 px-2 rounded text-xs font-medium border border-gray-300 min-w-[55px]">
-                                            <input type="radio" name="timeline" value="0" class="sr-only" checked> 6+ Mos
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="qual-result-card" class="hidden mt-3 rounded-lg p-4 text-center">
-                            <div class="flex items-center justify-center">
-                                <div id="qual-result-icon" class="text-3xl mr-2"></div>
-                                <div class="text-left">
-                                    <h2 id="qual-result-title" class="text-lg font-bold"></h2>
-                                    <p id="qual-result-description" class="text-sm"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="golden-hour" class="widget-content hidden">
-                        <div class="text-center mb-6"><h3 class="text-xl font-bold text-gray-800">Prospect Golden Hour</h3><p class="text-gray-600 mt-2">Find the best time to prospect.</p></div>
-                        <div class="mb-4"><label for="gh-timezone-select" class="block mb-2 text-sm font-medium text-slate-700">Prospect's Time Zone:</label><select id="gh-timezone-select" class="bg-gray-50 border border-gray-300 text-slate-900 text-sm rounded-lg focus:ring-customPurple-500 focus:border-customPurple-500 block w-full p-2.5"></select></div>
-                        <div id="gh-status-card" class="rounded-xl p-6 text-center"><div id="gh-status-icon" class="text-5xl mb-3 mx-auto"></div><h2 id="gh-status-text" class="text-2xl font-bold mb-1"></h2><p id="gh-prospect-time" class="text-lg font-medium text-slate-600"></p><div class="mt-4 pt-4 border-t border-gray-200"><p id="gh-next-golden-hour" class="text-slate-600"></p><p id="gh-your-time-equivalent" class="text-sm text-slate-500"></p></div></div>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </div>
-    <style>
-        .widget-tab {
-            transition: all 0.2s ease-in-out;
-        }
-        .widget-tab.active {
-            background-color: rgba(151, 139, 196, 0.3); /* customPurple-100/30 */
-            color: #41327e; /* customPurple-700 */
-            border-color: #523f9e; /* customPurple-500 */
-        }
-        .qual-option-label:has(input:checked) {
-            background-color: #523f9e; /* customPurple-500 */
-            color: white;
-            border-color: #523f9e;
-        }
-    </style>
+
     <script>
-    // --- DOM Elements ---
+    // DOM Elements
     const situationInput = document.getElementById('situation-input');
-    const generateBtn = document.getElementById('generate-btn');
-    const resultsContainer = document.getElementById('results-container');
+    const askBtn = document.getElementById('ask-btn');
     const btnText = document.getElementById('btn-text');
     const loader = document.getElementById('loader');
-    const trustBtn = document.getElementById('trust-btn');
-    const trustModal = document.getElementById('trust-modal');
-    const trustModalContent = document.getElementById('trust-modal-content');
-    const closeTrustModalBtn = document.getElementById('close-trust-modal-btn');
-    const sponsorBtn = document.getElementById('sponsor-btn');
-    const sponsorModal = document.getElementById('sponsor-modal');
-    const sponsorModalContent = document.getElementById('sponsor-modal-content');
-    const closeSponsorModalBtn = document.getElementById('close-sponsor-modal-btn');
-    const humanBtn = document.getElementById('human-btn');
-    const humanModal = document.getElementById('human-modal');
-    const humanModalContent = document.getElementById('human-modal-content');
-    const closeHumanModalBtn = document.getElementById('close-human-modal-btn');
-    const toolsBtn = document.getElementById('tools-btn');
-    const bonusToolsModal = document.getElementById('bonus-tools-modal');
-    const bonusToolsModalContent = document.getElementById('bonus-tools-modal-content');
-    const closeBonusToolsModalBtn = document.getElementById('close-bonus-tools-modal-btn');
-    let originalSituation = ""; 
-    const API_ENDPOINT = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
-    const showLoading = (isLoading) => {
-        btnText.classList.toggle('hidden', isLoading);
-        loader.classList.toggle('hidden', !isLoading);
-        generateBtn.disabled = isLoading;
-    };
-    const fetchCoachingPlan = async (situation) => {
-    const response = await fetch(API_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            request_type: 'generate_one_shot_plan',
-            situation: situation
-        })
-    });
-    if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
-    return await response.json();
-};
-const generatePlan = async () => {
-    const situation = situationInput.value.trim();
-    if (!situation) {
-        resultsContainer.innerHTML = `<div class="text-center p-6 bg-red-50 border border-red-200 rounded-xl"><p class="text-red-700 font-medium">Please describe your sales problem first.</p></div>`;
-        resultsContainer.firstChild.classList.add('error-shake');
-        return;
-    }
-    originalSituation = situation;
-    showLoading(true);
-    // Enhanced loading experience with your updated messages
-    let loadingStage = 0;
-    const loadingMessages = [
-        "Diving Deep...",
-        "Escalating...",
-        "Unpacking This...",
-        "Putting a Pin in it...",
-        "Circling Back...",
-        "Thinking Big..."
-    ];
-    // Enhanced loading UI with Arti's avatar and better styling
-    resultsContainer.innerHTML = `
-        <div class="text-center py-2 mt-2">
-            <div class="flex justify-center items-center mb-2">
-                <img src="images/arti_right.png" alt="Arti" class="h-16 w-16 animate-pulse">
-            </div>
-            <p id="loading-message" class="text-customPurple-500 text-lg font-semibold mb-2">Hang on, I'm Working Backwards...</p>
-        </div>
-    `;
-    const loadingInterval = setInterval(() => {
-        loadingStage = (loadingStage + 1) % loadingMessages.length;
-        const messageEl = document.getElementById('loading-message');
-        if (messageEl) {
-            messageEl.textContent = loadingMessages[loadingStage];
-        }
-    }, 2000);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    try {
-        const planData = await fetchCoachingPlan(originalSituation);
-        clearInterval(loadingInterval);
-        displayPlan(planData);
-    } catch (error) {
-        clearInterval(loadingInterval);
-        handleApiError(error);
-    } finally {
-        showLoading(false);
-    }
-};
-    const handleCannedPrompt = (e) => {
-        const button = e.currentTarget;
-        const fullText = button.getAttribute('data-full-text');
-        situationInput.value = fullText;
-        setTimeout(() => {
-            generateBtn.click();
-        }, 200);
-    };
-const displayPlan = (planData) => {
-    // Check if this is a prospecting response (either old or new format)
-    if (planData.naics_codes || planData.federal_competitors) {
-        displayProspectingResults(planData);
-        return;
-    }
-    const coachingPlan = planData.coaching_plan;
-    const recommendation = planData.high_level_recommendation;
-    const tldr = planData.tldr_summary;
-    const mermaidDiagram = planData.mermaid_diagram; // Extract the diagram
+    const resultsContainer = document.getElementById('results-container');
+    const aboutBtn = document.getElementById('about-btn');
+    const aboutModal = document.getElementById('about-modal');
+    const closeAbout = document.getElementById('close-about');
+    const shareBtn = document.getElementById('share-btn');
 
-    const colors = [
-        { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-500' },
-        { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-700' },
-        { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-500' },
-        { bg: 'bg-customPurple-100/20', border: 'border-customPurple-100/40', text: 'text-customPurple-900', icon: 'bg-customPurple-700' }
-    ];
-    const personaCardsHTML = coachingPlan.map((personaData, index) => {
-        const color = colors[index % colors.length];
-        const talkingPointsHTML = personaData.talking_points.map(point => `<li class="flex items-start gap-2 mb-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg><span class="text-gray-700">${marked.parse(point)}</span></li>`).join('');
-        const snippetHTML = `
-            <div class="mt-4 pt-4 border-t border-gray-200">
-                <h3 class="font-medium text-gray-900 mb-2 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
-                        <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" />
-                    </svg>
-                    Shareable Snippet
-                </h3>
-                <div class="relative bg-gray-50 p-3 rounded-lg border border-gray-200">
-                    <p class="text-sm text-gray-700 snippet-text">${personaData.suggested_snippet}</p>
-                    <button class="copy-snippet-btn absolute top-2 right-2 p-1.5 bg-white/50 hover:bg-gray-200/80 rounded-full transition-colors" data-text="${personaData.suggested_snippet}" title="Copy Snippet">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    </button>
-                </div>
-            </div>
-        `;
-        return `
-            <div class="persona-card bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <div class="flex items-start gap-3 mb-4">
-                    <div class="${color.icon} w-10 h-10 rounded-xl text-white flex-shrink-0 flex items-center justify-center"><span class="font-bold">${personaData.persona.charAt(0)}</span></div>
-                    <h2 class="text-lg md:text-xl font-semibold text-gray-900 break-words">${personaData.persona}</h2>
-                </div>
-                <div class="space-y-4">
-                    <div class="${color.bg} ${color.border} border p-4 rounded-xl">
-                        <h3 class="font-medium text-customPurple-700 mb-2">SMART Goal</h3>
-                        <div class="text-gray-700">${marked.parse(personaData.smart_goal)}</div>
-                    </div>
-                    <div>
-                        <h3 class="font-medium text-gray-900 mb-3">Key Talking Points</h3>
-                        <ul class="space-y-1">${talkingPointsHTML}</ul>
-                    </div>
-                    ${snippetHTML}
-                </div>
-            </div>
-        `;
-    }).join('');
-    resultsContainer.innerHTML = `
-        <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs">
-            <div class="flex items-center gap-2">
-                <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
-                <a href="https://subhoo.com" class="text-customPurple-700 font-medium hover:text-customPurple-900">Subhoo.com</a>
-            </div>
-            <p class="text-gray-600 text-xs mt-1">Helping you avoid teaming partners who still fax NDAs.</p>
-        </div>
-        <div id="coaching-plan-container" class="space-y-6">
-            <div class="space-y-6">
-                <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 p-5 rounded-xl shadow-md border border-customPurple-100/50 success-pulse">
-                    <img src="images/arti_right.png" alt="Arti" class="float-left h-12 w-12 mr-4 mb-2">
-                    <h3 class="text-lg font-semibold mb-1.5 text-customPurple-900">A few thoughts...</h3>
-                    <div class="text-gray-800">${marked.parse(recommendation)}</div>
-                    <div class="clear-both"></div>
-                </div>
-                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-                    <h3 class="font-semibold text-gray-900 mb-1 flex items-center gap-2">
-                        <span class="bg-customPurple-500 text-white text-xs font-bold px-2 py-1 rounded">TL;DR</span>
-                    </h3>
-                    <div class="text-sm text-gray-700">${marked.parse(tldr)}</div>
-                </div>
-				 ${mermaidDiagram ? createDiagramContainer(mermaidDiagram, 'Visual Strategy') : ''}
-                <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs">
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
-                        <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">FastTrack Compliance</a>
-                    </div>
-                    <p class="text-gray-600 text-xs mt-1">Because waiting 18 months for security clearance is so last century.</p>
-                </div>
-                </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">${personaCardsHTML}</div>
-        </div>
-       <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 mt-6 text-xs">
-            <div class="flex items-center gap-2">
-                <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
-                <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">DeepPockets Funding</a>
-            </div>
-            <p class="text-gray-600 text-xs mt-1">We find money hiding in the couch cushions of Congress.</p>
-        </div>
-        <div class="mt-8 flex flex-col sm:flex-row gap-3">
-            <button id="copy-btn" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" /><path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" /></svg>Copy Plan</button>
-            <button id="reset-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl border border-gray-200 transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>Start Over</button>
-        </div>`;
-    // Set up event listeners for dynamically created elements
-    document.getElementById('reset-btn').addEventListener('click', resetForm);
-    document.getElementById('copy-btn').addEventListener('click', copyPlanToClipboard);
-    document.querySelectorAll('.copy-snippet-btn').forEach(btn => {
-        btn.addEventListener('click', copySnippet);
+    const API_ENDPOINT = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
+
+    // Quick prompt handling
+    document.querySelectorAll('.quick-prompt').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            situationInput.value = e.target.dataset.text;
+            askBtn.click();
+        });
     });
-// Initialize Mermaid diagrams
-    setTimeout(() => {
-        initializeMermaidDiagrams();
-    }, 100);
-};
-    const copyPlanToClipboard = () => {
-    const planContainer = document.getElementById('coaching-plan-container');
-    if (!planContainer) return;
-    const thoughtsSection = planContainer.querySelector('.bg-gradient-to-r div');
-    const recommendation = thoughtsSection ? thoughtsSection.textContent.trim() : '';
-    let fullText = `ARTI'S THOUGHTS:\n${recommendation}\n\n--- DETAILED PLAN ---\n\n`;
-    const personaCards = document.querySelectorAll('.persona-card');
-    personaCards.forEach(card => {
-        const persona = card.querySelector('h2').textContent.trim();
-        let goal = 'No goal available.';
-        const snippet = card.querySelector('.snippet-text')?.textContent.trim() || 'No snippet available.';
-        // --- DEFINITIVE GOAL-COPYING LOGIC ---
-        // Find the H3 element with the text "SMART Goal"
-        const allH3s = card.querySelectorAll('h3');
-        const smartGoalH3 = Array.from(allH3s).find(h3 => h3.textContent.trim() === 'SMART Goal');
-        // If the H3 is found, the div containing the goal text is its direct sibling.
-        if (smartGoalH3) {
-            const goalContainerDiv = smartGoalH3.nextElementSibling;
-            if (goalContainerDiv) {
-                // Get all text from within the container, which correctly handles paragraphs, lists, etc.
-                goal = goalContainerDiv.textContent.trim();
-            }
-        }
-        const points = Array.from(card.querySelectorAll('ul li span')).map(span => `- ${span.textContent.trim()}`).join('\n');
-        fullText += `--- ${persona.toUpperCase()} ---\n\n`;
-        fullText += `SMART GOAL:\n${goal}\n\n`; // This will now have the correct text
-        fullText += `KEY TALKING POINTS:\n${points}\n\n`;
-        fullText += `SUGGESTED SNIPPET:\n${snippet}\n\n`;
+
+    // Action card handling
+    document.querySelectorAll('.action-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            const action = e.currentTarget.dataset.action;
+            const prompts = {
+                deal: "My champion at [AGENCY] went dark after [EVENT]. It's a $[AMOUNT] [SOLUTION] deal. [BLOCKER]. Need to save this for Q[#].",
+                meeting: "Preparing for [TYPE] meeting at [AGENCY] next week. [STAKEHOLDERS] will be there. They care about [PRIORITY]. How should I position our [SOLUTION]?",
+                prospect: "I sell [SOLUTION] and want to break into [AGENCY]. What programs should I target? Who are the key contractors? What contract vehicles should I pursue?",
+                interview: "Interviewing for [ROLE] at [COMPANY] focused on federal. They want someone who can [REQUIREMENT]. How should I position my experience with [ACHIEVEMENT]?"
+            };
+            situationInput.value = prompts[action];
+            situationInput.focus();
+        });
     });
-    navigator.clipboard.writeText(fullText.trim()).then(() => {
-        const copyBtn = document.getElementById('copy-btn');
-        const originalHtml = copyBtn.innerHTML;
-        copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>Copied!`;
-        copyBtn.classList.add('success-pulse');
-        setTimeout(() => {
-            copyBtn.innerHTML = originalHtml;
-            copyBtn.classList.remove('success-pulse');
-        }, 2000);
-    });
-};
-const copyProspectingResults = () => {
-    const container = document.getElementById('prospecting-results-container');
-    if (!container) return;
-    let fullText = "ARTI'S PROSPECTING RESEARCH\n\n";
-    // A robust helper function to find a section by its title and get its text
-    const addSectionToText = (title) => {
-        const allH3s = Array.from(container.querySelectorAll('h3'));
-        const titleH3 = allH3s.find(h3 => h3.textContent.trim().includes(title));
-        if (!titleH3) return; // Skip if section doesn't exist
-        // Find the parent 'card' element for the section
-        const card = titleH3.closest('.bg-white, .bg-gradient-to-r, .bg-customPurple-100\\/20');
-        if (!card) return;
-        fullText += `--- ${title.toUpperCase()} ---\n`;
-        // Special case for the main summary, which has a different structure
-        if (title === "Prospect Research") {
-            const summaryContent = card.querySelector('.text-gray-800');
-            if (summaryContent) {
-                 fullText += `${summaryContent.textContent.trim().replace(/\s+/g, ' ')}\n\n`;
-            }
+
+    // Show/hide loader
+    const setLoading = (loading) => {
+        btnText.style.display = loading ? 'none' : 'inline';
+        loader.style.display = loading ? 'block' : 'none';
+        askBtn.disabled = loading;
+    };
+
+    // Get advice
+    const getAdvice = async () => {
+        const situation = situationInput.value.trim();
+        if (!situation) {
+            resultsContainer.innerHTML = `
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+                    <p class="text-red-700 font-medium">Drop your situation in the box above 👆</p>
+                </div>`;
             return;
         }
-        // Find all list items, tags, or content blocks within the card
-        const items = card.querySelectorAll('li, .flex-wrap > span, .space-y-3 > div, .space-y-2 > div, p.text-customPurple-900');
-        if (items.length > 0) {
-            items.forEach(item => {
-                fullText += `- ${item.textContent.trim().replace(/\s+/g, ' ')}\n`;
+
+        setLoading(true);
+        resultsContainer.innerHTML = `
+            <div class="text-center py-8">
+                <img src="/images/arti_right.png" alt="Arti thinking" class="h-16 w-16 mx-auto mb-4 opacity-50 animate-pulse">
+                <p class="text-gray-600">Analyzing your situation...</p>
+            </div>`;
+
+        try {
+            const response = await fetch(API_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ situation })
             });
+
+            if (!response.ok) throw new Error('API Error');
+            
+            const data = await response.json();
+            displayAdvice(data);
+        } catch (error) {
+            console.error('Error:', error);
+            resultsContainer.innerHTML = `
+                <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+                    <p class="text-red-700 font-medium mb-2">Couldn't connect to Arti</p>
+                    <p class="text-red-600 text-sm">Try again in a second</p>
+                </div>`;
+        } finally {
+            setLoading(false);
         }
-        fullText += '\n';
     };
-    // Process each section using the helper
-    addSectionToText("Prospect Research");
-    addSectionToText("Core Capabilities");
-    addSectionToText("Relevant NAICS Codes");
-    addSectionToText("Prospect Recommendations");
-    addSectionToText("Federal Competitors");
-    addSectionToText("Prime Contractors");
-    addSectionToText("Market Insight");
-    // Copy the final text to the clipboard and provide user feedback
-    navigator.clipboard.writeText(fullText.trim()).then(() => {
-        const copyBtn = document.getElementById('copy-prospecting-btn');
-        const originalHtml = copyBtn.innerHTML;
-        copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>Copied!`;
-        copyBtn.classList.add('success-pulse');
-        setTimeout(() => {
-            copyBtn.innerHTML = originalHtml;
-            copyBtn.classList.remove('success-pulse');
-        }, 2000);
-    });
-};
-const displayProspectingResults = (prospectData) => {
-    // By adding "= []", we ensure these are always arrays, preventing mapping errors.
-    const { 
-        summary, 
-        company_capabilities = [],
-        naics_codes = [], 
-        federal_competitors = [], 
-        prime_contractors = [],
-        prospect_recommendations = [],
-        market_insights,
-        mermaid_diagram // Extract diagram
-    } = prospectData;
-    // The rest of the function remains the same, but is now safe from errors.
-    resultsContainer.innerHTML = `
-        <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs">
-            <div class="flex items-center gap-2">
-                <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
-                <a href="https://subhoo.com" class="text-customPurple-700 font-medium hover:text-customPurple-900">Subhoo.com</a>
-            </div>
-            <p class="text-gray-600 text-xs mt-1">Helping you avoid teaming partners who still fax NDAs.</p>
-        </div>
-        <div id="prospecting-results-container" class="space-y-6">
-            <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 p-5 rounded-xl shadow-md border border-customPurple-100/50">
-                <img src="images/arti_right.png" alt="Arti" class="float-left h-12 w-12 mr-4 mb-2">
-                <h3 class="text-lg font-semibold mb-2 text-customPurple-900">Prospect Research & Competitive Intelligence</h3>
-                <div class="text-gray-800">${marked.parse(summary || '')}</div>
-                <div class="clear-both"></div>
-            </div>
-			 ${mermaid_diagram ? createDiagramContainer(mermaid_diagram, 'Market Overview') : ''}
-            ${company_capabilities.length > 0 ? `
-            <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-                <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm2 6a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1z" clip-rule="evenodd" />
-                    </svg>
-                    Core Capabilities
-                </h3>
-                <div class="flex flex-wrap gap-2">
-                    ${company_capabilities.map(cap => `<span class="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">${marked.parse(cap).replace(/<\/?p>/g, '')}</span>`).join('')}
+
+    // Display advice
+    const displayAdvice = (data) => {
+        const { response_type, quick_take, key_moves, talking_points, email_template, next_steps } = data;
+
+        // Determine response type styling
+        const typeStyles = {
+            deal: { label: 'Deal Strategy', class: 'type-deal' },
+            meeting: { label: 'Meeting Prep', class: 'type-meeting' },
+            prospect: { label: 'Prospecting Intel', class: 'type-prospect' },
+            interview: { label: 'Interview Prep', class: 'type-interview' }
+        };
+        const typeStyle = typeStyles[response_type] || typeStyles.deal;
+
+        let html = `
+            <!-- Quick Take -->
+            <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 rounded-xl p-6 mb-6 border border-customPurple-100/50">
+                <div class="flex items-start gap-4">
+                    <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 flex-shrink-0">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <h3 class="text-lg font-bold text-customPurple-900">Here's what I'd do</h3>
+                            <span class="response-type ${typeStyle.class}">${typeStyle.label}</span>
+                        </div>
+                        <div class="text-gray-800 space-y-2">${marked.parse(quick_take || '')}</div>
+                    </div>
                 </div>
             </div>
-            ` : ''}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-                    <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
-                        </svg>
-                        Relevant NAICS Codes
-                    </h3>
-                    <ul class="space-y-1">
-                        ${naics_codes.map(code => `<li class="text-sm text-gray-700"><span class="font-medium">${marked.parse(code).replace(/<\/?p>/g, '')}</span></li>`).join('')}
-                    </ul>
-                </div>
-                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-                    <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M13 7H7v6h6V7z" />
-                            <path fill-rule="evenodd" d="M7 2a1 1 0 012 0v1h2V2a1 1 0 112 0v1h2a2 2 0 012 2v2h1a1 1 0 110 2h-1v2h1a1 1 0 110 2h-1v2a2 2 0 01-2 2h-2v1a1 1 0 11-2 0v-1H9v1a1 1 0 11-2 0v-1H5a2 2 0 01-2-2v-2H2a1 1 0 110-2h1V9H2a1 1 0 010-2h1V5a2 2 0 012-2h2V2z" clip-rule="evenodd" />
-                        </svg>
-                        Prospect Recommendations
-                    </h3>
-                    <ul class="space-y-2">
-                        ${prospect_recommendations.map(rec => `<li class="text-sm text-gray-700 flex items-start gap-2"><span class="text-customPurple-500">•</span><span>${marked.parse(rec).replace(/<\/?p>/g, '')}</span></li>`).join('')}
-                    </ul>
-                </div>
-            </div>
-            <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 text-xs">
-                <div class="flex items-center gap-2">
-                    <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
-                    <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">FaxLess Solutions</a>
-                </div>
-                <p class="text-gray-600 text-xs mt-1">Finally, a contractor who emails instead of sending carrier pigeons.</p>
-            </div>
-            ${federal_competitors.length > 0 ? `
-            <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-                <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                    </svg>
-                    Federal Competitors & Similar Companies
+
+            <!-- Key Moves -->
+            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
+                <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <span class="text-2xl">🎯</span> Your Next 3 Moves
                 </h3>
                 <div class="space-y-3">
-                    ${federal_competitors.map(comp => `
-                        <div class="border-l-4 border-customPurple-200 pl-3">
-                            <h4 class="font-medium text-gray-900">${comp.company}</h4>
-                            <p class="text-sm text-gray-600 mt-1">${marked.parse(comp.strengths).replace(/<\/?p>/g, '')}</p>
-                            ${comp.contract_vehicles ? `<p class="text-xs text-gray-500 mt-1">Vehicles: ${comp.contract_vehicles}</p>` : ''}
+                    ${(key_moves || []).map((move, i) => `
+                        <div class="flex gap-3">
+                            <span class="flex-shrink-0 w-7 h-7 bg-customPurple-100 text-customPurple-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-900">${move.action}</p>
+                                <p class="text-sm text-gray-600 mt-1">${move.why}</p>
+                            </div>
                         </div>
                     `).join('')}
                 </div>
             </div>
-            ` : ''}
-            ${prime_contractors.length > 0 ? `
-            <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-                <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-                    </svg>
-                    Prime Contractors & Partners
+
+            <!-- Talking Points -->
+            ${talking_points && talking_points.length > 0 ? `
+            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
+                <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <span class="text-2xl">💬</span> What to Say
                 </h3>
-                <div class="space-y-2">
-                    ${prime_contractors.map(prime => `
-                        <div class="flex items-start gap-2">
-                            <span class="font-medium text-gray-900">${prime.company}:</span>
-                            <span class="text-sm text-gray-600">${marked.parse(prime.relationship).replace(/<\/?p>/g, '')}</span>
-                        </div>
+                <ul class="space-y-2">
+                    ${talking_points.map(point => `
+                        <li class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-customPurple-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-gray-700">${point}</span>
+                        </li>
                     `).join('')}
-                </div>
+                </ul>
             </div>
             ` : ''}
-            ${market_insights ? `
-            <div class="bg-customPurple-100/20 rounded-xl border border-customPurple-100/40 p-4">
-                <h3 class="text-sm font-semibold text-customPurple-800 mb-2 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                    </svg>
-                    Market Insight
-                </h3>
-                <p class="text-sm text-customPurple-900">${marked.parse(market_insights).replace(/<\/?p>/g, '')}</p>
+
+            <!-- Email Template -->
+            ${email_template ? `
+            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="font-bold text-gray-900 flex items-center gap-2">
+                        <span class="text-2xl">📧</span> Email Template
+                    </h3>
+                    <button onclick="copyEmail()" class="text-customPurple-500 hover:text-customPurple-700 text-sm font-medium">
+                        Copy
+                    </button>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap" id="email-content">${email_template}</div>
             </div>
             ` : ''}
-            <div class="bg-customPurple-100/10 border border-customPurple-100/30 rounded-lg p-2.5 mb-4 mt-6 text-xs">
-                <div class="flex items-center gap-2">
-                    <span class="text-xs font-medium text-customPurple-500 bg-customPurple-100/30 px-1.5 py-0.5 rounded">SPONSOR</span>
-                    <a href="#" class="text-customPurple-700 font-medium hover:text-customPurple-900">ClearSpeak Consulting</a>
-                </div>
-                <p class="text-gray-600 text-xs mt-1">We translate government requirements from ancient hieroglyphics to English.</p>
+
+            <!-- Next Steps -->
+            ${next_steps ? `
+            <div class="bg-customPurple-100/20 rounded-xl border border-customPurple-100/40 p-6">
+                <h3 class="font-bold text-customPurple-900 mb-2">Remember:</h3>
+                <p class="text-customPurple-800">${next_steps}</p>
             </div>
-            <div class="mt-6 flex flex-col sm:flex-row gap-3">
-                <button id="copy-prospecting-btn" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
-                        <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
-                    </svg>
-                    Copy Research
+            ` : ''}
+
+            <!-- Actions -->
+            <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                    Copy Everything
                 </button>
-                <button id="reset-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl border border-gray-200 transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>
-                    Start Over
+                <button onclick="startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">
+                    Ask Another Question
                 </button>
             </div>
-        </div>`;
-    document.getElementById('reset-btn').addEventListener('click', resetForm);
-    document.getElementById('copy-prospecting-btn').addEventListener('click', copyProspectingResults);
-// Initialize Mermaid diagrams
-    setTimeout(() => {
-        initializeMermaidDiagrams();
-    }, 100);
-};
-    const resetForm = () => {
+        `;
+
+        resultsContainer.innerHTML = html;
+        resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    // Helper functions
+    window.copyEmail = () => {
+        const email = document.getElementById('email-content').textContent;
+        navigator.clipboard.writeText(email);
+        alert('Email copied to clipboard!');
+    };
+
+    window.copyAll = () => {
+        const content = resultsContainer.innerText;
+        navigator.clipboard.writeText(content);
+        alert('Advice copied to clipboard!');
+    };
+
+    window.startOver = () => {
         situationInput.value = '';
-        originalSituation = '';
         resultsContainer.innerHTML = '';
+        situationInput.focus();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
-    const handleApiError = (error) => {
-        console.error("API Error:", error);
-        resultsContainer.innerHTML = `<div class="text-center p-8 bg-red-50 border border-red-200 rounded-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-red-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><p class="text-red-700 font-medium">Something went wrong</p><p class="text-red-600 text-sm mt-1">Please try again in a moment</p></div>`;
-        resultsContainer.firstChild.classList.add('error-shake');
-    };
-    const copySnippet = (e) => {
-        const button = e.currentTarget;
-        const textToCopy = button.dataset.text;
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            const originalIcon = button.innerHTML;
-            button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>`;
-            setTimeout(() => { button.innerHTML = originalIcon; }, 2000);
-        });
-    };
-    const handleShare = () => {
-    const shareText = "Just got some good advice from AskArti.";
-    const shareUrl = "https://askarti.com/";
-    const fullShareText = `${shareText} ${shareUrl}`;
-    if (navigator.share) {
-        navigator.share({
-            // Match this title exactly to your og:title meta tag
-            title: 'AskArti - Your Federal Sales Buddy', 
-            text: shareText,
-            url: shareUrl
-        });
-    } else {
-        navigator.clipboard.writeText(fullShareText).then(() => {
-            const shareBtn = document.getElementById('share-btn');
-            const originalText = shareBtn.textContent;
-            shareBtn.textContent = 'Copied!';
-            setTimeout(() => {
-                shareBtn.textContent = originalText;
-            }, 2000);
-        });
-    }
-};
-    const openModal = (modal, content) => {
-        modal.classList.remove('hidden');
-        setTimeout(() => {
-            modal.classList.add('show');
-            content.classList.add('show');
-        }, 10);
-    };
-    const closeModal = (modal, content) => {
-        modal.classList.remove('show');
-        content.classList.remove('show');
-        setTimeout(() => { modal.classList.add('hidden'); }, 200);
-    };
-    // --- Event Listeners ---
-    generateBtn.addEventListener('click', generatePlan);
-    document.querySelectorAll('.prompt-btn').forEach(btn => {
-        btn.addEventListener('click', handleCannedPrompt);
-    });
-    // Modal Event Listeners
-    trustBtn.addEventListener('click', () => openModal(trustModal, trustModalContent));
-    closeTrustModalBtn.addEventListener('click', () => closeModal(trustModal, trustModalContent));
-    trustModal.addEventListener('click', (e) => {
-        if(e.target === trustModal) {
-            closeModal(trustModal, trustModalContent);
-        }
-    });
-    sponsorBtn.addEventListener('click', () => openModal(sponsorModal, sponsorModalContent));
-    closeSponsorModalBtn.addEventListener('click', () => closeModal(sponsorModal, sponsorModalContent));
-    sponsorModal.addEventListener('click', (e) => {
-        if(e.target === sponsorModal) {
-            closeModal(sponsorModal, sponsorModalContent);
-        }
-    });
-    humanBtn.addEventListener('click', () => openModal(humanModal, humanModalContent));
-    closeHumanModalBtn.addEventListener('click', () => closeModal(humanModal, humanModalContent));
-    humanModal.addEventListener('click', (e) => {
-        if(e.target === humanModal) {
-            closeModal(humanModal, humanModalContent);
-        }
-    });
-    toolsBtn.addEventListener('click', () => openModal(bonusToolsModal, bonusToolsModalContent));
-    closeBonusToolsModalBtn.addEventListener('click', () => closeModal(bonusToolsModal, bonusToolsModalContent));
-    bonusToolsModal.addEventListener('click', (e) => {
-        if(e.target === bonusToolsModal) {
-            closeModal(bonusToolsModal, bonusToolsModalContent);
-        }
-    });
-    // Share button event listener
-    document.getElementById('share-btn').addEventListener('click', handleShare);
-    // Escape key to close modals
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            if (!trustModal.classList.contains('hidden')) {
-                closeModal(trustModal, trustModalContent);
-            }
-            if (!sponsorModal.classList.contains('hidden')) {
-                closeModal(sponsorModal, sponsorModalContent);
-            }
-            if (!humanModal.classList.contains('hidden')) {
-                closeModal(humanModal, humanModalContent);
-            }
-            if (!bonusToolsModal.classList.contains('hidden')) {
-                closeModal(bonusToolsModal, bonusToolsModalContent);
-            }
-        }
-    });
-    // Tab switching logic for tools
-    const tabs = document.querySelectorAll('.widget-tab');
-    const widgetContents = document.querySelectorAll('.widget-content');
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            const widgetId = tab.dataset.widget;
-            widgetContents.forEach(content => {
-                content.classList.toggle('hidden', content.id !== widgetId);
-            });
-        });
-    });
-    // Activate the first tab by default
-    if (tabs.length > 0) {
-        tabs[0].classList.add('active');
-    }
-    // --- FY Countdown Widget JS ---
-    const fy_fiscalYearEl = document.getElementById('fy-fiscal-year');
-    const fy_daysEl = document.getElementById('fy-days');
-    const fy_hoursEl = document.getElementById('fy-hours');
-    const fy_minutesEl = document.getElementById('fy-minutes');
-    const fy_secondsEl = document.getElementById('fy-seconds');
-    const fy_proTipEl = document.getElementById('fy-pro-tip');
-    const fy_countdownWrapper = document.getElementById('fy-countdown-wrapper');
-    const fy_yearendMessage = document.getElementById('fy-yearend-message');
-    const fy_progressBar = document.getElementById('fy-progress-bar');
-    const fy_progressPercent = document.getElementById('fy-progress-percent');
-    function fy_getFiscalYearData(date) {
-        const year = date.getUTCFullYear();
-        const month = date.getUTCMonth();
-        const fiscalYear = month >= 9 ? year + 1 : year;
-        return { fiscalYear, endDate: new Date(`October 1, ${fiscalYear} 03:59:59 GMT`) }; 
-    }
-    function fy_updateTimer() {
-        if (!fy_fiscalYearEl) return; // Don't run if element not on page
-        const now = new Date();
-        const { fiscalYear, endDate } = fy_getFiscalYearData(now);
-        fy_fiscalYearEl.textContent = `Fiscal Year ${fiscalYear}`;
-        const totalSeconds = (endDate - now) / 1000;
-        if (totalSeconds > 0) {
-            fy_daysEl.textContent = String(Math.floor(totalSeconds / 3600 / 24)).padStart(2, '0');
-            fy_hoursEl.textContent = String(Math.floor(totalSeconds / 3600) % 24).padStart(2, '0');
-            fy_minutesEl.textContent = String(Math.floor(totalSeconds / 60) % 60).padStart(2, '0');
-            fy_secondsEl.textContent = String(Math.floor(totalSeconds) % 60).padStart(2, '0');
-            const q4StartDate = new Date(`July 1, ${fiscalYear} 00:00:00 GMT-0400`);
-            const progress = Math.min(100, Math.max(0, ((now - q4StartDate) / (endDate - q4StartDate)) * 100));
-            fy_progressBar.style.width = `${progress}%`;
-            fy_progressPercent.textContent = `${Math.round(progress)}%`;
+
+    // Share functionality
+    shareBtn.addEventListener('click', () => {
+        const text = "Just got unstuck on a federal deal with AskArti:";
+        const url = "https://askarti.com";
+        
+        if (navigator.share) {
+            navigator.share({ title: 'AskArti', text, url });
         } else {
-            fy_countdownWrapper.classList.add('hidden');
-            fy_yearendMessage.classList.remove('hidden');
-            fy_progressBar.style.width = '100%';
-            fy_progressPercent.textContent = '100%';
-            clearInterval(fy_timerInterval);
+            navigator.clipboard.writeText(`${text} ${url}`);
+            shareBtn.textContent = 'Link Copied!';
+            setTimeout(() => { shareBtn.textContent = 'Share'; }, 2000);
         }
-        fy_updateStrategicTip(now.getUTCMonth());
-    }
-    function fy_updateStrategicTip(month) {
-        let tip = '';
-        switch (month) {
-            case 6: tip = "Agencies are finalizing requirements. Focus on RFIs/Sources Sought notices and solidify relationships."; break;
-            case 7: tip = "The buying season is in full swing. RFPs are dropping daily. Prioritize high-PWin opportunities."; break;
-            case 8: tip = "It's award season! Follow up on submitted proposals and watch for last-minute simplified acquisitions."; break;
-            default: tip = "Focus on building your pipeline and strategy for the next fiscal year. Analyze wins and losses.";
-        }
-        fy_proTipEl.textContent = tip;
-    }
-    const fy_timerInterval = setInterval(fy_updateTimer, 1000);
-    fy_updateTimer();
-    // --- Qual Scorecard Widget JS ---
-    const qual_form = document.getElementById('qual-form');
-    const qual_resultCard = document.getElementById('qual-result-card');
-    const qual_resultIcon = document.getElementById('qual-result-icon');
-    const qual_resultTitle = document.getElementById('qual-result-title');
-    const qual_resultDescription = document.getElementById('qual-result-description');
-    const qual_scoreThresholds = { hot: 9, warm: 5 };
-    function qual_calculateScore() {
-        if (!qual_form) return;
-        const budget = parseInt(qual_form.querySelector('input[name="budget"]:checked').value);
-        const authority = parseInt(qual_form.querySelector('input[name="authority"]:checked').value);
-        const need = parseInt(qual_form.querySelector('input[name="need"]:checked').value);
-        const timeline = parseInt(qual_form.querySelector('input[name="timeline"]:checked').value);
-        qual_updateResult(budget + authority + need + timeline);
-    }
-    function qual_updateResult(score) {
-        if (!qual_resultCard) return;
-        qual_resultCard.classList.remove('hidden', 'bg-red-100', 'text-red-800', 'bg-yellow-100', 'text-yellow-800', 'bg-green-100', 'text-green-800');
-        if (score >= qual_scoreThresholds.hot) {
-            qual_resultCard.classList.add('bg-customPurple-100/30', 'text-customPurple-700');
-            qual_resultIcon.textContent = '🔥';
-            qual_resultTitle.textContent = `Hot Lead (Score: ${score})`;
-            qual_resultDescription.textContent = "Pursue this lead immediately. They are a great fit.";
-        } else if (score >= qual_scoreThresholds.warm) {
-            qual_resultCard.classList.add('bg-yellow-100', 'text-yellow-800');
-            qual_resultIcon.textContent = '🤔';
-            qual_resultTitle.textContent = `Warm Lead (Score: ${score})`;
-            qual_resultDescription.textContent = "Good potential. Nurture and develop this relationship.";
-        } else {
-            qual_resultCard.classList.add('bg-red-100', 'text-red-800');
-            qual_resultIcon.textContent = '❄️';
-            qual_resultTitle.textContent = `Cold Lead (Score: ${score})`;
-            qual_resultDescription.textContent = "Low priority. Add to a long-term nurture campaign.";
-        }
-        qual_resultCard.classList.remove('hidden');
-    }
-    if (qual_form) {
-        qual_form.addEventListener('change', qual_calculateScore);
-        qual_calculateScore();
-    }
-    // --- Golden Hour Widget JS ---
-    const gh_timezoneSelect = document.getElementById('gh-timezone-select');
-    const gh_statusCard = document.getElementById('gh-status-card');
-    const gh_statusIcon = document.getElementById('gh-status-icon');
-    const gh_statusText = document.getElementById('gh-status-text');
-    const gh_prospectTime = document.getElementById('gh-prospect-time');
-    const gh_nextGoldenHour = document.getElementById('gh-next-golden-hour');
-    const gh_yourTimeEquivalent = document.getElementById('gh-your-time-equivalent');
-    const gh_timezones = {"USA & Canada": ["America/New_York", "America/Chicago", "America/Denver", "America/Phoenix", "America/Los_Angeles", "America/Anchorage", "Pacific/Honolulu"], "Europe": ["Europe/London", "Europe/Paris", "Europe/Berlin", "Europe/Helsinki"], "Asia & Australia": ["Asia/Dubai", "Asia/Kolkata", "Asia/Singapore", "Asia/Tokyo", "Australia/Sydney", "Australia/Perth"]};
-    const gh_GOLDEN_HOURS = [{ start: 8, end: 9 }, { start: 13, end: 14 }];
-    function gh_populateTimezones() {
-        if (!gh_timezoneSelect) return;
-        for (const region in gh_timezones) {
-            const optgroup = document.createElement('optgroup');
-            optgroup.label = region;
-            gh_timezones[region].forEach(tz => {
-                const option = document.createElement('option');
-                option.value = tz;
-                option.textContent = tz.replace(/_/g, ' ');
-                optgroup.appendChild(option);
-            });
-            gh_timezoneSelect.appendChild(optgroup);
-        }
-        try {
-            const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            if (Object.values(gh_timezones).flat().includes(userTz)) gh_timezoneSelect.value = userTz;
-            else gh_timezoneSelect.value = "America/New_York";
-        } catch(e) { gh_timezoneSelect.value = "America/New_York"; }
-    }
-    function gh_analyzeTime() {
-        if (!gh_timezoneSelect || !gh_statusText) return;
-        const selectedTz = gh_timezoneSelect.value;
-        const now = new Date();
-        const prospectHour = parseInt(now.toLocaleTimeString('en-US', { timeZone: selectedTz, hour: '2-digit', hourCycle: 'h23' }), 10);
-        gh_prospectTime.textContent = `Their time: ${now.toLocaleTimeString('en-US', { timeZone: selectedTz, hour: '2-digit', minute: '2-digit', hour12: true })}`;
-        const isGoldenHour = gh_GOLDEN_HOURS.some(w => prospectHour >= w.start && prospectHour <= w.end);
-        if (isGoldenHour) {
-            gh_updateUI('golden');
-        } else {
-            let nextStartHour = gh_GOLDEN_HOURS.find(w => prospectHour < w.start)?.start ?? gh_GOLDEN_HOURS[0].start;
-            gh_updateUI('wait', { nextStartHour, selectedTz, now });
-        }
-    }
-    function gh_updateUI(status, data = {}) {
-        if (!gh_statusCard) return;
-        gh_statusCard.className = 'rounded-xl p-6 text-center';
-        if (status === 'golden') {
-            gh_statusCard.classList.add('bg-customPurple-100/30');
-            gh_statusIcon.textContent = '✅';
-            gh_statusText.textContent = "It's a Golden Hour!";
-            gh_statusText.className = 'text-2xl font-bold mb-1 text-customPurple-700';
-            gh_nextGoldenHour.textContent = 'A great time to make contact.';
-            gh_yourTimeEquivalent.textContent = '';
-        } else {
-            gh_statusCard.classList.add('bg-amber-100');
-            gh_statusIcon.textContent = '⏳';
-            gh_statusText.textContent = 'Hold Off For Now';
-            gh_statusText.className = 'text-2xl font-bold mb-1 text-amber-800';
-            const { nextStartHour, selectedTz, now } = data;
-            const nextDate = new Date(now);
-            nextDate.toLocaleString('en-US', {timeZone: selectedTz});
-            nextDate.setHours(nextStartHour, 0, 0, 0);
-            if (nextDate < now) nextDate.setDate(nextDate.getDate() + 1);
-            gh_nextGoldenHour.textContent = `Next golden hour at ${nextDate.toLocaleTimeString('en-US', { timeZone: selectedTz, hour: 'numeric', hour12: true })}.`;
-            gh_yourTimeEquivalent.textContent = `(That's ${nextDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZoneName: 'short' })} your time)`;
-        }
-    }
-    // Initialize Golden Hour widget
-    if (gh_timezoneSelect) {
-        gh_populateTimezones();
-        gh_analyzeTime();
-        gh_timezoneSelect.addEventListener('change', gh_analyzeTime);
-        setInterval(gh_analyzeTime, 60000);
-    }
-/**
- * **UPDATED FUNCTION**
- * Generates the container for a Mermaid diagram, including an explanation.
- * It now correctly parses a string that contains both text and a Mermaid code block.
- * @param {string} diagramString - The full string from the API.
- * @param {string} defaultTitle - A fallback title.
- * @returns {string} HTML containing the explanation and the Mermaid diagram.
- */
-const createDiagramContainer = (diagramString, defaultTitle) => {
-    if (!diagramString) return '';
+    });
 
-    // Split the explanation from the diagram code using '```mermaid' as a delimiter.
-    const parts = diagramString.split('```mermaid');
-    let explanation = '';
-    let diagramCode = '';
+    // Modal handling
+    aboutBtn.addEventListener('click', () => aboutModal.classList.remove('hidden'));
+    closeAbout.addEventListener('click', () => aboutModal.classList.add('hidden'));
+    aboutModal.addEventListener('click', (e) => {
+        if (e.target === aboutModal) aboutModal.classList.add('hidden');
+    });
 
-    if (parts.length > 1) {
-        // The first part is the explanation.
-        explanation = marked.parse(parts[0].trim());
-        // The second part is the code. Re-add the delimiter for clarity if needed, or just use the code.
-        diagramCode = parts[1].replace(/```\s*$/, '').trim(); // Clean trailing backticks
-    } else {
-        // Fallback if the string ONLY contains mermaid code (no explanation).
-        diagramCode = diagramString.replace(/^```mermaid\s*/, '').replace(/```\s*$/, '').trim();
-    }
-
-    const uniqueId = 'mermaid-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-    
-    return `
-        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm mt-6">
-            <h3 class="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
-                <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" class="h-4 w-4 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
-                </svg>
-                ${defaultTitle}
-            </h3>
-            ${explanation ? `<div class="text-sm text-gray-600 mb-3">${explanation}</div>` : ''}
-            <div class="mermaid" id="${uniqueId}">
-                ${diagramCode}
-            </div>
-        </div>
-    `;
-};
-
-
-/**
- * Initializes Mermaid diagrams after they're added to the DOM
- */
-const initializeMermaidDiagrams = () => {
-    if (typeof window.mermaid !== 'undefined') {
-        // Use mermaid.run() for dynamically added content which is more reliable
-        try {
-            window.mermaid.run({
-                nodes: document.querySelectorAll('.mermaid')
-            });
-        } catch (e) {
-            console.error("Mermaid rendering error:", e);
+    // Event listeners
+    askBtn.addEventListener('click', getAdvice);
+    situationInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            getAdvice();
         }
-    }
-};
+    });
+
+    // Focus input on load
+    situationInput.focus();
     </script>
 </body>
 </html>
