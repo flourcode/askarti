@@ -254,7 +254,7 @@
         </div>
     </div>
 
-    <script>
+<script>
     // DOM Elements
     const situationInput = document.getElementById('situation-input');
     const askBtn = document.getElementById('ask-btn');
@@ -267,6 +267,9 @@
     const shareBtn = document.getElementById('share-btn');
 
     const API_ENDPOINT = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
+    
+    // Define loading interval variable in a broader scope
+    let loadingInterval;
 
     // Quick prompt handling
     document.querySelectorAll('.quick-prompt').forEach(btn => {
@@ -298,7 +301,7 @@
         askBtn.disabled = loading;
     };
 
-    // Get advice
+    // Get advice with integrated dynamic loading messages
     const getAdvice = async () => {
         const situation = situationInput.value.trim();
         if (!situation) {
@@ -310,11 +313,36 @@
         }
 
         setLoading(true);
+
+        const loadingMessages = [
+            "Analyzing your situation...",
+            "Diving Deep...",
+            "Unpacking This...",
+            "Putting a Pin in it...",
+            "Circling Back...",
+            "Thinking Big..."
+        ];
+        let loadingStage = 0;
+
+        // Set the initial loading UI with a target for message updates
         resultsContainer.innerHTML = `
             <div class="text-center py-8">
                 <img src="/images/arti_right.png" alt="Arti thinking" class="h-16 w-16 mx-auto mb-4 opacity-50 animate-pulse">
-                <p class="text-gray-600">Analyzing your situation...</p>
+                <p id="loading-message" class="text-gray-600"></p>
             </div>`;
+        
+        const messageEl = document.getElementById('loading-message');
+        if (messageEl) {
+            messageEl.textContent = loadingMessages[0]; // Set initial message
+        }
+
+        // Start cycling through the messages
+        loadingInterval = setInterval(() => {
+            loadingStage = (loadingStage + 1) % loadingMessages.length;
+            if (messageEl) {
+                messageEl.textContent = loadingMessages[loadingStage];
+            }
+        }, 2000);
 
         try {
             const response = await fetch(API_ENDPOINT, {
@@ -335,6 +363,8 @@
                     <p class="text-red-600 text-sm">Try again in a second</p>
                 </div>`;
         } finally {
+            // IMPORTANT: Clear the interval and reset loading state
+            clearInterval(loadingInterval);
             setLoading(false);
         }
     };
@@ -353,7 +383,6 @@
         const typeStyle = typeStyles[response_type] || typeStyles.deal;
 
         let html = `
-            <!-- Quick Take -->
             <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 rounded-xl p-6 mb-6 border border-customPurple-100/50">
                 <div class="flex items-start gap-4">
                     <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 flex-shrink-0">
@@ -367,7 +396,6 @@
                 </div>
             </div>
 
-            <!-- Key Moves -->
             <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
                 <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <span class="text-2xl">🎯</span> Your Next 3 Moves
@@ -385,7 +413,6 @@
                 </div>
             </div>
 
-            <!-- Talking Points -->
             ${talking_points && talking_points.length > 0 ? `
             <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
                 <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
@@ -404,7 +431,6 @@
             </div>
             ` : ''}
 
-            <!-- Email Template -->
             ${email_template ? `
             <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
                 <div class="flex justify-between items-start mb-4">
@@ -419,7 +445,6 @@
             </div>
             ` : ''}
 
-            <!-- Next Steps -->
             ${next_steps ? `
             <div class="bg-customPurple-100/20 rounded-xl border border-customPurple-100/40 p-6">
                 <h3 class="font-bold text-customPurple-900 mb-2">Remember:</h3>
@@ -427,7 +452,6 @@
             </div>
             ` : ''}
 
-            <!-- Actions -->
             <div class="mt-8 flex flex-col sm:flex-row gap-3">
                 <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
                     Copy Everything
@@ -494,6 +518,6 @@
 
     // Focus input on load
     situationInput.focus();
-    </script>
+</script>
 </body>
 </html>
