@@ -75,7 +75,7 @@
                 primaryColor: '#e9e5f5',
                 primaryTextColor: '#31255e',
                 primaryBorderColor: '#523f9e',
-                lineColor: '#7465b1', 
+                lineColor: '#7465b1',
                 secondaryColor: '#f3f4f6',
                 tertiaryColor: '#e9e5f5'
             }
@@ -153,6 +153,14 @@
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
+        /* Persona card styling */
+        .persona-card {
+            transition: all 0.2s ease;
+        }
+        .persona-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
         @media (max-width: 640px) {
             .mermaid {
                 padding: 1rem;
@@ -163,7 +171,6 @@
 </head>
 <body class="bg-gray-50 text-gray-900">
     <div class="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-20">
-        <!-- Header -->
         <header class="text-center mb-6">
             <a href="/" aria-label="AskArti Home" class="inline-block">
                 <img src="/images/asklite.png" alt="AskArti" class="h-16 w-auto md:h-20 lg:h-24">
@@ -171,20 +178,18 @@
             <p class="text-gray-600 mt-2 text-sm md:text-base">Real federal sales advice. Get unstuck in 60 seconds.</p>
         </header>
 
-        <!-- Main Input Section -->
         <main class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
             <div class="mb-4">
                 <label for="situation-input" class="block text-lg font-semibold text-gray-900 mb-2 text-center">
                     What's blocking your deal?
                 </label>
-                <textarea 
-                    id="situation-input" 
-                    rows="3" 
+                <textarea
+                    id="situation-input"
+                    rows="3"
                     class="w-full p-4 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary resize-none placeholder-gray-500"
                     placeholder="Champion ghosted me after seeing pricing. $2M deal at DHS. Q4 commit."></textarea>
             </div>
 
-            <!-- Quick Prompts -->
             <div class="flex flex-wrap gap-2 justify-center mb-4">
                 <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
                         data-text="My champion at VA went dark after I sent our SOW. It's a $1.5M cloud migration deal. The CISO loves our competitor and I think he's poisoning the well. Q4 is shot if I lose this.">
@@ -203,12 +208,11 @@
                     Interview prep
                 </button>
                 <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
-                        data-text="I sell cloud infrastructure and want to break into DHS. What programs should I target? Who are the key primes? What contract vehicles are hot?">
+                        data-text="I sell cloud infrastructure and want to prospect into DHS. What programs should I target? Who are the key contractors?">
                     Prospect at DHS
                 </button>
             </div>
 
-            <!-- Ask Button -->
             <div class="text-center">
                 <button id="ask-btn" class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-semibold py-3 px-8 rounded-full transition-all inline-flex items-center gap-2 shadow-lg hover:shadow-xl">
                     <span id="btn-text">Get Arti's Take</span>
@@ -217,7 +221,6 @@
             </div>
         </main>
 
-        <!-- What I Can Help With -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div class="action-card bg-white rounded-lg border border-gray-200 p-4 text-center" data-action="deal">
                 <div class="text-3xl mb-2">🎯</div>
@@ -241,10 +244,8 @@
             </div>
         </div>
 
-        <!-- Results Container -->
         <div id="results-container" class="fade-in"></div>
 
-        <!-- Footer -->
         <footer class="text-center mt-12 space-y-4">
             <div class="flex justify-center gap-6 text-sm">
                 <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">About</button>
@@ -252,7 +253,7 @@
                 <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Contact</a>
             </div>
             <p class="text-xs text-gray-400 max-w-2xl mx-auto">
-                AskArti provides tactical advice based on real federal sales experience. Not legal or procurement advice. 
+                AskArti provides tactical advice based on real federal sales experience. Not legal or procurement advice.
                 Your data isn't stored. Built by federal sellers for federal sellers.
             </p>
             <div class="mt-4">
@@ -263,7 +264,6 @@
         </footer>
     </div>
 
-    <!-- About Modal -->
     <div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
             <div class="flex justify-between items-start mb-4">
@@ -279,7 +279,7 @@
                 <p>Built AskArti because I got tired of generic sales advice that doesn't understand how federal actually works.</p>
                 <p>This is the coach I wish I had when I was grinding out deals at 11:47pm on September 30th.</p>
                 <div class="pt-4 border-t">
-                    <a href="https://calendly.com/markflournoy/30min" target="_blank" 
+                    <a href="https://calendly.com/markflournoy/30min" target="_blank"
                        class="block w-full bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-lg text-center transition-colors">
                         Want to talk federal sales? Let's chat →
                     </a>
@@ -332,6 +332,49 @@
         askBtn.disabled = loading;
     };
 
+    // Parse and render Mermaid diagram
+    const renderMermaidDiagram = (diagramString) => {
+        if (!diagramString) return '';
+
+        const parts = diagramString.split('```mermaid');
+        let explanation = '';
+        let diagramCode = '';
+
+        if (parts.length > 1) {
+            explanation = marked.parse(parts[0].trim());
+            diagramCode = parts[1].replace(/```\s*$/, '').trim();
+        } else {
+            diagramCode = diagramString.replace(/^```mermaid\s*/, '').replace(/```\s*$/, '').trim();
+        }
+
+        const uniqueId = 'mermaid-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+
+        return `
+            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
+                <h3 class="font-bold text-gray-900 mb-2 flex items-center gap-2">
+                    <span class="text-2xl">📊</span> Visual Strategy
+                </h3>
+                ${explanation ? `<div class="text-sm text-gray-600 mb-3">${explanation}</div>` : ''}
+                <div class="mermaid" id="${uniqueId}">
+                    ${diagramCode}
+                </div>
+            </div>
+        `;
+    };
+
+    // Initialize Mermaid diagrams
+    const initializeMermaidDiagrams = () => {
+        if (typeof window.mermaid !== 'undefined') {
+            try {
+                window.mermaid.run({
+                    nodes: document.querySelectorAll('.mermaid')
+                });
+            } catch (e) {
+                console.error("Mermaid rendering error:", e);
+            }
+        }
+    };
+
     // Get advice
     const getAdvice = async () => {
         const situation = situationInput.value.trim();
@@ -358,7 +401,7 @@
             });
 
             if (!response.ok) throw new Error('API Error');
-            
+
             const data = await response.json();
             displayAdvice(data);
         } catch (error) {
@@ -373,68 +416,34 @@
         }
     };
 
-    // Parse and render Mermaid diagram
-    const renderMermaidDiagram = (diagramString) => {
-        if (!diagramString) return '';
-        
-        // Split explanation from diagram code
-        const parts = diagramString.split('```mermaid');
-        let explanation = '';
-        let diagramCode = '';
-        
-        if (parts.length > 1) {
-            explanation = marked.parse(parts[0].trim());
-            diagramCode = parts[1].replace(/```\s*$/, '').trim();
-        } else {
-            diagramCode = diagramString.replace(/^```mermaid\s*/, '').replace(/```\s*$/, '').trim();
-        }
-        
-        const uniqueId = 'mermaid-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-        
-        return `
-            <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                <h3 class="font-bold text-gray-900 mb-2 flex items-center gap-2">
-                    <span class="text-2xl">📊</span> Visual Strategy
-                </h3>
-                ${explanation ? `<div class="text-sm text-gray-600 mb-3">${explanation}</div>` : ''}
-                <div class="mermaid" id="${uniqueId}">
-                    ${diagramCode}
-                </div>
-            </div>
-        `;
-    };
-
-    // Initialize Mermaid diagrams
-    const initializeMermaidDiagrams = () => {
-        if (typeof window.mermaid !== 'undefined') {
-            try {
-                window.mermaid.run({
-                    nodes: document.querySelectorAll('.mermaid')
-                });
-            } catch (e) {
-                console.error("Mermaid rendering error:", e);
-            }
-        }
-    };
-
-    // Display advice based on response type
+    // Display advice - handles all response types
     const displayAdvice = (data) => {
-        // Handle different response structures based on type
-        if (data.federal_competitors || data.naics_codes) {
-            displayProspectingAdvice(data);
+        let html = '';
+
+        // Handle different response structures
+        if (data.federal_competitors || data.naics_codes || data.prospect_recommendations) {
+            html = displayProspectingResponse(data);
         } else if (data.federal_differentiators) {
-            displayInterviewAdvice(data);
+            html = displayInterviewResponse(data);
+        } else if (data.coaching_plan) {
+            html = displayStandardResponse(data);
         } else {
-            displayStandardAdvice(data);
+            // Fallback to simple response
+            html = displaySimpleResponse(data);
         }
+
+        resultsContainer.innerHTML = html;
+        resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        initializeCopyButtons();
+        setTimeout(initializeMermaidDiagrams, 100);
     };
 
-    // Display standard sales/meeting advice
-    const displayStandardAdvice = (data) => {
+    // Display standard sales/meeting response
+    const displayStandardResponse = (data) => {
         const { high_level_recommendation, tldr_summary, coaching_plan, mermaid_diagram } = data;
 
-        let html = `
-            <!-- Quick Take -->
+        return `
             <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 rounded-xl p-6 mb-6 border border-customPurple-100/50">
                 <div class="flex items-start gap-4">
                     <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 flex-shrink-0">
@@ -445,82 +454,57 @@
                 </div>
             </div>
 
-            <!-- TL;DR -->
             ${tldr_summary ? `
             <div class="bg-white rounded-xl border border-gray-200 p-4 mb-6 shadow-sm">
-                <h3 class="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                <h3 class="font-semibold text-gray-900 mb-2">
                     <span class="bg-customPurple-500 text-white text-xs font-bold px-2 py-1 rounded">TL;DR</span>
                 </h3>
                 <div class="text-sm text-gray-700">${marked.parse(tldr_summary)}</div>
             </div>
             ` : ''}
 
-            <!-- Mermaid Diagram -->
             ${mermaid_diagram ? renderMermaidDiagram(mermaid_diagram) : ''}
 
-            <!-- Coaching Plan -->
             ${coaching_plan && coaching_plan.length > 0 ? `
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                ${coaching_plan.map((plan, i) => `
-                    <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                        <div class="flex items-start gap-3 mb-4">
-                            <div class="bg-customPurple-500 w-10 h-10 rounded-xl text-white flex-shrink-0 flex items-center justify-center">
-                                <span class="font-bold">${plan.persona.charAt(0)}</span>
-                            </div>
-                            <h2 class="text-lg font-semibold text-gray-900">${plan.persona}</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                ${coaching_plan.map((plan) => `
+                    <div class="persona-card bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+                        <h2 class="text-lg font-semibold text-gray-900 mb-4">${plan.persona}</h2>
+                        <div class="bg-customPurple-100/20 border border-customPurple-100/40 p-4 rounded-xl mb-4">
+                            <h3 class="font-medium text-customPurple-700 mb-2">Goal</h3>
+                            <p class="text-gray-700">${marked.parse(plan.smart_goal).replace(/<\/?p>/g, '')}</p>
                         </div>
-                        
-                        <div class="space-y-4">
-                            <div class="bg-customPurple-100/20 border border-customPurple-100/40 p-4 rounded-xl">
-                                <h3 class="font-medium text-customPurple-700 mb-2">SMART Goal</h3>
-                                <p class="text-gray-700">${marked.parse(plan.smart_goal).replace(/<\/?p>/g, '')}</p>
-                            </div>
-                            
-                            ${plan.talking_points && plan.talking_points.length > 0 ? `
-                            <div>
-                                <h3 class="font-medium text-gray-900 mb-3">Key Talking Points</h3>
-                                <ul class="space-y-2">
-                                    ${plan.talking_points.map(point => `
-                                        <li class="flex items-start gap-2">
-                                            <svg class="w-5 h-5 text-customPurple-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                                            </svg>
-                                            <span class="text-gray-700">${marked.parse(point).replace(/<\/?p>/g, '')}</span>
-                                        </li>
-                                    `).join('')}
-                                </ul>
-                            </div>
-                            ` : ''}
-                            
-                            ${plan.suggested_snippet ? `
-                            <div class="mt-4 pt-4 border-t border-gray-200">
-                                <h3 class="font-medium text-gray-900 mb-2 flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
-                                        <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" />
-                                    </svg>
-                                    Suggested Message
-                                </h3>
-                                <div class="relative bg-gray-50 p-3 rounded-lg border border-gray-200">
-                                    <p class="text-sm text-gray-700 whitespace-pre-wrap snippet-text">${plan.suggested_snippet}</p>
-                                    <button class="copy-btn copy-snippet absolute top-2 right-2 p-1.5 bg-white hover:bg-gray-100 rounded-full transition-colors" 
-                                            data-text="${plan.suggested_snippet.replace(/"/g, '&quot;')}" 
-                                            title="Copy snippet">
-                                        <svg class="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            ` : ''}
+                        ${plan.talking_points && plan.talking_points.length > 0 ? `
+                        <div class="mb-4">
+                            <h3 class="font-medium text-gray-900 mb-2">Key Points</h3>
+                            <ul class="space-y-1 text-sm">
+                                ${plan.talking_points.map(point => `
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-customPurple-500 mt-0.5">•</span>
+                                        <span class="text-gray-700">${marked.parse(point).replace(/<\/?p>/g, '')}</span>
+                                    </li>
+                                `).join('')}
+                            </ul>
                         </div>
+                        ` : ''}
+                        ${plan.suggested_snippet ? `
+                        <div class="relative bg-gray-50 p-3 rounded-lg border border-gray-200">
+                            <p class="text-sm text-gray-700 whitespace-pre-wrap">${plan.suggested_snippet}</p>
+                            <button class="copy-btn absolute top-2 right-2 p-1.5 bg-white hover:bg-gray-100 rounded-full transition-colors"
+                                    data-text="${plan.suggested_snippet.replace(/"/g, '&quot;')}"
+                                    title="Copy">
+                                <svg class="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                            </button>
+                        </div>
+                        ` : ''}
                     </div>
                 `).join('')}
             </div>
             ` : ''}
 
-            <!-- Actions -->
-            <div class="mt-8 flex flex-col sm:flex-row gap-3">
+            <div class="flex flex-col sm:flex-row gap-3">
                 <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
                     Copy Everything
                 </button>
@@ -529,169 +513,118 @@
                 </button>
             </div>
         `;
-
-        resultsContainer.innerHTML = html;
-        resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        
-        // Initialize copy buttons and mermaid
-        initializeCopyButtons();
-        setTimeout(initializeMermaidDiagrams, 100);
     };
 
-    // Display prospecting advice
-    const displayProspectingAdvice = (data) => {
-        const { 
-            summary, 
+    // Display prospecting response
+    const displayProspectingResponse = (data) => {
+        const {
+            summary,
             company_capabilities = [],
-            naics_codes = [], 
-            federal_competitors = [], 
+            naics_codes = [],
+            federal_competitors = [],
             prime_contractors = [],
             prospect_recommendations = [],
             market_insights,
             mermaid_diagram
         } = data;
 
-        let html = `
-            <!-- Summary -->
+        return `
             <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 rounded-xl p-6 mb-6 border border-customPurple-100/50">
                 <div class="flex items-start gap-4">
                     <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 flex-shrink-0">
                     <div class="w-full">
-                        <h3 class="text-lg font-bold text-customPurple-900 mb-2">Prospect Research & Competitive Intel</h3>
-                        <div class="text-gray-800">${marked.parse(summary || '')}</div>
+                        <h3 class="text-lg font-bold text-customPurple-900 mb-2">Prospecting Angle of Attack</h3>
+                        <div class="text-gray-800 space-y-2">${marked.parse(summary || '')}</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Mermaid Diagram -->
             ${mermaid_diagram ? renderMermaidDiagram(mermaid_diagram) : ''}
 
-            <!-- Core Capabilities -->
-            ${company_capabilities.length > 0 ? `
-            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
-                <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm2 6a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1z" clip-rule="evenodd" />
-                    </svg>
-                    Core Capabilities
-                </h3>
-                <div class="flex flex-wrap gap-2">
-                    ${company_capabilities.map(cap => `
-                        <span class="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">
-                            ${marked.parse(cap).replace(/<\/?p>/g, '')}
-                        </span>
-                    `).join('')}
-                </div>
-            </div>
-            ` : ''}
-
-            <!-- NAICS and Recommendations Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                ${company_capabilities.length > 0 ? `
+                <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+                    <h3 class="font-bold text-gray-900 mb-3">Relevant Capabilities</h3>
+                    <ul class="space-y-2">
+                        ${company_capabilities.map(cap => `
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-customPurple-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                <span class="text-sm text-gray-700">${cap}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+                ` : ''}
+
                 ${naics_codes.length > 0 ? `
                 <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                    <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
-                        </svg>
-                        Relevant NAICS Codes
-                    </h3>
-                    <ul class="space-y-2">
+                    <h3 class="font-bold text-gray-900 mb-3">Target NAICS Codes</h3>
+                    <ul class="space-y-1">
                         ${naics_codes.map(code => `
-                            <li class="text-sm text-gray-700">
-                                <span class="font-medium">${marked.parse(code).replace(/<\/?p>/g, '')}</span>
-                            </li>
+                            <li class="text-sm text-gray-700 font-mono">${code}</li>
                         `).join('')}
                     </ul>
                 </div>
                 ` : ''}
+            </div>
 
-                ${prospect_recommendations.length > 0 ? `
+            <div class="space-y-6 mb-6">
+                ${federal_competitors.length > 0 ? `
                 <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                    <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M13 7H7v6h6V7z" />
-                            <path fill-rule="evenodd" d="M7 2a1 1 0 012 0v1h2V2a1 1 0 112 0v1h2a2 2 0 012 2v2h1a1 1 0 110 2h-1v2h1a1 1 0 110 2h-1v2a2 2 0 01-2 2h-2v1a1 1 0 11-2 0v-1H9v1a1 1 0 11-2 0v-1H5a2 2 0 01-2-2v-2H2a1 1 0 110-2h1V9H2a1 1 0 010-2h1V5a2 2 0 012-2h2V2z" clip-rule="evenodd" />
-                        </svg>
-                        Prospect Recommendations
-                    </h3>
-                    <ul class="space-y-3">
-                        ${prospect_recommendations.map(rec => `
-                            <li class="text-sm text-gray-700 flex items-start gap-2">
-                                <span class="text-customPurple-500 mt-0.5">•</span>
-                                <span>${marked.parse(rec).replace(/<\/?p>/g, '')}</span>
-                            </li>
+                    <h3 class="font-bold text-gray-900 mb-4">Key Competitors</h3>
+                    <div class="space-y-4">
+                        ${federal_competitors.map(comp => `
+                            <div class="border-l-4 border-customPurple-200 pl-4">
+                                <h4 class="font-medium text-gray-900">${comp.company}</h4>
+                                <p class="text-sm text-gray-600"><strong class="text-gray-700">Strengths:</strong> ${comp.strengths}</p>
+                                ${comp.weakness ? `<p class="text-sm text-red-700/80"><strong class="text-red-700">Weakness:</strong> ${comp.weakness}</p>` : ''}
+                                ${comp.contract_vehicles ? `<p class="text-xs text-gray-500 mt-1"><strong>Vehicles:</strong> ${comp.contract_vehicles}</p>` : ''}
+                            </div>
                         `).join('')}
-                    </ul>
+                    </div>
+                </div>
+                ` : ''}
+
+                ${prime_contractors.length > 0 ? `
+                 <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+                    <h3 class="font-bold text-gray-900 mb-4">Potential Prime Partners</h3>
+                    <div class="space-y-4">
+                        ${prime_contractors.map(prime => `
+                            <div class="border-l-4 border-green-300 pl-4">
+                                <h4 class="font-medium text-gray-900">${prime.company}</h4>
+                                <p class="text-sm text-gray-600"><strong class="text-gray-700">Role:</strong> ${prime.relationship}</p>
+                                <p class="text-sm text-green-800/90"><strong class="text-green-800">Angle:</strong> ${prime.partnership_angle}</p>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
                 ` : ''}
             </div>
 
-            <!-- Federal Competitors -->
-            ${federal_competitors.length > 0 ? `
+            ${prospect_recommendations.length > 0 ? `
             <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
-                <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                    </svg>
-                    Federal Competitors & Players
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    ${federal_competitors.map(comp => `
-                        <div class="border-l-4 border-customPurple-200 pl-4">
-                            <h4 class="font-semibold text-gray-900">${comp.company}</h4>
-                            <p class="text-sm text-gray-600 mt-1">${marked.parse(comp.strengths).replace(/<\/?p>/g, '')}</p>
-                            ${comp.contract_vehicles ? `
-                                <p class="text-xs text-gray-500 mt-1">Vehicles: ${comp.contract_vehicles}</p>
-                            ` : ''}
-                            ${comp.weakness ? `
-                                <p class="text-xs text-red-600 mt-1">Weakness: ${comp.weakness}</p>
-                            ` : ''}
-                        </div>
+                <h3 class="font-bold text-gray-900 mb-4">Action Plan</h3>
+                <ul class="space-y-3">
+                    ${prospect_recommendations.map(rec => `
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-customPurple-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-gray-700">${rec}</span>
+                        </li>
                     `).join('')}
-                </div>
+                </ul>
             </div>
             ` : ''}
 
-            <!-- Prime Contractors -->
-            ${prime_contractors.length > 0 ? `
-            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
-                <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-customPurple-500" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-                    </svg>
-                    Prime Contractors & Partners
-                </h3>
-                <div class="space-y-3">
-                    ${prime_contractors.map(prime => `
-                        <div>
-                            <div class="flex items-start gap-2">
-                                <span class="font-semibold text-gray-900">${prime.company}:</span>
-                                <span class="text-sm text-gray-600">${marked.parse(prime.relationship).replace(/<\/?p>/g, '')}</span>
-                            </div>
-                            ${prime.partnership_angle ? `
-                                <p class="text-sm text-customPurple-600 mt-1 ml-4">→ ${prime.partnership_angle}</p>
-                            ` : ''}
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-            ` : ''}
-
-            <!-- Market Insights -->
             ${market_insights ? `
             <div class="bg-customPurple-100/20 rounded-xl border border-customPurple-100/40 p-6 mb-6">
-                <h3 class="font-bold text-customPurple-800 mb-3 flex items-center gap-2">
-                    <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                    </svg>
-                    Market Insight
-                </h3>
-                <div class="text-customPurple-900">${marked.parse(market_insights)}</div>
+                <h3 class="font-bold text-customPurple-900 mb-2">Insider Intel</h3>
+                <div class="text-customPurple-800 prose prose-sm max-w-none">${marked.parse(market_insights)}</div>
             </div>
             ` : ''}
 
-            <!-- Actions -->
-            <div class="mt-8 flex flex-col sm:flex-row gap-3">
+            <div class="flex flex-col sm:flex-row gap-3">
                 <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
                     Copy Research
                 </button>
@@ -700,26 +633,19 @@
                 </button>
             </div>
         `;
-
-        resultsContainer.innerHTML = html;
-        resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        
-        // Initialize mermaid
-        setTimeout(initializeMermaidDiagrams, 100);
     };
 
-    // Display interview advice
-    const displayInterviewAdvice = (data) => {
-        const { 
-            high_level_recommendation, 
-            tldr_summary, 
+    // Display interview response
+    const displayInterviewResponse = (data) => {
+        const {
+            high_level_recommendation,
+            tldr_summary,
             coaching_plan = [],
             federal_differentiators = [],
             mermaid_diagram
         } = data;
 
-        let html = `
-            <!-- High Level Recommendation -->
+        return `
             <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 rounded-xl p-6 mb-6 border border-customPurple-100/50">
                 <div class="flex items-start gap-4">
                     <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 flex-shrink-0">
@@ -730,89 +656,57 @@
                 </div>
             </div>
 
-            <!-- TL;DR -->
             ${tldr_summary ? `
             <div class="bg-white rounded-xl border border-gray-200 p-4 mb-6 shadow-sm">
-                <h3 class="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                <h3 class="font-semibold text-gray-900 mb-2">
                     <span class="bg-customPurple-500 text-white text-xs font-bold px-2 py-1 rounded">TL;DR</span>
                 </h3>
                 <div class="text-sm text-gray-700">${marked.parse(tldr_summary)}</div>
             </div>
             ` : ''}
 
-            <!-- Federal Differentiators -->
             ${federal_differentiators.length > 0 ? `
             <div class="bg-customPurple-100/20 rounded-xl border border-customPurple-100/40 p-6 mb-6">
-                <h3 class="font-bold text-customPurple-800 mb-4 flex items-center gap-2">
-                    <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                    </svg>
-                    What Makes Federal Sellers Different
-                </h3>
+                <h3 class="font-bold text-customPurple-900 mb-3">What Makes Federal Sellers Different</h3>
                 <ul class="space-y-2">
                     ${federal_differentiators.map(diff => `
                         <li class="flex items-start gap-2">
-                            <span class="text-customPurple-500 mt-0.5">•</span>
-                            <span class="text-customPurple-900">${diff}</span>
+                            <span class="text-customPurple-500">•</span>
+                            <span class="text-customPurple-800">${diff}</span>
                         </li>
                     `).join('')}
                 </ul>
             </div>
             ` : ''}
 
-            <!-- Mermaid Diagram -->
             ${mermaid_diagram ? renderMermaidDiagram(mermaid_diagram) : ''}
 
-            <!-- Mock Interview Questions -->
             ${coaching_plan.length > 0 ? `
-            <div class="space-y-6 mt-6">
-                <h3 class="text-lg font-bold text-gray-900">Mock Interview Questions & STAR Answers</h3>
+            <div class="space-y-6">
                 ${coaching_plan.map((question, i) => `
                     <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
                         <div class="mb-4">
-                            <span class="bg-customPurple-100 text-customPurple-700 text-xs font-semibold px-2 py-1 rounded">Question ${i + 1}</span>
+                            <span class="bg-customPurple-100 text-customPurple-700 text-xs font-semibold px-2 py-1 rounded">Q${i + 1}</span>
                             <h4 class="text-lg font-semibold text-gray-900 mt-2">${question.persona}</h4>
                         </div>
-                        
                         ${question.smart_goal ? `
                         <div class="bg-yellow-50 border border-yellow-200 p-3 rounded-lg mb-4">
-                            <p class="text-sm text-yellow-800">
-                                <strong>What they're really testing:</strong> ${question.smart_goal}
-                            </p>
+                            <p class="text-sm text-yellow-800"><strong>What they're testing:</strong> ${question.smart_goal}</p>
                         </div>
                         ` : ''}
-                        
                         ${question.talking_points && question.talking_points.length > 0 ? `
                         <div class="space-y-2 mb-4">
-                            <h5 class="font-medium text-gray-900">STAR Answer:</h5>
-                            <div class="space-y-1">
-                                ${question.talking_points.map(point => {
-                                    const [prefix, ...content] = point.split(':');
-                                    const label = prefix.trim();
-                                    const text = content.join(':').trim();
-                                    const colors = {
-                                        'S': 'bg-blue-50 text-blue-700 border-blue-200',
-                                        'T': 'bg-green-50 text-green-700 border-green-200',
-                                        'A': 'bg-purple-50 text-purple-700 border-purple-200',
-                                        'R': 'bg-orange-50 text-orange-700 border-orange-200'
-                                    };
-                                    const colorClass = colors[label] || 'bg-gray-50 text-gray-700 border-gray-200';
-                                    
-                                    return `
-                                        <div class="${colorClass} p-3 rounded-lg border">
-                                            <strong>${label}:</strong> ${text}
-                                        </div>
-                                    `;
-                                }).join('')}
-                            </div>
+                            <h5 class="font-medium text-gray-900">Your STAR Answer:</h5>
+                            ${question.talking_points.map(point => `
+                                <div class="bg-gray-50 p-3 rounded-lg text-sm">
+                                    ${point}
+                                </div>
+                            `).join('')}
                         </div>
                         ` : ''}
-                        
                         ${question.suggested_snippet ? `
                         <div class="bg-customPurple-100/20 border border-customPurple-100/40 p-3 rounded-lg">
-                            <p class="text-sm text-customPurple-900">
-                                <strong>Pro tip:</strong> ${question.suggested_snippet}
-                            </p>
+                            <p class="text-sm text-customPurple-900"><strong>Pro tip:</strong> ${question.suggested_snippet}</p>
                         </div>
                         ` : ''}
                     </div>
@@ -820,27 +714,106 @@
             </div>
             ` : ''}
 
-            <!-- Actions -->
             <div class="mt-8 flex flex-col sm:flex-row gap-3">
                 <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
-                    Copy Interview Prep
+                    Copy Prep Notes
                 </button>
                 <button onclick="startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">
                     Ask Another Question
                 </button>
             </div>
         `;
+    };
 
-        resultsContainer.innerHTML = html;
-        resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        
-        // Initialize mermaid
-        setTimeout(initializeMermaidDiagrams, 100);
+    // Display simple response (fallback for backward compatibility)
+    const displaySimpleResponse = (data) => {
+        const { quick_take, key_moves, talking_points, email_template, next_steps } = data;
+
+        return `
+            ${quick_take ? `
+            <div class="bg-gradient-to-r from-customPurple-100/30 to-customPurple-100/10 rounded-xl p-6 mb-6 border border-customPurple-100/50">
+                <div class="flex items-start gap-4">
+                    <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 flex-shrink-0">
+                    <div>
+                        <h3 class="text-lg font-bold text-customPurple-900 mb-2">Here's what I'd do</h3>
+                        <div class="text-gray-800 space-y-2">${marked.parse(quick_take)}</div>
+                    </div>
+                </div>
+            </div>
+            ` : ''}
+
+            ${key_moves && key_moves.length > 0 ? `
+            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
+                <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <span class="text-2xl">🎯</span> Your Next Moves
+                </h3>
+                <div class="space-y-3">
+                    ${key_moves.map((move, i) => `
+                        <div class="flex gap-3">
+                            <span class="flex-shrink-0 w-7 h-7 bg-customPurple-100 text-customPurple-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-900">${move.action}</p>
+                                <p class="text-sm text-gray-600 mt-1">${move.why}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            ` : ''}
+
+            ${talking_points && talking_points.length > 0 ? `
+            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
+                <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <span class="text-2xl">💬</span> What to Say
+                </h3>
+                <ul class="space-y-2">
+                    ${talking_points.map(point => `
+                        <li class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-customPurple-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-gray-700">${point}</span>
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
+            ` : ''}
+
+            ${email_template ? `
+            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6 shadow-sm">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="font-bold text-gray-900 flex items-center gap-2">
+                        <span class="text-2xl">📧</span> Email Template
+                    </h3>
+                    <button onclick="copyEmail()" class="text-customPurple-500 hover:text-customPurple-700 text-sm font-medium">
+                        Copy
+                    </button>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap" id="email-content">${email_template}</div>
+            </div>
+            ` : ''}
+
+            ${next_steps ? `
+            <div class="bg-customPurple-100/20 rounded-xl border border-customPurple-100/40 p-6 mb-6">
+                <h3 class="font-bold text-customPurple-900 mb-2">Remember:</h3>
+                <p class="text-customPurple-800">${next_steps}</p>
+            </div>
+            ` : ''}
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                    Copy Everything
+                </button>
+                <button onclick="startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">
+                    Ask Another Question
+                </button>
+            </div>
+        `;
     };
 
     // Initialize copy buttons
     const initializeCopyButtons = () => {
-        document.querySelectorAll('.copy-snippet').forEach(btn => {
+        document.querySelectorAll('.copy-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const text = e.currentTarget.dataset.text;
                 navigator.clipboard.writeText(text).then(() => {
@@ -861,6 +834,12 @@
     };
 
     // Helper functions
+    window.copyEmail = () => {
+        const email = document.getElementById('email-content').textContent;
+        navigator.clipboard.writeText(email);
+        alert('Email copied to clipboard!');
+    };
+
     window.copyAll = () => {
         const content = resultsContainer.innerText;
         navigator.clipboard.writeText(content).then(() => {
@@ -886,7 +865,7 @@
     shareBtn.addEventListener('click', () => {
         const text = "Just got unstuck on a federal deal with AskArti:";
         const url = "https://askarti.com";
-        
+
         if (navigator.share) {
             navigator.share({ title: 'AskArti', text, url });
         } else {
