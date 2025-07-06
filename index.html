@@ -61,11 +61,6 @@
         }
         .mermaid-container { text-align: center; }
         .mermaid { display: inline-block; max-width: 100%;}
-        
-        /* Fix for chart escaping its container */
-        #competitors-chart {
-            min-width: 0;
-        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
@@ -223,18 +218,17 @@
         let html = '';
 
         if (response_type === 'prospect') {
-            const { summary, top_s_is, top_is_vs, top_vars, top_smalls, market_insights } = data;
+            const { summary, top_s_is, top_is_vs, top_vars, company_capabilities, naics_codes, prospect_recommendations, market_insights } = data;
             
-            // Helper function to render ranked lists
             const renderRankedList = (items) => {
                 if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No specific companies found.</p>';
-                return items.map((item, index) => `
-                    <li class="flex items-center gap-3 py-2 border-t border-gray-100">
-                        <span class="text-xs font-bold text-customPurple-700 bg-customPurple-100 w-6 h-6 flex items-center justify-center rounded-full">${index + 1}</span>
+                return `<ul class="space-y-1">${items.map((item, index) => `
+                    <li class="flex items-center gap-3 py-2 border-t border-gray-100 first:border-t-0 first:pt-0">
+                        <span class="text-xs font-bold text-customPurple-700 bg-customPurple-100 w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">${index + 1}</span>
                         <span class="flex-1 font-medium text-gray-800">${item.company}</span>
                         <span class="text-sm font-semibold text-gray-600">${item.value}</span>
                     </li>
-                `).join('');
+                `).join('')}</ul>`;
             };
 
             html = `
@@ -244,28 +238,39 @@
                     <div class="text-customPurple-900/80">${marked.parse(summary || '')}</div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="dashboard-card">
-                        <h3 class="font-bold text-gray-900 mb-3">Top Systems Integrators (SIs)</h3>
-                        <ul class="space-y-1">${renderRankedList(top_s_is)}</ul>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="dashboard-card">
+                            <h3 class="font-bold text-gray-900 mb-3">Top Systems Integrators (SIs)</h3>
+                            ${renderRankedList(top_s_is)}
+                        </div>
+                        <div class="dashboard-card">
+                            <h3 class="font-bold text-gray-900 mb-3">Top Software Vendors (ISVs)</h3>
+                            ${renderRankedList(top_is_vs)}
+                        </div>
+                        <div class="dashboard-card">
+                            <h3 class="font-bold text-gray-900 mb-3">Top Value-Added Resellers (VARs)</h3>
+                            ${renderRankedList(top_vars)}
+                        </div>
                     </div>
-                    <div class="dashboard-card">
-                        <h3 class="font-bold text-gray-900 mb-3">Top Software Vendors (ISVs)</h3>
-                        <ul class="space-y-1">${renderRankedList(top_is_vs)}</ul>
-                    </div>
-                    <div class="dashboard-card">
-                        <h3 class="font-bold text-gray-900 mb-3">Top Value-Added Resellers (VARs)</h3>
-                        <ul class="space-y-1">${renderRankedList(top_vars)}</ul>
-                    </div>
-                    <div class="dashboard-card">
-                        <h3 class="font-bold text-gray-900 mb-3">Top Small Businesses</h3>
-                        <ul class="space-y-1">${renderRankedList(top_smalls)}</ul>
+                    <div class="lg:col-span-1 space-y-6">
+                        <div class="dashboard-card">
+                            <h3 class="font-bold text-gray-900 mb-3">Core Capabilities</h3>
+                            <ul class="space-y-2 text-sm">${(company_capabilities || []).map(c => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
+                            <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${n}</li>`).join('')}</ul>
+                        </div>
+                         <div class="dashboard-card">
+                            <h3 class="font-bold text-gray-900 mb-3">Key Insight</h3>
+                            <p class="text-sm text-gray-700">${market_insights || 'N/A'}</p>
+                        </div>
                     </div>
                 </div>
-                
                  <div class="dashboard-card">
-                     <h3 class="font-bold text-gray-900 mb-2">Key Market Insight</h3>
-                     <p class="text-gray-700">${market_insights || 'N/A'}</p>
+                    <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
+                    <ul class="space-y-2 text-sm">${(prospect_recommendations || []).map(r => `<li class="flex gap-3"><span class="text-customPurple-500 font-bold text-lg flex-shrink-0 -mt-1">→</span><span>${r}</span></li>`).join('')}</ul>
                 </div>
             </div>`;
         } else {
