@@ -185,29 +185,7 @@
 
         <!-- Results Container -->
         <div id="results-container" class="fade-in"></div>
- <!-- What I Can Help With -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div class="action-card bg-white rounded-lg border border-gray-200 p-4 text-center" data-action="deal">
-                <div class="text-3xl mb-2">🎯</div>
-                <h3 class="font-semibold text-gray-900 mb-1">Stuck Deals</h3>
-                <p class="text-sm text-gray-600">Unblock stalled opportunities</p>
-            </div>
-            <div class="action-card bg-white rounded-lg border border-gray-200 p-4 text-center" data-action="meeting">
-                <div class="text-3xl mb-2">📊</div>
-                <h3 class="font-semibold text-gray-900 mb-1">Meeting Prep</h3>
-                <p class="text-sm text-gray-600">Nail your next QBR or pitch</p>
-            </div>
-            <div class="action-card bg-white rounded-lg border border-gray-200 p-4 text-center" data-action="prospect">
-                <div class="text-3xl mb-2">🔍</div>
-                <h3 class="font-semibold text-gray-900 mb-1">Find Prospects</h3>
-                <p class="text-sm text-gray-600">Target the right agencies</p>
-            </div>
-            <div class="action-card bg-white rounded-lg border border-gray-200 p-4 text-center" data-action="interview">
-                <div class="text-3xl mb-2">💼</div>
-                <h3 class="font-semibold text-gray-900 mb-1">Interview Prep</h3>
-                <p class="text-sm text-gray-600">Land your next fed sales role</p>
-            </div>
-        </div>
+
         <!-- Footer - Simplified -->
         <footer class="text-center mt-12 space-y-4">
             <div class="flex justify-center gap-6 text-sm">
@@ -274,21 +252,6 @@
         btn.addEventListener('click', (e) => {
             situationInput.value = e.target.dataset.text;
             askBtn.click();
-        });
-    });
-
-    // Action card handling
-    document.querySelectorAll('.action-card').forEach(card => {
-        card.addEventListener('click', (e) => {
-            const action = e.currentTarget.dataset.action;
-            const prompts = {
-                deal: "My champion at [AGENCY] went dark after [EVENT]. It's a $[AMOUNT] [SOLUTION] deal. [BLOCKER]. Need to save this for Q[#].",
-                meeting: "Preparing for [TYPE] meeting at [AGENCY] next week. [STAKEHOLDERS] will be there. They care about [PRIORITY]. How should I position our [SOLUTION]?",
-                prospect: "I sell [SOLUTION] and want to break into [AGENCY]. What programs should I target? Who are the key contractors? What contract vehicles should I pursue?",
-                interview: "Interviewing for [ROLE] at [COMPANY] focused on federal. They want someone who can [REQUIREMENT]. How should I position my experience with [ACHIEVEMENT]?"
-            };
-            situationInput.value = prompts[action];
-            situationInput.focus();
         });
     });
 
