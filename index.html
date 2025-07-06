@@ -124,17 +124,18 @@
             transform: scale(1.05);
         }
 
-        /* --- ADD THIS CSS TO FIX CHART SIZING --- */
-        /* Ensures any wrapper DIV created by Mermaid is full-width */
-        .mermaid > div {
-            width: 100%;
-        }
-        /* Ensures the final SVG is responsive */
-        .mermaid svg {
-            width: 100%;
-            height: auto;
-        }
-        
+       .mermaid {
+    width: 100%;
+    display: block;
+}
+.mermaid > div {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+.mermaid svg {
+    width: 100% !important;
+    height: auto !important;
+}
         @media (max-width: 640px) {
             .response-type { font-size: 0.625rem; padding: 0.2rem 0.5rem; }
         }
@@ -385,9 +386,11 @@ const displayAdvice = async (data) => {
             <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <span class="text-2xl">🗺️</span> Your Game Plan
             </h3>
-            <div class="flex justify-center text-center">
-                <pre class="mermaid">${mermaid_chart}</pre>
-            </div>
+            <div class="flex justify-center">
+    <div class="w-full max-w-4xl overflow-x-auto">
+        <pre class="mermaid">${mermaid_chart}</pre>
+    </div>
+</div>
         </div>
         ` : ''}
 
