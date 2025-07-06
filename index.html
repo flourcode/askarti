@@ -249,11 +249,17 @@
     };
 
     const getAdvice = async () => {
-        const situation = situationInput.value.trim();
-        if (!situation) {
-            resultsContainer.innerHTML = `<div class="bg-red-50 border border-red-200 rounded-lg p-4 text-center"><p class="text-red-700 font-medium">Drop your situation in the box above 👆</p></div>`;
-            return;
+    const situation = situationInput.value.trim();
+    if (!situation) {
+        // Change this line - instead of writing directly to resultsContainer
+        loadingMessageContainer.classList.remove('hidden');
+        const messageEl = document.getElementById('loading-message');
+        if (messageEl) { 
+            messageEl.textContent = "Drop your situation in the box above 👆"; 
+            messageEl.classList.add('text-red-700', 'font-medium');
         }
+        return;
+    }
 
         setLoading(true);
         const loadingMessages = ["Hang on. I'm...Working Backwards", "...Diving Deep", "...Unpacking This", "...Putting a Pin in it", "...Circling Back", "...Thinking Big"];
@@ -412,12 +418,16 @@
         alert('Results copied to clipboard!');
     };
     window.startOver = () => {
-        situationInput.value = '';
-        resultsContainer.innerHTML = '';
-        loadingMessageContainer.classList.add('hidden');
-        situationInput.focus();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+    situationInput.value = '';
+    resultsContainer.innerHTML = '';
+    loadingMessageContainer.classList.add('hidden');
+    const messageEl = document.getElementById('loading-message');
+    if (messageEl) {
+        messageEl.classList.remove('text-red-700', 'font-medium');
+    }
+    situationInput.focus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
 
     shareBtn.addEventListener('click', () => {
         const text = "Just got unstuck on a federal deal with AskArti:";
