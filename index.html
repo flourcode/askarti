@@ -218,7 +218,7 @@
         let html = '';
 
         if (response_type === 'prospect') {
-            const { summary, top_s_is, top_is_vs, top_vars, company_capabilities, naics_codes, prospect_recommendations, market_insights } = data;
+            const { summary, top_s_is, top_software_and_cloud, company_capabilities, naics_codes, prospect_recommendations, market_insights } = data;
             
             const renderRankedList = (items) => {
                 if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No specific companies found.</p>';
@@ -245,12 +245,8 @@
                             ${renderRankedList(top_s_is)}
                         </div>
                         <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Top Software Vendors (ISVs)</h3>
-                            ${renderRankedList(top_is_vs)}
-                        </div>
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Top Value-Added Resellers (VARs)</h3>
-                            ${renderRankedList(top_vars)}
+                            <h3 class="font-bold text-gray-900 mb-3">Top Software & Cloud Providers</h3>
+                            ${renderRankedList(top_software_and_cloud)}
                         </div>
                     </div>
                     <div class="lg:col-span-1 space-y-6">
@@ -262,15 +258,15 @@
                             <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
                             <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${n}</li>`).join('')}</ul>
                         </div>
-                         <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Key Insight</h3>
-                            <p class="text-sm text-gray-700">${market_insights || 'N/A'}</p>
-                        </div>
                     </div>
                 </div>
                  <div class="dashboard-card">
                     <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
                     <ul class="space-y-2 text-sm">${(prospect_recommendations || []).map(r => `<li class="flex gap-3"><span class="text-customPurple-500 font-bold text-lg flex-shrink-0 -mt-1">→</span><span>${r}</span></li>`).join('')}</ul>
+                </div>
+                 <div class="dashboard-card">
+                     <h3 class="font-bold text-gray-900 mb-2">Key Market Insight</h3>
+                     <p class="text-gray-700">${market_insights || 'N/A'}</p>
                 </div>
             </div>`;
         } else {
