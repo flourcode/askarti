@@ -9,6 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -51,29 +52,15 @@
             background-color: rgba(82, 63, 158, 0.1);
             transform: scale(1.02);
         }
-        /* Styling for the new dashboard cards */
         .dashboard-card {
              background-color: white;
-             border-radius: 0.75rem; /* 12px */
+             border-radius: 0.75rem;
              border: 1px solid #e5e7eb;
-             padding: 1.5rem; /* 24px */
+             padding: 1.5rem;
              box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
         }
-        /* Mermaid Chart Sizing & Centering */
         .mermaid-container { text-align: center; }
         .mermaid { display: inline-block; max-width: 100%;}
-        
-        /* Sponsor ad styling */
-        .sponsor-ad {
-            background: linear-gradient(135deg, rgba(82, 63, 158, 0.05) 0%, rgba(82, 63, 158, 0.02) 100%);
-            border: 1px solid rgba(82, 63, 158, 0.1);
-            transition: all 0.3s ease;
-        }
-        .sponsor-ad:hover {
-            background: linear-gradient(135deg, rgba(82, 63, 158, 0.08) 0%, rgba(82, 63, 158, 0.04) 100%);
-            border-color: rgba(82, 63, 158, 0.2);
-            transform: translateY(-1px);
-        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
@@ -104,10 +91,6 @@
                 <button class="quick-prompt px-3 py-1.5 bg-gray-100 rounded-full text-sm text-gray-700 font-medium"
                         data-text="Our demo crashed during the technical evaluation at DOJ. The whole team saw it fail. My champion looks like an idiot and the lead engineer called our solution 'vaporware'. This was supposed to close this quarter.">
                     Demo crashed
-                </button>
-				<button class="quick-prompt px-3 py-1.5 bg-gray-100 rounded-full text-sm text-gray-700 font-medium"
-                        data-text="I'm the Director of Federal Partners. My Partner Reps and our Direct Account Reps are always blaming each other for deals gone bad, partner discounting, and revenue recognition.">
-                    Partner drama
                 </button>
                 <button class="quick-prompt px-3 py-1.5 bg-gray-100 rounded-full text-sm text-gray-700 font-medium"
                         data-text="Final interview at AWS for Fed Account Exec role next week. Need to learn about the Amazon Leadership Principles and prep STAR stories about closing complex deals and handling technical objections. What should I emphasize?">
@@ -176,92 +159,6 @@
 
     mermaid.initialize({ startOnLoad: false });
 
-    // --- Sponsor Ad System ---
-    const sponsorAds = {
-        premium: {
-            name: 'Subhoo.com',
-            text: 'Helping you avoid teaming partners who still fax NDAs.',
-            url: 'https://subhoo.com',
-            weight: 50
-        },
-        standard: {
-            name: 'FastTrack Compliance',
-            text: 'Because waiting 18 months for security clearance is so last century.',
-            url: '#',
-            weight: 30
-        },
-        starter: {
-            name: 'DeepPockets Funding',
-            text: 'We find money hiding in the couch cushions of Congress.',
-            url: '#',
-            weight: 20
-        },
-        consulting: {
-            name: 'GovCon Wizards',
-            text: 'Turn your federal sales pipeline from tumbleweed to avalanche.',
-            url: '#',
-            weight: 25
-        },
-        security: {
-            name: 'ClearanceNinja',
-            text: 'Getting security clearances faster than a GSA approval process.',
-            url: '#',
-            weight: 35
-        },
-        training: {
-            name: 'Fed Sales Academy',
-            text: 'Learn to speak fluent government buyer in 30 days or less.',
-            url: '#',
-            weight: 40
-        }
-    };
-
-    const templates = {
-        loadingIndicator: `
-            <div class="text-center py-2 mt-2">
-                <div class="flex justify-center items-center mb-2">
-                    <img src="/images/arti_right.png" alt="Arti" class="h-16 w-16 animate-pulse">
-                </div>
-                <p id="loading-message" class="text-customPurple-500 text-lg font-semibold mb-2">Hang on, I'm Working Backwards...</p>
-            </div>
-        `,
-        sponsorAd: (adKey) => {
-            const ad = sponsorAds[adKey] || sponsorAds.starter;
-            
-            return `
-                <div class="sponsor-ad rounded-lg p-3 mb-4 text-sm">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="text-xs font-medium text-customPurple-600 bg-customPurple-100 px-2 py-1 rounded-full">SPONSOR</span>
-                        <a href="${ad.url}" target="_blank" class="text-customPurple-700 font-semibold hover:text-customPurple-900 transition-colors">${ad.name}</a>
-                    </div>
-                    <p class="text-gray-700 text-sm leading-relaxed">${ad.text}</p>
-                </div>
-            `;
-        }
-    };
-
-    // Function to select a random sponsor ad based on weights
-    const getRandomSponsorAd = () => {
-        const adKeys = Object.keys(sponsorAds);
-        const totalWeight = adKeys.reduce((sum, key) => sum + sponsorAds[key].weight, 0);
-        let random = Math.random() * totalWeight;
-        
-        for (const key of adKeys) {
-            random -= sponsorAds[key].weight;
-            if (random <= 0) {
-                return key;
-            }
-        }
-        
-        return adKeys[0]; // fallback
-    };
-
-    // Track ad impressions (optional - for analytics)
-    const trackAdImpression = (adKey) => {
-        // You can send this data to your analytics service
-        console.log(`Ad impression: ${adKey}`);
-    };
-
     document.querySelectorAll('.quick-prompt').forEach(btn => {
         btn.addEventListener('click', (e) => {
             situationInput.value = e.target.dataset.text;
@@ -285,12 +182,7 @@
         setLoading(true);
         const loadingMessages = ["Hang on. I'm...Working Backwards", "...Diving Deep", "...Unpacking This", "...Putting a Pin in it", "...Circling Back", "...Thinking Big"];
         let loadingStage = 0;
-        
-        // Show loading with sponsor ad
-        const selectedAdKey = getRandomSponsorAd();
-        resultsContainer.innerHTML = templates.sponsorAd(selectedAdKey) + templates.loadingIndicator;
-        trackAdImpression(selectedAdKey);
-        
+        resultsContainer.innerHTML = `<div class="text-center py-8"><p id="loading-message" class="text-gray-600"></p></div>`;
         const messageEl = document.getElementById('loading-message');
         if (messageEl) { messageEl.textContent = loadingMessages[0]; }
 
@@ -307,7 +199,7 @@
             });
             if (!response.ok) throw new Error('API Error');
             const data = await response.json();
-            displayAdvice(data, selectedAdKey);
+            displayAdvice(data);
         } catch (error) {
             console.error('Error:', error);
             resultsContainer.innerHTML = `<div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center"><p class="text-red-700 font-medium mb-2">Couldn't connect to Arti</p><p class="text-red-600 text-sm">Try again in a second</p></div>`;
@@ -317,16 +209,13 @@
         }
     };
 
-    const displayAdvice = async (data, adKey) => {
+    const displayAdvice = async (data) => {
         const { response_type } = data;
         let html = '';
 
-        // Add sponsor ad at the top
-        html += templates.sponsorAd(adKey);
-
         if (response_type === 'prospect') {
             const { summary, company_capabilities, naics_codes, federal_competitors, prime_contractors, prospect_recommendations, market_insights } = data;
-            html += `
+            html = `
             <div class="fade-in">
                 <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6 mb-6">
                     <h3 class="text-xl font-bold text-customPurple-900 mb-2">Intelligence Briefing</h3>
@@ -336,8 +225,8 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-2 space-y-6">
                         <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-4">Federal Competitors</h3>
-                            <div class="space-y-4">${(federal_competitors || []).map(c => `<div class="border-t border-gray-100 pt-3"><p class="font-semibold text-gray-800">${c.company}</p><p class="text-sm text-gray-600 mt-1">${c.strengths}</p><p class="text-xs text-gray-500 mt-2"><b>Vehicles:</b> ${c.contract_vehicles || 'N/A'}</p></div>`).join('') || '<p class="text-sm text-gray-500">No specific competitors found.</p>'}</div>
+                            <h3 class="font-bold text-gray-900 mb-4">Competitor Landscape (by Contract Vehicle Access)</h3>
+                            <div id="competitors-chart"></div>
                         </div>
                         <div class="dashboard-card">
                             <h3 class="font-bold text-gray-900 mb-4">Potential Prime Contractors</h3>
@@ -366,7 +255,7 @@
             </div>`;
         } else {
             const { quick_take, key_moves, mermaid_chart, talking_points, email_template, next_steps } = data;
-            html += `
+            html = `
             <div class="fade-in space-y-6">
                 <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6 flow-root">
                     <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
@@ -398,13 +287,6 @@
             </div>`;
         }
 
-        // Add another sponsor ad in the middle of longer content
-        if (response_type === 'prospect' || (data.key_moves && data.key_moves.length > 2)) {
-            const secondAdKey = getRandomSponsorAd();
-            html += templates.sponsorAd(secondAdKey);
-            trackAdImpression(secondAdKey);
-        }
-
         html += `
             <div class="mt-8 flex flex-col sm:flex-row gap-3">
                 <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">Copy to Clipboard</button>
@@ -414,11 +296,35 @@
         resultsContainer.innerHTML = html;
         resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-        if (response_type !== 'prospect') {
-            try {
-                await mermaid.run();
-            } catch (e) {
-                console.error("Mermaid chart rendering error:", e);
+        if (response_type === 'prospect') {
+            const { federal_competitors } = data;
+            // Prepare data for the chart
+            const chartData = (federal_competitors || []).map(c => ({
+                x: c.company,
+                // Count vehicles, treat 'N/A' or empty as 0
+                y: c.contract_vehicles && c.contract_vehicles.toLowerCase() !== 'n/a' ? c.contract_vehicles.split(',').length : 0
+            })).sort((a, b) => a.y - b.y); // Sort so largest bar is at the top
+
+            const options = {
+                series: [{ data: chartData.map(d => d.y) }],
+                chart: { type: 'bar', height: 350, toolbar: { show: false } },
+                plotOptions: { bar: { borderRadius: 4, horizontal: true, barHeight: '60%' } },
+                dataLabels: { enabled: true, style: { colors: ['#fff'] } },
+                xaxis: { categories: chartData.map(d => d.x), labels: { style: { colors: '#6b7280' } } },
+                yaxis: { labels: { style: { colors: '#6b7280' } } },
+                colors: ['#523f9e'],
+                grid: { show: false },
+                tooltip: { y: { formatter: (val) => `${val} Vehicle(s)` } }
+            };
+            const chart = new ApexCharts(document.querySelector("#competitors-chart"), options);
+            chart.render();
+        } else {
+             if (data.mermaid_chart) {
+                try {
+                    await mermaid.run();
+                } catch (e) {
+                    console.error("Mermaid chart rendering error:", e);
+                }
             }
         }
     };
