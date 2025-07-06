@@ -210,124 +210,139 @@
     };
 
     const displayAdvice = async (data) => {
-        const { response_type } = data;
-        let html = '';
+    const { response_type } = data;
+    let html = '';
 
-        if (response_type === 'prospect') {
-            const { summary, company_capabilities, naics_codes, federal_competitors, prime_contractors, prospect_recommendations, market_insights } = data;
-            html = `
-            <div class="fade-in">
-                <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6 mb-6">
-                    <h3 class="text-xl font-bold text-customPurple-900 mb-2">Intelligence Briefing</h3>
-                    <div class="text-customPurple-900/80">${marked.parse(summary || '')}</div>
-                </div>
+    if (response_type === 'prospect') {
+        const { summary, company_capabilities, naics_codes, federal_competitors, prime_contractors, prospect_recommendations, market_insights } = data;
+        html = `
+        <div class="fade-in">
+            <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6 mb-6">
+                <h3 class="text-xl font-bold text-customPurple-900 mb-2">Intelligence Briefing</h3>
+                <div class="text-customPurple-900/80">${marked.parse(summary || '')}</div>
+            </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 space-y-6">
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-4">Competitor Landscape (by Contract Vehicle Access)</h3>
-                            <div id="competitors-chart"></div>
-                        </div>
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-4">Potential Prime Contractors</h3>
-                            <div class="space-y-4">${(prime_contractors || []).map(p => `<div class="border-t border-gray-100 pt-3"><p class="font-semibold text-gray-800">${p.company}</p><p class="text-sm text-gray-600 mt-1">${p.relationship}</p></div>`).join('') || '<p class="text-sm text-gray-500">No specific prime contractors found.</p>'}</div>
-                        </div>
-                    </div>
-                    <div class="lg:col-span-1 space-y-6">
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Core Capabilities</h3>
-                            <ul class="space-y-2 text-sm">${(company_capabilities || []).map(c => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
-                        </div>
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">NAICS Codes</h3>
-                            <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${n}</li>`).join('')}</ul>
-                        </div>
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Recommendations</h3>
-                            <ul class="space-y-2 text-sm">${(prospect_recommendations || []).map(r => `<li class="flex gap-2"><span class="text-customPurple-500 font-bold flex-shrink-0 mt-1">→</span><span>${r}</span></li>`).join('')}</ul>
-                        </div>
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Key Insight</h3>
-                            <p class="text-sm text-gray-700">${market_insights || 'N/A'}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>`;
-        } else {
-            const { quick_take, key_moves, mermaid_chart, talking_points, email_template, next_steps } = data;
-            html = `
-            <div class="fade-in space-y-6">
-                <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6 flow-root">
-                    <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
-                    <div class="text-customPurple-900/80 space-y-2">${marked.parse(quick_take || '')}</div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 space-y-6">
                     <div class="dashboard-card">
-                        <h3 class="font-bold text-gray-900 mb-4">Your Next 3 Moves</h3>
-                        <div class="space-y-3">${(key_moves || []).map((m, i) => `<div class="flex gap-3"><span class="flex-shrink-0 w-7 h-7 bg-customPurple-200 text-customPurple-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span><div class="flex-1"><p class="font-medium text-gray-900">${m.action}</p><p class="text-sm text-gray-600 mt-1">${m.why}</p></div></div>`).join('')}</div>
+                        <h3 class="font-bold text-gray-900 mb-4">Competitor Landscape (by Contract Vehicle Access)</h3>
+                        <div id="competitors-chart"></div>
                     </div>
                     <div class="dashboard-card">
-                        <h3 class="font-bold text-gray-900 mb-4">Game Plan</h3>
-                        ${mermaid_chart ? `<div class="mermaid-container"><pre class="mermaid">${mermaid_chart}</pre></div>` : '<p class="text-sm text-gray-500">No visual plan available.</p>'}
+                        <h3 class="font-bold text-gray-900 mb-4">Potential Prime Contractors</h3>
+                        <div class="space-y-4">${(prime_contractors || []).map(p => `<div class="border-t border-gray-100 pt-3"><p class="font-semibold text-gray-800">${p.company}</p><p class="text-sm text-gray-600 mt-1">${p.relationship}</p></div>`).join('') || '<p class="text-sm text-gray-500">No specific prime contractors found.</p>'}</div>
                     </div>
                 </div>
+                <div class="lg:col-span-1 space-y-6">
+                    <div class="dashboard-card">
+                        <h3 class="font-bold text-gray-900 mb-3">Core Capabilities</h3>
+                        <ul class="space-y-2 text-sm">${(company_capabilities || []).map(c => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3 class="font-bold text-gray-900 mb-3">NAICS Codes</h3>
+                        <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${n}</li>`).join('')}</ul>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3 class="font-bold text-gray-900 mb-3">Recommendations</h3>
+                        <ul class="space-y-2 text-sm">${(prospect_recommendations || []).map(r => `<li class="flex gap-2"><span class="text-customPurple-500 font-bold flex-shrink-0 mt-1">→</span><span>${r}</span></li>`).join('')}</ul>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3 class="font-bold text-gray-900 mb-3">Key Insight</h3>
+                        <p class="text-sm text-gray-700">${market_insights || 'N/A'}</p>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    } else {
+        const { quick_take, key_moves, mermaid_chart, talking_points, email_template, next_steps } = data;
+        html = `
+        <div class="fade-in space-y-6">
+            <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6 flow-root">
+                <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
+                <div class="text-customPurple-900/80 space-y-2">${marked.parse(quick_take || '')}</div>
+            </div>
 
-                ${(talking_points && talking_points.length > 0) || email_template ? `
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="dashboard-card">
-                    <h3 class="font-bold text-gray-900 mb-4">Communications</h3>
-                    <div class="grid grid-cols-1 ${email_template && talking_points && talking_points.length > 0 ? 'md:grid-cols-2' : ''} gap-6">
-                        ${talking_points && talking_points.length > 0 ? `<div><h4 class="font-semibold text-gray-800 mb-3">What to Say</h4><ul class="space-y-2 text-sm">${talking_points.map(t => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${t}</li>`).join('')}</ul></div>` : ''}
-                        ${email_template ? `<div><h4 class="font-semibold text-gray-800 mb-3">Email Template</h4><div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap border">${email_template}</div></div>` : ''}
-                    </div>
+                    <h3 class="font-bold text-gray-900 mb-4">Your Next 3 Moves</h3>
+                    <div class="space-y-3">${(key_moves || []).map((m, i) => `<div class="flex gap-3"><span class="flex-shrink-0 w-7 h-7 bg-customPurple-200 text-customPurple-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span><div class="flex-1"><p class="font-medium text-gray-900">${m.action}</p><p class="text-sm text-gray-600 mt-1">${m.why}</p></div></div>`).join('')}</div>
                 </div>
-                ` : ''}
+                <div class="dashboard-card">
+                    <h3 class="font-bold text-gray-900 mb-4">Game Plan</h3>
+                    ${mermaid_chart ? `<div class="mermaid-container"><pre class="mermaid">${mermaid_chart}</pre></div>` : '<p class="text-sm text-gray-500">No visual plan available.</p>'}
+                </div>
+            </div>
 
-                 ${next_steps ? `<div class="bg-customPurple-200/60 p-4 rounded-lg text-sm text-customPurple-900"><b class="font-semibold">Remember:</b> ${next_steps}</div>` : ''}
-            </div>`;
-        }
+            ${(talking_points && talking_points.length > 0) || email_template ? `
+            <div class="dashboard-card">
+                <h3 class="font-bold text-gray-900 mb-4">Communications</h3>
+                <div class="grid grid-cols-1 ${email_template && talking_points && talking_points.length > 0 ? 'md:grid-cols-2' : ''} gap-6">
+                    ${talking_points && talking_points.length > 0 ? `<div><h4 class="font-semibold text-gray-800 mb-3">What to Say</h4><ul class="space-y-2 text-sm">${talking_points.map(t => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${t}</li>`).join('')}</ul></div>` : ''}
+                    ${email_template ? `<div><h4 class="font-semibold text-gray-800 mb-3">Email Template</h4><div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap border">${email_template}</div></div>` : ''}
+                </div>
+            </div>
+            ` : ''}
 
-        html += `
-            <div class="mt-8 flex flex-col sm:flex-row gap-3">
-                <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">Copy to Clipboard</button>
-                <button onclick="startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">Ask Another Question</button>
-            </div>`;
+             ${next_steps ? `<div class="bg-customPurple-200/60 p-4 rounded-lg text-sm text-customPurple-900"><b class="font-semibold">Remember:</b> ${next_steps}</div>` : ''}
+        </div>`;
+    }
 
-        resultsContainer.innerHTML = html;
-        resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    html += `
+        <div class="mt-8 flex flex-col sm:flex-row gap-3">
+            <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">Copy to Clipboard</button>
+            <button onclick="startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">Ask Another Question</button>
+        </div>`;
 
-        if (response_type === 'prospect') {
-            const { federal_competitors } = data;
-            // Prepare data for the chart
-            const chartData = (federal_competitors || []).map(c => ({
-                x: c.company,
-                // Count vehicles, treat 'N/A' or empty as 0
-                y: c.contract_vehicles && c.contract_vehicles.toLowerCase() !== 'n/a' ? c.contract_vehicles.split(',').length : 0
-            })).sort((a, b) => a.y - b.y); // Sort so largest bar is at the top
+    resultsContainer.innerHTML = html;
+    resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-            const options = {
-                series: [{ data: chartData.map(d => d.y) }],
-                chart: { type: 'bar', height: 350, toolbar: { show: false } },
-                plotOptions: { bar: { borderRadius: 4, horizontal: true, barHeight: '60%' } },
-                dataLabels: { enabled: true, style: { colors: ['#fff'] } },
-                xaxis: { categories: chartData.map(d => d.x), labels: { style: { colors: '#6b7280' } } },
-                yaxis: { labels: { style: { colors: '#6b7280' } } },
-                colors: ['#523f9e'],
-                grid: { show: false },
-                tooltip: { y: { formatter: (val) => `${val} Vehicle(s)` } }
-            };
-            const chart = new ApexCharts(document.querySelector("#competitors-chart"), options);
-            chart.render();
-        } else {
-             if (data.mermaid_chart) {
-                try {
-                    await mermaid.run();
-                } catch (e) {
-                    console.error("Mermaid chart rendering error:", e);
+    if (response_type === 'prospect') {
+        const { federal_competitors } = data;
+        
+        // --- ROBUST CHART DATA PROCESSING START ---
+        // This block now handles both strings and arrays for contract_vehicles
+        const chartData = (federal_competitors || []).map(c => {
+            let vehicleCount = 0;
+            if (c.contract_vehicles) {
+                if (Array.isArray(c.contract_vehicles)) {
+                    // It's an array, so the count is its length
+                    vehicleCount = c.contract_vehicles.length;
+                } else if (typeof c.contract_vehicles === 'string' && c.contract_vehicles.toLowerCase().trim() !== 'n/a') {
+                    // It's a string, so we split and count
+                    vehicleCount = c.contract_vehicles.split(',').length;
                 }
             }
+            return {
+                x: c.company,
+                y: vehicleCount
+            };
+        }).sort((a, b) => a.y - b.y);
+        // --- ROBUST CHART DATA PROCESSING END ---
+
+        const options = {
+            series: [{ name: 'Vehicles', data: chartData.map(d => d.y) }],
+            chart: { type: 'bar', height: 350, toolbar: { show: false } },
+            plotOptions: { bar: { borderRadius: 4, horizontal: true, barHeight: '60%' } },
+            dataLabels: { enabled: true, style: { colors: ['#fff'] }, offsetX: -20 },
+            xaxis: { categories: chartData.map(d => d.x), labels: { style: { colors: '#6b7280' } } },
+            yaxis: { labels: { style: { colors: '#6b7280' } } },
+            colors: ['#523f9e'],
+            grid: { show: false },
+            tooltip: { y: { formatter: (val) => `${val} Vehicle(s)` } }
+        };
+        const chart = new ApexCharts(document.querySelector("#competitors-chart"), options);
+        chart.render();
+
+    } else {
+         if (data.mermaid_chart) {
+            try {
+                await mermaid.run();
+            } catch (e) {
+                console.error("Mermaid chart rendering error:", e);
+            }
         }
-    };
+    }
+};
 
     window.copyAll = () => {
         const contentEl = document.getElementById('results-container');
