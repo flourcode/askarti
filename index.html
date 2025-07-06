@@ -123,19 +123,21 @@
             background-color: rgba(82, 63, 158, 0.1);
             transform: scale(1.05);
         }
+
+        /* --- ADD THIS CSS TO FIX CHART SIZING --- */
+        /* Ensures any wrapper DIV created by Mermaid is full-width */
+        .mermaid > div {
+            width: 100%;
+        }
+        /* Ensures the final SVG is responsive */
+        .mermaid svg {
+            width: 100%;
+            height: auto;
+        }
+        
         @media (max-width: 640px) {
             .response-type { font-size: 0.625rem; padding: 0.2rem 0.5rem; }
         }
-		/* --- Definitive Mermaid Chart Sizing --- */
-/* Ensures any wrapper DIV created by Mermaid is full-width */
-.mermaid > div {
-    width: 100%;
-}
-/* Ensures the final SVG is responsive */
-.mermaid svg {
-    width: 100%;
-    height: auto;
-}
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
@@ -250,7 +252,6 @@
     // Define loading interval variable in a broader scope
     let loadingInterval;
 
-    // 2. INITIALIZE MERMAID.JS
     // We set startOnLoad to false to control rendering manually
     mermaid.initialize({ startOnLoad: false });
 
@@ -339,7 +340,6 @@
 
 // Display advice
 const displayAdvice = async (data) => {
-    // 3. DESTRUCTURE THE NEW MERMAID_CHART FIELD
     const { response_type, quick_take, key_moves, mermaid_chart, talking_points, email_template, next_steps } = data;
 
     // Determine response type styling
@@ -443,7 +443,6 @@ const displayAdvice = async (data) => {
     resultsContainer.innerHTML = html;
     resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-    // 5. RENDER THE MERMAID CHART
     try {
         await mermaid.run();
     } catch (e) {
