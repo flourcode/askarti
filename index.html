@@ -671,7 +671,6 @@ async function getAdvice() {
     }
 }
 
-// Display the advice with error handling for Mermaid
 async function displayAdvice(data) {
     const { response_type } = data;
     // Extract seller_type early (new code)
@@ -786,13 +785,12 @@ async function displayAdvice(data) {
                 <div class="dashboard-card">
                     <h3 class="font-bold text-gray-900 mb-4">Communications</h3>
                     <div class="grid grid-cols-1 ${email_template && talking_points && talking_points.length > 0 ? 'md:grid-cols-2' : ''} gap-6">
-                        ${talking_points && talking_points.length > 0 ? `<div><h4 class="font-semibold text-gray-800 mb-3">What to Ask</h4><ul class="space-y-2 text-sm">${talking_points.map(t => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${t}</li>`).join('')}</ul></div>` : ''}
+                        ${talking_points && talking_points.length > 0 ? `<div><h4 class="font-semibold text-gray-800 mb-3">${response_type === 'interview' ? 'What They May Ask' : 'What to Ask'}</h4><ul class="space-y-2 text-sm">${talking_points.map(t => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${t}</li>`).join('')}</ul></div>` : ''}
                         ${email_template ? `<div><h4 class="font-semibold text-gray-800 mb-3">Email Template</h4><div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap border">${email_template}</div></div>` : ''}
                     </div>
                 </div>
                 ` : ''}
-
-                 ${next_steps ? `<div class="bg-customPurple-200/60 p-4 rounded-lg text-sm text-customPurple-900"><b class="font-semibold">Remember:</b> ${next_steps}</div>` : ''}
+                ${next_steps ? `<div class="bg-customPurple-200/60 p-4 rounded-lg text-sm text-customPurple-900"><b class="font-semibold">Remember:</b> ${next_steps}</div>` : ''}
             </div>`;
         }
 
