@@ -805,22 +805,22 @@ async function displayAdvice(data) {
         elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         // Add seller type badge after DOM update (new code)
-        if (sellerType) {
-            setTimeout(() => {
-                try {
-                    const sellerTypeBadge = document.createElement('div');
-                    sellerTypeBadge.className = 'text-xs font-medium text-gray-500 mb-2';
-                    sellerTypeBadge.textContent = `Advice tailored for ${sellerType.replace(/_/g, ' ')} context`;
-                    
-                    const firstResultElement = elements.resultsContainer.querySelector('.fade-in');
-                    if (firstResultElement && firstResultElement.firstChild) {
-                        firstResultElement.insertBefore(sellerTypeBadge, firstResultElement.firstChild.nextSibling);
-                    }
-                } catch (badgeError) {
-                    console.log('Non-critical error adding context badge:', badgeError);
-                }
-            }, 100);
+        if (sellerType && !situation.toLowerCase().includes('leadership principles')) {
+    setTimeout(() => {
+        try {
+            const sellerTypeBadge = document.createElement('div');
+            sellerTypeBadge.className = 'text-xs font-medium text-gray-500 mb-2';
+            sellerTypeBadge.textContent = `Advice tailored for ${sellerType.replace(/_/g, ' ')} context`;
+            
+            const firstResultElement = elements.resultsContainer.querySelector('.fade-in');
+            if (firstResultElement && firstResultElement.firstChild) {
+                firstResultElement.insertBefore(sellerTypeBadge, firstResultElement.firstChild.nextSibling);
+            }
+        } catch (badgeError) {
+            console.log('Non-critical error adding context badge:', badgeError);
         }
+    }, 100);
+}
 
         // Try to render mermaid chart if present
         if (response_type !== 'prospect' && data.mermaid_chart) {
