@@ -669,29 +669,29 @@ async function getAdvice() {
 
 async function displayAdvice(data) {
     const { response_type } = data;
-    // Extract seller_type early (new code)
+    // Extract seller_type early
     const sellerType = data.seller_type || '';
     let html = '';
 
     try {
         if (response_type === 'prospect') {
-            // Prospect response rendering with fallbacks for each section
+            // This section is updated to render the new, richer prospecting data
             const { 
                 summary = "Strategic insight for your federal prospecting efforts.",
-                top_s_is = [],
-                top_software_and_cloud = [],
-                company_capabilities = [],
+                top_spending_agencies = [],
+                top_prime_contractors = [],
+                key_contract_vehicles = [],
                 naics_codes = [],
                 prospect_recommendations = [],
                 market_insights = "Focus on relationship building and understanding agency mission needs."
             } = data;
             
             const renderRankedList = (items) => {
-                if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No specific companies found.</p>';
+                if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No specific data found.</p>';
                 return `<ul class="space-y-1">${items.map((item, index) => `
                     <li class="flex items-center gap-3 py-2 border-t border-gray-100 first:border-t-0 first:pt-0">
                         <span class="text-xs font-bold text-customPurple-700 bg-customPurple-100 w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">${index + 1}</span>
-                        <span class="flex-1 font-medium text-gray-800">${item.company || 'Company'}</span>
+                        <span class="flex-1 font-medium text-gray-800">${item.company || 'Entry'}</span>
                         <span class="text-sm font-semibold text-gray-600">${item.value || 'N/A'}</span>
                     </li>
                 `).join('')}</ul>`;
@@ -704,39 +704,40 @@ async function displayAdvice(data) {
                     <div class="text-customPurple-900/80">${marked.parse(summary || '')}</div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 space-y-6">
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Top Systems Integrators (SIs)</h3>
-                            ${renderRankedList(top_s_is)}
-                        </div>
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Top Software & Cloud Providers</h3>
-                            ${renderRankedList(top_software_and_cloud)}
-                        </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="dashboard-card">
+                        <h3 class="font-bold text-gray-900 mb-3">Top Spending Agencies</h3>
+                        ${renderRankedList(top_spending_agencies)}
                     </div>
-                    <div class="lg:col-span-1 space-y-6">
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
-                            <ul class="space-y-2 text-sm">${(company_capabilities || []).map(c => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
-                        </div>
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
-                            <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${n}</li>`).join('')}</ul>
-                        </div>
+                    <div class="dashboard-card">
+                        <h3 class="font-bold text-gray-900 mb-3">Top Prime Contractors</h3>
+                        ${renderRankedList(top_prime_contractors)}
                     </div>
                 </div>
-                 <div class="dashboard-card">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                     <div class="dashboard-card">
+                        <h3 class="font-bold text-gray-900 mb-3">Key Contract Vehicles</h3>
+                        <ul class="space-y-2 text-sm">${(key_contract_vehicles || []).map(c => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
+                        <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${n}</li>`).join('')}</ul>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
                     <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
                     <ul class="space-y-2 text-sm">${(prospect_recommendations || []).map(r => `<li class="flex gap-3"><span class="text-customPurple-500 font-bold text-lg flex-shrink-0 -mt-1">→</span><span>${r}</span></li>`).join('')}</ul>
                 </div>
-                 <div class="dashboard-card">
-                     <h3 class="font-bold text-gray-900 mb-2">Key Market Insight</h3>
-                     <p class="text-gray-700">${market_insights || 'N/A'}</p>
+
+                <div class="dashboard-card">
+                    <h3 class="font-bold text-gray-900 mb-2">Key Market Insight</h3>
+                    <p class="text-gray-700">${market_insights || 'N/A'}</p>
                 </div>
             </div>`;
         } else {
-            // Deal, meeting, or interview response with fallbacks for each field
+            // This is the original, unchanged logic for deal, meeting, or interview responses
             const { 
                 quick_take = "Here are tactical steps to move your federal sales situation forward.",
                 key_moves = [],
@@ -746,7 +747,6 @@ async function displayAdvice(data) {
                 next_steps = ''
             } = data;
 
-            // Ensure key_moves has valid structure
             const safeKeyMoves = Array.isArray(key_moves) && key_moves.length > 0 ? 
                 key_moves : [
                     { action: "Clarify the true decision criteria", why: "Federal decisions rarely match the stated requirements" },
@@ -800,25 +800,25 @@ async function displayAdvice(data) {
         elements.resultsContainer.innerHTML = html;
         elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-        // Add seller type badge after DOM update (new code)
+        // Add seller type badge after DOM update
         if (sellerType && !(situation.toLowerCase().includes('leadership principle') || 
                     situation.toLowerCase().includes('leadership principles') || 
                     (situation.toLowerCase().includes('aws') && situation.toLowerCase().includes('lp')))) {
-    setTimeout(() => {
-        try {
-            const sellerTypeBadge = document.createElement('div');
-            sellerTypeBadge.className = 'text-xs font-medium text-gray-500 mb-2';
-            sellerTypeBadge.textContent = `Advice tailored for ${sellerType.replace(/_/g, ' ')} context`;
-            
-            const firstResultElement = elements.resultsContainer.querySelector('.fade-in');
-            if (firstResultElement && firstResultElement.firstChild) {
-                firstResultElement.insertBefore(sellerTypeBadge, firstResultElement.firstChild.nextSibling);
-            }
-        } catch (badgeError) {
-            console.log('Non-critical error adding context badge:', badgeError);
+            setTimeout(() => {
+                try {
+                    const sellerTypeBadge = document.createElement('div');
+                    sellerTypeBadge.className = 'text-xs font-medium text-gray-500 mb-2';
+                    sellerTypeBadge.textContent = `Advice tailored for ${sellerType.replace(/_/g, ' ')} context`;
+                    
+                    const firstResultElement = elements.resultsContainer.querySelector('.fade-in');
+                    if (firstResultElement && firstResultElement.firstChild) {
+                        firstResultElement.insertBefore(sellerTypeBadge, firstResultElement.firstChild.nextSibling);
+                    }
+                } catch (badgeError) {
+                    console.log('Non-critical error adding context badge:', badgeError);
+                }
+            }, 100);
         }
-    }, 100);
-}
 
         // Try to render mermaid chart if present
         if (response_type !== 'prospect' && data.mermaid_chart) {
@@ -849,7 +849,6 @@ async function displayAdvice(data) {
         `;
     }
 }
-
     // Copy all results to clipboard
     window.copyAll = () => {
         try {
