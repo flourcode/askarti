@@ -543,11 +543,11 @@ elements.situationInput.addEventListener('input', function() {
         return fallbacks[responseType] || fallbacks.deal;
     }
 
-    // Main function to get advice
-    async function getAdvice() {
-    const situation = elements.situationInput.value.trim();
-    situation = situation + " [" + Date.now() % 10000 + "]";
-    // Add client-side rate limiting (new code)
+async function getAdvice() {
+    // Declare a local variable instead of modifying the parameter
+    let situationText = elements.situationInput.value.trim();
+    
+    // Add client-side rate limiting
     const now = Date.now();
     const MIN_CALL_INTERVAL = 2000; // 2 seconds minimum between calls
     if (now - state.lastCallTime < MIN_CALL_INTERVAL) {
@@ -562,49 +562,52 @@ elements.situationInput.addEventListener('input', function() {
     state.lastCallTime = now;
     
     // Validate input
-    if (!situation) {
+    if (!situationText) {
         elements.loadingMessageContainer.classList.remove('hidden');
         elements.loadingMessage.textContent = "Drop your situation in the box above 👆"; 
         elements.loadingMessage.classList.add('text-red-700', 'font-medium');
         return;
     }
+    
+    // Add the hidden timestamp to create variation in responses
+    situationText = situationText + " [" + (Date.now() % 10000) + "]";
         
-        // Clear previous results and show loading state
-        setLoading(true);
-        elements.resultsContainer.innerHTML = '';
-        state.retryCount = 0;
+    // Clear previous results and show loading state
+    setLoading(true);
+    elements.resultsContainer.innerHTML = '';
+    state.retryCount = 0;
+    
+    try {
+        // Make API request
+        const data = await makeRequest(situationText);
         
+        // Hide loading message
+        elements.loadingMessageContainer.classList.add('hidden');
+        
+        // Display results
+        displayAdvice(data);
+    } catch (error) {
+        console.error('Error:', error);
+        
+        // Try fallback if API fails completely
         try {
-            // Make API request
-            const data = await makeRequest(situation);
-            
-            // Hide loading message
+            const fallbackData = generateFallbackAdvice(situationText);
             elements.loadingMessageContainer.classList.add('hidden');
+            displayAdvice(fallbackData);
             
-            // Display results
-            displayAdvice(data);
-        } catch (error) {
-            console.error('Error:', error);
-            
-            // Try fallback if API fails completely
-            try {
-                const fallbackData = generateFallbackAdvice(situation);
-                elements.loadingMessageContainer.classList.add('hidden');
-                displayAdvice(fallbackData);
-                
-                // Show a subtle notice that we're using fallback data
-                const fallbackNotice = document.createElement('div');
-                fallbackNotice.className = 'text-center text-sm text-orange-600 mt-2 mb-4';
-                fallbackNotice.textContent = "Using backup advice while our servers catch up. Refresh for full insights.";
-                elements.resultsContainer.insertAdjacentElement('afterbegin', fallbackNotice);
-            } catch (fallbackError) {
-                // If even fallback fails, show a generic error
-                showError("We're having trouble generating advice right now. Please try again in a moment.");
-            }
-        } finally {
-            setLoading(false);
+            // Show a subtle notice that we're using fallback data
+            const fallbackNotice = document.createElement('div');
+            fallbackNotice.className = 'text-center text-sm text-orange-600 mt-2 mb-4';
+            fallbackNotice.textContent = "Using backup advice while our servers catch up. Refresh for full insights.";
+            elements.resultsContainer.insertAdjacentElement('afterbegin', fallbackNotice);
+        } catch (fallbackError) {
+            // If even fallback fails, show a generic error
+            showError("We're having trouble generating advice right now. Please try again in a moment.");
         }
+    } finally {
+        setLoading(false);
     }
+}
 
 // Display the advice with error handling for Mermaid
 async function displayAdvice(data) {
