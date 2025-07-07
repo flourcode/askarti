@@ -683,8 +683,7 @@ async function displayAdvice(data) {
                 company_capabilities = [],
                 naics_codes = [],
                 prospect_recommendations = [],
-                market_insights = "Focus on relationship building and understanding agency mission needs.",
-                visualization = null
+                market_insights = "Focus on relationship building and understanding agency mission needs."
             } = data;
             
             const renderRankedList = (items) => {
@@ -703,14 +702,8 @@ async function displayAdvice(data) {
                 <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6">
                     <h3 class="text-xl font-bold text-customPurple-900 mb-2">Intelligence Briefing</h3>
                     <div class="text-customPurple-900/80">${marked.parse(summary || '')}</div>
-                </div>`;
+                </div>
 
-            // Add dynamic visualization if provided
-            if (visualization && visualization.type && visualization.data) {
-                html += renderDynamicChart(visualization);
-            }
-
-            html += `
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-2 space-y-6">
                         <div class="dashboard-card">
@@ -855,89 +848,6 @@ async function displayAdvice(data) {
             </div>
         `;
     }
-}
-
-// Add this helper function for rendering dynamic charts
-window.renderDynamicChart = function(visualization) {
-    const { type, title, data } = visualization;
-    const chartId = `chart-${Date.now()}`;
-    
-    let chartConfig;
-    switch(type) {
-        case 'spending_trends':
-            chartConfig = {
-                series: data.series,
-                chart: { type: 'area', height: 350, toolbar: { show: false } },
-                colors: ['#7C6BBE', '#9F8FDB', '#C2B5F0'],
-                xaxis: { categories: data.categories },
-                yaxis: { title: { text: 'Billions ($)' } },
-                dataLabels: { enabled: false },
-                stroke: { curve: 'smooth', width: 2 },
-                fill: { type: 'gradient', gradient: { opacityFrom: 0.6, opacityTo: 0.8 } }
-            };
-            break;
-            
-        case 'market_share':
-            chartConfig = {
-                series: data.map(d => d.value),
-                chart: { type: 'donut', height: 350 },
-                labels: data.map(d => d.name),
-                colors: ['#7C6BBE', '#9F8FDB', '#C2B5F0', '#E8E4F7', '#F5F3FB'],
-                dataLabels: { enabled: true },
-                legend: { position: 'bottom' }
-            };
-            break;
-            
-        case 'competitive_radar':
-            chartConfig = {
-                series: data.series,
-                chart: { type: 'radar', height: 350, toolbar: { show: false } },
-                xaxis: { categories: data.categories },
-                colors: ['#7C6BBE', '#FF6B6B', '#95A5A6'],
-                markers: { size: 4 },
-                fill: { opacity: 0.2 }
-            };
-            break;
-            
-        case 'opportunity_heatmap':
-            const heatmapSeries = data.agencies.map((agency, i) => ({
-                name: agency,
-                data: data.values[i]
-            }));
-            chartConfig = {
-                series: heatmapSeries,
-                chart: { type: 'heatmap', height: 350, toolbar: { show: false } },
-                dataLabels: { enabled: true },
-                colors: ["#7C6BBE"],
-                xaxis: { categories: data.quarters }
-            };
-            break;
-            
-        case 'contract_vehicles':
-            chartConfig = {
-                series: [{ data: data.map(d => ({ x: d.name, y: d.value })) }],
-                chart: { type: 'treemap', height: 350 },
-                colors: ['#7C6BBE', '#9F8FDB', '#C2B5F0', '#E8E4F7', '#F5F3FB'],
-                dataLabels: { enabled: true }
-            };
-            break;
-            
-        default:
-            return ''; // No chart for unknown types
-    }
-    
-    return `
-        <div class="dashboard-card">
-            <h3 class="font-bold text-gray-900 mb-3">${title}</h3>
-            <div id="${chartId}"></div>
-        </div>
-        <script>
-            (function() {
-                const options = ${JSON.stringify(chartConfig)};
-                new ApexCharts(document.querySelector("#${chartId}"), options).render();
-            })();
-        </script>
-    `;
 }
 
     // Copy all results to clipboard
