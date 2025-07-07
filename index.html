@@ -90,21 +90,20 @@
 
         <main class="dashboard-card mb-3">
     <div class="mb-4">
-        <label for="situation-input" class="block text-lg font-semibold text-gray-900 mb-2 text-center">
-            Hi, I'm Arti, your 24/7 Sales Buddy. What's blocking your deal?
-        </label>
-        <textarea 
-            id="situation-input" 
-            rows="3" 
-            class="w-full p-4 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary resize-none placeholder-gray-500"
-            placeholder="Champion ghosted me after seeing pricing. $2M deal at DHS. Q4 commit."
-            maxlength="500"></textarea>
-        <div class="text-xs text-gray-500 mt-1 flex justify-between items-center">
-            <span class="hint-text">The more details you give Arti — like agency, $ amount, or who’s involved — the better the advice.
-Don't like the answer, just ask it again. Arti doesn’t mind.</span>
-            <span id="char-count" class="hidden">0/500</span>
-        </div>
+    <label for="situation-input" class="block text-lg font-semibold text-gray-900 mb-2 text-center">
+        Hi, I'm Arti, your 24/7 Sales Buddy. What's blocking your deal?
+    </label>
+    <textarea 
+        id="situation-input" 
+        rows="3" 
+        class="w-full p-4 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary resize-none placeholder-gray-500"
+        placeholder="Champion ghosted me after seeing pricing. $2M deal at DHS. Q4 commit."
+        maxlength="500"></textarea>
+    <div class="text-xs text-gray-500 mt-1 flex justify-between items-center">
+        <span class="hint-text">The more details you give Arti — like agency, $ amount, or who's involved — the better the advice. Don't like the answer, just ask Arti again.</span>
+        <span id="char-count" class="opacity-0 transition-opacity duration-200">0/500</span>
     </div>
+</div>
 
     <div class="flex flex-wrap gap-2 justify-center mb-4">
         <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
@@ -310,28 +309,38 @@ Don't like the answer, just ask it again. Arti doesn’t mind.</span>
 
     // Input validation and character count
     function setupInputValidation() {
-        elements.situationInput.addEventListener('input', function() {
-            const maxLength = CONFIG.MAX_INPUT_LENGTH;
-            const currentLength = this.value.length;
-            
-            // Update character count
-            elements.charCount.textContent = `${currentLength}/${maxLength}`;
-            elements.charCount.classList.remove('hidden');
-            
-            // Visual feedback when approaching limit
-            if (currentLength >= maxLength * 0.9) {
-                elements.charCount.classList.add('text-orange-500');
-            } else {
-                elements.charCount.classList.remove('text-orange-500');
-            }
-            
-            // Enforce max length (backup for maxlength attribute)
-            if (currentLength > maxLength) {
-                this.value = this.value.substring(0, maxLength);
-                elements.charCount.textContent = `${maxLength}/${maxLength}`;
-                elements.charCount.classList.add('text-red-500');
-            }
-        });
+elements.situationInput.addEventListener('input', function() {
+    const maxLength = CONFIG.MAX_INPUT_LENGTH;
+    const currentLength = this.value.length;
+    
+    // Update character count
+    elements.charCount.textContent = `${currentLength}/${maxLength}`;
+    
+    // Show character count when typing begins
+    if (currentLength > 0) {
+        elements.charCount.classList.remove('opacity-0');
+        elements.charCount.classList.add('opacity-100');
+    } else {
+        elements.charCount.classList.remove('opacity-100');
+        elements.charCount.classList.add('opacity-0');
+    }
+    
+    // Visual feedback when approaching limit
+    if (currentLength >= maxLength * 0.9) {
+        elements.charCount.classList.add('text-orange-500');
+    } else {
+        elements.charCount.classList.remove('text-orange-500');
+    }
+    
+    // Enforce max length (backup for maxlength attribute)
+    if (currentLength > maxLength) {
+        this.value = this.value.substring(0, maxLength);
+        elements.charCount.textContent = `${maxLength}/${maxLength}`;
+        elements.charCount.classList.add('text-red-500');
+    } else {
+        elements.charCount.classList.remove('text-red-500');
+    }
+});
     }
 
     // Show/hide loading state
