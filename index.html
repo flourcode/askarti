@@ -805,7 +805,9 @@ async function displayAdvice(data) {
         elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         // Add seller type badge after DOM update (new code)
-        if (sellerType && !situation.toLowerCase().includes('leadership principles')) {
+        if (sellerType && !(situation.toLowerCase().includes('leadership principle') || 
+                    situation.toLowerCase().includes('leadership principles') || 
+                    (situation.toLowerCase().includes('aws') && situation.toLowerCase().includes('lp')))) {
     setTimeout(() => {
         try {
             const sellerTypeBadge = document.createElement('div');
