@@ -627,23 +627,22 @@ class AskArti {
         </div>`;
     };
     
-    // Alternative simple list layout
     const renderSimpleList = (items) => {
-        if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
-        
-        return `
-        <div class="space-y-2">
-            ${items.map((item, index) => `
-                <div class="border-l-4 border-customPurple-500 pl-3 py-1">
-                    <div class="font-medium text-gray-900">
-                        <span class="text-customPurple-600 font-bold">#${index + 1}</span> 
-                        ${item.company || 'Unknown'}
-                    </div>
-                    <div class="text-sm text-gray-600">${item.value || 'N/A'}</div>
+    if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
+    
+    return `
+    <div class="space-y-2">
+        ${items.map((item, index) => `
+            <div class="border-l-4 border-customPurple-500 pl-3 py-1">
+                <div class="font-medium text-gray-900">
+                    <span class="text-customPurple-600 font-bold">${index + 1}</span> 
+                    ${item.company || 'Unknown'}
                 </div>
-            `).join('')}
-        </div>`;
-    };
+                <div class="text-sm text-gray-600">${item.value || 'N/A'}</div>
+            </div>
+        `).join('')}
+    </div>`;
+};
     
     const html = `
     <div class="fade-in space-y-6">
