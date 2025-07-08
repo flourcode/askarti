@@ -642,41 +642,35 @@ async function displayAdvice(data) {
             };
             html = `
             <div class="fade-in space-y-6">
-                <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6">
-                    <h3 class="text-xl font-bold text-customPurple-900 mb-2">Intelligence Briefing</h3>
-                    <div class="text-customPurple-900/80">${marked.parse(summary || '')}</div>
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 space-y-6">
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Top Contractors</h3>
-                            ${renderRankedList(top_s_is)}
-                        </div>
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Relevant Companies</h3>
-                            ${renderRankedList(top_software_and_cloud)}
-                        </div>
-                    </div>
-                    <div class="lg:col-span-1 space-y-6">
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
-                            <ul class="space-y-2 text-sm">${(company_capabilities || []).map(c => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
-                        </div>
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
-                            <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${n}</li>`).join('')}</ul>
-                        </div>
-                    </div>
-                </div>
-                 <div class="dashboard-card">
-                    <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
-                    <ul class="space-y-2 text-sm">${(prospect_recommendations || []).map(r => `<li class="flex gap-3"><span class="text-customPurple-500 font-bold text-lg flex-shrink-0 -mt-1">→</span><span>${r}</span></li>`).join('')}</ul>
-                </div>
-                 <div class="dashboard-card">
-                     <h3 class="font-bold text-gray-900 mb-2">Key Market Insight</h3>
-                     <p class="text-gray-700">${market_insights || 'N/A'}</p>
-                </div>
-            </div>`;
+    <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6">
+        <h3 class="text-xl font-bold text-customPurple-900 mb-2">Intelligence Briefing</h3>
+        <div class="text-customPurple-900/80">${marked.parse(summary || '')}</div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="dashboard-card">
+            <h3 class="font-bold text-gray-900 mb-3">Top Companies</h3>
+            ${renderRankedList(top_s_is)}
+        </div>
+        <div class="dashboard-card">
+            <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
+            <ul class="space-y-2 text-sm">${(company_capabilities || []).map(c => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
+        </div>
+        <div class="dashboard-card">
+            <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
+            <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${n}</li>`).join('')}</ul>
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
+        <ul class="space-y-2 text-sm">${(prospect_recommendations || []).map(r => `<li class="flex gap-3"><span class="text-customPurple-500 font-bold text-lg flex-shrink-0 -mt-1">→</span><span>${r}</span></li>`).join('')}</ul>
+    </div>
+    <div class="dashboard-card">
+        <h3 class="font-bold text-gray-900 mb-2">Key Market Insight</h3>
+        <p class="text-gray-700">${market_insights || 'N/A'}</p>
+    </div>
+</div>`;
         } else {
             // Deal, meeting, or interview response with fallbacks for each field
             const { 
