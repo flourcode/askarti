@@ -145,8 +145,8 @@
         <div class="flex items-center gap-3">
             <img src="/images/arti_right.png" alt="Arti" class="w-10 h-10">
             <div>
-                <h2 class="font-semibold text-gray-900">Chat with Arti</h2>
-                <p class="text-sm text-gray-600">Your Federal Sales Buddy</p>
+                <h2 class="font-semibold text-gray-900">Arti, Strategic Assistant</h2>
+                <p class="text-sm text-gray-600">Your Federal Sales Co-Pilot</p>
             </div>
             <div class="ml-auto flex items-center gap-2">
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
@@ -167,14 +167,14 @@
 
     <div class="border-t border-gray-200 pt-4">
         <div class="flex gap-3">
-            <input 
-                type="text" 
-                id="chat-input" 
-                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
-                placeholder="Just talk to me like you would a trusted colleague..."
-                maxlength="1000"
-            >
-            <button id="send-btn" class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium px-6 py-2 rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+            <textarea
+                id="chat-input"
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary resize-none"
+                placeholder="Brief me on a contact, analyze RFP text, or ask a question..."
+                rows="1"
+                maxlength="5000"
+            ></textarea>
+            <button id="send-btn" class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium px-6 py-2 rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed self-end">
                 <span>Send</span>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
@@ -196,7 +196,7 @@
         <button id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Share</button>
         <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Contact</a>
     </div>
-    
+
     <div class="sponsor-ad rounded-lg p-3 mb-4 text-sm bg-white border border-gray-200 not-italic text-left leading-normal text-gray-700 max-w-md mx-auto">
         <div class="flex items-center gap-2 mb-2">
             <span class="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded-full">SPONSOR</span>
@@ -244,7 +244,7 @@
             <div class="space-y-4 text-gray-700">
                 <p>I've spent over 30 years working with the federal government as a mission owner, COTR, and seller.</p>
                 <p>I built AskArti to help federal salespeople use AI in a practical way to better support their customers. Arti's not perfect, so use your judgment, but he's available 24/7 whenever you need ideas.</p>
-                
+
                 <div class="mt-6 pt-4 border-t border-gray-200">
                     <div class="bg-gray-50 rounded-lg p-4 text-sm">
                         <h3 class="font-semibold text-gray-800 mb-2 flex items-center">
@@ -256,7 +256,7 @@
                         <p class="text-gray-600 mb-2">AskArti uses models that may include Gemini, Claude, and ChatGPT. These models may use API inputs to improve responses. We do not store, log, or persist any prompt or response data. All processing occurs in-memory using AWS Lambda and is discarded after execution.</p>
                     </div>
                 </div>
-                
+
                 <div class="pt-4">
                     <a href="https://calendly.com/markflournoy/30min" target="_blank" class="block w-full bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-lg text-center transition-colors">
                         Let's chat about AI or Fed Sales →
@@ -269,8 +269,7 @@
 <script>
     // Configuration
     const CONFIG = {
-        // IMPORTANT: Replace this with the URL of your new, conversational Lambda function
-        API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI', 
+        API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
     };
 
     // Global State
@@ -278,7 +277,7 @@
         history: [],
     };
 
-    // --- DOM Elements ---
+    // DOM Elements
     const chatMessages = document.getElementById('chat-messages');
     const chatInput = document.getElementById('chat-input');
     const sendBtn = document.getElementById('send-btn');
@@ -287,8 +286,6 @@
     const shareBtn = document.getElementById('share-btn');
     const aboutModal = document.getElementById('about-modal');
     const closeAboutBtn = document.getElementById('close-about');
-    
-    // --- Core Chat Functions ---
 
     /**
      * Appends a message to the chat log.
@@ -298,14 +295,16 @@
         messageWrapper.className = 'flex gap-3 fade-in';
 
         if (isUser) {
+            // User message with pre-wrap to respect newlines from textarea
             messageWrapper.innerHTML = `
                 <div class="flex-1 flex justify-end">
                     <div class="bg-customPurple-500 text-white rounded-lg p-4 max-w-[80%]">
-                        <p>${escapeHtml(content)}</p>
+                        <p style="white-space: pre-wrap;">${escapeHtml(content)}</p>
                     </div>
                 </div>
             `;
         } else {
+            // AI message parsed by Marked.js
             messageWrapper.innerHTML = `
                 <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
                 <div class="flex-1">
@@ -314,7 +313,7 @@
                     </div>
                 </div>`;
         }
-       
+
        chatMessages.appendChild(messageWrapper);
        chatMessages.scrollTop = chatMessages.scrollHeight;
    }
@@ -331,8 +330,10 @@
 
        addMessage(message, true);
        chatInput.value = '';
-       conversationState.history.push({ role: 'user', parts: [{ text: message }] });
+       autoResizeTextarea(); // Resize textarea back to normal
        
+       conversationState.history.push({ role: 'user', parts: [{ text: message }] });
+
        showTypingIndicator();
 
        try {
@@ -341,7 +342,7 @@
                headers: { 'Content-Type': 'application/json' },
                body: JSON.stringify({
                    message: message,
-                   conversationHistory: conversationState.history.slice(-6) // Send last 3 exchanges
+                   conversationHistory: conversationState.history.slice(-6)
                })
            });
 
@@ -351,7 +352,7 @@
 
            const data = await response.json();
            removeTypingIndicator();
-           
+
            addMessage(data.message, false);
            conversationState.history.push({ role: 'model', parts: [{ text: data.message }] });
 
@@ -371,13 +372,13 @@
     */
    function showTypingIndicator() {
        if (document.getElementById('typing-indicator')) return;
-       
+
        const typingDiv = document.createElement('div');
        typingDiv.id = 'typing-indicator';
-       typingDiv.className = 'flex gap-3';
+       typingDiv.className = 'flex gap-3 fade-in';
        typingDiv.innerHTML = `
            <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
-           <div>
+           <div class="flex items-center">
                <div class="bg-gray-100 rounded-lg p-4 inline-flex items-center gap-2">
                    <div class="flex gap-1">
                        <span class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></span>
@@ -390,17 +391,11 @@
        chatMessages.scrollTop = chatMessages.scrollHeight;
    }
 
-   /**
-    * Removes the typing indicator.
-    */
    function removeTypingIndicator() {
        const indicator = document.getElementById('typing-indicator');
        if (indicator) indicator.remove();
    }
 
-   /**
-    * Resets the chat to its initial state.
-    */
    function clearChat() {
        if (confirm('Are you sure you want to clear the chat history?')) {
            chatMessages.innerHTML = '';
@@ -408,52 +403,52 @@
            addWelcomeMessage();
        }
    }
-   
-   /**
-    * Adds the initial welcome message and suggested questions.
-    */
+
+    /**
+     * UPDATED: Adds a new, more powerful welcome message.
+     */
     function addWelcomeMessage() {
+        const rfpSampleText = `shred this rfp text for me: 4.2 The Contractor shall provide a cloud-based Software-as-a-Service (SaaS) solution for enterprise-wide asset management. The solution must be FedRAMP High and operational on an Amazon Web Services (AWS) GovCloud environment. The incumbent solution is 'AssetPro' by Federal Integrators, Inc. The award will be made on a best-value tradeoff basis. Questions are due by July 15, 2025.`;
+        const dossierSampleText = `Create a deal dossier for a new opportunity: Project Citadel Shield at the Department of Homeland Security (DHS). My main contact is Director John Miller.`;
+        
         chatMessages.innerHTML = `
-            <div class="flex gap-3">
+            <div class="flex gap-3 fade-in">
                 <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
                 <div class="flex-1">
                     <div class="bg-gray-100 rounded-lg p-4 max-w-[80%]">
-                        <p class="text-gray-800 mb-2">Hey there! I'm Arti. What's on your mind today? Ask me anything about federal sales, and I'll do my best to find the answer for you.</p>
+                        <h4 class="font-semibold text-gray-800 mb-2">I'm Arti, your Fed.</h4>
+                        <p class="text-gray-800">I can analyze documents, prep you for meetings, and help strategize your deals. How can I help you win today?</p>
                     </div>
                     <div class="mt-2 flex flex-wrap gap-2">
-                        <button class="suggested-question text-xs bg-white border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50 hover:border-customPurple-300" data-question="Buyer at VA ghosted me after pricing. $1.5M cloud deal. CISO loves our competitor.">
-                            Ghosted
+                        <button class="suggested-question text-xs bg-white border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50 hover:border-customPurple-300" data-question="Brief me on the current CIO of the Department of Veterans Affairs.">
+                            Prep for a meeting
                         </button>
-                        <button class="suggested-question text-xs bg-white border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50 hover:border-customPurple-300" data-question="Demo crashed at DOJ yesterday. CTO just shook his head and walked out. How to recover?">
-                            Demo crashed
+                        <button class="suggested-question text-xs bg-white border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50 hover:border-customPurple-300" data-question="${escapeHtml(rfpSampleText)}">
+                            Analyze an RFP
                         </button>
-                        <button class="suggested-question text-xs bg-white border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50 hover:border-customPurple-300" data-question="Prospect for cloud services at VA">
-                            Prospecting
+                        <button class="suggested-question text-xs bg-white border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50 hover:border-customPurple-300" data-question="${escapeHtml(dossierSampleText)}">
+                            Create a deal dossier
                         </button>
                     </div>
                 </div>
             </div>`;
-        
-        // Re-attach listeners for the new suggested question buttons
+
         document.querySelectorAll('.suggested-question').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 chatInput.value = e.target.dataset.question;
-                handleSendMessage();
+                autoResizeTextarea();
+                chatInput.focus();
             });
         });
     }
 
-
-   /**
-    * Utility function to escape HTML to prevent XSS.
-    */
    function escapeHtml(unsafe) {
-       return unsafe
-           .replace(/&/g, "&amp;")
-           .replace(/</g, "&lt;")
-           .replace(/>/g, "&gt;")
-           .replace(/"/g, "&quot;")
-           .replace(/'/g, "&#039;");
+       return unsafe.replace(/"/g, "&quot;");
+   }
+
+   function autoResizeTextarea() {
+        chatInput.style.height = 'auto';
+        chatInput.style.height = (chatInput.scrollHeight) + 'px';
    }
 
    // --- Event Listeners Setup ---
@@ -465,9 +460,10 @@
                handleSendMessage();
            }
        });
+       chatInput.addEventListener('input', autoResizeTextarea);
 
        clearChatBtn.addEventListener('click', clearChat);
-       
+
        aboutBtn.addEventListener('click', () => aboutModal.classList.remove('hidden'));
        closeAboutBtn.addEventListener('click', () => aboutModal.classList.add('hidden'));
        aboutModal.addEventListener('click', (e) => {
@@ -475,12 +471,12 @@
        });
 
        shareBtn.addEventListener('click', () => {
-           const shareData = { 
-               title: 'AskArti - Federal Sales Buddy', 
-               text: "Check out AskArti!", 
-               url: "https://askarti.com" 
+           const shareData = {
+               title: 'AskArti - Federal Sales Co-Pilot',
+               text: "Check out this AI assistant for Federal Sales!",
+               url: "https://askarti.com"
            };
-           
+
            if (navigator.share) {
                navigator.share(shareData).catch(err => console.error('Share failed:', err));
            } else {
@@ -497,12 +493,10 @@
            }
        });
 
-       // Add initial welcome message on load
        addWelcomeMessage();
        chatInput.focus();
    }
 
-   // Initialize the application
    document.addEventListener('DOMContentLoaded', setupEventListeners);
 </script>
 </body>
