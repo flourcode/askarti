@@ -409,30 +409,44 @@
             }
             
             // Get the chart definition and sanitize it
-            let definition = diagramElement.textContent || '';
-            
-            // Basic validation of the Mermaid syntax
-            if (!definition || !definition.trim() || !definition.includes('graph')) {
-                console.error("Invalid or empty Mermaid definition");
-                diagramElement.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Invalid game plan structure</div>';
-                return false;
-            }
-            
-            // Ensure no leading/trailing spaces that might cause parsing issues
-            definition = definition.trim();
-            
-            // Advanced syntax error catching - look for common issues
-            const commonErrors = [
-                { pattern: /-->-->/g, fix: '-->' },
-                { pattern: /-->(\w)/g, fix: '--> $1' },
-                { pattern: /(\w)-->/g, fix: '$1 -->' },
-                { pattern: /\s{2,}/g, fix: ' ' },
-                { pattern: /\n\n+/g, fix: '\n' }
-            ];
-            
-            commonErrors.forEach(({pattern, fix}) => {
-                definition = definition.replace(pattern, fix);
-            });
+let definition = diagramElement.textContent || '';
+
+// Basic validation of the Mermaid syntax
+if (!definition || !definition.trim() || !definition.includes('graph')) {
+    console.error("Invalid or empty Mermaid definition");
+    diagramElement.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Invalid game plan structure</div>';
+    return false;
+}
+
+// Ensure no leading/trailing spaces that might cause parsing issues
+definition = definition.trim();
+
+// Advanced syntax error catching - look for common issues
+const commonErrors = [
+    { pattern: /-->-->/g, fix: '-->' },
+    { pattern: /-->(\w)/g, fix: '--> $1' },
+    { pattern: /(\w)-->/g, fix: '$1 -->' },
+    { pattern: /\s{2,}/g, fix: ' ' },
+    { pattern: /\n\n+/g, fix: '\n' },
+    // Fix the specific error pattern you're seeing
+    { pattern: /graph TD\s+(\w+)([^[{(].*?)(?=-->)/g, fix: (match, nodeId, nodeText) => {
+        return `graph TD\n    ${nodeId}[${nodeText.trim()}]`;
+    }},
+    // Ensure there's a line break after "graph TD"
+    { pattern: /graph TD(?!\s*\n)/g, fix: 'graph TD\n    ' },
+    // Handle node names that are missing brackets entirely
+    { pattern: /\n\s*(\w+)\s+-->/g, fix: (match, nodeName) => {
+        return `\n    ${nodeName}[${nodeName}] -->`;
+    }}
+];
+
+commonErrors.forEach(({pattern, fix}) => {
+    if (typeof fix === 'function') {
+        definition = definition.replace(pattern, fix);
+    } else {
+        definition = definition.replace(pattern, fix);
+    }
+});
             
             // Try rendering with a timeout to avoid freezing the UI
             console.log(`Attempting to render Mermaid chart (attempt ${retryCount + 1})`);
