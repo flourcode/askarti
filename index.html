@@ -161,21 +161,18 @@
             transform: scale(1);
             opacity: 1;
         }
-		/* Add to the existing styles */
+
+.dashboard-card ul {
+    max-width: 100%;
+}
+
 .dashboard-card li {
     word-break: break-word;
 }
 
-/* Ensure minimum width for company names */
-.min-w-0 {
+/* Ensure the flex container doesn't overflow */
+.dashboard-card .flex {
     min-width: 0;
-}
-
-/* Better text truncation if needed */
-.truncate-text {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
     </style>
 </head>
@@ -611,15 +608,15 @@ class AskArti {
         } = data;
         
         const renderRankedList = (items) => {
-            if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
-            return `<ul class="space-y-1">${items.map((item, index) => `
-                <li class="flex items-center gap-3 py-2 border-t border-gray-100 first:border-t-0 first:pt-0">
-                    <span class="text-xs font-bold text-customPurple-700 bg-customPurple-100 w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">${index + 1}</span>
-                    <span class="flex-1 font-medium text-gray-800 min-w-0 pr-2">${item.company || 'Unknown'}</span>
-                    <span class="text-sm font-semibold text-gray-600 flex-shrink-0">${item.value || 'N/A'}</span>
-                </li>
-            `).join('')}</ul>`;
-        };
+    if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
+    return `<ul class="space-y-1">${items.map((item, index) => `
+        <li class="flex items-center gap-3 py-2 border-t border-gray-100 first:border-t-0 first:pt-0">
+            <span class="text-xs font-bold text-customPurple-700 bg-customPurple-100 w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">${index + 1}</span>
+            <span class="flex-1 font-medium text-gray-800 break-words">${item.company || 'Unknown'}</span>
+            <span class="text-sm font-semibold text-gray-600 whitespace-nowrap ml-2">${item.value || 'N/A'}</span>
+        </li>
+    `).join('')}</ul>`;
+};
         
         const html = `
         <div class="fade-in space-y-6">
