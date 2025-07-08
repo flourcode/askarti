@@ -4,53 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AskArti - Your 24/7 Sales Buddy</title>
-    <!-- Primary Meta Tags -->
     <meta name="description" content="Get personalized federal sales advice from AskArti. Free AI tool provides SMART goals, customer messaging, and deal strategies for government contractors and sales professionals.">
     <meta name="keywords" content="federal sales, government sales, AI sales coach, sales strategy, federal contractors, govcon, sales advice">
     <meta name="author" content="Mark">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://askarti.com">
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://askarti.com/">
     <meta property="og:title" content="AskArti - Your Federal Sales Buddy">
     <meta property="og:description" content="Get personalized federal sales advice from AskArti. Free AI tool provides SMART goals, customer messaging, and deal strategies for government contractors and sales professionals.">
     <meta property="og:image" content="https://askarti.com/images/asklite.png">
     <meta property="og:image:alt" content="AskArti Logo">
-    <!-- Twitter -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:url" content="https://askarti.com/">
     <meta name="twitter:title" content="AskArti - Your Federal Sales Buddy">
     <meta name="twitter:description" content="Get personalized federal sales advice from AskArti. Free AI tool provides SMART goals, customer messaging, and deal strategies for government contractors and sales professionals.">
     <meta name="twitter:image" content="https://askarti.com/images/asklite.png">
     <meta name="twitter:image:alt" content="AskArti Logo">
-    <!-- Favicon files -->
     <link rel="icon" href="/images/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
     <meta name="theme-color" content="#523f9e">
-    <!-- Chrome Android icons -->
     <link rel="icon" type="image/png" sizes="192x192" href="/images/android-chrome-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="/images/android-chrome-512x512.png">
-    <!-- Resource hints for faster loading -->
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Preload critical assets -->
     <link rel="preload" href="/images/asklite.png" as="image">
     <link rel="preload" href="/images/arti_right.png" as="image">
-    <!-- Styles and scripts with optimized loading -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
-    <!-- Required for modals and visualizations -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WLGEPY5H4G"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -78,26 +67,10 @@
     </script>
     <style>
     body { font-family: 'Inter', sans-serif; }
-    .loader {
-        border: 2px solid #e5e7eb;
-        border-top: 2px solid #7C6BBE;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
     .fade-in { animation: fadeIn 0.5s ease-in-out; }
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
-    }
-    .quick-prompt:hover {
-        background-color: rgba(124, 107, 190, 0.1);
-        transform: scale(1.02);
     }
     .sponsor-ad {
         background: linear-gradient(135deg, rgba(124, 107, 190, 0.05) 0%, rgba(124, 107, 190, 0.02) 100%);
@@ -116,46 +89,27 @@
          padding: 1.5rem;
          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     }
-    .mermaid-container { text-align: center; }
-    .mermaid { display: inline-block; max-width: 100%;}
-    .hint-text {
-        opacity: 0.8;
-        transition: opacity 0.2s ease;
-    }
-    #situation-input:focus ~ .hint-text {
-        opacity: 1;
-    }
-    /* Modal animation styles */
-    .modal-backdrop {
-        transition: opacity 0.2s ease-out;
-    }
-    .modal-backdrop.show {
-        opacity: 1;
-    }
-    .modal-content {
-        transform: scale(0.95);
-        opacity: 0;
-        transition: all 0.2s ease-out;
-    }
-    .modal-content.show {
-        transform: scale(1);
-        opacity: 1;
-    }
-	#char-count {
-    display: none !important;
-}
-    /* Widget tab styles */
-    .widget-tab {
-        position: relative;
-        transition: all 0.2s ease;
-    }
-    .widget-tab.active {
-        color: #7C6BBE;
-        border-bottom-color: #7C6BBE;
-    }
-    .qual-option-label input:checked + span {
+    .user-message {
         background-color: #7C6BBE;
         color: white;
+        margin-left: auto;
+    }
+    .arti-message {
+        background-color: #f3f4f6;
+        color: #1f2937;
+    }
+    #chat-messages::-webkit-scrollbar {
+        width: 6px;
+    }
+    #chat-messages::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    #chat-messages::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 3px;
+    }
+    #chat-messages::-webkit-scrollbar-thumb:hover {
+        background: #555;
     }
 </style>
 </head>
@@ -166,70 +120,66 @@
                 <img src="/images/asklite.png" alt="AskArti" class="h-16 w-auto md:h-20 lg:h-24">
             </a>
         </header>
-        <main class="dashboard-card mb-3">
-    <div class="mb-4">
-    <label for="situation-input" class="block text-lg font-semibold text-gray-900 mb-2 text-center">
-        Hi, I'm Arti, your 24/7 Sales Buddy. What's blocking your deal?
-    </label>
-    <textarea 
-        id="situation-input" 
-        rows="3" 
-        class="w-full p-4 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary resize-none placeholder-gray-500"
-        placeholder="Champion ghosted me after seeing pricing. $2M deal at DHS. Q4 commit."
-        maxlength="500"></textarea>
-    <div class="text-xs text-gray-500 mt-1 flex justify-between items-center">
-        <span class="hint-text">More details may yield better advice. Don’t like the answer? Just hit “Ask Arti” again, like Vegas slots.</span>
-        <span id="char-count" class="opacity-0 transition-opacity duration-200">0/500</span>
+
+<main class="dashboard-card mb-3 h-[600px] flex flex-col">
+    <div class="border-b border-gray-200 pb-3 mb-4">
+        <div class="flex items-center gap-3">
+            <img src="/images/arti_right.png" alt="Arti" class="w-10 h-10">
+            <div>
+                <h2 class="font-semibold text-gray-900">Hi, I'm Arti.</h2>
+                <p class="text-sm text-gray-600">Your Federal Sales Buddy</p>
+            </div>
+            <div class="ml-auto">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <span class="w-2 h-2 bg-green-400 rounded-full mr-1.5 animate-pulse"></span>
+                    Online
+                </span>
+            </div>
+        </div>
     </div>
-</div>
-    <div class="flex flex-wrap gap-2 justify-center mb-4">
-        <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
-                data-text="Buyer at VA ghosted me after pricing. $1.5M cloud deal. CISO loves our competitor.">
-            Buyer Went Dark
-        </button>
-        <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
-                data-text="Demo crashed at DOJ yesterday. CTO just shook his head and walked out. How to recover?">
-            Demo Crashed
-        </button>
-        <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
-                data-text="Partner reps and Account reps fighting over deals, pipeline, and revenue recognition. It's hurting sales.">
-            Partner Drama
-        </button>
-        <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
-                data-text="Meeting DHS CIO next week. Don't have a Champion. How to position our cybersecurity platform?">
-            Meeting Prep
-        </button>
-        <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
-                data-text="AWS federal sales interview next week. Help me with the Leadership Principles. Help me prep.">
-            Interview Prep
-        </button>
-        <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium"
-                data-text="Prospect for cyber opps at HHS. Which office should I focus on?">
-            Prospecting
-        </button>
+
+    <div id="chat-messages" class="flex-1 overflow-y-auto space-y-4 mb-4 scroll-smooth">
+        <div class="flex gap-3">
+            <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
+            <div class="flex-1">
+                <div class="bg-gray-100 rounded-lg p-4 max-w-[80%]">
+                    <p class="text-gray-800">Hey there! I'm Arti. Are you being ghosted by customers, your #OneTeam let you down again, maybe you're looking for better job? Ask me anything and I'll help you figure things out. I've seen it all: the good RFPs, the bad products, terrible bosses, and the ugly demos that crashed in front of the CIO.</p>
+                    <p class="text-gray-800 mt-2">What's on your mind today? Deal stuck? Prepping for a big meeting? Or just want to talk federal sales strategy? I'm all ears!</p>
+                </div>
+                <div class="mt-2 flex flex-wrap gap-2">
+                    <button class="suggested-question text-xs bg-white border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50" data-question="I have a $2M deal at DHS that's stuck. The champion went dark after pricing. What should I do?">
+                        Deal is stuck
+                    </button>
+                    <button class="suggested-question text-xs bg-white border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50" data-question="How do I find the real decision maker at VA? I keep getting shuffled around.">
+                        Finding decision makers
+                    </button>
+                    <button class="suggested-question text-xs bg-white border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50" data-question="Can you show me typical federal sales pipeline metrics I should track?">
+                        Pipeline metrics
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="text-center">
-        <button id="ask-btn" class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-semibold py-3 px-8 rounded-full transition-all inline-flex items-center gap-2 shadow-lg hover:shadow-xl">
-            <span id="btn-text">Ask Arti</span>
-            <div id="loader" class="loader hidden"></div>
-        </button>
+
+    <div class="border-t border-gray-200 pt-4">
+        <div class="flex gap-3">
+            <input 
+                type="text" 
+                id="chat-input" 
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                placeholder="Ask me anything about federal sales..."
+                maxlength="500"
+            >
+            <button id="send-btn" class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium px-6 py-2 rounded-lg transition-colors flex items-center gap-2">
+                <span>Send</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                </svg>
+            </button>
+        </div>
     </div>
 </main>
-<!-- Loading Message Area -->
-<div id="loading-message-container" class="text-center py-4 hidden">
-    <p id="loading-message" class="text-gray-600"></p>
-</div>
-<!-- Error Message Area -->
-<div id="error-message" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center mb-4 hidden">
-    <p class="text-red-700 font-medium mb-2">Something went wrong</p>
-    <p class="text-red-600 text-sm" id="error-details">We're having trouble connecting to Arti. Please try again in a moment.</p>
-    <button id="retry-btn" class="mt-3 bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg text-sm">
-        Try Again
-    </button>
-</div>
-<!-- Results Area -->
-<div id="results-container"></div>
-<!-- Footer -->
+
 <footer class="text-center mt-12 space-y-4">
     <div class="flex justify-center gap-6 text-sm">
         <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">About</button>
@@ -251,20 +201,25 @@
         <a href="mailto:mark@subhoo.com" class="hover:underline">Contact me to reserve this premium spot →</a>
     </p>
 </div>
-    <!-- Disclaimer -->
+ 
+
     <p class="text-xs text-gray-400">
         AskArti.com results are provided for informational and educational purposes only and do not constitute professional business advice. AI can make errors or provide recommendations that may not suit your specific situation. Please consult qualified professionals before making important business decisions.
     </p>
+
     <br>
+
     <p class="text-xs text-gray-400">© 2025 AskArti. Made for Sellers by Sellers.</p>
-    <!-- AWS Logo -->
+
     <div class="mt-4 flex justify-center">
         <a href="https://aws.amazon.com/what-is-cloud-computing" target="_blank" rel="noopener noreferrer">
             <img src="https://d0.awsstatic.com/logos/powered-by-aws.png" alt="Powered by AWS Cloud Computing" style="width: 80px; height: auto;">
         </a>
     </div>
 </footer>
+
     </div>
+
     <div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
     <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
         <div class="flex justify-between items-start mb-4">
@@ -279,6 +234,8 @@
         <div class="space-y-4 text-gray-700">
             <p>I’ve spent over 30 years working with the federal government as a mission owner, COTR, and seller.</p>
 <p>I built AskArti to help federal salespeople use AI in a practical way to better support their customers. Arti’s not perfect, so use your judgment, but he’s available 24/7 whenever you need ideas.</p>
+
+            
             <div class="mt-6 pt-4 border-t border-gray-200">
                 <div class="bg-gray-50 rounded-lg p-4 text-sm">
                     <h3 class="font-semibold text-gray-800 mb-2 flex items-center">
@@ -290,6 +247,7 @@
                     <p class="text-gray-600 mb-2">AskArti uses models that may include Gemini, Claude, and ChatGPT. These models may use API inputs to improve responses. We do not store, log, or persist any prompt or response data. All processing occurs in-memory using AWS Lambda and is discarded after execution.</p>
                 </div>
             </div>
+            
             <div class="pt-4">
                 <a href="https://calendly.com/markflournoy/30min" target="_blank" class="block w-full bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-lg text-center transition-colors">
                     Let's chat about AI or Fed Sales →
@@ -298,684 +256,276 @@
         </div>
     </div>
 </div>
+
 <script>
     // Configuration
     const CONFIG = {
         API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
-        REQUEST_TIMEOUT: 25000, // 25 seconds timeout
-        MAX_RETRIES: 2,
-        RETRY_DELAY: 2000, // 2 seconds between retries
-        MAX_INPUT_LENGTH: 500,
-        DEFAULT_LOADING_MESSAGES: [
-            "Hang on. I'm...Working Backwards", 
-            "...Diving Deep", 
-            "...Unpacking This", 
-            "...Putting a Pin in it", 
-            "...Circling Back", 
-            "...Thinking Big"
-        ],
-        ERROR_FALLBACK_MESSAGE: "We're having trouble with Arti right now. Please try again in a moment."
     };
-    // DOM Elements
-    const elements = {
-        situationInput: document.getElementById('situation-input'),
-        charCount: document.getElementById('char-count'),
-        askBtn: document.getElementById('ask-btn'),
-        btnText: document.getElementById('btn-text'),
-        loader: document.getElementById('loader'),
-        loadingMessageContainer: document.getElementById('loading-message-container'),
-        loadingMessage: document.getElementById('loading-message'),
-        errorMessage: document.getElementById('error-message'),
-        errorDetails: document.getElementById('error-details'),
-        retryBtn: document.getElementById('retry-btn'),
-        resultsContainer: document.getElementById('results-container'),
-        aboutBtn: document.getElementById('about-btn'),
-        aboutModal: document.getElementById('about-modal'),
-        closeAbout: document.getElementById('close-about'),
-        shareBtn: document.getElementById('share-btn'),
-        quickPromptBtns: document.querySelectorAll('.quick-prompt')
+
+    // Global State
+    const conversationState = {
+        history: [],
+        isTyping: false,
     };
-    // Global state
-	let state = {
-    currentRequest: null,
-    loadingInterval: null,
-    loadingStage: 0,
-    retryCount: 0,
-    lastQuery: '',
-    abortController: null,
-    pendingRequest: false,
-    lastCallTime: 0  // Add this line
-};
-    // Initialize Mermaid with safe default config and error handling
-    try {
-        mermaid.initialize({ 
-            startOnLoad: false,
-            securityLevel: 'strict',
-            logLevel: 'fatal',
-            errorFn: (errorMsg, id) => {
-                console.error(`Mermaid error in diagram ${id}: ${errorMsg}`);
-                const element = document.getElementById(id);
-                if (element) {
-                    element.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Diagram could not be displayed</div>';
-                }
-            }
-        });
-    } catch (e) {
-        console.error('Failed to initialize mermaid:', e);
-    }
-    // Input validation and character count
-    function setupInputValidation() {
-elements.situationInput.addEventListener('input', function() {
-    const maxLength = CONFIG.MAX_INPUT_LENGTH;
-    const currentLength = this.value.length;
-    // Update character count
-    elements.charCount.textContent = `${currentLength}/${maxLength}`;
-    // Show character count when typing begins
-    if (currentLength > 0) {
-        elements.charCount.classList.remove('opacity-0');
-        elements.charCount.classList.add('opacity-100');
-    } else {
-        elements.charCount.classList.remove('opacity-100');
-        elements.charCount.classList.add('opacity-0');
-    }
-    // Visual feedback when approaching limit
-    if (currentLength >= maxLength * 0.9) {
-        elements.charCount.classList.add('text-orange-500');
-    } else {
-        elements.charCount.classList.remove('text-orange-500');
-    }
-    // Enforce max length (backup for maxlength attribute)
-    if (currentLength > maxLength) {
-        this.value = this.value.substring(0, maxLength);
-        elements.charCount.textContent = `${maxLength}/${maxLength}`;
-        elements.charCount.classList.add('text-red-500');
-    } else {
-        elements.charCount.classList.remove('text-red-500');
-    }
-});
-    }
-    // Show/hide loading state
-    function setLoading(loading) {
-        elements.btnText.style.display = loading ? 'none' : 'inline';
-        elements.loader.style.display = loading ? 'block' : 'none';
-        elements.askBtn.disabled = loading;
-        elements.errorMessage.classList.add('hidden');
-        if (loading) {
-            elements.loadingMessageContainer.classList.remove('hidden');
-            if (elements.loadingMessage) {
-                elements.loadingMessage.textContent = CONFIG.DEFAULT_LOADING_MESSAGES[0];
-                elements.loadingMessage.classList.remove('text-red-700', 'font-medium');
-            }
-            // Clear any existing interval
-            clearInterval(state.loadingInterval);
-            // Start new loading message rotation
-            state.loadingStage = 0;
-            state.loadingInterval = setInterval(() => {
-                state.loadingStage = (state.loadingStage + 1) % CONFIG.DEFAULT_LOADING_MESSAGES.length;
-                if (elements.loadingMessage) {
-                    elements.loadingMessage.textContent = CONFIG.DEFAULT_LOADING_MESSAGES[state.loadingStage];
-                }
-            }, 2000);
+
+    // --- DOM Elements ---
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInput = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+    const aboutBtn = document.getElementById('about-btn');
+    const shareBtn = document.getElementById('share-btn');
+    const aboutModal = document.getElementById('about-modal');
+    const closeAboutBtn = document.getElementById('close-about');
+    
+    // --- Core Chat Functions ---
+
+    /**
+     * Appends a message to the chat log.
+     * @param {string} content The message text content.
+     * @param {boolean} isUser True if the message is from the user.
+     * @param {object | null} responseData Optional data from the API for rich responses.
+     */
+    function addMessage(content, isUser = false, responseData = null) {
+        const messageWrapper = document.createElement('div');
+        messageWrapper.className = 'flex gap-3 fade-in';
+
+        if (isUser) {
+            messageWrapper.innerHTML = `
+                <div class="flex-1 flex justify-end">
+                    <div class="bg-customPurple-500 text-white rounded-lg p-4 max-w-[80%]">
+                        <p>${content}</p>
+                    </div>
+                </div>
+            `;
         } else {
-            clearInterval(state.loadingInterval);
+            let messageContent = `
+                <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
+                <div class="flex-1">
+                    <div class="bg-gray-100 rounded-lg p-4 max-w-[80%]">
+                        <div class="prose prose-sm max-w-none">${marked.parse(content)}</div>
+                    </div>
+                </div>`;
+            messageWrapper.innerHTML = messageContent;
+            
+            // Add rich visualizations if available
+            if (responseData?.visualization) {
+                const vizElement = renderChatVisualization(responseData.visualization);
+                messageWrapper.querySelector('.flex-1').appendChild(vizElement);
+            }
         }
+        chatMessages.appendChild(messageWrapper);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     }
-    // Show error message
-    function showError(message, isRetryable = true) {
-        elements.loadingMessageContainer.classList.add('hidden');
-        elements.errorMessage.classList.remove('hidden');
-        elements.errorDetails.textContent = message || CONFIG.ERROR_FALLBACK_MESSAGE;
-        elements.retryBtn.style.display = isRetryable ? 'inline-block' : 'none';
-        setLoading(false);
-    }
-    // Make the API request with timeout and retry logic
-    async function makeRequest(situation, retryCount = 0) {
-        if (state.pendingRequest) {
-            return; // Prevent duplicate requests
-        }
-        state.pendingRequest = true;
-        state.lastQuery = situation;
-        state.abortController = new AbortController();
+
+    /**
+     * Handles the entire process of sending a message and receiving a response.
+     */
+    async function handleSendMessage() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        addMessage(message, true);
+        chatInput.value = '';
+        showTypingIndicator();
+
+        // Update conversation history for the API call
+        conversationState.history.push({ user: message });
+
         try {
-            // Set up timeout
-            const timeoutId = setTimeout(() => {
-                state.abortController.abort();
-            }, CONFIG.REQUEST_TIMEOUT);
             const response = await fetch(CONFIG.API_ENDPOINT, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ situation }),
-                signal: state.abortController.signal
-            });
-            clearTimeout(timeoutId);
-            if (!response.ok) {
-                throw new Error(`API returned status: ${response.status}`);
-            }
-            const data = await response.json();
-            state.pendingRequest = false;
-            return data;
-        } catch (error) {
-            state.pendingRequest = false;
-            console.error('Request error:', error);
-            // Handle timeout or network errors
-            if (error.name === 'AbortError') {
-                throw new Error('Request timed out. The server might be busy.');
-            }
-            // Retry logic
-            if (retryCount < CONFIG.MAX_RETRIES) {
-                await new Promise(resolve => setTimeout(resolve, CONFIG.RETRY_DELAY));
-                return makeRequest(situation, retryCount + 1);
-            }
-            throw error;
-        }
-    }
-    // Generate fallback advice when API fails
-    function generateFallbackAdvice(situation) {
-        // Simplified context detection
-        const context = {
-            agency: situation.match(/dhs|va|dod|army|navy|usaf|air force|marines|uscis/i)?.[0]?.toUpperCase() || 'Unknown Agency',
-            amount: situation.match(/\$(\d+)([kmb])?/i) ? 'Specified' : 'Unknown',
-            blocker: 'Unknown Issue'
-        };
-        // Determine response type based on keywords
-        let responseType = 'deal';
-        if (situation.match(/interview|job|hiring|resume|star/i)) responseType = 'interview';
-        if (situation.match(/prospect|lead|naics|sell into/i)) responseType = 'prospect';
-        if (situation.match(/meeting|presentation|qbr|brief/i)) responseType = 'meeting';
-        // Basic fallback responses by type
-        const fallbacks = {
-            deal: {
-                response_type: 'deal',
-                quick_take: "Let's get your deal unstuck. I'm working with limited connectivity right now, but here are proven tactics for federal deals.",
-                key_moves: [
-                    { action: "Test your champion with a specific request", why: "If they won't make introductions or share information, they're not a real champion" },
-                    { action: "Create urgency with fiscal year timeline", why: "Federal money has a shelf life - remind them when funds expire" },
-                    { action: "Find multiple paths to power", why: "Never single-thread a federal deal" }
-                ],
-                mermaid_chart: "graph TD\n    A[Test Champion] --> B{Real Champion?}\n    B -->|Yes| C[Leverage Relationship]\n    B -->|No| D[Find New Champion]\n    C --> E[Close Deal]\n    D --> A",
-                next_steps: "Federal deals move at their own pace. Stay professional, be persistent, and keep multiple options open."
-            },
-            meeting: {
-                response_type: 'meeting',
-                quick_take: "Federal meetings require thorough preparation. Here's what works based on decades of government experience.",
-                key_moves: [
-                    { action: "Research every attendee's role and tenure", why: "Know who has power vs. who has influence" },
-                    { action: "Prepare 3 mission-focused success stories", why: "They care about outcomes, not features" },
-                    { action: "Plan your specific asks and next steps", why: "Never leave without clear commitments" }
-                ],
-                talking_points: [
-                    "What would make this meeting a success from your perspective?",
-                    "Who else should be involved in these discussions?",
-                    "How does this align with your mission priorities this fiscal year?"
-                ],
-                next_steps: "Make their job easier and you'll win their business."
-            },
-            prospect: {
-                response_type: 'prospect',
-                summary: "Here's a starting point for your federal prospecting strategy. When connectivity improves, ask again for more detailed intelligence.",
-                top_s_is: [
-                    {company: "Booz Allen Hamilton", value: "$1B+"},
-                    {company: "GDIT", value: "$800M+"},
-                    {company: "Leidos", value: "$750M+"}
-                ],
-                top_software_and_cloud: [
-                    {company: "Microsoft", value: "$600M+"},
-                    {company: "Amazon Web Services", value: "$500M+"},
-                    {company: "Oracle", value: "$400M+"}
-                ],
-                company_capabilities: [
-                    "Custom application development",
-                    "Data management and analytics",
-                    "Cloud migration services"
-                ],
-                naics_codes: [
-                    "541512 - Computer Systems Design Services",
-                    "541511 - Custom Computer Programming Services",
-                    "518210 - Data Processing, Hosting, and Related Services"
-                ],
-                prospect_recommendations: [
-                    "Research GWACs and IDIQs that your target agency uses most frequently",
-                    "Identify key incumbent contractors at your target agency",
-                    "Connect with Small Business Liaison Officers at large primes for partnership opportunities"
-                ],
-                market_insights: "Federal fiscal year-end (July-September) represents 30-40% of annual contract awards. Time your outreach accordingly."
-            },
-            interview: {
-                response_type: 'interview',
-                quick_take: "Federal sales interviews test your ability to navigate complexity. Here's how to showcase your expertise.",
-                key_moves: [
-                    { action: "Quantify your achievements with dollar amounts and timeframes", why: "Shows you understand federal scale and timing" },
-                    { action: "Prepare STAR stories about navigating procurement challenges", why: "Demonstrates you can handle the unique federal sales cycle" },
-                    { action: "Research their current federal contracts and clients", why: "Shows you did your homework and understand their business" }
-                ],
-                talking_points: [
-                    "What does success look like for this role in the first 90 days?",
-                    "How does your team collaborate with partners and federal contracting officers?",
-                    "What are the most common roadblocks your federal customers face in the procurement process?"
-                ],
-                next_steps: "Your federal experience is a differentiator. Own it, quantify it, and explain how it transfers to this role."
-            }
-        };
-        return fallbacks[responseType] || fallbacks.deal;
-    }
-async function getAdvice() {
-    // Declare a local variable instead of modifying the parameter
-    let situationText = elements.situationInput.value.trim();
-    // Add client-side rate limiting
-    const now = Date.now();
-    const MIN_CALL_INTERVAL = 2000; // 2 seconds minimum between calls
-    if (now - state.lastCallTime < MIN_CALL_INTERVAL) {
-        elements.loadingMessageContainer.classList.remove('hidden');
-        elements.loadingMessage.textContent = "Please wait a moment before asking again"; 
-        elements.loadingMessage.classList.add('text-orange-700', 'font-medium');
-        setTimeout(() => {
-            elements.loadingMessageContainer.classList.add('hidden');
-        }, 2000);
-        return;
-    }
-    state.lastCallTime = now;
-    // Validate input
-    if (!situationText) {
-        elements.loadingMessageContainer.classList.remove('hidden');
-        elements.loadingMessage.textContent = "Drop your situation in the box above 👆"; 
-        elements.loadingMessage.classList.add('text-red-700', 'font-medium');
-        return;
-    }
-    // Clear previous results and show loading state
-    setLoading(true);
-    elements.resultsContainer.innerHTML = '';
-    state.retryCount = 0;
-    try {
-        // Make API request
-        const data = await makeRequest(situationText);
-        // Hide loading message
-        elements.loadingMessageContainer.classList.add('hidden');
-        // Display results
-        displayAdvice(data);
-    } catch (error) {
-        console.error('Error:', error);
-        // Try fallback if API fails completely
-        try {
-            const fallbackData = generateFallbackAdvice(situationText);
-            elements.loadingMessageContainer.classList.add('hidden');
-            displayAdvice(fallbackData);
-            // Show a subtle notice that we're using fallback data
-            const fallbackNotice = document.createElement('div');
-            fallbackNotice.className = 'text-center text-sm text-orange-600 mt-2 mb-4';
-            fallbackNotice.textContent = "Using backup advice while our servers catch up. Refresh for full insights.";
-            elements.resultsContainer.insertAdjacentElement('afterbegin', fallbackNotice);
-        } catch (fallbackError) {
-            // If even fallback fails, show a generic error
-            showError("We're having trouble generating advice right now. Please try again in a moment.");
-        }
-    } finally {
-        setLoading(false);
-    }
-}
-async function displayAdvice(data) {
-    const { response_type } = data;
-    // Extract seller_type early (new code)
-    const sellerType = data.seller_type || '';
-    let html = '';
-    try {
-        if (response_type === 'prospect') {
-            // Prospect response rendering with fallbacks for each section
-            const { 
-                summary = "Strategic insight for your federal prospecting efforts.",
-                top_s_is = [],
-                top_software_and_cloud = [],
-                company_capabilities = [],
-                naics_codes = [],
-                prospect_recommendations = [],
-                market_insights = "Focus on relationship building and understanding agency mission needs.",
-                visualization = null
-            } = data;
-            const renderRankedList = (items) => {
-                if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No specific companies found.</p>';
-                return `<ul class="space-y-1">${items.map((item, index) => `
-                    <li class="flex items-center gap-3 py-2 border-t border-gray-100 first:border-t-0 first:pt-0">
-                        <span class="text-xs font-bold text-customPurple-700 bg-customPurple-100 w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">${index + 1}</span>
-                        <span class="flex-1 font-medium text-gray-800">${item.company || 'Company'}</span>
-                        <span class="text-sm font-semibold text-gray-600">${item.value || 'N/A'}</span>
-                    </li>
-                `).join('')}</ul>`;
-            };
-            html = `
-            <div class="fade-in space-y-6">
-                <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6">
-                    <h3 class="text-xl font-bold text-customPurple-900 mb-2">Intelligence Briefing</h3>
-                    <div class="text-customPurple-900/80">${marked.parse(summary || '')}</div>
-                </div>`;
-            // Add dynamic visualization if provided
-            if (visualization && visualization.type && visualization.data) {
-                html += renderDynamicChart(visualization);
-            }
-            html += `
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 space-y-6">
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Top Systems Integrators (SIs)</h3>
-                            ${renderRankedList(top_s_is)}
-                        </div>
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Top Software & Cloud Providers</h3>
-                            ${renderRankedList(top_software_and_cloud)}
-                        </div>
-                    </div>
-                    <div class="lg:col-span-1 space-y-6">
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
-                            <ul class="space-y-2 text-sm">${(company_capabilities || []).map(c => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
-                        </div>
-                        <div class="dashboard-card">
-                            <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
-                            <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${n}</li>`).join('')}</ul>
-                        </div>
-                    </div>
-                </div>
-                 <div class="dashboard-card">
-                    <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
-                    <ul class="space-y-2 text-sm">${(prospect_recommendations || []).map(r => `<li class="flex gap-3"><span class="text-customPurple-500 font-bold text-lg flex-shrink-0 -mt-1">→</span><span>${r}</span></li>`).join('')}</ul>
-                </div>
-                 <div class="dashboard-card">
-                     <h3 class="font-bold text-gray-900 mb-2">Key Market Insight</h3>
-                     <p class="text-gray-700">${market_insights || 'N/A'}</p>
-                </div>
-            </div>`;
-        } else {
-            // Deal, meeting, or interview response with fallbacks for each field
-            const { 
-                quick_take = "Here are tactical steps to move your federal sales situation forward.",
-                key_moves = [],
-                mermaid_chart = '',
-                talking_points = [],
-                email_template = '',
-                next_steps = ''
-            } = data;
-            // Ensure key_moves has valid structure
-            const safeKeyMoves = Array.isArray(key_moves) && key_moves.length > 0 ? 
-                key_moves : [
-                    { action: "Clarify the true decision criteria", why: "Federal decisions rarely match the stated requirements" },
-                    { action: "Map the full stakeholder landscape", why: "Identify all influencers, not just the formal decision makers" },
-                    { action: "Document your federal past performance", why: "Proof of government success is your strongest selling point" }
-                ];
-            html = `
-            <div class="fade-in space-y-6">
-                <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6 flow-root">
-                    <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
-                    <div class="text-customPurple-900/80 space-y-2">${marked.parse(quick_take || '')}</div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="dashboard-card">
-                        <h3 class="font-bold text-gray-900 mb-4">Your Next 3 Moves</h3>
-                        <div class="space-y-3">${safeKeyMoves.slice(0, 3).map((m, i) => `<div class="flex gap-3"><span class="flex-shrink-0 w-7 h-7 bg-customPurple-200 text-customPurple-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span><div class="flex-1"><p class="font-medium text-gray-900">${m.action || 'Take strategic action'}</p><p class="text-sm text-gray-600 mt-1">${m.why || 'To improve your position'}</p></div></div>`).join('')}</div>
-                    </div>
-                    <div class="dashboard-card">
-                        <h3 class="font-bold text-gray-900 mb-4">Game Plan</h3>
-                        ${mermaid_chart ? 
-                            `<div class="mermaid-container"><div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div></div>` : 
-                            `<div class="p-4 bg-gray-50 rounded-lg text-center">
-                                <p class="text-gray-600">A visual game plan is not available for this scenario.</p>
-                            </div>`
-                        }
-                    </div>
-                </div>
-                ${(talking_points && talking_points.length > 0) || email_template ? `
-                <div class="dashboard-card">
-                    <h3 class="font-bold text-gray-900 mb-4">Communications</h3>
-                    <div class="grid grid-cols-1 ${email_template && talking_points && talking_points.length > 0 ? 'md:grid-cols-2' : ''} gap-6">
-                        ${talking_points && talking_points.length > 0 ? `<div><h4 class="font-semibold text-gray-800 mb-3">${response_type === 'interview' ? 'What They May Ask' : 'What to Ask'}</h4><ul class="space-y-2 text-sm">${talking_points.map(t => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${t}</li>`).join('')}</ul></div>` : ''}
-                        ${email_template ? `<div><h4 class="font-semibold text-gray-800 mb-3">Email Template</h4><div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap border">${email_template}</div></div>` : ''}
-                    </div>
-                </div>
-                ` : ''}
-                ${next_steps ? `<div class="bg-customPurple-200/60 p-4 rounded-lg text-sm text-customPurple-900"><b class="font-semibold">Remember:</b> ${next_steps}</div>` : ''}
-            </div>`;
-        }
-        // Add action buttons
-        html += `
-            <div class="mt-8 flex flex-col sm:flex-row gap-3">
-                <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">Copy to Clipboard</button>
-                <button onclick="startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">Ask Another Question</button>
-            </div>`;
-        elements.resultsContainer.innerHTML = html;
-        elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        // Add seller type badge after DOM update (new code)
-        if (sellerType && !(situation.toLowerCase().includes('leadership principle') || 
-                    situation.toLowerCase().includes('leadership principles') || 
-                    (situation.toLowerCase().includes('aws') && situation.toLowerCase().includes('lp')))) {
-    setTimeout(() => {
-        try {
-            const sellerTypeBadge = document.createElement('div');
-            sellerTypeBadge.className = 'text-xs font-medium text-gray-500 mb-2';
-            sellerTypeBadge.textContent = `Advice tailored for ${sellerType.replace(/_/g, ' ')} context`;
-            const firstResultElement = elements.resultsContainer.querySelector('.fade-in');
-            if (firstResultElement && firstResultElement.firstChild) {
-                firstResultElement.insertBefore(sellerTypeBadge, firstResultElement.firstChild.nextSibling);
-            }
-        } catch (badgeError) {
-            console.log('Non-critical error adding context badge:', badgeError);
-        }
-    }, 100);
-}
-        // Try to render mermaid chart if present
-        if (response_type !== 'prospect' && data.mermaid_chart) {
-            try {
-                // Wrap in try-catch to handle mermaid errors
-                await mermaid.run();
-            } catch (e) {
-                console.error("Mermaid chart rendering error:", e);
-                // Replace with error message
-                const diagramElement = document.getElementById('mermaid-diagram');
-                if (diagramElement) {
-                    diagramElement.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Game plan visualization couldn\'t be displayed</div>';
-                }
-            }
-        }
-    } catch (error) {
-        // Handle general display errors
-        console.error('Display error:', error);
-        elements.resultsContainer.innerHTML = `
-            <div class="bg-white border border-gray-200 rounded-lg p-6 text-center">
-                <h3 class="font-bold text-gray-900 mb-3">Federal Sales Advice</h3>
-                <p class="text-gray-700 mb-4">We've got insights for you, but had trouble formatting them. Here's the core advice:</p>
-                <div class="p-4 bg-gray-50 rounded-lg text-left mb-4">
-                    <p class="font-medium">${data.quick_take || 'Focus on understanding the true needs behind the stated requirements.'}</p>
-                </div>
-                <button onclick="startOver()" class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">Ask Another Question</button>
-            </div>
-        `;
-    }
-}
-// Add this helper function for rendering dynamic charts
-function renderDynamicChart(visualization) {
-    const { type, title, data } = visualization;
-    const chartId = `chart-${Date.now()}`;
-    let chartConfig;
-    switch(type) {
-        case 'spending_trends':
-            chartConfig = {
-                series: data.series,
-                chart: { type: 'area', height: 350, toolbar: { show: false } },
-                colors: ['#7C6BBE', '#9F8FDB', '#C2B5F0'],
-                xaxis: { categories: data.categories },
-                yaxis: { title: { text: 'Billions ($)' } },
-                dataLabels: { enabled: false },
-                stroke: { curve: 'smooth', width: 2 },
-                fill: { type: 'gradient', gradient: { opacityFrom: 0.6, opacityTo: 0.8 } }
-            };
-            break;
-        case 'market_share':
-            chartConfig = {
-                series: data.map(d => d.value),
-                chart: { type: 'donut', height: 350 },
-                labels: data.map(d => d.name),
-                colors: ['#7C6BBE', '#9F8FDB', '#C2B5F0', '#E8E4F7', '#F5F3FB'],
-                dataLabels: { enabled: true },
-                legend: { position: 'bottom' }
-            };
-            break;
-        case 'competitive_radar':
-            chartConfig = {
-                series: data.series,
-                chart: { type: 'radar', height: 350, toolbar: { show: false } },
-                xaxis: { categories: data.categories },
-                colors: ['#7C6BBE', '#FF6B6B', '#95A5A6'],
-                markers: { size: 4 },
-                fill: { opacity: 0.2 }
-            };
-            break;
-        case 'opportunity_heatmap':
-            const heatmapSeries = data.agencies.map((agency, i) => ({
-                name: agency,
-                data: data.values[i]
-            }));
-            chartConfig = {
-                series: heatmapSeries,
-                chart: { type: 'heatmap', height: 350, toolbar: { show: false } },
-                dataLabels: { enabled: true },
-                colors: ["#7C6BBE"],
-                xaxis: { categories: data.quarters }
-            };
-            break;
-        case 'contract_vehicles':
-            chartConfig = {
-                series: [{ data: data.map(d => ({ x: d.name, y: d.value })) }],
-                chart: { type: 'treemap', height: 350 },
-                colors: ['#7C6BBE', '#9F8FDB', '#C2B5F0', '#E8E4F7', '#F5F3FB'],
-                dataLabels: { enabled: true }
-            };
-            break;
-        default:
-            return ''; // No chart for unknown types
-    }
-    return `
-        <div class="dashboard-card">
-            <h3 class="font-bold text-gray-900 mb-3">${title}</h3>
-            <div id="${chartId}"></div>
-        </div>
-        
-    `;
-}
-    // Copy all results to clipboard
-    window.copyAll = () => {
-        try {
-            const contentEl = document.getElementById('results-container');
-            const text = contentEl.innerText;
-            if (!text || text.trim() === '') {
-                alert('No content to copy');
-                return;
-            }
-            navigator.clipboard.writeText(text)
-                .then(() => {
-                    // Visual feedback for successful copy
-                    const copyBtn = document.querySelector('#results-container button');
-                    if (copyBtn) {
-                        const originalText = copyBtn.textContent;
-                        copyBtn.textContent = 'Copied!';
-                        setTimeout(() => copyBtn.textContent = originalText, 2000);
-                    } else {
-                        alert('Results copied to clipboard!');
-                    }
+                body: JSON.stringify({
+                    message: message,
+                    conversationHistory: conversationState.history.slice(-5) // Send last 5 exchanges
                 })
-                .catch(err => {
-                    console.error('Copy failed:', err);
-                    alert('Copy failed. Please try again.');
-                });
+            });
+
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            removeTypingIndicator();
+            
+            // Add Arti's response and update history
+            addMessage(data.message, false, data);
+            conversationState.history.push({ assistant: data.message });
+
+            if (data.follow_up_questions && data.follow_up_questions.length > 0) {
+                addFollowUpQuestions(data.follow_up_questions);
+            }
+
         } catch (error) {
-            console.error('Copy error:', error);
-            alert('Could not copy the results. Please try selecting and copying manually.');
+            console.error('Failed to get response from Arti:', error);
+            removeTypingIndicator();
+            addMessage("Ah, my circuits must be crossed. I'm having a little trouble connecting right now. Please try asking again in a moment.", false);
         }
-    };
-    // Reset for a new question
-    window.startOver = () => {
-        // Cancel any pending requests
-        if (state.abortController) {
-            state.abortController.abort();
-        }
-        // Clear state and UI
-        elements.situationInput.value = '';
-        elements.resultsContainer.innerHTML = '';
-        elements.loadingMessageContainer.classList.add('hidden');
-        elements.errorMessage.classList.add('hidden');
-        elements.charCount.classList.add('hidden');
-        if (elements.loadingMessage) {
-            elements.loadingMessage.classList.remove('text-red-700', 'font-medium');
-        }
-        clearInterval(state.loadingInterval);
-        state.pendingRequest = false;
-        // Focus on input
-        elements.situationInput.focus();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-    // Set up event listeners
-    function setupEventListeners() {
-        // Quick prompt buttons
-        elements.quickPromptBtns.forEach(btn => {
+    }
+
+    // --- UI & Helper Functions ---
+
+    /**
+     * Displays the "Arti is typing..." indicator.
+     */
+    function showTypingIndicator() {
+        if (document.getElementById('typing-indicator')) return;
+        const typingDiv = document.createElement('div');
+        typingDiv.id = 'typing-indicator';
+        typingDiv.className = 'flex gap-3';
+        typingDiv.innerHTML = `
+            <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
+            <div class="bg-gray-100 rounded-lg p-4">
+                <div class="flex gap-1">
+                    <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0ms"></span>
+                    <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 150ms"></span>
+                    <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 300ms"></span>
+                </div>
+            </div>`;
+        chatMessages.appendChild(typingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    /**
+     * Removes the typing indicator.
+     */
+    function removeTypingIndicator() {
+        const indicator = document.getElementById('typing-indicator');
+        if (indicator) indicator.remove();
+    }
+
+    /**
+     * Creates and adds suggested follow-up questions to the chat.
+     * @param {string[]} questions Array of question strings.
+     */
+    function addFollowUpQuestions(questions) {
+        const questionsDiv = document.createElement('div');
+        questionsDiv.className = 'flex gap-3 mt-2';
+        questionsDiv.innerHTML = `
+            <div class="w-8 h-8 flex-shrink-0"></div> <div class="flex flex-wrap gap-2">
+                ${questions.map(q => `
+                    <button class="suggested-question text-xs bg-white border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50" data-question="${q}">
+                        ${q}
+                    </button>
+                `).join('')}
+            </div>`;
+        chatMessages.appendChild(questionsDiv);
+        
+        // Add new event listeners to these buttons
+        questionsDiv.querySelectorAll('.suggested-question').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                elements.situationInput.value = e.currentTarget.dataset.text;
-                elements.askBtn.click();
+                chatInput.value = e.target.dataset.question;
+                handleSendMessage();
             });
         });
-        // Share button
-        elements.shareBtn.addEventListener('click', () => {
-            const text = "Check out this Fed Sales Bot";
-            const url = "https://askarti.com";
-            try {
-                if (navigator.share) {
-                    navigator.share({ title: 'AskArti', text, url })
-                        .catch(err => console.error('Share failed:', err));
-                } else {
-                    navigator.clipboard.writeText(`${text} ${url}`)
-                        .then(() => {
-                            elements.shareBtn.textContent = 'Link Copied!';
-                            setTimeout(() => { elements.shareBtn.textContent = 'Share'; }, 2000);
-                        })
-                        .catch(err => console.error('Copy failed:', err));
-                }
-            } catch (error) {
-                console.error('Share error:', error);
-                alert('Could not share. Please copy the URL manually.');
+    }
+
+    /**
+     * Creates an HTML element for an ApexChart visualization.
+     * @param {object} visualization The visualization data from the API.
+     * @returns {HTMLElement} The container div for the chart.
+     */
+    function renderChatVisualization(visualization) {
+        const { type, title, data } = visualization;
+        const chartId = `chat-chart-${Date.now()}`;
+        const chartContainer = document.createElement('div');
+        chartContainer.className = "mt-3 bg-white rounded-lg border border-gray-200 p-4";
+        chartContainer.innerHTML = `
+            <h4 class="font-semibold text-gray-900 mb-2">${title}</h4>
+            <div id="${chartId}" style="height: 300px;"></div>
+        `;
+
+        // Use a timeout to ensure the element is in the DOM before rendering the chart
+        setTimeout(() => {
+            const options = getChartConfig(type, data);
+            new ApexCharts(document.querySelector(`#${chartId}`), options).render();
+        }, 0);
+        
+        return chartContainer;
+    }
+
+    /**
+     * Returns the configuration object for an ApexChart.
+     * @param {string} type The chart type (e.g., 'pipeline_forecast').
+     * @param {object} data The data for the chart.
+     * @returns {object} The ApexCharts configuration object.
+     */
+    function getChartConfig(type, data) {
+        const commonOptions = {
+             chart: { toolbar: { show: false }, zoom: { enabled: false } },
+             colors: ['#7C6BBE', '#5A4E8C', '#E8E4F7'],
+        };
+        const configs = {
+            pipeline_forecast: {
+                ...commonOptions,
+                series: [{ name: 'Pipeline Value', data: data.values || [] }],
+                chart: { ...commonOptions.chart, type: 'area', height: 280 },
+                xaxis: { categories: data.categories || [] },
+            },
+            competitive_analysis: {
+                ...commonOptions,
+                series: data.series || [],
+                chart: { ...commonOptions.chart, type: 'radar', height: 280 },
+                xaxis: { categories: data.categories || [] },
             }
-        });
-        // About modal
-        elements.aboutBtn.addEventListener('click', () => elements.aboutModal.classList.remove('hidden'));
-        elements.closeAbout.addEventListener('click', () => elements.aboutModal.classList.add('hidden'));
-        elements.aboutModal.addEventListener('click', (e) => {
-            if (e.target === elements.aboutModal) elements.aboutModal.classList.add('hidden');
-        });
-        // Main action button
-        elements.askBtn.addEventListener('click', getAdvice);
-        // Retry button
-        elements.retryBtn.addEventListener('click', () => {
-            elements.errorMessage.classList.add('hidden');
-            if (state.lastQuery) {
-                elements.situationInput.value = state.lastQuery;
-                getAdvice();
-            }
-        });
-        // Enter key in textarea
-        elements.situationInput.addEventListener('keydown', (e) => {
+        };
+        return configs[type] || configs.pipeline_forecast;
+    }
+
+    // --- Initialization ---
+
+    /**
+     * Sets up all event listeners for the application.
+     */
+    function setupEventListeners() {
+        // Chat functionality
+        sendBtn.addEventListener('click', handleSendMessage);
+        chatInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                getAdvice();
+                handleSendMessage();
             }
         });
-        // Keyboard shortcut to escape modal
+
+        // Initial suggested questions
+        document.querySelectorAll('.suggested-question').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                chatInput.value = e.target.dataset.question;
+                handleSendMessage();
+            });
+        });
+
+        // About Modal
+        aboutBtn.addEventListener('click', () => aboutModal.classList.remove('hidden'));
+        closeAboutBtn.addEventListener('click', () => aboutModal.classList.add('hidden'));
+        aboutModal.addEventListener('click', (e) => {
+            if (e.target === aboutModal) aboutModal.classList.add('hidden');
+        });
+
+        // Share Button
+        shareBtn.addEventListener('click', () => {
+            const shareData = { title: 'AskArti', text: "Check out this AI Federal Sales Buddy!", url: "https://askarti.com" };
+            if (navigator.share) {
+                navigator.share(shareData).catch(err => console.error('Share failed:', err));
+            } else {
+                navigator.clipboard.writeText(shareData.url).then(() => {
+                    shareBtn.textContent = 'Link Copied!';
+                    setTimeout(() => { shareBtn.textContent = 'Share'; }, 2000);
+                });
+            }
+        });
+
+        // Global keydown for closing modal
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                elements.aboutModal.classList.add('hidden');
+            if (e.key === 'Escape' && !aboutModal.classList.contains('hidden')) {
+                aboutModal.classList.add('hidden');
             }
         });
     }
-    // Initialize everything
-    function init() {
-        setupInputValidation();
-        setupEventListeners();
-        elements.situationInput.focus();
-    }
-    // Start the application
-    init();
+
+    // Start the application once the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', setupEventListeners);
 </script>
 </body>
 </html>
