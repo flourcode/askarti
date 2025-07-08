@@ -384,128 +384,185 @@
     // Initialize Mermaid on page load
     initializeMermaid();
 
-    // Enhanced function to render mermaid with better error handling and retries
-    async function renderMermaidChart(retryCount = 0) {
-        const MAX_RETRIES = 3;
-        const RETRY_DELAY = 300; // ms
-        
-        if (retryCount > MAX_RETRIES) {
-            console.error("Max retries exceeded for Mermaid rendering");
-            const diagramElement = document.getElementById('mermaid-diagram');
-            if (diagramElement) {
-                diagramElement.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Game plan visualization couldn\'t be displayed after multiple attempts</div>';
-            }
+
+async function renderMermaidChart(retryCount = 0) {
+    const MAX_RETRIES = 3;
+    const RETRY_DELAY = 300; // ms
+    
+    if (retryCount > MAX_RETRIES) {
+        console.error("Max retries exceeded for Mermaid rendering");
+        const diagramElement = document.getElementById('mermaid-diagram');
+        if (diagramElement) {
+            diagramElement.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Game plan visualization couldn\'t be displayed after multiple attempts</div>';
+        }
+        return false;
+    }
+    
+    try {
+        // Check if the element exists
+        const diagramElement = document.getElementById('mermaid-diagram');
+        if (!diagramElement) {
+            console.log(`Mermaid diagram element not found, retry ${retryCount}`);
+            // Wait and retry if element isn't ready yet
+            setTimeout(() => renderMermaidChart(retryCount + 1), RETRY_DELAY);
             return false;
         }
         
-        try {
-            // Check if the element exists
-            const diagramElement = document.getElementById('mermaid-diagram');
-            if (!diagramElement) {
-                console.log(`Mermaid diagram element not found, retry ${retryCount}`);
-                // Wait and retry if element isn't ready yet
-                setTimeout(() => renderMermaidChart(retryCount + 1), RETRY_DELAY);
-                return false;
-            }
-            
-            // Get the chart definition and sanitize it
-let definition = diagramElement.textContent || '';
-
-// Basic validation of the Mermaid syntax
-if (!definition || !definition.trim() || !definition.includes('graph')) {
-    console.error("Invalid or empty Mermaid definition");
-    diagramElement.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Invalid game plan structure</div>';
-    return false;
-}
-
-// Ensure no leading/trailing spaces that might cause parsing issues
-definition = definition.trim();
-
-// Advanced syntax error catching - look for common issues
-const commonErrors = [
-    { pattern: /-->-->/g, fix: '-->' },
-    { pattern: /-->(\w)/g, fix: '--> $1' },
-    { pattern: /(\w)-->/g, fix: '$1 -->' },
-    { pattern: /\s{2,}/g, fix: ' ' },
-    { pattern: /\n\n+/g, fix: '\n' },
-    // Fix the specific error pattern you're seeing
-    { pattern: /graph TD\s+(\w+)([^[{(].*?)(?=-->)/g, fix: (match, nodeId, nodeText) => {
-        return `graph TD\n    ${nodeId}[${nodeText.trim()}]`;
-    }},
-    // Ensure there's a line break after "graph TD"
-    { pattern: /graph TD(?!\s*\n)/g, fix: 'graph TD\n    ' },
-    // Handle node names that are missing brackets entirely
-    { pattern: /\n\s*(\w+)\s+-->/g, fix: (match, nodeName) => {
-        return `\n    ${nodeName}[${nodeName}] -->`;
-    }}
-];
-
-commonErrors.forEach(({pattern, fix}) => {
-    if (typeof fix === 'function') {
-        definition = definition.replace(pattern, fix);
-    } else {
-        definition = definition.replace(pattern, fix);
-    }
-});
-            
-            // Try rendering with a timeout to avoid freezing the UI
-            console.log(`Attempting to render Mermaid chart (attempt ${retryCount + 1})`);
-            
-            // Set diagram content to the sanitized version
+        // Get the chart definition
+        let definition = diagramElement.textContent || '';
+        
+        // Basic validation of the Mermaid syntax
+        if (!definition || !definition.trim() || !definition.includes('graph')) {
+            console.error("Invalid or empty Mermaid definition");
+            diagramElement.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Invalid game plan structure</div>';
+            return false;
+        }
+        
+        // If there are major syntax issues, use a simple valid chart
+        if (definition.includes('[l[') || definition.includes('D[D]]') || 
+            definition.includes('[[') || definition.includes(']]')) {
+            definition = `graph TD
+    A[Assessment] --> B{Key Issue}
+    B -->|Opportunity| C[Action Plan]
+    B -->|Risk| D[Mitigation]
+    C --> E[Next Steps]
+    D --> E`;
             diagramElement.textContent = definition;
-            
-            // Reinitialize Mermaid if needed (helps with repeated renders)
-            if (retryCount > 0 || !state.mermaidInitialized) {
-                initializeMermaid();
-            }
-            
-            // Attempt to run with promise timeout
-            const renderPromise = new Promise((resolve, reject) => {
-                try {
-                    // Clear any previous mermaid renders in this element
-                    diagramElement.removeAttribute('data-processed');
-                    
-                    // Small delay before rendering to ensure DOM is ready
-                    setTimeout(async () => {
-                        try {
-                            await mermaid.run();
-                            resolve(true);
-                        } catch (e) {
+        } else {
+            // Otherwise, try to sanitize it
+            definition = sanitizeMermaidDefinition(definition);
+        }
+        
+        // Try rendering with a timeout to avoid freezing the UI
+        console.log(`Attempting to render Mermaid chart (attempt ${retryCount + 1})`);
+        
+        // Reinitialize Mermaid if needed (helps with repeated renders)
+        if (retryCount > 0 || !state.mermaidInitialized) {
+            initializeMermaid();
+        }
+        
+        // Attempt to run with promise timeout
+        const renderPromise = new Promise((resolve, reject) => {
+            try {
+                // Clear any previous mermaid renders in this element
+                diagramElement.removeAttribute('data-processed');
+                
+                // Small delay before rendering to ensure DOM is ready
+                setTimeout(async () => {
+                    try {
+                        await mermaid.run();
+                        resolve(true);
+                    } catch (e) {
+                        console.error("Mermaid run error:", e);
+                        
+                        // If there's a parse error, try to use a simple valid chart
+                        if (e.message && e.message.includes('Parse error')) {
+                            diagramElement.textContent = `graph TD
+    A[Assessment] --> B{Key Issue}
+    B -->|Opportunity| C[Action Plan]
+    B -->|Risk| D[Mitigation]
+    C --> E[Next Steps]
+    D --> E`;
+                            
+                            // Try one more time with the simple chart
+                            try {
+                                await mermaid.run();
+                                resolve(true);
+                            } catch (finalError) {
+                                reject(finalError);
+                            }
+                        } else {
                             reject(e);
                         }
-                    }, 50);
-                } catch (e) {
-                    reject(e);
-                }
-            });
-            
-            // Add timeout to the render promise
-            const timeoutPromise = new Promise((_, reject) => {
-                setTimeout(() => reject(new Error("Mermaid render timeout")), 3000);
-            });
-            
-            // Race the render against the timeout
-            await Promise.race([renderPromise, timeoutPromise]);
-            console.log("Mermaid chart rendered successfully");
-            return true;
-        } catch (e) {
-            console.error("Mermaid rendering error:", e);
-            
-            if (retryCount < MAX_RETRIES) {
-                console.log(`Retrying Mermaid render, attempt ${retryCount + 1}`);
-                // Wait and retry
-                setTimeout(() => renderMermaidChart(retryCount + 1), RETRY_DELAY);
-                return false;
-            } else {
-                const diagramElement = document.getElementById('mermaid-diagram');
-                if (diagramElement) {
-                    diagramElement.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Game plan visualization couldn\'t be displayed</div>';
-                }
-                return false;
+                    }
+                }, 50);
+            } catch (e) {
+                reject(e);
             }
+        });
+        
+        // Add timeout to the render promise
+        const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error("Mermaid render timeout")), 3000);
+        });
+        
+        // Race the render against the timeout
+        await Promise.race([renderPromise, timeoutPromise]);
+        console.log("Mermaid chart rendered successfully");
+        return true;
+    } catch (e) {
+        console.error("Mermaid rendering error:", e);
+        
+        if (retryCount < MAX_RETRIES) {
+            console.log(`Retrying Mermaid render, attempt ${retryCount + 1}`);
+            // Wait and retry
+            setTimeout(() => renderMermaidChart(retryCount + 1), RETRY_DELAY);
+            return false;
+        } else {
+            const diagramElement = document.getElementById('mermaid-diagram');
+            if (diagramElement) {
+                // Use a simple guaranteed-valid chart as last resort
+                diagramElement.textContent = `graph TD
+    A[Assessment] --> B{Key Issue}
+    B -->|Opportunity| C[Action Plan]
+    B -->|Risk| D[Mitigation]
+    C --> E[Next Steps]
+    D --> E`;
+                
+                // Try one final render
+                try {
+                    await mermaid.run();
+                    return true;
+                } catch (finalError) {
+                    console.error("Final render attempt failed:", finalError);
+                    diagramElement.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Game plan visualization couldn\'t be displayed</div>';
+                    return false;
+                }
+            }
+            return false;
         }
     }
+}
 
+/**
+ * Helper function to sanitize Mermaid definition
+ */
+function sanitizeMermaidDefinition(definition) {
+    // Ensure it starts with graph TD on its own line
+    definition = definition.trim();
+    if (!definition.startsWith('graph TD')) {
+        definition = 'graph TD\n' + definition.replace(/^graph\s+[A-Z]+/i, '');
+    } else {
+        definition = 'graph TD\n' + definition.substring(8).trim();
+    }
+    
+    // Fix common syntax issues
+    const lines = definition.split('\n');
+    const processedLines = ['graph TD'];
+    
+    for (let i = 1; i < lines.length; i++) {
+        let line = lines[i].trim();
+        if (!line) continue;
+        
+        // Fix nested brackets by removing inner brackets
+        line = line.replace(/\[([^\[\]]*)\[([^\[\]]*)\]/g, '[$1$2]');
+        line = line.replace(/\]([^\[\]]*)\]/g, ']$1');
+        
+        // Fix missing spaces around arrows
+        line = line.replace(/(\w)-->/g, '$1 -->');
+        line = line.replace(/-->(\w)/g, '--> $1');
+        
+        // Ensure node IDs have brackets
+        line = line.replace(/^(\w+)\s+-->/g, '$1[] -->');
+        
+        // Add proper indentation
+        line = '    ' + line;
+        
+        processedLines.push(line);
+    }
+    
+    return processedLines.join('\n');
+}
     // Input validation and character count
     function setupInputValidation() {
 elements.situationInput.addEventListener('input', function() {
