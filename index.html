@@ -598,85 +598,117 @@ class AskArti {
     }
 
     displayProspectAdvice(data) {
-        const { 
-            summary = '',
-            top_s_is = [],
-            top_software_and_cloud = [],
-            company_capabilities = [],
-            naics_codes = [],
-            prospect_recommendations = []
-        } = data;
+    const { 
+        summary = '',
+        top_s_is = [],
+        top_software_and_cloud = [],
+        company_capabilities = [],
+        naics_codes = [],
+        prospect_recommendations = []
+    } = data;
+    
+    // New mobile-friendly card layout for ranked items
+    const renderRankedCards = (items, title) => {
+        if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
         
-        const renderRankedList = (items) => {
-    if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
-    return `<ul class="space-y-1">${items.map((item, index) => `
-        <li class="flex items-center gap-3 py-2 border-t border-gray-100 first:border-t-0 first:pt-0">
-            <span class="text-xs font-bold text-customPurple-700 bg-customPurple-100 w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">${index + 1}</span>
-            <span class="flex-1 font-medium text-gray-800 break-words">${item.company || 'Unknown'}</span>
-            <span class="text-sm font-semibold text-gray-600 whitespace-nowrap ml-2">${item.value || 'N/A'}</span>
-        </li>
-    `).join('')}</ul>`;
-};
+        return `
+        <div class="space-y-3">
+            ${items.map((item, index) => `
+                <div class="bg-gray-50 rounded-lg p-4 relative">
+                    <div class="absolute top-4 left-4 w-8 h-8 bg-customPurple-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                        ${index + 1}
+                    </div>
+                    <div class="pl-12">
+                        <h4 class="font-semibold text-gray-900">${item.company || 'Unknown'}</h4>
+                        <p class="text-sm text-gray-600 mt-1">${item.value || 'N/A'}</p>
+                    </div>
+                </div>
+            `).join('')}
+        </div>`;
+    };
+    
+    // Alternative simple list layout
+    const renderSimpleList = (items) => {
+        if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
         
-        const html = `
-        <div class="fade-in space-y-6">
-            <div class="dashboard-card bg-gradient-to-r from-customPurple-100 to-customPurple-200">
-                <h3 class="text-xl font-bold text-customPurple-900 mb-2">Key Market Insights</h3>
-                <div class="text-customPurple-900/90">${marked.parse(summary)}</div>
-            </div>
-
-            <div class="dashboard-card">
-                <h3 class="font-bold text-gray-900 mb-3">Top Contractors</h3>
-                ${renderRankedList(top_s_is)}
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="dashboard-card">
-                    <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
-                    <ul class="space-y-2 text-sm">${company_capabilities.map(c => `
-                        <li class="flex gap-2">
-                            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span>${c}</span>
-                        </li>`).join('')}
-                    </ul>
+        return `
+        <div class="space-y-2">
+            ${items.map((item, index) => `
+                <div class="border-l-4 border-customPurple-500 pl-3 py-1">
+                    <div class="font-medium text-gray-900">
+                        <span class="text-customPurple-600 font-bold">#${index + 1}</span> 
+                        ${item.company || 'Unknown'}
+                    </div>
+                    <div class="text-sm text-gray-600">${item.value || 'N/A'}</div>
                 </div>
-                
-                <div class="dashboard-card">
-                    <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
-                    <ul class="space-y-2 text-sm">${naics_codes.map(n => {
-                        const naicsText = typeof n === 'string' ? n : (n.code ? `${n.code} - ${n.description || ''}` : 'Unknown');
-                        return `
-                        <li class="flex gap-2">
-                            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="break-words">${naicsText}</span>
-                        </li>`;
-                    }).join('')}
-                    </ul>
-                </div>
-            </div>
+            `).join('')}
+        </div>`;
+    };
+    
+    const html = `
+    <div class="fade-in space-y-6">
+        <!-- Key Market Insights -->
+        <div class="dashboard-card bg-gradient-to-r from-customPurple-100 to-customPurple-200">
+            <h3 class="text-xl font-bold text-customPurple-900 mb-2">Key Market Insights</h3>
+            <div class="text-customPurple-900/90">${marked.parse(summary)}</div>
+        </div>
 
+        <!-- Top Contractors -->
+        <div class="dashboard-card">
+            <h3 class="font-bold text-gray-900 mb-4 text-lg">Top Contractors</h3>
+            ${renderSimpleList(top_s_is)}
+        </div>
+        
+        <!-- Mission Needs and NAICS in responsive grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="dashboard-card">
-                <h3 class="font-bold text-gray-900 mb-3">Potential Software Plays</h3>
-                ${renderRankedList(top_software_and_cloud)}
-            </div>
-
-            <div class="dashboard-card">
-                <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
-                <ul class="space-y-2 text-sm">${prospect_recommendations.map(r => `
-                    <li class="flex gap-3">
-                        <span class="text-customPurple-500 font-bold text-lg flex-shrink-0 -mt-1">→</span>
-                        <span>${r}</span>
+                <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
+                <ul class="space-y-2 text-sm">${company_capabilities.map(c => `
+                    <li class="flex gap-2">
+                        <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>${c}</span>
                     </li>`).join('')}
                 </ul>
             </div>
-        </div>`;
-        
-        this.elements.resultsContainer.innerHTML = html;
-    }
+            
+            <div class="dashboard-card">
+                <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
+                <ul class="space-y-2 text-sm">${naics_codes.map(n => {
+                    const naicsText = typeof n === 'string' ? n : (n.code ? `${n.code} - ${n.description || ''}` : 'Unknown');
+                    return `
+                    <li class="flex gap-2">
+                        <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>${naicsText}</span>
+                    </li>`;
+                }).join('')}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Potential Software Plays -->
+        <div class="dashboard-card">
+            <h3 class="font-bold text-gray-900 mb-4 text-lg">Potential Software Plays</h3>
+            ${renderSimpleList(top_software_and_cloud)}
+        </div>
+
+        <!-- Strategic Recommendations -->
+        <div class="dashboard-card">
+            <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
+            <ul class="space-y-3 text-sm">${prospect_recommendations.map(r => `
+                <li class="flex gap-3">
+                    <span class="text-customPurple-500 font-bold text-lg flex-shrink-0">→</span>
+                    <span>${r}</span>
+                </li>`).join('')}
+            </ul>
+        </div>
+    </div>`;
+    
+    this.elements.resultsContainer.innerHTML = html;
+}
 
     displayGeneralAdvice(data) {
         const { 
