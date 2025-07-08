@@ -37,8 +37,6 @@
     <link rel="preload" href="/images/arti_right.png" as="image">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WLGEPY5H4G"></script>
@@ -125,12 +123,6 @@
         0%, 60%, 100% { transform: translateY(0); }
         30% { transform: translateY(-10px); }
     }
-    .mermaid {
-        display: flex;
-        justify-content: center;
-        background: white;
-        padding: 1rem;
-    }
     .suggested-question {
         transition: all 0.2s ease;
     }
@@ -171,31 +163,7 @@
     </div>
 
     <div id="chat-messages" class="flex-1 overflow-y-auto space-y-4 mb-4 scroll-smooth px-2">
-        <div class="flex gap-3">
-            <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
-            <div class="flex-1">
-                <div class="bg-gray-100 rounded-lg p-4 max-w-[80%]">
-                    <p class="text-gray-800 mb-2">Hey there! I'm Arti. I spent 30+ years in federal sales - from pounding the pavement as a junior rep to running federal divisions. I've seen it all: the good RFPs, the bad protests, and the ugly demos that crashed in front of the CIO.</p>
-                    <p class="text-gray-800">What's on your mind today? Deal stuck? Prepping for a big meeting? Need to vent about procurement? Or just want to talk strategy? I'm all ears!</p>
-                </div>
-                <div class="mt-2 flex flex-wrap gap-2">
-                    <button class="suggested-question text-xs bg-white border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50 hover:border-customPurple-300" data-question="I have a $2M deal at DHS that's stuck. The champion went dark after pricing. What should I do?">
-                        Deal is stuck
-                    </button>
-                    <button class="suggested-question text-xs bg-white border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50 hover:border-customPurple-300" data-question="How do I find the real decision maker at VA? I keep getting shuffled around.">
-                        Finding decision makers
-                    </button>
-                    <button class="suggested-question text-xs bg-white border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50 hover:border-customPurple-300" data-question="Can you show me a typical federal sales process flowchart?">
-                        Show me the process
-                    </button>
-                    <button class="suggested-question text-xs bg-white border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50 hover:border-customPurple-300" data-question="What are the top federal contractors in cybersecurity?">
-                        Market intelligence
-                    </button>
-                </div>
-                <div class="text-xs text-gray-500 mt-2 italic">Arti is here and ready to help</div>
-            </div>
         </div>
-    </div>
 
     <div class="border-t border-gray-200 pt-4">
         <div class="flex gap-3">
@@ -222,37 +190,10 @@
     </div>
 </main>
 
-<!-- Session Metrics (hidden by default) -->
-<div id="session-metrics" class="hidden fixed bottom-4 right-4 bg-white rounded-lg shadow-lg p-4 max-w-xs">
-    <h3 class="font-semibold text-gray-900 mb-2">Session Impact</h3>
-    <div class="space-y-2 text-sm">
-        <div class="flex justify-between">
-            <span class="text-gray-600">Time Connected:</span>
-            <span class="font-medium" id="session-time">0 min</span>
-        </div>
-        <div class="flex justify-between">
-            <span class="text-gray-600">Messages Exchanged:</span>
-            <span class="font-medium" id="message-count">0</span>
-        </div>
-        <div class="flex justify-between">
-            <span class="text-gray-600">Insights Shared:</span>
-            <span class="font-medium" id="insight-count">0</span>
-        </div>
-        <div class="flex justify-between">
-            <span class="text-gray-600">Visualizations:</span>
-            <span class="font-medium" id="viz-count">0</span>
-        </div>
-    </div>
-    <button class="mt-3 text-xs text-gray-500 hover:text-gray-700" onclick="document.getElementById('session-metrics').classList.add('hidden')">
-        Dismiss
-    </button>
-</div>
-
 <footer class="text-center mt-12 space-y-4">
     <div class="flex justify-center gap-6 text-sm">
         <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">About</button>
         <button id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Share</button>
-        <button id="metrics-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Session Stats</button>
         <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Contact</a>
     </div>
     
@@ -328,35 +269,13 @@
 <script>
     // Configuration
     const CONFIG = {
-        API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
-        MAX_RETRIES: 2,
-        RETRY_DELAY: 2000,
+        // IMPORTANT: Replace this with the URL of your new, conversational Lambda function
+        API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI', 
     };
-
-    // Initialize Mermaid
-    mermaid.initialize({ 
-        startOnLoad: false,
-        theme: 'neutral',
-        themeVariables: {
-            primaryColor: '#7C6BBE',
-            primaryTextColor: '#fff',
-            primaryBorderColor: '#5A4E8C',
-            lineColor: '#5A4E8C',
-            secondaryColor: '#E8E4F7',
-            tertiaryColor: '#fff'
-        }
-    });
 
     // Global State
     const conversationState = {
         history: [],
-        isTyping: false,
-        sessionStart: Date.now(),
-        metrics: {
-            messagesExchanged: 0,
-            insightsProvided: 0,
-            visualizationsShared: 0
-        }
     };
 
     // --- DOM Elements ---
@@ -366,29 +285,15 @@
     const clearChatBtn = document.getElementById('clear-chat');
     const aboutBtn = document.getElementById('about-btn');
     const shareBtn = document.getElementById('share-btn');
-    const metricsBtn = document.getElementById('metrics-btn');
     const aboutModal = document.getElementById('about-modal');
     const closeAboutBtn = document.getElementById('close-about');
-    const sessionMetricsDiv = document.getElementById('session-metrics');
     
     // --- Core Chat Functions ---
 
     /**
-     * Analyzes user mood from message content
-     */
-    function analyzeUserMood(message) {
-        return {
-            frustrated: /frustrated|annoying|stupid|hate|sick of|fed up/i.test(message),
-            urgent: /asap|urgent|now|today|immediately|quick/i.test(message),
-            confused: /confused|don't understand|lost|help|what do you mean/i.test(message),
-            excited: /excited|great|awesome|love|fantastic|excellent/i.test(message)
-        };
-    }
-
-    /**
      * Appends a message to the chat log.
      */
-    function addMessage(content, isUser = false, responseData = null) {
+    function addMessage(content, isUser = false) {
         const messageWrapper = document.createElement('div');
         messageWrapper.className = 'flex gap-3 fade-in';
 
@@ -401,278 +306,42 @@
                 </div>
             `;
         } else {
-            let messageContent = `
+            messageWrapper.innerHTML = `
                 <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
                 <div class="flex-1">
                     <div class="bg-gray-100 rounded-lg p-4 max-w-[80%]">
                         <div class="prose prose-sm max-w-none">${marked.parse(content)}</div>
-                    </div>`;
-
-            // Add quick wins if provided
-            if (responseData?.quick_wins && responseData.quick_wins.length > 0) {
-                messageContent += `
-                    <div class="mt-3 bg-green-50 border border-green-200 rounded-lg p-3 max-w-[80%]">
-                        <h4 class="text-sm font-semibold text-green-900 mb-2 flex items-center">
-                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 1.414L10.586 9.5H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"/>
-                            </svg>
-                            Quick Wins
-                        </h4>
-                        <ul class="space-y-1">
-                            ${responseData.quick_wins.map(win => `
-                                <li class="text-sm text-green-800 flex items-start">
-                                    <span class="text-green-600 mr-2">→</span>
-                                    ${escapeHtml(win)}
-                                </li>
-                            `).join('')}
-                        </ul>
-                    </div>`;
-                conversationState.metrics.insightsProvided++;
-            }
-
-            // Add hidden factors if provided
-            if (responseData?.hidden_factors && responseData.hidden_factors.length > 0) {
-                messageContent += `
-                    <div class="mt-3 bg-amber-50 border border-amber-200 rounded-lg p-3 max-w-[80%]">
-                        <h4 class="text-sm font-semibold text-amber-900 mb-2 flex items-center">
-                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-                            </svg>
-                            Things You Might Not Have Considered
-                        </h4>
-                        <ul class="space-y-1">
-                            ${responseData.hidden_factors.map(factor => `
-                                <li class="text-sm text-amber-800">• ${escapeHtml(factor)}</li>
-                            `).join('')}
-                        </ul>
-                    </div>`;
-                conversationState.metrics.insightsProvided++;
-            }
-
-            // Add confidence score if provided
-            if (responseData?.confidence_score) {
-                messageContent += `
-                    <div class="mt-3 inline-flex items-center bg-purple-100 text-purple-800 text-sm rounded-full px-3 py-1">
-                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        ${escapeHtml(responseData.confidence_score)}
-                    </div>`;
-            }
-
-            // Add personal anecdote if provided
-           if (responseData?.personal_anecdote) {
-               messageContent += `
-                   <div class="mt-3 bg-blue-50 border-l-4 border-blue-400 px-4 py-3 rounded-r-lg max-w-[80%]">
-                       <p class="text-sm text-blue-800 italic">
-                           <span class="font-medium">Story time:</span> ${escapeHtml(responseData.personal_anecdote)}
-                       </p>
-                   </div>`;
-           }
-
-           // Add practical tip if provided
-           if (responseData?.practical_tip) {
-               messageContent += `
-                   <div class="mt-3 bg-indigo-50 rounded-lg p-3 max-w-[80%]">
-                       <p class="text-sm text-indigo-800">
-                           <span class="font-semibold">💡 Pro tip:</span> ${escapeHtml(responseData.practical_tip)}
-                       </p>
-                   </div>`;
-           }
-
-           // Add mood-based response indicator
-           const mood = analyzeUserMood(conversationState.history[conversationState.history.length - 1]?.user || '');
-           let moodText = 'Arti is engaged and thinking';
-           if (mood.frustrated) moodText = 'Arti senses your frustration and is here to help';
-           if (mood.urgent) moodText = 'Arti understands the urgency';
-           if (mood.confused) moodText = 'Arti is here to clarify things';
-           if (mood.excited) moodText = 'Arti shares your enthusiasm';
-
-           messageContent += `
-                   <div class="text-xs text-gray-500 mt-2 italic">${moodText}</div>
-               </div>`;
-           
-           messageWrapper.innerHTML = messageContent;
-           
-           // Add visualization if provided
-           if (responseData?.visualization) {
-               setTimeout(() => {
-                   const vizElement = renderChatVisualization(responseData.visualization);
-                   messageWrapper.querySelector('.flex-1').appendChild(vizElement);
-                   conversationState.metrics.visualizationsShared++;
-               }, 100);
-           }
-       }
+                    </div>
+                </div>`;
+        }
        
        chatMessages.appendChild(messageWrapper);
        chatMessages.scrollTop = chatMessages.scrollHeight;
    }
 
    /**
-    * Creates an HTML element for visualizations (Mermaid or ApexCharts)
-    */
-   function renderChatVisualization(visualization) {
-       const { type, title, data } = visualization;
-       const chartId = `chart-${Date.now()}`;
-       const chartContainer = document.createElement('div');
-       chartContainer.className = "mt-3 bg-white rounded-lg border border-gray-200 p-4 max-w-[80%]";
-       
-       // Handle Mermaid diagrams
-       if (type.startsWith('mermaid_')) {
-           chartContainer.innerHTML = `
-               <h4 class="font-semibold text-gray-900 mb-3">${escapeHtml(title)}</h4>
-               <div class="mermaid" id="${chartId}">${data.content}</div>
-           `;
-           
-           // Initialize mermaid for this specific diagram
-           setTimeout(() => {
-               try {
-                   mermaid.init(undefined, document.getElementById(chartId));
-               } catch (e) {
-                   console.error('Mermaid rendering error:', e);
-                   document.getElementById(chartId).innerHTML = '<p class="text-sm text-red-600">Unable to render diagram</p>';
-               }
-           }, 0);
-           
-           return chartContainer;
-       }
-       
-       // Handle ApexCharts
-       chartContainer.innerHTML = `
-           <h4 class="font-semibold text-gray-900 mb-3">${escapeHtml(title)}</h4>
-           <div id="${chartId}" style="min-height: 300px;"></div>
-       `;
-       
-       setTimeout(() => {
-           try {
-               const options = getChartConfig(type, data);
-               new ApexCharts(document.querySelector(`#${chartId}`), options).render();
-           } catch (e) {
-               console.error('ApexCharts rendering error:', e);
-               document.querySelector(`#${chartId}`).innerHTML = '<p class="text-sm text-red-600">Unable to render chart</p>';
-           }
-       }, 100);
-       
-       return chartContainer;
-   }
-
-   /**
-    * Returns the configuration object for different chart types
-    */
-   function getChartConfig(type, data) {
-       const commonOptions = {
-           chart: { 
-               toolbar: { show: false }, 
-               zoom: { enabled: false },
-               fontFamily: 'Inter, sans-serif'
-           },
-           colors: ['#7C6BBE', '#5A4E8C', '#E8E4F7', '#9F8FDB', '#C2B5F0'],
-       };
-       
-       const configs = {
-           apex_line: {
-               ...commonOptions,
-               series: data.series || [],
-               chart: { ...commonOptions.chart, type: 'line', height: 280 },
-               xaxis: { categories: data.categories || [] },
-               stroke: { curve: 'smooth', width: 2 },
-               markers: { size: 4 }
-           },
-           apex_bar: {
-               ...commonOptions,
-               series: data.series || [],
-               chart: { ...commonOptions.chart, type: 'bar', height: 280 },
-               xaxis: { categories: data.categories || [] },
-               plotOptions: { 
-                   bar: { 
-                       horizontal: false, 
-                       columnWidth: '55%',
-                       borderRadius: 4
-                   } 
-               },
-               dataLabels: { enabled: false }
-           },
-           apex_radar: {
-               ...commonOptions,
-               series: data.series || [],
-               chart: { ...commonOptions.chart, type: 'radar', height: 320 },
-               xaxis: { categories: data.categories || [] },
-               yaxis: { show: false },
-               markers: { size: 4 }
-           },
-           apex_heatmap: {
-               ...commonOptions,
-               series: data.series || [],
-               chart: { ...commonOptions.chart, type: 'heatmap', height: 280 },
-               dataLabels: { enabled: true },
-               xaxis: { categories: data.xCategories || [] },
-               plotOptions: {
-                   heatmap: {
-                       shadeIntensity: 0.5,
-                       colorScale: { ranges: [
-                           { from: 0, to: 25, color: '#E8E4F7' },
-                           { from: 26, to: 50, color: '#C2B5F0' },
-                           { from: 51, to: 75, color: '#9F8FDB' },
-                           { from: 76, to: 100, color: '#7C6BBE' }
-                       ]}
-                   }
-               }
-           },
-           apex_pie: {
-               ...commonOptions,
-               series: data.values || [],
-               chart: { ...commonOptions.chart, type: 'pie', height: 280 },
-               labels: data.labels || [],
-               legend: { position: 'bottom' },
-               responsive: [{
-                   breakpoint: 480,
-                   options: { 
-                       chart: { width: 200 }, 
-                       legend: { position: 'bottom' } 
-                   }
-               }]
-           }
-       };
-       
-       return configs[type] || configs.apex_line;
-   }
-
-   /**
-    * Handles the entire process of sending a message and receiving a response
+    * Handles sending a message and receiving a response.
     */
    async function handleSendMessage() {
        const message = chatInput.value.trim();
        if (!message) return;
 
-       // Disable input while processing
        sendBtn.disabled = true;
        chatInput.disabled = true;
 
-       // Add user message
        addMessage(message, true);
        chatInput.value = '';
+       conversationState.history.push({ role: 'user', parts: [{ text: message }] });
        
-       // Update conversation history
-       conversationState.history.push({ user: message });
-       conversationState.metrics.messagesExchanged++;
-       
-       // Analyze mood and show appropriate typing indicator
-       const mood = analyzeUserMood(message);
-       let typingMessage = "Arti is thinking...";
-       if (mood.frustrated) typingMessage = "Taking a deep breath with you...";
-       if (mood.urgent) typingMessage = "Getting you quick answers...";
-       if (mood.confused) typingMessage = "Let me clarify this for you...";
-       
-       showTypingIndicator(typingMessage);
+       showTypingIndicator();
 
        try {
-           const response = await fetchWithRetry(CONFIG.API_ENDPOINT, {
+           const response = await fetch(CONFIG.API_ENDPOINT, {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
                body: JSON.stringify({
                    message: message,
-                   conversationHistory: conversationState.history.slice(-5)
+                   conversationHistory: conversationState.history.slice(-6) // Send last 3 exchanges
                })
            });
 
@@ -683,35 +352,14 @@
            const data = await response.json();
            removeTypingIndicator();
            
-           // Add Arti's response
-           addMessage(data.message, false, data);
-           
-           // Update conversation history
-           if (data.message) {
-               conversationState.history.push({ assistant: data.message });
-           }
-
-           // Add follow-up questions if provided
-           if (data.follow_up_questions && data.follow_up_questions.length > 0) {
-               setTimeout(() => {
-                   addFollowUpQuestions(data.follow_up_questions);
-               }, 500);
-           }
-
-           // Update session metrics
-           updateSessionMetrics();
+           addMessage(data.message, false);
+           conversationState.history.push({ role: 'model', parts: [{ text: data.message }] });
 
        } catch (error) {
            console.error('Failed to get response:', error);
            removeTypingIndicator();
-           
-           const errorMessage = mood.frustrated 
-               ? "I know this is frustrating - technology fails me too sometimes. Let me shake off these digital cobwebs. What were you trying to tell me?"
-               : "Well, this is embarrassing. My circuits are crossed right now. Mind trying again? Sometimes a fresh start helps.";
-           
-           addMessage(errorMessage, false);
+           addMessage("I seem to be having trouble connecting right now. Please try again in a moment.", false);
        } finally {
-           // Re-enable inputs
            sendBtn.disabled = false;
            chatInput.disabled = false;
            chatInput.focus();
@@ -719,24 +367,9 @@
    }
 
    /**
-    * Fetch with retry logic
+    * Shows a generic "is typing" indicator.
     */
-   async function fetchWithRetry(url, options, retries = CONFIG.MAX_RETRIES) {
-       for (let i = 0; i <= retries; i++) {
-           try {
-               const response = await fetch(url, options);
-               return response;
-           } catch (error) {
-               if (i === retries) throw error;
-               await new Promise(resolve => setTimeout(resolve, CONFIG.RETRY_DELAY * (i + 1)));
-           }
-       }
-   }
-
-   /**
-    * Shows typing indicator
-    */
-   function showTypingIndicator(message = "Arti is thinking...") {
+   function showTypingIndicator() {
        if (document.getElementById('typing-indicator')) return;
        
        const typingDiv = document.createElement('div');
@@ -751,7 +384,6 @@
                        <span class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></span>
                        <span class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></span>
                    </div>
-                   <span class="text-sm text-gray-600 ml-2">${escapeHtml(message)}</span>
                </div>
            </div>`;
        chatMessages.appendChild(typingDiv);
@@ -759,7 +391,7 @@
    }
 
    /**
-    * Removes typing indicator
+    * Removes the typing indicator.
     */
    function removeTypingIndicator() {
        const indicator = document.getElementById('typing-indicator');
@@ -767,66 +399,54 @@
    }
 
    /**
-    * Adds follow-up question buttons
-    */
-   function addFollowUpQuestions(questions) {
-       const questionsDiv = document.createElement('div');
-       questionsDiv.className = 'flex gap-3 mt-2 fade-in';
-       questionsDiv.innerHTML = `
-           <div class="w-8 h-8 flex-shrink-0"></div>
-           <div class="flex-1">
-               <p class="text-xs text-gray-500 mb-2">Keep the conversation going:</p>
-               <div class="flex flex-wrap gap-2">
-                   ${questions.map(q => `
-                       <button class="suggested-question text-xs bg-white border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50 hover:border-customPurple-300" data-question="${escapeHtml(q)}">
-                           ${escapeHtml(q)}
-                       </button>
-                   `).join('')}
-               </div>
-           </div>`;
-       chatMessages.appendChild(questionsDiv);
-       
-       // Add event listeners
-       questionsDiv.querySelectorAll('.suggested-question').forEach(btn => {
-           btn.addEventListener('click', (e) => {
-               chatInput.value = e.target.dataset.question;
-               handleSendMessage();
-           });
-       });
-   }
-
-   /**
-    * Updates session metrics display
-    */
-   function updateSessionMetrics() {
-       const duration = Math.floor((Date.now() - conversationState.sessionStart) / 60000);
-       document.getElementById('session-time').textContent = `${duration} min`;
-       document.getElementById('message-count').textContent = conversationState.metrics.messagesExchanged;
-       document.getElementById('insight-count').textContent = conversationState.metrics.insightsProvided;
-       document.getElementById('viz-count').textContent = conversationState.metrics.visualizationsShared;
-   }
-
-   /**
-    * Clears the chat history
+    * Resets the chat to its initial state.
     */
    function clearChat() {
-       if (confirm('Clear all chat history? This cannot be undone.')) {
+       if (confirm('Are you sure you want to clear the chat history?')) {
            chatMessages.innerHTML = '';
            conversationState.history = [];
-           conversationState.sessionStart = Date.now();
-           conversationState.metrics = {
-               messagesExchanged: 0,
-               insightsProvided: 0,
-               visualizationsShared: 0
-           };
-           
-           // Re-add welcome message
-           addMessage("Alright, fresh start! What's on your mind?", false);
+           addWelcomeMessage();
        }
    }
+   
+   /**
+    * Adds the initial welcome message and suggested questions.
+    */
+    function addWelcomeMessage() {
+        chatMessages.innerHTML = `
+            <div class="flex gap-3">
+                <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
+                <div class="flex-1">
+                    <div class="bg-gray-100 rounded-lg p-4 max-w-[80%]">
+                        <p class="text-gray-800 mb-2">Hey there! I'm Arti. I spent 30+ years in federal sales - from pounding the pavement as a junior rep to running federal divisions. I've seen it all: the good RFPs, the bad protests, and the ugly demos that crashed in front of the CIO.</p>
+                        <p class="text-gray-800">What's on your mind today? Ask me anything about federal sales, and I'll do my best to find the answer for you.</p>
+                    </div>
+                    <div class="mt-2 flex flex-wrap gap-2">
+                        <button class="suggested-question text-xs bg-white border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50 hover:border-customPurple-300" data-question="What are the latest cybersecurity trends in the Department of Defense?">
+                            Cybersecurity Trends at DoD
+                        </button>
+                        <button class="suggested-question text-xs bg-white border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50 hover:border-customPurple-300" data-question="Who are the key decision-makers for IT contracts at the Department of Veterans Affairs?">
+                            VA Decision-Makers
+                        </button>
+                        <button class="suggested-question text-xs bg-white border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50 hover:border-customPurple-300" data-question="Summarize the latest federal IT budget proposal.">
+                            Federal IT Budget
+                        </button>
+                    </div>
+                </div>
+            </div>`;
+        
+        // Re-attach listeners for the new suggested question buttons
+        document.querySelectorAll('.suggested-question').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                chatInput.value = e.target.dataset.question;
+                handleSendMessage();
+            });
+        });
+    }
+
 
    /**
-    * Utility function to escape HTML
+    * Utility function to escape HTML to prevent XSS.
     */
    function escapeHtml(unsafe) {
        return unsafe
@@ -837,9 +457,8 @@
            .replace(/'/g, "&#039;");
    }
 
-   // --- Event Listeners ---
+   // --- Event Listeners Setup ---
    function setupEventListeners() {
-       // Chat functionality
        sendBtn.addEventListener('click', handleSendMessage);
        chatInput.addEventListener('keydown', (e) => {
            if (e.key === 'Enter' && !e.shiftKey) {
@@ -848,60 +467,39 @@
            }
        });
 
-       // Clear chat
        clearChatBtn.addEventListener('click', clearChat);
-
-       // Initial suggested questions
-       document.querySelectorAll('.suggested-question').forEach(btn => {
-           btn.addEventListener('click', (e) => {
-               chatInput.value = e.target.dataset.question;
-               handleSendMessage();
-           });
-       });
-
-       // About Modal
+       
        aboutBtn.addEventListener('click', () => aboutModal.classList.remove('hidden'));
        closeAboutBtn.addEventListener('click', () => aboutModal.classList.add('hidden'));
        aboutModal.addEventListener('click', (e) => {
            if (e.target === aboutModal) aboutModal.classList.add('hidden');
        });
 
-       // Session Metrics
-       metricsBtn.addEventListener('click', () => {
-           updateSessionMetrics();
-           sessionMetricsDiv.classList.toggle('hidden');
-       });
-
-       // Share Button
        shareBtn.addEventListener('click', () => {
            const shareData = { 
-               title: 'AskArti - Federal Sales Mentor', 
-               text: "Get federal sales advice from a 30-year veteran. Check out AskArti!", 
+               title: 'AskArti - Federal Sales Buddy', 
+               text: "Check out AskArti!", 
                url: "https://askarti.com" 
            };
            
            if (navigator.share) {
                navigator.share(shareData).catch(err => console.error('Share failed:', err));
            } else {
-               navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`).then(() => {
+               navigator.clipboard.writeText(shareData.url).then(() => {
                    shareBtn.textContent = 'Link Copied!';
                    setTimeout(() => { shareBtn.textContent = 'Share'; }, 2000);
-               }).catch(err => {
-                   console.error('Copy failed:', err);
-                   alert('Copy the link: https://askarti.com');
                });
            }
        });
 
-       // Global keydown
        document.addEventListener('keydown', (e) => {
-           if (e.key === 'Escape') {
+           if (e.key === 'Escape' && !aboutModal.classList.contains('hidden')) {
                aboutModal.classList.add('hidden');
-               sessionMetricsDiv.classList.add('hidden');
            }
        });
 
-       // Auto-focus on input
+       // Add initial welcome message on load
+       addWelcomeMessage();
        chatInput.focus();
    }
 
