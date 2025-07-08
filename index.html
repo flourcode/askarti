@@ -334,7 +334,6 @@
             </div>
         </div>
     </div>
-
 <script>
 // Configuration
 const CONFIG = {
@@ -389,538 +388,493 @@ class AskArti {
     }
 
     init() {
-       this.initializeMermaid();
-       this.setupEventListeners();
-       this.elements.situationInput.focus();
-   }
+        this.initializeMermaid();
+        this.setupEventListeners();
+        this.elements.situationInput.focus();
+    }
 
-   initializeMermaid() {
-       mermaid.initialize({ 
-           startOnLoad: false,
-           securityLevel: 'strict',
-           theme: 'default',
-           flowchart: {
-               htmlLabels: true,
-               curve: 'linear'
-           }
-       });
-   }
+    initializeMermaid() {
+        mermaid.initialize({ 
+            startOnLoad: false,
+            securityLevel: 'strict',
+            theme: 'default',
+            flowchart: {
+                htmlLabels: true,
+                curve: 'linear'
+            }
+        });
+    }
 
-   setupEventListeners() {
-       // Quick prompts
-       this.elements.quickPromptBtns.forEach(btn => {
-           btn.addEventListener('click', (e) => {
-               this.elements.situationInput.value = e.currentTarget.dataset.text;
-               this.getAdvice();
-           });
-       });
+    setupEventListeners() {
+        // Quick prompts
+        this.elements.quickPromptBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                this.elements.situationInput.value = e.currentTarget.dataset.text;
+                this.getAdvice();
+            });
+        });
 
-       // Main button
-       this.elements.askBtn.addEventListener('click', () => this.getAdvice());
-       
-       // Enter key
-       this.elements.situationInput.addEventListener('keydown', (e) => {
-           if (e.key === 'Enter' && !e.shiftKey) {
-               e.preventDefault();
-               this.getAdvice();
-           }
-       });
-
-       // Retry
-       this.elements.retryBtn.addEventListener('click', () => {
-           this.elements.errorMessage.classList.add('hidden');
-           if (this.state.lastQuery) {
-               this.elements.situationInput.value = this.state.lastQuery;
-               this.getAdvice();
-           }
-       });
-
-       // Share
-       this.elements.shareBtn.addEventListener('click', () => this.share());
-
-       // About modal
-       this.elements.aboutBtn.addEventListener('click', () => this.showModal());
-       this.elements.closeAbout.addEventListener('click', () => this.hideModal());
-       this.elements.aboutModal.addEventListener('click', (e) => {
-           if (e.target === this.elements.aboutModal) this.hideModal();
-       });
-
-       // Escape key
-       document.addEventListener('keydown', (e) => {
-           if (e.key === 'Escape') this.hideModal();
-       });
-   }
-
-   setLoading(loading) {
-       this.elements.btnText.style.display = loading ? 'none' : 'inline';
-       this.elements.loader.style.display = loading ? 'block' : 'none';
-       this.elements.askBtn.disabled = loading;
-       this.elements.errorMessage.classList.add('hidden');
-       
-       if (loading) {
-           this.showLoadingMessages();
-       } else {
-           this.hideLoadingMessages();
-       }
-   }
-
-   showLoadingMessages() {
-       this.elements.loadingMessageContainer.classList.remove('hidden');
-       this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[0];
-       
-       let messageIndex = 0;
-       this.state.loadingInterval = setInterval(() => {
-           messageIndex = (messageIndex + 1) % CONFIG.LOADING_MESSAGES.length;
-           this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[messageIndex];
-       }, 2000);
-   }
-
-   hideLoadingMessages() {
-       clearInterval(this.state.loadingInterval);
-       this.elements.loadingMessageContainer.classList.add('hidden');
-   }
-
-   showError(message) {
-       this.hideLoadingMessages();
-       this.elements.errorMessage.classList.remove('hidden');
-       this.elements.errorDetails.textContent = message;
-       this.setLoading(false);
-   }
-
-   showTemporaryMessage(message, type = 'info') {
-       this.elements.loadingMessageContainer.classList.remove('hidden');
-       this.elements.loadingMessage.textContent = message;
-       
-       const colorClasses = {
-           error: 'text-red-700 font-medium',
-           warning: 'text-orange-700 font-medium',
-           info: 'text-gray-600'
-       };
-       
-       this.elements.loadingMessage.className = colorClasses[type] || colorClasses.info;
-       
-       setTimeout(() => {
-           this.elements.loadingMessageContainer.classList.add('hidden');
-       }, 2000);
-   }
-
-   async getAdvice() {
-       const situation = this.elements.situationInput.value.trim();
-       
-       // Rate limiting
-       const now = Date.now();
-       if (now - this.state.lastRequestTime < CONFIG.MIN_REQUEST_INTERVAL) {
-           this.showTemporaryMessage("Please wait a moment before asking again", 'warning');
-           return;
-       }
-       
-       // Validation
-       if (!situation) {
-           this.showTemporaryMessage("Drop your situation in the box above 👆", 'error');
-           return;
-       }
-       
-       // Prevent duplicate requests
-       if (this.state.pendingRequest) return;
-       
-       this.state.lastRequestTime = now;
-       this.state.lastQuery = situation;
-       this.state.pendingRequest = true;
-       
-       // Clear previous results and show loading
-       this.elements.resultsContainer.innerHTML = '';
-       this.setLoading(true);
-       
-       try {
-           const data = await this.makeRequest(situation);
-           this.displayAdvice(data);
-       } catch (error) {
-           console.error('Request failed:', error);
-           this.showError(error.message || "We're having trouble connecting to Arti. Please try again.");
-       } finally {
-           this.state.pendingRequest = false;
-           this.setLoading(false);
-       }
-   }
-
-   async makeRequest(situation) {
-       this.state.abortController = new AbortController();
-       
-       const timeoutId = setTimeout(() => {
-           this.state.abortController.abort();
-       }, CONFIG.REQUEST_TIMEOUT);
-       
-       try {
-           const response = await fetch(CONFIG.API_ENDPOINT, {
-               method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ situation }),
-               signal: this.state.abortController.signal
-           });
-           
-           clearTimeout(timeoutId);
-           
-           if (!response.ok) {
-               throw new Error(`Server error (${response.status})`);
-           }
-           
-           const data = await response.json();
-           
-           if (data.error) {
-               throw new Error(data.message || data.error);
-           }
-           
-           return data;
-       } catch (error) {
-           if (error.name === 'AbortError') {
-               throw new Error('Request timed out. Please try again.');
-           }
-           throw error;
-       }
-   }
-
-   displayAdvice(data) {
-       const { response_type } = data;
-       
-       try {
-           if (response_type === 'prospect') {
-               this.displayProspectAdvice(data);
-           } else {
-               this.displayGeneralAdvice(data);
-           }
-           
-           // Add action buttons
-           this.addActionButtons();
-           
-           // Smooth scroll to results
-           this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-           
-       } catch (error) {
-           console.error('Display error:', error);
-           this.showError("Failed to display results. Please try again.");
-       }
-   }
-
-   displayProspectAdvice(data) {
-    const { 
-        summary = '',
-        top_s_is = [],
-        top_software_and_cloud = [],
-        company_capabilities = [],
-        naics_codes = [],
-        prospect_recommendations = []
-    } = data;
-    
-    const renderRankedList = (items) => {
-        if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
-        return `<ul class="space-y-1">${items.map((item, index) => `
-            <li class="flex items-center gap-3 py-2 border-t border-gray-100 first:border-t-0 first:pt-0">
-                <span class="text-xs font-bold text-customPurple-700 bg-customPurple-100 w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">${index + 1}</span>
-                <span class="flex-1 font-medium text-gray-800 min-w-0 pr-2">${item.company || 'Unknown'}</span>
-                <span class="text-sm font-semibold text-gray-600 flex-shrink-0">${item.value || 'N/A'}</span>
-            </li>
-        `).join('')}</ul>`;
-    };
-    
-    const html = `
-    <div class="fade-in space-y-6">
-        <div class="dashboard-card bg-gradient-to-r from-customPurple-100 to-customPurple-200">
-            <h3 class="text-xl font-bold text-customPurple-900 mb-2">Key Market Insights</h3>
-            <div class="text-customPurple-900/90">${marked.parse(summary)}</div>
-        </div>
-
-        <div class="dashboard-card">
-            <h3 class="font-bold text-gray-900 mb-3">Top Contractors</h3>
-            ${renderRankedList(top_s_is)}
-        </div>
+        // Main button
+        this.elements.askBtn.addEventListener('click', () => this.getAdvice());
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        // Enter key
+        this.elements.situationInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                this.getAdvice();
+            }
+        });
+
+        // Retry
+        this.elements.retryBtn.addEventListener('click', () => {
+            this.elements.errorMessage.classList.add('hidden');
+            if (this.state.lastQuery) {
+                this.elements.situationInput.value = this.state.lastQuery;
+                this.getAdvice();
+            }
+        });
+
+        // Share
+        this.elements.shareBtn.addEventListener('click', () => this.share());
+
+        // About modal
+        this.elements.aboutBtn.addEventListener('click', () => this.showModal());
+        this.elements.closeAbout.addEventListener('click', () => this.hideModal());
+        this.elements.aboutModal.addEventListener('click', (e) => {
+            if (e.target === this.elements.aboutModal) this.hideModal();
+        });
+
+        // Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') this.hideModal();
+        });
+    }
+
+    setLoading(loading) {
+        this.elements.btnText.style.display = loading ? 'none' : 'inline';
+        this.elements.loader.style.display = loading ? 'block' : 'none';
+        this.elements.askBtn.disabled = loading;
+        this.elements.errorMessage.classList.add('hidden');
+        
+        if (loading) {
+            this.showLoadingMessages();
+        } else {
+            this.hideLoadingMessages();
+        }
+    }
+
+    showLoadingMessages() {
+        this.elements.loadingMessageContainer.classList.remove('hidden');
+        this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[0];
+        
+        let messageIndex = 0;
+        this.state.loadingInterval = setInterval(() => {
+            messageIndex = (messageIndex + 1) % CONFIG.LOADING_MESSAGES.length;
+            this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[messageIndex];
+        }, 2000);
+    }
+
+    hideLoadingMessages() {
+        clearInterval(this.state.loadingInterval);
+        this.elements.loadingMessageContainer.classList.add('hidden');
+    }
+
+    showError(message) {
+        this.hideLoadingMessages();
+        this.elements.errorMessage.classList.remove('hidden');
+        this.elements.errorDetails.textContent = message;
+        this.setLoading(false);
+    }
+
+    showTemporaryMessage(message, type = 'info') {
+        this.elements.loadingMessageContainer.classList.remove('hidden');
+        this.elements.loadingMessage.textContent = message;
+        
+        const colorClasses = {
+            error: 'text-red-700 font-medium',
+            warning: 'text-orange-700 font-medium',
+            info: 'text-gray-600'
+        };
+        
+        this.elements.loadingMessage.className = colorClasses[type] || colorClasses.info;
+        
+        setTimeout(() => {
+            this.elements.loadingMessageContainer.classList.add('hidden');
+        }, 2000);
+    }
+
+    async getAdvice() {
+        const situation = this.elements.situationInput.value.trim();
+        
+        // Rate limiting
+        const now = Date.now();
+        if (now - this.state.lastRequestTime < CONFIG.MIN_REQUEST_INTERVAL) {
+            this.showTemporaryMessage("Please wait a moment before asking again", 'warning');
+            return;
+        }
+        
+        // Validation
+        if (!situation) {
+            this.showTemporaryMessage("Drop your situation in the box above 👆", 'error');
+            return;
+        }
+        
+        // Prevent duplicate requests
+        if (this.state.pendingRequest) return;
+        
+        this.state.lastRequestTime = now;
+        this.state.lastQuery = situation;
+        this.state.pendingRequest = true;
+        
+        // Clear previous results and show loading
+        this.elements.resultsContainer.innerHTML = '';
+        this.setLoading(true);
+        
+        try {
+            const data = await this.makeRequest(situation);
+            this.displayAdvice(data);
+        } catch (error) {
+            console.error('Request failed:', error);
+            this.showError(error.message || "We're having trouble connecting to Arti. Please try again.");
+        } finally {
+            this.state.pendingRequest = false;
+            this.setLoading(false);
+        }
+    }
+
+    async makeRequest(situation) {
+        this.state.abortController = new AbortController();
+        
+        const timeoutId = setTimeout(() => {
+            this.state.abortController.abort();
+        }, CONFIG.REQUEST_TIMEOUT);
+        
+        try {
+            const response = await fetch(CONFIG.API_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ situation }),
+                signal: this.state.abortController.signal
+            });
+            
+            clearTimeout(timeoutId);
+            
+            if (!response.ok) {
+                throw new Error(`Server error (${response.status})`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.error) {
+                throw new Error(data.message || data.error);
+            }
+            
+            return data;
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                throw new Error('Request timed out. Please try again.');
+            }
+            throw error;
+        }
+    }
+
+    displayAdvice(data) {
+        const { response_type } = data;
+        
+        try {
+            if (response_type === 'prospect') {
+                this.displayProspectAdvice(data);
+            } else {
+                this.displayGeneralAdvice(data);
+            }
+            
+            // Add action buttons
+            this.addActionButtons();
+            
+            // Smooth scroll to results
+            this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+        } catch (error) {
+            console.error('Display error:', error);
+            this.showError("Failed to display results. Please try again.");
+        }
+    }
+
+    displayProspectAdvice(data) {
+        const { 
+            summary = '',
+            top_s_is = [],
+            top_software_and_cloud = [],
+            company_capabilities = [],
+            naics_codes = [],
+            prospect_recommendations = []
+        } = data;
+        
+        const renderRankedList = (items) => {
+            if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
+            return `<ul class="space-y-1">${items.map((item, index) => `
+                <li class="flex items-center gap-3 py-2 border-t border-gray-100 first:border-t-0 first:pt-0">
+                    <span class="text-xs font-bold text-customPurple-700 bg-customPurple-100 w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">${index + 1}</span>
+                    <span class="flex-1 font-medium text-gray-800 min-w-0 pr-2">${item.company || 'Unknown'}</span>
+                    <span class="text-sm font-semibold text-gray-600 flex-shrink-0">${item.value || 'N/A'}</span>
+                </li>
+            `).join('')}</ul>`;
+        };
+        
+        const html = `
+        <div class="fade-in space-y-6">
+            <div class="dashboard-card bg-gradient-to-r from-customPurple-100 to-customPurple-200">
+                <h3 class="text-xl font-bold text-customPurple-900 mb-2">Key Market Insights</h3>
+                <div class="text-customPurple-900/90">${marked.parse(summary)}</div>
+            </div>
+
             <div class="dashboard-card">
-                <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
-                <ul class="space-y-2 text-sm">${company_capabilities.map(c => `
-                    <li class="flex gap-2">
-                        <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                        </svg>
-                        <span>${c}</span>
+                <h3 class="font-bold text-gray-900 mb-3">Top Contractors</h3>
+                ${renderRankedList(top_s_is)}
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="dashboard-card">
+                    <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
+                    <ul class="space-y-2 text-sm">${company_capabilities.map(c => `
+                        <li class="flex gap-2">
+                            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>${c}</span>
+                        </li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
+                    <ul class="space-y-2 text-sm">${naics_codes.map(n => {
+                        const naicsText = typeof n === 'string' ? n : (n.code ? `${n.code} - ${n.description || ''}` : 'Unknown');
+                        return `
+                        <li class="flex gap-2">
+                            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="break-words">${naicsText}</span>
+                        </li>`;
+                    }).join('')}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <h3 class="font-bold text-gray-900 mb-3">Potential Software Plays</h3>
+                ${renderRankedList(top_software_and_cloud)}
+            </div>
+
+            <div class="dashboard-card">
+                <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
+                <ul class="space-y-2 text-sm">${prospect_recommendations.map(r => `
+                    <li class="flex gap-3">
+                        <span class="text-customPurple-500 font-bold text-lg flex-shrink-0 -mt-1">→</span>
+                        <span>${r}</span>
                     </li>`).join('')}
                 </ul>
             </div>
-            
-            <div class="dashboard-card">
-                <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
-                <ul class="space-y-2 text-sm">${naics_codes.map(n => {
-                    // Handle both string format and object format
-                    const naicsText = typeof n === 'string' ? n : (n.code ? `${n.code} - ${n.description || ''}` : 'Unknown');
-                    return `
-                    <li class="flex gap-2">
-                        <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                        </svg>
-                        <span class="break-words">${naicsText}</span>
-                    </li>`;
-                }).join('')}
-                </ul>
+        </div>`;
+        
+        this.elements.resultsContainer.innerHTML = html;
+    }
+
+    displayGeneralAdvice(data) {
+        const { 
+            quick_take = '',
+            key_moves = [],
+            mermaid_chart = '',
+            talking_points = [],
+            email_template = '',
+            next_steps = '',
+            response_type = 'deal'
+        } = data;
+        
+        const html = `
+        <div class="fade-in space-y-6">
+            <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6 flow-root">
+                <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
+                <div class="text-customPurple-900/80 space-y-2">${marked.parse(quick_take)}</div>
             </div>
-        </div>
 
-        <div class="dashboard-card">
-            <h3 class="font-bold text-gray-900 mb-3">Potential Software Plays</h3>
-            ${renderRankedList(top_software_and_cloud)}
-        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="dashboard-card">
+                    <h3 class="font-bold text-gray-900 mb-4">Your Next 3 Moves</h3>
+                    <div class="space-y-3">${key_moves.slice(0, 3).map((m, i) => `
+                        <div class="flex gap-3">
+                            <span class="flex-shrink-0 w-7 h-7 bg-customPurple-200 text-customPurple-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-900">${m.action}</p>
+                                <p class="text-sm text-gray-600 mt-1">${m.why}</p>
+                            </div>
+                        </div>`).join('')}
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3 class="font-bold text-gray-900 mb-4">Game Plan</h3>
+                    ${mermaid_chart ? `
+                        <div class="mermaid-container">
+                            <div class="mermaid-loading">
+                                <div class="loader"></div>
+                            </div>
+                            <div id="mermaid-diagram" class="mermaid" style="opacity: 0;">${mermaid_chart}</div>
+                        </div>` : 
+                        '<div class="p-4 bg-gray-50 rounded-lg text-center"><p class="text-gray-600">Visual game plan not available</p></div>'
+                    }
+                </div>
+            </div>
 
-        <div class="dashboard-card">
-            <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
-            <ul class="space-y-2 text-sm">${prospect_recommendations.map(r => `
-                <li class="flex gap-3">
-                    <span class="text-customPurple-500 font-bold text-lg flex-shrink-0 -mt-1">→</span>
-                    <span>${r}</span>
-                </li>`).join('')}
-            </ul>
-        </div>
-    </div>`;
-    
-    this.elements.resultsContainer.innerHTML = html;
-}
-
-   displayGeneralAdvice(data) {
-       const { 
-           quick_take = '',
-           key_moves = [],
-           mermaid_chart = '',
-           talking_points = [],
-           email_template = '',
-           next_steps = '',
-           response_type = 'deal'
-       } = data;
-       
-       const html = `
-       <div class="fade-in space-y-6">
-           <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6 flow-root">
-               <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
-               <div class="text-customPurple-900/80 space-y-2">${marked.parse(quick_take)}</div>
-           </div>
-
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-               <div class="dashboard-card">
-                   <h3 class="font-bold text-gray-900 mb-4">Your Next 3 Moves</h3>
-                   <div class="space-y-3">${key_moves.slice(0, 3).map((m, i) => `
-                       <div class="flex gap-3">
-                           <span class="flex-shrink-0 w-7 h-7 bg-customPurple-200 text-customPurple-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span>
-                           <div class="flex-1">
-                               <p class="font-medium text-gray-900">${m.action}</p>
-                               <p class="text-sm text-gray-600 mt-1">${m.why}</p>
-                           </div>
-                       </div>`).join('')}
-                   </div>
-               </div>
-               
-               <div class="dashboard-card">
-                   <h3 class="font-bold text-gray-900 mb-4">Game Plan</h3>
-                   ${mermaid_chart ? `
-                       <div class="mermaid-container">
-                           <div class="mermaid-loading">
-                               <div class="loader"></div>
-                           </div>
-                           <div id="mermaid-diagram" class="mermaid" style="opacity: 0;">${mermaid_chart}</div>
-                       </div>` : 
-                       '<div class="p-4 bg-gray-50 rounded-lg text-center"><p class="text-gray-600">Visual game plan not available</p></div>'
-                   }
-               </div>
-           </div>
-
-           ${(talking_points?.length > 0 || email_template) ? `
-           <div class="dashboard-card">
-               <h3 class="font-bold text-gray-900 mb-4">Communications</h3>
-               <div class="grid grid-cols-1 ${email_template && talking_points?.length > 0 ? 'md:grid-cols-2' : ''} gap-6">
-                   ${talking_points?.length > 0 ? `
-                       <div>
-                           <h4 class="font-semibold text-gray-800 mb-3">
-                               ${response_type === 'interview' ? 'What They May Ask' : 'What to Ask'}
-                           </h4>
-                           <ul class="space-y-2 text-sm">${talking_points.map(t => `
-                               <li class="flex gap-2">
-                                   <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                       <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                   </svg>${t}
-                               </li>`).join('')}
-                           </ul>
-                       </div>` : ''}
-                   
-                   ${email_template ? `
-                       <div>
-                           <h4 class="font-semibold text-gray-800 mb-3">Email Template</h4>
-                           <div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap border">${email_template}</div>
-                       </div>` : ''}
-               </div>
-           </div>` : ''}
-           
-           ${next_steps ? `
-               <div class="bg-customPurple-200/60 p-4 rounded-lg text-sm text-customPurple-900">
-                   <b class="font-semibold">Remember:</b> ${next_steps}
-               </div>` : ''}
-       </div>`;
-       
-       this.elements.resultsContainer.innerHTML = html;
-  }     
-       // Render mermaid chart with proper timing
-       if (mermaid_chart) {
-           this.renderMermaidChart();
-       }
-   }
-
-   async renderMermaidChart() {
-    try {
-        // Give DOM time to settle
-        await new Promise(resolve => setTimeout(resolve, 100));
+            ${(talking_points?.length > 0 || email_template) ? `
+            <div class="dashboard-card">
+                <h3 class="font-bold text-gray-900 mb-4">Communications</h3>
+                <div class="grid grid-cols-1 ${email_template && talking_points?.length > 0 ? 'md:grid-cols-2' : ''} gap-6">
+                    ${talking_points?.length > 0 ? `
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-3">
+                                ${response_type === 'interview' ? 'What They May Ask' : 'What to Ask'}
+                            </h4>
+                            <ul class="space-y-2 text-sm">${talking_points.map(t => `
+                                <li class="flex gap-2">
+                                    <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>${t}
+                                </li>`).join('')}
+                            </ul>
+                        </div>` : ''}
+                    
+                    ${email_template ? `
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-3">Email Template</h4>
+                            <div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap border">${email_template}</div>
+                        </div>` : ''}
+                </div>
+            </div>` : ''}
+            
+            ${next_steps ? `
+                <div class="bg-customPurple-200/60 p-4 rounded-lg text-sm text-customPurple-900">
+                    <b class="font-semibold">Remember:</b> ${next_steps}
+                </div>` : ''}
+        </div>`;
         
-        const element = document.getElementById('mermaid-diagram');
-        if (!element) return;
+        this.elements.resultsContainer.innerHTML = html;
         
-        // Sanitize the mermaid chart content
-        let chartContent = element.textContent;
-        
-        // Fix common Mermaid syntax issues
-        chartContent = this.sanitizeMermaidChart(chartContent);
-        
-        // Update the element with sanitized content
-        element.textContent = chartContent;
-        
-        // Run mermaid
-        await mermaid.run();
-        
-        // Fade in the chart
-        element.style.opacity = '1';
-        element.style.transition = 'opacity 0.3s ease-in';
-        
-        // Hide loader
-        const loader = element.parentElement.querySelector('.mermaid-loading');
-        if (loader) loader.style.display = 'none';
-        
-    } catch (error) {
-        console.error('Mermaid rendering error:', error);
-        const container = document.querySelector('.mermaid-container');
-        if (container) {
-            container.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Game plan visualization unavailable</div>';
+        // Render mermaid chart with proper timing
+        if (mermaid_chart) {
+            this.renderMermaidChart();
         }
     }
-}
 
-sanitizeMermaidChart(chart) {
-    // Replace problematic characters in node labels
-    return chart.replace(/\[([^\]]+)\]/g, (match, label) => {
-        // Escape special characters that break Mermaid parsing
-        const sanitized = label
-            .replace(/\(/g, '❨')  // Replace ( with unicode alternative
-            .replace(/\)/g, '❩')  // Replace ) with unicode alternative
-            .replace(/&/g, 'and') // Replace & with 'and'
-            .replace(/'/g, '\')   // Replace ' with smart quote
-            .replace(/"/g, '"')   // Replace " with smart quote
-            .replace(/</g, '‹')   // Replace < with unicode alternative
-            .replace(/>/g, '›')   // Replace > with unicode alternative
-            .replace(/\|/g, '┃')  // Replace | with unicode alternative
-            .replace(/\{/g, '❴')  // Replace { with unicode alternative
-            .replace(/\}/g, '❵')  // Replace } with unicode alternative
-            .replace(/\[/g, '⟦')  // Replace [ with unicode alternative
-            .replace(/\]/g, '⟧')  // Replace ] with unicode alternative
-            .replace(/\#/g, '♯')  // Replace # with unicode alternative
-            .replace(/\$/g, '＄')  // Replace $ with unicode alternative
-            .replace(/\%/g, '％')  // Replace % with unicode alternative
-            .replace(/\^/g, '＾')  // Replace ^ with unicode alternative
-            .replace(/\*/g, '✱')  // Replace * with unicode alternative
-            .replace(/\+/g, '＋')  // Replace + with unicode alternative
-            .replace(/\=/g, '＝')  // Replace = with unicode alternative
-            .replace(/\~/g, '∼')  // Replace ~ with unicode alternative
-            .replace(/\`/g, '｀')  // Replace ` with unicode alternative
-            .replace(/\n/g, ' ')  // Replace newlines with spaces
-            .replace(/\r/g, ' ')  // Replace carriage returns with spaces
-            .replace(/\s+/g, ' ') // Collapse multiple spaces
-            .trim();              // Trim whitespace
+    async renderMermaidChart() {
+        try {
+            // Give DOM time to settle
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            const element = document.getElementById('mermaid-diagram');
+            if (!element) return;
+            
+            // Run mermaid
+            await mermaid.run();
+            
+            // Fade in the chart
+            element.style.opacity = '1';
+            element.style.transition = 'opacity 0.3s ease-in';
+            
+            // Hide loader
+            const loader = element.parentElement.querySelector('.mermaid-loading');
+            if (loader) loader.style.display = 'none';
+            
+        } catch (error) {
+            console.error('Mermaid rendering error:', error);
+            const container = document.querySelector('.mermaid-container');
+            if (container) {
+                container.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Game plan visualization unavailable</div>';
+            }
+        }
+    }
+
+    addActionButtons() {
+        const buttonsHtml = `
+            <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                <button onclick="app.copyResults()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                    Copy to Clipboard
+                </button>
+                <button onclick="app.startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">
+                    Ask Another Question
+                </button>
+            </div>`;
         
-        return `[${sanitized}]`;
-    });
-}
+        this.elements.resultsContainer.insertAdjacentHTML('beforeend', buttonsHtml);
+    }
 
-   addActionButtons() {
-       const buttonsHtml = `
-           <div class="mt-8 flex flex-col sm:flex-row gap-3">
-               <button onclick="app.copyResults()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
-                   Copy to Clipboard
-               </button>
-               <button onclick="app.startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">
-                   Ask Another Question
-               </button>
-           </div>`;
-       
-       this.elements.resultsContainer.insertAdjacentHTML('beforeend', buttonsHtml);
-   }
+    copyResults() {
+        const content = this.elements.resultsContainer.innerText;
+        
+        if (!content || content.trim() === '') {
+            alert('No content to copy');
+            return;
+        }
+        
+        navigator.clipboard.writeText(content)
+            .then(() => {
+                const btn = this.elements.resultsContainer.querySelector('button');
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = originalText, 2000);
+            })
+            .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
+    }
 
-   copyResults() {
-       const content = this.elements.resultsContainer.innerText;
-       
-       if (!content || content.trim() === '') {
-           alert('No content to copy');
-           return;
-       }
-       
-       navigator.clipboard.writeText(content)
-           .then(() => {
-               const btn = this.elements.resultsContainer.querySelector('button');
-               const originalText = btn.textContent;
-               btn.textContent = 'Copied!';
-               setTimeout(() => btn.textContent = originalText, 2000);
-           })
-           .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
-   }
+    startOver() {
+        if (this.state.abortController) {
+            this.state.abortController.abort();
+        }
+        
+        this.elements.situationInput.value = '';
+        this.elements.resultsContainer.innerHTML = '';
+        this.hideLoadingMessages();
+        this.elements.errorMessage.classList.add('hidden');
+        
+        clearInterval(this.state.loadingInterval);
+        this.state.pendingRequest = false;
+        
+        this.elements.situationInput.focus();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-   startOver() {
-       if (this.state.abortController) {
-           this.state.abortController.abort();
-       }
-       
-       this.elements.situationInput.value = '';
-       this.elements.resultsContainer.innerHTML = '';
-       this.hideLoadingMessages();
-       this.elements.errorMessage.classList.add('hidden');
-       
-       clearInterval(this.state.loadingInterval);
-       this.state.pendingRequest = false;
-       
-       this.elements.situationInput.focus();
-       window.scrollTo({ top: 0, behavior: 'smooth' });
-   }
+    share() {
+        const shareData = {
+            title: 'AskArti',
+            text: 'Check out this Fed Sales Bot',
+            url: 'https://askarti.com'
+        };
+        
+        if (navigator.share) {
+            navigator.share(shareData).catch(console.error);
+        } else {
+            navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`)
+                .then(() => {
+                    this.elements.shareBtn.textContent = 'Link Copied!';
+                    setTimeout(() => this.elements.shareBtn.textContent = 'Share', 2000);
+                })
+                .catch(() => alert('Please copy the URL manually: https://askarti.com'));
+        }
+    }
 
-   share() {
-       const shareData = {
-           title: 'AskArti',
-           text: 'Check out this Fed Sales Bot',
-           url: 'https://askarti.com'
-       };
-       
-       if (navigator.share) {
-           navigator.share(shareData).catch(console.error);
-       } else {
-           navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`)
-               .then(() => {
-                   this.elements.shareBtn.textContent = 'Link Copied!';
-                   setTimeout(() => this.elements.shareBtn.textContent = 'Share', 2000);
-               })
-               .catch(() => alert('Please copy the URL manually: https://askarti.com'));
-       }
-   }
+    showModal() {
+        this.elements.aboutModal.classList.remove('hidden');
+        requestAnimationFrame(() => {
+            this.elements.aboutModal.querySelector('.modal-content').classList.add('show');
+        });
+    }
 
-   showModal() {
-       this.elements.aboutModal.classList.remove('hidden');
-       requestAnimationFrame(() => {
-           this.elements.aboutModal.querySelector('.modal-content').classList.add('show');
-       });
-   }
-
-   hideModal() {
-       const content = this.elements.aboutModal.querySelector('.modal-content');
-       content.classList.remove('show');
-       setTimeout(() => this.elements.aboutModal.classList.add('hidden'), 200);
-   }
+    hideModal() {
+        const content = this.elements.aboutModal.querySelector('.modal-content');
+        content.classList.remove('show');
+        setTimeout(() => this.elements.aboutModal.classList.add('hidden'), 200);
+    }
 }
 
 // Initialize app
