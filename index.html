@@ -178,7 +178,7 @@
         placeholder="Champion ghosted me after seeing pricing. $2M deal at DHS. Q4 commit."
         maxlength="500"></textarea>
     <div class="text-xs text-gray-500 mt-1 flex justify-between items-center">
-        <span class="hint-text">More details may yield better advice. Don’t like the answer? Just hit “Ask Arti” again, like Vegas slots.</span>
+        <span class="hint-text">The more details you give Arti, like agency, $ amount, or who's involved, the better the advice. Don't like an answer? Just press Ask Arti again like a Vegas slot machine.</span>
         <span id="char-count" class="opacity-0 transition-opacity duration-200">0/500</span>
     </div>
 </div>
@@ -287,7 +287,8 @@
                         </svg>
                         Privacy & Technology
                     </h3>
-                    <p class="text-gray-600 mb-2">AskArti uses models that may include Gemini, Claude, and ChatGPT. These models may use API inputs to improve responses. We do not store, log, or persist any prompt or response data. All processing occurs in-memory using AWS Lambda and is discarded after execution.</p>
+                    <p class="text-gray-600 mb-2">AskArti uses models that may include Gemini, Claude, and ChatGPT. These models may use API inputs to improve responses.</p>
+                    <p class="text-gray-600">We do not store, log, or persist any prompt or response data. All processing occurs in-memory using AWS Lambda and is discarded after execution.</p>
                 </div>
             </div>
             <div class="pt-4">
@@ -614,75 +615,70 @@ async function getAdvice() {
 }
 async function displayAdvice(data) {
     const { response_type } = data;
-    // Extract seller_type early
+    // Extract seller_type early (new code)
     const sellerType = data.seller_type || '';
     let html = '';
-
     try {
         if (response_type === 'prospect') {
-            // This section is updated to render the new, richer prospecting data
+            // Prospect response rendering with fallbacks for each section
             const { 
                 summary = "Strategic insight for your federal prospecting efforts.",
-                top_spending_agencies = [],
-                top_prime_contractors = [],
-                key_contract_vehicles = [],
+                top_s_is = [],
+                top_software_and_cloud = [],
+                company_capabilities = [],
                 naics_codes = [],
                 prospect_recommendations = [],
                 market_insights = "Focus on relationship building and understanding agency mission needs."
             } = data;
-            
             const renderRankedList = (items) => {
-                if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No specific data found.</p>';
+                if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No specific companies found.</p>';
                 return `<ul class="space-y-1">${items.map((item, index) => `
                     <li class="flex items-center gap-3 py-2 border-t border-gray-100 first:border-t-0 first:pt-0">
                         <span class="text-xs font-bold text-customPurple-700 bg-customPurple-100 w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">${index + 1}</span>
-                        <span class="flex-1 font-medium text-gray-800">${item.company || 'Entry'}</span>
+                        <span class="flex-1 font-medium text-gray-800">${item.company || 'Company'}</span>
                         <span class="text-sm font-semibold text-gray-600">${item.value || 'N/A'}</span>
                     </li>
                 `).join('')}</ul>`;
             };
-
             html = `
             <div class="fade-in space-y-6">
                 <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6">
                     <h3 class="text-xl font-bold text-customPurple-900 mb-2">Intelligence Briefing</h3>
                     <div class="text-customPurple-900/80">${marked.parse(summary || '')}</div>
                 </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="dashboard-card">
-                        <h3 class="font-bold text-gray-900 mb-3">Top Spending Agencies</h3>
-                        ${renderRankedList(top_spending_agencies)}
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="dashboard-card">
+                            <h3 class="font-bold text-gray-900 mb-3">Top Systems Integrators (SIs)</h3>
+                            ${renderRankedList(top_s_is)}
+                        </div>
+                        <div class="dashboard-card">
+                            <h3 class="font-bold text-gray-900 mb-3">Top Software & Cloud Providers</h3>
+                            ${renderRankedList(top_software_and_cloud)}
+                        </div>
                     </div>
-                    <div class="dashboard-card">
-                        <h3 class="font-bold text-gray-900 mb-3">Top Prime Contractors</h3>
-                        ${renderRankedList(top_prime_contractors)}
+                    <div class="lg:col-span-1 space-y-6">
+                        <div class="dashboard-card">
+                            <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
+                            <ul class="space-y-2 text-sm">${(company_capabilities || []).map(c => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
+                            <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${n}</li>`).join('')}</ul>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                     <div class="dashboard-card">
-                        <h3 class="font-bold text-gray-900 mb-3">Key Contract Vehicles</h3>
-                        <ul class="space-y-2 text-sm">${(key_contract_vehicles || []).map(c => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
-                    </div>
-                    <div class="dashboard-card">
-                        <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
-                        <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${n}</li>`).join('')}</ul>
-                    </div>
-                </div>
-
-                <div class="dashboard-card">
+                 <div class="dashboard-card">
                     <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
                     <ul class="space-y-2 text-sm">${(prospect_recommendations || []).map(r => `<li class="flex gap-3"><span class="text-customPurple-500 font-bold text-lg flex-shrink-0 -mt-1">→</span><span>${r}</span></li>`).join('')}</ul>
                 </div>
-
-                <div class="dashboard-card">
-                    <h3 class="font-bold text-gray-900 mb-2">Key Market Insight</h3>
-                    <p class="text-gray-700">${market_insights || 'N/A'}</p>
+                 <div class="dashboard-card">
+                     <h3 class="font-bold text-gray-900 mb-2">Key Market Insight</h3>
+                     <p class="text-gray-700">${market_insights || 'N/A'}</p>
                 </div>
             </div>`;
         } else {
-            // This is the original, unchanged logic for deal, meeting, or interview responses
+            // Deal, meeting, or interview response with fallbacks for each field
             const { 
                 quick_take = "Here are tactical steps to move your federal sales situation forward.",
                 key_moves = [],
@@ -691,21 +687,19 @@ async function displayAdvice(data) {
                 email_template = '',
                 next_steps = ''
             } = data;
-
+            // Ensure key_moves has valid structure
             const safeKeyMoves = Array.isArray(key_moves) && key_moves.length > 0 ? 
                 key_moves : [
                     { action: "Clarify the true decision criteria", why: "Federal decisions rarely match the stated requirements" },
                     { action: "Map the full stakeholder landscape", why: "Identify all influencers, not just the formal decision makers" },
                     { action: "Document your federal past performance", why: "Proof of government success is your strongest selling point" }
                 ];
-
             html = `
             <div class="fade-in space-y-6">
                 <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6 flow-root">
                     <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
                     <div class="text-customPurple-900/80 space-y-2">${marked.parse(quick_take || '')}</div>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="dashboard-card">
                         <h3 class="font-bold text-gray-900 mb-4">Your Next 3 Moves</h3>
@@ -721,7 +715,6 @@ async function displayAdvice(data) {
                         }
                     </div>
                 </div>
-
                 ${(talking_points && talking_points.length > 0) || email_template ? `
                 <div class="dashboard-card">
                     <h3 class="font-bold text-gray-900 mb-4">Communications</h3>
@@ -734,37 +727,32 @@ async function displayAdvice(data) {
                 ${next_steps ? `<div class="bg-customPurple-200/60 p-4 rounded-lg text-sm text-customPurple-900"><b class="font-semibold">Remember:</b> ${next_steps}</div>` : ''}
             </div>`;
         }
-
         // Add action buttons
         html += `
             <div class="mt-8 flex flex-col sm:flex-row gap-3">
                 <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">Copy to Clipboard</button>
                 <button onclick="startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">Ask Another Question</button>
             </div>`;
-
         elements.resultsContainer.innerHTML = html;
         elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-        // Add seller type badge after DOM update
+        // Add seller type badge after DOM update (new code)
         if (sellerType && !(situation.toLowerCase().includes('leadership principle') || 
                     situation.toLowerCase().includes('leadership principles') || 
                     (situation.toLowerCase().includes('aws') && situation.toLowerCase().includes('lp')))) {
-            setTimeout(() => {
-                try {
-                    const sellerTypeBadge = document.createElement('div');
-                    sellerTypeBadge.className = 'text-xs font-medium text-gray-500 mb-2';
-                    sellerTypeBadge.textContent = `Advice tailored for ${sellerType.replace(/_/g, ' ')} context`;
-                    
-                    const firstResultElement = elements.resultsContainer.querySelector('.fade-in');
-                    if (firstResultElement && firstResultElement.firstChild) {
-                        firstResultElement.insertBefore(sellerTypeBadge, firstResultElement.firstChild.nextSibling);
-                    }
-                } catch (badgeError) {
-                    console.log('Non-critical error adding context badge:', badgeError);
-                }
-            }, 100);
+    setTimeout(() => {
+        try {
+            const sellerTypeBadge = document.createElement('div');
+            sellerTypeBadge.className = 'text-xs font-medium text-gray-500 mb-2';
+            sellerTypeBadge.textContent = `Advice tailored for ${sellerType.replace(/_/g, ' ')} context`;
+            const firstResultElement = elements.resultsContainer.querySelector('.fade-in');
+            if (firstResultElement && firstResultElement.firstChild) {
+                firstResultElement.insertBefore(sellerTypeBadge, firstResultElement.firstChild.nextSibling);
+            }
+        } catch (badgeError) {
+            console.log('Non-critical error adding context badge:', badgeError);
         }
-
+    }, 100);
+}
         // Try to render mermaid chart if present
         if (response_type !== 'prospect' && data.mermaid_chart) {
             try {
