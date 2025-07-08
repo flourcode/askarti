@@ -744,78 +744,78 @@ async function displayAdvice(data) {
         let html = '';
 
         if (response_type === 'prospect') {
-            // Prospect response layout with two columns
-            const { 
-                summary = '',
-                top_s_is = [],
-                top_software_and_cloud = [],
-                company_capabilities = [],
-                naics_codes = [],
-                prospect_recommendations = [],
-                market_insights = ''
-            } = data;
-            
-            // Check if we have the necessary data
-            if (!summary || !top_s_is.length || !top_software_and_cloud.length) {
-                throw new Error('Incomplete data received. Please try again.');
-            }
-            
-            const renderRankedList = (items) => {
-                if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No specific information available.</p>';
-                return `<ul class="space-y-1">${items.map((item, index) => `
-                    <li class="flex items-center gap-3 py-2 border-t border-gray-100 first:border-t-0 first:pt-0">
-                        <span class="text-xs font-bold text-customPurple-700 bg-customPurple-100 w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">${index + 1}</span>
-                        <span class="flex-1 font-medium text-gray-800">${item.company || 'Unknown'}</span>
-                        <span class="text-sm font-semibold text-gray-600">${item.value || 'N/A'}</span>
-                    </li>
-                `).join('')}</ul>`;
-            };
-            
-            html = `
-            <div class="fade-in space-y-6">
-                <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6">
-                    <h3 class="text-xl font-bold text-customPurple-900 mb-2">Intelligence Briefing</h3>
-                    <div class="text-customPurple-900/80">${marked.parse(summary || '')}</div>
-                </div>
+    // Prospect response layout with your specified structure
+    const { 
+        summary = '',
+        top_s_is = [],
+        top_software_and_cloud = [],
+        company_capabilities = [],
+        naics_codes = [],
+        prospect_recommendations = [],
+        market_insights = ''
+    } = data;
+    
+    // Check if we have the necessary data
+    if (!summary || !top_s_is.length || !top_software_and_cloud.length) {
+        throw new Error('Incomplete data received. Please try again.');
+    }
+    
+    const renderRankedList = (items) => {
+        if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No specific information available.</p>';
+        return `<ul class="space-y-1">${items.map((item, index) => `
+            <li class="flex items-center gap-3 py-2 border-t border-gray-100 first:border-t-0 first:pt-0">
+                <span class="text-xs font-bold text-customPurple-700 bg-customPurple-100 w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">${index + 1}</span>
+                <span class="flex-1 font-medium text-gray-800">${item.company || 'Unknown'}</span>
+                <span class="text-sm font-semibold text-gray-600">${item.value || 'N/A'}</span>
+            </li>
+        `).join('')}</ul>`;
+    };
+    
+    // Combine Intelligence Briefing and Market Insights
+    const combinedInsights = `${summary}${summary && market_insights ? ' ' : ''}${market_insights}`;
+    
+    html = `
+    <div class="fade-in space-y-6">
+        <!-- Key Market Insights (full width) -->
+        <div class="dashboard-card bg-gradient-to-r from-customPurple-100 to-customPurple-200">
+            <h3 class="text-xl font-bold text-customPurple-900 mb-2">Key Market Insights</h3>
+            <div class="text-customPurple-900/90">${marked.parse(combinedInsights || 'No market insights available.')}</div>
+        </div>
 
-                <!-- Two columns grid layout for both top and bottom sections -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Top Contractors -->
-                    <div class="dashboard-card">
-                        <h3 class="font-bold text-gray-900 mb-3">Top Contractors</h3>
-                        ${renderRankedList(top_s_is)}
-                    </div>
-                    
-                    <!-- Potential Software Plays -->
-                    <div class="dashboard-card">
-                        <h3 class="font-bold text-gray-900 mb-3">Potential Software Plays</h3>
-                        ${renderRankedList(top_software_and_cloud)}
-                    </div>
-                    
-                    <!-- Mission Needs -->
-                    <div class="dashboard-card">
-                        <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
-                        <ul class="space-y-2 text-sm">${(company_capabilities || []).map(c => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
-                    </div>
-                    
-                    <!-- Relevant NAICS Codes -->
-                    <div class="dashboard-card">
-                        <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
-                        <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${n}</li>`).join('')}</ul>
-                    </div>
-                </div>
+        <!-- Top Contractors (full width) -->
+        <div class="dashboard-card">
+            <h3 class="font-bold text-gray-900 mb-3">Top Contractors</h3>
+            ${renderRankedList(top_s_is)}
+        </div>
+        
+        <!-- Mission Needs (1/2) and Relevant NAICS (1/2) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Mission Needs -->
+            <div class="dashboard-card">
+                <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
+                <ul class="space-y-2 text-sm">${(company_capabilities || []).map(c => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
+            </div>
+            
+            <!-- Relevant NAICS Codes -->
+            <div class="dashboard-card">
+                <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
+                <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${n}</li>`).join('')}</ul>
+            </div>
+        </div>
 
-                <!-- Full width cards for recommendations and insights -->
-                <div class="dashboard-card">
-                    <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
-                    <ul class="space-y-2 text-sm">${(prospect_recommendations || []).map(r => `<li class="flex gap-3"><span class="text-customPurple-500 font-bold text-lg flex-shrink-0 -mt-1">→</span><span>${r}</span></li>`).join('')}</ul>
-                </div>
-                <div class="dashboard-card">
-                    <h3 class="font-bold text-gray-900 mb-2">Key Market Insight</h3>
-                    <p class="text-gray-700">${market_insights || 'No market insights available.'}</p>
-                </div>
-            </div>`;
-        } else {
+        <!-- Potential Software Plays (full width) -->
+        <div class="dashboard-card">
+            <h3 class="font-bold text-gray-900 mb-3">Potential Software Plays</h3>
+            ${renderRankedList(top_software_and_cloud)}
+        </div>
+
+        <!-- Strategic Recommendations (full width) -->
+        <div class="dashboard-card">
+            <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
+            <ul class="space-y-2 text-sm">${(prospect_recommendations || []).map(r => `<li class="flex gap-3"><span class="text-customPurple-500 font-bold text-lg flex-shrink-0 -mt-1">→</span><span>${r}</span></li>`).join('')}</ul>
+        </div>
+    </div>`;
+} else {
             // Deal, meeting, or interview response with error handling for missing fields
             const { 
                 quick_take = '',
