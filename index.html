@@ -178,7 +178,7 @@
         placeholder="Champion ghosted me after seeing pricing. $2M deal at DHS. Q4 commit."
         maxlength="500"></textarea>
     <div class="text-xs text-gray-500 mt-1 flex justify-between items-center">
-        <span class="hint-text">More details yield better results. Don't like an answer? Just press "Ask Arti" again.</span>
+        <span class="hint-text">The more details you give Arti, like agency, $ amount, or who's involved, the better the advice. Don't like an answer? Just press Ask Arti again like a Vegas slot machine.</span>
         <span id="char-count" class="opacity-0 transition-opacity duration-200">0/500</span>
     </div>
 </div>
@@ -348,7 +348,6 @@
     lastCallTime: 0,  // Add this line
     mermaidInitialized: false
 };
-
     // Initialize Mermaid with safe default config and comprehensive error handling
     function initializeMermaid() {
         try {
@@ -380,15 +379,12 @@
             return false;
         }
     }
-
     // Initialize Mermaid on page load
     initializeMermaid();
-
     // Enhanced function to render mermaid with better error handling and retries
     async function renderMermaidChart(retryCount = 0) {
         const MAX_RETRIES = 3;
         const RETRY_DELAY = 300; // ms
-        
         if (retryCount > MAX_RETRIES) {
             console.error("Max retries exceeded for Mermaid rendering");
             const diagramElement = document.getElementById('mermaid-diagram');
@@ -397,7 +393,6 @@
             }
             return false;
         }
-        
         try {
             // Check if the element exists
             const diagramElement = document.getElementById('mermaid-diagram');
@@ -407,20 +402,16 @@
                 setTimeout(() => renderMermaidChart(retryCount + 1), RETRY_DELAY);
                 return false;
             }
-            
             // Get the chart definition and sanitize it
             let definition = diagramElement.textContent || '';
-            
             // Basic validation of the Mermaid syntax
             if (!definition || !definition.trim() || !definition.includes('graph')) {
                 console.error("Invalid or empty Mermaid definition");
                 diagramElement.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Invalid game plan structure</div>';
                 return false;
             }
-            
             // Ensure no leading/trailing spaces that might cause parsing issues
             definition = definition.trim();
-            
             // Advanced syntax error catching - look for common issues
             const commonErrors = [
                 { pattern: /-->-->/g, fix: '-->' },
@@ -429,28 +420,22 @@
                 { pattern: /\s{2,}/g, fix: ' ' },
                 { pattern: /\n\n+/g, fix: '\n' }
             ];
-            
             commonErrors.forEach(({pattern, fix}) => {
                 definition = definition.replace(pattern, fix);
             });
-            
             // Try rendering with a timeout to avoid freezing the UI
             console.log(`Attempting to render Mermaid chart (attempt ${retryCount + 1})`);
-            
             // Set diagram content to the sanitized version
             diagramElement.textContent = definition;
-            
             // Reinitialize Mermaid if needed (helps with repeated renders)
             if (retryCount > 0 || !state.mermaidInitialized) {
                 initializeMermaid();
             }
-            
             // Attempt to run with promise timeout
             const renderPromise = new Promise((resolve, reject) => {
                 try {
                     // Clear any previous mermaid renders in this element
                     diagramElement.removeAttribute('data-processed');
-                    
                     // Small delay before rendering to ensure DOM is ready
                     setTimeout(async () => {
                         try {
@@ -464,19 +449,16 @@
                     reject(e);
                 }
             });
-            
             // Add timeout to the render promise
             const timeoutPromise = new Promise((_, reject) => {
                 setTimeout(() => reject(new Error("Mermaid render timeout")), 3000);
             });
-            
             // Race the render against the timeout
             await Promise.race([renderPromise, timeoutPromise]);
             console.log("Mermaid chart rendered successfully");
             return true;
         } catch (e) {
             console.error("Mermaid rendering error:", e);
-            
             if (retryCount < MAX_RETRIES) {
                 console.log(`Retrying Mermaid render, attempt ${retryCount + 1}`);
                 // Wait and retry
@@ -491,7 +473,6 @@
             }
         }
     }
-
     // Input validation and character count
     function setupInputValidation() {
 elements.situationInput.addEventListener('input', function() {
@@ -719,12 +700,10 @@ async function getAdvice() {
         const data = await makeRequest(situationText);
         // Hide loading message
         elements.loadingMessageContainer.classList.add('hidden');
-        
         // Check if we got an error response
         if (data.error) {
             throw new Error(data.message || 'Technical difficulties. Please try again.');
         }
-        
         // Display results
         displayAdvice(data);
     } catch (error) {
@@ -735,87 +714,77 @@ async function getAdvice() {
         setLoading(false);
     }
 }
-
 async function displayAdvice(data) {
     try {
         const { response_type } = data;
         // Extract seller_type early (new code)
         const sellerType = data.seller_type || '';
         let html = '';
-
         if (response_type === 'prospect') {
-    // Prospect response layout with your specified structure
-    const { 
-        summary = '',
-        top_s_is = [],
-        top_software_and_cloud = [],
-        company_capabilities = [],
-        naics_codes = [],
-        prospect_recommendations = [],
-        market_insights = ''
-    } = data;
-    
-    // Check if we have the necessary data
-    if (!summary || !top_s_is.length || !top_software_and_cloud.length) {
-        throw new Error('Incomplete data received. Please try again.');
-    }
-    
-    const renderRankedList = (items) => {
-        if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No specific information available.</p>';
-        return `<ul class="space-y-1">${items.map((item, index) => `
-            <li class="flex items-center gap-3 py-2 border-t border-gray-100 first:border-t-0 first:pt-0">
-                <span class="text-xs font-bold text-customPurple-700 bg-customPurple-100 w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">${index + 1}</span>
-                <span class="flex-1 font-medium text-gray-800">${item.company || 'Unknown'}</span>
-                <span class="text-sm font-semibold text-gray-600">${item.value || 'N/A'}</span>
-            </li>
-        `).join('')}</ul>`;
-    };
-    
-    // Combine Intelligence Briefing and Market Insights
-    const combinedInsights = `${summary}${summary && market_insights ? ' ' : ''}${market_insights}`;
-    
-    html = `
-    <div class="fade-in space-y-6">
-        <!-- Key Market Insights (full width) -->
-        <div class="dashboard-card bg-gradient-to-r from-customPurple-100 to-customPurple-200">
-            <h3 class="text-xl font-bold text-customPurple-900 mb-2">Key Market Insights</h3>
-            <div class="text-customPurple-900/90">${marked.parse(combinedInsights || 'No market insights available.')}</div>
-        </div>
-
-        <!-- Top Contractors (full width) -->
-        <div class="dashboard-card">
-            <h3 class="font-bold text-gray-900 mb-3">Top Contractors</h3>
-            ${renderRankedList(top_s_is)}
-        </div>
-        
-        <!-- Mission Needs (1/2) and Relevant NAICS (1/2) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Mission Needs -->
-            <div class="dashboard-card">
-                <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
-                <ul class="space-y-2 text-sm">${(company_capabilities || []).map(c => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
-            </div>
-            
-            <!-- Relevant NAICS Codes -->
-            <div class="dashboard-card">
-                <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
-                <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${n}</li>`).join('')}</ul>
-            </div>
-        </div>
-
-        <!-- Potential Software Plays (full width) -->
-        <div class="dashboard-card">
-            <h3 class="font-bold text-gray-900 mb-3">Potential Software Plays</h3>
-            ${renderRankedList(top_software_and_cloud)}
-        </div>
-
-        <!-- Strategic Recommendations (full width) -->
-        <div class="dashboard-card">
-            <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
-            <ul class="space-y-2 text-sm">${(prospect_recommendations || []).map(r => `<li class="flex gap-3"><span class="text-customPurple-500 font-bold text-lg flex-shrink-0 -mt-1">→</span><span>${r}</span></li>`).join('')}</ul>
-        </div>
-    </div>`;
-} else {
+            // Prospect response layout with two columns
+            const { 
+                summary = '',
+                top_s_is = [],
+                top_software_and_cloud = [],
+                company_capabilities = [],
+                naics_codes = [],
+                prospect_recommendations = [],
+                market_insights = ''
+            } = data;
+            // Check if we have the necessary data
+            if (!summary || !top_s_is.length || !top_software_and_cloud.length) {
+                throw new Error('Incomplete data received. Please try again.');
+            }
+            const renderRankedList = (items) => {
+                if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No specific information available.</p>';
+                return `<ul class="space-y-1">${items.map((item, index) => `
+                    <li class="flex items-center gap-3 py-2 border-t border-gray-100 first:border-t-0 first:pt-0">
+                        <span class="text-xs font-bold text-customPurple-700 bg-customPurple-100 w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">${index + 1}</span>
+                        <span class="flex-1 font-medium text-gray-800">${item.company || 'Unknown'}</span>
+                        <span class="text-sm font-semibold text-gray-600">${item.value || 'N/A'}</span>
+                    </li>
+                `).join('')}</ul>`;
+            };
+            html = `
+            <div class="fade-in space-y-6">
+                <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6">
+                    <h3 class="text-xl font-bold text-customPurple-900 mb-2">Intelligence Briefing</h3>
+                    <div class="text-customPurple-900/80">${marked.parse(summary || '')}</div>
+                </div>
+                <!-- Two columns grid layout for both top and bottom sections -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Top Contractors -->
+                    <div class="dashboard-card">
+                        <h3 class="font-bold text-gray-900 mb-3">Top Contractors</h3>
+                        ${renderRankedList(top_s_is)}
+                    </div>
+                    <!-- Potential Software Plays -->
+                    <div class="dashboard-card">
+                        <h3 class="font-bold text-gray-900 mb-3">Potential Software Plays</h3>
+                        ${renderRankedList(top_software_and_cloud)}
+                    </div>
+                    <!-- Mission Needs -->
+                    <div class="dashboard-card">
+                        <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
+                        <ul class="space-y-2 text-sm">${(company_capabilities || []).map(c => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
+                    </div>
+                    <!-- Relevant NAICS Codes -->
+                    <div class="dashboard-card">
+                        <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
+                        <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2"><svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>${n}</li>`).join('')}</ul>
+                    </div>
+                </div>
+                <!-- Full width cards for recommendations and insights -->
+                <div class="dashboard-card">
+                    <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
+                    <ul class="space-y-2 text-sm">${(prospect_recommendations || []).map(r => `<li class="flex gap-3"><span class="text-customPurple-500 font-bold text-lg flex-shrink-0 -mt-1">→</span><span>${r}</span></li>`).join('')}</ul>
+                </div>
+                <div class="dashboard-card">
+                    <h3 class="font-bold text-gray-900 mb-2">Key Market Insight</h3>
+                    <p class="text-gray-700">${market_insights || 'No market insights available.'}</p>
+                </div>
+            </div>`;
+        } else {
             // Deal, meeting, or interview response with error handling for missing fields
             const { 
                 quick_take = '',
@@ -825,12 +794,10 @@ async function displayAdvice(data) {
                 email_template = '',
                 next_steps = ''
             } = data;
-            
             // Check if we have the necessary data
             if (!quick_take || !key_moves.length) {
                 throw new Error('Incomplete data received. Please try again.');
             }
-            
             html = `
             <div class="fade-in space-y-6">
                 <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6 flow-root">
@@ -864,17 +831,14 @@ async function displayAdvice(data) {
                ${next_steps ? `<div class="bg-customPurple-200/60 p-4 rounded-lg text-sm text-customPurple-900"><b class="font-semibold">Remember:</b> ${next_steps}</div>` : ''}
            </div>`;
        }
-       
        // Add action buttons
        html += `
            <div class="mt-8 flex flex-col sm:flex-row gap-3">
                <button onclick="copyAll()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">Copy to Clipboard</button>
                <button onclick="startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">Ask Another Question</button>
            </div>`;
-       
        elements.resultsContainer.innerHTML = html;
        elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-       
        // Add seller type badge after DOM update (new code)
        if (sellerType && !(situationText.toLowerCase().includes('leadership principle') || 
                    situationText.toLowerCase().includes('leadership principles') || 
@@ -893,7 +857,6 @@ async function displayAdvice(data) {
                }
            }, 100);
        }
-       
        // Try to render mermaid chart if present
        if (response_type !== 'prospect' && data.mermaid_chart) {
            try {
