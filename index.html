@@ -748,32 +748,76 @@ class AskArti {
    }
 
    async renderMermaidChart() {
-       try {
-           // Give DOM time to settle
-           await new Promise(resolve => setTimeout(resolve, 100));
-           
-           const element = document.getElementById('mermaid-diagram');
-           if (!element) return;
-           
-           // Run mermaid
-           await mermaid.run();
-           
-           // Fade in the chart
-           element.style.opacity = '1';
-           element.style.transition = 'opacity 0.3s ease-in';
-           
-           // Hide loader
-           const loader = element.parentElement.querySelector('.mermaid-loading');
-           if (loader) loader.style.display = 'none';
-           
-       } catch (error) {
-           console.error('Mermaid rendering error:', error);
-           const container = document.querySelector('.mermaid-container');
-           if (container) {
-               container.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Game plan visualization error</div>';
-           }
-       }
-   }
+    try {
+        // Give DOM time to settle
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        const element = document.getElementById('mermaid-diagram');
+        if (!element) return;
+        
+        // Sanitize the mermaid chart content
+        let chartContent = element.textContent;
+        
+        // Fix common Mermaid syntax issues
+        chartContent = this.sanitizeMermaidChart(chartContent);
+        
+        // Update the element with sanitized content
+        element.textContent = chartContent;
+        
+        // Run mermaid
+        await mermaid.run();
+        
+        // Fade in the chart
+        element.style.opacity = '1';
+        element.style.transition = 'opacity 0.3s ease-in';
+        
+        // Hide loader
+        const loader = element.parentElement.querySelector('.mermaid-loading');
+        if (loader) loader.style.display = 'none';
+        
+    } catch (error) {
+        console.error('Mermaid rendering error:', error);
+        const container = document.querySelector('.mermaid-container');
+        if (container) {
+            container.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Game plan visualization unavailable</div>';
+        }
+    }
+}
+
+sanitizeMermaidChart(chart) {
+    // Replace problematic characters in node labels
+    return chart.replace(/\[([^\]]+)\]/g, (match, label) => {
+        // Escape special characters that break Mermaid parsing
+        const sanitized = label
+            .replace(/\(/g, '❨')  // Replace ( with unicode alternative
+            .replace(/\)/g, '❩')  // Replace ) with unicode alternative
+            .replace(/&/g, 'and') // Replace & with 'and'
+            .replace(/'/g, ''')   // Replace ' with smart quote
+            .replace(/"/g, '"')   // Replace " with smart quote
+            .replace(/</g, '‹')   // Replace < with unicode alternative
+            .replace(/>/g, '›')   // Replace > with unicode alternative
+            .replace(/\|/g, '┃')  // Replace | with unicode alternative
+            .replace(/\{/g, '❴')  // Replace { with unicode alternative
+            .replace(/\}/g, '❵')  // Replace } with unicode alternative
+            .replace(/\[/g, '⟦')  // Replace [ with unicode alternative
+            .replace(/\]/g, '⟧')  // Replace ] with unicode alternative
+            .replace(/\#/g, '♯')  // Replace # with unicode alternative
+            .replace(/\$/g, '＄')  // Replace $ with unicode alternative
+            .replace(/\%/g, '％')  // Replace % with unicode alternative
+            .replace(/\^/g, '＾')  // Replace ^ with unicode alternative
+            .replace(/\*/g, '✱')  // Replace * with unicode alternative
+            .replace(/\+/g, '＋')  // Replace + with unicode alternative
+            .replace(/\=/g, '＝')  // Replace = with unicode alternative
+            .replace(/\~/g, '∼')  // Replace ~ with unicode alternative
+            .replace(/\`/g, '｀')  // Replace ` with unicode alternative
+            .replace(/\n/g, ' ')  // Replace newlines with spaces
+            .replace(/\r/g, ' ')  // Replace carriage returns with spaces
+            .replace(/\s+/g, ' ') // Collapse multiple spaces
+            .trim();              // Trim whitespace
+        
+        return `[${sanitized}]`;
+    });
+}
 
    addActionButtons() {
        const buttonsHtml = `
