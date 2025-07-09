@@ -787,22 +787,15 @@ async makeChatRequest(message) {
 addFollowUpSuggestions(suggestions) {
     const suggestionsHtml = `
         <div class="mt-4 px-2">
-            <div class="flex items-center gap-1 mb-2">
-                <svg class="w-3 h-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-                </svg>
-                <span class="text-xs text-gray-500">Quick reply - tap to send:</span>
-            </div>
-            <div class="flex gap-2 flex-wrap">
+            <p class="text-xs text-gray-500 mb-2 text-center">Tell me more or tap what's relevant:</p>
+            <div class="flex gap-2 flex-wrap justify-center">
                 ${suggestions.map(s => `
-                    <button class="group relative px-3 py-1.5 bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300 rounded-full text-sm text-gray-600 hover:text-gray-800 transition-all shadow-sm hover:shadow"
+                    <button class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 rounded-full text-sm text-blue-700 hover:text-blue-800 transition-all"
                             onclick="app.elements.chatInput.value='${s.replace(/'/g, "\\'")}'; app.sendChatMessage();">
-                        <span class="opacity-0 group-hover:opacity-100 absolute -top-1 -right-1 text-[10px] bg-gray-500 text-white px-1 rounded">TAP</span>
                         ${s}
                     </button>
                 `).join('')}
             </div>
-            <p class="text-xs text-gray-400 mt-2 text-center">or type your own question below</p>
         </div>
     `;
     this.elements.chatMessages.insertAdjacentHTML('beforeend', suggestionsHtml);
