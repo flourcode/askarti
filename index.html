@@ -707,8 +707,17 @@ class AskArti {
     }
 
     scrollChatToBottom() {
-        this.elements.chatMessages.scrollTop = this.elements.chatMessages.scrollHeight;
-    }
+    requestAnimationFrame(() => {
+        const container = this.elements.chatMessages;
+        container.scrollTop = container.scrollHeight;
+
+        // Redundant fallback for delayed renders (e.g., images, charts)
+        setTimeout(() => {
+            container.scrollTop = container.scrollHeight;
+        }, 100);
+    });
+}
+
 
     async sendChatMessage() {
         const message = this.elements.chatInput.value.trim();
