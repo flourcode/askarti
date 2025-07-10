@@ -909,22 +909,42 @@ resetSendButton() {
 }
 
     async makeChatRequest(message) {
-        // Format chat history for context
-        const conversationContext = this.state.chatHistory.slice(-6); // Last 3 exchanges
-        
+    // Send the FULL conversation history instead of truncating it
+    // This ensures the AI model has complete context
+    const conversationContext = this.state.chatHistory;
+    
+    // Include a safety mechanism to prevent the context from growing too large
+    // If the context gets too large, we'll keep the first message (for initial context)
+    // and the most recent messages (for recent context)
+    const maxContextSize = 20; // Maximum number of messages to include
+    let contextToSend = conversationContext;
+    
+    if (conversationContext.length > maxContextSize) {
+        // Keep the first message plus the most recent messages
+        contextToSend = [
+            conversationContext[0],
+            ...conversationContext.slice(-maxContextSize + 1)
+        ];
+    }
+    
+    try {
         const response = await fetch(CONFIG.API_ENDPOINT, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 situation: message,
                 mode: 'chat',
-                conversationHistory: conversationContext
+                conversationHistory: contextToSend
             })
         });
 
         if (!response.ok) throw new Error('Request failed');
         return await response.json();
+    } catch (error) {
+        console.error('API request failed:', error);
+        throw error;
     }
+}
 
     addFollowUpSuggestions(suggestions) {
         const suggestionsHtml = `
@@ -942,53 +962,65 @@ resetSendButton() {
     }
 
     async generateAccountPlan() {
-        if (this.state.pendingRequest) return;
+    if (this.state.pendingRequest) return;
+    
+    // Show loading message
+    this.showTemporaryMessage('Creating your account plan...', 'info');
+    this.elements.accountPlanContainer.innerHTML = `
+        <div class="account-plan-card text-center p-6">
+            <div class="loader mx-auto mb-3"></div>
+            <p>Creating your account plan...</p>
+        </div>
+    `;
+    this.elements.accountPlanContainer.classList.remove('hidden');
+    
+    // Smooth scroll to account plan area
+    this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
+    
+    this.state.pendingRequest = true;
+    
+    try {
+        // Use the full conversation history for better context
+        let contextToSend = this.state.chatHistory;
         
-        // Show loading message
-        this.showTemporaryMessage('Creating your account plan...', 'info');
+        // Same safety mechanism as in makeChatRequest
+        const maxContextSize = 20;
+        if (contextToSend.length > maxContextSize) {
+            contextToSend = [
+                contextToSend[0],
+                ...contextToSend.slice(-maxContextSize + 1)
+            ];
+        }
+        
+        const response = await fetch(CONFIG.API_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                situation: "Generate account plan",
+                mode: 'account_plan',
+                conversationHistory: contextToSend
+            })
+        });
+        
+        if (!response.ok) throw new Error('Request failed');
+        
+        const data = await response.json();
+        this.displayModernAccountPlan(data);
+        
+    } catch (error) {
+        console.error('Account plan generation failed:', error);
         this.elements.accountPlanContainer.innerHTML = `
-            <div class="account-plan-card text-center p-6">
-                <div class="loader mx-auto mb-3"></div>
-                <p>Creating your account plan...</p>
+            <div class="account-plan-card text-center">
+                <p class="text-red-600 mb-3">Sorry, I couldn't generate your account plan at this time.</p>
+                <button onclick="app.generateAccountPlan()" class="bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg text-sm">
+                    Try Again
+                </button>
             </div>
         `;
-        this.elements.accountPlanContainer.classList.remove('hidden');
-        
-        // Smooth scroll to account plan area
-        this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
-        
-        this.state.pendingRequest = true;
-        
-        try {
-            const response = await fetch(CONFIG.API_ENDPOINT, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    situation: "Generate account plan",
-                    mode: 'account_plan',
-                    conversationHistory: this.state.chatHistory
-                })
-            });
-            
-            if (!response.ok) throw new Error('Request failed');
-            
-            const data = await response.json();
-            this.displayModernAccountPlan(data);
-            
-        } catch (error) {
-            console.error('Account plan generation failed:', error);
-            this.elements.accountPlanContainer.innerHTML = `
-                <div class="account-plan-card text-center">
-                    <p class="text-red-600 mb-3">Sorry, I couldn't generate your account plan at this time.</p>
-                    <button onclick="app.generateAccountPlan()" class="bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg text-sm">
-                        Try Again
-                    </button>
-                </div>
-            `;
-        } finally {
-            this.state.pendingRequest = false;
-        }
+    } finally {
+        this.state.pendingRequest = false;
     }
+}
 
     displayModernAccountPlan(data) {
         const { 
