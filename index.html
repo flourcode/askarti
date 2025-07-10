@@ -250,6 +250,21 @@
         background-color: rgba(124, 107, 190, 0.1);
         transform: scale(1.02);
     }
+    
+    .account-plan-card {
+        background-color: white;
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e5e7eb;
+        margin-bottom: 1rem;
+        transition: all 0.2s ease;
+    }
+    
+    .account-plan-card:hover {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        transform: translateY(-2px);
+    }
 
     /* Mobile layout improvements */
     @media (max-width: 640px) {
@@ -292,14 +307,25 @@
             -webkit-overflow-scrolling: touch;
         }
     }
-
-    .account-plan-card {
-        background-color: white;
-        border-radius: 0.75rem;
-        border: 1px solid #e5e7eb;
-        padding: 1.5rem;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-        margin-bottom: 1rem;
+    
+    @media print {
+        body {
+            background-color: white;
+        }
+        
+        .account-plan-container {
+            display: block !important;
+        }
+        
+        .account-plan-card {
+            box-shadow: none;
+            border: 1px solid #ccc;
+            break-inside: avoid;
+        }
+        
+        header, footer, .dashboard-card, #chat-interface, button, .no-print {
+            display: none !important;
+        }
     }
 </style>
 
@@ -331,7 +357,6 @@
                 <div class="flex gap-2 sticky bottom-0 bg-white pt-2 z-10">
                     <button 
                         id="clear-chat-btn"
-                        onclick="app.clearChat()"
                         class="p-2.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all"
                         title="Clear chat">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -358,7 +383,6 @@
 
                 <!-- Quick scenarios - always visible -->
                 <div class="mt-4">
-                    <p class="text-xs text-gray-500 text-center mb-2">Quick scenarios - tap for instant game plan:</p>
                     <div class="flex flex-wrap gap-2 justify-center">
                         <button class="quick-scenario px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
                                 onclick="app.quickAnalysis('Buyer at VA ghosted me after I sent pricing. CISO loves our competitor.')">
@@ -380,18 +404,11 @@
                                 onclick="app.quickAnalysis('Partner reps and Account reps fighting over deals, pipeline, and revenue recognition.')">
                             Partner Drama
                         </button>
-                        <button class="quick-scenario px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
-                                onclick="app.quickAnalysis('Prospect for janitorial services at VA.')">
-                            Prospecting
+                        <button class="quick-scenario px-3 py-1.5 bg-green-100 hover:bg-green-200 rounded-full text-sm text-green-700 font-medium transition-all"
+                                onclick="app.autoCreateAccountPlan()">
+                            Create Account Plan
                         </button>
                     </div>
-                </div>
-                
-                <!-- Account Plan Button -->
-                <div class="mt-3 text-center">
-                    <button id="generate-account-plan-btn" class="bg-green-600 hover:bg-green-700 text-white font-medium px-5 sm:px-6 py-2 sm:py-2 rounded-lg transition-all text-sm sm:text-base hidden">
-                        Generate Account Plan
-                    </button>
                 </div>
             </div>
         </main>
@@ -414,7 +431,7 @@
         <div id="results-container"></div>
         
         <!-- Account Plan Results -->
-        <div id="account-plan-container" class="hidden"></div>
+        <div id="account-plan-container" class="hidden mt-6 space-y-4"></div>
 
         <!-- Footer -->
         <footer class="text-center mt-8 sm:mt-12 space-y-3 sm:space-y-4 pb-20">
@@ -529,7 +546,6 @@ class AskArti {
             chatInput: document.getElementById('chat-input'),
             chatSendBtn: document.getElementById('chat-send-btn'),
             clearChatBtn: document.getElementById('clear-chat-btn'),
-            generateAccountPlanBtn: document.getElementById('generate-account-plan-btn'),
             loadingMessageContainer: document.getElementById('loading-message-container'),
             loadingMessage: document.getElementById('loading-message'),
             errorMessage: document.getElementById('error-message'),
@@ -572,11 +588,8 @@ class AskArti {
             }
         });
 
-        // Clear chat
+        // Clear chat - silently clear without confirmation
         this.elements.clearChatBtn.addEventListener('click', () => this.clearChat());
-
-        // Generate account plan
-        this.elements.generateAccountPlanBtn.addEventListener('click', () => this.generateAccountPlan());
 
         // Retry
         this.elements.retryBtn.addEventListener('click', () => {
@@ -585,7 +598,13 @@ class AskArti {
                 this.sendChatMessage();
             }
         });
-
+			
+			// Reset send button when user types something new
+this.elements.chatInput.addEventListener('input', () => {
+    if (this.elements.chatSendBtn.classList.contains('bg-yellow-600')) {
+        this.resetSendButton();
+    }
+});
         // Share
         this.elements.shareBtn.addEventListener('click', () => this.share());
 
@@ -603,12 +622,7 @@ class AskArti {
     }
 
     clearChat() {
-        // Confirm if there's significant history
-        if (this.state.chatHistory.length > 2) {
-            if (!confirm('Clear the conversation and start fresh?')) return;
-        }
-        
-        // Clear chat history
+        // Clear chat history without confirmation
         this.state.chatHistory = [];
         this.state.messageCount = 0;
         
@@ -626,11 +640,23 @@ class AskArti {
         this.elements.chatInput.value = '';
         this.elements.resultsContainer.innerHTML = '';
         this.elements.accountPlanContainer.classList.add('hidden');
-        this.elements.generateAccountPlanBtn.classList.add('hidden');
+        this.elements.accountPlanContainer.innerHTML = '';
         this.elements.chatInput.focus();
         
-        // Visual feedback
-        this.showTemporaryMessage('Fresh start! What can I help with?', 'info');
+        // Small visual feedback
+        this.showTemporaryMessage('Conversation cleared', 'info');
+    }
+    
+    // Auto-create account plan with pre-populated message
+    autoCreateAccountPlan() {
+        // Directly enter the text and submit
+        this.elements.chatInput.value = "Create an account plan for selling to the federal government";
+        this.sendChatMessage();
+        
+        // After a brief delay, generate the account plan
+        setTimeout(() => {
+            this.generateAccountPlan();
+        }, 1500);
     }
 
     async quickAnalysis(scenario) {
@@ -722,48 +748,122 @@ class AskArti {
     }
 
     async sendChatMessage() {
-        const message = this.elements.chatInput.value.trim();
-        if (!message || this.state.pendingRequest) return;
+    const message = this.elements.chatInput.value.trim();
+    
+    // If a connection is pending, don't allow new messages
+    if (this.state.pendingRequest) return;
+    
+    // If input is empty but we have a lastQuery from a failed attempt, retry that
+    if (!message && this.state.lastQuery) {
+        this.retryLastMessage();
+        return;
+    }
+    
+    // Exit if no message and no previous query to retry
+    if (!message) return;
 
-        // Add user message
-        this.addChatMessage(message, true);
-        this.elements.chatInput.value = '';
-        this.state.lastQuery = message;
+    // Add user message to chat
+    this.addChatMessage(message, true);
+    this.elements.chatInput.value = '';
+    this.state.lastQuery = message;
+    
+    // Add to chat history
+    this.state.chatHistory.push({ role: 'user', content: message });
+    this.state.messageCount++;
+
+    // Show typing indicator
+    this.showTypingIndicator();
+    this.state.pendingRequest = true;
+
+    try {
+        const response = await this.makeChatRequest(message);
+        this.hideTypingIndicator();
         
-        // Add to chat history
-        this.state.chatHistory.push({ role: 'user', content: message });
-        this.state.messageCount++;
+        // Add Arti's response
+        this.addChatMessage(response.message || "I'm not sure how to respond to that. Could you rephrase?");
+        this.state.chatHistory.push({ role: 'assistant', content: response.message || "I'm not sure how to respond to that. Could you rephrase?" });
 
-        // Show typing indicator
-        this.showTypingIndicator();
-        this.state.pendingRequest = true;
+        // Clear lastQuery on success since we don't need to retry
+        this.state.lastQuery = '';
 
-        try {
-            const response = await this.makeChatRequest(message);
+        // Add follow-up suggestions if provided
+        if (response.suggestions && response.suggestions.length > 0) {
+            this.addFollowUpSuggestions(response.suggestions);
+        }
+        
+        // Auto-generate account plan if message is asking for one
+        if (message.toLowerCase().includes('account plan')) {
+            setTimeout(() => {
+                this.generateAccountPlan();
+            }, 1000);
+        }
+
+    } catch (error) {
+        console.error('Chat request failed:', error);
+        this.hideTypingIndicator();
+        this.addChatMessage("I'm having trouble connecting right now. Click Send again to retry your message, or try again in a moment.", false);
+        
+        // Change send button to indicate retry functionality
+        this.elements.chatSendBtn.innerHTML = `
+            <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            <span>Retry</span>
+        `;
+        this.elements.chatSendBtn.classList.add('bg-yellow-600', 'hover:bg-yellow-700');
+        this.elements.chatSendBtn.classList.remove('bg-customPurple-500', 'hover:bg-customPurple-700');
+    } finally {
+        this.state.pendingRequest = false;
+    }
+}
+
+// New method for retrying the last message
+retryLastMessage() {
+    if (!this.state.lastQuery || this.state.pendingRequest) return;
+    
+    // Reset send button styling
+    this.resetSendButton();
+    
+    // Re-add the last message to chat with 'Retrying...' appended
+    this.addChatMessage(`${this.state.lastQuery} <em class="text-xs text-gray-200">(Retrying...)</em>`, true);
+    
+    // Show typing indicator
+    this.showTypingIndicator();
+    this.state.pendingRequest = true;
+    
+    // Try the request again
+    this.makeChatRequest(this.state.lastQuery)
+        .then(response => {
             this.hideTypingIndicator();
             
             // Add Arti's response
             this.addChatMessage(response.message || "I'm not sure how to respond to that. Could you rephrase?");
             this.state.chatHistory.push({ role: 'assistant', content: response.message || "I'm not sure how to respond to that. Could you rephrase?" });
-
-            // Show account plan button after sufficient conversation with plan mention
-            if (this.state.messageCount >= 2 && response.message && response.message.includes("Generate")) {
-                this.elements.generateAccountPlanBtn.classList.remove('hidden');
-            }
-
+            
+            // Clear lastQuery on success
+            this.state.lastQuery = '';
+            
             // Add follow-up suggestions if provided
             if (response.suggestions && response.suggestions.length > 0) {
                 this.addFollowUpSuggestions(response.suggestions);
             }
-
-        } catch (error) {
-            console.error('Chat request failed:', error);
+        })
+        .catch(error => {
+            console.error('Retry failed:', error);
             this.hideTypingIndicator();
-            this.addChatMessage("I'm having trouble connecting right now. Please try again in a moment.");
-        } finally {
+            this.addChatMessage("I'm still having trouble connecting. Please try again later.", false);
+        })
+        .finally(() => {
             this.state.pendingRequest = false;
-        }
-    }
+        });
+}
+
+// Method to reset send button to original state
+resetSendButton() {
+    this.elements.chatSendBtn.innerHTML = `<span>Send</span>`;
+    this.elements.chatSendBtn.classList.remove('bg-yellow-600', 'hover:bg-yellow-700');
+    this.elements.chatSendBtn.classList.add('bg-customPurple-500', 'hover:bg-customPurple-700');
+}
 
     async makeChatRequest(message) {
         // Format chat history for context
@@ -799,14 +899,14 @@ class AskArti {
     }
 
     async generateAccountPlan() {
-        if (this.state.pendingRequest || this.state.chatHistory.length < 2) return;
+        if (this.state.pendingRequest) return;
         
         // Show loading message
         this.showTemporaryMessage('Creating your account plan...', 'info');
         this.elements.accountPlanContainer.innerHTML = `
-            <div class="account-plan-card text-center p-8">
-                <div class="loader mx-auto mb-4"></div>
-                <p>Creating your account plan based on our conversation...</p>
+            <div class="account-plan-card text-center p-6">
+                <div class="loader mx-auto mb-3"></div>
+                <p>Creating your account plan...</p>
             </div>
         `;
         this.elements.accountPlanContainer.classList.remove('hidden');
@@ -830,7 +930,7 @@ class AskArti {
             if (!response.ok) throw new Error('Request failed');
             
             const data = await response.json();
-            this.displayAccountPlan(data);
+            this.displayModernAccountPlan(data);
             
         } catch (error) {
             console.error('Account plan generation failed:', error);
@@ -847,7 +947,7 @@ class AskArti {
         }
     }
 
-    displayAccountPlan(data) {
+    displayModernAccountPlan(data) {
         const { 
             account_name,
             objectives,
@@ -861,160 +961,209 @@ class AskArti {
         
         if (!account_name) {
             this.elements.accountPlanContainer.innerHTML = `
-                <div class="account-plan-card text-center">
-                    <p class="text-red-600 mb-3">I couldn't create a complete account plan with the information provided.</p>
-                    <p class="text-gray-600 mb-3">Try sharing more specific details about your account and objectives in our chat.</p>
+                <div class="account-plan-card text-center p-6">
+                    <svg class="w-12 h-12 text-yellow-500 mb-2 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <p class="text-gray-800 font-medium mb-2">Insufficient Information</p>
+                    <p class="text-gray-600 mb-3">I need more details about your account to create a comprehensive plan.</p>
+                    <p class="text-sm text-gray-500">Try telling me more about your target agency, products, and goals in our chat.</p>
                 </div>
             `;
             return;
         }
         
-        const html = `
-            <div class="fade-in">
+        let html = `
+            <div class="mb-2 flex justify-between items-center">
+                <h2 class="text-xl font-bold text-gray-900">${account_name} - Account Plan</h2>
+                <div class="flex gap-2">
+                    <button onclick="app.copyAccountPlan()" class="text-gray-600 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 p-2 rounded-lg" title="Copy to clipboard">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                        </svg>
+                    </button>
+                    <button onclick="window.print()" class="text-gray-600 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 p-2 rounded-lg" title="Print account plan">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <!-- Objectives Card -->
                 <div class="account-plan-card">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">${account_name} - Account Plan</h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-800 mb-3">Key Objectives</h3>
-                            <ul class="space-y-2">
-                                ${objectives?.map(o => `
-                                    <li class="flex items-start gap-2">
-                                        <span class="text-customPurple-500 font-bold mt-1">→</span>
-                                        <span>${o}</span>
-                                    </li>
-                                `).join('') || '<li class="text-gray-500">No objectives defined</li>'}
-                            </ul>
-                        </div>
-                        
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-800 mb-3">Challenges</h3>
-                            <ul class="space-y-2">
-                                ${challenges?.map(c => `
-                                    <li class="flex items-start gap-2">
-                                        <span class="text-red-500 font-bold mt-1">•</span>
-                                        <span>${c}</span>
-                                    </li>
-                                `).join('') || '<li class="text-gray-500">No challenges identified</li>'}
-                            </ul>
-                        </div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                        </svg>
+                        <h3 class="font-semibold text-gray-800">Key Objectives</h3>
                     </div>
-                    
-                    <div class="mb-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Key Stakeholders</h3>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full border border-gray-200 rounded-lg">
-                                <thead>
-                                    <tr class="bg-gray-50">
-                                        <th class="py-2 px-4 text-left text-gray-800 font-medium border-b border-gray-200">Name/Role</th>
-                                        <th class="py-2 px-4 text-left text-gray-800 font-medium border-b border-gray-200">Influence</th>
-                                        <th class="py-2 px-4 text-left text-gray-800 font-medium border-b border-gray-200">Notes</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${stakeholders?.map((s, i) => `
-                                        <tr class="${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}">
-                                            <td class="py-2 px-4 border-b border-gray-200">${s.name || 'Unknown'}</td>
-                                            <td class="py-2 px-4 border-b border-gray-200">
-                                                <span class="px-2 py-1 rounded-full text-xs font-medium ${
-                                                    s.influence?.toLowerCase() === 'high' ? 'bg-green-100 text-green-800' :
-                                                    s.influence?.toLowerCase() === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                                                    'bg-gray-100 text-gray-800'
-                                                }">${s.influence || 'Unknown'}</span>
-                                            </td>
-                                            <td class="py-2 px-4 border-b border-gray-200">${s.notes || '-'}</td>
-                                        </tr>
-                                    `).join('') || `
-                                        <tr>
-                                            <td colspan="3" class="py-3 px-4 text-center text-gray-500">No stakeholders identified</td>
-                                        </tr>
-                                    `}
-                                </tbody>
-                            </table>
-                        </div>
+                    <ul class="space-y-2 pl-2">
+                        ${objectives?.map(o => `
+                            <li class="flex items-start gap-2">
+                                <span class="text-blue-500 font-bold mt-1">→</span>
+                                <span class="text-gray-700">${o}</span>
+                            </li>
+                        `).join('') || '<li class="text-gray-500">No objectives defined</li>'}
+                    </ul>
+                </div>
+                
+                <!-- Challenges Card -->
+                <div class="account-plan-card">
+                    <div class="flex items-center gap-2 mb-3">
+                        <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <h3 class="font-semibold text-gray-800">Challenges</h3>
                     </div>
-                    
-                    <div class="mb-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Opportunities</h3>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full border border-gray-200 rounded-lg">
-                                <thead>
-                                    <tr class="bg-gray-50">
-                                        <th class="py-2 px-4 text-left text-gray-800 font-medium border-b border-gray-200">Opportunity</th>
-                                        <th class="py-2 px-4 text-left text-gray-800 font-medium border-b border-gray-200">Value</th>
-                                        <th class="py-2 px-4 text-left text-gray-800 font-medium border-b border-gray-200">Status</th>
-                                        <th class="py-2 px-4 text-left text-gray-800 font-medium border-b border-gray-200">Next Steps</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${opportunities?.map((o, i) => `
-                                        <tr class="${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}">
-                                            <td class="py-2 px-4 border-b border-gray-200">${o.name || 'Unknown'}</td>
-                                            <td class="py-2 px-4 border-b border-gray-200 font-medium">${o.value || '-'}</td>
-                                            <td class="py-2 px-4 border-b border-gray-200">${o.status || '-'}</td>
-                                            <td class="py-2 px-4 border-b border-gray-200">${o.next_steps || '-'}</td>
-                                        </tr>
-                                    `).join('') || `
-                                        <tr>
-                                            <td colspan="4" class="py-3 px-4 text-center text-gray-500">No opportunities identified</td>
-                                        </tr>
-                                    `}
-                                </tbody>
-                            </table>
-                        </div>
+                    <ul class="space-y-2 pl-2">
+                        ${challenges?.map(c => `
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-500 font-bold mt-1">•</span>
+                                <span class="text-gray-700">${c}</span>
+                            </li>
+                        `).join('') || '<li class="text-gray-500">No challenges identified</li>'}
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Stakeholders Card -->
+            <div class="account-plan-card mb-4">
+                <div class="flex items-center gap-2 mb-3">
+                    <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <h3 class="font-semibold text-gray-800">Key Stakeholders</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="py-2 px-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name/Role</th>
+                                <th class="py-2 px-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Influence</th>
+                                <th class="py-2 px-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            ${stakeholders?.map(s => `
+                                <tr>
+                                    <td class="py-2 px-3 text-sm text-gray-800 font-medium">${s.name || 'Unknown'}</td>
+                                    <td class="py-2 px-3">
+                                        <span class="px-2 py-1 rounded-full text-xs font-medium ${
+                                            s.influence?.toLowerCase() === 'high' ? 'bg-green-100 text-green-800' :
+                                            s.influence?.toLowerCase() === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                                            'bg-gray-100 text-gray-800'
+                                        }">${s.influence || 'Unknown'}</span>
+                                    </td>
+                                    <td class="py-2 px-3 text-sm text-gray-600">${s.notes || '-'}</td>
+                                </tr>
+                            `).join('') || `
+                                <tr>
+                                    <td colspan="3" class="py-3 px-3 text-center text-gray-500 text-sm">No stakeholders identified</td>
+                                </tr>
+                            `}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Opportunities Card -->
+            <div class="account-plan-card mb-4">
+                <div class="flex items-center gap-2 mb-3">
+                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                    <h3 class="font-semibold text-gray-800">Opportunities</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="py-2 px-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Opportunity</th>
+                                <th class="py-2 px-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+                                <th class="py-2 px-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="py-2 px-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Next Steps</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            ${opportunities?.map(o => `
+                                <tr>
+                                    <td class="py-2 px-3 text-sm text-gray-800 font-medium">${o.name || 'Unknown'}</td>
+                                    <td class="py-2 px-3 text-sm font-medium text-gray-900">${o.value || '-'}</td>
+                                    <td class="py-2 px-3 text-sm text-gray-600">${o.status || '-'}</td>
+                                    <td class="py-2 px-3 text-sm text-gray-600">${o.next_steps || '-'}</td>
+                                </tr>
+                            `).join('') || `
+                                <tr>
+                                    <td colspan="4" class="py-3 px-3 text-center text-gray-500 text-sm">No opportunities identified</td>
+                                </tr>
+                            `}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <!-- Success Metrics Card -->
+                <div class="account-plan-card">
+                    <div class="flex items-center gap-2 mb-3">
+                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <h3 class="font-semibold text-gray-800">Success Metrics</h3>
                     </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-800 mb-3">Success Metrics</h3>
-                            <ul class="space-y-2">
-                                ${success_metrics?.map(m => `
-                                    <li class="flex items-start gap-2">
-                                        <span class="text-green-500 font-bold mt-1">✓</span>
-                                        <span>${m}</span>
-                                    </li>
-                                `).join('') || '<li class="text-gray-500">No success metrics defined</li>'}
-                            </ul>
-                        </div>
-                        
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-800 mb-3">Action Items</h3>
-                            <ul class="space-y-2">
-                                ${action_items?.map(a => `
-                                    <li class="flex items-start gap-2">
-                                        <span class="text-customPurple-500 font-bold mt-1">▶</span>
-                                        <span>${a}</span>
-                                    </li>
-                                `).join('') || '<li class="text-gray-500">No action items defined</li>'}
-                            </ul>
-                        </div>
+                    <ul class="space-y-2 pl-2">
+                        ${success_metrics?.map(m => `
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-500 font-bold mt-1">✓</span>
+                                <span class="text-gray-700">${m}</span>
+                            </li>
+                        `).join('') || '<li class="text-gray-500">No success metrics defined</li>'}
+                    </ul>
+                </div>
+                
+                <!-- Action Items Card -->
+                <div class="account-plan-card">
+                    <div class="flex items-center gap-2 mb-3">
+                        <svg class="w-5 h-5 text-customPurple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                        <h3 class="font-semibold text-gray-800">Action Items</h3>
                     </div>
-                    
-                    ${mermaid_chart ? `
-                        <div class="mb-6">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-3">Stakeholder Map</h3>
-                            <div class="mermaid-container">
-                                <div class="mermaid-loading">
-                                    <div class="loader"></div>
-                                </div>
-					<div id="mermaid-diagram" class="mermaid opacity-0">
-                                    ${mermaid_chart}
-                                </div>
-                            </div>
-                        </div>
-                    ` : ''}
-                    
-                    <div class="flex justify-end mt-6">
-                        <button onclick="window.print()" class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium px-4 py-2 rounded-lg text-sm flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2z" />
-                            </svg>
-                            Print Account Plan
-                        </button>
-                    </div>
+                    <ul class="space-y-2 pl-2">
+                        ${action_items?.map(a => `
+                            <li class="flex items-start gap-2">
+                                <span class="text-customPurple-500 font-bold mt-1">▶</span>
+                                <span class="text-gray-700">${a}</span>
+                            </li>
+                        `).join('') || '<li class="text-gray-500">No action items defined</li>'}
+                    </ul>
                 </div>
             </div>
         `;
+        
+        // Add mermaid chart if available
+        if (mermaid_chart) {
+            html += `
+                <div class="account-plan-card">
+                    <div class="flex items-center gap-2 mb-3">
+                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                        </svg>
+                        <h3 class="font-semibold text-gray-800">Stakeholder Map</h3>
+                    </div>
+                    <div class="mermaid-container bg-white rounded-lg p-4">
+                        <div class="flex justify-center items-center absolute inset-0" id="mermaid-loading">
+                            <div class="loader"></div>
+                        </div>
+                        <div id="mermaid-diagram" class="mermaid opacity-0">
+                            ${mermaid_chart}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
         
         this.elements.accountPlanContainer.innerHTML = html;
         
@@ -1022,6 +1171,21 @@ class AskArti {
         if (mermaid_chart) {
             this.renderMermaidChart();
         }
+    }
+    
+    copyAccountPlan() {
+        const content = this.elements.accountPlanContainer.innerText;
+        
+        if (!content || content.trim() === '') {
+            alert('No account plan to copy');
+            return;
+        }
+        
+        navigator.clipboard.writeText(content)
+            .then(() => {
+                this.showTemporaryMessage('Account plan copied to clipboard!', 'info');
+            })
+            .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
     }
 
     renderMermaidChart() {
@@ -1038,7 +1202,7 @@ class AskArti {
                 element.style.transition = 'opacity 0.3s ease-in';
                 
                 // Hide loader
-                const loader = document.querySelector('.mermaid-loading');
+                const loader = document.getElementById('mermaid-loading');
                 if (loader) loader.style.display = 'none';
             }, 300);
         } catch (error) {
@@ -1332,4 +1496,4 @@ class AskArti {
 const app = new AskArti();
 </script>
 </body>
-</html>			
+</html>
