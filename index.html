@@ -637,27 +637,51 @@ this.elements.chatInput.addEventListener('input', () => {
             </div>`;
         
         // Clear input and results
-        this.elements.chatInput.value = '';
-        this.elements.resultsContainer.innerHTML = '';
-        this.elements.accountPlanContainer.classList.add('hidden');
-        this.elements.accountPlanContainer.innerHTML = '';
+       this.elements.chatInput.value = '';
+this.elements.resultsContainer.innerHTML = '';
+this.elements.accountPlanContainer.classList.add('hidden');
+this.elements.accountPlanContainer.innerHTML = '';
+
+// Remove generate plan button if it exists
+const generatePlanContainer = document.getElementById('generate-plan-container');
+if (generatePlanContainer) {
+    generatePlanContainer.remove();
+}
         this.elements.chatInput.focus();
         
         // Small visual feedback
         this.showTemporaryMessage('Conversation cleared', 'info');
     }
     
-    // Auto-create account plan with pre-populated message
-    autoCreateAccountPlan() {
-        // Directly enter the text and submit
-        this.elements.chatInput.value = "Create an account plan for selling to the federal government";
-        this.sendChatMessage();
+    // Update the autoCreateAccountPlan method:
+autoCreateAccountPlan() {
+    // Directly enter the text and submit
+    this.elements.chatInput.value = "Create an account plan for selling to the federal government";
+    this.sendChatMessage();
+    
+    // Add the generate plan button right away
+    setTimeout(() => {
+        if (!document.getElementById('generate-plan-btn')) {
+            const generateBtnHtml = `
+                <div id="generate-plan-container" class="flex justify-center mt-4 mb-2">
+                    <button id="generate-plan-btn" onclick="app.generateAccountPlan()" 
+                        class="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                        </svg>
+                        Generate Account Plan
+                    </button>
+                </div>
+            `;
+            this.elements.chatMessages.insertAdjacentHTML('beforeend', generateBtnHtml);
+        }
         
         // After a brief delay, generate the account plan
         setTimeout(() => {
             this.generateAccountPlan();
-        }, 1500);
-    }
+        }, 1000);
+    }, 1500);
+}
 
     async quickAnalysis(scenario) {
         // Add user message to chat
@@ -780,8 +804,27 @@ this.elements.chatInput.addEventListener('input', () => {
         this.hideTypingIndicator();
         
         // Add Arti's response
-        this.addChatMessage(response.message || "I'm not sure how to respond to that. Could you rephrase?");
-        this.state.chatHistory.push({ role: 'assistant', content: response.message || "I'm not sure how to respond to that. Could you rephrase?" });
+this.addChatMessage(response.message || "I'm not sure how to respond to that. Could you rephrase?");
+this.state.chatHistory.push({ role: 'assistant', content: response.message || "I'm not sure how to respond to that. Could you rephrase?" });
+
+// Show Generate Account Plan button after a few exchanges or if the message mentions account plan
+if ((this.state.messageCount >= 3 || message.toLowerCase().includes('account plan') || 
+    (response.message && response.message.toLowerCase().includes('account plan'))) &&
+    !document.getElementById('generate-plan-btn')) {
+    // Add the generate plan button after the chat messages
+    const generateBtnHtml = `
+        <div id="generate-plan-container" class="flex justify-center mt-4 mb-2">
+            <button id="generate-plan-btn" onclick="app.generateAccountPlan()" 
+                class="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
+                Generate Account Plan
+            </button>
+        </div>
+    `;
+    this.elements.chatMessages.insertAdjacentHTML('beforeend', generateBtnHtml);
+}
 
         // Clear lastQuery on success since we don't need to retry
         this.state.lastQuery = '';
