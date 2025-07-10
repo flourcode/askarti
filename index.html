@@ -108,7 +108,7 @@
         to { opacity: 1; transform: translateY(0); }
     }
 
-    .quick-prompt:hover {
+    .quick-scenario:hover {
         background-color: rgba(124, 107, 190, 0.1);
         transform: scale(1.02);
     }
@@ -178,32 +178,18 @@
         min-width: 0;
     }
 
-    .mode-btn {
-        background-color: #e5e7eb;
-        color: #6b7280;
-    }
-
-    .mode-btn.active {
-        background-color: #7C6BBE;
-        color: white;
-    }
-
-    .mode-content {
-        transition: opacity 0.2s ease-in-out;
-    }
-
     .chat-container {
-    height: 60dvh;
-    max-height: 500px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-}
+        height: 60dvh;
+        max-height: 500px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
 
-@supports not (height: 100dvh) {
-  .chat-container {
-    height: 60vh;
-  }
-}
+    @supports not (height: 100dvh) {
+        .chat-container {
+            height: 60vh;
+        }
+    }
 
     .chat-container::-webkit-scrollbar {
         width: 6px;
@@ -270,24 +256,18 @@
         }
 
         .chat-container {
-            height: 60dvh;
+            height: 50dvh;
         }
 
-        .quick-prompt {
-            font-size: 0.875rem;
-            padding: 0.5rem 1rem;
-        }
-
-        .mode-btn {
-            font-size: 0.875rem;
-            min-height: 44px;
-            flex: 1;
+        .quick-scenario {
+            font-size: 0.8125rem;
+            padding: 0.375rem 0.75rem;
         }
 
         input[type="text"],
         input[type="email"],
         textarea {
-            font-size: 16px !important; /* Prevent zoom on iOS */
+            font-size: 16px !important;
         }
 
         #chat-input {
@@ -298,7 +278,7 @@
     /* iOS Safari viewport fix */
     @supports (-webkit-touch-callout: none) {
         .chat-container {
-            height: 60dvh;
+            height: 50dvh;
         }
 
         html, body {
@@ -322,106 +302,80 @@
         </header>
 
         <main class="dashboard-card mb-3">
-            <!-- Mode Toggle -->
-            <div class="mode-toggle mb-4 flex justify-center gap-2">
-                <button class="mode-btn px-4 py-2 rounded-lg font-medium transition-all active" data-mode="quick">
-                    Quick Advice
-                </button>
-                <button class="mode-btn px-4 py-2 rounded-lg font-medium transition-all" data-mode="chat">
-                    Chat with Arti
-                </button>
-            </div>
-
-            <!-- Quick Mode (current interface) -->
-            <div id="quick-mode" class="mode-content">
-                <div class="mb-4">
-                    <label for="situation-input" class="block text-lg font-semibold text-gray-900 mb-2 text-center">
-                        Hi, I'm Arti, your 24/7 Sales Buddy. What's blocking your deal?
-                    </label>
-                    <textarea 
-                        id="situation-input" 
-                        rows="3" 
-                        class="w-full p-4 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary resize-none placeholder-gray-500"
-                        placeholder="Champion ghosted me after seeing pricing. $2M deal at DHS. Q4 commit."
-                        maxlength="500"></textarea>
-                    <div class="text-xs text-gray-500 mt-1">
-                        <span class="hint-text">Don't like the results? Try "Chat with Arti".</span>
+            <!-- Unified chat interface -->
+            <div id="chat-interface">
+                <div class="chat-container h-[60vh] sm:h-96 max-h-[400px] overflow-y-auto mb-4 bg-gray-50 rounded-lg p-3 sm:p-4">
+                    <div id="chat-messages" class="space-y-3 sm:space-y-4">
+                        <div class="flex justify-start">
+                            <div class="bg-white rounded-lg px-3 py-2 sm:px-4 sm:py-3 max-w-[90%] sm:max-w-[80%] shadow-sm">
+                                <p class="text-gray-800 text-sm sm:text-base">
+                                    Hey! I'm Arti. Tell me what's going on with your deal - or tap a scenario below for a quick game plan.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="flex flex-wrap gap-2 justify-center mb-4">
-                    <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
-                            data-text="Buyer at VA ghosted me after I sent pricing. CISO loves our competitor.">
-                        Buyer Went Dark
+                <!-- Input area with clear button -->
+                <div class="flex gap-2 sticky bottom-0 bg-white pt-2 z-10">
+                    <button 
+                        id="clear-chat-btn"
+                        onclick="app.clearChat()"
+                        class="p-2.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all"
+                        title="Clear chat">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
                     </button>
-                    <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
-                            data-text="Demo crashed at DOJ yesterday. CTO walked out. How to recover?">
-                        Demo Crashed
-                    </button>
-                    <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
-                            data-text="Partner reps and Account reps fighting over deals, pipeline, and revenue recognition.">
-                        Partner Drama
-                    </button>
-                    <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
-                            data-text="Meeting DHS CIO next week and don't have a Champion. How to position our cybersecurity platform?">
-                        Meeting Prep
-                    </button>
-                    <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
-                            data-text="AWS federal sales interview next week. Help me prep.">
-                        Interview Prep
-                    </button>
-                    <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
-                            data-text="Prospect for janitorial services at VA.">
-                        Prospecting
+                    <input 
+                        type="text" 
+                        id="chat-input"
+                        inputmode="text"
+                        autocomplete="off"
+                        autocorrect="on"
+                        autocapitalize="sentences"
+                        spellcheck="true"
+                        class="flex-1 p-2.5 sm:p-3 text-[16px] sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary min-h-[44px]"
+                        placeholder="Type your situation or tap below for quick analysis..."
+                        maxlength="500">
+                    <button 
+                        id="chat-send-btn" 
+                        class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg transition-all text-sm sm:text-base min-h-[44px] whitespace-nowrap">
+                        Send
                     </button>
                 </div>
 
-                <div class="text-center">
-                    <button id="ask-btn" class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-semibold py-3 px-8 rounded-full transition-all inline-flex items-center gap-2 shadow-lg hover:shadow-xl">
-                        <span id="btn-text">Ask Arti</span>
-                        <div id="loader" class="loader hidden"></div>
-                    </button>
+                <!-- Quick scenarios - always visible -->
+                <div class="mt-4">
+                    <p class="text-xs text-gray-500 text-center mb-2">Quick scenarios - tap for instant game plan:</p>
+                    <div class="flex flex-wrap gap-2 justify-center">
+                        <button class="quick-scenario px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
+                                onclick="app.quickAnalysis('Buyer at VA ghosted me after I sent pricing. CISO loves our competitor.')">
+                            <span class="text-lg mr-1">👻</span> Buyer Went Dark
+                        </button>
+                        <button class="quick-scenario px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
+                                onclick="app.quickAnalysis('Demo crashed at DOJ yesterday. CTO walked out. How to recover?')">
+                            <span class="text-lg mr-1">💥</span> Demo Crashed
+                        </button>
+                        <button class="quick-scenario px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
+                                onclick="app.quickAnalysis('Meeting DHS CIO next week. No champion. How to position our cybersecurity platform?')">
+                            <span class="text-lg mr-1">🎯</span> Meeting Prep
+                        </button>
+                        <button class="quick-scenario px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
+                                onclick="app.quickAnalysis('AWS federal sales interview next week. Help me prep.')">
+                            <span class="text-lg mr-1">💼</span> Interview Prep
+                        </button>
+                        <button class="quick-scenario px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
+                                onclick="app.quickAnalysis('Partner reps and Account reps fighting over deals, pipeline, and revenue recognition.')">
+                            <span class="text-lg mr-1">🤝</span> Partner Drama
+                        </button>
+                        <button class="quick-scenario px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
+                                onclick="app.quickAnalysis('Prospect for janitorial services at VA.')">
+                            <span class="text-lg mr-1">🔍</span> Prospecting
+                        </button>
+                    </div>
                 </div>
             </div>
-
-<div id="chat-mode" class="mode-content hidden">
-    <div class="chat-container h-[60vh] sm:h-96 max-h-[400px] overflow-y-auto mb-4 bg-gray-50 rounded-lg p-3 sm:p-4" style="height: 60dvh;">
-        <div id="chat-messages" class="space-y-3 sm:space-y-4">
-            <div class="flex justify-start">
-                <div class="bg-white rounded-lg px-3 py-2 sm:px-4 sm:py-3 max-w-[90%] sm:max-w-[80%] shadow-sm">
-                    <p class="text-gray-800 text-sm sm:text-base">Hey! I'm Arti. Tell me what's going on with your deal and I'll help you work through it. What's the situation?</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="flex gap-2 sticky bottom-0 bg-white pt-2 z-10">
-        <input 
-            type="text" 
-            id="chat-input"
-            inputmode="text"
-            autocomplete="off"
-            autocorrect="on"
-            autocapitalize="sentences"
-            spellcheck="true"
-            class="flex-1 p-2.5 sm:p-3 text-[16px] sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary min-h-[44px]"
-            placeholder="Type your message..."
-            maxlength="500">
-        <button 
-            id="chat-send-btn" 
-            class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg transition-all text-sm sm:text-base min-h-[44px] whitespace-nowrap"
-            style="touch-action: manipulation;">
-            Send
-        </button>
-    </div>
-
-    <div class="mt-3 text-center">
-        <button id="generate-report-btn" class="bg-green-600 hover:bg-green-700 text-white font-medium px-5 sm:px-6 py-2.5 sm:py-2 rounded-lg transition-all text-sm sm:text-base min-h-[44px] hidden">
-            Generate Action Plan
-        </button>
-    </div>
-</div>
-
         </main>
 
         <!-- Loading Message -->
@@ -472,7 +426,6 @@
             <br>
 
             <p class="text-xs text-gray-400">© 2025 AskArti. Made for Sellers by Sellers.</p>
-
         </footer>
     </div>
 
@@ -491,7 +444,7 @@
                 </button>
             </div>
             <div class="space-y-4 text-gray-700">
-                <p>I built AskArti to help salespeople use AI in a practical way to better support federal customers. Arti's not perfect, so use your judgment, but he's available 24/7 when you need to talk through a stuck deal or prep for a tough meeting.</p>
+                <p>I built AskArti to help federal salespeople learn how to use AI in a practical way to better support their customers. Arti's not perfect, so use your judgment, but he's available 24/7 when you need to talk through a stuck deal or prep for a tough meeting.</p>
                 
                 <div class="mt-6 pt-4 border-t border-gray-200">
                     <div class="bg-gray-50 rounded-lg p-4 text-sm">
@@ -533,7 +486,7 @@ const CONFIG = {
     ]
 };
 
-// Application class for better organization
+// Application class
 class AskArti {
     constructor() {
         this.elements = this.getElements();
@@ -543,19 +496,19 @@ class AskArti {
             loadingInterval: null,
             abortController: null,
             lastQuery: '',
-            currentMode: 'quick',
             chatHistory: [],
-            messageCount: 0
+            messageCount: 0,
+            lastFullResponse: null
         };
         this.init();
     }
 
     getElements() {
         return {
-            situationInput: document.getElementById('situation-input'),
-            askBtn: document.getElementById('ask-btn'),
-            btnText: document.getElementById('btn-text'),
-            loader: document.getElementById('loader'),
+            chatMessages: document.getElementById('chat-messages'),
+            chatInput: document.getElementById('chat-input'),
+            chatSendBtn: document.getElementById('chat-send-btn'),
+            clearChatBtn: document.getElementById('clear-chat-btn'),
             loadingMessageContainer: document.getElementById('loading-message-container'),
             loadingMessage: document.getElementById('loading-message'),
             errorMessage: document.getElementById('error-message'),
@@ -565,22 +518,14 @@ class AskArti {
             aboutBtn: document.getElementById('about-btn'),
             aboutModal: document.getElementById('about-modal'),
             closeAbout: document.getElementById('close-about'),
-            shareBtn: document.getElementById('share-btn'),
-            quickPromptBtns: document.querySelectorAll('.quick-prompt'),
-            modeButtons: document.querySelectorAll('.mode-btn'),
-            quickMode: document.getElementById('quick-mode'),
-            chatMode: document.getElementById('chat-mode'),
-            chatMessages: document.getElementById('chat-messages'),
-            chatInput: document.getElementById('chat-input'),
-            chatSendBtn: document.getElementById('chat-send-btn'),
-            generateReportBtn: document.getElementById('generate-report-btn')
+            shareBtn: document.getElementById('share-btn')
         };
     }
 
     init() {
         this.initializeMermaid();
         this.setupEventListeners();
-        this.elements.situationInput.focus();
+        this.elements.chatInput.focus();
     }
 
     initializeMermaid() {
@@ -596,31 +541,23 @@ class AskArti {
     }
 
     setupEventListeners() {
-        // Quick prompts
-        this.elements.quickPromptBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                this.elements.situationInput.value = e.currentTarget.dataset.text;
-                this.getAdvice();
-            });
-        });
-
-        // Main button
-        this.elements.askBtn.addEventListener('click', () => this.getAdvice());
-        
-        // Enter key
-        this.elements.situationInput.addEventListener('keydown', (e) => {
+        // Chat events
+        this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
+        this.elements.chatInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                this.getAdvice();
+                this.sendChatMessage();
             }
         });
+
+        // Clear chat
+        this.elements.clearChatBtn.addEventListener('click', () => this.clearChat());
 
         // Retry
         this.elements.retryBtn.addEventListener('click', () => {
             this.elements.errorMessage.classList.add('hidden');
             if (this.state.lastQuery) {
-                this.elements.situationInput.value = this.state.lastQuery;
-                this.getAdvice();
+                this.sendChatMessage();
             }
         });
 
@@ -638,640 +575,550 @@ class AskArti {
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') this.hideModal();
         });
-
-        // Mode toggle
-        this.elements.modeButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => this.switchMode(e.target.dataset.mode));
-        });
-
-        // Chat events
-        this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
-        this.elements.chatInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                this.sendChatMessage();
-            }
-        });
-
-        // Generate report from chat
-        this.elements.generateReportBtn.addEventListener('click', () => this.generateFullReport());
     }
 
-    switchMode(mode) {
-        this.state.currentMode = mode;
-        
-        // Update button states
-        this.elements.modeButtons.forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.mode === mode);
-        });
-
-        // Show/hide content
-        if (mode === 'quick') {
-            this.elements.quickMode.classList.remove('hidden');
-            this.elements.chatMode.classList.add('hidden');
-            this.elements.situationInput.focus();
-        } else {
-            this.elements.quickMode.classList.add('hidden');
-            this.elements.chatMode.classList.remove('hidden');
-            this.elements.chatInput.focus();
+    clearChat() {
+        // Confirm if there's significant history
+        if (this.state.chatHistory.length > 2) {
+            if (!confirm('Clear the conversation and start fresh?')) return;
         }
-    }
-
-    addChatMessage(content, isUser = false) {
-        const messageHtml = `
-            <div class="flex ${isUser ? 'justify-end' : 'justify-start'}">
-                <div class="${isUser ? 'chat-message-user' : 'chat-message-arti'} 
-                            rounded-lg px-4 py-3 max-w-[80%] shadow-sm">
-                    ${isUser ? content : marked.parse(content)}
-                </div>
-            </div>
-        `;
         
-        this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
-        this.scrollChatToBottom();
-    }
-
-    showTypingIndicator() {
-        const typingHtml = `
-            <div id="typing-indicator" class="flex justify-start">
-                <div class="bg-white rounded-lg shadow-sm typing-indicator">
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
+        // Clear chat history
+        this.state.chatHistory = [];
+        this.state.messageCount = 0;
+        this.state.lastFullResponse = null;
+        
+        // Clear messages but keep welcome
+        this.elements.chatMessages.innerHTML = `
+            <div class="flex justify-start">
+                <div class="bg-white rounded-lg px-3 py-2 sm:px-4 sm:py-3 max-w-[90%] sm:max-w-[80%] shadow-sm">
+                    <p class="text-gray-800 text-sm sm:text-base">
+                        Hey! I'm Arti. Tell me what's going on with your deal - or tap a scenario below for a quick game plan.
+                    </p>
                 </div>
-            </div>
-        `;
-        this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
-        this.scrollChatToBottom();
-    }
-
-    hideTypingIndicator() {
-        const indicator = document.getElementById('typing-indicator');
-        if (indicator) indicator.remove();
-    }
-
-    scrollChatToBottom() {
-    const scrollContainer = document.querySelector('.chat-container');
-    if (!scrollContainer) return;
-
-    requestAnimationFrame(() => {
-        scrollContainer.scrollTop = scrollContainer.scrollHeight;
-        setTimeout(() => {
-            scrollContainer.scrollTop = scrollContainer.scrollHeight;
-        }, 100); // Handles late content rendering like images or Mermaid charts
-    });
-}
-
-
-
-    async sendChatMessage() {
-        const message = this.elements.chatInput.value.trim();
-        if (!message || this.state.pendingRequest) return;
-
-        // Add user message
-        this.addChatMessage(message, true);
+            </div>`;
+        
+        // Clear input and results
         this.elements.chatInput.value = '';
-        
-        // Add to chat history
-this.state.chatHistory.push({ role: 'user', content: message });
-this.state.messageCount++;
-
-// Show typing indicator
-this.showTypingIndicator();
-this.state.pendingRequest = true;
-
-    try {
-        const response = await this.makeChatRequest(message);
-        this.hideTypingIndicator();
-        
-        // Add Arti's response
-        this.addChatMessage(response.message || response.content);
-        this.state.chatHistory.push({ role: 'assistant', content: response.message || response.content });
-
-        // Show generate report button after 2+ exchanges
-        if (this.state.messageCount >= 2) {
-            this.elements.generateReportBtn.classList.remove('hidden');
-        }
-
-        // Add follow-up suggestions if provided
-        if (response.suggestions && response.suggestions.length > 0) {
-            this.addFollowUpSuggestions(response.suggestions);
-        }
-
-    } catch (error) {
-        this.hideTypingIndicator();
-        this.addChatMessage("I'm having trouble connecting right now. Please try again.", false);
-    } finally {
-        this.state.pendingRequest = false;
-    }
-}
-
-async makeChatRequest(message) {
-    // Format chat history for context
-    const conversationContext = this.state.chatHistory.slice(-6); // Last 3 exchanges
-    
-    const response = await fetch(CONFIG.API_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            situation: message,
-            mode: 'chat',
-            conversationHistory: conversationContext
-        })
-    });
-
-    if (!response.ok) throw new Error('Request failed');
-    return await response.json();
-}
-
-addFollowUpSuggestions(suggestions) {
-    const suggestionsHtml = `
-        <div class="mt-4 px-2">
-            <p class="text-xs text-gray-500 mb-2 text-center">Tell me more or tap what's relevant:</p>
-            <div class="flex gap-2 flex-wrap justify-center">
-                ${suggestions.map(s => `
-                    <button class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 rounded-full text-sm text-blue-700 hover:text-blue-800 transition-all"
-                            onclick="app.elements.chatInput.value='${s.replace(/'/g, "\\'")}'; app.sendChatMessage();">
-                        ${s}
-                    </button>
-                `).join('')}
-            </div>
-        </div>
-    `;
-    this.elements.chatMessages.insertAdjacentHTML('beforeend', suggestionsHtml);
-    this.scrollChatToBottom();
-}
-
-async generateFullReport() {
-    // Collect all context from chat
-    const fullContext = this.state.chatHistory.map(h => 
-        `${h.role === 'user' ? 'User' : 'Arti'}: ${h.content}`
-    ).join('\n');
-
-    // Show loading in results area
-    this.elements.resultsContainer.innerHTML = '<div class="text-center py-8"><div class="loader mx-auto"></div><p class="mt-4 text-gray-600">Generating your action plan...</p></div>';
-    
-    // Smooth scroll to results
-    this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-    try {
-        const response = await fetch(CONFIG.API_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                situation: `Based on our chat conversation, please provide a comprehensive action plan. Context: ${fullContext}`,
-                mode: 'report',
-                generateFullReport: true
-            })
-        });
-
-        const data = await response.json();
-        this.displayAdvice(data); // Use your existing display function
-        
-    } catch (error) {
-        this.showError("Failed to generate report. Please try again.");
-    }
-}
-
-setLoading(loading) {
-    this.elements.btnText.style.display = loading ? 'none' : 'inline';
-    this.elements.loader.style.display = loading ? 'block' : 'none';
-    this.elements.askBtn.disabled = loading;
-    this.elements.errorMessage.classList.add('hidden');
-    
-    if (loading) {
-        this.showLoadingMessages();
-    } else {
-        this.hideLoadingMessages();
-    }
-}
-
-showLoadingMessages() {
-    this.elements.loadingMessageContainer.classList.remove('hidden');
-    this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[0];
-    
-    let messageIndex = 0;
-    this.state.loadingInterval = setInterval(() => {
-        messageIndex = (messageIndex + 1) % CONFIG.LOADING_MESSAGES.length;
-        this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[messageIndex];
-    }, 2000);
-}
-
-hideLoadingMessages() {
-    clearInterval(this.state.loadingInterval);
-    this.elements.loadingMessageContainer.classList.add('hidden');
-}
-
-showError(message) {
-    this.hideLoadingMessages();
-    this.elements.errorMessage.classList.remove('hidden');
-    this.elements.errorDetails.textContent = message;
-    this.setLoading(false);
-}
-
-showTemporaryMessage(message, type = 'info') {
-    this.elements.loadingMessageContainer.classList.remove('hidden');
-    this.elements.loadingMessage.textContent = message;
-    
-    const colorClasses = {
-        error: 'text-red-700 font-medium',
-        warning: 'text-orange-700 font-medium',
-        info: 'text-gray-600'
-    };
-    
-    this.elements.loadingMessage.className = colorClasses[type] || colorClasses.info;
-    
-    setTimeout(() => {
-        this.elements.loadingMessageContainer.classList.add('hidden');
-    }, 2000);
-}
-
-async getAdvice() {
-    const situation = this.elements.situationInput.value.trim();
-    
-    // Rate limiting
-    const now = Date.now();
-    if (now - this.state.lastRequestTime < CONFIG.MIN_REQUEST_INTERVAL) {
-        this.showTemporaryMessage("Easy there, killer. Give me a sec to catch my breath.", 'warning');
-        return;
-    }
-    
-    // Validation
-    if (!situation) {
-        this.showTemporaryMessage("Drop your situation in the box above 👆", 'error');
-        return;
-    }
-    
-    // Prevent duplicate requests
-    if (this.state.pendingRequest) return;
-    
-    this.state.lastRequestTime = now;
-    this.state.lastQuery = situation;
-    this.state.pendingRequest = true;
-    
-    // Clear previous results and show loading
-    this.elements.resultsContainer.innerHTML = '';
-    this.setLoading(true);
-    
-    try {
-        const data = await this.makeRequest(situation);
-        this.displayAdvice(data);
-    } catch (error) {
-        console.error('Request failed:', error);
-        this.showError(error.message || "We're having trouble connecting to Arti. Please try again.");
-    } finally {
-        this.state.pendingRequest = false;
-        this.setLoading(false);
-    }
-}
-
-async makeRequest(situation) {
-    this.state.abortController = new AbortController();
-    
-    const timeoutId = setTimeout(() => {
-        this.state.abortController.abort();
-    }, CONFIG.REQUEST_TIMEOUT);
-    
-    try {
-        const response = await fetch(CONFIG.API_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ situation }),
-            signal: this.state.abortController.signal
-        });
-        
-        clearTimeout(timeoutId);
-        
-        if (!response.ok) {
-            throw new Error(`Server error (${response.status})`);
-        }
-        
-        const data = await response.json();
-        
-        if (data.error) {
-            throw new Error(data.message || data.error);
-        }
-        
-        return data;
-    } catch (error) {
-        if (error.name === 'AbortError') {
-            throw new Error('Request timed out. Please try again.');
-        }
-        throw error;
-    }
-}
-
-displayAdvice(data) {
-    const { response_type } = data;
-    
-    try {
-        if (response_type === 'prospect') {
-            this.displayProspectAdvice(data);
-        } else {
-            this.displayGeneralAdvice(data);
-        }
-        
-        // Add action buttons
-        this.addActionButtons();
-        
-        // Smooth scroll to results
-        this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        
-    } catch (error) {
-        console.error('Display error:', error);
-        this.showError("Failed to display results. Please try again.");
-    }
-}
-
-displayProspectAdvice(data) {
-    const { 
-        summary = '',
-        top_s_is = [],
-        top_software_and_cloud = [],
-        company_capabilities = [],
-        naics_codes = [],
-        prospect_recommendations = []
-    } = data;
-    
-    const renderSimpleList = (items) => {
-        if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
-        
-        return `
-        <div class="space-y-2">
-            ${items.map((item, index) => `
-                <div class="border-l-4 border-customPurple-500 pl-3 py-1">
-                    <div class="font-medium text-gray-900">
-                        <span class="text-customPurple-600 font-bold">${index + 1}</span> 
-                        ${item.company || 'Unknown'}
-                    </div>
-                    <div class="text-sm text-gray-600">${item.value || 'N/A'}</div>
-                </div>
-            `).join('')}
-        </div>`;
-    };
-    
-    const html = `
-    <div class="fade-in space-y-6">
-        <div class="dashboard-card bg-gradient-to-r from-customPurple-100 to-customPurple-200">
-            <h3 class="text-xl font-bold text-customPurple-900 mb-2">Key Market Insights</h3>
-            <div class="text-customPurple-900/90">${marked.parse(summary)}</div>
-        </div>
-
-        <div class="dashboard-card">
-            <h3 class="font-bold text-gray-900 mb-4 text-lg">Top Contractors</h3>
-            ${renderSimpleList(top_s_is)}
-        </div>
-        
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="dashboard-card">
-                <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
-                <ul class="space-y-2 text-sm">${company_capabilities.map(c => `
-                    <li class="flex gap-2">
-                        <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                        </svg>
-                        <span>${c}</span>
-                    </li>`).join('')}
-                </ul>
-            </div>
-            
-            <div class="dashboard-card">
-                <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
-                <ul class="space-y-2 text-sm">${naics_codes.map(n => {
-                    const naicsText = typeof n === 'string' ? n : (n.code ? `${n.code} - ${n.description || ''}` : 'Unknown');
-                    return `
-                    <li class="flex gap-2">
-                        <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                        </svg>
-                        <span>${naicsText}</span>
-                    </li>`;
-                }).join('')}
-                </ul>
-            </div>
-        </div>
-
-        <div class="dashboard-card">
-            <h3 class="font-bold text-gray-900 mb-4 text-lg">Potential Software Plays</h3>
-            ${renderSimpleList(top_software_and_cloud)}
-        </div>
-
-        <div class="dashboard-card">
-            <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
-            <ul class="space-y-3 text-sm">${prospect_recommendations.map(r => `
-                <li class="flex gap-3">
-                    <span class="text-customPurple-500 font-bold text-lg flex-shrink-0">→</span>
-                    <span>${r}</span>
-                </li>`).join('')}
-            </ul>
-        </div>
-    </div>`;
-    
-    this.elements.resultsContainer.innerHTML = html;
-}
-
-displayGeneralAdvice(data) {
-    const { 
-        quick_take = '',
-        key_moves = [],
-        mermaid_chart = '',
-        talking_points = [],
-        email_template = '',
-        next_steps = '',
-        response_type = 'deal'
-    } = data;
-    
-    const html = `
-    <div class="fade-in space-y-6">
-        <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6 flow-root">
-            <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
-            <div class="text-customPurple-900/80 space-y-2">${marked.parse(quick_take)}</div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="dashboard-card">
-                <h3 class="font-bold text-gray-900 mb-4">Your Next 3 Moves</h3>
-                <div class="space-y-3">${key_moves.slice(0, 3).map((m, i) => `
-                    <div class="flex gap-3">
-                        <span class="flex-shrink-0 w-7 h-7 bg-customPurple-200 text-customPurple-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span>
-                        <div class="flex-1">
-                            <p class="font-medium text-gray-900">${m.action}</p>
-                            <p class="text-sm text-gray-600 mt-1">${m.why}</p>
-                        </div>
-                    </div>`).join('')}
-                </div>
-            </div>
-            
-            <div class="dashboard-card">
-                <h3 class="font-bold text-gray-900 mb-4">Game Plan</h3>
-                ${mermaid_chart ? `
-                    <div class="mermaid-container">
-                        <div class="mermaid-loading">
-                            <div class="loader"></div>
-                        </div>
-                        <div id="mermaid-diagram" class="mermaid" style="opacity: 0;">${mermaid_chart}</div>
-                    </div>` : 
-                    '<div class="p-4 bg-gray-50 rounded-lg text-center"><p class="text-gray-600">Visual game plan not available</p></div>'
-                }
-            </div>
-        </div>
-
-        ${(talking_points?.length > 0 || email_template) ? `
-        <div class="dashboard-card">
-            <h3 class="font-bold text-gray-900 mb-4">Communications</h3>
-            <div class="grid grid-cols-1 ${email_template && talking_points?.length > 0 ? 'md:grid-cols-2' : ''} gap-6">
-                ${talking_points?.length > 0 ? `
-                    <div>
-                        <h4 class="font-semibold text-gray-800 mb-3">
-                            ${response_type === 'interview' ? 'What They May Ask' : 'What to Ask'}
-                        </h4>
-                        <ul class="space-y-2 text-sm">${talking_points.map(t => `
-                            <li class="flex gap-2">
-                                <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                </svg>${t}
-                            </li>`).join('')}
-                        </ul>
-                    </div>` : ''}
-                
-                ${email_template ? `
-                    <div>
-                        <h4 class="font-semibold text-gray-800 mb-3">Email Template</h4>
-                        <div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap border">${email_template}</div>
-                    </div>` : ''}
-            </div>
-        </div>` : ''}
-        
-        ${next_steps ? `
-            <div class="bg-customPurple-200/60 p-4 rounded-lg text-sm text-customPurple-900">
-                <b class="font-semibold">Remember:</b> ${next_steps}
-            </div>` : ''}
-    </div>`;
-    
-    this.elements.resultsContainer.innerHTML = html;
-    
-    // Render mermaid chart with proper timing
-    if (mermaid_chart) {
-        this.renderMermaidChart();
-    }
-}
-
-async renderMermaidChart() {
-    try {
-        // Give DOM time to settle
-        await new Promise(resolve => setTimeout(resolve, 100));
-        
-        const element = document.getElementById('mermaid-diagram');
-        if (!element) return;
-        
-        // Run mermaid
-        await mermaid.run();
-        
-        // Fade in the chart
-        element.style.opacity = '1';
-        element.style.transition = 'opacity 0.3s ease-in';
-        
-        // Hide loader
-        const loader = element.parentElement.querySelector('.mermaid-loading');
-        if (loader) loader.style.display = 'none';
-        
-    } catch (error) {
-        console.error('Mermaid rendering error:', error);
-        const container = document.querySelector('.mermaid-container');
-        if (container) {
-            container.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Game plan visualization unavailable</div>';
-        }
-    }
-}
-
-addActionButtons() {
-    const buttonsHtml = `
-        <div class="mt-8 flex flex-col sm:flex-row gap-3">
-            <button onclick="app.copyResults()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
-                Copy to Clipboard
-            </button>
-            <button onclick="app.startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">
-                Ask Another Question
-            </button>
-        </div>`;
-    
-    this.elements.resultsContainer.insertAdjacentHTML('beforeend', buttonsHtml);
-}
-
-copyResults() {
-    const content = this.elements.resultsContainer.innerText;
-    
-    if (!content || content.trim() === '') {
-        alert('No content to copy');
-        return;
-    }
-    
-    navigator.clipboard.writeText(content)
-        .then(() => {
-            const btn = this.elements.resultsContainer.querySelector('button');
-            const originalText = btn.textContent;
-            btn.textContent = 'Copied!';
-            setTimeout(() => btn.textContent = originalText, 2000);
-        })
-        .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
-}
-
-startOver() {
-    if (this.state.abortController) {
-        this.state.abortController.abort();
-    }
-    
-    // Clear based on current mode
-    if (this.state.currentMode === 'quick') {
-        this.elements.situationInput.value = '';
-        this.elements.situationInput.focus();
-    } else {
-        // In chat mode, just clear the input
-        this.elements.chatInput.value = '';
+        this.elements.resultsContainer.innerHTML = '';
         this.elements.chatInput.focus();
+        
+        // Visual feedback
+        this.showTemporaryMessage('Fresh start! What can I help with?', 'info');
     }
-    
-    this.elements.resultsContainer.innerHTML = '';
-    this.hideLoadingMessages();
-    this.elements.errorMessage.classList.add('hidden');
-    
-    clearInterval(this.state.loadingInterval);
-    this.state.pendingRequest = false;
-    
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
 
-share() {
-    const shareData = {
-        title: 'AskArti',
-        text: 'Check out this Fed Sales Bot',
-        url: 'https://askarti.com'
-    };
-    
-    if (navigator.share) {
-        navigator.share(shareData).catch(console.error);
-    } else {
-        navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`)
-            .then(() => {
-                this.elements.shareBtn.textContent = 'Link Copied!';
-                setTimeout(() => this.elements.shareBtn.textContent = 'Share', 2000);
-            })
-            .catch(() => alert('Please copy the URL manually: https://askarti.com'));
+    async quickAnalysis(scenario) {
+        // Add user message to chat
+        this.addChatMessage(scenario, true);
+        
+        // Show typing
+        this.showTypingIndicator();
+        this.state.pendingRequest = true;
+        
+        try {
+            // Make request for full analysis
+            const response = await fetch(CONFIG.API_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    situation: scenario,
+                    mode: 'quick-analysis'
+                })
+            });
+            
+            const data = await response.json();
+            this.hideTypingIndicator();
+            
+            // Display full structured response in chat
+            this.displayStructuredResponseInChat(data);
+            
+        } catch (error) {
+            this.hideTypingIndicator();
+            this.addChatMessage("I'm having trouble generating that analysis. Please try again.", false);
+        } finally {
+            this.state.pendingRequest = false;
+        }
     }
-}
 
-showModal() {
-    this.elements.aboutModal.classList.remove('hidden');
-    requestAnimationFrame(() => {
-        this.elements.aboutModal.querySelector('.modal-content').classList.add('show');
-    });
-}
+    displayStructuredResponseInChat(data) {
+        // Create a special message format for structured responses
+        const messageHtml = `
+            <div class="flex justify-start mb-4">
+                <div class="bg-white rounded-lg shadow-md p-4 max-w-full w-full">
+                    <div class="flex items-start gap-3 mb-3">
+                        <img src="/images/arti_right.png" alt="Arti" class="h-8 w-8">
+                        <div class="text-gray-800">${marked.parse(data.quick_take || '')}</div>
+                    </div>
+                    
+                    ${data.key_moves ? `
+                    <div class="mt-4 p-3 bg-gray-50 rounded-lg">
+                        <h4 class="font-bold text-gray-900 mb-2">Your Next Moves:</h4>
+                        ${data.key_moves.map((m, i) => `
+                            <div class="flex gap-2 mb-2">
+                                <span class="text-customPurple-600 font-bold">${i + 1}.</span>
+                                <div class="text-sm">
+                                    <span class="font-medium">${m.action}</span>
+                                    <span class="text-gray-600"> - ${m.why}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>` : ''}
+                    
+                    <div class="mt-3 pt-3 border-t border-gray-200">
+                       <button onclick="app.showFullReport()" class="text-sm text-customPurple-600 hover:text-customPurple-700 font-medium">
+                           View full game plan →
+                       </button>
+                   </div>
+               </div>
+           </div>
+       `;
+       
+       this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
+       this.scrollChatToBottom();
+       
+       // Store the full data for the "View full game plan" button
+       this.state.lastFullResponse = data;
+       
+       // Add follow-up suggestions
+       this.addFollowUpSuggestions([
+           "I need help with the email",
+           "What questions should I ask?",
+           "Tell me more about the strategy"
+       ]);
+   }
 
-hideModal() {
-        const content = this.elements.aboutModal.querySelector('.modal-content');
-        content.classList.remove('show');
-        setTimeout(() => this.elements.aboutModal.classList.add('hidden'), 200);
-    }
+   showFullReport() {
+       // Display the full structured report in the results container
+       if (this.state.lastFullResponse) {
+           this.displayAdvice(this.state.lastFullResponse);
+           this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+       }
+   }
+
+   addChatMessage(content, isUser = false) {
+       const messageHtml = `
+           <div class="flex ${isUser ? 'justify-end' : 'justify-start'}">
+               <div class="${isUser ? 'chat-message-user' : 'chat-message-arti'} 
+                           rounded-lg px-4 py-3 max-w-[80%] shadow-sm">
+                   ${isUser ? content : marked.parse(content)}
+               </div>
+           </div>
+       `;
+       
+       this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
+       this.scrollChatToBottom();
+   }
+
+   showTypingIndicator() {
+       const typingHtml = `
+           <div id="typing-indicator" class="flex justify-start">
+               <div class="bg-white rounded-lg shadow-sm typing-indicator">
+                   <div class="typing-dot"></div>
+                   <div class="typing-dot"></div>
+                   <div class="typing-dot"></div>
+               </div>
+           </div>
+       `;
+       this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
+       this.scrollChatToBottom();
+   }
+
+   hideTypingIndicator() {
+       const indicator = document.getElementById('typing-indicator');
+       if (indicator) indicator.remove();
+   }
+
+   scrollChatToBottom() {
+       const scrollContainer = document.querySelector('.chat-container');
+       if (!scrollContainer) return;
+
+       requestAnimationFrame(() => {
+           scrollContainer.scrollTop = scrollContainer.scrollHeight;
+           setTimeout(() => {
+               scrollContainer.scrollTop = scrollContainer.scrollHeight;
+           }, 100);
+       });
+   }
+
+   async sendChatMessage() {
+       const message = this.elements.chatInput.value.trim();
+       if (!message || this.state.pendingRequest) return;
+
+       // Check if this looks like a quick scenario request
+       const isQuickScenario = message.length > 50 && this.state.chatHistory.length === 0;
+
+       // Add user message
+       this.addChatMessage(message, true);
+       this.elements.chatInput.value = '';
+       
+       // Add to chat history
+       this.state.chatHistory.push({ role: 'user', content: message });
+       this.state.messageCount++;
+
+       // Show typing indicator
+       this.showTypingIndicator();
+       this.state.pendingRequest = true;
+
+       try {
+           const response = await this.makeChatRequest(message, isQuickScenario);
+           this.hideTypingIndicator();
+           
+           if (response.response_type) {
+               // It's a full structured response
+               this.displayStructuredResponseInChat(response);
+           } else {
+               // It's a chat response
+               this.addChatMessage(response.message || response.content);
+               this.state.chatHistory.push({ role: 'assistant', content: response.message || response.content });
+
+               // Add follow-up suggestions if provided
+               if (response.suggestions && response.suggestions.length > 0) {
+                   this.addFollowUpSuggestions(response.suggestions);
+               }
+           }
+
+       } catch (error) {
+           this.hideTypingIndicator();
+           this.addChatMessage("I'm having trouble connecting right now. Please try again.", false);
+       } finally {
+           this.state.pendingRequest = false;
+       }
+   }
+
+   async makeChatRequest(message, isQuickScenario) {
+       // Format chat history for context
+       const conversationContext = this.state.chatHistory.slice(-6); // Last 3 exchanges
+       
+       const response = await fetch(CONFIG.API_ENDPOINT, {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify({ 
+               situation: message,
+               mode: isQuickScenario ? 'smart' : 'chat',
+               conversationHistory: conversationContext
+           })
+       });
+
+       if (!response.ok) throw new Error('Request failed');
+       return await response.json();
+   }
+
+   addFollowUpSuggestions(suggestions) {
+       const suggestionsHtml = `
+           <div class="flex justify-center gap-2 mt-4 flex-wrap">
+               ${suggestions.map(s => `
+                   <button class="chat-suggestion px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
+                           onclick="app.elements.chatInput.value='${s.replace(/'/g, "\\'")}'; app.sendChatMessage();">
+                       ${s}
+                   </button>
+               `).join('')}
+           </div>
+       `;
+       this.elements.chatMessages.insertAdjacentHTML('beforeend', suggestionsHtml);
+       this.scrollChatToBottom();
+   }
+
+   showTemporaryMessage(message, type = 'info') {
+       this.elements.loadingMessageContainer.classList.remove('hidden');
+       this.elements.loadingMessage.textContent = message;
+       
+       const colorClasses = {
+           error: 'text-red-700 font-medium',
+           warning: 'text-orange-700 font-medium',
+           info: 'text-gray-600'
+       };
+       
+       this.elements.loadingMessage.className = colorClasses[type] || colorClasses.info;
+       
+       setTimeout(() => {
+           this.elements.loadingMessageContainer.classList.add('hidden');
+       }, 2000);
+   }
+
+   displayAdvice(data) {
+       const { response_type } = data;
+       
+       try {
+           if (response_type === 'prospect') {
+               this.displayProspectAdvice(data);
+           } else {
+               this.displayGeneralAdvice(data);
+           }
+           
+           // Add action buttons
+           this.addActionButtons();
+           
+       } catch (error) {
+           console.error('Display error:', error);
+           this.showError("Failed to display results. Please try again.");
+       }
+   }
+
+   displayProspectAdvice(data) {
+       const { 
+           summary = '',
+           top_s_is = [],
+           top_software_and_cloud = [],
+           company_capabilities = [],
+           naics_codes = [],
+           prospect_recommendations = []
+       } = data;
+       
+       const renderSimpleList = (items) => {
+           if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
+           
+           return `
+           <div class="space-y-2">
+               ${items.map((item, index) => `
+                   <div class="border-l-4 border-customPurple-500 pl-3 py-1">
+                       <div class="font-medium text-gray-900">
+                           <span class="text-customPurple-600 font-bold">${index + 1}</span> 
+                           ${item.company || 'Unknown'}
+                       </div>
+                       <div class="text-sm text-gray-600">${item.value || 'N/A'}</div>
+                   </div>
+               `).join('')}
+           </div>`;
+       };
+       
+       const html = `
+       <div class="fade-in space-y-6">
+           <div class="dashboard-card bg-gradient-to-r from-customPurple-100 to-customPurple-200">
+               <h3 class="text-xl font-bold text-customPurple-900 mb-2">Key Market Insights</h3>
+               <div class="text-customPurple-900/90">${marked.parse(summary)}</div>
+           </div>
+
+           <div class="dashboard-card">
+               <h3 class="font-bold text-gray-900 mb-4 text-lg">Top Contractors</h3>
+               ${renderSimpleList(top_s_is)}
+           </div>
+           
+           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+               <div class="dashboard-card">
+                   <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
+                   <ul class="space-y-2 text-sm">${company_capabilities.map(c => `
+                       <li class="flex gap-2">
+                           <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                               <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                           </svg>
+                           <span>${c}</span>
+                       </li>`).join('')}
+                   </ul>
+               </div>
+               
+               <div class="dashboard-card">
+                   <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
+                   <ul class="space-y-2 text-sm">${naics_codes.map(n => {
+                       const naicsText = typeof n === 'string' ? n : (n.code ? `${n.code} - ${n.description || ''}` : 'Unknown');
+                       return `
+                       <li class="flex gap-2">
+                           <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                               <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                           </svg>
+                           <span>${naicsText}</span>
+                       </li>`;
+                   }).join('')}
+                   </ul>
+               </div>
+           </div>
+
+           <div class="dashboard-card">
+               <h3 class="font-bold text-gray-900 mb-4 text-lg">Potential Software Plays</h3>
+               ${renderSimpleList(top_software_and_cloud)}
+           </div>
+
+           <div class="dashboard-card">
+               <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
+               <ul class="space-y-3 text-sm">${prospect_recommendations.map(r => `
+                   <li class="flex gap-3">
+                       <span class="text-customPurple-500 font-bold text-lg flex-shrink-0">→</span>
+                       <span>${r}</span>
+                   </li>`).join('')}
+               </ul>
+           </div>
+       </div>`;
+       
+       this.elements.resultsContainer.innerHTML = html;
+   }
+
+   displayGeneralAdvice(data) {
+       const { 
+           quick_take = '',
+           key_moves = [],
+           mermaid_chart = '',
+           talking_points = [],
+           email_template = '',
+           next_steps = '',
+           response_type = 'deal'
+       } = data;
+       
+       const html = `
+       <div class="fade-in space-y-6">
+           <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6 flow-root">
+               <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
+               <div class="text-customPurple-900/80 space-y-2">${marked.parse(quick_take)}</div>
+           </div>
+
+           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <div class="dashboard-card">
+                   <h3 class="font-bold text-gray-900 mb-4">Your Next 3 Moves</h3>
+                   <div class="space-y-3">${key_moves.slice(0, 3).map((m, i) => `
+                       <div class="flex gap-3">
+                           <span class="flex-shrink-0 w-7 h-7 bg-customPurple-200 text-customPurple-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span>
+                           <div class="flex-1">
+                               <p class="font-medium text-gray-900">${m.action}</p>
+                               <p class="text-sm text-gray-600 mt-1">${m.why}</p>
+                           </div>
+                       </div>`).join('')}
+                   </div>
+               </div>
+               
+               <div class="dashboard-card">
+                   <h3 class="font-bold text-gray-900 mb-4">Game Plan</h3>
+                   ${mermaid_chart ? `
+                       <div class="mermaid-container">
+                           <div class="mermaid-loading">
+                               <div class="loader"></div>
+                           </div>
+                           <div id="mermaid-diagram" class="mermaid" style="opacity: 0;">${mermaid_chart}</div>
+                       </div>` : 
+                       '<div class="p-4 bg-gray-50 rounded-lg text-center"><p class="text-gray-600">Visual game plan not available</p></div>'
+                   }
+               </div>
+           </div>
+
+           ${(talking_points?.length > 0 || email_template) ? `
+           <div class="dashboard-card">
+               <h3 class="font-bold text-gray-900 mb-4">Communications</h3>
+               <div class="grid grid-cols-1 ${email_template && talking_points?.length > 0 ? 'md:grid-cols-2' : ''} gap-6">
+                   ${talking_points?.length > 0 ? `
+                       <div>
+                           <h4 class="font-semibold text-gray-800 mb-3">
+                               ${response_type === 'interview' ? 'What They May Ask' : 'What to Ask'}
+                           </h4>
+                           <ul class="space-y-2 text-sm">${talking_points.map(t => `
+                               <li class="flex gap-2">
+                                   <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                       <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                   </svg>${t}
+                               </li>`).join('')}
+                           </ul>
+                       </div>` : ''}
+                   
+                   ${email_template ? `
+                       <div>
+                           <h4 class="font-semibold text-gray-800 mb-3">Email Template</h4>
+                           <div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap border">${email_template}</div>
+                       </div>` : ''}
+               </div>
+           </div>` : ''}
+           
+           ${next_steps ? `
+               <div class="bg-customPurple-200/60 p-4 rounded-lg text-sm text-customPurple-900">
+                   <b class="font-semibold">Remember:</b> ${next_steps}
+               </div>` : ''}
+       </div>`;
+       
+       this.elements.resultsContainer.innerHTML = html;
+       
+       // Render mermaid chart with proper timing
+       if (mermaid_chart) {
+           this.renderMermaidChart();
+       }
+   }
+
+   async renderMermaidChart() {
+       try {
+           await new Promise(resolve => setTimeout(resolve, 100));
+           
+           const element = document.getElementById('mermaid-diagram');
+           if (!element) return;
+           
+           await mermaid.run();
+           
+           element.style.opacity = '1';
+           element.style.transition = 'opacity 0.3s ease-in';
+           
+           const loader = element.parentElement.querySelector('.mermaid-loading');
+           if (loader) loader.style.display = 'none';
+           
+       } catch (error) {
+           console.error('Mermaid rendering error:', error);
+           const container = document.querySelector('.mermaid-container');
+           if (container) {
+               container.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Game plan visualization unavailable</div>';
+           }
+       }
+   }
+
+   addActionButtons() {
+       const buttonsHtml = `
+           <div class="mt-8 flex flex-col sm:flex-row gap-3">
+               <button onclick="app.copyResults()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                   Copy to Clipboard
+               </button>
+               <button onclick="app.clearChat()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">
+                   Start New Conversation
+               </button>
+           </div>`;
+       
+       this.elements.resultsContainer.insertAdjacentHTML('beforeend', buttonsHtml);
+   }
+
+   copyResults() {
+       const content = this.elements.resultsContainer.innerText;
+       
+       if (!content || content.trim() === '') {
+           alert('No content to copy');
+           return;
+       }
+       
+       navigator.clipboard.writeText(content)
+           .then(() => {
+               const btn = this.elements.resultsContainer.querySelector('button');
+               const originalText = btn.textContent;
+               btn.textContent = 'Copied!';
+               setTimeout(() => btn.textContent = originalText, 2000);
+           })
+           .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
+   }
+
+   share() {
+       const shareData = {
+           title: 'AskArti',
+           text: 'Check out this Fed Sales Bot',
+           url: 'https://askarti.com'
+       };
+       
+       if (navigator.share) {
+           navigator.share(shareData).catch(console.error);
+       } else {
+           navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`)
+               .then(() => {
+                   this.elements.shareBtn.textContent = 'Link Copied!';
+                   setTimeout(() => this.elements.shareBtn.textContent = 'Share', 2000);
+               })
+               .catch(() => alert('Please copy the URL manually: https://askarti.com'));
+       }
+   }
+
+   showModal() {
+       this.elements.aboutModal.classList.remove('hidden');
+       requestAnimationFrame(() => {
+           this.elements.aboutModal.querySelector('.modal-content').classList.add('show');
+       });
+   }
+
+   hideModal() {
+       const content = this.elements.aboutModal.querySelector('.modal-content');
+       content.classList.remove('show');
+       setTimeout(() => this.elements.aboutModal.classList.add('hidden'), 200);
+   }
+
+   showError(message) {
+       this.elements.errorMessage.classList.remove('hidden');
+       this.elements.errorDetails.textContent = message;
+   }
 }
 
 // Initialize app
