@@ -71,6 +71,11 @@
                             500: '#7C6BBE',
                             700: '#5A4E8C',
                             900: '#403866'
+                        },
+                        accountBlue: {
+                            100: '#E6F0F9',
+                            500: '#4A77B3',
+                            700: '#345C96'
                         }
                     }
                 }
@@ -389,10 +394,6 @@
                             Buyer Went Dark
                         </button>
                         <button class="quick-scenario px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
-                                onclick="app.quickAnalysis('Demo crashed at DOJ yesterday. CTO walked out. How to recover?')">
-                            Demo Crashed
-                        </button>
-                        <button class="quick-scenario px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
                                 onclick="app.quickAnalysis('Meeting DHS CIO next week. No champion. How to position our cybersecurity platform?')">
                             Meeting Prep
                         </button>
@@ -404,7 +405,7 @@
                                 onclick="app.quickAnalysis('Partner reps and Account reps fighting over deals, pipeline, and revenue recognition.')">
                             Partner Drama
                         </button>
-                        <button class="quick-scenario px-3 py-1.5 bg-green-100 hover:bg-green-200 rounded-full text-sm text-green-700 font-medium transition-all"
+                        <button class="quick-scenario px-3 py-1.5 bg-accountBlue-100 hover:bg-accountBlue-100 rounded-full text-sm text-accountBlue-700 font-medium transition-all"
                                 onclick="app.autoCreateAccountPlan()">
                             Create Account Plan
                         </button>
@@ -588,6 +589,13 @@ class AskArti {
             }
         });
 
+        // Reset send button when user types something new
+        this.elements.chatInput.addEventListener('input', () => {
+            if (this.elements.chatSendBtn.classList.contains('bg-yellow-600')) {
+                this.resetSendButton();
+            }
+        });
+
         // Clear chat - silently clear without confirmation
         this.elements.clearChatBtn.addEventListener('click', () => this.clearChat());
 
@@ -598,13 +606,7 @@ class AskArti {
                 this.sendChatMessage();
             }
         });
-			
-			// Reset send button when user types something new
-this.elements.chatInput.addEventListener('input', () => {
-    if (this.elements.chatSendBtn.classList.contains('bg-yellow-600')) {
-        this.resetSendButton();
-    }
-});
+
         // Share
         this.elements.shareBtn.addEventListener('click', () => this.share());
 
@@ -637,51 +639,52 @@ this.elements.chatInput.addEventListener('input', () => {
             </div>`;
         
         // Clear input and results
-       this.elements.chatInput.value = '';
-this.elements.resultsContainer.innerHTML = '';
-this.elements.accountPlanContainer.classList.add('hidden');
-this.elements.accountPlanContainer.innerHTML = '';
-
-// Remove generate plan button if it exists
-const generatePlanContainer = document.getElementById('generate-plan-container');
-if (generatePlanContainer) {
-    generatePlanContainer.remove();
-}
+        this.elements.chatInput.value = '';
+        this.elements.resultsContainer.innerHTML = '';
+        this.elements.accountPlanContainer.classList.add('hidden');
+        this.elements.accountPlanContainer.innerHTML = '';
+        
+        // Remove generate plan button if it exists
+        const generatePlanContainer = document.getElementById('generate-plan-container');
+        if (generatePlanContainer) {
+            generatePlanContainer.remove();
+        }
+        
         this.elements.chatInput.focus();
         
         // Small visual feedback
         this.showTemporaryMessage('Conversation cleared', 'info');
     }
     
-    // Update the autoCreateAccountPlan method:
-autoCreateAccountPlan() {
-    // Directly enter the text and submit
-    this.elements.chatInput.value = "Create an account plan for selling to the federal government";
-    this.sendChatMessage();
-    
-    // Add the generate plan button right away
-    setTimeout(() => {
-        if (!document.getElementById('generate-plan-btn')) {
-            const generateBtnHtml = `
-                <div id="generate-plan-container" class="flex justify-center mt-4 mb-2">
-                    <button id="generate-plan-btn" onclick="app.generateAccountPlan()" 
-                        class="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition-all">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                        </svg>
-                        Generate Account Plan
-                    </button>
-                </div>
-            `;
-            this.elements.chatMessages.insertAdjacentHTML('beforeend', generateBtnHtml);
-        }
+    // Auto-create account plan with pre-populated message
+    autoCreateAccountPlan() {
+        // Directly enter the text and submit
+        this.elements.chatInput.value = "Create an account plan for selling GenAI to DHS";
+        this.sendChatMessage();
         
-        // After a brief delay, generate the account plan
+        // Add the generate plan button right away
         setTimeout(() => {
-            this.generateAccountPlan();
-        }, 1000);
-    }, 1500);
-}
+            if (!document.getElementById('generate-plan-btn')) {
+                const generateBtnHtml = `
+                    <div id="generate-plan-container" class="flex justify-center mt-4 mb-2">
+                        <button id="generate-plan-btn" onclick="app.generateAccountPlan()" 
+                        class="bg-accountBlue-500 hover:bg-accountBlue-700 text-white font-medium px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition-all">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                            </svg>
+                            Generate Account Plan
+                        </button>
+                    </div>
+                `;
+                this.elements.chatMessages.insertAdjacentHTML('beforeend', generateBtnHtml);
+            }
+            
+            // After a brief delay, generate the account plan
+            setTimeout(() => {
+                this.generateAccountPlan();
+            }, 1000);
+        }, 1500);
+    }
 
     async quickAnalysis(scenario) {
         // Add user message to chat
@@ -700,7 +703,10 @@ autoCreateAccountPlan() {
             const response = await fetch(CONFIG.API_ENDPOINT, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ situation: scenario })
+                body: JSON.stringify({ 
+                    situation: scenario,
+                    currentDate: new Date().toISOString().split('T')[0]
+                })
             });
             
             const data = await response.json();
@@ -772,179 +778,180 @@ autoCreateAccountPlan() {
     }
 
     async sendChatMessage() {
-    const message = this.elements.chatInput.value.trim();
-    
-    // If a connection is pending, don't allow new messages
-    if (this.state.pendingRequest) return;
-    
-    // If input is empty but we have a lastQuery from a failed attempt, retry that
-    if (!message && this.state.lastQuery) {
-        this.retryLastMessage();
-        return;
-    }
-    
-    // Exit if no message and no previous query to retry
-    if (!message) return;
-
-    // Add user message to chat
-    this.addChatMessage(message, true);
-    this.elements.chatInput.value = '';
-    this.state.lastQuery = message;
-    
-    // Add to chat history
-    this.state.chatHistory.push({ role: 'user', content: message });
-    this.state.messageCount++;
-
-    // Show typing indicator
-    this.showTypingIndicator();
-    this.state.pendingRequest = true;
-
-    try {
-        const response = await this.makeChatRequest(message);
-        this.hideTypingIndicator();
+        const message = this.elements.chatInput.value.trim();
         
-        // Add Arti's response
-this.addChatMessage(response.message || "I'm not sure how to respond to that. Could you rephrase?");
-this.state.chatHistory.push({ role: 'assistant', content: response.message || "I'm not sure how to respond to that. Could you rephrase?" });
-
-// Show Generate Account Plan button after a few exchanges or if the message mentions account plan
-if ((this.state.messageCount >= 3 || message.toLowerCase().includes('account plan') || 
-    (response.message && response.message.toLowerCase().includes('account plan'))) &&
-    !document.getElementById('generate-plan-btn')) {
-    // Add the generate plan button after the chat messages
-    const generateBtnHtml = `
-        <div id="generate-plan-container" class="flex justify-center mt-4 mb-2">
-            <button id="generate-plan-btn" onclick="app.generateAccountPlan()" 
-                class="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition-all">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                </svg>
-                Generate Account Plan
-            </button>
-        </div>
-    `;
-    this.elements.chatMessages.insertAdjacentHTML('beforeend', generateBtnHtml);
-}
-
-        // Clear lastQuery on success since we don't need to retry
-        this.state.lastQuery = '';
-
-        // Add follow-up suggestions if provided
-        if (response.suggestions && response.suggestions.length > 0) {
-            this.addFollowUpSuggestions(response.suggestions);
+        // If a connection is pending, don't allow new messages
+        if (this.state.pendingRequest) return;
+        
+        // If input is empty but we have a lastQuery from a failed attempt, retry that
+        if (!message && this.state.lastQuery) {
+            this.retryLastMessage();
+            return;
         }
         
-        // Auto-generate account plan if message is asking for one
-        if (message.toLowerCase().includes('account plan')) {
-            setTimeout(() => {
-                this.generateAccountPlan();
-            }, 1000);
-        }
+        // Exit if no message and no previous query to retry
+        if (!message) return;
 
-    } catch (error) {
-        console.error('Chat request failed:', error);
-        this.hideTypingIndicator();
-        this.addChatMessage("I'm having trouble connecting right now. Click Send again to retry your message, or try again in a moment.", false);
+        // Add user message to chat
+        this.addChatMessage(message, true);
+        this.elements.chatInput.value = '';
+        this.state.lastQuery = message;
         
-        // Change send button to indicate retry functionality
-        this.elements.chatSendBtn.innerHTML = `
-            <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
-            <span>Retry</span>
-        `;
-        this.elements.chatSendBtn.classList.add('bg-yellow-600', 'hover:bg-yellow-700');
-        this.elements.chatSendBtn.classList.remove('bg-customPurple-500', 'hover:bg-customPurple-700');
-    } finally {
-        this.state.pendingRequest = false;
-    }
-}
+        // Add to chat history
+        this.state.chatHistory.push({ role: 'user', content: message });
+        this.state.messageCount++;
 
-// New method for retrying the last message
-retryLastMessage() {
-    if (!this.state.lastQuery || this.state.pendingRequest) return;
-    
-    // Reset send button styling
-    this.resetSendButton();
-    
-    // Re-add the last message to chat with 'Retrying...' appended
-    this.addChatMessage(`${this.state.lastQuery} <em class="text-xs text-gray-200">(Retrying...)</em>`, true);
-    
-    // Show typing indicator
-    this.showTypingIndicator();
-    this.state.pendingRequest = true;
-    
-    // Try the request again
-    this.makeChatRequest(this.state.lastQuery)
-        .then(response => {
+        // Show typing indicator
+        this.showTypingIndicator();
+        this.state.pendingRequest = true;
+
+        try {
+            const response = await this.makeChatRequest(message);
             this.hideTypingIndicator();
             
             // Add Arti's response
             this.addChatMessage(response.message || "I'm not sure how to respond to that. Could you rephrase?");
             this.state.chatHistory.push({ role: 'assistant', content: response.message || "I'm not sure how to respond to that. Could you rephrase?" });
-            
-            // Clear lastQuery on success
+
+            // Clear lastQuery on success since we don't need to retry
             this.state.lastQuery = '';
-            
+
+            // Show Generate Account Plan button after a few exchanges or if message mentions account plan
+            if ((this.state.messageCount >= 3 || message.toLowerCase().includes('account plan') || 
+                (response.message && response.message.toLowerCase().includes('account plan'))) &&
+                !document.getElementById('generate-plan-btn')) {
+                // Add the generate plan button after the chat messages
+                const generateBtnHtml = `
+                    <div id="generate-plan-container" class="flex justify-center mt-4 mb-2">
+                        <button id="generate-plan-btn" onclick="app.generateAccountPlan()" 
+                            class="bg-accountBlue-500 hover:bg-accountBlue-700 text-white font-medium px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition-all">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                            </svg>
+                            Generate Account Plan
+                        </button>
+                    </div>
+                `;
+                this.elements.chatMessages.insertAdjacentHTML('beforeend', generateBtnHtml);
+            }
+
             // Add follow-up suggestions if provided
             if (response.suggestions && response.suggestions.length > 0) {
                 this.addFollowUpSuggestions(response.suggestions);
             }
-        })
-        .catch(error => {
-            console.error('Retry failed:', error);
-            this.hideTypingIndicator();
-            this.addChatMessage("I'm still having trouble connecting. Please try again later.", false);
-        })
-        .finally(() => {
-            this.state.pendingRequest = false;
-        });
-}
+            
+            // Auto-generate account plan if message is asking for one
+            if (message.toLowerCase().includes('account plan')) {
+                setTimeout(() => {
+                    this.generateAccountPlan();
+                }, 1000);
+            }
 
-// Method to reset send button to original state
-resetSendButton() {
-    this.elements.chatSendBtn.innerHTML = `<span>Send</span>`;
-    this.elements.chatSendBtn.classList.remove('bg-yellow-600', 'hover:bg-yellow-700');
-    this.elements.chatSendBtn.classList.add('bg-customPurple-500', 'hover:bg-customPurple-700');
-}
+        } catch (error) {
+            console.error('Chat request failed:', error);
+            this.hideTypingIndicator();
+            this.addChatMessage("I'm having trouble connecting right now. Click Send again to retry your message, or try again in a moment.", false);
+            
+            // Change send button to indicate retry functionality
+            this.elements.chatSendBtn.innerHTML = `
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span>Retry</span>
+            `;
+            this.elements.chatSendBtn.classList.add('bg-yellow-600', 'hover:bg-yellow-700');
+            this.elements.chatSendBtn.classList.remove('bg-customPurple-500', 'hover:bg-customPurple-700');
+        } finally {
+            this.state.pendingRequest = false;
+        }
+    }
+
+    // Method to reset send button to original state
+    resetSendButton() {
+        this.elements.chatSendBtn.innerHTML = `<span>Send</span>`;
+        this.elements.chatSendBtn.classList.remove('bg-yellow-600', 'hover:bg-yellow-700');
+        this.elements.chatSendBtn.classList.add('bg-customPurple-500', 'hover:bg-customPurple-700');
+    }
+
+    // New method for retrying the last message
+    retryLastMessage() {
+        if (!this.state.lastQuery || this.state.pendingRequest) return;
+        
+        // Reset send button styling
+        this.resetSendButton();
+        
+        // Re-add the last message to chat with 'Retrying...' appended
+        this.addChatMessage(`${this.state.lastQuery} <em class="text-xs text-gray-200">(Retrying...)</em>`, true);
+        
+        // Show typing indicator
+        this.showTypingIndicator();
+        this.state.pendingRequest = true;
+        
+        // Try the request again
+        this.makeChatRequest(this.state.lastQuery)
+            .then(response => {
+                this.hideTypingIndicator();
+                
+                // Add Arti's response
+                this.addChatMessage(response.message || "I'm not sure how to respond to that. Could you rephrase?");
+                this.state.chatHistory.push({ role: 'assistant', content: response.message || "I'm not sure how to respond to that. Could you rephrase?" });
+                
+                // Clear lastQuery on success
+                this.state.lastQuery = '';
+                
+                // Add follow-up suggestions if provided
+                if (response.suggestions && response.suggestions.length > 0) {
+                    this.addFollowUpSuggestions(response.suggestions);
+                }
+            })
+            .catch(error => {
+                console.error('Retry failed:', error);
+                this.hideTypingIndicator();
+                this.addChatMessage("I'm still having trouble connecting. Please try again later.", false);
+            })
+            .finally(() => {
+                this.state.pendingRequest = false;
+            });
+    }
 
     async makeChatRequest(message) {
-    // Send the FULL conversation history instead of truncating it
-    // This ensures the AI model has complete context
-    const conversationContext = this.state.chatHistory;
-    
-    // Include a safety mechanism to prevent the context from growing too large
-    // If the context gets too large, we'll keep the first message (for initial context)
-    // and the most recent messages (for recent context)
-    const maxContextSize = 20; // Maximum number of messages to include
-    let contextToSend = conversationContext;
-    
-    if (conversationContext.length > maxContextSize) {
-        // Keep the first message plus the most recent messages
-        contextToSend = [
-            conversationContext[0],
-            ...conversationContext.slice(-maxContextSize + 1)
-        ];
-    }
-    
-    try {
-        const response = await fetch(CONFIG.API_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                situation: message,
-                mode: 'chat',
-                conversationHistory: contextToSend
-            })
-        });
+        // Send the FULL conversation history instead of truncating it
+        // This ensures the AI model has complete context
+        const conversationContext = this.state.chatHistory;
+        
+        // Include a safety mechanism to prevent the context from growing too large
+        // If the context gets too large, we'll keep the first message (for initial context)
+        // and the most recent messages (for recent context)
+        const maxContextSize = 20; // Maximum number of messages to include
+        let contextToSend = conversationContext;
+        
+        if (conversationContext.length > maxContextSize) {
+            // Keep the first message plus the most recent messages
+            contextToSend = [
+                conversationContext[0],
+                ...conversationContext.slice(-maxContextSize + 1)
+            ];
+        }
+        
+        try {
+            const response = await fetch(CONFIG.API_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    situation: message,
+                    mode: 'chat',
+                    conversationHistory: contextToSend,
+                    currentDate: new Date().toISOString().split('T')[0] // Add current date
+                })
+            });
 
-        if (!response.ok) throw new Error('Request failed');
-        return await response.json();
-    } catch (error) {
-        console.error('API request failed:', error);
-        throw error;
+            if (!response.ok) throw new Error('Request failed');
+            return await response.json();
+        } catch (error) {
+            console.error('API request failed:', error);
+            throw error;
+        }
     }
-}
 
     addFollowUpSuggestions(suggestions) {
         const suggestionsHtml = `
@@ -962,65 +969,100 @@ resetSendButton() {
     }
 
     async generateAccountPlan() {
-    if (this.state.pendingRequest) return;
-    
-    // Show loading message
-    this.showTemporaryMessage('Creating your account plan...', 'info');
-    this.elements.accountPlanContainer.innerHTML = `
-        <div class="account-plan-card text-center p-6">
-            <div class="loader mx-auto mb-3"></div>
-            <p>Creating your account plan...</p>
-        </div>
-    `;
-    this.elements.accountPlanContainer.classList.remove('hidden');
-    
-    // Smooth scroll to account plan area
-    this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
-    
-    this.state.pendingRequest = true;
-    
-    try {
-        // Use the full conversation history for better context
-        let contextToSend = this.state.chatHistory;
+        if (this.state.pendingRequest) return;
         
-        // Same safety mechanism as in makeChatRequest
-        const maxContextSize = 20;
-        if (contextToSend.length > maxContextSize) {
-            contextToSend = [
-                contextToSend[0],
-                ...contextToSend.slice(-maxContextSize + 1)
-            ];
-        }
-        
-        const response = await fetch(CONFIG.API_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                situation: "Generate account plan",
-                mode: 'account_plan',
-                conversationHistory: contextToSend
-            })
-        });
-        
-        if (!response.ok) throw new Error('Request failed');
-        
-        const data = await response.json();
-        this.displayModernAccountPlan(data);
-        
-    } catch (error) {
-        console.error('Account plan generation failed:', error);
+        // Show loading message
+        this.showTemporaryMessage('Creating your account plan...', 'info');
         this.elements.accountPlanContainer.innerHTML = `
-            <div class="account-plan-card text-center">
-                <p class="text-red-600 mb-3">Sorry, I couldn't generate your account plan at this time.</p>
-                <button onclick="app.generateAccountPlan()" class="bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg text-sm">
-                    Try Again
-                </button>
+            <div class="account-plan-card text-center p-6">
+                <div class="loader mx-auto mb-3"></div>
+                <p>Creating your account plan...</p>
             </div>
         `;
-    } finally {
-        this.state.pendingRequest = false;
+        this.elements.accountPlanContainer.classList.remove('hidden');
+        
+        // Smooth scroll to account plan area
+        this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
+        
+        this.state.pendingRequest = true;
+        
+        try {
+            // Use the full conversation history for better context
+            let contextToSend = this.state.chatHistory;
+            
+            // Same safety mechanism as in makeChatRequest
+            const maxContextSize = 20;
+            if (contextToSend.length > maxContextSize) {
+                contextToSend = [
+                    contextToSend[0],
+                    ...contextToSend.slice(-maxContextSize + 1)
+                ];
+            }
+            
+            const response = await fetch(CONFIG.API_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    situation: "Generate account plan",
+                    mode: 'account_plan',
+                    conversationHistory: contextToSend,
+                    currentDate: new Date().toISOString().split('T')[0] // Add current date
+                })
+            });
+            
+            if (!response.ok) throw new Error('Request failed');
+            
+            const data = await response.json();
+            this.displayModernAccountPlan(data);
+            
+        } catch (error) {
+            console.error('Account plan generation failed:', error);
+            this.elements.accountPlanContainer.innerHTML = `
+                <div class="account-plan-card text-center">
+                    <p class="text-red-600 mb-3">Sorry, I couldn't generate your account plan at this time.</p>
+                    <button onclick="app.generateAccountPlan()" class="bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg text-sm">
+                        Try Again
+                    </button>
+                </div>
+            `;
+        } finally {
+            this.state.pendingRequest = false;
+        }
     }
-}
+
+    // Add this helper function to validate and fix dates
+    validateAndFixDate(dateString) {
+        // If it's "Ongoing", that's valid
+        if (dateString === "Ongoing" || dateString.toLowerCase() === "ongoing") {
+            return "Ongoing";
+        }
+        
+        // Try to parse the date
+        const dateRegex = /(\d{4}-\d{2}-\d{2})/;
+        const match = dateString.match(dateRegex);
+        
+        if (match) {
+            const extractedDate = match[1];
+            const date = new Date(extractedDate);
+            const currentDate = new Date();
+            
+            // If date is valid and in the past, add 1 year
+            if (!isNaN(date) && date < currentDate) {
+                date.setFullYear(currentDate.getFullYear() + 1);
+                return date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+            }
+            
+            // If date is valid and in the future, keep it
+            if (!isNaN(date) && date > currentDate) {
+                return extractedDate;
+            }
+        }
+        
+        // Default: return a date 3 months in the future
+        const futureDate = new Date();
+        futureDate.setMonth(futureDate.getMonth() + 3);
+        return futureDate.toISOString().split('T')[0];
+    }
 
     displayModernAccountPlan(data) {
         const { 
@@ -1207,12 +1249,25 @@ resetSendButton() {
                         <h3 class="font-semibold text-gray-800">Action Items</h3>
                     </div>
                     <ul class="space-y-2 pl-2">
-                        ${action_items?.map(a => `
+                        ${action_items?.map(a => {
+                            // Find due dates in the action item text and fix them if needed
+                            let processedItem = a;
+                            const dueDateMatch = a.match(/Due Date: ([^)]+)/);
+                            if (dueDateMatch) {
+                                const originalDate = dueDateMatch[1].trim();
+                                const fixedDate = this.validateAndFixDate(originalDate);
+                                // Only replace if different
+                                if (originalDate !== fixedDate) {
+                                    processedItem = a.replace(`Due Date: ${originalDate}`, `Due Date: ${fixedDate}`);
+                                }
+                            }
+                            
+                            return `
                             <li class="flex items-start gap-2">
                                 <span class="text-customPurple-500 font-bold mt-1">▶</span>
-                                <span class="text-gray-700">${a}</span>
-                            </li>
-                        `).join('') || '<li class="text-gray-500">No action items defined</li>'}
+                                <span class="text-gray-700">${processedItem}</span>
+                            </li>`;
+                        }).join('') || '<li class="text-gray-500">No action items defined</li>'}
                     </ul>
                 </div>
             </div>
