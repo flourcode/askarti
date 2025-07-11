@@ -366,17 +366,17 @@
             <!-- Quick scenarios -->
             <div class="border-t border-gray-200 px-4 py-3 bg-gray-50 no-print">
                 <div class="flex flex-wrap gap-2 justify-center">
-                    <button class="scenario-btn" onclick="app.quickAnalysis('Buyer ghosted me after pricing. Competition has the inside track.')">
-                        👻 Ghosted Again
+                    <button class="scenario-btn" onclick="app.quickAnalysis('Buyer ghosted me after pricing. CIO loves our competitor.')">
+                        👻Buyer Ghosted Me
                     </button>
-                    <button class="scenario-btn" onclick="app.quickAnalysis('Interview for federal sales role at AWS. Help me prep.')">
+                    <button class="scenario-btn" onclick="app.quickAnalysis('Help me prep for an AWS Federal Sales Interview.')">
                         💼 Interview Prep
                     </button>
-                    <button class="scenario-btn" onclick="app.quickAnalysis('Partner Team and Account Team blaming each other for weak pipeline, lagging sales, and revenue recognition.')">
-                        🤝 Partner Issues
+                    <button class="scenario-btn" onclick="app.quickAnalysis('My internal Partner and Account reps are battling over deals, pipeline, and revenue recognition.')">
+                        🤝 Partner Drama
                     </button>
                     <button class="scenario-btn" onclick="app.autoCreateAccountPlan()">
-                        📋 Account Plan
+                        📋 Write My Plan
                     </button>
                 </div>
             </div>
@@ -385,7 +385,6 @@
         <!-- Loading state -->
         <div id="loading-container" class="hidden text-center py-4">
             <div class="inline-flex items-center gap-3 text-gray-600">
-                <div class="loader"></div>
                 <span id="loading-message" class="text-sm font-medium"></span>
             </div>
         </div>
@@ -411,11 +410,10 @@
             </div>
 
             <!-- Sponsor message -->
-            <div class="max-w-md mx-auto bg-customPurple-50 border border-customPurple-200 rounded-lg p-4 text-sm">
-                <p class="text-customPurple-900 font-medium mb-1">Hey, enjoying the free therapy?</p>
+            <div class="max-w-xl mx-auto bg-customPurple-50 border border-customPurple-200 rounded-lg p-4 text-sm">
+                <p class="text-customPurple-900 font-medium mb-1">Hey there! Enjoying these results?</p>
                 <p class="text-customPurple-700">
-                    My AWS bill is starting to look like your Q4 quota - completely unrealistic. 
-                    Sponsor this spot for $99/mo.
+                   By the time I pay off all my scientists, all the lab coats, and my AWS bill…I'm losin' money every time you Ask Arti something...Sponsor this spot for $99/mo.
                 </p>
                 <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium underline">
                     Help keep Arti alive →
@@ -423,9 +421,7 @@
             </div>
 
             <p class="text-xs text-gray-500 max-w-xl mx-auto">
-                AskArti provides strategic advice for federal sales professionals. 
-                AI can make mistakes. Use your judgment. 
-                No data is stored - everything vanishes after your session.
+                AskArti.com results are provided for informational and educational purposes only and do not constitute professional business advice. AI can make errors that may not suit your specific situation. Please consult qualified professionals before making important business decisions.
             </p>
 
             <p class="text-xs text-gray-400">
@@ -467,7 +463,7 @@
                 <div class="pt-3">
                     <a href="https://calendly.com/markflournoy/30min" target="_blank" 
                        class="block w-full bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-2.5 rounded-lg text-center transition-colors">
-                        Let's talk federal sales →
+                        Want to chat about AI or Sales? →
                     </a>
                 </div>
             </div>
@@ -748,9 +744,9 @@ class AskArti {
            this.state.lastQuery = '';
 
            // Show account plan button after a few messages
-           if (this.state.messageCount >= 3 && !document.getElementById('generate-plan-btn')) {
-               this.addAccountPlanButton();
-           }
+if (this.state.messageCount >= 3 && !document.getElementById('generate-plan-container')) {
+    this.addAccountPlanButton();
+}
 
            // Add follow-up suggestions
            if (response.suggestions && response.suggestions.length > 0) {
@@ -815,18 +811,23 @@ class AskArti {
        this.scrollChatToBottom();
    }
 
-   autoCreateAccountPlan() {
-       this.elements.chatInput.value = "Help me build an account plan for selling cloud services to DHS";
-       this.sendChatMessage();
-       
-       setTimeout(() => {
-           if (!document.getElementById('generate-plan-btn')) {
-               this.addAccountPlanButton();
-           }
-           setTimeout(() => this.generateAccountPlan(), 1000);
-       }, 1500);
-   }
+  autoCreateAccountPlan() {
+       // Avoid running if a request is already in progress
+       if (this.state.pendingRequest) return;
 
+       const message = "Help me build an account plan for selling cloud services to DHS";
+
+       // 1. Manually add the user's request to the chat UI for visual context.
+       this.addChatMessage(message, true);
+
+       // 2. Manually update the internal conversation history state.
+       this.state.chatHistory.push({ role: 'user', content: message });
+       this.state.messageCount++; // Keep the count accurate
+
+       // 3. Immediately call the function to generate the plan.
+       // This bypasses the unnecessary chat API call and directly triggers the plan.
+       this.generateAccountPlan();
+   }
    async generateAccountPlan() {
        if (this.state.pendingRequest) return;
        
