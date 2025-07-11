@@ -385,7 +385,6 @@
         <!-- Loading state -->
         <div id="loading-container" class="hidden text-center py-4">
             <div class="inline-flex items-center gap-3 text-gray-600">
-                <div class="loader"></div>
                 <span id="loading-message" class="text-sm font-medium"></span>
             </div>
         </div>
@@ -745,9 +744,9 @@ class AskArti {
            this.state.lastQuery = '';
 
            // Show account plan button after a few messages
-           if (this.state.messageCount >= 3 && !document.getElementById('generate-plan-btn')) {
-               this.addAccountPlanButton();
-           }
+if (this.state.messageCount >= 3 && !document.getElementById('generate-plan-container')) {
+    this.addAccountPlanButton();
+}
 
            // Add follow-up suggestions
            if (response.suggestions && response.suggestions.length > 0) {
@@ -813,15 +812,19 @@ class AskArti {
    }
 
    autoCreateAccountPlan() {
+       // Avoid running if a request is already in progress
+       if (this.state.pendingRequest) return;
+
        this.elements.chatInput.value = "Help me build an account plan for selling cloud services to DHS";
+       
+       // Send the message to initiate the conversation.
+       // The sendChatMessage function will naturally add the "Generate" button if conditions are met.
        this.sendChatMessage();
        
+       // Wait for the chat to process, then automatically trigger the plan generation.
        setTimeout(() => {
-           if (!document.getElementById('generate-plan-btn')) {
-               this.addAccountPlanButton();
-           }
-           setTimeout(() => this.generateAccountPlan(), 1000);
-       }, 1500);
+           this.generateAccountPlan();
+       }, 1500); // A short delay to allow the chat UI to update.
    }
 
    async generateAccountPlan() {
