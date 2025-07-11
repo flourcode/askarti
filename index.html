@@ -700,10 +700,10 @@ class AskArti {
             this.state.chatHistory.push({ role: 'assistant', content: response.message || "I'm not sure how to respond to that. Could you rephrase?" });
             // Clear lastQuery on success since we don't need to retry
             this.state.lastQuery = '';
-            // Show Generate Account Plan button after a few exchanges or if message mentions account plan
-            if ((this.state.messageCount >= 3 || message.toLowerCase().includes('account plan') || 
-                (response.message && response.message.toLowerCase().includes('account plan'))) &&
-                !document.getElementById('generate-plan-btn')) {
+            // Show Generate Account Plan button after a few exchanges or if message mentions it
+if ((this.state.messageCount >= 3 || message.toLowerCase().includes('generate plan') || 
+    (response.message && response.message.toLowerCase().includes('generate plan'))) && // <- Corrected line
+    !document.getElementById('generate-plan-btn')) {
                 // Add the generate plan button after the chat messages
                 const generateBtnHtml = `
                     <div id="generate-plan-container" class="flex justify-center mt-4 mb-2">
