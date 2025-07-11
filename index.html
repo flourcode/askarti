@@ -515,10 +515,9 @@
    </div>
 
 <script>
-// Configuration
 const CONFIG = {
    API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
-   REQUEST_TIMEOUT: 25000,
+   REQUEST_TIMEOUT: 30000, // Increased timeout for better reliability
    MAX_RETRIES: 2,
    RETRY_DELAY: 2000,
    MAX_INPUT_LENGTH: 500,
@@ -545,7 +544,9 @@ class AskArti {
            lastQuery: '',
            currentMode: 'quick',
            chatHistory: [],
-           messageCount: 0
+           messageCount: 0,
+           reportGenerationInProgress: false,
+           lastReportContext: null
        };
        this.init();
    }
@@ -581,9 +582,66 @@ class AskArti {
        this.initializeMermaid();
        this.setupEventListeners();
        this.elements.situationInput.focus();
+       this.initializeFromLocalStorage();
    }
 
-   initializeMermaid() {
+   initializeFromLocalStorage() {
+       try {
+           // Load chat history if available
+           const savedChatHistory = localStorage.getItem('artChatHistory');
+           if (savedChatHistory) {
+               this.state.chatHistory = JSON.parse(savedChatHistory);
+               
+               // If there was history, rebuild the chat UI
+               if (this.state.chatHistory.length > 0) {
+                   this.rebuildChatInterface();
+                   this.state.messageCount = this.state.chatHistory.length;
+                   
+                   // Show report button if appropriate
+                   if (this.state.messageCount >= 2) {
+                       this.elements.generateReportBtn.classList.remove('hidden');
+                   }
+               }
+           }
+           
+           // Restore current mode if set
+           const savedMode = localStorage.getItem('artCurrentMode');
+           if (savedMode) {
+               this.switchMode(savedMode, false); // Don't save mode again
+           }
+       } catch (error) {
+           console.error('Error loading from localStorage:', error);
+           // If localStorage fails, just continue with default state
+       }
+   }
+
+   rebuildChatInterface() {
+       // Clear existing messages
+       this.elements.chatMessages.innerHTML = '';
+       
+       // Start with Arti's intro message
+       this.addChatMessage("Hey! I'm Arti. Tell me what's going on with your deal and I'll help you work through it. What's the situation?", false);
+       
+       // Add all messages from history
+       this.state.chatHistory.forEach(entry => {
+           this.addChatMessage(entry.content, entry.role === 'user');
+       });
+   }
+
+   saveToLocalStorage() {
+       try {
+           // Save chat history (limit to last 20 messages to avoid storage limits)
+           const historyToSave = this.state.chatHistory.slice(-20);
+           localStorage.setItem('artChatHistory', JSON.stringify(historyToSave));
+           
+           // Save current mode
+           localStorage.setItem('artCurrentMode', this.state.currentMode);
+       } catch (error) {
+           console.error('Error saving to localStorage:', error);
+           // If saving fails, just continue
+       }
+   }
+initializeMermaid() {
        mermaid.initialize({ 
            startOnLoad: false,
            securityLevel: 'strict',
@@ -657,7 +715,7 @@ class AskArti {
        this.elements.generateReportBtn.addEventListener('click', () => this.generateFullReport());
    }
 
-   switchMode(mode) {
+   switchMode(mode, saveState = true) {
        this.state.currentMode = mode;
        
        // Update button states
@@ -675,13 +733,18 @@ class AskArti {
            this.elements.chatMode.classList.remove('hidden');
            this.elements.chatInput.focus();
        }
+       
+       // Save current mode if requested
+       if (saveState) {
+           this.saveToLocalStorage();
+       }
    }
 
    addChatMessage(content, isUser = false) {
        const messageHtml = `
            <div class="flex ${isUser ? 'justify-end' : 'justify-start'}">
                <div class="${isUser ? 'chat-message-user' : 'chat-message-arti'} 
-                           rounded-lg px-4 py-3 max-w-[80%] shadow-sm">
+                           rounded-lg px-4 py-3 max-w-[90%] sm:max-w-[80%] shadow-sm">
                    ${isUser ? content : marked.parse(content)}
                </div>
            </div>
@@ -714,11 +777,14 @@ class AskArti {
        const scrollContainer = document.querySelector('.chat-container');
        if (!scrollContainer) return;
 
+       // Use requestAnimationFrame for smoother scrolling
        requestAnimationFrame(() => {
            scrollContainer.scrollTop = scrollContainer.scrollHeight;
+           
+           // Second scroll after a delay to handle late rendering content
            setTimeout(() => {
                scrollContainer.scrollTop = scrollContainer.scrollHeight;
-           }, 100); // Handles late content rendering like images or Mermaid charts
+           }, 100);
        });
    }
 
@@ -728,21 +794,25 @@ class AskArti {
        return controller.signal;
    }
 
-   async makeChatRequest(message) {
-       // Increase context window and add smarter truncation
-       let conversationContext = this.state.chatHistory.slice(-10); // Last 5 exchanges
+   async makeChatRequest(message, retryCount = 0) {
+       // Prepare conversation context with appropriate length management
+       let conversationContext = [...this.state.chatHistory]; // Clone to avoid mutation
        
-       // If context is getting too long, summarize older messages
-       const contextString = conversationContext.map(h => `${h.role}: ${h.content}`).join('\n');
-       if (contextString.length > 1500) {
-           // Keep only the most recent 3 exchanges
-           conversationContext = this.state.chatHistory.slice(-6);
+       // Calculate context size to ensure we're not sending too much
+       const contextString = JSON.stringify(conversationContext);
+       const isContextTooLarge = contextString.length > 3000;
+       
+       // If context is too large, keep first message and most recent exchanges
+       if (isContextTooLarge) {
+           const firstMessages = conversationContext.slice(0, 2); // Keep the initial context
+           const recentMessages = conversationContext.slice(-6); // And the most recent messages
+           conversationContext = [...firstMessages, ...recentMessages];
+           console.log('Truncated context from', this.state.chatHistory.length, 'to', conversationContext.length, 'messages');
        }
        
        console.log('Chat History Length:', this.state.chatHistory.length);
        console.log('Message Count:', this.state.messageCount);
-       console.log('Sending context:', conversationContext);
-       console.log('Total context chars:', JSON.stringify(conversationContext).length);
+       console.log('Context Messages Count:', conversationContext.length);
        
        try {
            const response = await fetch(CONFIG.API_ENDPOINT, {
@@ -753,7 +823,7 @@ class AskArti {
                    mode: 'chat',
                    conversationHistory: conversationContext
                }),
-               signal: this.createTimeoutSignal(20000) // Add timeout
+               signal: this.createTimeoutSignal(CONFIG.REQUEST_TIMEOUT)
            });
 
            if (!response.ok) {
@@ -772,6 +842,15 @@ class AskArti {
            return data;
        } catch (error) {
            console.error('Chat request failed:', error);
+           
+           // Implement retry with exponential backoff
+           if (retryCount < CONFIG.MAX_RETRIES) {
+               const delay = CONFIG.RETRY_DELAY * Math.pow(2, retryCount);
+               console.log(`Retrying chat request in ${delay}ms...`);
+               await new Promise(resolve => setTimeout(resolve, delay));
+               return this.makeChatRequest(message, retryCount + 1);
+           }
+           
            throw error;
        }
    }
@@ -781,18 +860,19 @@ class AskArti {
        if (!message || this.state.pendingRequest) return;
 
        // Validate message length
-       if (message.length > 500) {
-           this.addChatMessage("That message is a bit long. Try breaking it into smaller parts.", false);
+       if (message.length > CONFIG.MAX_INPUT_LENGTH) {
+           this.addChatMessage("That message is a bit long. Try breaking it into smaller parts (max 500 characters).", false);
            return;
        }
 
-       // Add user message
+       // Add user message to UI
        this.addChatMessage(message, true);
        this.elements.chatInput.value = '';
        
        // Add to chat history
        this.state.chatHistory.push({ role: 'user', content: message });
        this.state.messageCount++;
+       this.saveToLocalStorage();
 
        // Show typing indicator
        this.showTypingIndicator();
@@ -813,9 +893,12 @@ class AskArti {
                throw new Error('No message in response');
            }
            
-           // Add Arti's response
+           // Add Arti's response to UI
            this.addChatMessage(messageContent);
+           
+           // Add to chat history
            this.state.chatHistory.push({ role: 'assistant', content: messageContent });
+           this.saveToLocalStorage();
 
            // Show generate report button after 2+ exchanges
            if (this.state.messageCount >= 2) {
@@ -831,10 +914,11 @@ class AskArti {
            this.hideTypingIndicator();
            console.error('Chat error details:', error);
            
-           // More specific error messages
-           let errorMessage = "I'm having trouble connecting right now.";
+           // Provide more specific error messages
+           let errorMessage = "I'm having trouble connecting right now. Please try again.";
+           
            if (error.message.includes('timeout') || error.name === 'AbortError') {
-               errorMessage = "That took too long to process. Please try a shorter message.";
+               errorMessage = "That took too long to process. Please try a shorter message or try again in a moment.";
            } else if (error.message.includes('400')) {
                errorMessage = "There was an issue with your message format. Please try rephrasing.";
            } else if (error.message.includes('500')) {
@@ -853,8 +937,8 @@ class AskArti {
                <p class="text-xs text-gray-500 mb-2 text-center">Tell me more or tap what's relevant:</p>
                <div class="flex gap-2 flex-wrap justify-center">
                    ${suggestions.map(s => `
-                       <button class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 rounded-full text-sm text-blue-700 hover:text-blue-800 transition-all"
-                               onclick="app.elements.chatInput.value='${s.replace(/'/g, "\\'")}'; app.sendChatMessage();">
+                       <button class="chat-suggestion px-3 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 rounded-full text-sm text-blue-700 hover:text-blue-800 transition-all"
+                               onclick="app.useSuggestion('${s.replace(/'/g, "\\'")}');">
                            ${s}
                        </button>
                    `).join('')}
@@ -865,16 +949,41 @@ class AskArti {
        this.scrollChatToBottom();
    }
 
-   async generateFullReport() {
-       // Collect all context from chat
-       const fullContext = this.state.chatHistory.map(h => 
-           `${h.role === 'user' ? 'User' : 'Arti'}: ${h.content}`
-       ).join('\n');
+   // Helper method to handle suggestion clicks
+   useSuggestion(text) {
+       this.elements.chatInput.value = text;
+       this.sendChatMessage();
+   }
 
-       // Show loading in results area
-       this.elements.resultsContainer.innerHTML = '<div class="text-center py-8"><div class="loader mx-auto"></div><p class="mt-4 text-gray-600">Generating your action plan...</p></div>';
+   async generateFullReport() {
+       // Prevent multiple simultaneous report generations
+       if (this.state.reportGenerationInProgress) {
+           this.showTemporaryMessage("Report generation already in progress", "warning");
+           return;
+       }
        
-       // Smooth scroll to results
+       // Validate we have enough chat history
+       if (this.state.chatHistory.length < 2) {
+           this.addChatMessage("We need a bit more conversation before I can generate a full action plan. Tell me more about your situation.", false);
+           return;
+       }
+       
+       // Update UI to show generation in progress
+       this.state.reportGenerationInProgress = true;
+       this.elements.generateReportBtn.disabled = true;
+       this.elements.generateReportBtn.textContent = "Generating...";
+       
+       // Save the current chat context for potential retry
+       this.state.lastReportContext = [...this.state.chatHistory];
+       
+       // Show loading in results area and scroll to it
+       this.elements.resultsContainer.innerHTML = `
+           <div class="text-center py-8">
+               <div class="loader mx-auto"></div>
+               <p class="mt-4 text-gray-600">Generating your action plan...</p>
+               <p class="text-sm text-gray-500 mt-2">This may take up to 30 seconds.</p>
+           </div>`;
+       
        this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
        try {
@@ -882,17 +991,65 @@ class AskArti {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
                body: JSON.stringify({ 
-                   situation: `Based on our chat conversation, please provide a comprehensive action plan. Context: ${fullContext}`,
+                   situation: `Generate a comprehensive action plan based on our conversation.`,
                    mode: 'report',
+                   conversationHistory: this.state.lastReportContext,
                    generateFullReport: true
-               })
+               }),
+               signal: this.createTimeoutSignal(CONFIG.REQUEST_TIMEOUT + 10000) // Longer timeout for reports
            });
 
+           if (!response.ok) {
+               throw new Error(`Server error (${response.status})`);
+           }
+
            const data = await response.json();
-           this.displayAdvice(data); // Use your existing display function
+           
+           if (data.error) {
+               throw new Error(data.message || data.error);
+           }
+           
+           // Successfully generated report
+           this.displayAdvice(data); 
+           
+           // Add a note in the chat that a report was generated
+           this.addChatMessage("I've generated an action plan based on our conversation. You can find it below.", false);
            
        } catch (error) {
-           this.showError("Failed to generate report. Please try again.");
+           console.error('Report generation error:', error);
+           
+           // Show error in results container
+           this.elements.resultsContainer.innerHTML = `
+               <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+                   <p class="text-red-700 font-medium mb-2">Report Generation Failed</p>
+                   <p class="text-red-600 text-sm mb-4">${error.message || "We had trouble creating your action plan."}</p>
+                   <button class="bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg text-sm" onclick="app.retryReportGeneration()">
+                       Try Again
+                   </button>
+               </div>`;
+           
+           // Also notify in the chat
+           this.addChatMessage("I had trouble generating your action plan. You can try again using the 'Generate Action Plan' button, or we can continue our conversation for more specific advice.", false);
+           
+       } finally {
+           // Reset UI state
+           this.state.reportGenerationInProgress = false;
+           this.elements.generateReportBtn.disabled = false;
+           this.elements.generateReportBtn.textContent = "Generate Action Plan";
+       }
+   }
+
+   // Retry report generation with the same context
+   retryReportGeneration() {
+       if (this.state.lastReportContext && this.state.lastReportContext.length > 0) {
+           // Restore chat history if needed
+           if (this.state.lastReportContext.length !== this.state.chatHistory.length) {
+               this.state.chatHistory = [...this.state.lastReportContext];
+           }
+           this.generateFullReport();
+       } else {
+           // No context to retry with
+           this.showTemporaryMessage("Cannot retry - missing context", "error");
        }
    }
 
@@ -946,7 +1103,7 @@ class AskArti {
        
        setTimeout(() => {
            this.elements.loadingMessageContainer.classList.add('hidden');
-       }, 2000);
+       }, 2500);
    }
 
    async getAdvice() {
@@ -988,7 +1145,7 @@ class AskArti {
        }
    }
 
-   async makeRequest(situation) {
+   async makeRequest(situation, retryCount = 0) {
        this.state.abortController = new AbortController();
        
        const timeoutId = setTimeout(() => {
@@ -1020,6 +1177,15 @@ class AskArti {
            if (error.name === 'AbortError') {
                throw new Error('Request timed out. Please try again.');
            }
+           
+           // Implement retry with exponential backoff
+           if (retryCount < CONFIG.MAX_RETRIES) {
+               const delay = CONFIG.RETRY_DELAY * Math.pow(2, retryCount);
+               console.log(`Retrying request in ${delay}ms...`);
+               await new Promise(resolve => setTimeout(resolve, delay));
+               return this.makeRequest(situation, retryCount + 1);
+           }
+           
            throw error;
        }
    }
@@ -1204,8 +1370,7 @@ class AskArti {
                        </div>` : ''}
                </div>
            </div>` : ''}
-           
-           ${next_steps ? `
+		   ${next_steps ? `
                <div class="bg-customPurple-200/60 p-4 rounded-lg text-sm text-customPurple-900">
                    <b class="font-semibold">Remember:</b> ${next_steps}
                </div>` : ''}
@@ -1335,10 +1500,24 @@ class AskArti {
        content.classList.remove('show');
        setTimeout(() => this.elements.aboutModal.classList.add('hidden'), 200);
    }
+
+   // Clear chat history and reset
+   clearChatHistory() {
+       this.state.chatHistory = [];
+       this.state.messageCount = 0;
+       this.saveToLocalStorage();
+       this.rebuildChatInterface();
+       this.elements.generateReportBtn.classList.add('hidden');
+   }
 }
 
 // Initialize app
 const app = new AskArti();
+
+// Make the useSuggestion method available globally
+window.useSuggestion = (text) => {
+    app.useSuggestion(text);
+};
 </script>
 </body>
 </html>
