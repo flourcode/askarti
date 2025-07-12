@@ -815,20 +815,17 @@ class AskArti {
        // Avoid running if a request is already in progress
        if (this.state.pendingRequest) return;
 
-       const planTopic = prompt("What would you like to create a plan for?\n\ne.g., 'selling to the VA' or 'improving my relationship with my boss'");
-
-       if (planTopic && planTopic.trim().length > 0) {
-            const message = `Help me build a plan for: ${planTopic}`;
-            // Manually add the user's request to the chat UI for visual context.
-            this.addChatMessage(message, true);
-
-            // Manually update the internal conversation history state.
-            this.state.chatHistory.push({ role: 'user', content: message });
-            this.state.messageCount++; // Keep the count accurate
-
-            // Immediately call the function to generate the plan.
-            this.generateAccountPlan();
+       // If there are results from a previous query, clear them out.
+       if (this.state.hasActiveResults) {
+            this.clearResults();
        }
+       
+       // Define a clear, conversational message to start the process
+       const message = "Help me build an action plan.";
+       
+       // Place the message in the input box and send it immediately
+       this.elements.chatInput.value = message;
+       this.sendChatMessage();
    }
    async generateAccountPlan() {
        if (this.state.pendingRequest) return;
