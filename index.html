@@ -711,7 +711,8 @@ class AskArti {
         }
     }
 
-  async sendChatMessage() {
+    // UPDATED: Enhanced chat message handling
+    async sendChatMessage() {
         const message = this.elements.chatInput.value.trim();
         
         if (this.state.pendingRequest || !message) return;
@@ -739,20 +740,16 @@ class AskArti {
             this.hideTypingIndicator();
             
             const aiMessage = response.message || "Tell me more.";
-            // Add response
             this.addChatMessage(aiMessage, false);
-			this.state.chatHistory.push({ role: 'assistant', content: aiMessage });
-           this.state.lastQuery = '';
+            this.state.chatHistory.push({ role: 'assistant', content: aiMessage });
+            this.state.lastQuery = '';
 
-           // Show account plan button if the AI indicates it's ready
-            if (aiMessage.includes("generate an action plan now") && !document.getElementById('generate-plan-container')) {
-                this.addAccountPlanButton();
+            // NEW: Show strategic plan button when ready (instead of confusing bubbles)
+            if (response.ready_for_plan && !document.getElementById('generate-plan-container')) {
+                this.addStrategicPlanButton();
             }
 
-           // Add follow-up suggestions
-           if (response.suggestions && response.suggestions.length > 0) {
-               this.addFollowUpSuggestions(response.suggestions);
-           }
+            // REMOVED: No more suggestion bubbles that confuse users
 
        } catch (error) {
            console.error('Chat request failed:', error);
@@ -763,6 +760,7 @@ class AskArti {
            this.state.pendingRequest = false;
        }
    }
+
    async makeChatRequest(message) {
        const contextToSend = this.state.chatHistory.length > 20 
            ? [this.state.chatHistory[0], ...this.state.chatHistory.slice(-19)]
@@ -783,27 +781,13 @@ class AskArti {
        return await response.json();
    }
 
-   addFollowUpSuggestions(suggestions) {
-       const suggestionsHtml = `
-           <div class="flex flex-wrap gap-2 justify-center my-4 px-4">
-               ${suggestions.map(s => `
-                   <button class="scenario-btn text-xs" 
-                           onclick="app.elements.chatInput.value='${s.replace(/'/g, "\\'")}'; app.sendChatMessage();">
-                       ${s}
-                   </button>
-               `).join('')}
-           </div>
-       `;
-       this.elements.chatMessages.insertAdjacentHTML('beforeend', suggestionsHtml);
-       this.scrollChatToBottom();
-   }
-
-   addAccountPlanButton() {
+   // NEW: Strategic plan button (replaces confusing suggestion bubbles)
+   addStrategicPlanButton() {
        const btnHtml = `
            <div id="generate-plan-container" class="flex justify-center my-4">
-               <button onclick="app.generateAccountPlan()" 
-                   class="px-4 py-2 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg text-sm transition-colors">
-                   Generate Account Plan
+               <button onclick="app.generateStrategicPlan()" 
+                   class="px-6 py-3 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg text-sm transition-colors">
+                   Generate Strategic Plan
                </button>
            </div>
        `;
@@ -811,7 +795,7 @@ class AskArti {
        this.scrollChatToBottom();
    }
 
-  autoCreateAccountPlan() {
+   autoCreateAccountPlan() {
        // Avoid running if a request is already in progress
        if (this.state.pendingRequest) return;
 
@@ -827,37 +811,36 @@ class AskArti {
        this.elements.chatInput.value = message;
        this.sendChatMessage();
    }
+
+   // UPDATED: Enhanced strategic plan generation
    async generateAccountPlan() {
+       return this.generateStrategicPlan(); // Redirect to new method
+   }
+
+   async generateStrategicPlan() {
        if (this.state.pendingRequest) return;
        
-       // Clear any existing results
        this.clearResults();
-       
        this.showLoading();
        this.elements.accountPlanContainer.innerHTML = `
            <div class="result-card text-center p-6">
                <div class="loader mx-auto mb-3"></div>
-               <p class="text-sm text-gray-600">Building your account plan...</p>
+               <p class="text-sm text-gray-600">Creating your strategic plan...</p>
            </div>
        `;
        this.elements.accountPlanContainer.classList.remove('hidden');
-       
        this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
        
        this.state.pendingRequest = true;
        
        try {
-           const contextToSend = this.state.chatHistory.length > 20 
-               ? [this.state.chatHistory[0], ...this.state.chatHistory.slice(-19)]
-               : this.state.chatHistory;
-           
            const response = await fetch(CONFIG.API_ENDPOINT, {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
                body: JSON.stringify({ 
-                   situation: "Generate account plan",
-                   mode: 'account_plan',
-                   conversationHistory: contextToSend,
+                   situation: "Generate strategic plan",
+                   mode: 'strategic_plan',
+                   conversationHistory: this.state.chatHistory,
                    currentDate: new Date().toISOString().split('T')[0]
                })
            });
@@ -867,15 +850,17 @@ class AskArti {
            const data = await response.json();
            this.hideLoading();
            this.state.hasActiveResults = true;
+           
+           // Use existing display method - it handles the new format
            this.displayAccountPlan(data);
            
        } catch (error) {
-           console.error('Account plan generation failed:', error);
+           console.error('Strategic plan generation failed:', error);
            this.hideLoading();
            this.elements.accountPlanContainer.innerHTML = `
                <div class="result-card text-center">
                    <p class="text-red-600 font-medium text-sm mb-3">Couldn't generate your plan.</p>
-                   <button onclick="app.generateAccountPlan()" 
+                   <button onclick="app.generateStrategicPlan()" 
                        class="text-red-700 underline text-sm">Try again</button>
                </div>
            `;
@@ -886,32 +871,30 @@ class AskArti {
 
    displayAccountPlan(data) {
        const { 
-           account_name = 'Federal Agency',
+           account_name = 'Strategic Plan',
+           executive_summary = '',
            objectives = [],
            stakeholders = [],
            opportunities = [],
            challenges = [],
            success_metrics = [],
            action_items = [],
-           mermaid_chart
+           next_steps = [],
+           strategic_assessment = {},
+           stakeholder_strategy = [],
+           communication_framework = {},
+           top_contractors = [],
+           technology_plays = [],
+           market_intelligence = {},
+           strategic_diagram
        } = data;
-       
-       if (!account_name || account_name === 'Federal Agency') {
-           this.elements.accountPlanContainer.innerHTML = `
-               <div class="result-card text-center p-6">
-                   <p class="text-gray-700 font-medium mb-2">Need More Details</p>
-                   <p class="text-sm text-gray-600">Tell me more about your target agency and what you're selling.</p>
-               </div>
-           `;
-           return;
-       }
        
        let html = `
            <div class="account-plan-header">
                <div class="flex justify-between items-center">
                    <div>
                        <h2 class="text-xl font-bold text-gray-900">${account_name}</h2>
-                       <p class="text-sm text-gray-600">Account Strategy</p>
+                       <p class="text-sm text-gray-600">Strategic Analysis & Recommendations</p>
                    </div>
                    <div class="flex gap-2">
                        <button onclick="app.copyAccountPlan()" 
@@ -932,150 +915,194 @@ class AskArti {
                </div>
            </div>
 
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <!-- Objectives -->
-               <div class="result-card">
-                   <h3>Key Objectives</h3>
-                   <ul class="space-y-2">
-                       ${objectives.map(o => `
-                           <li class="flex items-start gap-2">
-                               <span class="text-customPurple-500 mt-1">•</span>
-                               <span>${o}</span>
-                           </li>
-                       `).join('') || '<li class="text-gray-500 italic">No objectives defined</li>'}
-                   </ul>
+           ${executive_summary ? `
+               <div class="result-card bg-customPurple-50 border-customPurple-200">
+                   <h3>Executive Summary</h3>
+                   <p>${executive_summary}</p>
                </div>
-               
-               <!-- Challenges -->
-               <div class="result-card">
-                   <h3>Challenges</h3>
-                   <ul class="space-y-2">
-                       ${challenges.map(c => `
-                           <li class="flex items-start gap-2">
-                               <span class="text-red-500 mt-1">•</span>
-                               <span>${c}</span>
-                           </li>
-                       `).join('') || '<li class="text-gray-500 italic">No challenges identified</li>'}
-                   </ul>
-               </div>
-           </div>
-           
-           <!-- Stakeholders -->
-           <div class="result-card">
-               <h3>Key Stakeholders</h3>
-               <div class="overflow-x-auto">
-                   <table class="data-table w-full">
-                       <thead>
-                           <tr class="border-b border-gray-200">
-                               <th class="text-left py-2 px-3">Name/Role</th>
-                               <th class="text-left py-2 px-3">Influence</th>
-                               <th class="text-left py-2 px-3">Notes</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                           ${stakeholders.map(s => `
-                               <tr class="border-b border-gray-100">
-                                   <td class="py-2 px-3 font-medium">${s.name || 'Unknown'}</td>
-                                   <td class="py-2 px-3">
-                                       <span class="inline-block px-2 py-1 rounded text-xs font-medium ${
-                                           s.influence?.toLowerCase() === 'high' ? 'bg-green-100 text-green-800' :
-                                           s.influence?.toLowerCase() === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                                           'bg-gray-100 text-gray-800'
-                                       }">${s.influence || 'Unknown'}</span>
-                                   </td>
-                                   <td class="py-2 px-3 text-sm">${s.notes || '—'}</td>
-                               </tr>
-                           `).join('') || `
-                               <tr>
-                                   <td colspan="3" class="py-4 text-center text-gray-500 italic">
-                                       No stakeholders identified
-                                   </td>
-                               </tr>
-                           `}
-                       </tbody>
-                   </table>
-               </div>
-           </div>
-           
-           <!-- Opportunities -->
-           <div class="result-card">
-               <h3>Opportunities</h3>
-               <div class="overflow-x-auto">
-                   <table class="data-table w-full">
-                       <thead>
-                           <tr class="border-b border-gray-200">
-                               <th class="text-left py-2 px-3">Opportunity</th>
-                               <th class="text-left py-2 px-3">Value</th>
-                               <th class="text-left py-2 px-3">Status</th>
-                               <th class="text-left py-2 px-3">Next Steps</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                           ${opportunities.map(o => `
-                               <tr class="border-b border-gray-100">
-                                   <td class="py-2 px-3 font-medium">${o.name || 'Unknown'}</td>
-                                   <td class="py-2 px-3 font-bold text-green-700">${o.value || '—'}</td>
-                                   <td class="py-2 px-3 text-sm">${o.status || '—'}</td>
-                                   <td class="py-2 px-3 text-sm">${o.next_steps || '—'}</td>
-                               </tr>
-                           `).join('') || `
-                               <tr>
-                                   <td colspan="4" class="py-4 text-center text-gray-500 italic">
-                                       No opportunities identified
-                                   </td>
-                               </tr>
-                           `}
-                       </tbody>
-                   </table>
-               </div>
-           </div>
+           ` : ''}
 
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <!-- Success Metrics -->
+           ${strategic_assessment && Object.keys(strategic_assessment).length > 0 ? `
                <div class="result-card">
-                   <h3>Success Metrics</h3>
-                   <ul class="space-y-2">
-                       ${success_metrics.map(m => `
-                           <li class="flex items-start gap-2">
-                               <span class="text-green-500 mt-1">✓</span>
-                               <span>${m}</span>
-                           </li>
-                       `).join('') || '<li class="text-gray-500 italic">No metrics defined</li>'}
-                   </ul>
+                   <h3>Strategic Assessment</h3>
+                   ${strategic_assessment.current_state ? `
+                       <div class="mb-4">
+                           <h4 class="font-semibold text-gray-800 mb-2">Current State</h4>
+                           <p class="text-sm">${strategic_assessment.current_state}</p>
+                       </div>
+                   ` : ''}
+                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       ${strategic_assessment.key_challenges ? `
+                           <div>
+                               <h4 class="font-semibold text-gray-800 mb-2">Key Challenges</h4>
+                               <ul class="space-y-1">
+                                   ${strategic_assessment.key_challenges.map(c => `
+                                       <li class="flex items-start gap-2">
+                                           <span class="text-red-500 mt-1 text-xs">▪</span>
+                                           <span class="text-sm">${c}</span>
+                                       </li>
+                                   `).join('')}
+                               </ul>
+                           </div>
+                       ` : ''}
+                       ${strategic_assessment.opportunities ? `
+                           <div>
+                               <h4 class="font-semibold text-gray-800 mb-2">Strategic Opportunities</h4>
+                               <ul class="space-y-1">
+                                   ${strategic_assessment.opportunities.map(o => `
+                                       <li class="flex items-start gap-2">
+                                           <span class="text-green-500 mt-1 text-xs">▪</span>
+                                           <span class="text-sm">${o}</span>
+                                       </li>
+                                   `).join('')}
+                               </ul>
+                           </div>
+                       ` : ''}
+                   </div>
                </div>
-               
-               <!-- Action Items -->
+           ` : ''}
+
+           ${next_steps && next_steps.length > 0 ? `
                <div class="result-card">
-                   <h3>Next Actions</h3>
-                   <ul class="space-y-2">
-                       ${action_items.map(a => `
-                           <li class="flex items-start gap-2">
-                               <span class="text-customPurple-500 mt-1">→</span>
-                               <span>${a}</span>
-                           </li>
-                       `).join('') || '<li class="text-gray-500 italic">No actions defined</li>'}
-                   </ul>
+                   <h3>Strategic Next Steps</h3>
+                   <div class="space-y-4">
+                       ${next_steps.map((step, i) => `
+                           <div class="border-l-4 ${
+                               step.priority === 'immediate' ? 'border-red-500 bg-red-50' :
+                               step.priority === 'high' ? 'border-orange-500 bg-orange-50' :
+                               'border-blue-500 bg-blue-50'
+                           } pl-4 py-3">
+                               <div class="flex justify-between items-start mb-2">
+                                   <h4 class="font-semibold text-gray-900">${step.action}</h4>
+                                   <span class="text-xs font-medium px-2 py-1 rounded ${
+                                       step.priority === 'immediate' ? 'bg-red-100 text-red-800' :
+                                       step.priority === 'high' ? 'bg-orange-100 text-orange-800' :
+                                       'bg-blue-100 text-blue-800'
+                                   }">${step.priority} • ${step.timeline}</span>
+                               </div>
+                               <p class="text-sm text-gray-700">${step.rationale}</p>
+                           </div>
+                       `).join('')}
+                   </div>
                </div>
-           </div>
-       `;
-       
-       // Add mermaid chart if available
-       if (mermaid_chart) {
-           html += `
+           ` : ''}
+
+           ${market_intelligence && Object.keys(market_intelligence).length > 0 ? `
                <div class="result-card">
-                   <h3>Game Plan</h3>
+                   <h3>Market Intelligence</h3>
+                   ${market_intelligence.market_size ? `<p class="text-sm mb-3"><strong>Market Size:</strong> ${market_intelligence.market_size}</p>` : ''}
+                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       ${market_intelligence.key_trends ? `
+                           <div>
+                               <h4 class="font-semibold text-gray-800 mb-2">Key Market Trends</h4>
+                               <ul class="space-y-1">
+                                   ${market_intelligence.key_trends.map(t => `<li class="text-sm">• ${t}</li>`).join('')}
+                               </ul>
+                           </div>
+                       ` : ''}
+                       ${market_intelligence.procurement_landscape ? `
+                           <div>
+                               <h4 class="font-semibold text-gray-800 mb-2">Procurement Landscape</h4>
+                               <p class="text-sm">${market_intelligence.procurement_landscape}</p>
+                           </div>
+                       ` : ''}
+                   </div>
+               </div>
+           ` : ''}
+
+           ${top_contractors && top_contractors.length > 0 ? `
+               <div class="result-card">
+                   <h3>Key Contractors & Partners</h3>
+                   <div class="space-y-3">
+                       ${top_contractors.map(contractor => `
+                           <div class="border border-gray-200 rounded-lg p-3">
+                               <h4 class="font-semibold text-gray-900">${contractor.name}</h4>
+                               <p class="text-sm text-gray-600 mb-2">${contractor.strength}</p>
+                               <p class="text-sm"><strong>Engagement Opportunity:</strong> ${contractor.opportunity}</p>
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>
+           ` : ''}
+
+           ${technology_plays && technology_plays.length > 0 ? `
+               <div class="result-card">
+                   <h3>Technology Landscape</h3>
+                   <div class="space-y-3">
+                       ${technology_plays.map(tech => `
+                           <div class="border border-gray-200 rounded-lg p-3">
+                               <h4 class="font-semibold text-gray-900">${tech.technology}</h4>
+                               <p class="text-sm text-gray-600 mb-2">${tech.federal_adoption}</p>
+                               <p class="text-sm"><strong>Your Positioning:</strong> ${tech.opportunity}</p>
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>
+           ` : ''}
+
+           ${stakeholder_strategy && stakeholder_strategy.length > 0 ? `
+               <div class="result-card">
+                   <h3>Stakeholder Strategy</h3>
+                   <div class="space-y-4">
+                       ${stakeholder_strategy.map(group => `
+                           <div class="border border-gray-200 rounded-lg p-4">
+                               <h4 class="font-semibold text-gray-900 mb-2">${group.stakeholder_group}</h4>
+                               <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                   <div>
+                                       <strong>Approach:</strong> ${group.approach}
+                                   </div>
+                                   <div>
+                                       <strong>Key Messages:</strong> ${group.key_messages}
+                                   </div>
+                               </div>
+                               ${group.success_metrics ? `
+                                   <div class="mt-2 text-sm">
+                                       <strong>Success Metrics:</strong> ${group.success_metrics}
+                                   </div>
+                               ` : ''}
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>
+           ` : ''}
+
+           ${communication_framework && Object.keys(communication_framework).length > 0 ? `
+               <div class="result-card">
+                   <h3>Communication Framework</h3>
+                   ${communication_framework.key_messages ? `
+                       <div class="mb-4">
+                           <h4 class="font-semibold text-gray-800 mb-2">Key Messages</h4>
+                           <ul class="space-y-1">
+                               ${communication_framework.key_messages.map(msg => `
+                                   <li class="text-sm">• ${msg}</li>
+                               `).join('')}
+                           </ul>
+                       </div>
+                   ` : ''}
+                   ${communication_framework.email_template ? `
+                       <div>
+                           <h4 class="font-semibold text-gray-800 mb-2">Email Template</h4>
+                           <div class="bg-gray-50 rounded-lg p-3 text-xs font-mono whitespace-pre-wrap border border-gray-200">${communication_framework.email_template}</div>
+                       </div>
+                   ` : ''}
+               </div>
+           ` : ''}
+
+           ${strategic_diagram ? `
+               <div class="result-card">
+                   <h3>Strategic Framework</h3>
                    <div class="mermaid-container">
                        <div id="mermaid-diagram" class="mermaid">
-                           ${mermaid_chart}
+                           ${strategic_diagram}
                        </div>
                    </div>
                </div>
-           `;
-       }
+           ` : ''}
+       `;
        
        this.elements.accountPlanContainer.innerHTML = html;
        
-       if (mermaid_chart) {
+       if (strategic_diagram) {
            this.renderMermaidChart();
        }
    }
@@ -1090,7 +1117,7 @@ class AskArti {
        
        navigator.clipboard.writeText(content)
            .then(() => {
-               alert('Account plan copied!');
+               alert('Strategic plan copied!');
            })
            .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
    }
@@ -1247,7 +1274,7 @@ class AskArti {
                </div>
                
                <div class="result-card">
-                   <h3>Game Plan</h3>
+                   <h3>Strategy</h3>
                    ${mermaid_chart ? `
                        <div class="mermaid-container">
                            <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
