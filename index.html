@@ -57,7 +57,7 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-WLGEPY5H4G');
-    </script> 
+    </script>   
     <script>
         tailwind.config = {
             theme: {
@@ -88,6 +88,16 @@
     .card-header { display: flex; align-items: center; gap: 0.75rem; padding-bottom: 0.75rem; margin-bottom: 1rem; border-bottom: 1px solid #E9ECEF; }
     .card-icon { color: #5A4E8C; flex-shrink: 0; }
     .card-title { font-size: 1.125rem; font-weight: 600; color: #212529; }
+	.mermaid-container {
+        text-align: center;
+        min-height: 200px;
+        position: relative;
+    }
+
+    .mermaid {
+        display: inline-block;
+        max-width: 100%;
+    }
 </style>
 </head>
 <body class="text-text">
@@ -139,29 +149,9 @@ class StrategicAdvisorApp {
     }
 
     init() {
-    mermaid.initialize({ 
-        startOnLoad: false, 
-        securityLevel: 'strict',
-        theme: 'base', // Use the base theme as a starting point for customization
-        themeVariables: {
-            // Chart background color
-            background: '#FFFFFF', 
-
-            // Default styles for nodes
-            primaryColor: '#F6F5FB',      // Muted purple background
-            primaryTextColor: '#403866',  // Deep purple for text
-            primaryBorderColor: '#D8D2EF', // Soft purple border
-
-            // Style for arrows and lines
-            lineColor: '#5A4E8C',         
-            
-            // Extra colors you can use with classDef
-            secondaryColor: '#E8E4F7',    
-            tertiaryColor: '#D8D2EF'      
-        }
-    });
-    this.setupEventListeners();
-}
+        mermaid.initialize({ startOnLoad: false, theme: 'base', securityLevel: 'strict' });
+        this.setupEventListeners();
+    }
 
     setupEventListeners() {
         this.elements.chatSendBtn.addEventListener('click', () => this.getResponse());
