@@ -371,6 +371,34 @@
             border-color: #4b5563;
         }
     }
+	/* --- UNIFIED CARD TYPOGRAPHY --- */
+.therapy-card h3 {
+    font-size: 1.1rem; /* 17.6px */
+    font-weight: 800; /* Extra-bold for clear headings */
+    color: #1f2937;
+}
+
+.therapy-card p, 
+.therapy-card li, 
+.therapy-card td,
+.therapy-card .prose {
+    font-size: 0.9rem; /* 14.4px */
+    line-height: 1.65;
+    color: #374151; /* A standard, readable text color */
+}
+
+/* Ensure prose styles don't override the base therapy-card styles */
+.therapy-card .prose p, 
+.therapy-card .prose li {
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+}
+
+.therapy-card strong {
+    color: #111827; /* Make bolded text stand out */
+    font-weight: 700;
+}
 </style>
 
 </head>
@@ -931,6 +959,8 @@ class AskArti {
    }
 
    async quickAnalysis(scenario) {
+   
+   this.elements.resultsContainer.innerHTML = ''; 
        // Detect stress from scenario
        this.detectStressLevel(scenario);
        
@@ -1232,9 +1262,10 @@ class AskArti {
 
    async generateAccountPlan() {
        if (this.state.pendingRequest) return;
+	   this.elements.resultsContainer.innerHTML = '';
        
        // Show loading
-       this.showTemporaryMessage('Crafting your federal domination strategy...', 'info');
+       this.showTemporaryMessage('Crafting your plan...', 'info');
        this.elements.accountPlanContainer.innerHTML = `
            <div class="therapy-card text-center p-8 animate-pulse-slow">
                <div class="loader mx-auto mb-4"></div>
