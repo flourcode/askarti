@@ -167,6 +167,15 @@
         border: 1px solid #E5E7EB;
         padding: 1.5rem;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        transition: opacity 0.3s ease, height 0.3s ease;
+    }
+
+    .result-card[style*="display: none"] {
+        opacity: 0;
+        height: 0;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
     }
 
     /* Scenario buttons */
@@ -252,517 +261,519 @@
     }
 
     /* Account plan specific styles */
-    .account-plan-header {
-        background: linear-gradient(135deg, #F6F5FB 0%, #E8E4F7 100%);
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
+   .account-plan-header {
+       background: linear-gradient(135deg, #F6F5FB 0%, #E8E4F7 100%);
+       border-radius: 12px;
+       padding: 1.5rem;
+       margin-bottom: 1.5rem;
+   }
 
-    /* Table styles */
-    .data-table {
-        font-size: 0.875rem;
-    }
+   /* Table styles */
+   .data-table {
+       font-size: 0.875rem;
+   }
 
-    .data-table th {
-        font-weight: 600;
-        color: #6B7280;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 0.05em;
-    }
+   .data-table th {
+       font-weight: 600;
+       color: #6B7280;
+       text-transform: uppercase;
+       font-size: 0.75rem;
+       letter-spacing: 0.05em;
+   }
 
-    .data-table td {
-        color: #374151;
-    }
+   .data-table td {
+       color: #374151;
+   }
 
-    /* Mobile optimizations */
-    @media (max-width: 640px) {
-        .result-card {
-            padding: 1rem;
-        }
+   /* Mobile optimizations */
+   @media (max-width: 640px) {
+       .result-card {
+           padding: 1rem;
+       }
 
-        .scenario-btn {
-            font-size: 0.8125rem;
-            padding: 0.375rem 0.75rem;
-        }
+       .scenario-btn {
+           font-size: 0.8125rem;
+           padding: 0.375rem 0.75rem;
+       }
 
-        input[type="text"] {
-            font-size: 16px !important; /* Prevent zoom on iOS */
-        }
-    }
+       input[type="text"] {
+           font-size: 16px !important; /* Prevent zoom on iOS */
+       }
+   }
 
-    /* Print styles */
-    @media print {
-        body {
-            background-color: white;
-        }
-        
-        .no-print {
-            display: none !important;
-        }
-        
-        .result-card {
-            box-shadow: none;
-            border: 1px solid #E5E7EB;
-            break-inside: avoid;
-        }
-    }
+   /* Print styles */
+   @media print {
+       body {
+           background-color: white;
+       }
+       
+       .no-print {
+           display: none !important;
+       }
+       
+       .result-card {
+           box-shadow: none;
+           border: 1px solid #E5E7EB;
+           break-inside: avoid;
+       }
+   }
 </style>
 
 </head>
 <body class="bg-gray-50 text-gray-900">
-    <div class="max-w-3xl mx-auto px-4 py-6 min-h-screen">
-        <!-- Clean header -->
-        <header class="text-center mb-6">
-            <a href="/" aria-label="AskArti Home">
-                <img src="/images/asklite.png" alt="AskArti" class="h-16 sm:h-20 mx-auto">
-            </a>
-        </header>
+   <div class="max-w-3xl mx-auto px-4 py-6 min-h-screen">
+       <!-- Clean header -->
+       <header class="text-center mb-6">
+           <a href="/" aria-label="AskArti Home">
+               <img src="/images/asklite.png" alt="AskArti" class="h-16 sm:h-20 mx-auto">
+           </a>
+       </header>
 
-        <!-- Main chat interface -->
-        <main class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
-            <div class="p-4 sm:p-6">
-                <!-- Chat messages -->
-                <div class="chat-container mb-4" id="chat-messages">
-                    <div class="flex items-start gap-3 mb-4">
-                        <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
-                        <div class="chat-message-arti px-4 py-2.5 max-w-[85%]">
-                            <p class="text-sm">
-                                Hey, I'm Arti, your Federal Sales Buddy. 
-                                What's on your mind?
-                            </p>
-                        </div>
-                    </div>
-                </div>
+       <!-- Main chat interface -->
+       <main class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+           <div class="p-4 sm:p-6">
+               <!-- Chat messages -->
+               <div class="chat-container mb-4" id="chat-messages">
+                   <div class="flex items-start gap-3 mb-4">
+                       <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
+                       <div class="chat-message-arti px-4 py-2.5 max-w-[85%]">
+                           <p class="text-sm">
+                               Hey, I'm Arti, your Federal Sales Buddy. 
+                               What's on your mind?
+                           </p>
+                       </div>
+                   </div>
+               </div>
 
-                <!-- Input area -->
-                <div class="flex gap-2">
-                    <button 
-                        id="clear-chat-btn"
-                        class="p-2.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors no-print"
-                        title="Clear chat">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                        </svg>
-                    </button>
-                    <input 
-                        type="text" 
-                        id="chat-input"
-                        class="flex-1 px-4 py-2.5 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-customPurple-500 focus:border-transparent outline-none transition-all"
-                        placeholder="What's going on with your deal?"
-                        maxlength="500">
-                    <button 
-                        id="chat-send-btn" 
-                        class="px-4 sm:px-6 py-2.5 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2 no-print">
-                        <span class="hidden sm:inline">Send</span>
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
+               <!-- Input area -->
+               <div class="flex gap-2">
+                   <button 
+                       id="clear-chat-btn"
+                       class="p-2.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors no-print"
+                       title="Clear chat">
+                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                       </svg>
+                   </button>
+                   <input 
+                       type="text" 
+                       id="chat-input"
+                       class="flex-1 px-4 py-2.5 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-customPurple-500 focus:border-transparent outline-none transition-all"
+                       placeholder="What's going on with your deal?"
+                       maxlength="500">
+                   <button 
+                       id="chat-send-btn" 
+                       class="px-4 sm:px-6 py-2.5 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2 no-print">
+                       <span class="hidden sm:inline">Send</span>
+                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                       </svg>
+                   </button>
+               </div>
+           </div>
 
-            <!-- Quick scenarios -->
-            <div class="border-t border-gray-200 px-4 py-3 bg-gray-50 no-print">
-                <div class="flex flex-wrap gap-2 justify-center">
-                    <button class="scenario-btn" onclick="app.quickAnalysis('Buyer ghosted me after pricing. CIO loves our competitor.')">
-                        👻Buyer Ghosted Me
-                    </button>
-                    <button class="scenario-btn" onclick="app.quickAnalysis('Help me prep for an AWS Federal Sales Interview.')">
-                        💼 Interview Prep
-                    </button>
-                    <button class="scenario-btn" onclick="app.quickAnalysis('My internal Partner and Account reps are battling over deals, pipeline, and revenue recognition.')">
-                        🤝 Partner Drama
-                    </button>
-                    <button class="scenario-btn" onclick="app.autoCreateAccountPlan()">
-                        📋 Write My Plan
-                    </button>
-                </div>
-            </div>
-        </main>
+           <!-- Quick scenarios -->
+           <div class="border-t border-gray-200 px-4 py-3 bg-gray-50 no-print">
+               <div class="flex flex-wrap gap-2 justify-center">
+                   <button class="scenario-btn" onclick="app.quickAnalysis('Buyer ghosted me after pricing. CIO loves our competitor.')">
+                       👻Buyer Ghosted Me
+                   </button>
+                   <button class="scenario-btn" onclick="app.quickAnalysis('Help me prep for an AWS Federal Sales Interview.')">
+                       💼 Interview Prep
+                   </button>
+                   <button class="scenario-btn" onclick="app.quickAnalysis('My internal Partner and Account reps are battling over deals, pipeline, and revenue recognition.')">
+                       🤝 Partner Drama
+                   </button>
+                   <button class="scenario-btn" onclick="app.autoCreateAccountPlan()">
+                       📋 Write My Plan
+                   </button>
+               </div>
+           </div>
+       </main>
 
-        <!-- Loading state -->
-        <div id="loading-container" class="hidden text-center py-4">
-            <div class="inline-flex items-center gap-3 text-gray-600">
-                <span id="loading-message" class="text-sm font-medium"></span>
-            </div>
-        </div>
+       <!-- Loading state -->
+       <div id="loading-container" class="hidden text-center py-4">
+           <div class="inline-flex items-center gap-3 text-gray-600">
+               <span id="loading-message" class="text-sm font-medium"></span>
+           </div>
+       </div>
 
-        <!-- Error state -->
-        <div id="error-message" class="hidden bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-            <p class="text-red-700 font-medium text-sm">Connection issues. Even the servers are ghosting us.</p>
-            <button id="retry-btn" class="mt-2 text-red-700 underline text-sm">Try again</button>
-        </div>
+       <!-- Error state -->
+       <div id="error-message" class="hidden bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+           <p class="text-red-700 font-medium text-sm">Connection issues. Even the servers are ghosting us.</p>
+           <button id="retry-btn" class="mt-2 text-red-700 underline text-sm">Try again</button>
+       </div>
 
-        <!-- Results container -->
-        <div id="results-container" class="space-y-4"></div>
-        
-        <!-- Account Plan container -->
-        <div id="account-plan-container" class="hidden space-y-4"></div>
+       <!-- Results container -->
+       <div id="results-container" class="space-y-4"></div>
+       
+       <!-- Account Plan container -->
+       <div id="account-plan-container" class="hidden space-y-4"></div>
 
-        <!-- Footer -->
-        <footer class="text-center mt-12 space-y-4 pb-8 no-print">
-            <div class="flex justify-center gap-6 text-sm">
-                <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">About</button>
-                <button id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Share</button>
-                <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Contact</a>
-            </div>
+       <!-- Footer -->
+       <footer class="text-center mt-12 space-y-4 pb-8 no-print">
+           <div class="flex justify-center gap-6 text-sm">
+               <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">About</button>
+               <button id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Share</button>
+               <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Contact</a>
+           </div>
 
-            <!-- Sponsor message -->
-            <div class="max-w-xl mx-auto bg-customPurple-50 border border-customPurple-200 rounded-lg p-4 text-sm">
-                <p class="text-customPurple-900 font-medium mb-1">Hey there! Enjoying these results?</p>
-                <p class="text-customPurple-700">
-                   By the time I pay off all my scientists, all the lab coats, and my AWS bill…I'm losin' money every time you Ask Arti something...Sponsor this spot for $99/mo.
-                </p>
-                <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium underline">
-                    Help keep Arti alive →
-                </a>
-            </div>
+           <!-- Sponsor message -->
+           <div class="max-w-xl mx-auto bg-customPurple-50 border border-customPurple-200 rounded-lg p-4 text-sm">
+               <p class="text-customPurple-900 font-medium mb-1">Hey there! Enjoying these results?</p>
+               <p class="text-customPurple-700">
+                  By the time I pay off all my scientists, all the lab coats, and my AWS bill…I'm losin' money every time you Ask Arti something...Sponsor this spot for $99/mo.
+               </p>
+               <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium underline">
+                   Help keep Arti alive →
+               </a>
+           </div>
 
-            <p class="text-xs text-gray-500 max-w-xl mx-auto">
-                AskArti.com results are provided for informational and educational purposes only and do not constitute professional business advice. AI can make errors that may not suit your specific situation. Please consult qualified professionals before making important business decisions.
-            </p>
+           <p class="text-xs text-gray-500 max-w-xl mx-auto">
+               AskArti.com results are provided for informational and educational purposes only and do not constitute professional business advice. AI can make errors that may not suit your specific situation. Please consult qualified professionals before making important business decisions.
+           </p>
 
-            <p class="text-xs text-gray-400">
-                © 2025 AskArti · Built by sellers, for sellers
-            </p>
-        </footer>
-    </div>
+           <p class="text-xs text-gray-400">
+               © 2025 AskArti · Built by sellers, for sellers
+           </p>
+       </footer>
+   </div>
 
-    <!-- About Modal -->
-    <div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
-            <div class="flex justify-between items-start mb-4">
-                <div class="flex items-center gap-3">
-                    <img src="images/oldmark.jpg" alt="Mark" class="w-12 h-12 rounded-full">
-                    <div>
-                        <h2 class="text-lg font-bold text-gray-900">Hi, I'm Mark</h2>
-                        <p class="text-xs text-gray-600">Retired Federal Sales Guy</p>
-                    </div>
-                </div>
-                <button id="close-about" class="text-gray-400 hover:text-gray-600">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <div class="space-y-3 text-sm text-gray-700">
-                <p>
-                    I built AskArti to help sellers spend more time with their customers. Arti's not perfect but is available 24/7 when you need to strategize or just vent.
-                </p>
-                
-                <div class="bg-gray-50 rounded-lg p-3 text-xs">
-                    <p class="font-medium text-gray-800 mb-1">Privacy First</p>
-                    <p class="text-gray-600">
-                        Zero storage. Zero tracking. Everything happens in-memory using AWS Serverless and vanishes after your session. 
-                        The AI models might learn from our chats, but I don't keep anything.
-                    </p>
-                </div>
-                
-                <div class="pt-3">
-                    <a href="https://calendly.com/markflournoy/30min" target="_blank" 
-                       class="block w-full bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-2.5 rounded-lg text-center transition-colors">
-                        Want to chat about AI or Sales? →
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+   <!-- About Modal -->
+   <div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+       <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+           <div class="flex justify-between items-start mb-4">
+               <div class="flex items-center gap-3">
+                   <img src="images/oldmark.jpg" alt="Mark" class="w-12 h-12 rounded-full">
+                   <div>
+                       <h2 class="text-lg font-bold text-gray-900">Hi, I'm Mark</h2>
+                       <p class="text-xs text-gray-600">Retired Federal Sales Guy</p>
+                   </div>
+               </div>
+               <button id="close-about" class="text-gray-400 hover:text-gray-600">
+                   <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                   </svg>
+               </button>
+           </div>
+           <div class="space-y-3 text-sm text-gray-700">
+               <p>
+                   I built AskArti to help sellers spend more time with their customers. Arti's not perfect but is available 24/7 when you need to strategize or just vent.
+               </p>
+               
+               <div class="bg-gray-50 rounded-lg p-3 text-xs">
+                   <p class="font-medium text-gray-800 mb-1">Privacy First</p>
+                   <p class="text-gray-600">
+                       Zero storage. Zero tracking. Everything happens in-memory using AWS Serverless and vanishes after your session. 
+                       The AI models might learn from our chats, but I don't keep anything.
+                   </p>
+               </div>
+               
+               <div class="pt-3">
+                   <a href="https://calendly.com/markflournoy/30min" target="_blank" 
+                      class="block w-full bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-2.5 rounded-lg text-center transition-colors">
+                       Want to chat about AI or Sales? →
+                   </a>
+               </div>
+           </div>
+       </div>
+   </div>
 
 <script>
 // Configuration
 const CONFIG = {
-    API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
-    REQUEST_TIMEOUT: 25000,
-    MAX_RETRIES: 2,
-    RETRY_DELAY: 2000,
-    MAX_INPUT_LENGTH: 500,
-    LOADING_MESSAGES: [
-        "Working backwards...",
-        "Thinking big...",
-        "Circling back...",
-        "Unpacking this...",
-        "Putting a pin in it..."
-    ]
+   API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
+   REQUEST_TIMEOUT: 25000,
+   MAX_RETRIES: 2,
+   RETRY_DELAY: 2000,
+   MAX_INPUT_LENGTH: 500,
+   LOADING_MESSAGES: [
+       "Working backwards...",
+       "Thinking big...",
+       "Circling back...",
+       "Unpacking this...",
+       "Putting a pin in it..."
+   ]
 };
 
 // Clean, focused application class
 class AskArti {
-    constructor() {
-        this.elements = this.getElements();
-        this.state = {
-            pendingRequest: false,
-            lastQuery: '',
-            chatHistory: [],
-            messageCount: 0,
-            hasActiveResults: false
-        };
-        this.init();
-    }
+   constructor() {
+       this.elements = this.getElements();
+       this.state = {
+           pendingRequest: false,
+           lastQuery: '',
+           chatHistory: [],
+           messageCount: 0,
+           hasActiveResults: false
+       };
+       this.init();
+   }
 
-    getElements() {
-        return {
-            chatMessages: document.getElementById('chat-messages'),
-            chatInput: document.getElementById('chat-input'),
-            chatSendBtn: document.getElementById('chat-send-btn'),
-            clearChatBtn: document.getElementById('clear-chat-btn'),
-            loadingContainer: document.getElementById('loading-container'),
-            loadingMessage: document.getElementById('loading-message'),
-            errorMessage: document.getElementById('error-message'),
-            retryBtn: document.getElementById('retry-btn'),
-            resultsContainer: document.getElementById('results-container'),
-            accountPlanContainer: document.getElementById('account-plan-container'),
-            aboutBtn: document.getElementById('about-btn'),
-            aboutModal: document.getElementById('about-modal'),
-            closeAbout: document.getElementById('close-about'),
-            shareBtn: document.getElementById('share-btn')
-        };
-    }
+   getElements() {
+       return {
+           chatMessages: document.getElementById('chat-messages'),
+           chatInput: document.getElementById('chat-input'),
+           chatSendBtn: document.getElementById('chat-send-btn'),
+           clearChatBtn: document.getElementById('clear-chat-btn'),
+           loadingContainer: document.getElementById('loading-container'),
+           loadingMessage: document.getElementById('loading-message'),
+           errorMessage: document.getElementById('error-message'),
+           retryBtn: document.getElementById('retry-btn'),
+           resultsContainer: document.getElementById('results-container'),
+           accountPlanContainer: document.getElementById('account-plan-container'),
+           aboutBtn: document.getElementById('about-btn'),
+           aboutModal: document.getElementById('about-modal'),
+           closeAbout: document.getElementById('close-about'),
+           shareBtn: document.getElementById('share-btn')
+       };
+   }
 
-    init() {
-        this.initializeMermaid();
-        this.setupEventListeners();
-        this.elements.chatInput.focus();
-    }
+   init() {
+       this.initializeMermaid();
+       this.setupEventListeners();
+       this.elements.chatInput.focus();
+   }
 
-    initializeMermaid() {
-        mermaid.initialize({ 
-            startOnLoad: false,
-            securityLevel: 'strict',
-            theme: 'default',
-            flowchart: {
-                htmlLabels: true,
-                curve: 'linear'
-            }
-        });
-    }
+   initializeMermaid() {
+       mermaid.initialize({ 
+           startOnLoad: false,
+           securityLevel: 'strict',
+           theme: 'default',
+           flowchart: {
+               htmlLabels: true,
+               curve: 'linear'
+           }
+       });
+   }
 
-    setupEventListeners() {
-        // Chat events
-        this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
-        this.elements.chatInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                this.sendChatMessage();
-            }
-        });
+   setupEventListeners() {
+       // Chat events
+       this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
+       this.elements.chatInput.addEventListener('keydown', (e) => {
+           if (e.key === 'Enter' && !e.shiftKey) {
+               e.preventDefault();
+               this.sendChatMessage();
+           }
+       });
 
-        this.elements.clearChatBtn.addEventListener('click', () => this.clearChat());
-        this.elements.retryBtn.addEventListener('click', () => this.retry());
+       this.elements.clearChatBtn.addEventListener('click', () => this.clearChat());
+       this.elements.retryBtn.addEventListener('click', () => this.retry());
 
-        // Modal events
-        this.elements.aboutBtn.addEventListener('click', () => this.showModal());
-        this.elements.closeAbout.addEventListener('click', () => this.hideModal());
-        this.elements.aboutModal.addEventListener('click', (e) => {
-            if (e.target === this.elements.aboutModal) this.hideModal();
-        });
+       // Modal events
+       this.elements.aboutBtn.addEventListener('click', () => this.showModal());
+       this.elements.closeAbout.addEventListener('click', () => this.hideModal());
+       this.elements.aboutModal.addEventListener('click', (e) => {
+           if (e.target === this.elements.aboutModal) this.hideModal();
+       });
 
-        // Share
-        this.elements.shareBtn.addEventListener('click', () => this.share());
+       // Share
+       this.elements.shareBtn.addEventListener('click', () => this.share());
 
-        // Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') this.hideModal();
-        });
-    }
+       // Escape key
+       document.addEventListener('keydown', (e) => {
+           if (e.key === 'Escape') this.hideModal();
+       });
+   }
 
-    clearChat() {
-        this.state.chatHistory = [];
-        this.state.messageCount = 0;
-        this.state.hasActiveResults = false;
-        
-        // Reset chat to welcome message
-        this.elements.chatMessages.innerHTML = `
-            <div class="flex items-start gap-3 mb-4">
-                <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
-                <div class="chat-message-arti px-4 py-2.5 max-w-[85%]">
-                    <p class="text-sm">
-                        Fresh start. What's on your mind?
-                    </p>
-                </div>
-            </div>`;
-        
-        // Clear other areas
-        this.elements.chatInput.value = '';
-        this.clearResults();
-        
-        // Remove any generate plan buttons
-        const planBtns = document.querySelectorAll('#generate-plan-container');
-        planBtns.forEach(btn => btn.remove());
-        
-        this.elements.chatInput.focus();
-    }
+   clearChat() {
+       this.state.chatHistory = [];
+       this.state.messageCount = 0;
+       this.state.hasActiveResults = false;
+       
+       // Reset chat to welcome message
+       this.elements.chatMessages.innerHTML = `
+           <div class="flex items-start gap-3 mb-4">
+               <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
+               <div class="chat-message-arti px-4 py-2.5 max-w-[85%]">
+                   <p class="text-sm">
+                       Fresh start. What's on your mind?
+                   </p>
+               </div>
+           </div>`;
+       
+       // Clear other areas
+       this.elements.chatInput.value = '';
+       this.clearResults();
+       
+       // Remove any generate plan buttons
+       const planBtns = document.querySelectorAll('#generate-plan-container');
+       planBtns.forEach(btn => btn.remove());
+       
+       this.elements.chatInput.focus();
+   }
 
-    clearResults() {
-        // Clear previous results before showing new ones
-        this.elements.resultsContainer.innerHTML = '';
-        this.elements.accountPlanContainer.innerHTML = '';
-        this.elements.accountPlanContainer.classList.add('hidden');
-    }
+   clearResults() {
+       // Clear previous results before showing new ones
+       this.elements.resultsContainer.innerHTML = '';
+       this.elements.accountPlanContainer.innerHTML = '';
+       this.elements.accountPlanContainer.classList.add('hidden');
+   }
 
-    async quickAnalysis(scenario) {
-        // Clear previous results
-        if (this.state.hasActiveResults) {
-            this.clearResults();
-        }
-        
-        // Add user message
-        this.addChatMessage(scenario, true);
-        
-        // Show typing
-        this.showTypingIndicator();
-        this.state.pendingRequest = true;
-        
-        try {
-            this.state.chatHistory.push({ role: 'user', content: scenario });
-            this.state.messageCount++;
-            
-            const response = await fetch(CONFIG.API_ENDPOINT, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    situation: scenario,
-                    currentDate: new Date().toISOString().split('T')[0]
-                })
-            });
-            
-            const data = await response.json();
-            this.hideTypingIndicator();
-            
-            // Add response
-            const responseMessage = `I hear you. ${data.quick_take || "Let me break this down for you."}`;
-            this.addChatMessage(responseMessage, false);
-            
-            this.state.chatHistory.push({ role: 'assistant', content: responseMessage });
-            
-            // Display results
-            this.state.hasActiveResults = true;
-            this.displayAdvice(data);
-            
-            // Smooth scroll to results
-            setTimeout(() => {
-                this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
-            
-        } catch (error) {
-            console.error('Quick analysis failed:', error);
-            this.hideTypingIndicator();
-            this.addChatMessage("Connection issues. Try again?", false);
-        } finally {
-            this.state.pendingRequest = false;
-        }
-    }
+   async quickAnalysis(scenario) {
+       // Clear previous results
+       if (this.state.hasActiveResults) {
+           this.clearResults();
+       }
+       
+       // Add user message
+       this.addChatMessage(scenario, true);
+       
+       // Show typing
+       this.showTypingIndicator();
+       this.state.pendingRequest = true;
+       
+       try {
+           this.state.chatHistory.push({ role: 'user', content: scenario });
+           this.state.messageCount++;
+           
+           const response = await fetch(CONFIG.API_ENDPOINT, {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({ 
+                   situation: scenario,
+                   currentDate: new Date().toISOString().split('T')[0]
+               })
+           });
+           
+           const data = await response.json();
+           this.hideTypingIndicator();
+           
+           // Add response
+           const responseMessage = `I hear you. ${data.quick_take || "Let me break this down for you."}`;
+           this.addChatMessage(responseMessage, false);
+           
+           this.state.chatHistory.push({ role: 'assistant', content: responseMessage });
+           
+           // Display results
+           this.state.hasActiveResults = true;
+           this.displayAdvice(data);
+           
+           // Smooth scroll to results
+           setTimeout(() => {
+               this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+           }, 100);
+           
+       } catch (error) {
+           console.error('Quick analysis failed:', error);
+           this.hideTypingIndicator();
+           this.addChatMessage("Connection issues. Try again?", false);
+       } finally {
+           this.state.pendingRequest = false;
+       }
+   }
 
-    addChatMessage(content, isUser = false) {
-        const messageHtml = isUser ? `
-            <div class="flex justify-end mb-4 fade-in">
-                <div class="chat-message-user px-4 py-2.5 max-w-[85%] text-sm">
-                    ${content}
-                </div>
-            </div>
-        ` : `
-            <div class="flex items-start gap-3 mb-4 fade-in">
-                <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
-                <div class="chat-message-arti px-4 py-2.5 max-w-[85%]">
-                    <div class="text-sm">${marked.parse(content)}</div>
-                </div>
-            </div>
-        `;
-        
-        this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
-        this.scrollChatToBottom();
-    }
+   addChatMessage(content, isUser = false) {
+       const messageHtml = isUser ? `
+           <div class="flex justify-end mb-4 fade-in">
+               <div class="chat-message-user px-4 py-2.5 max-w-[85%] text-sm">
+                   ${content}
+               </div>
+           </div>
+       ` : `
+           <div class="flex items-start gap-3 mb-4 fade-in">
+               <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
+               <div class="chat-message-arti px-4 py-2.5 max-w-[85%]">
+                   <div class="text-sm">${marked.parse(content)}</div>
+               </div>
+           </div>
+       `;
+       
+       this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
+       this.scrollChatToBottom();
+   }
 
-    showTypingIndicator() {
-        const typingHtml = `
-            <div id="typing-indicator" class="flex items-start gap-3 mb-4">
-                <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0 opacity-50">
-                <div class="typing-indicator">
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                </div>
-            </div>
-        `;
-        this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
-        this.scrollChatToBottom();
-    }
+   showTypingIndicator() {
+       const typingHtml = `
+           <div id="typing-indicator" class="flex items-start gap-3 mb-4">
+               <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0 opacity-50">
+               <div class="typing-indicator">
+                   <div class="typing-dot"></div>
+                   <div class="typing-dot"></div>
+                   <div class="typing-dot"></div>
+               </div>
+           </div>
+       `;
+       this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
+       this.scrollChatToBottom();
+   }
 
-    hideTypingIndicator() {
-        const indicator = document.getElementById('typing-indicator');
-        if (indicator) indicator.remove();
-    }
+   hideTypingIndicator() {
+       const indicator = document.getElementById('typing-indicator');
+       if (indicator) indicator.remove();
+   }
 
-    showLoading() {
-        const message = CONFIG.LOADING_MESSAGES[Math.floor(Math.random() * CONFIG.LOADING_MESSAGES.length)];
-        this.elements.loadingMessage.textContent = message;
-        this.elements.loadingContainer.classList.remove('hidden');
-    }
+   showLoading() {
+       const message = CONFIG.LOADING_MESSAGES[Math.floor(Math.random() * CONFIG.LOADING_MESSAGES.length)];
+       this.elements.loadingMessage.textContent = message;
+       this.elements.loadingContainer.classList.remove('hidden');
+   }
 
-    hideLoading() {
-        this.elements.loadingContainer.classList.add('hidden');
-    }
+   hideLoading() {
+       this.elements.loadingContainer.classList.add('hidden');
+   }
 
-    scrollChatToBottom() {
-        const container = document.querySelector('.chat-container');
-        if (container) {
-            container.scrollTop = container.scrollHeight;
-        }
-    }
+   scrollChatToBottom() {
+       const container = document.querySelector('.chat-container');
+       if (container) {
+           container.scrollTop = container.scrollHeight;
+       }
+   }
 
-async sendChatMessage() {
-    const message = this.elements.chatInput.value.trim();
-    
-    if (this.state.pendingRequest || !message) return;
+   // UPDATED: Enhanced chat message handling with auto-plan generation
+   async sendChatMessage() {
+       const message = this.elements.chatInput.value.trim();
+       
+       if (this.state.pendingRequest || !message) return;
 
-    // Clear previous results if any
-    if (this.state.hasActiveResults) {
-        this.clearResults();
-    }
+       // Clear previous results if any
+       if (this.state.hasActiveResults) {
+           this.clearResults();
+       }
 
-    // Add user message
-    this.addChatMessage(message, true);
-    this.elements.chatInput.value = '';
-    this.state.lastQuery = message;
-    
-    // Update history
-    this.state.chatHistory.push({ role: 'user', content: message });
-    this.state.messageCount++;
+       // Add user message
+       this.addChatMessage(message, true);
+       this.elements.chatInput.value = '';
+       this.state.lastQuery = message;
+       
+       // Update history
+       this.state.chatHistory.push({ role: 'user', content: message });
+       this.state.messageCount++;
 
-    // Show typing
-    this.showTypingIndicator();
-    this.state.pendingRequest = true;
+       // Show typing
+       this.showTypingIndicator();
+       this.state.pendingRequest = true;
 
-    try {
-        const response = await this.makeChatRequest(message);
-        this.hideTypingIndicator();
-        
-        const aiMessage = response.message || "Tell me more.";
-        this.addChatMessage(aiMessage, false);
-        this.state.chatHistory.push({ role: 'assistant', content: aiMessage });
-        this.state.lastQuery = '';
+       try {
+           const response = await this.makeChatRequest(message);
+           this.hideTypingIndicator();
+           
+           const aiMessage = response.message || "Tell me more.";
+           this.addChatMessage(aiMessage, false);
+           this.state.chatHistory.push({ role: 'assistant', content: aiMessage });
+           this.state.lastQuery = '';
 
-        // NEW: Auto-generate plan if ready, or show button
-        if (response.ready_for_plan) {
-            // Auto-generate the plan immediately
-            setTimeout(() => {
-                this.generateStrategicPlan();
-            }, 1000); // Small delay for better UX
-        } else if (response.readiness_score >= 7 && !document.getElementById('generate-plan-container')) {
-            // Show button if we have enough context but user hasn't requested it yet
-            this.addStrategicPlanButton();
-        }
+           // Auto-generate plan if ready, or show button
+           if (response.ready_for_plan) {
+               // Auto-generate the plan immediately
+               setTimeout(() => {
+                   this.generateStrategicPlan();
+               }, 1000); // Small delay for better UX
+           } else if (response.readiness_score >= 7 && !document.getElementById('generate-plan-container')) {
+               // Show button if we have enough context but user hasn't requested it yet
+               this.addStrategicPlanButton();
+           }
 
-    } catch (error) {
-        console.error('Chat request failed:', error);
-        this.hideTypingIndicator();
-        this.addChatMessage("Connection issues. Try again?", false);
-        this.showError();
-    } finally {
-        this.state.pendingRequest = false;
-    }
-}
+       } catch (error) {
+           console.error('Chat request failed:', error);
+           this.hideTypingIndicator();
+           this.addChatMessage("Connection issues. Try again?", false);
+           this.showError();
+       } finally {
+           this.state.pendingRequest = false;
+       }
+   }
+
    async makeChatRequest(message) {
        const contextToSend = this.state.chatHistory.length > 20 
            ? [this.state.chatHistory[0], ...this.state.chatHistory.slice(-19)]
@@ -783,7 +794,7 @@ async sendChatMessage() {
        return await response.json();
    }
 
-   // NEW: Strategic plan button (replaces confusing suggestion bubbles)
+   // Strategic plan button (replaces confusing suggestion bubbles)
    addStrategicPlanButton() {
        const btnHtml = `
            <div id="generate-plan-container" class="flex justify-center my-4">
@@ -814,7 +825,7 @@ async sendChatMessage() {
        this.sendChatMessage();
    }
 
-   // UPDATED: Enhanced strategic plan generation
+   // Enhanced strategic plan generation
    async generateAccountPlan() {
        return this.generateStrategicPlan(); // Redirect to new method
    }
@@ -1090,8 +1101,8 @@ async sendChatMessage() {
                </div>
            ` : ''}
 
-           ${strategic_diagram ? `
-               <div class="result-card">
+           ${strategic_diagram && strategic_diagram.trim() ? `
+               <div class="result-card" id="strategic-chart-container">
                    <h3>Strategic Framework</h3>
                    <div class="mermaid-container">
                        <div id="mermaid-diagram" class="mermaid">
@@ -1104,7 +1115,7 @@ async sendChatMessage() {
        
        this.elements.accountPlanContainer.innerHTML = html;
        
-       if (strategic_diagram) {
+       if (strategic_diagram && strategic_diagram.trim()) {
            this.renderMermaidChart();
        }
    }
@@ -1124,18 +1135,56 @@ async sendChatMessage() {
            .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
    }
 
+   // Updated chart rendering - no fallbacks, just hide on failure
    renderMermaidChart() {
        setTimeout(async () => {
            try {
-               await mermaid.run();
-           } catch (error) {
-               console.error('Mermaid rendering error:', error);
-               const container = document.querySelector('.mermaid-container');
-               if (container) {
-                   container.innerHTML = '<p class="text-sm text-gray-500 text-center py-4">Chart unavailable</p>';
+               const mermaidElement = document.querySelector('#mermaid-diagram');
+               if (!mermaidElement || !mermaidElement.textContent.trim()) {
+                   this.hideMermaidContainer();
+                   return;
                }
+
+               // Clean the mermaid syntax but don't replace with fallbacks
+               let mermaidCode = this.cleanMermaidSyntax(mermaidElement.textContent.trim());
+               
+               // Update the element with cleaned code
+               mermaidElement.textContent = mermaidCode;
+               
+               // Try to render the AI-generated chart
+               await mermaid.run();
+               
+               // Check if rendering actually worked
+               const svgElement = mermaidElement.querySelector('svg');
+               if (!svgElement || svgElement.children.length === 0) {
+                   throw new Error('Mermaid rendering failed');
+               }
+               
+           } catch (error) {
+               console.error('AI-generated chart failed to render:', error);
+               // No fallback - just hide the entire chart section
+               this.hideMermaidContainer();
            }
        }, 100);
+   }
+
+   cleanMermaidSyntax(mermaidCode) {
+       // Only clean syntax issues, don't replace content
+       return mermaidCode
+           .replace(/[""]/g, '"')  // Fix smart quotes
+           .replace(/['']/g, "'")  // Fix smart apostrophes
+           .replace(/[–—]/g, '-')  // Fix em/en dashes
+           .replace(/\\n/g, '\n')  // Fix escaped newlines
+           .replace(/\n\s*\n/g, '\n')  // Remove empty lines
+           .trim();
+   }
+
+   hideMermaidContainer() {
+       const container = document.querySelector('.result-card:has(#mermaid-diagram)') || 
+                        document.querySelector('#mermaid-diagram')?.closest('.result-card');
+       if (container) {
+           container.style.display = 'none';
+       }
    }
 
    displayAdvice(data) {
