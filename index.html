@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AskArti - Your Fed Sales Buddy</title>
+    <title>AskArti - Your Fed Sales Therapist</title>
     
     <!-- Meta Tags -->
-    <meta name="description" content="When your customer ghosts you and your boss wants impossible quota. Real federal sales advice that actually works.">
-    <meta name="keywords" content="federal sales, government sales, sales strategy, federal contractors, govcon">
+    <meta name="description" content="When your boss wants impossible quota, your customer ghosts you, and your stakeholders vanish - Arti gets it. Real federal sales advice from someone who's been in the trenches.">
+    <meta name="keywords" content="federal sales, government sales, deal therapy, sales burnout, govcon, sales advice">
     <meta name="author" content="Mark">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://askarti.com">
@@ -15,15 +15,15 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://askarti.com/">
-    <meta property="og:title" content="AskArti - Your Federal Sales Buddy">
-    <meta property="og:description" content="Real federal sales advice from someone who gets it. No BS, just results.">
+    <meta property="og:title" content="AskArti - Your Federal Sales Therapist">
+    <meta property="og:description" content="When federal sales is breaking you down, Arti builds you back up. No BS. No buzzwords. Just real talk.">
     <meta property="og:image" content="https://askarti.com/images/asklite.png">
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:url" content="https://askarti.com/">
-    <meta name="twitter:title" content="AskArti - Your Federal Sales Buddy">
-    <meta name="twitter:description" content="Real federal sales advice that actually works.">
+    <meta name="twitter:title" content="AskArti - Your Federal Sales Therapist">
+    <meta name="twitter:description" content="Real federal sales advice from someone who gets it.">
     <meta name="twitter:image" content="https://askarti.com/images/asklite.png">
     
     <!-- Favicons -->
@@ -48,7 +48,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WLGEPY5H4G"></script>
@@ -66,13 +66,59 @@
                     colors: {
                         primary: '#7C6BBE',
                         customPurple: {
-                            50: '#F6F5FB',
                             100: '#E8E4F7',
                             200: '#D8D2EF',
-                            300: '#C0B6E3',
                             500: '#7C6BBE',
                             700: '#5A4E8C',
                             900: '#403866'
+                        },
+                        accountBlue: {
+                            100: '#E6F0F9',
+                            500: '#4A77B3',
+                            700: '#345C96'
+                        },
+                        stressRed: {
+                            100: '#FEE2E2',
+                            500: '#EF4444',
+                            700: '#DC2626'
+                        },
+                        hopeGreen: {
+                            100: '#D1FAE5',
+                            500: '#10B981',
+                            700: '#059669'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-in': 'slideIn 0.3s ease-out',
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'bounce-slow': 'bounce 3s infinite',
+                        'stress-shake': 'stressShake 0.5s ease-in-out',
+                        'relief': 'relief 0.8s ease-out'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' }
+                        },
+                        slideIn: {
+                            '0%': { transform: 'translateX(-100%)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        stressShake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-2px)' },
+                            '20%, 40%, 60%, 80%': { transform: 'translateX(2px)' }
+                        },
+                        relief: {
+                            '0%': { transform: 'scale(0.95)', opacity: '0' },
+                            '50%': { transform: 'scale(1.05)' },
+                            '100%': { transform: 'scale(1)', opacity: '1' }
                         }
                     }
                 }
@@ -85,19 +131,48 @@
         font-family: 'Inter', sans-serif;
         margin: 0;
         padding: 0;
-        background-color: #FAFBFC;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+        background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+        min-height: 100vh;
     }
 
-    /* Clean, professional loader */
+    /* Stress level indicator */
+    .stress-indicator {
+        transition: all 0.3s ease;
+    }
+
+    .stress-low { background-color: #10B981; }
+    .stress-medium { background-color: #F59E0B; }
+    .stress-high { background-color: #EF4444; }
+    .stress-critical { 
+        background-color: #DC2626; 
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    /* Mood-based backgrounds */
+    .mood-stressed {
+        background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+    }
+
+    .mood-hopeful {
+        background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+    }
+
+    .mood-neutral {
+        background: linear-gradient(135deg, #E8E4F7 0%, #D8D2EF 100%);
+    }
+
+    /* Enhanced loader */
     .loader {
-        border: 2px solid #E5E7EB;
-        border-top: 2px solid #7C6BBE;
+        border: 3px solid #e5e7eb;
+        border-top: 3px solid #7C6BBE;
         border-radius: 50%;
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         animation: spin 1s linear infinite;
+    }
+
+    .loader-text {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
 
     @keyframes spin {
@@ -105,49 +180,109 @@
         100% { transform: rotate(360deg); }
     }
 
-    /* Subtle animations */
-    .fade-in {
-        animation: fadeIn 0.3s ease-out;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(8px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Clean chat messages */
+    /* Chat bubbles with personality */
     .chat-message-user {
-        background-color: #7C6BBE;
+        background: linear-gradient(135deg, #7C6BBE 0%, #5A4E8C 100%);
         color: white;
-        border-radius: 18px 18px 4px 18px;
+        position: relative;
+        box-shadow: 0 2px 10px rgba(124, 107, 190, 0.3);
+    }
+
+    .chat-message-user::after {
+        content: '';
+        position: absolute;
+        right: -8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-left: 8px solid #5A4E8C;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
     }
 
     .chat-message-arti {
-        background-color: #F3F4F6;
-        color: #1F2937;
-        border-radius: 18px 18px 18px 4px;
+        background: white;
+        color: #1f2937;
+        border: 1px solid #e5e7eb;
+        position: relative;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     }
 
-    /* Typing indicator */
+    .chat-message-arti::after {
+        content: '';
+        position: absolute;
+        left: -8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-right: 8px solid white;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+    }
+
+    /* Therapy session vibes */
+    .therapy-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(124, 107, 190, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .therapy-card:hover {
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        transform: translateY(-2px);
+    }
+
+    /* Quick scenario buttons with emotion */
+    .scenario-btn {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .scenario-btn::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(124, 107, 190, 0.1);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .scenario-btn:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    /* Typing indicator with personality */
     .typing-indicator {
         display: flex;
         gap: 4px;
-        padding: 12px 16px;
-        background-color: #F3F4F6;
-        border-radius: 18px 18px 18px 4px;
-        width: fit-content;
+        padding: 16px 20px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     }
 
     .typing-dot {
-        width: 8px;
-        height: 8px;
-        background-color: #9CA3AF;
+        width: 10px;
+        height: 10px;
+        background: linear-gradient(135deg, #7C6BBE 0%, #5A4E8C 100%);
         border-radius: 50%;
         animation: typing 1.4s infinite ease-in-out;
     }
 
     .typing-dot:nth-child(1) { animation-delay: -0.32s; }
     .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+    .typing-dot:nth-child(3) { animation-delay: 0s; }
 
     @keyframes typing {
         0%, 80%, 100% {
@@ -155,639 +290,939 @@
             opacity: 0.5;
         }
         40% {
-            transform: scale(1);
+            transform: scale(1.2);
             opacity: 1;
         }
     }
 
-    /* Clean cards */
-    .result-card {
-        background-color: white;
-        border-radius: 12px;
-        border: 1px solid #E5E7EB;
-        padding: 1.5rem;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    }
-
-    /* Scenario buttons */
-    .scenario-btn {
-        background-color: #F3F4F6;
-        color: #374151;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        font-size: 0.875rem;
-        font-weight: 500;
-        transition: all 0.2s ease;
-        border: 1px solid transparent;
-    }
-
-    .scenario-btn:hover {
-        background-color: #E5E7EB;
-        border-color: #D1D5DB;
-        transform: translateY(-1px);
-    }
-
-    .scenario-btn:active {
-        transform: translateY(0);
-    }
-
-    /* Mobile-first responsive design */
-    .chat-container {
-        height: 50vh;
-        max-height: 400px;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    @media (min-width: 640px) {
-        .chat-container {
-            height: 60vh;
-            max-height: 500px;
-        }
-    }
-
-    /* Clean scrollbar */
-    .chat-container::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    .chat-container::-webkit-scrollbar-track {
-        background: #F9FAFB;
-    }
-
-    .chat-container::-webkit-scrollbar-thumb {
-        background: #D1D5DB;
-        border-radius: 3px;
-    }
-
-    .chat-container::-webkit-scrollbar-thumb:hover {
-        background: #9CA3AF;
-    }
-
-    /* Mermaid container */
+    /* Enhanced mermaid container */
     .mermaid-container {
-        background-color: #F9FAFB;
-        border-radius: 8px;
+        text-align: center;
+        min-height: 200px;
+        position: relative;
+        background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+        border-radius: 0.75rem;
         padding: 1rem;
-        overflow-x: auto;
     }
 
-    /* Results typography */
-    .result-card h3 {
-        font-size: 1.125rem;
-        font-weight: 700;
-        color: #111827;
-        margin-bottom: 1rem;
+    /* Sponsor ad with personality */
+    .sponsor-ad {
+        background: linear-gradient(135deg, rgba(124, 107, 190, 0.05), rgba(124, 107, 190, 0.02));
+        border: 2px dashed rgba(124, 107, 190, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
     }
 
-    .result-card p, .result-card li {
-        font-size: 0.875rem;
-        line-height: 1.6;
-        color: #4B5563;
+    .sponsor-ad::before {
+        content: '💸';
+        position: absolute;
+        top: -20px;
+        right: -20px;
+        font-size: 60px;
+        opacity: 0.1;
+        transform: rotate(-15deg);
     }
 
-    .result-card strong {
-        color: #1F2937;
-        font-weight: 600;
-    }
-
-    /* Account plan specific styles */
-    .account-plan-header {
-        background: linear-gradient(135deg, #F6F5FB 0%, #E8E4F7 100%);
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
-
-    /* Table styles */
-    .data-table {
-        font-size: 0.875rem;
-    }
-
-    .data-table th {
-        font-weight: 600;
-        color: #6B7280;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 0.05em;
-    }
-
-    .data-table td {
-        color: #374151;
+    .sponsor-ad:hover {
+        background: linear-gradient(135deg, rgba(124, 107, 190, 0.08), rgba(124, 107, 190, 0.04));
+        border-color: rgba(124, 107, 190, 0.3);
+        transform: translateY(-1px);
     }
 
     /* Mobile optimizations */
     @media (max-width: 640px) {
-        .result-card {
+        .chat-container {
+            height: 50dvh;
+            max-height: 400px;
+        }
+
+        .therapy-card {
             padding: 1rem;
         }
 
         .scenario-btn {
             font-size: 0.8125rem;
-            padding: 0.375rem 0.75rem;
+            padding: 0.5rem 0.875rem;
         }
 
-        input[type="text"] {
-            font-size: 16px !important; /* Prevent zoom on iOS */
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            font-size: 16px !important;
         }
     }
 
-    /* Print styles */
-    @media print {
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
         body {
-            background-color: white;
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            color: #f9fafb;
         }
-        
-        .no-print {
-            display: none !important;
+
+        .therapy-card {
+            background: #374151;
+            border-color: rgba(124, 107, 190, 0.3);
         }
-        
-        .result-card {
-            box-shadow: none;
-            border: 1px solid #E5E7EB;
-            break-inside: avoid;
+
+        .chat-message-arti {
+            background: #374151;
+            color: #f9fafb;
+            border-color: #4b5563;
         }
     }
+	/* --- UNIFIED CARD TYPOGRAPHY --- */
+.therapy-card h3 {
+    font-size: 1.1rem; /* 17.6px */
+    font-weight: 800; /* Extra-bold for clear headings */
+    color: #1f2937;
+}
+
+.therapy-card p, 
+.therapy-card li, 
+.therapy-card td,
+.therapy-card .prose {
+    font-size: 0.9rem; /* 14.4px */
+    line-height: 1.65;
+    color: #374151; /* A standard, readable text color */
+}
+
+/* Ensure prose styles don't override the base therapy-card styles */
+.therapy-card .prose p, 
+.therapy-card .prose li {
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+}
+
+.therapy-card strong {
+    color: #111827; /* Make bolded text stand out */
+    font-weight: 700;
+}
 </style>
 
 </head>
-<body class="bg-gray-50 text-gray-900">
-    <div class="max-w-3xl mx-auto px-4 py-6 min-h-screen">
-        <!-- Clean header -->
-        <header class="text-center mb-6">
-            <a href="/" aria-label="AskArti Home">
-                <img src="/images/asklite.png" alt="AskArti" class="h-16 sm:h-20 mx-auto">
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900 min-h-screen">
+    <!-- Stress Level Indicator -->
+    <div class="fixed top-4 right-4 z-50">
+        <div id="stress-meter" class="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-lg">
+            <span class="text-xs font-medium text-gray-600">Stress Level:</span>
+            <div class="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div id="stress-bar" class="h-full stress-low transition-all duration-500" style="width: 20%"></div>
+            </div>
+            <span id="stress-emoji" class="text-lg">😌</span>
+        </div>
+    </div>
+
+    <div class="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20">
+        <!-- Header with personality -->
+        <header class="text-center mb-6 animate-fade-in">
+            <a href="/" aria-label="AskArti Home" class="inline-block group">
+                <img src="/images/asklite.png" alt="AskArti" class="h-16 w-auto md:h-20 lg:h-24 transition-transform group-hover:scale-105">
             </a>
+            <p class="mt-2 text-sm text-gray-600 font-medium">
+                <span id="greeting-text" class="transition-all">Your Federal Sales Therapist</span>
+            </p>
         </header>
 
-        <!-- Main chat interface -->
-        <main class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
-            <div class="p-4 sm:p-6">
-                <!-- Chat messages -->
-                <div class="chat-container mb-4" id="chat-messages">
-                    <div class="flex items-start gap-3 mb-4">
-                        <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
-                        <div class="chat-message-arti px-4 py-2.5 max-w-[85%]">
-                            <p class="text-sm">
-                                Hey, I'm Arti, your Federal Sales Buddy. 
-                                What's on your mind?
-                            </p>
+        <main class="therapy-card mb-6 animate-slide-in">
+            <!-- Mood Banner -->
+            <div id="mood-banner" class="hidden mb-4 p-3 rounded-lg text-center transition-all">
+                <p id="mood-text" class="text-sm font-medium"></p>
+            </div>
+
+            <!-- Unified chat interface -->
+            <div id="chat-interface">
+                <div class="chat-container h-[60vh] sm:h-96 max-h-[500px] overflow-y-auto mb-4 rounded-xl p-4 sm:p-6 transition-all" id="chat-container">
+                    <div id="chat-messages" class="space-y-4">
+                        <!-- Welcome message with more personality -->
+                        <div class="flex items-start gap-3">
+                            <img src="/images/arti_right.png" alt="Arti" class="w-10 h-10 rounded-full animate-bounce-slow">
+                            <div class="chat-message-arti rounded-2xl px-4 py-3 max-w-[85%] animate-fade-in">
+                                <p class="text-gray-800 text-sm sm:text-base leading-relaxed">
+                                    <strong>Hey there.</strong> I'm Arti. I've been where you are - 
+                                    impossible quotas, vanishing stakeholders, and customers who treat your emails like spam. 
+                                    <br><br>
+                                    <em>What's got you pulling your hair out today?</em> 
+                                    <span class="text-gray-500 text-xs block mt-2">Or tap a scenario below if you need ideas...</span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Input area -->
-                <div class="flex gap-2">
+<div id="plan-button-container" class="hidden animate-fade-in p-4 border-t border-gray-200">
+        <button id="generate-plan-btn" onclick="app.generateAccountPlan()"
+                class="w-full bg-gradient-to-r from-accountBlue-500 to-accountBlue-700 hover:from-accountBlue-600 hover:to-accountBlue-800 text-white font-bold px-6 py-3 rounded-xl text-sm flex items-center justify-center gap-2 transition-all transform hover:scale-105 shadow-lg">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+            </svg>
+            Okay, let's make a plan from what we've got
+        </button>
+    </div>
+                <!-- Input area with therapy vibes -->
+                <div class="flex gap-2 sticky bottom-0 bg-white/80 backdrop-blur-sm pt-3 z-10 rounded-xl">
                     <button 
                         id="clear-chat-btn"
-                        class="p-2.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors no-print"
-                        title="Clear chat">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="p-2.5 text-gray-400 hover:text-stressRed-500 hover:bg-red-50 rounded-lg transition-all group"
+                        title="Start fresh">
+                        <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                         </svg>
                     </button>
                     <input 
                         type="text" 
                         id="chat-input"
-                        class="flex-1 px-4 py-2.5 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-customPurple-500 focus:border-transparent outline-none transition-all"
-                        placeholder="What's going on with your deal?"
+                        inputmode="text"
+                        autocomplete="off"
+                        autocorrect="on"
+                        autocapitalize="sentences"
+                        spellcheck="true"
+                        class="flex-1 p-3 text-[16px] sm:text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary min-h-[44px] transition-all hover:border-gray-300"
+                        placeholder="Tell me what's really going on..."
                         maxlength="500">
                     <button 
                         id="chat-send-btn" 
-                        class="px-4 sm:px-6 py-2.5 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2 no-print">
-                        <span class="hidden sm:inline">Send</span>
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                        </svg>
+                        class="bg-gradient-to-r from-customPurple-500 to-customPurple-700 hover:from-customPurple-600 hover:to-customPurple-800 text-white font-medium px-4 sm:px-6 py-3 rounded-xl transition-all text-sm sm:text-base min-h-[44px] whitespace-nowrap transform hover:scale-105 active:scale-95">
+                        <span class="flex items-center gap-2">
+                            <span>Send</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                            </svg>
+                        </span>
                     </button>
                 </div>
-            </div>
 
-            <!-- Quick scenarios -->
-            <div class="border-t border-gray-200 px-4 py-3 bg-gray-50 no-print">
-                <div class="flex flex-wrap gap-2 justify-center">
-                    <button class="scenario-btn" onclick="app.quickAnalysis('Buyer ghosted me after pricing. CIO loves our competitor.')">
-                        👻Buyer Ghosted Me
-                    </button>
-                    <button class="scenario-btn" onclick="app.quickAnalysis('Help me prep for an AWS Federal Sales Interview.')">
-                        💼 Interview Prep
-                    </button>
-                    <button class="scenario-btn" onclick="app.quickAnalysis('My internal Partner and Account reps are battling over deals, pipeline, and revenue recognition.')">
-                        🤝 Partner Drama
-                    </button>
-                    <button class="scenario-btn" onclick="app.autoCreateAccountPlan()">
-                        📋 Write My Plan
-                    </button>
+                <!-- Quick scenarios with emotions -->
+                <div class="mt-6">
+                    <p class="text-center text-xs text-gray-500 mb-3 font-medium">COMMON THERAPY TOPICS</p>
+                    <div class="flex flex-wrap gap-2 justify-center">
+                        <button class="scenario-btn px-4 py-2 bg-gradient-to-r from-stressRed-100 to-red-100 hover:from-stressRed-200 hover:to-red-200 rounded-full text-sm text-stressRed-700 font-medium transition-all transform hover:scale-105"
+                                onclick="app.quickAnalysis('Buyer at VA ghosted me after I sent pricing. CISO loves our competitor. I\'m about to lose it.')">
+                            <span class="flex items-center gap-1">
+                                😤 Buyer Ghosted Me
+                            </span>
+                        </button>
+                        <button class="scenario-btn px-4 py-2 bg-gradient-to-r from-amber-100 to-yellow-100 hover:from-amber-200 hover:to-yellow-200 rounded-full text-sm text-amber-700 font-medium transition-all transform hover:scale-105"
+                                onclick="app.quickAnalysis('Meeting DHS CIO next week. No champion. No idea how to position our cybersecurity platform. Help!')">
+                            <span class="flex items-center gap-1">
+                                😰 Big Meeting Panic
+                            </span>
+                        </button>
+                        <button class="scenario-btn px-4 py-2 bg-gradient-to-r from-purple-100 to-indigo-100 hover:from-purple-200 hover:to-indigo-200 rounded-full text-sm text-purple-700 font-medium transition-all transform hover:scale-105"
+                                onclick="app.quickAnalysis('AWS federal sales interview next week. Nervous as hell. Help me not blow this.')">
+                            <span class="flex items-center gap-1">
+                                🎯 Interview Prep
+                            </span>
+                        </button>
+                        <button class="scenario-btn px-4 py-2 bg-gradient-to-r from-gray-100 to-slate-100 hover:from-gray-200 hover:to-slate-200 rounded-full text-sm text-gray-700 font-medium transition-all transform hover:scale-105"
+                                onclick="app.quickAnalysis('Partner reps and Account reps fighting over deals. I\'m stuck in the middle. This is exhausting.')">
+                            <span class="flex items-center gap-1">
+                                🤯 Partner Drama
+                            </span>
+                        </button>
+                        <button class="scenario-btn px-4 py-2 bg-gradient-to-r from-hopeGreen-100 to-emerald-100 hover:from-hopeGreen-200 hover:to-emerald-200 rounded-full text-sm text-hopeGreen-700 font-medium transition-all transform hover:scale-105"
+                                onclick="app.autoCreateAccountPlan()">
+                            <span class="flex items-center gap-1">
+                                📋 Build Account Plan
+                            </span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </main>
 
-        <!-- Loading state -->
-        <div id="loading-container" class="hidden text-center py-4">
-            <div class="inline-flex items-center gap-3 text-gray-600">
-                <span id="loading-message" class="text-sm font-medium"></span>
+        <!-- Emotional Support Messages -->
+        <div id="support-message" class="hidden mb-4 p-4 rounded-xl text-center transition-all animate-fade-in">
+            <p id="support-text" class="text-sm font-medium"></p>
+        </div>
+
+        <!-- Loading with personality -->
+        <div id="loading-message-container" class="text-center py-4 hidden">
+            <div class="inline-flex items-center gap-3 bg-white px-6 py-3 rounded-full shadow-lg">
+                <div class="loader"></div>
+                <p id="loading-message" class="text-gray-700 font-medium loader-text"></p>
             </div>
         </div>
 
-        <!-- Error state -->
-        <div id="error-message" class="hidden bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-            <p class="text-red-700 font-medium text-sm">Connection issues. Even the servers are ghosting us.</p>
-            <button id="retry-btn" class="mt-2 text-red-700 underline text-sm">Try again</button>
+        <!-- Error with empathy -->
+        <div id="error-message" class="bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-200 rounded-xl p-6 text-center mb-4 hidden animate-stress-shake">
+            <p class="text-red-700 font-bold mb-2 text-lg">Oof. Technical Difficulties.</p>
+            <p class="text-red-600 text-sm" id="error-details">Even my servers need therapy sometimes. Let's try this again.</p>
+            <button id="retry-btn" class="mt-4 bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-6 rounded-lg text-sm transition-all transform hover:scale-105">
+                Deep Breath & Retry
+            </button>
         </div>
 
         <!-- Results container -->
-        <div id="results-container" class="space-y-4"></div>
+        <div id="results-container"></div>
         
-        <!-- Account Plan container -->
-        <div id="account-plan-container" class="hidden space-y-4"></div>
+        <!-- Account Plan Results -->
+        <div id="account-plan-container" class="hidden mt-6 space-y-4"></div>
 
-        <!-- Footer -->
-        <footer class="text-center mt-12 space-y-4 pb-8 no-print">
+        <!-- Footer with personality -->
+        <footer class="text-center mt-12 space-y-4 pb-20">
             <div class="flex justify-center gap-6 text-sm">
-                <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">About</button>
-                <button id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Share</button>
-                <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Contact</a>
+                <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium transition-all hover:underline">About Arti</button>
+                <button id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium transition-all hover:underline">Share the Therapy</button>
+                <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium transition-all hover:underline">Talk to a Human</a>
             </div>
 
-            <!-- Sponsor message -->
-            <div class="max-w-xl mx-auto bg-customPurple-50 border border-customPurple-200 rounded-lg p-4 text-sm">
-                <p class="text-customPurple-900 font-medium mb-1">Hey there! Enjoying these results?</p>
-                <p class="text-customPurple-700">
-                   By the time I pay off all my scientists, all the lab coats, and my AWS bill…I'm losin' money every time you Ask Arti something...Sponsor this spot for $99/mo.
+            <!-- Sponsor ad with more personality -->
+            <div class="sponsor-ad rounded-xl p-4 mb-4 text-sm bg-white border-2 border-dashed not-italic text-left leading-relaxed">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-xs font-bold text-gray-600 bg-gradient-to-r from-yellow-200 to-amber-200 px-3 py-1 rounded-full uppercase">Sponsor Therapy</span>
+                    <span class="text-gray-800 font-bold">Hey, stressed seller!</span>
+                </div>
+                <p class="text-sm leading-relaxed text-gray-700">
+                    Every time you vent to Arti, I'm paying for the therapy session. My AWS bill is starting to look like your Q4 quota - 
+                    <strong>completely unrealistic</strong>. 
                 </p>
-                <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium underline">
-                    Help keep Arti alive →
-                </a>
+                <p class="mt-2 text-xs italic text-gray-600">
+                    Help me help you. Sponsor this spot for just $99/mo. 
+                    <br>That's like 2 overpriced airport drinks. Worth it.
+                </p>
+                <p class="mt-3 text-sm text-customPurple-600 font-bold">
+                    <a href="mailto:mark@subhoo.com" class="hover:underline">
+                        Save my sanity (and Lambda bill) →
+                    </a>
+                </p>
             </div>
 
-            <p class="text-xs text-gray-500 max-w-xl mx-auto">
-                AskArti.com results are provided for informational and educational purposes only and do not constitute professional business advice. AI can make errors that may not suit your specific situation. Please consult qualified professionals before making important business decisions.
+            <p class="text-xs text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                <strong>Therapy Disclaimer:</strong> AskArti provides emotional support and strategic advice for federal sales professionals. 
+                Not a replacement for actual therapy (though sometimes it feels like you need both). 
+                AI-powered insights may occasionally hallucinate - just like your quota.
             </p>
 
-            <p class="text-xs text-gray-400">
-                © 2025 AskArti · Built by sellers, for sellers
+            <p class="text-xs text-gray-400 font-medium">
+                © 2025 AskArti · Built by sellers who've been burned · For sellers currently on fire 🔥
             </p>
         </footer>
     </div>
 
-    <!-- About Modal -->
-    <div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+    <!-- Enhanced About Modal -->
+    <div id="about-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 modal-backdrop">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 modal-content transform transition-all">
             <div class="flex justify-between items-start mb-4">
                 <div class="flex items-center gap-3">
-                    <img src="images/oldmark.jpg" alt="Mark" class="w-12 h-12 rounded-full">
+                    <img src="images/oldmark.jpg" alt="Mark Flournoy" class="w-14 h-14 rounded-full object-cover border-3 border-customPurple-200 animate-float">
                     <div>
-                        <h2 class="text-lg font-bold text-gray-900">Hi, I'm Mark</h2>
-                        <p class="text-xs text-gray-600">Retired Federal Sales Guy</p>
+                        <h2 class="text-xl font-bold text-gray-900">Hey, I'm Mark</h2>
+                        <p class="text-xs text-gray-600">Fellow Fed Sales Survivor</p>
                     </div>
                 </div>
-                <button id="close-about" class="text-gray-400 hover:text-gray-600">
+                <button id="close-about" class="text-gray-400 hover:text-gray-600 transition-colors">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
-            <div class="space-y-3 text-sm text-gray-700">
-                <p>
-                    I built AskArti to help sellers spend more time with their customers. Arti's not perfect but is available 24/7 when you need to strategize or just vent.
+            <div class="space-y-4 text-gray-700">
+                <p class="leading-relaxed">
+                    I built AskArti after too many nights staring at the ceiling, wondering why my champion went dark 
+                    and whether I'd hit my impossible quota.
                 </p>
-                
-                <div class="bg-gray-50 rounded-lg p-3 text-xs">
-                    <p class="font-medium text-gray-800 mb-1">Privacy First</p>
-                    <p class="text-gray-600">
-                        Zero storage. Zero tracking. Everything happens in-memory using AWS Serverless and vanishes after your session. 
-                        The AI models might learn from our chats, but I don't keep anything.
-                    </p>
-                </div>
-                
-                <div class="pt-3">
-                    <a href="https://calendly.com/markflournoy/30min" target="_blank" 
-                       class="block w-full bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-2.5 rounded-lg text-center transition-colors">
-                        Want to chat about AI or Sales? →
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
+                <p class="Sound familiar? Yeah, I thought so.
+               </p>
+               <p class="text-sm leading-relaxed">
+                   Arti's not perfect (what in federal sales is?), but he's here 24/7 when you need to vent, 
+                   strategize, or just remember that you're not losing your mind - federal sales is just Like That™.
+               </p>
+               
+               <div class="mt-6 pt-4 border-t border-gray-200">
+                   <div class="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl p-4 text-sm">
+                       <h3 class="font-semibold text-gray-800 mb-2 flex items-center">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                           </svg>
+                           Your Data = Your Business
+                       </h3>
+                       <p class="text-gray-600 mb-2">
+                           Zero storage. Zero tracking. Zero BS. 
+                           Everything happens in-memory and vanishes faster than your stakeholder's promises. 
+                           The AI models (Gemini, Claude, GPT) might learn from our chats, but I don't keep anything.
+                       </p>
+                   </div>
+               </div>
+               
+               <div class="pt-4">
+                   <a href="https://calendly.com/markflournoy/30min" target="_blank" 
+                      class="block w-full bg-gradient-to-r from-customPurple-500 to-customPurple-700 hover:from-customPurple-600 hover:to-customPurple-800 text-white font-bold py-3 px-4 rounded-xl text-center transition-all transform hover:scale-105">
+                       Let's Commiserate Over Coffee ☕ →
+                   </a>
+                   <p class="text-xs text-center text-gray-500 mt-2">
+                       Virtual coffee. Real federal sales talk.
+                   </p>
+               </div>
+           </div>
+       </div>
+   </div>
 <script>
-// Configuration
+// Configuration with personality
 const CONFIG = {
-    API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
-    REQUEST_TIMEOUT: 25000,
-    MAX_RETRIES: 2,
-    RETRY_DELAY: 2000,
-    MAX_INPUT_LENGTH: 500,
-    LOADING_MESSAGES: [
-        "Working backwards...",
-        "Thinking big...",
-        "Circling back...",
-        "Unpacking this...",
-        "Putting a pin in it..."
-    ]
+   API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
+   REQUEST_TIMEOUT: 25000,
+   MAX_RETRIES: 2,
+   RETRY_DELAY: 2000,
+   MAX_INPUT_LENGTH: 500,
+   MIN_REQUEST_INTERVAL: 2000,
+   LOADING_MESSAGES: [
+       "Reading between the lines...",
+       "Channeling my inner COTR...",
+       "Consulting the Federal Acquisition Regulation...",
+       "Calculating your actual close probability...",
+       "Finding the real decision maker...",
+       "Translating government speak...",
+       "Brewing strong coffee...",
+       "Reviewing similar train wrecks...",
+       "Activating empathy mode..."
+   ],
+   SUPPORT_MESSAGES: {
+       stressed: [
+           "I see you. This is rough.",
+           "Deep breaths. We'll figure this out.",
+           "You're not alone in this mess.",
+           "Federal sales is hard. You're doing your best."
+       ],
+       hopeful: [
+           "There's a path forward here.",
+           "I've seen deals turn around from worse.",
+           "You've got more cards to play.",
+           "This could actually work out."
+       ],
+       neutral: [
+           "Let's think through this together.",
+           "Interesting situation. Let me help.",
+           "I've got some ideas for you.",
+           "Time to get strategic."
+       ]
+   },
+   GREETINGS: {
+       morning: "Rough morning already?",
+       afternoon: "Afternoon crisis mode?",
+       evening: "Still at it? Respect.",
+       night: "Burning the midnight oil?",
+       weekend: "No rest for the quota-crushed?"
+   }
 };
 
-// Clean, focused application class
+// Enhanced Application class
 class AskArti {
-    constructor() {
-        this.elements = this.getElements();
-        this.state = {
-            pendingRequest: false,
-            lastQuery: '',
-            chatHistory: [],
-            messageCount: 0,
-            hasActiveResults: false
-        };
-        this.init();
-    }
+   constructor() {
+       this.elements = this.getElements();
+       this.state = {
+           pendingRequest: false,
+           lastRequestTime: 0,
+           loadingInterval: null,
+           abortController: null,
+           lastQuery: '',
+           chatHistory: [],
+           messageCount: 0,
+           stressLevel: 20,
+           currentMood: 'neutral',
+           sessionStart: Date.now()
+       };
+       this.init();
+   }
 
-    getElements() {
-        return {
-            chatMessages: document.getElementById('chat-messages'),
-            chatInput: document.getElementById('chat-input'),
-            chatSendBtn: document.getElementById('chat-send-btn'),
-            clearChatBtn: document.getElementById('clear-chat-btn'),
-            loadingContainer: document.getElementById('loading-container'),
-            loadingMessage: document.getElementById('loading-message'),
-            errorMessage: document.getElementById('error-message'),
-            retryBtn: document.getElementById('retry-btn'),
-            resultsContainer: document.getElementById('results-container'),
-            accountPlanContainer: document.getElementById('account-plan-container'),
-            aboutBtn: document.getElementById('about-btn'),
-            aboutModal: document.getElementById('about-modal'),
-            closeAbout: document.getElementById('close-about'),
-            shareBtn: document.getElementById('share-btn')
-        };
-    }
+   getElements() {
+       return {
+           chatMessages: document.getElementById('chat-messages'),
+           chatInput: document.getElementById('chat-input'),
+           chatSendBtn: document.getElementById('chat-send-btn'),
+           clearChatBtn: document.getElementById('clear-chat-btn'),
+           loadingMessageContainer: document.getElementById('loading-message-container'),
+           loadingMessage: document.getElementById('loading-message'),
+           errorMessage: document.getElementById('error-message'),
+           errorDetails: document.getElementById('error-details'),
+           retryBtn: document.getElementById('retry-btn'),
+           resultsContainer: document.getElementById('results-container'),
+           accountPlanContainer: document.getElementById('account-plan-container'),
+           aboutBtn: document.getElementById('about-btn'),
+           aboutModal: document.getElementById('about-modal'),
+           closeAbout: document.getElementById('close-about'),
+           shareBtn: document.getElementById('share-btn'),
+           stressBar: document.getElementById('stress-bar'),
+           stressEmoji: document.getElementById('stress-emoji'),
+           greetingText: document.getElementById('greeting-text'),
+           moodBanner: document.getElementById('mood-banner'),
+           moodText: document.getElementById('mood-text'),
+           supportMessage: document.getElementById('support-message'),
+           supportText: document.getElementById('support-text'),
+           chatContainer: document.getElementById('chat-container')
+       };
+   }
 
-    init() {
-        this.initializeMermaid();
-        this.setupEventListeners();
-        this.elements.chatInput.focus();
-    }
+   init() {
+       this.initializeMermaid();
+       this.setupEventListeners();
+       this.updateGreeting();
+       this.elements.chatInput.focus();
+       this.animateStressLevel(20);
+   }
 
-    initializeMermaid() {
-        mermaid.initialize({ 
-            startOnLoad: false,
-            securityLevel: 'strict',
-            theme: 'default',
-            flowchart: {
-                htmlLabels: true,
-                curve: 'linear'
-            }
-        });
-    }
+   updateGreeting() {
+       const hour = new Date().getHours();
+       const day = new Date().getDay();
+       
+       let greeting;
+       if (day === 0 || day === 6) {
+           greeting = CONFIG.GREETINGS.weekend;
+       } else if (hour < 12) {
+           greeting = CONFIG.GREETINGS.morning;
+       } else if (hour < 17) {
+           greeting = CONFIG.GREETINGS.afternoon;
+       } else if (hour < 21) {
+           greeting = CONFIG.GREETINGS.evening;
+       } else {
+           greeting = CONFIG.GREETINGS.night;
+       }
+       
+       this.elements.greetingText.textContent = greeting;
+   }
 
-    setupEventListeners() {
-        // Chat events
-        this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
-        this.elements.chatInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                this.sendChatMessage();
-            }
-        });
+   detectStressLevel(message) {
+       const stressWords = {
+           high: ['ghosted', 'lost', 'panic', 'help!', 'losing it', 'exhausting', 'nightmare', 'disaster', 'furious', 'killing me'],
+           medium: ['worried', 'nervous', 'stuck', 'confused', 'frustrated', 'struggling', 'concerned', 'challenging'],
+           low: ['curious', 'interested', 'planning', 'preparing', 'thinking', 'wondering', 'exploring']
+       };
+       
+       const lower = message.toLowerCase();
+       let detectedLevel = this.state.stressLevel;
+       
+       if (stressWords.high.some(word => lower.includes(word))) {
+           detectedLevel = Math.min(100, detectedLevel + 30);
+           this.state.currentMood = 'stressed';
+       } else if (stressWords.medium.some(word => lower.includes(word))) {
+           detectedLevel = Math.min(100, detectedLevel + 15);
+           this.state.currentMood = 'neutral';
+       } else if (stressWords.low.some(word => lower.includes(word))) {
+           detectedLevel = Math.max(20, detectedLevel - 10);
+           this.state.currentMood = 'hopeful';
+       }
+       
+       this.animateStressLevel(detectedLevel);
+       this.updateMoodUI();
+   }
 
-        this.elements.clearChatBtn.addEventListener('click', () => this.clearChat());
-        this.elements.retryBtn.addEventListener('click', () => this.retry());
+   animateStressLevel(newLevel) {
+       this.state.stressLevel = newLevel;
+       this.elements.stressBar.style.width = `${newLevel}%`;
+       
+       // Update stress bar color
+       this.elements.stressBar.className = 'h-full transition-all duration-500';
+       if (newLevel >= 80) {
+           this.elements.stressBar.classList.add('stress-critical');
+           this.elements.stressEmoji.textContent = '🤯';
+       } else if (newLevel >= 60) {
+           this.elements.stressBar.classList.add('stress-high');
+           this.elements.stressEmoji.textContent = '😰';
+       } else if (newLevel >= 40) {
+           this.elements.stressBar.classList.add('stress-medium');
+           this.elements.stressEmoji.textContent = '😟';
+       } else {
+           this.elements.stressBar.classList.add('stress-low');
+           this.elements.stressEmoji.textContent = '😌';
+       }
+   }
 
-        // Modal events
-        this.elements.aboutBtn.addEventListener('click', () => this.showModal());
-        this.elements.closeAbout.addEventListener('click', () => this.hideModal());
-        this.elements.aboutModal.addEventListener('click', (e) => {
-            if (e.target === this.elements.aboutModal) this.hideModal();
-        });
+   updateMoodUI() {
+       // Update chat container background
+       this.elements.chatContainer.className = 'chat-container h-[60vh] sm:h-96 max-h-[500px] overflow-y-auto mb-4 rounded-xl p-4 sm:p-6 transition-all';
+       this.elements.chatContainer.classList.add(`mood-${this.state.currentMood}`);
+       
+       // Show support message
+       const messages = CONFIG.SUPPORT_MESSAGES[this.state.currentMood];
+       const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+       this.showSupportMessage(randomMessage);
+   }
 
-        // Share
-        this.elements.shareBtn.addEventListener('click', () => this.share());
+   showSupportMessage(message) {
+       this.elements.supportText.textContent = message;
+       this.elements.supportMessage.classList.remove('hidden');
+       this.elements.supportMessage.classList.add('animate-fade-in');
+       
+       // Color based on mood
+       if (this.state.currentMood === 'stressed') {
+           this.elements.supportMessage.className = 'mb-4 p-4 rounded-xl text-center transition-all animate-fade-in bg-red-50 text-red-700';
+       } else if (this.state.currentMood === 'hopeful') {
+           this.elements.supportMessage.className = 'mb-4 p-4 rounded-xl text-center transition-all animate-fade-in bg-green-50 text-green-700';
+       } else {
+           this.elements.supportMessage.className = 'mb-4 p-4 rounded-xl text-center transition-all animate-fade-in bg-purple-50 text-purple-700';
+       }
+       
+       setTimeout(() => {
+           this.elements.supportMessage.classList.add('hidden');
+       }, 5000);
+   }
 
-        // Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') this.hideModal();
-        });
-    }
-
-    clearChat() {
-        this.state.chatHistory = [];
-        this.state.messageCount = 0;
-        this.state.hasActiveResults = false;
-        
-        // Reset chat to welcome message
-        this.elements.chatMessages.innerHTML = `
-            <div class="flex items-start gap-3 mb-4">
-                <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
-                <div class="chat-message-arti px-4 py-2.5 max-w-[85%]">
-                    <p class="text-sm">
-                        Fresh start. What's on your mind?
-                    </p>
-                </div>
-            </div>`;
-        
-        // Clear other areas
-        this.elements.chatInput.value = '';
-        this.clearResults();
-        
-        // Remove any generate plan buttons
-        const planBtns = document.querySelectorAll('#generate-plan-container');
-        planBtns.forEach(btn => btn.remove());
-        
-        this.elements.chatInput.focus();
-    }
-
-    clearResults() {
-        // Clear previous results before showing new ones
-        this.elements.resultsContainer.innerHTML = '';
-        this.elements.accountPlanContainer.innerHTML = '';
-        this.elements.accountPlanContainer.classList.add('hidden');
-    }
-
-    async quickAnalysis(scenario) {
-        // Clear previous results
-        if (this.state.hasActiveResults) {
-            this.clearResults();
-        }
-        
-        // Add user message
-        this.addChatMessage(scenario, true);
-        
-        // Show typing
-        this.showTypingIndicator();
-        this.state.pendingRequest = true;
-        
-        try {
-            this.state.chatHistory.push({ role: 'user', content: scenario });
-            this.state.messageCount++;
-            
-            const response = await fetch(CONFIG.API_ENDPOINT, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    situation: scenario,
-                    currentDate: new Date().toISOString().split('T')[0]
-                })
-            });
-            
-            const data = await response.json();
-            this.hideTypingIndicator();
-            
-            // Add response
-            const responseMessage = `I hear you. ${data.quick_take || "Let me break this down for you."}`;
-            this.addChatMessage(responseMessage, false);
-            
-            this.state.chatHistory.push({ role: 'assistant', content: responseMessage });
-            
-            // Display results
-            this.state.hasActiveResults = true;
-            this.displayAdvice(data);
-            
-            // Smooth scroll to results
-            setTimeout(() => {
-                this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
-            
-        } catch (error) {
-            console.error('Quick analysis failed:', error);
-            this.hideTypingIndicator();
-            this.addChatMessage("Connection issues. Try again?", false);
-        } finally {
-            this.state.pendingRequest = false;
-        }
-    }
-
-    addChatMessage(content, isUser = false) {
-        const messageHtml = isUser ? `
-            <div class="flex justify-end mb-4 fade-in">
-                <div class="chat-message-user px-4 py-2.5 max-w-[85%] text-sm">
-                    ${content}
-                </div>
-            </div>
-        ` : `
-            <div class="flex items-start gap-3 mb-4 fade-in">
-                <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
-                <div class="chat-message-arti px-4 py-2.5 max-w-[85%]">
-                    <div class="text-sm">${marked.parse(content)}</div>
-                </div>
-            </div>
-        `;
-        
-        this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
-        this.scrollChatToBottom();
-    }
-
-    showTypingIndicator() {
-        const typingHtml = `
-            <div id="typing-indicator" class="flex items-start gap-3 mb-4">
-                <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0 opacity-50">
-                <div class="typing-indicator">
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                </div>
-            </div>
-        `;
-        this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
-        this.scrollChatToBottom();
-    }
-
-    hideTypingIndicator() {
-        const indicator = document.getElementById('typing-indicator');
-        if (indicator) indicator.remove();
-    }
-
-    showLoading() {
-        const message = CONFIG.LOADING_MESSAGES[Math.floor(Math.random() * CONFIG.LOADING_MESSAGES.length)];
-        this.elements.loadingMessage.textContent = message;
-        this.elements.loadingContainer.classList.remove('hidden');
-    }
-
-    hideLoading() {
-        this.elements.loadingContainer.classList.add('hidden');
-    }
-
-    scrollChatToBottom() {
-        const container = document.querySelector('.chat-container');
-        if (container) {
-            container.scrollTop = container.scrollHeight;
-        }
-    }
-
-  async sendChatMessage() {
-        const message = this.elements.chatInput.value.trim();
-        
-        if (this.state.pendingRequest || !message) return;
-
-        // Clear previous results if any
-        if (this.state.hasActiveResults) {
-            this.clearResults();
-        }
-
-        // Add user message
-        this.addChatMessage(message, true);
-        this.elements.chatInput.value = '';
-        this.state.lastQuery = message;
-        
-        // Update history
-        this.state.chatHistory.push({ role: 'user', content: message });
-        this.state.messageCount++;
-
-        // Show typing
-        this.showTypingIndicator();
-        this.state.pendingRequest = true;
-
-        try {
-            const response = await this.makeChatRequest(message);
-            this.hideTypingIndicator();
-            
-            const aiMessage = response.message || "Tell me more.";
-            // Add response
-            this.addChatMessage(aiMessage, false);
-			this.state.chatHistory.push({ role: 'assistant', content: aiMessage });
-           this.state.lastQuery = '';
-
-           // Show account plan button if the AI indicates it's ready
-            if (aiMessage.includes("generate an action plan now") && !document.getElementById('generate-plan-container')) {
-                this.addAccountPlanButton();
-            }
-
-           // Add follow-up suggestions
-           if (response.suggestions && response.suggestions.length > 0) {
-               this.addFollowUpSuggestions(response.suggestions);
+   initializeMermaid() {
+       mermaid.initialize({ 
+           startOnLoad: false,
+           securityLevel: 'strict',
+           theme: 'default',
+           flowchart: {
+               htmlLabels: true,
+               curve: 'basis'
            }
+       });
+   }
 
-       } catch (error) {
-           console.error('Chat request failed:', error);
+   setupEventListeners() {
+       // Chat events
+       this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
+       this.elements.chatInput.addEventListener('keydown', (e) => {
+           if (e.key === 'Enter' && !e.shiftKey) {
+               e.preventDefault();
+               this.sendChatMessage();
+           }
+       });
+
+       // Update stress level as user types
+       this.elements.chatInput.addEventListener('input', (e) => {
+           if (e.target.value.length > 50) {
+               this.detectStressLevel(e.target.value);
+           }
+           
+           if (this.elements.chatSendBtn.querySelector('.retry-icon')) {
+               this.resetSendButton();
+           }
+       });
+
+       // Clear chat with confirmation
+       this.elements.clearChatBtn.addEventListener('click', () => {
+           if (this.state.messageCount > 2) {
+               if (confirm('Start fresh? (Your current therapy session will be erased)')) {
+                   this.clearChat();
+               }
+           } else {
+               this.clearChat();
+           }
+       });
+
+       // Retry
+       this.elements.retryBtn.addEventListener('click', () => {
+           this.elements.errorMessage.classList.add('hidden');
+           if (this.state.lastQuery) {
+               this.sendChatMessage();
+           }
+       });
+
+       // Share
+       this.elements.shareBtn.addEventListener('click', () => this.share());
+
+       // About modal
+       this.elements.aboutBtn.addEventListener('click', () => this.showModal());
+       this.elements.closeAbout.addEventListener('click', () => this.hideModal());
+       this.elements.aboutModal.addEventListener('click', (e) => {
+           if (e.target === this.elements.aboutModal) this.hideModal();
+       });
+
+       // Escape key
+       document.addEventListener('keydown', (e) => {
+           if (e.key === 'Escape') this.hideModal();
+       });
+   }
+
+   clearChat() {
+       // Reset everything
+       this.state.chatHistory = [];
+       this.state.messageCount = 0;
+       this.state.stressLevel = 20;
+       this.state.currentMood = 'neutral';
+       
+       // Reset UI
+       this.animateStressLevel(20);
+       this.updateGreeting();
+       
+       // Clear messages but keep welcome
+       this.elements.chatMessages.innerHTML = `
+           <div class="flex items-start gap-3">
+               <img src="/images/arti_right.png" alt="Arti" class="w-10 h-10 rounded-full animate-bounce-slow">
+               <div class="chat-message-arti rounded-2xl px-4 py-3 max-w-[85%] animate-fade-in">
+                   <p class="text-gray-800 text-sm sm:text-base leading-relaxed">
+                       <strong>Fresh start.</strong> Sometimes that's exactly what we need.
+                       <br><br>
+                       <em>What's on your mind?</em>
+                   </p>
+               </div>
+           </div>`;
+       
+       // Clear other elements
+       this.elements.chatInput.value = '';
+    this.elements.resultsContainer.innerHTML = '';
+    this.elements.accountPlanContainer.classList.add('hidden');
+    this.elements.accountPlanContainer.innerHTML = '';
+    document.getElementById('plan-button-container').classList.add('hidden'); 
+
+    // Remove generate plan button
+       const generatePlanContainer = document.getElementById('generate-plan-container');
+       if (generatePlanContainer) {
+           generatePlanContainer.remove();
+       }
+       
+       this.elements.chatInput.focus();
+       this.showTemporaryMessage('Clean slate. Let\'s go.', 'info');
+   }
+
+   async quickAnalysis(scenario) {
+   
+   this.elements.resultsContainer.innerHTML = ''; 
+       // Detect stress from scenario
+       this.detectStressLevel(scenario);
+       
+       // Add user message to chat
+       this.addChatMessage(scenario, true);
+       
+       // Show typing with personality
+       this.showTypingIndicator();
+       this.state.pendingRequest = true;
+       
+       try {
+           // Add to chat history
+           this.state.chatHistory.push({ role: 'user', content: scenario });
+           this.state.messageCount++;
+           
+           // Show random loading message
+           this.showLoadingMessage();
+           
+           // Make request
+           const response = await fetch(CONFIG.API_ENDPOINT, {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({ 
+                   situation: scenario,
+                   currentDate: new Date().toISOString().split('T')[0],
+                   stressLevel: this.state.stressLevel,
+                   sessionDuration: Math.floor((Date.now() - this.state.sessionStart) / 1000)
+               })
+           });
+           
+           const data = await response.json();
            this.hideTypingIndicator();
-           this.addChatMessage("Connection issues. Try again?", false);
-           this.showError();
+           this.hideLoadingMessage();
+           
+           // Reduce stress level after getting help
+           this.animateStressLevel(Math.max(20, this.state.stressLevel - 15));
+           
+           // Add response to chat
+           const responseMessage = `${data.quick_take}\n\n*I've put together a detailed game plan below. Take a look when you're ready.*`;
+           this.addChatMessage(responseMessage, false);
+           
+           // Add to chat history
+           this.state.chatHistory.push({ role: 'assistant', content: responseMessage });
+           
+           // Display full response with animation
+           this.displayAdvice(data);
+           
+           // Smooth scroll to results
+           setTimeout(() => {
+               this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+           }, 300);
+           
+       } catch (error) {
+           console.error('Quick analysis failed:', error);
+           this.hideTypingIndicator();
+           this.hideLoadingMessage();
+           this.addChatMessage("Tech issues on my end. The irony isn't lost on me. Try again?", false);
+           this.animateStressLevel(Math.min(100, this.state.stressLevel + 10));
        } finally {
            this.state.pendingRequest = false;
        }
    }
+
+   addChatMessage(content, isUser = false) {
+       const messageHtml = isUser ? `
+           <div class="flex justify-end animate-slide-in">
+               <div class="chat-message-user rounded-2xl px-4 py-3 max-w-[85%] shadow-lg">
+                   ${content}
+               </div>
+           </div>
+       ` : `
+           <div class="flex items-start gap-3 animate-slide-in">
+               <img src="/images/arti_right.png" alt="Arti" class="w-10 h-10 rounded-full">
+               <div class="chat-message-arti rounded-2xl px-4 py-3 max-w-[85%]">
+                   ${marked.parse(content)}
+               </div>
+           </div>
+       `;
+       
+       this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
+       this.scrollChatToBottom();
+   }
+
+   showTypingIndicator() {
+       const typingHtml = `
+           <div id="typing-indicator" class="flex items-start gap-3 animate-fade-in">
+               <img src="/images/arti_right.png" alt="Arti" class="w-10 h-10 rounded-full opacity-50">
+               <div class="typing-indicator">
+                   <div class="typing-dot"></div>
+                   <div class="typing-dot"></div>
+                   <div class="typing-dot"></div>
+               </div>
+           </div>
+       `;
+       this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
+       this.scrollChatToBottom();
+   }
+
+   hideTypingIndicator() {
+       const indicator = document.getElementById('typing-indicator');
+       if (indicator) indicator.remove();
+   }
+
+   showLoadingMessage() {
+       const message = CONFIG.LOADING_MESSAGES[Math.floor(Math.random() * CONFIG.LOADING_MESSAGES.length)];
+       this.elements.loadingMessage.textContent = message;
+       this.elements.loadingMessageContainer.classList.remove('hidden');
+   }
+
+   hideLoadingMessage() {
+       this.elements.loadingMessageContainer.classList.add('hidden');
+   }
+
+   scrollChatToBottom() {
+       const scrollContainer = document.querySelector('.chat-container');
+       if (!scrollContainer) return;
+
+       requestAnimationFrame(() => {
+           scrollContainer.scrollTop = scrollContainer.scrollHeight;
+           setTimeout(() => {
+               scrollContainer.scrollTop = scrollContainer.scrollHeight;
+           }, 100);
+       });
+   }
+
+   async sendChatMessage() {
+       const message = this.elements.chatInput.value.trim();
+       
+       if (this.state.pendingRequest) return;
+       
+       if (!message && this.state.lastQuery) {
+           this.retryLastMessage();
+           return;
+       }
+       
+       if (!message) return;
+
+       // Detect stress level
+       this.detectStressLevel(message);
+
+       // Add user message to chat
+       this.addChatMessage(message, true);
+       this.elements.chatInput.value = '';
+       this.state.lastQuery = message;
+       
+       // Add to chat history
+       this.state.chatHistory.push({ role: 'user', content: message });
+       this.state.messageCount++;
+
+       // Show typing indicator
+       this.showTypingIndicator();
+       this.showLoadingMessage();
+       this.state.pendingRequest = true;
+
+       try {
+           const response = await this.makeChatRequest(message);
+           this.hideTypingIndicator();
+           this.hideLoadingMessage();
+           
+           // Check if this is a factual answer
+           if (response.response_type === 'factual_answer' && response.answer) {
+               // Format the factual answer nicely
+               const formattedAnswer = `**Here's what I know:**\n\n${response.answer}`;
+               this.addChatMessage(formattedAnswer, false);
+               this.state.chatHistory.push({ role: 'assistant', content: formattedAnswer });
+           } else {
+               // Reduce stress after getting response
+               this.animateStressLevel(Math.max(20, this.state.stressLevel - 10));
+               
+               // Add Arti's response
+               this.addChatMessage(response.message || "I hear you. Tell me more about what's happening.", false);
+               this.state.chatHistory.push({ role: 'assistant', content: response.message });
+
+               // Add follow-up suggestions if provided
+               if (response.suggestions && response.suggestions.length > 0) {
+                   this.addFollowUpSuggestions(response.suggestions);
+               }
+           }
+
+           // Clear lastQuery on success
+           this.state.lastQuery = '';
+
+// Show the plan generation button if enough context is built
+if (this.state.messageCount >= 3 && document.getElementById('plan-button-container')?.classList.contains('hidden')) {
+    document.getElementById('plan-button-container').classList.remove('hidden');
+}
+
+       } catch (error) {
+           console.error('Chat request failed:', error);
+           this.hideTypingIndicator();
+           this.hideLoadingMessage();
+           this.addChatMessage("Connection issues. Even my servers are ghosting me now. Try again?", false);
+           this.animateStressLevel(Math.min(100, this.state.stressLevel + 10));
+           
+           // Update send button for retry
+           this.elements.chatSendBtn.innerHTML = `
+               <span class="flex items-center gap-2">
+                   <svg class="w-5 h-5 retry-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                   </svg>
+                   <span>Retry</span>
+               </span>
+           `;
+           this.elements.chatSendBtn.classList.add('bg-gradient-to-r', 'from-yellow-500', 'to-amber-600');
+       } finally {
+           this.state.pendingRequest = false;
+       }
+   }
+
+   resetSendButton() {
+       this.elements.chatSendBtn.innerHTML = `
+           <span class="flex items-center gap-2">
+               <span>Send</span>
+               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+               </svg>
+           </span>
+       `;
+       this.elements.chatSendBtn.className = 'bg-gradient-to-r from-customPurple-500 to-customPurple-700 hover:from-customPurple-600 hover:to-customPurple-800 text-white font-medium px-4 sm:px-6 py-3 rounded-xl transition-all text-sm sm:text-base min-h-[44px] whitespace-nowrap transform hover:scale-105 active:scale-95';
+   }
+
    async makeChatRequest(message) {
        const contextToSend = this.state.chatHistory.length > 20 
            ? [this.state.chatHistory[0], ...this.state.chatHistory.slice(-19)]
            : this.state.chatHistory;
        
-       const response = await fetch(CONFIG.API_ENDPOINT, {
-           method: 'POST',
-           headers: { 'Content-Type': 'application/json' },
-           body: JSON.stringify({ 
-               situation: message,
-               mode: 'chat',
-               conversationHistory: contextToSend,
-               currentDate: new Date().toISOString().split('T')[0]
-           })
-       });
+       try {
+           const response = await fetch(CONFIG.API_ENDPOINT, {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({ 
+                   situation: message,
+                   mode: 'chat',
+                   conversationHistory: contextToSend,
+                   currentDate: new Date().toISOString().split('T')[0],
+                   stressLevel: this.state.stressLevel,
+                   sessionDuration: Math.floor((Date.now() - this.state.sessionStart) / 1000)
+               })
+           });
 
-       if (!response.ok) throw new Error('Request failed');
-       return await response.json();
+           if (!response.ok) throw new Error('Request failed');
+           return await response.json();
+       } catch (error) {
+           console.error('API request failed:', error);
+           throw error;
+       }
    }
 
    addFollowUpSuggestions(suggestions) {
        const suggestionsHtml = `
-           <div class="flex flex-wrap gap-2 justify-center my-4 px-4">
+           <div class="flex justify-center gap-2 mt-6 flex-wrap animate-fade-in">
+               <p class="w-full text-center text-xs text-gray-500 mb-2">You might be thinking...</p>
                ${suggestions.map(s => `
-                   <button class="scenario-btn text-xs" 
+                   <button class="scenario-btn px-4 py-2 bg-gradient-to-r from-gray-100 to-slate-100 hover:from-gray-200 hover:to-slate-200 rounded-full text-sm text-gray-700 font-medium transition-all transform hover:scale-105"
                            onclick="app.elements.chatInput.value='${s.replace(/'/g, "\\'")}'; app.sendChatMessage();">
                        ${s}
                    </button>
@@ -798,58 +1233,63 @@ class AskArti {
        this.scrollChatToBottom();
    }
 
-   addAccountPlanButton() {
-       const btnHtml = `
-           <div id="generate-plan-container" class="flex justify-center my-4">
-               <button onclick="app.generateAccountPlan()" 
-                   class="px-4 py-2 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg text-sm transition-colors">
-                   Get Your Plan →
-               </button>
-           </div>
-       `;
-       this.elements.chatMessages.insertAdjacentHTML('beforeend', btnHtml);
-       this.scrollChatToBottom();
-   }
-
-  autoCreateAccountPlan() {
-       // Avoid running if a request is already in progress
-       if (this.state.pendingRequest) return;
-
-       // If there are results from a previous query, clear them out.
-       if (this.state.hasActiveResults) {
-            this.clearResults();
-       }
-       
-       // Define a clear, conversational message to start the process
-       const message = "Help me build an action plan.";
-       
-       // Place the message in the input box and send it immediately
-       this.elements.chatInput.value = message;
+   // Auto-create account plan
+   autoCreateAccountPlan() {
+       this.detectStressLevel("Create an account plan");
+       this.elements.chatInput.value = "I need help building an account plan for selling GenAI to DHS. They're being difficult.";
        this.sendChatMessage();
+       
+       setTimeout(() => {
+           if (!document.getElementById('generate-plan-btn')) {
+               const generateBtnHtml = `
+                   <div id="generate-plan-container" class="flex justify-center mt-6 mb-2 animate-fade-in">
+                       <button id="generate-plan-btn" onclick="app.generateAccountPlan()" 
+                       class="bg-gradient-to-r from-hopeGreen-500 to-emerald-600 hover:from-hopeGreen-600 hover:to-emerald-700 text-white font-bold px-6 py-3 rounded-xl text-sm flex items-center gap-2 transition-all transform hover:scale-105 shadow-lg animate-pulse-slow">
+                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                           </svg>
+                           Generate Your Battle Plan
+                       </button>
+                   </div>
+               `;
+               this.elements.chatMessages.insertAdjacentHTML('beforeend', generateBtnHtml);
+           }
+           
+           setTimeout(() => {
+               this.generateAccountPlan();
+           }, 1500);
+       }, 2000);
    }
+
    async generateAccountPlan() {
-       if (this.state.pendingRequest) return;
+    if (this.state.pendingRequest) return;
+    document.getElementById('plan-button-container').classList.add('hidden');
+	   this.elements.resultsContainer.innerHTML = '';
        
-       // Clear any existing results
-       this.clearResults();
-       
-       this.showLoading();
+       // Show loading
+       this.showTemporaryMessage('Crafting your plan...', 'info');
        this.elements.accountPlanContainer.innerHTML = `
-           <div class="result-card text-center p-6">
-               <div class="loader mx-auto mb-3"></div>
-               <p class="text-sm text-gray-600">Building your account plan...</p>
+           <div class="therapy-card text-center p-8 animate-pulse-slow">
+               <div class="loader mx-auto mb-4"></div>
+               <p class="text-lg font-medium text-gray-700">Building your account plan...</p>
+               <p class="text-sm text-gray-500 mt-2">This is going to be good.</p>
            </div>
        `;
        this.elements.accountPlanContainer.classList.remove('hidden');
        
+       // Smooth scroll
        this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
        
        this.state.pendingRequest = true;
-       
-       try {
-           const contextToSend = this.state.chatHistory.length > 20 
-               ? [this.state.chatHistory[0], ...this.state.chatHistory.slice(-19)]
-               : this.state.chatHistory;
+	   try {
+           let contextToSend = this.state.chatHistory;
+           const maxContextSize = 20;
+           if (contextToSend.length > maxContextSize) {
+               contextToSend = [
+                   contextToSend[0],
+                   ...contextToSend.slice(-maxContextSize + 1)
+               ];
+           }
            
            const response = await fetch(CONFIG.API_ENDPOINT, {
                method: 'POST',
@@ -858,25 +1298,29 @@ class AskArti {
                    situation: "Generate account plan",
                    mode: 'account_plan',
                    conversationHistory: contextToSend,
-                   currentDate: new Date().toISOString().split('T')[0]
+                   currentDate: new Date().toISOString().split('T')[0],
+                   stressLevel: this.state.stressLevel
                })
            });
            
            if (!response.ok) throw new Error('Request failed');
            
            const data = await response.json();
-           this.hideLoading();
-           this.state.hasActiveResults = true;
-           this.displayAccountPlan(data);
+           this.displayModernAccountPlan(data);
+           
+           // Reduce stress after successful plan generation
+           this.animateStressLevel(Math.max(20, this.state.stressLevel - 20));
+           this.showSupportMessage("Nice! You've got a solid plan now. You can do this.");
            
        } catch (error) {
            console.error('Account plan generation failed:', error);
-           this.hideLoading();
            this.elements.accountPlanContainer.innerHTML = `
-               <div class="result-card text-center">
-                   <p class="text-red-600 font-medium text-sm mb-3">Couldn't generate your plan.</p>
-                   <button onclick="app.generateAccountPlan()" 
-                       class="text-red-700 underline text-sm">Try again</button>
+               <div class="therapy-card text-center p-6">
+                   <p class="text-red-600 mb-3 font-medium">Plan generation hit a snag.</p>
+                   <p class="text-gray-600 text-sm mb-4">Even my AI needs a coffee break sometimes.</p>
+                   <button onclick="app.generateAccountPlan()" class="bg-gradient-to-r from-red-100 to-pink-100 hover:from-red-200 hover:to-pink-200 text-red-700 font-medium py-2 px-6 rounded-xl text-sm transition-all transform hover:scale-105">
+                       Try Again
+                   </button>
                </div>
            `;
        } finally {
@@ -884,501 +1328,551 @@ class AskArti {
        }
    }
 
-   displayAccountPlan(data) {
-       const { 
-           account_name = 'Federal Agency',
-           objectives = [],
-           stakeholders = [],
-           opportunities = [],
-           challenges = [],
-           success_metrics = [],
-           action_items = [],
-           mermaid_chart
-       } = data;
-       
-       if (!account_name || account_name === 'Federal Agency') {
-           this.elements.accountPlanContainer.innerHTML = `
-               <div class="result-card text-center p-6">
-                   <p class="text-gray-700 font-medium mb-2">Need More Details</p>
-                   <p class="text-sm text-gray-600">Tell me more about your target agency and what you're selling.</p>
-               </div>
-           `;
-           return;
+   validateAndFixDate(dateString) {
+       if (dateString === "Ongoing" || dateString.toLowerCase() === "ongoing") {
+           return "Ongoing";
        }
        
-       let html = `
-           <div class="account-plan-header">
-               <div class="flex justify-between items-center">
-                   <div>
-                       <h2 class="text-xl font-bold text-gray-900">${account_name}</h2>
-                       <p class="text-sm text-gray-600">Account Strategy</p>
-                   </div>
-                   <div class="flex gap-2">
-                       <button onclick="app.copyAccountPlan()" 
-                           class="p-2 text-gray-600 hover:text-gray-800 hover:bg-white/50 rounded-lg transition-colors" 
-                           title="Copy">
-                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                           </svg>
-                       </button>
-                       <button onclick="window.print()" 
-                           class="p-2 text-gray-600 hover:text-gray-800 hover:bg-white/50 rounded-lg transition-colors" 
-                           title="Print">
-                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2z" />
-                           </svg>
-                       </button>
-                   </div>
-               </div>
-           </div>
-
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <!-- Objectives -->
-               <div class="result-card">
-                   <h3>Key Objectives</h3>
-                   <ul class="space-y-2">
-                       ${objectives.map(o => `
-                           <li class="flex items-start gap-2">
-                               <span class="text-customPurple-500 mt-1">•</span>
-                               <span>${o}</span>
-                           </li>
-                       `).join('') || '<li class="text-gray-500 italic">No objectives defined</li>'}
-                   </ul>
-               </div>
-               
-               <!-- Challenges -->
-               <div class="result-card">
-                   <h3>Challenges</h3>
-                   <ul class="space-y-2">
-                       ${challenges.map(c => `
-                           <li class="flex items-start gap-2">
-                               <span class="text-red-500 mt-1">•</span>
-                               <span>${c}</span>
-                           </li>
-                       `).join('') || '<li class="text-gray-500 italic">No challenges identified</li>'}
-                   </ul>
-               </div>
-           </div>
+       const dateRegex = /(\d{4}-\d{2}-\d{2})/;
+       const match = dateString.match(dateRegex);
+       
+       if (match) {
+           const extractedDate = match[1];
+           const date = new Date(extractedDate);
+           const currentDate = new Date();
            
-           <!-- Stakeholders -->
-           <div class="result-card">
-               <h3>Key Stakeholders</h3>
-               <div class="overflow-x-auto">
-                   <table class="data-table w-full">
-                       <thead>
-                           <tr class="border-b border-gray-200">
-                               <th class="text-left py-2 px-3">Name/Role</th>
-                               <th class="text-left py-2 px-3">Influence</th>
-                               <th class="text-left py-2 px-3">Notes</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                           ${stakeholders.map(s => `
-                               <tr class="border-b border-gray-100">
-                                   <td class="py-2 px-3 font-medium">${s.name || 'Unknown'}</td>
-                                   <td class="py-2 px-3">
-                                       <span class="inline-block px-2 py-1 rounded text-xs font-medium ${
-                                           s.influence?.toLowerCase() === 'high' ? 'bg-green-100 text-green-800' :
-                                           s.influence?.toLowerCase() === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                                           'bg-gray-100 text-gray-800'
-                                       }">${s.influence || 'Unknown'}</span>
-                                   </td>
-                                   <td class="py-2 px-3 text-sm">${s.notes || '—'}</td>
-                               </tr>
-                           `).join('') || `
-                               <tr>
-                                   <td colspan="3" class="py-4 text-center text-gray-500 italic">
-                                       No stakeholders identified
-                                   </td>
-                               </tr>
-                           `}
-                       </tbody>
-                   </table>
-               </div>
-           </div>
-           
-           <!-- Opportunities -->
-           <div class="result-card">
-               <h3>Opportunities</h3>
-               <div class="overflow-x-auto">
-                   <table class="data-table w-full">
-                       <thead>
-                           <tr class="border-b border-gray-200">
-                               <th class="text-left py-2 px-3">Opportunity</th>
-                               <th class="text-left py-2 px-3">Value</th>
-                               <th class="text-left py-2 px-3">Status</th>
-                               <th class="text-left py-2 px-3">Next Steps</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                           ${opportunities.map(o => `
-                               <tr class="border-b border-gray-100">
-                                   <td class="py-2 px-3 font-medium">${o.name || 'Unknown'}</td>
-                                   <td class="py-2 px-3 font-bold text-green-700">${o.value || '—'}</td>
-                                   <td class="py-2 px-3 text-sm">${o.status || '—'}</td>
-                                   <td class="py-2 px-3 text-sm">${o.next_steps || '—'}</td>
-                               </tr>
-                           `).join('') || `
-                               <tr>
-                                   <td colspan="4" class="py-4 text-center text-gray-500 italic">
-                                       No opportunities identified
-                                   </td>
-                               </tr>
-                           `}
-                       </tbody>
-                   </table>
-               </div>
-           </div>
-
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <!-- Success Metrics -->
-               <div class="result-card">
-                   <h3>Success Metrics</h3>
-                   <ul class="space-y-2">
-                       ${success_metrics.map(m => `
-                           <li class="flex items-start gap-2">
-                               <span class="text-green-500 mt-1">✓</span>
-                               <span>${m}</span>
-                           </li>
-                       `).join('') || '<li class="text-gray-500 italic">No metrics defined</li>'}
-                   </ul>
-               </div>
-               
-               <!-- Action Items -->
-               <div class="result-card">
-                   <h3>Next Actions</h3>
-                   <ul class="space-y-2">
-                       ${action_items.map(a => `
-                           <li class="flex items-start gap-2">
-                               <span class="text-customPurple-500 mt-1">→</span>
-                               <span>${a}</span>
-                           </li>
-                       `).join('') || '<li class="text-gray-500 italic">No actions defined</li>'}
-                   </ul>
-               </div>
-           </div>
-       `;
-       
-       // Add mermaid chart if available
-       if (mermaid_chart) {
-           html += `
-               <div class="result-card">
-                   <h3>Game Plan</h3>
-                   <div class="mermaid-container">
-                       <div id="mermaid-diagram" class="mermaid">
-                           ${mermaid_chart}
-                       </div>
-                   </div>
-               </div>
-           `;
-       }
-       
-       this.elements.accountPlanContainer.innerHTML = html;
-       
-       if (mermaid_chart) {
-           this.renderMermaidChart();
-       }
-   }
-   
-   copyAccountPlan() {
-       const content = this.elements.accountPlanContainer.innerText;
-       
-       if (!content) {
-           alert('No plan to copy');
-           return;
-       }
-       
-       navigator.clipboard.writeText(content)
-           .then(() => {
-               alert('Account plan copied!');
-           })
-           .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
-   }
-
-   renderMermaidChart() {
-       setTimeout(async () => {
-           try {
-               await mermaid.run();
-           } catch (error) {
-               console.error('Mermaid rendering error:', error);
-               const container = document.querySelector('.mermaid-container');
-               if (container) {
-                   container.innerHTML = '<p class="text-sm text-gray-500 text-center py-4">Chart unavailable</p>';
-               }
-           }
-       }, 100);
-   }
-
-   displayAdvice(data) {
-       const { response_type } = data;
-       
-       try {
-           if (response_type === 'prospect') {
-               this.displayProspectAdvice(data);
-           } else {
-               this.displayGeneralAdvice(data);
+           if (!isNaN(date) && date < currentDate) {
+               date.setFullYear(currentDate.getFullYear() + 1);
+               return date.toISOString().split('T')[0];
            }
            
-           this.addActionButtons();
-           
-       } catch (error) {
-           console.error('Display error:', error);
-           this.elements.resultsContainer.innerHTML = `
-               <div class="result-card text-center">
-                   <p class="text-red-600 font-medium">Display error. Try again.</p>
-               </div>
-           `;
+           if (!isNaN(date) && date > currentDate) {
+               return extractedDate;
+           }
        }
+       
+       const futureDate = new Date();
+       futureDate.setMonth(futureDate.getMonth() + 3);
+       return futureDate.toISOString().split('T')[0];
    }
 
-   displayProspectAdvice(data) {
-       const { 
-           summary = '',
-           top_s_is = [],
-           top_software_and_cloud = [],
-           company_capabilities = [],
-           naics_codes = [],
-           prospect_recommendations = []
-       } = data;
-       
-       const html = `
-       <div class="space-y-4 fade-in">
-           <div class="result-card bg-customPurple-50 border-customPurple-200">
-               <div class="prose prose-sm max-w-none">${marked.parse(summary)}</div>
-           </div>
+   displayModernAccountPlan(data) {
+   const { 
+       plan_title,
+       executive_summary,
+       key_performance_indicators,
+       strategic_objectives,
+       key_players,
+       risk_factors,
+       strategic_initiatives,
+       mermaid_chart
+   } = data;
 
-           <div class="result-card">
-               <h3>Top Systems Integrators</h3>
-               <div class="space-y-3">
-                   ${top_s_is.map((item, i) => `
-                       <div class="border-l-3 border-customPurple-500 pl-3">
-                           <div class="font-medium">${i + 1}. ${item.company || 'Unknown'}</div>
-                           <div class="text-sm text-gray-600">${item.value || 'N/A'}</div>
-                       </div>
-                   `).join('') || '<p class="text-gray-500 italic">No data available</p>'}
-               </div>
-           </div>
-           
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <div class="result-card">
-                   <h3>Key Capabilities</h3>
-                   <ul class="space-y-2">
-                       ${company_capabilities.map(c => `
-                           <li class="flex gap-2">
-                               <span class="text-green-500 mt-1">✓</span>
-                               <span>${c}</span>
-                           </li>
-                       `).join('')}
-                   </ul>
-               </div>
-               
-               <div class="result-card">
-                   <h3>NAICS Codes</h3>
-                   <ul class="space-y-1">
-                       ${naics_codes.map(n => `
-                           <li class="text-sm font-mono">${n}</li>
-                       `).join('')}
-                   </ul>
-               </div>
-           </div>
-
-           <div class="result-card">
-               <h3>Software & Cloud Players</h3>
-               <div class="space-y-3">
-                   ${top_software_and_cloud.map((item, i) => `
-                       <div class="border-l-3 border-blue-500 pl-3">
-                           <div class="font-medium">${i + 1}. ${item.company || 'Unknown'}</div>
-                           <div class="text-sm text-gray-600">${item.value || 'N/A'}</div>
-                       </div>
-                   `).join('') || '<p class="text-gray-500 italic">No data available</p>'}
-               </div>
-           </div>
-
-           <div class="result-card">
-               <h3>Strategic Recommendations</h3>
-               <ul class="space-y-3">
-                   ${prospect_recommendations.map(r => `
-                       <li class="flex gap-3">
-                           <span class="text-customPurple-500 font-bold">→</span>
-                           <span>${r}</span>
-                       </li>
-                   `).join('')}
-               </ul>
-           </div>
-       </div>`;
-       
-       this.elements.resultsContainer.innerHTML = html;
+   if (!plan_title) {
+       this.elements.accountPlanContainer.innerHTML = `<div class="therapy-card text-center p-8"><p class="text-gray-800 font-bold">Could not generate a case study from the conversation. Please provide more context.</p></div>`;
+       return;
    }
 
-   displayGeneralAdvice(data) {
-       const { 
-           quick_take = '',
-           key_moves = [],
-           mermaid_chart = '',
-           talking_points = [],
-           email_template = '',
-           next_steps = '',
-           response_type = 'deal'
-       } = data;
-       
-       const html = `
-       <div class="space-y-4 fade-in">
-           <div class="result-card bg-customPurple-50 border-customPurple-200">
-               <div class="flex gap-3">
-                   <img src="/images/arti_right.png" alt="Arti" class="w-10 h-10 rounded-full flex-shrink-0">
-                   <div class="prose prose-sm max-w-none">${marked.parse(quick_take)}</div>
+   let kpiHtml = key_performance_indicators?.map(kpi => `
+       <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
+           <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">${kpi.metric}</p>
+           <p class="text-xl font-bold text-customPurple-700">${kpi.value}</p>
+           <p class="text-xs text-gray-500">${kpi.timeframe}</p>
+       </div>
+   `).join('');
+
+   let html = `
+       <div class="mb-6 animate-fade-in">
+           <h2 class="text-3xl font-extrabold text-gray-900">${plan_title}</h2>
+           <p class="mt-1 text-md text-gray-600">Case Study & Strategic Analysis</p>
+       </div>
+
+       <div class="therapy-card mb-4 p-5 bg-gradient-to-r from-gray-50 to-slate-100 border-gray-200">
+           <h3 class="font-bold text-gray-500 text-sm uppercase tracking-widest mb-2">Executive Summary</h3>
+           <p class="text-gray-700 mb-4">${executive_summary || 'No summary available.'}</p>
+           ${kpiHtml ? `<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4 pt-4 border-t border-gray-200">${kpiHtml}</div>` : ''}
+       </div>
+
+       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+           <div class="lg:col-span-2 space-y-4">
+               <div class="therapy-card">
+                   <h3 class="font-bold text-lg text-gray-800 mb-3">Strategic Objectives</h3>
+                   <ul class="space-y-3">${strategic_objectives?.map(o => `<li class="flex items-start gap-3"><span class="text-blue-500 text-xl font-bold mt-[-2px]">›</span><span class="text-gray-800">${o}</span></li>`).join('') || '<li>Not defined.</li>'}</ul>
                </div>
+               <div class="therapy-card">
+                   <h3 class="font-bold text-lg text-gray-800 mb-3">Strategic Initiatives</h3>
+                    <ul class="space-y-3">${strategic_initiatives?.map(i => `<li class="flex items-start gap-3"><span class="text-green-500 mt-1">✓</span><span class="text-gray-800">${i}</span></li>`).join('') || '<li>Not defined.</li>'}</ul>
+               </div>
+               ${mermaid_chart ? `
+               <div class="therapy-card">
+                   <h3 class="font-bold text-lg text-gray-800 mb-3">Influence Map</h3>
+                   <div class="mermaid-container"><div class="mermaid-loading flex justify-center items-center absolute inset-0"><div class="loader"></div></div><div class="mermaid opacity-0">${mermaid_chart}</div></div>
+               </div>` : ''}
            </div>
 
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <div class="result-card">
-                   <h3>Your Next Moves</h3>
-                   <div class="space-y-3">
-                       ${key_moves.slice(0, 3).map((m, i) => `
-                           <div class="flex gap-3">
-                               <span class="flex-shrink-0 w-6 h-6 bg-customPurple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">${i + 1}</span>
-                               <div>
-                                   <p class="font-medium">${m.action}</p>
-                                   <p class="text-sm text-gray-600 mt-1">${m.why}</p>
-                               </div>
+           <div class="lg:col-span-1 space-y-4">
+               <div class="therapy-card">
+                   <h3 class="font-bold text-lg text-gray-800 mb-3">Key Players</h3>
+                   <div class="space-y-3">${key_players?.map(p => {
+                       const stanceColor = { 'Champion': 'bg-green-100 text-green-800', 'Blocker': 'bg-red-100 text-red-800', 'Decision-Maker': 'bg-blue-100 text-blue-800', 'Neutral': 'bg-gray-100 text-gray-800'}[p.stance] || 'bg-gray-100';
+                       return `<div class="border-l-4 border-gray-200 pl-3">
+                           <div class="flex justify-between items-center">
+                               <p class="font-bold text-gray-800">${p.name}</p>
+                               <span class="text-xs font-bold px-2 py-0.5 rounded ${stanceColor}">${p.stance}</span>
                            </div>
-                       `).join('')}
-                   </div>
+                           <p class="text-sm text-gray-600">${p.notes}</p>
+                       </div>`
+                   }).join('') || '<p>Not defined.</p>'}</div>
                </div>
-               
-               <div class="result-card">
-                   <h3>Game Plan</h3>
-                   ${mermaid_chart ? `
-                       <div class="mermaid-container">
-                           <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                       </div>
-                   ` : '<p class="text-gray-500 text-center py-8">Visual not available</p>'}
+               <div class="therapy-card">
+                   <h3 class="font-bold text-lg text-gray-800 mb-3">Risk Factors & Mitigations</h3>
+                    <div class="space-y-3">${risk_factors?.map(r => `<div><p class="font-semibold text-gray-800 flex items-center gap-2"><span class="text-red-500">▲</span>${r.risk}</p><p class="text-sm text-gray-600 pl-5">${r.mitigation}</p></div>`).join('') || '<p>Not defined.</p>'}</div>
                </div>
            </div>
+       </div>
+   `;
 
-           ${(talking_points?.length > 0 || email_template) ? `
-           <div class="result-card">
-               <h3>Communications</h3>
-               <div class="grid grid-cols-1 ${email_template && talking_points?.length > 0 ? 'md:grid-cols-2' : ''} gap-6">
-                   ${talking_points?.length > 0 ? `
-                       <div>
-                           <h4 class="font-semibold text-gray-800 mb-3">
-                               ${response_type === 'interview' ? 'Interview Questions' : 'Power Questions'}
-                           </h4>
-                           <ul class="space-y-2">
-                               ${talking_points.map(t => `
-                                   <li class="flex gap-2">
-                                       <span class="text-green-500 mt-1">•</span>
-                                       <span class="text-sm">${t}</span>
-                                   </li>
-                               `).join('')}
-                           </ul>
-                       </div>
-                   ` : ''}
-                   
-                   ${email_template ? `
-                       <div>
-                           <h4 class="font-semibold text-gray-800 mb-3">Email Template</h4>
-                           <div class="bg-gray-50 rounded-lg p-3 text-xs font-mono whitespace-pre-wrap border border-gray-200">${email_template}</div>
-                       </div>
-                   ` : ''}
-               </div>
-           </div>
-           ` : ''}
-           
-           ${next_steps ? `
-               <div class="result-card bg-customPurple-50 border-customPurple-200">
-                   <p class="text-sm">
-                       <strong>Remember:</strong> ${next_steps}
-                   </p>
-               </div>
-           ` : ''}
-       </div>`;
-       
-       this.elements.resultsContainer.innerHTML = html;
-       
-       if (mermaid_chart) {
-           this.renderMermaidChart();
-       }
+   this.elements.accountPlanContainer.innerHTML = html;
+   
+   if (mermaid_chart) {
+       this.renderMermaidChart();
    }
+}
+  
+  copyAccountPlan() {
+      const content = this.elements.accountPlanContainer.innerText;
+      
+      if (!content || content.trim() === '') {
+          this.showTemporaryMessage('Nothing to copy yet!', 'error');
+          return;
+      }
+      
+      navigator.clipboard.writeText(content)
+          .then(() => {
+              this.showTemporaryMessage('Account plan copied! Go forth and conquer! 💪', 'info');
+          })
+          .catch(() => alert('Copy failed. Try selecting and copying manually.'));
+  }
 
-   addActionButtons() {
-       const buttonsHtml = `
-           <div class="mt-6 flex flex-col sm:flex-row gap-3">
-               <button onclick="app.copyResults()" 
-                   class="flex-1 px-4 py-2.5 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg transition-colors text-sm">
-                   Copy Results
-               </button>
-               <button onclick="app.clearChat()" 
-                   class="flex-1 px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded-lg border border-gray-200 transition-colors text-sm">
-                   New Session
-               </button>
-           </div>
-       `;
-       
-       this.elements.resultsContainer.insertAdjacentHTML('beforeend', buttonsHtml);
-   }
+  renderMermaidChart() {
+   try {
+       setTimeout(async () => {
+           // Find all Mermaid diagrams that haven't been processed yet
+           const diagrams = document.querySelectorAll('.mermaid:not([data-processed="true"])');
 
-   copyResults() {
-       const content = this.elements.resultsContainer.innerText;
-       
-       if (!content) {
-           alert('No results to copy');
-           return;
-       }
-       
-       navigator.clipboard.writeText(content)
-           .then(() => {
-               alert('Results copied!');
-           })
-           .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
-   }
+           if (diagrams.length === 0) return;
 
-   share() {
-       const shareData = {
-           title: 'AskArti',
-           text: 'Federal sales advice that actually works',
-           url: 'https://askarti.com'
-       };
-       
-       if (navigator.share) {
-           navigator.share(shareData).catch(console.error);
-       } else {
-           navigator.clipboard.writeText(`${shareData.text} - ${shareData.url}`)
-               .then(() => {
-                   this.elements.shareBtn.textContent = 'Link Copied!';
-                   setTimeout(() => this.elements.shareBtn.textContent = 'Share', 2000);
-               })
-               .catch(() => alert('Please copy: https://askarti.com'));
-       }
-   }
+           // Render all the found diagrams
+           await mermaid.run({ nodes: diagrams });
 
-   showError() {
-       this.elements.errorMessage.classList.remove('hidden');
-       setTimeout(() => {
-           this.elements.errorMessage.classList.add('hidden');
-       }, 5000);
-   }
-
-   retry() {
-       this.elements.errorMessage.classList.add('hidden');
-       if (this.state.lastQuery) {
-           this.elements.chatInput.value = this.state.lastQuery;
-           this.sendChatMessage();
-       }
-   }
-
-   showModal() {
-       this.elements.aboutModal.classList.remove('hidden');
-   }
-
-   hideModal() {
-       this.elements.aboutModal.classList.add('hidden');
+           // For each diagram that was just rendered, hide its specific loader
+           diagrams.forEach(element => {
+               element.style.opacity = '1';
+               const container = element.closest('.mermaid-container');
+               if (container) {
+                   const loader = container.querySelector('.mermaid-loading');
+                   if (loader) {
+                       loader.style.display = 'none';
+                   }
+               }
+           });
+       }, 300);
+   } catch (error) {
+       console.error('Mermaid rendering error:', error);
+       const containers = document.querySelectorAll('.mermaid-container');
+       containers.forEach(container => {
+           if (!container.querySelector('[data-processed="true"]')) {
+                container.innerHTML = '<div class="p-6 bg-gray-100 text-gray-700 rounded-xl text-center">Visualization got stage fright. The show must go on without it.</div>';
+           }
+       });
    }
 }
 
-// Initialize
+  displayAdvice(data) {
+      // This method is only called from quickAnalysis, not from chat messages
+      const { response_type } = data;
+      
+      try {
+          if (response_type === 'prospect') {
+              this.displayProspectAdvice(data);
+          } else {
+              this.displayGeneralAdvice(data);
+          }
+          
+          this.addActionButtons();
+          
+      } catch (error) {
+          console.error('Display error:', error);
+          this.elements.resultsContainer.innerHTML = `
+              <div class="therapy-card text-center p-6">
+                  <p class="text-red-600 mb-3 font-bold">Display malfunction.</p>
+                  <p class="text-gray-600">Even my UI needs therapy sometimes.</p>
+              </div>
+          `;
+      }
+  }
+
+  displayProspectAdvice(data) {
+      const { 
+          summary = '',
+          top_s_is = [],
+          top_software_and_cloud = [],
+          company_capabilities = [],
+          naics_codes = [],
+          prospect_recommendations = []
+      } = data;
+      
+      const renderCompanyList = (items) => {
+          if (!items || items.length === 0) return '<p class="text-sm text-gray-500 italic">No data available yet</p>';
+          
+          return `
+          <div class="space-y-3">
+              ${items.map((item, index) => `
+                  <div class="border-l-4 border-customPurple-500 pl-4 py-2 hover:bg-purple-50 transition-colors rounded-r-lg">
+                      <div class="font-bold text-gray-900">
+                          <span class="text-customPurple-600 text-lg">#${index + 1}</span> 
+                          ${item.company || 'Unknown'}
+                      </div>
+                      <div class="text-sm text-gray-600 font-medium">${item.value || 'N/A'}</div>
+                  </div>
+              `).join('')}
+          </div>`;
+      };
+      
+      const html = `
+      <div class="space-y-6 animate-fade-in">
+          <div class="therapy-card bg-gradient-to-r from-customPurple-100 to-indigo-100 border-customPurple-200">
+              <h3 class="text-xl font-bold text-gray-900 mb-3">🎯 Target Acquired</h3>
+              <div class="text-gray-800 prose prose-sm max-w-none">${marked.parse(summary)}</div>
+          </div>
+
+          <div class="therapy-card">
+              <h3 class="font-bold text-gray-900 mb-4 text-lg flex items-center gap-2">
+                  <span class="text-2xl">💰</span> The Big Fish (Systems Integrators)
+              </h3>
+              ${renderCompanyList(top_s_is)}
+          </div>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div class="therapy-card bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
+                  <h3 class="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                      <span class="text-xl">🎪</span> What They Need
+                  </h3>
+                  <ul class="space-y-2 text-sm">${company_capabilities.map(c => `
+                      <li class="flex gap-2 group">
+                          <svg class="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                          </svg>
+                          <span class="text-gray-700">${c}</span>
+                      </li>`).join('')}
+                  </ul>
+              </div>
+              
+              <div class="therapy-card bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+                  <h3 class="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                      <span class="text-xl">📋</span> NAICS Codes That Matter
+                  </h3>
+                  <ul class="space-y-2 text-sm">${naics_codes.map(n => {
+                      const naicsText = typeof n === 'string' ? n : (n.code ? `${n.code} - ${n.description || ''}` : 'Unknown');
+                      return `
+                      <li class="flex gap-2 group">
+                          <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                          </svg>
+                          <span class="text-gray-700 font-mono text-xs">${naicsText}</span>
+   					   </li>`;
+                  }).join('')}
+                  </ul>
+              </div>
+          </div>
+
+          <div class="therapy-card">
+              <h3 class="font-bold text-gray-900 mb-4 text-lg flex items-center gap-2">
+                  <span class="text-2xl">☁️</span> Software & Cloud Opportunities
+              </h3>
+              ${renderCompanyList(top_software_and_cloud)}
+          </div>
+
+          <div class="therapy-card bg-gradient-to-br from-amber-50 to-yellow-50 border-amber-200">
+              <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <span class="text-2xl">🎯</span> Your Attack Plan
+              </h3>
+              <ul class="space-y-3 text-sm">${prospect_recommendations.map((r, i) => `
+                  <li class="flex gap-3 group">
+                      <span class="text-amber-600 font-black text-lg flex-shrink-0 group-hover:scale-125 transition-transform">${i + 1}</span>
+                      <span class="text-gray-700">${r}</span>
+                  </li>`).join('')}
+              </ul>
+          </div>
+      </div>`;
+      
+      this.elements.resultsContainer.innerHTML = html;
+  }
+
+  displayGeneralAdvice(data) {
+      const { 
+          quick_take = '',
+          key_moves = [],
+          mermaid_chart = '',
+          talking_points = [],
+          email_template = '',
+          next_steps = '',
+          response_type = 'deal'
+      } = data;
+      
+      const html = `
+      <div class="space-y-6 animate-fade-in">
+          <div class="bg-gradient-to-r from-customPurple-50 to-indigo-100 rounded-2xl p-6 flow-root border-2 border-customPurple-200 shadow-lg">
+              <img src="/images/arti_right.png" alt="Arti" class="h-14 w-14 float-left mr-4 mb-2 rounded-full border-2 border-white shadow-md animate-float">
+              <div class="text-gray-800 space-y-2 prose prose-sm max-w-none">${marked.parse(quick_take)}</div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="therapy-card bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200">
+                  <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                      <span class="text-2xl">🎮</span> Your Next Power Moves
+                  </h3>
+                  <div class="space-y-4">${key_moves.slice(0, 3).map((m, i) => `
+                      <div class="flex gap-3 group hover:translate-x-1 transition-transform">
+                          <span class="flex-shrink-0 w-8 h-8 bg-customPurple-700 text-white rounded-full flex items-center justify-center text-sm font-bold shadow-md group-hover:shadow-lg transition-shadow">${i + 1}</span>
+                          <div class="flex-1">
+                              <p class="font-bold text-gray-900">${m.action}</p>
+                              <p class="text-sm text-gray-600 mt-1 italic">${m.why}</p>
+                          </div>
+                      </div>`).join('')}
+                  </div>
+              </div>
+              
+              <div class="therapy-card bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+                  <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                      <span class="text-2xl">🗺️</span> The Master Plan
+                  </h3>
+                  ${mermaid_chart ? `
+                      <div class="mermaid-container">
+   <div class="mermaid-loading"> <div class="loader"></div>
+   </div>
+   <div id="mermaid-diagram" class="mermaid" style="opacity: 0;">${mermaid_chart}</div>
+</div>` : 
+                      '<div class="p-6 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl text-center"><p class="text-gray-600 font-medium">Visual strategy unavailable. Use your imagination. 🎨</p></div>'
+                  }
+              </div>
+          </div>
+
+          ${(talking_points?.length > 0 || email_template) ? `
+          <div class="therapy-card bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
+              <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <span class="text-2xl">💬</span> Communication Arsenal
+              </h3>
+              <div class="grid grid-cols-1 ${email_template && talking_points?.length > 0 ? 'md:grid-cols-2' : ''} gap-6">
+                  ${talking_points?.length > 0 ? `
+                      <div>
+                          <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                              <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                              </svg>
+                              ${response_type === 'interview' ? 'Questions They\'ll Grill You With' : 'Power Questions to Ask'}
+                          </h4>
+                          <ul class="space-y-2 text-sm">${talking_points.map(t => `
+                              <li class="flex gap-2 group">
+                                  <svg class="w-5 h-5 text-green-600 flex-shrink-0 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                  </svg>
+                                  <span class="text-gray-700">${t}</span>
+                              </li>`).join('')}
+                          </ul>
+                      </div>` : ''}
+                  
+                  ${email_template ? `
+                      <div>
+                          <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                              <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                              </svg>
+                              Email That Actually Gets Responses
+                          </h4>
+                          <div class="bg-white rounded-xl p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap border-2 border-green-300 shadow-inner">${email_template}</div>
+                          <p class="text-xs text-gray-500 mt-2 italic">Pro tip: Personalize this. Don't be a robot.</p>
+                      </div>` : ''}
+              </div>
+          </div>` : ''}
+          
+          ${next_steps ? `
+              <div class="bg-gradient-to-r from-customPurple-100 to-purple-100 p-5 rounded-2xl text-gray-800 border-2 border-customPurple-300 shadow-lg">
+                  <p class="flex items-start gap-2">
+                      <span class="text-2xl flex-shrink-0">💡</span>
+                      <span><strong class="font-bold">The Bottom Line:</strong> ${next_steps}</span>
+                  </p>
+              </div>` : ''}
+      </div>`;
+      
+      this.elements.resultsContainer.innerHTML = html;
+      
+      // Render mermaid chart if present
+      if (mermaid_chart) {
+          this.renderMermaidChart();
+      }
+  }
+
+  addActionButtons() {
+      const buttonsHtml = `
+          <div class="mt-8 flex flex-col sm:flex-row gap-3 animate-fade-in">
+              <button onclick="app.copyResults()" 
+                  class="flex-1 bg-gradient-to-r from-customPurple-500 to-customPurple-700 hover:from-customPurple-600 hover:to-customPurple-800 text-white font-bold py-3 px-6 rounded-xl transition-all transform hover:scale-105 shadow-lg flex items-center justify-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                  </svg>
+                  Copy This Wisdom
+              </button>
+              <button onclick="app.clearChat()" 
+                  class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-bold py-3 px-6 rounded-xl border-2 border-gray-300 hover:border-gray-400 transition-all transform hover:scale-105 shadow-md flex items-center justify-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                  New Crisis
+              </button>
+          </div>`;
+      
+      this.elements.resultsContainer.insertAdjacentHTML('beforeend', buttonsHtml);
+  }
+
+  copyResults() {
+      const content = this.elements.resultsContainer.innerText;
+      
+      if (!content || content.trim() === '') {
+          this.showTemporaryMessage('Nothing to copy yet!', 'error');
+          return;
+      }
+      
+      navigator.clipboard.writeText(content)
+          .then(() => {
+              this.showTemporaryMessage('Copied! Now go execute! 🚀', 'info');
+          })
+          .catch(() => alert('Copy failed. Try selecting and copying manually.'));
+  }
+
+  share() {
+      const shareData = {
+          title: 'AskArti - Federal Sales Therapist',
+          text: 'When federal sales is breaking you down, Arti builds you back up.',
+          url: 'https://askarti.com'
+      };
+      
+      if (navigator.share) {
+          navigator.share(shareData).catch(console.error);
+      } else {
+          navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`)
+              .then(() => {
+                  this.elements.shareBtn.textContent = 'Link Copied! 📋';
+                  setTimeout(() => this.elements.shareBtn.textContent = 'Share the Therapy', 2000);
+              })
+              .catch(() => alert('Please copy the URL manually: https://askarti.com'));
+      }
+  }
+  
+  showTemporaryMessage(message, type = 'info') {
+      this.elements.loadingMessageContainer.classList.remove('hidden');
+      this.elements.loadingMessage.textContent = message;
+      
+      // Remove loader for temporary messages
+      const loader = this.elements.loadingMessageContainer.querySelector('.loader');
+      if (loader) loader.style.display = 'none';
+      
+      const colorClasses = {
+          error: 'text-red-700 font-bold',
+          warning: 'text-orange-700 font-bold',
+          info: 'text-gray-700 font-medium'
+      };
+      
+      this.elements.loadingMessage.className = colorClasses[type] || colorClasses.info;
+      
+      setTimeout(() => {
+          this.elements.loadingMessageContainer.classList.add('hidden');
+          if (loader) loader.style.display = 'block';
+      }, 3000);
+  }
+
+  showModal() {
+      this.elements.aboutModal.classList.remove('hidden');
+      requestAnimationFrame(() => {
+          this.elements.aboutModal.querySelector('.modal-content').classList.add('show');
+      });
+  }
+
+  hideModal() {
+      const content = this.elements.aboutModal.querySelector('.modal-content');
+      content.classList.remove('show');
+      setTimeout(() => this.elements.aboutModal.classList.add('hidden'), 200);
+  }
+
+  // Method to retry the last message
+  retryLastMessage() {
+      if (!this.state.lastQuery || this.state.pendingRequest) return;
+      
+      this.resetSendButton();
+      
+      // Show we're retrying
+      this.addChatMessage(`${this.state.lastQuery} <em class="text-xs text-purple-200">(Let's try this again...)</em>`, true);
+      
+      this.showTypingIndicator();
+      this.showLoadingMessage();
+      this.state.pendingRequest = true;
+      
+      this.makeChatRequest(this.state.lastQuery)
+          .then(response => {
+              this.hideTypingIndicator();
+              this.hideLoadingMessage();
+              
+              // Check if this is a factual answer
+              if (response.response_type === 'factual_answer' && response.answer) {
+                  const formattedAnswer = `**Here's what I know:**\n\n${response.answer}`;
+                  this.addChatMessage(formattedAnswer, false);
+                  this.state.chatHistory.push({ role: 'assistant', content: formattedAnswer });
+              } else {
+                  this.addChatMessage(response.message || "Got it. Tell me more.", false);
+                  this.state.chatHistory.push({ role: 'assistant', content: response.message });
+                  
+                  if (response.suggestions && response.suggestions.length > 0) {
+                      this.addFollowUpSuggestions(response.suggestions);
+                  }
+              }
+              
+              this.state.lastQuery = '';
+          })
+          .catch(error => {
+              console.error('Retry failed:', error);
+              this.hideTypingIndicator();
+              this.hideLoadingMessage();
+              this.addChatMessage("Still having connection issues. Maybe the universe is telling us to take a break?", false);
+          })
+          .finally(() => {
+              this.state.pendingRequest = false;
+          });
+  }
+}
+
+// Initialize the therapy session
 const app = new AskArti();
+
+// Add some personality to page visibility changes
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && app.state.messageCount > 0) {
+      app.updateGreeting();
+  }
+});
+
+// Random motivational console messages
+const consoleMessages = [
+  '%c🎯 Remember: Every "no" is one step closer to "yes"!',
+  '%c💪 Federal sales warrior mode: ACTIVATED',
+  '%c🚀 Your quota doesn\'t stand a chance',
+  '%c☕ Coffee break? You\'ve earned it.',
+  '%c🏆 Champions adjust. You\'ve got this!'
+];
+
+console.log(
+  consoleMessages[Math.floor(Math.random() * consoleMessages.length)],
+  'color: #7C6BBE; font-weight: bold; font-size: 14px;'
+);
 </script>
 </body>
 </html>
