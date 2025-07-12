@@ -92,9 +92,29 @@ class StrategicAdvisorApp {
     }
 
     init() {
-        mermaid.initialize({ startOnLoad: false, theme: 'base', securityLevel: 'strict' });
-        this.setupEventListeners();
-    }
+    mermaid.initialize({ 
+        startOnLoad: false, 
+        securityLevel: 'strict',
+        theme: 'base', // Use the base theme as a starting point for customization
+        themeVariables: {
+            // Chart background color
+            background: '#FFFFFF', 
+
+            // Default styles for nodes
+            primaryColor: '#F6F5FB',      // Muted purple background
+            primaryTextColor: '#403866',  // Deep purple for text
+            primaryBorderColor: '#D8D2EF', // Soft purple border
+
+            // Style for arrows and lines
+            lineColor: '#5A4E8C',         
+            
+            // Extra colors you can use with classDef
+            secondaryColor: '#E8E4F7',    
+            tertiaryColor: '#D8D2EF'      
+        }
+    });
+    this.setupEventListeners();
+}
 
     setupEventListeners() {
         this.elements.chatSendBtn.addEventListener('click', () => this.getResponse());
