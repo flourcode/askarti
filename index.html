@@ -3,76 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AskArti - Your Fed Sales Buddy</title>
-    
-    <!-- Meta Tags -->
-    <meta name="description" content="When your customer ghosts you and your boss wants impossible quota. Real federal sales advice that actually works.">
-    <meta name="keywords" content="federal sales, government sales, sales strategy, federal contractors, govcon">
-    <meta name="author" content="Mark">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://askarti.com">
-    
-    <!-- Open Graph -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://askarti.com/">
-    <meta property="og:title" content="AskArti - Your Federal Sales Buddy">
-    <meta property="og:description" content="Real federal sales advice from someone who gets it. No BS, just results.">
-    <meta property="og:image" content="https://askarti.com/images/asklite.png">
-    
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:url" content="https://askarti.com/">
-    <meta name="twitter:title" content="AskArti - Your Federal Sales Buddy">
-    <meta name="twitter:description" content="Real federal sales advice that actually works.">
-    <meta name="twitter:image" content="https://askarti.com/images/asklite.png">
-    
-    <!-- Favicons -->
+    <title>AskArti - Strategic Advisor</title>
+    <meta name="description" content="S-Team level strategic advice for complex business challenges.">
     <link rel="icon" href="/images/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <meta name="theme-color" content="#7C6BBE">
     
-    <!-- Preconnect -->
-    <link rel="preconnect" href="https://cdn.tailwindcss.com">
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <!-- Preload critical assets -->
-    <link rel="preload" href="/images/asklite.png" as="image">
-    <link rel="preload" href="/images/arti_right.png" as="image">
-    
-    <!-- Styles and Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WLGEPY5H4G"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-WLGEPY5H4G');
-    </script>
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#7C6BBE',
-                        customPurple: {
-                            50: '#F6F5FB',
-                            100: '#E8E4F7',
-                            200: '#D8D2EF',
-                            300: '#C0B6E3',
-                            500: '#7C6BBE',
-                            700: '#5A4E8C',
-                            900: '#403866'
+                        primary: '#5A4E8C',
+                        secondary: '#4A90E2',
+                        light: '#F8F9FA',
+                        text: {
+                            DEFAULT: '#212529',
+                            muted: '#6C757D'
                         }
                     }
                 }
@@ -81,1304 +31,192 @@
     </script>
     
 <style>
-    body {
-        font-family: 'Inter', sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #FAFBFC;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-
-    /* Clean, professional loader */
-    .loader {
-        border: 2px solid #E5E7EB;
-        border-top: 2px solid #7C6BBE;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-
-    /* Subtle animations */
-    .fade-in {
-        animation: fadeIn 0.3s ease-out;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(8px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Clean chat messages */
-    .chat-message-user {
-        background-color: #7C6BBE;
-        color: white;
-        border-radius: 18px 18px 4px 18px;
-    }
-
-    .chat-message-arti {
-        background-color: #F3F4F6;
-        color: #1F2937;
-        border-radius: 18px 18px 18px 4px;
-    }
-
-    /* Typing indicator */
-    .typing-indicator {
-        display: flex;
-        gap: 4px;
-        padding: 12px 16px;
-        background-color: #F3F4F6;
-        border-radius: 18px 18px 18px 4px;
-        width: fit-content;
-    }
-
-    .typing-dot {
-        width: 8px;
-        height: 8px;
-        background-color: #9CA3AF;
-        border-radius: 50%;
-        animation: typing 1.4s infinite ease-in-out;
-    }
-
-    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-
-    @keyframes typing {
-        0%, 80%, 100% {
-            transform: scale(0.8);
-            opacity: 0.5;
-        }
-        40% {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
-
-    /* Clean cards */
-    .result-card {
-        background-color: white;
-        border-radius: 12px;
-        border: 1px solid #E5E7EB;
-        padding: 1.5rem;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    }
-
-    /* Scenario buttons */
-    .scenario-btn {
-        background-color: #F3F4F6;
-        color: #374151;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        font-size: 0.875rem;
-        font-weight: 500;
-        transition: all 0.2s ease;
-        border: 1px solid transparent;
-    }
-
-    .scenario-btn:hover {
-        background-color: #E5E7EB;
-        border-color: #D1D5DB;
-        transform: translateY(-1px);
-    }
-
-    .scenario-btn:active {
-        transform: translateY(0);
-    }
-
-    /* Mobile-first responsive design */
-    .chat-container {
-        height: 50vh;
-        max-height: 400px;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    @media (min-width: 640px) {
-        .chat-container {
-            height: 60vh;
-            max-height: 500px;
-        }
-    }
-
-    /* Clean scrollbar */
-    .chat-container::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    .chat-container::-webkit-scrollbar-track {
-        background: #F9FAFB;
-    }
-
-    .chat-container::-webkit-scrollbar-thumb {
-        background: #D1D5DB;
-        border-radius: 3px;
-    }
-
-    .chat-container::-webkit-scrollbar-thumb:hover {
-        background: #9CA3AF;
-    }
-
-    /* Mermaid container */
-    .mermaid-container {
-        background-color: #F9FAFB;
-        border-radius: 8px;
-        padding: 1rem;
-        overflow-x: auto;
-    }
-
-    /* Results typography */
-    .result-card h3 {
-        font-size: 1.125rem;
-        font-weight: 700;
-        color: #111827;
-        margin-bottom: 1rem;
-    }
-
-    .result-card p, .result-card li {
-        font-size: 0.875rem;
-        line-height: 1.6;
-        color: #4B5563;
-    }
-
-    .result-card strong {
-        color: #1F2937;
-        font-weight: 600;
-    }
-
-    /* Account plan specific styles */
-    .account-plan-header {
-        background: linear-gradient(135deg, #F6F5FB 0%, #E8E4F7 100%);
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
-
-    /* Table styles */
-    .data-table {
-        font-size: 0.875rem;
-    }
-
-    .data-table th {
-        font-weight: 600;
-        color: #6B7280;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 0.05em;
-    }
-
-    .data-table td {
-        color: #374151;
-    }
-
-    /* Mobile optimizations */
-    @media (max-width: 640px) {
-        .result-card {
-            padding: 1rem;
-        }
-
-        .scenario-btn {
-            font-size: 0.8125rem;
-            padding: 0.375rem 0.75rem;
-        }
-
-        input[type="text"] {
-            font-size: 16px !important; /* Prevent zoom on iOS */
-        }
-    }
-
-    /* Print styles */
-    @media print {
-        body {
-            background-color: white;
-        }
-        
-        .no-print {
-            display: none !important;
-        }
-        
-        .result-card {
-            box-shadow: none;
-            border: 1px solid #E5E7EB;
-            break-inside: avoid;
-        }
-    }
+    body { font-family: 'Inter', sans-serif; background-color: #F8F9FA; -webkit-font-smoothing: antialiased; }
+    .loader { border: 3px solid #E9ECEF; border-top: 3px solid #5A4E8C; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .fade-in { animation: fadeIn 0.4s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .chat-message-user { background-color: #5A4E8C; color: white; border-radius: 18px 18px 4px 18px; }
+    .chat-message-arti { background-color: #FFFFFF; color: #212529; border-radius: 18px 18px 18px 4px; border: 1px solid #DEE2E6; }
+    .briefing-card { background-color: white; border-radius: 12px; border: 1px solid #E9ECEF; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .card-header { display: flex; align-items: center; gap: 0.75rem; padding-bottom: 0.75rem; margin-bottom: 1rem; border-bottom: 1px solid #E9ECEF; }
+    .card-icon { color: #5A4E8C; flex-shrink: 0; }
+    .card-title { font-size: 1.125rem; font-weight: 600; color: #212529; }
 </style>
-
 </head>
-<body class="bg-gray-50 text-gray-900">
-    <div class="max-w-3xl mx-auto px-4 py-6 min-h-screen">
-        <!-- Clean header -->
-        <header class="text-center mb-6">
-            <a href="/" aria-label="AskArti Home">
-                <img src="/images/asklite.png" alt="AskArti" class="h-16 sm:h-20 mx-auto">
-            </a>
+<body class="text-text">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <header class="text-center mb-8">
+            <img src="/images/asklite.png" alt="AskArti" class="h-16 mx-auto">
+            <p class="text-sm text-text-muted mt-2">Your AI Strategic Advisor</p>
         </header>
 
-        <!-- Main chat interface -->
         <main class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
             <div class="p-4 sm:p-6">
-                <!-- Chat messages -->
-                <div class="chat-container mb-4" id="chat-messages">
+                <div id="chat-messages" class="max-h-[50vh] overflow-y-auto mb-4 pr-2">
                     <div class="flex items-start gap-3 mb-4">
-                        <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
-                        <div class="chat-message-arti px-4 py-2.5 max-w-[85%]">
-                            <p class="text-sm">
-                                Hey, I'm Arti, your Federal Sales Buddy. 
-                                What's on your mind?
-                            </p>
+                        <img src="/images/arti_right.png" alt="Arti" class="w-9 h-9 rounded-full flex-shrink-0">
+                        <div class="chat-message-arti px-4 py-3 max-w-[85%]">
+                            <p class="text-sm">What is the situation? Provide as much context as you can.</p>
                         </div>
                     </div>
                 </div>
-
-                <!-- Input area -->
                 <div class="flex gap-2">
-                    <button 
-                        id="clear-chat-btn"
-                        class="p-2.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors no-print"
-                        title="Clear chat">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                        </svg>
-                    </button>
-                    <input 
-                        type="text" 
-                        id="chat-input"
-                        class="flex-1 px-4 py-2.5 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-customPurple-500 focus:border-transparent outline-none transition-all"
-                        placeholder="What's going on with your deal?"
-                        maxlength="500">
-                    <button 
-                        id="chat-send-btn" 
-                        class="px-4 sm:px-6 py-2.5 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2 no-print">
-                        <span class="hidden sm:inline">Send</span>
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Quick scenarios -->
-            <div class="border-t border-gray-200 px-4 py-3 bg-gray-50 no-print">
-                <div class="flex flex-wrap gap-2 justify-center">
-                    <button class="scenario-btn" onclick="app.quickAnalysis('Buyer ghosted me after pricing. CIO loves our competitor.')">
-                        👻Buyer Ghosted Me
-                    </button>
-                    <button class="scenario-btn" onclick="app.quickAnalysis('Help me prep for an AWS Federal Sales Interview.')">
-                        💼 Interview Prep
-                    </button>
-                    <button class="scenario-btn" onclick="app.quickAnalysis('My internal Partner and Account reps are battling over deals, pipeline, and revenue recognition.')">
-                        🤝 Partner Drama
-                    </button>
-                    <button class="scenario-btn" onclick="app.autoCreateAccountPlan()">
-                        📋 Write My Plan
+                    <textarea id="chat-input" class="flex-1 px-4 py-2.5 bg-light border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all resize-none" placeholder="Describe the business problem, competitive threat, or opportunity..." rows="2"></textarea>
+                    <button id="chat-send-btn" class="px-5 py-2.5 bg-primary hover:bg-opacity-90 text-white font-medium rounded-lg transition-colors flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </button>
                 </div>
             </div>
         </main>
-
-        <!-- Loading state -->
-        <div id="loading-container" class="hidden text-center py-4">
-            <div class="inline-flex items-center gap-3 text-gray-600">
-                <span id="loading-message" class="text-sm font-medium"></span>
-            </div>
-        </div>
-
-        <!-- Error state -->
-        <div id="error-message" class="hidden bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-            <p class="text-red-700 font-medium text-sm">Connection issues. Even the servers are ghosting us.</p>
-            <button id="retry-btn" class="mt-2 text-red-700 underline text-sm">Try again</button>
-        </div>
-
-        <!-- Results container -->
-        <div id="results-container" class="space-y-4"></div>
         
-        <!-- Account Plan container -->
-        <div id="account-plan-container" class="hidden space-y-4"></div>
-
-        <!-- Footer -->
-        <footer class="text-center mt-12 space-y-4 pb-8 no-print">
-            <div class="flex justify-center gap-6 text-sm">
-                <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">About</button>
-                <button id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Share</button>
-                <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Contact</a>
-            </div>
-
-            <!-- Sponsor message -->
-            <div class="max-w-xl mx-auto bg-customPurple-50 border border-customPurple-200 rounded-lg p-4 text-sm">
-                <p class="text-customPurple-900 font-medium mb-1">Hey there! Enjoying these results?</p>
-                <p class="text-customPurple-700">
-                   By the time I pay off all my scientists, all the lab coats, and my AWS bill…I'm losin' money every time you Ask Arti something...Sponsor this spot for $99/mo.
-                </p>
-                <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium underline">
-                    Help keep Arti alive →
-                </a>
-            </div>
-
-            <p class="text-xs text-gray-500 max-w-xl mx-auto">
-                AskArti.com results are provided for informational and educational purposes only and do not constitute professional business advice. AI can make errors that may not suit your specific situation. Please consult qualified professionals before making important business decisions.
-            </p>
-
-            <p class="text-xs text-gray-400">
-                © 2025 AskArti · Built by sellers, for sellers
-            </p>
-        </footer>
-    </div>
-
-    <!-- About Modal -->
-    <div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
-            <div class="flex justify-between items-start mb-4">
-                <div class="flex items-center gap-3">
-                    <img src="images/oldmark.jpg" alt="Mark" class="w-12 h-12 rounded-full">
-                    <div>
-                        <h2 class="text-lg font-bold text-gray-900">Hi, I'm Mark</h2>
-                        <p class="text-xs text-gray-600">Retired Federal Sales Guy</p>
-                    </div>
-                </div>
-                <button id="close-about" class="text-gray-400 hover:text-gray-600">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <div class="space-y-3 text-sm text-gray-700">
-                <p>
-                    I built AskArti to help sellers spend more time with their customers. Arti's not perfect but is available 24/7 when you need to strategize or just vent.
-                </p>
-                
-                <div class="bg-gray-50 rounded-lg p-3 text-xs">
-                    <p class="font-medium text-gray-800 mb-1">Privacy First</p>
-                    <p class="text-gray-600">
-                        Zero storage. Zero tracking. Everything happens in-memory using AWS Serverless and vanishes after your session. 
-                        The AI models might learn from our chats, but I don't keep anything.
-                    </p>
-                </div>
-                
-                <div class="pt-3">
-                    <a href="https://calendly.com/markflournoy/30min" target="_blank" 
-                       class="block w-full bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-2.5 rounded-lg text-center transition-colors">
-                        Want to chat about AI or Sales? →
-                    </a>
-                </div>
-            </div>
-        </div>
+        <div id="results-container" class="space-y-6"></div>
+        
     </div>
 
 <script>
-// Configuration
-const CONFIG = {
-    API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
-    REQUEST_TIMEOUT: 25000,
-    MAX_RETRIES: 2,
-    RETRY_DELAY: 2000,
-    MAX_INPUT_LENGTH: 500,
-    LOADING_MESSAGES: [
-        "Working backwards...",
-        "Thinking big...",
-        "Circling back...",
-        "Unpacking this...",
-        "Putting a pin in it..."
-    ]
-};
-
-// Clean, focused application class
-class AskArti {
+class StrategicAdvisorApp {
     constructor() {
-        this.elements = this.getElements();
-        this.state = {
-            pendingRequest: false,
-            lastQuery: '',
-            chatHistory: [],
-            messageCount: 0,
-            hasActiveResults: false
-        };
-        this.init();
-    }
-
-    getElements() {
-        return {
+        this.elements = {
             chatMessages: document.getElementById('chat-messages'),
             chatInput: document.getElementById('chat-input'),
             chatSendBtn: document.getElementById('chat-send-btn'),
-            clearChatBtn: document.getElementById('clear-chat-btn'),
-            loadingContainer: document.getElementById('loading-container'),
-            loadingMessage: document.getElementById('loading-message'),
-            errorMessage: document.getElementById('error-message'),
-            retryBtn: document.getElementById('retry-btn'),
             resultsContainer: document.getElementById('results-container'),
-            accountPlanContainer: document.getElementById('account-plan-container'),
-            aboutBtn: document.getElementById('about-btn'),
-            aboutModal: document.getElementById('about-modal'),
-            closeAbout: document.getElementById('close-about'),
-            shareBtn: document.getElementById('share-btn')
         };
+        this.state = {
+            isProcessing: false,
+            conversationHistory: []
+        };
+        this.apiEndpoint = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
+        this.init();
     }
 
     init() {
-        this.initializeMermaid();
+        mermaid.initialize({ startOnLoad: false, theme: 'base', securityLevel: 'strict', themeVariables: {
+            primaryColor: '#F8F9FA',
+            primaryTextColor: '#212529',
+            primaryBorderColor: '#DEE2E6',
+            lineColor: '#4A90E2',
+            textColor: '#212529',
+        }});
         this.setupEventListeners();
-        this.elements.chatInput.focus();
-    }
-
-    initializeMermaid() {
-        mermaid.initialize({ 
-            startOnLoad: false,
-            securityLevel: 'strict',
-            theme: 'default',
-            flowchart: {
-                htmlLabels: true,
-                curve: 'linear'
-            }
-        });
     }
 
     setupEventListeners() {
-        // Chat events
-        this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
+        this.elements.chatSendBtn.addEventListener('click', () => this.getBriefing());
         this.elements.chatInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                this.sendChatMessage();
+                this.getBriefing();
             }
         });
-
-        this.elements.clearChatBtn.addEventListener('click', () => this.clearChat());
-        this.elements.retryBtn.addEventListener('click', () => this.retry());
-
-        // Modal events
-        this.elements.aboutBtn.addEventListener('click', () => this.showModal());
-        this.elements.closeAbout.addEventListener('click', () => this.hideModal());
-        this.elements.aboutModal.addEventListener('click', (e) => {
-            if (e.target === this.elements.aboutModal) this.hideModal();
-        });
-
-        // Share
-        this.elements.shareBtn.addEventListener('click', () => this.share());
-
-        // Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') this.hideModal();
-        });
-    }
-
-    clearChat() {
-        this.state.chatHistory = [];
-        this.state.messageCount = 0;
-        this.state.hasActiveResults = false;
-        
-        // Reset chat to welcome message
-        this.elements.chatMessages.innerHTML = `
-            <div class="flex items-start gap-3 mb-4">
-                <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
-                <div class="chat-message-arti px-4 py-2.5 max-w-[85%]">
-                    <p class="text-sm">
-                        Fresh start. What's on your mind?
-                    </p>
-                </div>
-            </div>`;
-        
-        // Clear other areas
-        this.elements.chatInput.value = '';
-        this.clearResults();
-        
-        // Remove any generate plan buttons
-        const planBtns = document.querySelectorAll('#generate-plan-container');
-        planBtns.forEach(btn => btn.remove());
-        
-        this.elements.chatInput.focus();
-    }
-
-    clearResults() {
-        // Clear previous results before showing new ones
-        this.elements.resultsContainer.innerHTML = '';
-        this.elements.accountPlanContainer.innerHTML = '';
-        this.elements.accountPlanContainer.classList.add('hidden');
-    }
-
-    async quickAnalysis(scenario) {
-        // Clear previous results
-        if (this.state.hasActiveResults) {
-            this.clearResults();
-        }
-        
-        // Add user message
-        this.addChatMessage(scenario, true);
-        
-        // Show typing
-        this.showTypingIndicator();
-        this.state.pendingRequest = true;
-        
-        try {
-            this.state.chatHistory.push({ role: 'user', content: scenario });
-            this.state.messageCount++;
-            
-            const response = await fetch(CONFIG.API_ENDPOINT, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    situation: scenario,
-                    currentDate: new Date().toISOString().split('T')[0]
-                })
-            });
-            
-            const data = await response.json();
-            this.hideTypingIndicator();
-            
-            // Add response
-            const responseMessage = `I hear you. ${data.quick_take || "Let me break this down for you."}`;
-            this.addChatMessage(responseMessage, false);
-            
-            this.state.chatHistory.push({ role: 'assistant', content: responseMessage });
-            
-            // Display results
-            this.state.hasActiveResults = true;
-            this.displayAdvice(data);
-            
-            // Smooth scroll to results
-            setTimeout(() => {
-                this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
-            
-        } catch (error) {
-            console.error('Quick analysis failed:', error);
-            this.hideTypingIndicator();
-            this.addChatMessage("Connection issues. Try again?", false);
-        } finally {
-            this.state.pendingRequest = false;
-        }
-    }
-
-    addChatMessage(content, isUser = false) {
-        const messageHtml = isUser ? `
-            <div class="flex justify-end mb-4 fade-in">
-                <div class="chat-message-user px-4 py-2.5 max-w-[85%] text-sm">
-                    ${content}
-                </div>
-            </div>
-        ` : `
-            <div class="flex items-start gap-3 mb-4 fade-in">
-                <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
-                <div class="chat-message-arti px-4 py-2.5 max-w-[85%]">
-                    <div class="text-sm">${marked.parse(content)}</div>
-                </div>
-            </div>
-        `;
-        
-        this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
-        this.scrollChatToBottom();
-    }
-
-    showTypingIndicator() {
-        const typingHtml = `
-            <div id="typing-indicator" class="flex items-start gap-3 mb-4">
-                <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0 opacity-50">
-                <div class="typing-indicator">
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                </div>
-            </div>
-        `;
-        this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
-        this.scrollChatToBottom();
-    }
-
-    hideTypingIndicator() {
-        const indicator = document.getElementById('typing-indicator');
-        if (indicator) indicator.remove();
     }
 
     showLoading() {
-        const message = CONFIG.LOADING_MESSAGES[Math.floor(Math.random() * CONFIG.LOADING_MESSAGES.length)];
-        this.elements.loadingMessage.textContent = message;
-        this.elements.loadingContainer.classList.remove('hidden');
+        this.elements.resultsContainer.innerHTML = `
+            <div class="flex justify-center items-center p-8 fade-in">
+                <div class="loader"></div>
+                <p class="ml-4 text-text-muted font-medium">Analyzing... running strategic models.</p>
+            </div>`;
     }
 
-    hideLoading() {
-        this.elements.loadingContainer.classList.add('hidden');
+    addChatMessage(content, role) {
+        const isUser = role === 'user';
+        const messageHtml = `
+            <div class="flex items-start gap-3 mb-4 fade-in ${isUser ? 'justify-end' : ''}">
+                ${!isUser ? `<img src="/images/arti_right.png" alt="Arti" class="w-9 h-9 rounded-full flex-shrink-0">` : ''}
+                <div class="${isUser ? 'chat-message-user' : 'chat-message-arti'} px-4 py-3 max-w-[85%] text-sm">${content}</div>
+            </div>`;
+        this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
+        this.elements.chatMessages.scrollTop = this.elements.chatMessages.scrollHeight;
     }
 
-    scrollChatToBottom() {
-        const container = document.querySelector('.chat-container');
-        if (container) {
-            container.scrollTop = container.scrollHeight;
-        }
-    }
+    async getBriefing() {
+        const situation = this.elements.chatInput.value.trim();
+        if (!situation || this.state.isProcessing) return;
 
-  async sendChatMessage() {
-        const message = this.elements.chatInput.value.trim();
-        
-        if (this.state.pendingRequest || !message) return;
+        this.state.isProcessing = true;
+        this.elements.chatSendBtn.disabled = true;
+        this.elements.chatSendBtn.innerHTML = `<div class="loader w-6 h-6"></div>`;
 
-        // Clear previous results if any
-        if (this.state.hasActiveResults) {
-            this.clearResults();
-        }
-
-        // Add user message
-        this.addChatMessage(message, true);
+        this.addChatMessage(situation, 'user');
+        this.state.conversationHistory.push({ role: 'user', content: situation });
         this.elements.chatInput.value = '';
-        this.state.lastQuery = message;
-        
-        // Update history
-        this.state.chatHistory.push({ role: 'user', content: message });
-        this.state.messageCount++;
-
-        // Show typing
-        this.showTypingIndicator();
-        this.state.pendingRequest = true;
+        this.showLoading();
 
         try {
-            const response = await this.makeChatRequest(message);
-            this.hideTypingIndicator();
+            const response = await fetch(this.apiEndpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    situation,
+                    conversationHistory: this.state.conversationHistory
+                })
+            });
+
+            if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
             
-            const aiMessage = response.message || "Tell me more.";
-            // Add response
-            this.addChatMessage(aiMessage, false);
-			this.state.chatHistory.push({ role: 'assistant', content: aiMessage });
-           this.state.lastQuery = '';
+            const data = await response.json();
+            this.state.conversationHistory.push({ role: 'assistant', content: JSON.stringify(data) });
+            this.displayStrategicBriefing(data);
 
-           // Show account plan button if the AI indicates it's ready
-            if (aiMessage.includes("generate an action plan now") && !document.getElementById('generate-plan-container')) {
-                this.addAccountPlanButton();
-            }
+        } catch (error) {
+            console.error('Error fetching briefing:', error);
+            this.elements.resultsContainer.innerHTML = `<div class="briefing-card text-red-500"><strong>Error:</strong> Failed to generate briefing. Please try again.</div>`;
+        } finally {
+            this.state.isProcessing = false;
+            this.elements.chatSendBtn.disabled = false;
+            this.elements.chatSendBtn.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>`;
+        }
+    }
 
-           // Add follow-up suggestions
-           if (response.suggestions && response.suggestions.length > 0) {
-               this.addFollowUpSuggestions(response.suggestions);
-           }
+    displayStrategicBriefing(data) {
+        const { executiveSummary, strategicPrinciples, stakeholderAnalysis, strategicOptions, actionPlan, successMetrics, mermaidChart } = data;
+        let html = '';
 
-       } catch (error) {
-           console.error('Chat request failed:', error);
-           this.hideTypingIndicator();
-           this.addChatMessage("Connection issues. Try again?", false);
-           this.showError();
-       } finally {
-           this.state.pendingRequest = false;
-       }
-   }
-   async makeChatRequest(message) {
-       const contextToSend = this.state.chatHistory.length > 20 
-           ? [this.state.chatHistory[0], ...this.state.chatHistory.slice(-19)]
-           : this.state.chatHistory;
-       
-       const response = await fetch(CONFIG.API_ENDPOINT, {
-           method: 'POST',
-           headers: { 'Content-Type': 'application/json' },
-           body: JSON.stringify({ 
-               situation: message,
-               mode: 'chat',
-               conversationHistory: contextToSend,
-               currentDate: new Date().toISOString().split('T')[0]
-           })
-       });
+        if (executiveSummary) {
+            html += this.createCard('Executive Summary', 'M21 12a9 9 0 11-18 0 9 9 0 0118 0z', `<div class="prose prose-sm max-w-none">${marked.parse(executiveSummary)}</div>`);
+        }
+        if (strategicPrinciples && strategicPrinciples.length) {
+            html += this.createCard('Core Principles', 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h2M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4',
+                `<div class="space-y-4">${strategicPrinciples.map(p => `<div><h4 class="font-semibold text-text">${p.principle}</h4><p class="text-text-muted text-sm">${p.rationale}</p></div>`).join('')}</div>`
+            );
+        }
+        if (strategicOptions && strategicOptions.length) {
+            html += this.createCard('Strategic Options', 'M4 6h16M4 12h16M4 18h7',
+                `<div class="space-y-4">${strategicOptions.map(o => `<div><h4 class="font-semibold text-text">${o.option}</h4><p class="text-text-muted text-sm">${o.pros}</p><p class="text-text-muted text-sm mt-1">${o.cons}</p></div>`).join('')}</div>`
+            );
+        }
+        if (actionPlan && actionPlan.length) {
+            html += this.createCard('Action Plan (Next 14 Days)', 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01',
+                `<ul class="list-none space-y-3">${actionPlan.map(a => `<li class="flex items-start gap-3"><span class="text-secondary font-bold mt-1">→</span><span><strong>${a.owner}:</strong> ${a.task} (Due: ${a.due})</span></li>`).join('')}</ul>`
+            );
+        }
+        if (mermaidChart) {
+             html += this.createCard('Visual Model', 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341A6.002 6.002 0 006 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9', 
+                `<div class="bg-light p-4 rounded-lg overflow-x-auto"><div class="mermaid">${mermaidChart}</div></div>`
+            );
+        }
 
-       if (!response.ok) throw new Error('Request failed');
-       return await response.json();
-   }
+        this.elements.resultsContainer.innerHTML = `<div class="space-y-6">${html}</div>`;
+        if (mermaidChart) {
+            setTimeout(() => mermaid.run(), 100);
+        }
+    }
 
-   addFollowUpSuggestions(suggestions) {
-       const suggestionsHtml = `
-           <div class="flex flex-wrap gap-2 justify-center my-4 px-4">
-               ${suggestions.map(s => `
-                   <button class="scenario-btn text-xs" 
-                           onclick="app.elements.chatInput.value='${s.replace(/'/g, "\\'")}'; app.sendChatMessage();">
-                       ${s}
-                   </button>
-               `).join('')}
-           </div>
-       `;
-       this.elements.chatMessages.insertAdjacentHTML('beforeend', suggestionsHtml);
-       this.scrollChatToBottom();
-   }
-
-   addAccountPlanButton() {
-       const btnHtml = `
-           <div id="generate-plan-container" class="flex justify-center my-4">
-               <button onclick="app.generateAccountPlan()" 
-                   class="px-4 py-2 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg text-sm transition-colors">
-                   Get Your Plan →
-               </button>
-           </div>
-       `;
-       this.elements.chatMessages.insertAdjacentHTML('beforeend', btnHtml);
-       this.scrollChatToBottom();
-   }
-
-  autoCreateAccountPlan() {
-       // Avoid running if a request is already in progress
-       if (this.state.pendingRequest) return;
-
-       // If there are results from a previous query, clear them out.
-       if (this.state.hasActiveResults) {
-            this.clearResults();
-       }
-       
-       // Define a clear, conversational message to start the process
-       const message = "Help me build an action plan.";
-       
-       // Place the message in the input box and send it immediately
-       this.elements.chatInput.value = message;
-       this.sendChatMessage();
-   }
-   async generateAccountPlan() {
-       if (this.state.pendingRequest) return;
-       
-       // Clear any existing results
-       this.clearResults();
-       
-       this.showLoading();
-       this.elements.accountPlanContainer.innerHTML = `
-           <div class="result-card text-center p-6">
-               <div class="loader mx-auto mb-3"></div>
-               <p class="text-sm text-gray-600">Building your account plan...</p>
-           </div>
-       `;
-       this.elements.accountPlanContainer.classList.remove('hidden');
-       
-       this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
-       
-       this.state.pendingRequest = true;
-       
-       try {
-           const contextToSend = this.state.chatHistory.length > 20 
-               ? [this.state.chatHistory[0], ...this.state.chatHistory.slice(-19)]
-               : this.state.chatHistory;
-           
-           const response = await fetch(CONFIG.API_ENDPOINT, {
-               method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ 
-                   situation: "Generate account plan",
-                   mode: 'account_plan',
-                   conversationHistory: contextToSend,
-                   currentDate: new Date().toISOString().split('T')[0]
-               })
-           });
-           
-           if (!response.ok) throw new Error('Request failed');
-           
-           const data = await response.json();
-           this.hideLoading();
-           this.state.hasActiveResults = true;
-           this.displayAccountPlan(data);
-           
-       } catch (error) {
-           console.error('Account plan generation failed:', error);
-           this.hideLoading();
-           this.elements.accountPlanContainer.innerHTML = `
-               <div class="result-card text-center">
-                   <p class="text-red-600 font-medium text-sm mb-3">Couldn't generate your plan.</p>
-                   <button onclick="app.generateAccountPlan()" 
-                       class="text-red-700 underline text-sm">Try again</button>
-               </div>
-           `;
-       } finally {
-           this.state.pendingRequest = false;
-       }
-   }
-
-   displayAccountPlan(data) {
-       const { 
-           account_name = 'Federal Agency',
-           objectives = [],
-           stakeholders = [],
-           opportunities = [],
-           challenges = [],
-           success_metrics = [],
-           action_items = [],
-           mermaid_chart
-       } = data;
-       
-       if (!account_name || account_name === 'Federal Agency') {
-           this.elements.accountPlanContainer.innerHTML = `
-               <div class="result-card text-center p-6">
-                   <p class="text-gray-700 font-medium mb-2">Need More Details</p>
-                   <p class="text-sm text-gray-600">Tell me more about your target agency and what you're selling.</p>
-               </div>
-           `;
-           return;
-       }
-       
-       let html = `
-           <div class="account-plan-header">
-               <div class="flex justify-between items-center">
-                   <div>
-                       <h2 class="text-xl font-bold text-gray-900">${account_name}</h2>
-                       <p class="text-sm text-gray-600">Account Strategy</p>
-                   </div>
-                   <div class="flex gap-2">
-                       <button onclick="app.copyAccountPlan()" 
-                           class="p-2 text-gray-600 hover:text-gray-800 hover:bg-white/50 rounded-lg transition-colors" 
-                           title="Copy">
-                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                           </svg>
-                       </button>
-                       <button onclick="window.print()" 
-                           class="p-2 text-gray-600 hover:text-gray-800 hover:bg-white/50 rounded-lg transition-colors" 
-                           title="Print">
-                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2z" />
-                           </svg>
-                       </button>
-                   </div>
-               </div>
-           </div>
-
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <!-- Objectives -->
-               <div class="result-card">
-                   <h3>Key Objectives</h3>
-                   <ul class="space-y-2">
-                       ${objectives.map(o => `
-                           <li class="flex items-start gap-2">
-                               <span class="text-customPurple-500 mt-1">•</span>
-                               <span>${o}</span>
-                           </li>
-                       `).join('') || '<li class="text-gray-500 italic">No objectives defined</li>'}
-                   </ul>
-               </div>
-               
-               <!-- Challenges -->
-               <div class="result-card">
-                   <h3>Challenges</h3>
-                   <ul class="space-y-2">
-                       ${challenges.map(c => `
-                           <li class="flex items-start gap-2">
-                               <span class="text-red-500 mt-1">•</span>
-                               <span>${c}</span>
-                           </li>
-                       `).join('') || '<li class="text-gray-500 italic">No challenges identified</li>'}
-                   </ul>
-               </div>
-           </div>
-           
-           <!-- Stakeholders -->
-           <div class="result-card">
-               <h3>Key Stakeholders</h3>
-               <div class="overflow-x-auto">
-                   <table class="data-table w-full">
-                       <thead>
-                           <tr class="border-b border-gray-200">
-                               <th class="text-left py-2 px-3">Name/Role</th>
-                               <th class="text-left py-2 px-3">Influence</th>
-                               <th class="text-left py-2 px-3">Notes</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                           ${stakeholders.map(s => `
-                               <tr class="border-b border-gray-100">
-                                   <td class="py-2 px-3 font-medium">${s.name || 'Unknown'}</td>
-                                   <td class="py-2 px-3">
-                                       <span class="inline-block px-2 py-1 rounded text-xs font-medium ${
-                                           s.influence?.toLowerCase() === 'high' ? 'bg-green-100 text-green-800' :
-                                           s.influence?.toLowerCase() === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                                           'bg-gray-100 text-gray-800'
-                                       }">${s.influence || 'Unknown'}</span>
-                                   </td>
-                                   <td class="py-2 px-3 text-sm">${s.notes || '—'}</td>
-                               </tr>
-                           `).join('') || `
-                               <tr>
-                                   <td colspan="3" class="py-4 text-center text-gray-500 italic">
-                                       No stakeholders identified
-                                   </td>
-                               </tr>
-                           `}
-                       </tbody>
-                   </table>
-               </div>
-           </div>
-           
-           <!-- Opportunities -->
-           <div class="result-card">
-               <h3>Opportunities</h3>
-               <div class="overflow-x-auto">
-                   <table class="data-table w-full">
-                       <thead>
-                           <tr class="border-b border-gray-200">
-                               <th class="text-left py-2 px-3">Opportunity</th>
-                               <th class="text-left py-2 px-3">Value</th>
-                               <th class="text-left py-2 px-3">Status</th>
-                               <th class="text-left py-2 px-3">Next Steps</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                           ${opportunities.map(o => `
-                               <tr class="border-b border-gray-100">
-                                   <td class="py-2 px-3 font-medium">${o.name || 'Unknown'}</td>
-                                   <td class="py-2 px-3 font-bold text-green-700">${o.value || '—'}</td>
-                                   <td class="py-2 px-3 text-sm">${o.status || '—'}</td>
-                                   <td class="py-2 px-3 text-sm">${o.next_steps || '—'}</td>
-                               </tr>
-                           `).join('') || `
-                               <tr>
-                                   <td colspan="4" class="py-4 text-center text-gray-500 italic">
-                                       No opportunities identified
-                                   </td>
-                               </tr>
-                           `}
-                       </tbody>
-                   </table>
-               </div>
-           </div>
-
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <!-- Success Metrics -->
-               <div class="result-card">
-                   <h3>Success Metrics</h3>
-                   <ul class="space-y-2">
-                       ${success_metrics.map(m => `
-                           <li class="flex items-start gap-2">
-                               <span class="text-green-500 mt-1">✓</span>
-                               <span>${m}</span>
-                           </li>
-                       `).join('') || '<li class="text-gray-500 italic">No metrics defined</li>'}
-                   </ul>
-               </div>
-               
-               <!-- Action Items -->
-               <div class="result-card">
-                   <h3>Next Actions</h3>
-                   <ul class="space-y-2">
-                       ${action_items.map(a => `
-                           <li class="flex items-start gap-2">
-                               <span class="text-customPurple-500 mt-1">→</span>
-                               <span>${a}</span>
-                           </li>
-                       `).join('') || '<li class="text-gray-500 italic">No actions defined</li>'}
-                   </ul>
-               </div>
-           </div>
-       `;
-       
-       // Add mermaid chart if available
-       if (mermaid_chart) {
-           html += `
-               <div class="result-card">
-                   <h3>Game Plan</h3>
-                   <div class="mermaid-container">
-                       <div id="mermaid-diagram" class="mermaid">
-                           ${mermaid_chart}
-                       </div>
-                   </div>
-               </div>
-           `;
-       }
-       
-       this.elements.accountPlanContainer.innerHTML = html;
-       
-       if (mermaid_chart) {
-           this.renderMermaidChart();
-       }
-   }
-   
-   copyAccountPlan() {
-       const content = this.elements.accountPlanContainer.innerText;
-       
-       if (!content) {
-           alert('No plan to copy');
-           return;
-       }
-       
-       navigator.clipboard.writeText(content)
-           .then(() => {
-               alert('Account plan copied!');
-           })
-           .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
-   }
-
-   renderMermaidChart() {
-       setTimeout(async () => {
-           try {
-               await mermaid.run();
-           } catch (error) {
-               console.error('Mermaid rendering error:', error);
-               const container = document.querySelector('.mermaid-container');
-               if (container) {
-                   container.innerHTML = '<p class="text-sm text-gray-500 text-center py-4">Chart unavailable</p>';
-               }
-           }
-       }, 100);
-   }
-
-   displayAdvice(data) {
-       const { response_type } = data;
-       
-       try {
-           if (response_type === 'prospect') {
-               this.displayProspectAdvice(data);
-           } else {
-               this.displayGeneralAdvice(data);
-           }
-           
-           this.addActionButtons();
-           
-       } catch (error) {
-           console.error('Display error:', error);
-           this.elements.resultsContainer.innerHTML = `
-               <div class="result-card text-center">
-                   <p class="text-red-600 font-medium">Display error. Try again.</p>
-               </div>
-           `;
-       }
-   }
-
-   displayProspectAdvice(data) {
-       const { 
-           summary = '',
-           top_s_is = [],
-           top_software_and_cloud = [],
-           company_capabilities = [],
-           naics_codes = [],
-           prospect_recommendations = []
-       } = data;
-       
-       const html = `
-       <div class="space-y-4 fade-in">
-           <div class="result-card bg-customPurple-50 border-customPurple-200">
-               <div class="prose prose-sm max-w-none">${marked.parse(summary)}</div>
-           </div>
-
-           <div class="result-card">
-               <h3>Top Systems Integrators</h3>
-               <div class="space-y-3">
-                   ${top_s_is.map((item, i) => `
-                       <div class="border-l-3 border-customPurple-500 pl-3">
-                           <div class="font-medium">${i + 1}. ${item.company || 'Unknown'}</div>
-                           <div class="text-sm text-gray-600">${item.value || 'N/A'}</div>
-                       </div>
-                   `).join('') || '<p class="text-gray-500 italic">No data available</p>'}
-               </div>
-           </div>
-           
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <div class="result-card">
-                   <h3>Key Capabilities</h3>
-                   <ul class="space-y-2">
-                       ${company_capabilities.map(c => `
-                           <li class="flex gap-2">
-                               <span class="text-green-500 mt-1">✓</span>
-                               <span>${c}</span>
-                           </li>
-                       `).join('')}
-                   </ul>
-               </div>
-               
-               <div class="result-card">
-                   <h3>NAICS Codes</h3>
-                   <ul class="space-y-1">
-                       ${naics_codes.map(n => `
-                           <li class="text-sm font-mono">${n}</li>
-                       `).join('')}
-                   </ul>
-               </div>
-           </div>
-
-           <div class="result-card">
-               <h3>Software & Cloud Players</h3>
-               <div class="space-y-3">
-                   ${top_software_and_cloud.map((item, i) => `
-                       <div class="border-l-3 border-blue-500 pl-3">
-                           <div class="font-medium">${i + 1}. ${item.company || 'Unknown'}</div>
-                           <div class="text-sm text-gray-600">${item.value || 'N/A'}</div>
-                       </div>
-                   `).join('') || '<p class="text-gray-500 italic">No data available</p>'}
-               </div>
-           </div>
-
-           <div class="result-card">
-               <h3>Strategic Recommendations</h3>
-               <ul class="space-y-3">
-                   ${prospect_recommendations.map(r => `
-                       <li class="flex gap-3">
-                           <span class="text-customPurple-500 font-bold">→</span>
-                           <span>${r}</span>
-                       </li>
-                   `).join('')}
-               </ul>
-           </div>
-       </div>`;
-       
-       this.elements.resultsContainer.innerHTML = html;
-   }
-
-   displayGeneralAdvice(data) {
-       const { 
-           quick_take = '',
-           key_moves = [],
-           mermaid_chart = '',
-           talking_points = [],
-           email_template = '',
-           next_steps = '',
-           response_type = 'deal'
-       } = data;
-       
-       const html = `
-       <div class="space-y-4 fade-in">
-           <div class="result-card bg-customPurple-50 border-customPurple-200">
-               <div class="flex gap-3">
-                   <img src="/images/arti_right.png" alt="Arti" class="w-10 h-10 rounded-full flex-shrink-0">
-                   <div class="prose prose-sm max-w-none">${marked.parse(quick_take)}</div>
-               </div>
-           </div>
-
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <div class="result-card">
-                   <h3>Your Next Moves</h3>
-                   <div class="space-y-3">
-                       ${key_moves.slice(0, 3).map((m, i) => `
-                           <div class="flex gap-3">
-                               <span class="flex-shrink-0 w-6 h-6 bg-customPurple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">${i + 1}</span>
-                               <div>
-                                   <p class="font-medium">${m.action}</p>
-                                   <p class="text-sm text-gray-600 mt-1">${m.why}</p>
-                               </div>
-                           </div>
-                       `).join('')}
-                   </div>
-               </div>
-               
-               <div class="result-card">
-                   <h3>Game Plan</h3>
-                   ${mermaid_chart ? `
-                       <div class="mermaid-container">
-                           <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                       </div>
-                   ` : '<p class="text-gray-500 text-center py-8">Visual not available</p>'}
-               </div>
-           </div>
-
-           ${(talking_points?.length > 0 || email_template) ? `
-           <div class="result-card">
-               <h3>Communications</h3>
-               <div class="grid grid-cols-1 ${email_template && talking_points?.length > 0 ? 'md:grid-cols-2' : ''} gap-6">
-                   ${talking_points?.length > 0 ? `
-                       <div>
-                           <h4 class="font-semibold text-gray-800 mb-3">
-                               ${response_type === 'interview' ? 'Interview Questions' : 'Power Questions'}
-                           </h4>
-                           <ul class="space-y-2">
-                               ${talking_points.map(t => `
-                                   <li class="flex gap-2">
-                                       <span class="text-green-500 mt-1">•</span>
-                                       <span class="text-sm">${t}</span>
-                                   </li>
-                               `).join('')}
-                           </ul>
-                       </div>
-                   ` : ''}
-                   
-                   ${email_template ? `
-                       <div>
-                           <h4 class="font-semibold text-gray-800 mb-3">Email Template</h4>
-                           <div class="bg-gray-50 rounded-lg p-3 text-xs font-mono whitespace-pre-wrap border border-gray-200">${email_template}</div>
-                       </div>
-                   ` : ''}
-               </div>
-           </div>
-           ` : ''}
-           
-           ${next_steps ? `
-               <div class="result-card bg-customPurple-50 border-customPurple-200">
-                   <p class="text-sm">
-                       <strong>Remember:</strong> ${next_steps}
-                   </p>
-               </div>
-           ` : ''}
-       </div>`;
-       
-       this.elements.resultsContainer.innerHTML = html;
-       
-       if (mermaid_chart) {
-           this.renderMermaidChart();
-       }
-   }
-
-   addActionButtons() {
-       const buttonsHtml = `
-           <div class="mt-6 flex flex-col sm:flex-row gap-3">
-               <button onclick="app.copyResults()" 
-                   class="flex-1 px-4 py-2.5 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg transition-colors text-sm">
-                   Copy Results
-               </button>
-               <button onclick="app.clearChat()" 
-                   class="flex-1 px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded-lg border border-gray-200 transition-colors text-sm">
-                   New Session
-               </button>
-           </div>
-       `;
-       
-       this.elements.resultsContainer.insertAdjacentHTML('beforeend', buttonsHtml);
-   }
-
-   copyResults() {
-       const content = this.elements.resultsContainer.innerText;
-       
-       if (!content) {
-           alert('No results to copy');
-           return;
-       }
-       
-       navigator.clipboard.writeText(content)
-           .then(() => {
-               alert('Results copied!');
-           })
-           .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
-   }
-
-   share() {
-       const shareData = {
-           title: 'AskArti',
-           text: 'Federal sales advice that actually works',
-           url: 'https://askarti.com'
-       };
-       
-       if (navigator.share) {
-           navigator.share(shareData).catch(console.error);
-       } else {
-           navigator.clipboard.writeText(`${shareData.text} - ${shareData.url}`)
-               .then(() => {
-                   this.elements.shareBtn.textContent = 'Link Copied!';
-                   setTimeout(() => this.elements.shareBtn.textContent = 'Share', 2000);
-               })
-               .catch(() => alert('Please copy: https://askarti.com'));
-       }
-   }
-
-   showError() {
-       this.elements.errorMessage.classList.remove('hidden');
-       setTimeout(() => {
-           this.elements.errorMessage.classList.add('hidden');
-       }, 5000);
-   }
-
-   retry() {
-       this.elements.errorMessage.classList.add('hidden');
-       if (this.state.lastQuery) {
-           this.elements.chatInput.value = this.state.lastQuery;
-           this.sendChatMessage();
-       }
-   }
-
-   showModal() {
-       this.elements.aboutModal.classList.remove('hidden');
-   }
-
-   hideModal() {
-       this.elements.aboutModal.classList.add('hidden');
-   }
+    createCard(title, iconPath, content) {
+        return `
+            <div class="briefing-card fade-in">
+                <div class="card-header">
+                    <svg class="card-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${iconPath}"></path></svg>
+                    <h3 class="card-title">${title}</h3>
+                </div>
+                <div>${content}</div>
+            </div>`;
+    }
 }
 
-// Initialize
-const app = new AskArti();
+document.addEventListener('DOMContentLoaded', () => new StrategicAdvisorApp());
 </script>
 </body>
 </html>
