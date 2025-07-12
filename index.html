@@ -706,39 +706,65 @@ class AskArti {
         this.scrollChatToBottom();
     }
 
-    async generateStrategicPlan() {
-        if (this.state.pendingRequest) return;
-        
-        const planContainer = document.getElementById('generate-plan-container');
-        if (planContainer) planContainer.remove();
 
-        this.clearResults();
-        this.showLoading();
-        
-        this.elements.accountPlanContainer.classList.remove('hidden');
-        this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
-        
-        this.state.pendingRequest = true;
-        
-        try {
-            const response = await this.makeApiRequest({ 
+async generateStrategicPlan() {
+    if (this.state.pendingRequest) return;
+    
+    // Remove the "Get Your Plan" button if it exists
+    const planContainer = document.getElementById('generate-plan-container');
+    if (planContainer) planContainer.remove();
+
+    this.clearResults();
+    this.showLoading();
+    
+    this.elements.accountPlanContainer.classList.remove('hidden');
+    this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
+    
+    this.state.pendingRequest = true;
+    
+    try {
+        const response = await fetch(CONFIG.API_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
                 situation: "Generate strategic plan based on our conversation",
                 mode: 'strategic_plan',
-                conversationHistory: this.state.chatHistory
-            });
-            
-            this.hideLoading();
-            this.state.hasActiveResults = true;
-            this.displayAccountPlan(response);
-            
-        } catch (error) {
-            console.error('Strategic plan generation failed:', error);
-            this.hideLoading();
-            this.showError();
-        } finally {
-            this.state.pendingRequest = false;
-        }
+                // Send the full history to generate the current plan
+                conversationHistory: this.state.chatHistory,
+                currentDate: new Date().toISOString().split('T')[0]
+            })
+        });
+        
+        if (!response.ok) throw new Error('Request failed');
+        
+        const data = await response.json();
+        this.hideLoading();
+        this.state.hasActiveResults = true;
+        
+        // Display the strategic plan
+        this.displayAccountPlan(data);
+        
+        // --- KEY CHANGE HERE ---
+        // 1. Silently reset the chat history so the next request is fresh.
+        this.state.chatHistory = []; 
+        
+        // 2. Add a message to the chat to confirm the reset.
+        this.addChatMessage("I've generated your plan above. Feel free to start a new topic.", false);
+        
+    } catch (error) {
+        console.error('Strategic plan generation failed:', error);
+        this.hideLoading();
+        this.elements.accountPlanContainer.innerHTML = `
+            <div class="result-card text-center">
+                <p class="text-red-600 font-medium text-sm mb-3">Couldn't generate your plan.</p>
+                <button onclick="app.generateStrategicPlan()" 
+                    class="text-red-700 underline text-sm">Try again</button>
+            </div>
+        `;
+    } finally {
+        this.state.pendingRequest = false;
     }
+}
 
     displayAccountPlan(data) {
         const { 
