@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AskArti - Strategic Advisor</title>
-    <meta name="description" content="S-Team level strategic advice for complex business challenges.">
+    <meta name="description" content="AI strategic advice for complex business challenges.">
     <link rel="icon" href="/images/favicon.ico" sizes="any">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -57,12 +57,12 @@
                     <div class="flex items-start gap-3 mb-4">
                         <img src="/images/arti_right.png" alt="Arti" class="w-9 h-9 rounded-full flex-shrink-0">
                         <div class="chat-message-arti px-4 py-3 max-w-[85%]">
-                            <p class="text-sm">What is the situation? Provide as much context as you can.</p>
+                            <p class="text-sm">What information do you need?</p>
                         </div>
                     </div>
                 </div>
                 <div class="flex gap-2">
-                    <textarea id="chat-input" class="flex-1 px-4 py-2.5 bg-light border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all resize-none" placeholder="Describe the business problem, competitive threat, or opportunity..." rows="2"></textarea>
+                    <textarea id="chat-input" class="flex-1 px-4 py-2.5 bg-light border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all resize-none" placeholder="e.g., Who are the top contractors at DHS? or Help me build a strategy to compete with the incumbent..." rows="2"></textarea>
                     <button id="chat-send-btn" class="px-5 py-2.5 bg-primary hover:bg-opacity-90 text-white font-medium rounded-lg transition-colors flex items-center justify-center">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </button>
@@ -92,22 +92,16 @@ class StrategicAdvisorApp {
     }
 
     init() {
-        mermaid.initialize({ startOnLoad: false, theme: 'base', securityLevel: 'strict', themeVariables: {
-            primaryColor: '#F8F9FA',
-            primaryTextColor: '#212529',
-            primaryBorderColor: '#DEE2E6',
-            lineColor: '#4A90E2',
-            textColor: '#212529',
-        }});
+        mermaid.initialize({ startOnLoad: false, theme: 'base', securityLevel: 'strict' });
         this.setupEventListeners();
     }
 
     setupEventListeners() {
-        this.elements.chatSendBtn.addEventListener('click', () => this.getBriefing());
+        this.elements.chatSendBtn.addEventListener('click', () => this.getResponse());
         this.elements.chatInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                this.getBriefing();
+                this.getResponse();
             }
         });
     }
@@ -116,7 +110,7 @@ class StrategicAdvisorApp {
         this.elements.resultsContainer.innerHTML = `
             <div class="flex justify-center items-center p-8 fade-in">
                 <div class="loader"></div>
-                <p class="ml-4 text-text-muted font-medium">Analyzing... running strategic models.</p>
+                <p class="ml-4 text-text-muted font-medium">Analyzing...</p>
             </div>`;
     }
 
@@ -131,7 +125,7 @@ class StrategicAdvisorApp {
         this.elements.chatMessages.scrollTop = this.elements.chatMessages.scrollHeight;
     }
 
-    async getBriefing() {
+    async getResponse() {
         const situation = this.elements.chatInput.value.trim();
         if (!situation || this.state.isProcessing) return;
 
@@ -157,39 +151,63 @@ class StrategicAdvisorApp {
             if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
             
             const data = await response.json();
-            this.state.conversationHistory.push({ role: 'assistant', content: JSON.stringify(data) });
-            this.displayStrategicBriefing(data);
+            // We don't add the full JSON to history anymore to keep it clean.
+            // A summary message could be added if desired.
+            
+            this.displayResponse(data);
 
         } catch (error) {
-            console.error('Error fetching briefing:', error);
-            this.elements.resultsContainer.innerHTML = `<div class="briefing-card text-red-500"><strong>Error:</strong> Failed to generate briefing. Please try again.</div>`;
+            console.error('Error fetching response:', error);
+            this.elements.resultsContainer.innerHTML = `<div class="briefing-card text-red-500"><strong>Error:</strong> Failed to generate a response. Please check the console for details.</div>`;
         } finally {
             this.state.isProcessing = false;
             this.elements.chatSendBtn.disabled = false;
             this.elements.chatSendBtn.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>`;
         }
     }
+    
+    // --- NEW RESPONSE ROUTER ---
+    displayResponse(data) {
+        switch(data.response_type) {
+            case 'list':
+                this.displayList(data);
+                break;
+            case 'briefing':
+                this.displayStrategicBriefing(data);
+                break;
+            default:
+                this.elements.resultsContainer.innerHTML = `<div class="briefing-card text-orange-500"><strong>Warning:</strong> Received an unknown response type.</div>`;
+                console.warn("Unknown response type:", data);
+        }
+    }
 
+    // --- NEW: Function to display a simple list ---
+    displayList(data) {
+        const { title, items } = data;
+        let html = this.createCard(title, 'M3 4h18M3 8h18M3 12h18M3 16h18', 
+            `<ul class="list-disc list-inside space-y-2 text-text-muted">
+                ${items.map(item => `<li>${item}</li>`).join('')}
+            </ul>`
+        );
+        this.elements.resultsContainer.innerHTML = html;
+    }
+
+    // --- Function to display a complex briefing ---
     displayStrategicBriefing(data) {
-        const { executiveSummary, strategicPrinciples, stakeholderAnalysis, strategicOptions, actionPlan, successMetrics, mermaidChart } = data;
+        const { executiveSummary, keyChallenges, strategicRecommendations, actionPlan, successMetrics, mermaidChart } = data;
         let html = '';
 
         if (executiveSummary) {
             html += this.createCard('Executive Summary', 'M21 12a9 9 0 11-18 0 9 9 0 0118 0z', `<div class="prose prose-sm max-w-none">${marked.parse(executiveSummary)}</div>`);
         }
-        if (strategicPrinciples && strategicPrinciples.length) {
-            html += this.createCard('Core Principles', 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h2M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4',
-                `<div class="space-y-4">${strategicPrinciples.map(p => `<div><h4 class="font-semibold text-text">${p.principle}</h4><p class="text-text-muted text-sm">${p.rationale}</p></div>`).join('')}</div>`
-            );
-        }
-        if (strategicOptions && strategicOptions.length) {
-            html += this.createCard('Strategic Options', 'M4 6h16M4 12h16M4 18h7',
-                `<div class="space-y-4">${strategicOptions.map(o => `<div><h4 class="font-semibold text-text">${o.option}</h4><p class="text-text-muted text-sm">${o.pros}</p><p class="text-text-muted text-sm mt-1">${o.cons}</p></div>`).join('')}</div>`
+        if (strategicRecommendations && strategicRecommendations.length) {
+            html += this.createCard('Strategic Recommendations', 'M13 10V3L4 14h7v7l9-11h-7z',
+                `<div class="space-y-4">${strategicRecommendations.map(p => `<div><h4 class="font-semibold text-text">${p.recommendation}</h4><p class="text-text-muted text-sm">${p.rationale}</p></div>`).join('')}</div>`
             );
         }
         if (actionPlan && actionPlan.length) {
-            html += this.createCard('Action Plan (Next 14 Days)', 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01',
-                `<ul class="list-none space-y-3">${actionPlan.map(a => `<li class="flex items-start gap-3"><span class="text-secondary font-bold mt-1">→</span><span><strong>${a.owner}:</strong> ${a.task} (Due: ${a.due})</span></li>`).join('')}</ul>`
+            html += this.createCard('Action Plan', 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
+                `<ul class="list-none space-y-3">${actionPlan.map(a => `<li class="flex items-start gap-3"><span class="text-secondary font-bold mt-1">→</span><span><strong>${a.owner}:</strong> ${a.task}</span></li>`).join('')}</ul>`
             );
         }
         if (mermaidChart) {
