@@ -519,7 +519,7 @@
 <script>
 const CONFIG = {
    API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
-   REQUEST_TIMEOUT: 30000, // Increased timeout for better reliability
+   REQUEST_TIMEOUT: 30000,
    MAX_RETRIES: 2,
    RETRY_DELAY: 2000,
    MAX_INPUT_LENGTH: 500,
@@ -974,8 +974,8 @@ class AskArti {
                <p class="text-xs text-gray-500 mb-2 text-center">Tell me more or tap what's relevant:</p>
                <div class="flex gap-2 flex-wrap justify-center">
                    ${suggestions.map(s => `
-                       <button class="chat-suggestion px-3 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 rounded-full text-sm text-blue-700 hover:text-blue-800 transition-all"
-                               onclick="app.useSuggestion('${s.replace(/'/g, "\\'")}');">
+                       <button class="chat-suggestion px-3 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 rounded-full text-sm text-blue-700 hover:text-blue-800 transition-all" 
+                           data-suggestion="${s.replace(/"/g, '&quot;')}">
                            ${s}
                        </button>
                    `).join('')}
@@ -983,13 +983,19 @@ class AskArti {
            </div>
        `;
        this.elements.chatMessages.insertAdjacentHTML('beforeend', suggestionsHtml);
+       
+       // Add event listeners to suggestion buttons
+       document.querySelectorAll('.chat-suggestion').forEach(btn => {
+           btn.addEventListener('click', () => {
+               const suggestion = btn.dataset.suggestion;
+               if (suggestion) {
+                   this.elements.chatInput.value = suggestion;
+                   this.sendChatMessage();
+               }
+           });
+       });
+       
        this.scrollChatToBottom();
-   }
-
-   // Helper method to handle suggestion clicks
-   useSuggestion(text) {
-       this.elements.chatInput.value = text;
-       this.sendChatMessage();
    }
 
    async generateFullReport() {
@@ -1060,10 +1066,13 @@ class AskArti {
                <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
                    <p class="text-red-700 font-medium mb-2">Report Generation Failed</p>
                    <p class="text-red-600 text-sm mb-4">${error.message || "We had trouble creating your action plan."}</p>
-                   <button class="bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg text-sm" onclick="app.retryReportGeneration()">
+                   <button class="bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg text-sm" id="retry-report-btn">
                        Try Again
                    </button>
                </div>`;
+               
+           // Add event listener to retry button
+           document.getElementById('retry-report-btn').addEventListener('click', () => this.retryReportGeneration());
            
            // Also notify in the chat
            this.addChatMessage("I had trouble generating your action plan. You can try again using the 'Generate Action Plan' button, or we can continue our conversation for more specific advice.", false);
@@ -1192,10 +1201,13 @@ Make it extremely specific to the federal sales situation described in our conve
                <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
                    <p class="text-red-700 font-medium mb-2">1-Pager Generation Failed</p>
                    <p class="text-red-600 text-sm mb-4">${error.message || "We had trouble creating your Amazon 1-pager."}</p>
-                   <button class="bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg text-sm" onclick="app.retryAmazonOnePager()">
+                   <button class="bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg text-sm" id="retry-onepager-btn">
                        Try Again
                    </button>
                </div>`;
+               
+           // Add event listener to retry button
+           document.getElementById('retry-onepager-btn').addEventListener('click', () => this.retryAmazonOnePager());
            
            // Also notify in the chat
            this.addChatMessage("I had trouble generating your Amazon-style 1-pager. You can try again, or we can continue our conversation for more specific advice.", false);
@@ -1336,137 +1348,29 @@ Make it extremely specific to the federal sales situation described in our conve
                </div>
            </div>
            
-           <!-- Download/Print Buttons -->
-           <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
-               <button onclick="app.printAmazonOnePager()" class="flex-1 max-w-xs bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
-                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                   </svg>
-                   Print / Save as PDF
-               </button>
-               <button onclick="app.copyAmazonOnePager()" class="flex-1 max-w-xs bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
-                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                   </svg>
+           <!-- Simple Copy Button -->
+           <div class="mt-6 flex justify-center">
+               <button id="copy-amazon-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-6 rounded-lg transition-colors">
                    Copy to Clipboard
                </button>
            </div>
        </div>`;
        
        this.elements.resultsContainer.innerHTML = html;
-   }
-
-   // Print the Amazon 1-pager or save as PDF
-   printAmazonOnePager() {
-       const content = document.querySelector('.fade-in').innerHTML;
-       const printWindow = window.open('', '_blank');
        
-       printWindow.document.write(`
-           <!DOCTYPE html>
-           <html>
-           <head>
-               <title>Amazon 1-Pager: Federal GTM Plan</title>
-               <meta charset="UTF-8">
-               <meta name="viewport" content="width=device-width, initial-scale=1.0">
-               <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-               <style>
-                   @media print {
-                       @page { 
-                           size: letter;
-                           margin: 0.5in;
-                       }
-                       body {
-                           font-size: 12pt;
-                       }
-                       .no-print {
-                           display: none;
-                       }
-                   }
-               </style>
-           </head>
-           <body class="bg-white">
-               ${content}
-               <script>
-                   window.onload = function() { window.print(); window.close(); }
-               </script>
-           </body>
-           </html>
-       `);
-       
-       printWindow.document.close();
-   }
-
-   // Copy the Amazon 1-pager content to clipboard
-   copyAmazonOnePager() {
-       // Create a plain text version of the 1-pager for clipboard
-       const onePagerElement = document.querySelector('.fade-in');
-       
-       if (!onePagerElement) {
-           alert('No content to copy');
-           return;
-       }
-       
-       // Extract structured content
-       const title = onePagerElement.querySelector('h2').textContent;
-       
-       // Situation
-       const situationTitle = 'SITUATION:';
-       const situationItems = Array.from(onePagerElement.querySelectorAll('h3')).find(el => el.textContent === 'SITUATION')
-           ?.closest('div').querySelectorAll('li');
-       const situationText = situationItems ? 
-           Array.from(situationItems).map(item => `- ${item.textContent}`).join('\n') : '';
-       
-       // Complication
-       const complicationTitle = 'COMPLICATION:';
-       const complicationItems = Array.from(onePagerElement.querySelectorAll('h3')).find(el => el.textContent === 'COMPLICATION')
-           ?.closest('div').querySelectorAll('li');
-       const complicationText = complicationItems ? 
-           Array.from(complicationItems).map(item => `- ${item.textContent}`).join('\n') : '';
-       
-       // Question & Answer
-       const questionTitle = 'QUESTION:';
-       const questionText = Array.from(onePagerElement.querySelectorAll('h3')).find(el => el.textContent === 'QUESTION')
-           ?.nextElementSibling.textContent || '';
-       
-       const answerTitle = 'ANSWER:';
-       const answerText = Array.from(onePagerElement.querySelectorAll('h3')).find(el => el.textContent === 'ANSWER')
-           ?.nextElementSibling.textContent || '';
-       
-       // Key Actions
-       const actionsTitle = 'KEY ACTIONS:';
-       const actionRows = onePagerElement.querySelectorAll('tbody tr');
-       const actionsText = actionRows ? 
-           Array.from(actionRows).map(row => {
-               const cells = row.querySelectorAll('td');
-               return `- ${cells[0].textContent} | Owner: ${cells[1].textContent} | Timeline: ${cells[2].textContent}`;
-           }).join('\n') : '';
-       
-       // Metrics
-       const metricsTitle = 'METRICS:';
-       const metricsItems = Array.from(onePagerElement.querySelectorAll('h3')).find(el => el.textContent === 'METRICS')
-           ?.closest('div').querySelectorAll('li');
-       const metricsText = metricsItems ? 
-           Array.from(metricsItems).map(item => `- ${item.textContent}`).join('\n') : '';
-       
-       // Format the full text
-       const fullText = `${title}\n\n` +
-           `${situationTitle}\n${situationText}\n\n` +
-           `${complicationTitle}\n${complicationText}\n\n` +
-           `${questionTitle}\n${questionText}\n\n` +
-           `${answerTitle}\n${answerText}\n\n` +
-           `${actionsTitle}\n${actionsText}\n\n` +
-           `${metricsTitle}\n${metricsText}\n\n` +
-           `Generated ${new Date().toLocaleDateString()} | INTERNAL USE ONLY`;
-       
-       // Copy to clipboard
-       navigator.clipboard.writeText(fullText)
-           .then(() => {
-               const copyBtn = document.querySelector('button[onclick="app.copyAmazonOnePager()"]');
-               const originalText = copyBtn.textContent;
-               copyBtn.textContent = 'Copied!';
-               setTimeout(() => copyBtn.textContent = originalText, 2000);
-           })
-           .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
+       // Add event listener to the copy button
+       document.getElementById('copy-amazon-btn').addEventListener('click', () => {
+           const content = this.elements.resultsContainer.innerText;
+           if (content) {
+               navigator.clipboard.writeText(content)
+                   .then(() => {
+                       const btn = document.getElementById('copy-amazon-btn');
+                       btn.textContent = 'Copied!';
+                       setTimeout(() => btn.textContent = 'Copy to Clipboard', 2000);
+                   })
+                   .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
+           }
+       });
    }
 
    // Retry generating the Amazon 1-pager
@@ -1483,7 +1387,7 @@ Make it extremely specific to the federal sales situation described in our conve
        }
    }
 
-   setLoading(loading) {
+	setLoading(loading) {
        this.elements.btnText.style.display = loading ? 'none' : 'inline';
        this.elements.loader.style.display = loading ? 'block' : 'none';
        this.elements.askBtn.disabled = loading;
@@ -1846,15 +1750,19 @@ Make it extremely specific to the federal sales situation described in our conve
    addActionButtons() {
        const buttonsHtml = `
            <div class="mt-8 flex flex-col sm:flex-row gap-3">
-               <button onclick="app.copyResults()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+               <button id="copy-results-btn" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
                    Copy to Clipboard
                </button>
-               <button onclick="app.startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">
+               <button id="start-over-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">
                    Ask Another Question
                </button>
            </div>`;
        
        this.elements.resultsContainer.insertAdjacentHTML('beforeend', buttonsHtml);
+       
+       // Add event listeners to the buttons
+       document.getElementById('copy-results-btn').addEventListener('click', () => this.copyResults());
+       document.getElementById('start-over-btn').addEventListener('click', () => this.startOver());
    }
 
    copyResults() {
@@ -1867,10 +1775,10 @@ Make it extremely specific to the federal sales situation described in our conve
        
        navigator.clipboard.writeText(content)
            .then(() => {
-               const btn = this.elements.resultsContainer.querySelector('button');
-               const originalText = btn.textContent;
-               btn.textContent = 'Copied!';
-               setTimeout(() => btn.textContent = originalText, 2000);
+               const copyBtn = document.getElementById('copy-results-btn');
+               const originalText = copyBtn.textContent;
+               copyBtn.textContent = 'Copied!';
+               setTimeout(() => copyBtn.textContent = originalText, 2000);
            })
            .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
    }
@@ -1945,17 +1853,6 @@ Make it extremely specific to the federal sales situation described in our conve
 
 // Initialize app
 const app = new AskArti();
-
-// Make the necessary methods available globally
-window.useSuggestion = (text) => {
-    app.useSuggestion(text);
-};
-window.printAmazonOnePager = () => {
-    app.printAmazonOnePager();
-};
-window.copyAmazonOnePager = () => {
-    app.copyAmazonOnePager();
-};
 </script>
 </body>
 </html>
