@@ -9,13 +9,12 @@
     <link rel="canonical" href="https://askarti.com">
     <link rel="icon" href="/images/favicon.ico" sizes="any">
     
-    <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -23,32 +22,23 @@
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
+                        display: ['Lexend', 'sans-serif'],
                     },
                     colors: {
-                        bloomberg: {
-                            black: '#000000',
-                            orange: '#FF6600',
-                            blue: '#0033CC',
-                            darkblue: '#001F5C',
-                            green: '#00C851',
-                            red: '#FF3B30',
-                            gray: '#F5F5F5',
-                            yellow: '#FFD700'
+                        brand: {
+                            purple: '#6B46C1',
+                            blue: '#3B82F6',
+                            light: '#F7FAFC',
+                            text: '#2D3748',
+                            muted: '#718096',
                         }
                     },
                     animation: {
-                        'flash': 'flash 0.5s ease-in-out',
-                        'slide-up': 'slideUp 0.3s ease-out',
-                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
                     },
                     keyframes: {
-                        flash: {
-                            '0%, 100%': { opacity: '1' },
-                            '50%': { opacity: '0.5' },
-                        },
-                        slideUp: {
-                            '0%': { transform: 'translateY(10px)', opacity: '0' },
+                        fadeInUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
                             '100%': { transform: 'translateY(0)', opacity: '1' },
                         },
                     },
@@ -58,446 +48,250 @@
     </script>
     
 <style>
-    /* Base Styles - Sharp, Bloomberg-like */
+    /* --- MODERN, CLEAN AESTHETIC --- */
     body { 
         font-family: 'Inter', sans-serif; 
-        background-color: #FFFFFF;
+        background-color: #F7FAFC; /* Off-white background */
+        color: #2D3748;
         -webkit-font-smoothing: antialiased; 
-        min-height: 100vh;
     }
     
-    /* Power Loader */
     .loader {
         width: 40px;
         height: 40px;
-        border: 3px solid #F5F5F5;
-        border-top: 3px solid #FF6600;
+        border: 4px solid rgba(59, 130, 246, 0.2);
+        border-left-color: #3B82F6;
         border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-        margin: 0 auto;
+        animation: spin 1s linear infinite;
     }
     
     @keyframes spin { 
-        0% { transform: rotate(0deg); } 
-        100% { transform: rotate(360deg); } 
+        to { transform: rotate(360deg); } 
     }
     
-    /* Chat Styles - Clean and Direct */
+    /* --- CHAT STYLES --- */
     .chat-message-user { 
-        background-color: #0033CC;
+        background-color: #6B46C1; /* Brand Purple */
         color: white; 
-        border-radius: 4px;
-        font-weight: 500;
+        border-radius: 16px;
+        border-bottom-right-radius: 4px;
     }
     
     .chat-message-arti { 
-        background-color: #F5F5F5;
-        color: #000000; 
-        border-radius: 4px;
-        border-left: 4px solid #FF6600;
+        background-color: #FFFFFF;
+        color: #2D3748; 
+        border: 1px solid #E2E8F0;
+        border-radius: 16px;
+        border-bottom-left-radius: 4px;
     }
     
-    /* POWER REPORT STYLES - Bloomberg Terminal Meets Sales Playbook */
-    .power-report {
+    /* --- MODERN INPUT & BUTTON --- */
+    .modern-input {
         background: #FFFFFF;
-        border: 2px solid #000000;
-        border-radius: 0;
-        overflow: hidden;
-        box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
+        border: 1px solid #CBD5E0;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     }
     
-    .report-header {
-        background: #000000;
+    .modern-input:focus {
+        outline: none;
+        border-color: #6B46C1;
+        box-shadow: 0 0 0 3px rgba(107, 70, 193, 0.2);
+    }
+    
+    .modern-button {
+        background-color: #6B46C1;
         color: #FFFFFF;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    }
+    
+    .modern-button:hover {
+        background-color: #5534a5;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    .modern-button:active {
+        transform: translateY(0);
+    }
+    
+    .modern-button:disabled {
+        background-color: #A0AEC0;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* --- "WIRED MAGAZINE" REPORT STYLES --- */
+    .report-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .report-card {
+        background: #FFFFFF;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
         padding: 1.5rem;
-        border-bottom: 4px solid #FF6600;
+        opacity: 0;
+        animation: fade-in-up 0.5s ease-out forwards;
     }
-    
-    .report-header h1 {
-        font-size: 1.75rem;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: -0.02em;
-        margin: 0;
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid #E2E8F0;
+        padding-bottom: 1rem;
     }
-    
-    .report-badge {
-        display: inline-block;
-        background: #FF6600;
-        color: #FFFFFF;
-        padding: 0.25rem 0.75rem;
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-bottom: 0.5rem;
+
+    .card-icon {
+        background-color: rgba(59, 130, 246, 0.1);
+        color: #3B82F6;
+        border-radius: 8px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
     }
-    
-    .report-section {
-        padding: 1.5rem;
-        border-bottom: 1px solid #E5E5E5;
+
+    .card-title {
+        font-family: 'Lexend', sans-serif;
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #2D3748;
     }
-    
-    .report-section:last-child {
-        border-bottom: none;
-    }
-    
-    /* KILLER METRICS */
+
     .metric-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
-        margin-bottom: 1.5rem;
     }
     
-    .metric-card {
-        background: #F5F5F5;
-        border-left: 4px solid #FF6600;
+    .metric-item {
+        text-align: center;
         padding: 1rem;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .metric-card.green {
-        border-left-color: #00C851;
-    }
-    
-    .metric-card.red {
-        border-left-color: #FF3B30;
+        background-color: #F7FAFC;
+        border-radius: 8px;
     }
     
     .metric-value {
         font-size: 2rem;
-        font-weight: 900;
-        color: #000000;
-        line-height: 1;
+        font-weight: 700;
+        font-family: 'Lexend', sans-serif;
+        color: #6B46C1;
+        line-height: 1.1;
     }
     
     .metric-label {
         font-size: 0.75rem;
-        font-weight: 600;
+        font-weight: 500;
         text-transform: uppercase;
-        color: #666666;
+        color: #718096;
         margin-top: 0.25rem;
     }
     
-    /* ACTION ITEMS - What to Do NOW */
-    .action-card {
-        background: #FFFFFF;
-        border: 2px solid #000000;
-        padding: 1.25rem;
-        margin-bottom: 1rem;
-        position: relative;
-        transition: all 0.2s ease;
-    }
-    
-    .action-card:hover {
-        transform: translateX(4px);
-        box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
-    }
-    
-    .action-card.urgent {
-        border-color: #FF3B30;
-        background: #FFF5F5;
-    }
-    
-    .action-card.urgent::before {
-        content: 'URGENT';
-        position: absolute;
-        top: 0;
-        right: 0;
-        background: #FF3B30;
-        color: white;
-        padding: 0.25rem 0.75rem;
-        font-size: 0.625rem;
-        font-weight: 700;
-    }
-    
-    .action-title {
-        font-size: 1.125rem;
-        font-weight: 800;
-        color: #000000;
-        margin-bottom: 0.5rem;
-    }
-    
-    .action-detail {
-        font-size: 0.875rem;
-        color: #333333;
-        line-height: 1.5;
-    }
-    
-    .action-meta {
-        display: flex;
-        gap: 1rem;
-        margin-top: 0.75rem;
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: #666666;
-    }
-    
-    .action-meta span {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-    }
-    
-    /* BLOOMBERG-STYLE LISTS */
-    .power-list {
-        padding-left: 0;
-        margin: 0;
-    }
-    
-    .power-list li {
-        display: flex;
-        align-items: flex-start;
-        gap: 0.75rem;
+    .action-item {
+        background: #F7FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 8px;
+        padding: 1rem;
         margin-bottom: 0.75rem;
-        font-size: 0.9375rem;
-        line-height: 1.5;
+        transition: all 0.2s ease;
     }
-    
-    .power-list li::before {
-        content: '►';
-        color: #FF6600;
-        font-weight: 700;
-        flex-shrink: 0;
-        margin-top: 0.125rem;
+    .action-item:hover {
+        border-color: #6B46C1;
+        transform: translateY(-2px);
     }
-    
-    /* KEY INSIGHTS BOX */
-    .insight-box {
-        background: #000000;
-        color: #FFFFFF;
-        padding: 1.5rem;
-        margin: 1.5rem 0;
-        position: relative;
-    }
-    
-    .insight-box::before {
-        content: '💡 KEY INSIGHT';
-        position: absolute;
-        top: -0.75rem;
-        left: 1rem;
-        background: #FF6600;
-        padding: 0.25rem 0.75rem;
-        font-size: 0.625rem;
-        font-weight: 700;
-        letter-spacing: 0.05em;
-    }
-    
-    .insight-box p {
-        margin: 0;
-        font-size: 1.125rem;
+    .action-item-title {
         font-weight: 600;
-        line-height: 1.4;
+        color: #2D3748;
     }
-    
-    /* COMPETITIVE INTEL GRID */
-    .intel-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1rem;
-    }
-    
-    .intel-card {
-        background: #FFFFFF;
-        border: 1px solid #E5E5E5;
-        padding: 1rem;
-    }
-    
-    .intel-card h4 {
+    .action-item-detail {
         font-size: 0.875rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        margin-bottom: 0.5rem;
-        color: #000000;
+        color: #718096;
+        margin-top: 0.25rem;
     }
-    
-    .intel-card p {
-        font-size: 0.875rem;
-        color: #333333;
-        line-height: 1.4;
-    }
-    
-    /* WIN PROBABILITY */
-    .win-meter {
-        background: #F5F5F5;
-        height: 40px;
-        position: relative;
-        margin: 1rem 0;
-        border: 2px solid #000000;
-    }
-    
-    .win-meter-fill {
-        height: 100%;
-        background: #00C851;
-        transition: width 1s ease-out;
-        position: relative;
-    }
-    
-    .win-meter-label {
-        position: absolute;
-        right: 1rem;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 1.25rem;
-        font-weight: 900;
-        color: #000000;
-    }
-    
-    /* PARTNER MATRIX */
-    .partner-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 1rem;
-    }
-    
-    .partner-table th,
-    .partner-table td {
-        padding: 0.75rem;
-        text-align: left;
-        border-bottom: 1px solid #E5E5E5;
-    }
-    
-    .partner-table th {
-        background: #000000;
-        color: #FFFFFF;
-        font-weight: 700;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-    
-    .partner-table td {
-        font-size: 0.875rem;
-    }
-    
-    .partner-score {
-        display: inline-block;
-        padding: 0.25rem 0.5rem;
-        font-size: 0.75rem;
-        font-weight: 700;
-        border-radius: 2px;
-    }
-    
-    .partner-score.high {
-        background: #00C851;
-        color: white;
-    }
-    
-    .partner-score.medium {
-        background: #FFD700;
-        color: #000000;
-    }
-    
-    .partner-score.low {
-        background: #FF3B30;
-        color: white;
-    }
-    
-    /* Input Enhancement */
-    .power-input {
-        background: #F5F5F5;
-        border: 2px solid #000000;
-        padding: 1rem;
-        font-size: 1rem;
-        font-weight: 500;
-        color: #000000;
-        transition: all 0.2s ease;
-    }
-    
-    .power-input:focus {
-        background: #FFFFFF;
-        border-color: #FF6600;
-        outline: none;
-        box-shadow: 4px 4px 0 rgba(255, 102, 0, 0.2);
-    }
-    
-    .power-button {
-        background: #FF6600;
-        color: #FFFFFF;
-        border: 2px solid #000000;
-        padding: 0.75rem 1.5rem;
-        font-weight: 800;
-        font-size: 0.875rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        position: relative;
-    }
-    
-    .power-button:hover {
-        background: #000000;
-        transform: translate(-2px, -2px);
-        box-shadow: 4px 4px 0 #FF6600;
-    }
-    
-    .power-button:active {
-        transform: translate(0, 0);
-        box-shadow: none;
-    }
-    
-    /* Animations */
-    @keyframes flash-in {
-        0% { opacity: 0; transform: scale(0.95); }
-        50% { opacity: 1; transform: scale(1.02); }
-        100% { opacity: 1; transform: scale(1); }
-    }
-    
-    .flash-in {
-        animation: flash-in 0.4s ease-out;
-    }
-    
-    /* Responsive */
-    @media (max-width: 768px) {
-        .report-section { padding: 1rem; }
-        .metric-grid { grid-template-columns: 1fr; }
-        .intel-grid { grid-template-columns: 1fr; }
-    }
-</style>
 
+    /* --- ENHANCED MARKDOWN STYLES --- */
+    .analysis-content h1, .analysis-content h2, .analysis-content h3 {
+        font-family: 'Lexend', sans-serif;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #2D3748;
+    }
+    .analysis-content h1 { font-size: 1.5rem; margin-top: 0; }
+    .analysis-content h2 { font-size: 1.25rem; margin-top: 1.5rem; }
+    .analysis-content p { margin-bottom: 1rem; line-height: 1.6; }
+    .analysis-content ul { list-style: none; padding-left: 0; }
+    .analysis-content li { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .analysis-content li::before {
+        content: '✓';
+        color: #6B46C1;
+        font-weight: 700;
+        margin-top: 0.25rem;
+    }
+    .analysis-content strong { color: #6B46C1; font-weight: 600; }
+    .analysis-content blockquote {
+        border-left: 4px solid #6B46C1;
+        padding-left: 1rem;
+        margin-left: 0;
+        font-style: italic;
+        color: #718096;
+    }
+
+</style>
 </head>
-<body>
-   <div class="max-w-5xl mx-auto px-4 py-6">
-       <header class="text-center mb-6">
+<body class="bg-brand-light">
+   <div class="max-w-3xl mx-auto px-4 py-8 md:py-12">
+       <header class="text-center mb-8">
            <a href="/" aria-label="AskArti Home">
                <img src="/images/asklite.png" alt="AskArti" class="h-16 sm:h-20 mx-auto mb-2">
            </a>
-           <p class="text-xs font-bold uppercase tracking-wider text-gray-600">FEDERAL SALES INTELLIGENCE • INSTANT PLAYBOOKS</p>
+           <p class="text-sm font-medium text-brand-muted">Your AI-Powered Federal Sales Strategist</p>
        </header>
 
-       <main class="bg-white border-2 border-black mb-6">
-           <div class="p-4">
-               <div class="chat-container mb-4" id="chat-history">
-                   <div class="flex items-start gap-3 mb-4">
-                       <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 flex-shrink-0">
-                       <div class="chat-message-arti px-4 py-2.5 max-w-[85%]">
-                           <p class="text-sm font-medium">What's your situation? I'll give you exactly what you need to win.</p>
-                       </div>
+       <main class="bg-white rounded-lg shadow-sm p-4 md:p-6 mb-8">
+           <div class="chat-container mb-4" id="chat-history">
+               <div class="flex justify-start mb-4">
+                   <img src="/images/arti_right.png" alt="Arti" class="w-10 h-10 rounded-full flex-shrink-0 mr-3">
+                   <div class="chat-message-arti px-4 py-3 max-w-[85%] text-sm font-medium">
+                       <p>What's your critical sales situation? I'll build you a winning playbook.</p>
                    </div>
                </div>
-               <div class="flex gap-2">
-                   <input 
-                       type="text" 
-                       id="chat-input" 
-                       class="power-input flex-1" 
-                       placeholder="e.g., Losing to Booz Allen on DHS deal, need a comeback plan NOW" 
-                       maxlength="500"
-                   >
-                   <button id="chat-send-btn" class="power-button no-print">
-                       GET PLAN →
-                   </button>
-               </div>
+           </div>
+           <div class="flex gap-3">
+               <input 
+                   type="text" 
+                   id="chat-input" 
+                   class="modern-input flex-1" 
+                   placeholder="e.g., How to win a DHS deal against Booz Allen..." 
+                   maxlength="500"
+               >
+               <button id="chat-send-btn" class="modern-button">
+                   <span>Analyze</span>
+               </button>
            </div>
        </main>
 
        <div id="results-container"></div>
 
-       <footer class="text-center mt-12 pb-8 no-print">
-            <p class="text-xs text-gray-600 font-medium">
-                © 2025 AskArti · AI-POWERED FEDERAL SALES INTELLIGENCE<br>
-                <span class="text-gray-500">Not responsible for deals you close using our advice</span>
+       <footer class="text-center mt-12 pb-8">
+            <p class="text-xs text-brand-muted font-medium">
+                © 2025 AskArti · AI-Powered Intelligence
             </p>
        </footer>
    </div>
@@ -530,13 +324,13 @@ class AskArtiApp {
     }
 
     addMessageToUI(content, isUser) {
-        const messageClass = isUser ? 'chat-message-user' : 'chat-message-arti';
         const justifyClass = isUser ? 'justify-end' : 'justify-start';
+        const avatar = !isUser ? `<img src="/images/arti_right.png" alt="Arti" class="w-10 h-10 rounded-full flex-shrink-0 mr-3">` : '';
         
         const messageHtml = `
-            <div class="flex ${justifyClass} mb-4 animate-slide-up">
-                ${!isUser ? '<img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 flex-shrink-0 mr-3">' : ''}
-                <div class="${messageClass} px-4 py-2.5 max-w-[85%] text-sm font-medium">${content}</div>
+            <div class="flex ${justifyClass} mb-4" style="opacity:0; animation: fadeInUp 0.3s ease-out forwards;">
+                ${avatar}
+                <div class="${isUser ? 'chat-message-user' : 'chat-message-arti'} px-4 py-3 max-w-[85%] text-sm font-medium">${content}</div>
             </div>`;
         
         this.elements.chatHistory.insertAdjacentHTML('beforeend', messageHtml);
@@ -545,12 +339,10 @@ class AskArtiApp {
 
     showLoading() {
         this.elements.resultsContainer.innerHTML = `
-            <div class="power-report">
-                <div class="report-section text-center py-8">
-                    <div class="loader mb-3"></div>
-                    <p class="font-bold text-sm uppercase tracking-wider">GENERATING YOUR PLAYBOOK...</p>
-                    <p class="text-xs text-gray-600 mt-1">10 seconds to tactical brilliance</p>
-                </div>
+            <div class="text-center p-8">
+                <div class="loader mb-4"></div>
+                <p class="font-semibold text-brand-purple">Analyzing intelligence feeds...</p>
+                <p class="text-sm text-brand-muted mt-1">Crafting your strategic playbook.</p>
             </div>`;
     }
 
@@ -560,7 +352,7 @@ class AskArtiApp {
 
         this.state.isProcessing = true;
         this.elements.chatSendBtn.disabled = true;
-        this.elements.chatSendBtn.textContent = 'PROCESSING...';
+        this.elements.chatSendBtn.innerHTML = `<div class="w-5 h-5 border-2 border-white/50 border-t-white rounded-full animate-spin"></div>`;
         
         this.addMessageToUI(message, true);
         this.elements.chatInput.value = '';
@@ -582,283 +374,158 @@ class AskArtiApp {
             
             const data = await response.json();
             
-            const contextualResponse = this.getContextualResponse(data);
+            const contextualResponse = "I've analyzed the situation. Here is your strategic playbook.";
             this.addMessageToUI(contextualResponse, false);
             
-            this.state.conversationHistory.push({ 
-                role: 'assistant', 
-                content: contextualResponse 
-            });
+            this.state.conversationHistory.push({ role: 'assistant', content: contextualResponse });
             
             this.displayResponse(data);
 
         } catch (error) {
             console.error('Error:', error);
             this.elements.resultsContainer.innerHTML = `
-                <div class="power-report">
-                    <div class="report-section text-center text-red-600 py-6">
-                        <p class="font-bold">SYSTEM ERROR</p>
-                        <p class="text-sm mt-2">Try again. The AI hamsters need a coffee break.</p>
-                    </div>
+                <div class="report-card text-center text-red-500">
+                    <p class="font-bold">SYSTEM ERROR</p>
+                    <p class="text-sm mt-2">Failed to generate a response. Please try again.</p>
                 </div>`;
         } finally {
             this.state.isProcessing = false;
             this.elements.chatSendBtn.disabled = false;
-            this.elements.chatSendBtn.textContent = 'GET PLAN →';
+            this.elements.chatSendBtn.innerHTML = `<span>Analyze</span>`;
         }
     }
 
-    getContextualResponse(data) {
-        const responses = [
-            "Boom! Here's your tactical playbook. Execute this and watch the magic happen.",
-            "Got it. Here's exactly what you need to do to turn this around.",
-            "Analysis complete. This playbook will get you back in the game.",
-            "Here's your action plan. Follow this and you'll crush it.",
-            "Locked and loaded. Here's how you win this."
-        ];
-        return responses[Math.floor(Math.random() * responses.length)];
-    }
-
     displayResponse(data) {
-        this.elements.resultsContainer.innerHTML = '';
-        
+        this.elements.resultsContainer.innerHTML = ''; 
         if (data.response_type === 'analysis' && data.analysis_markdown) {
             this.displayTacticalAnalysis(data.analysis_markdown);
         } else {
             this.displayBattlePlan(data);
         }
-        
-        // Flash animation on new content
-        setTimeout(() => {
-            this.elements.resultsContainer.scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'start' 
-            });
-        }, 100);
     }
 
     displayTacticalAnalysis(markdown) {
-        // Parse and enhance the markdown for Bloomberg-style presentation
         const htmlContent = marked.parse(markdown);
-        
         const analysisHtml = `
-            <div class="power-report flash-in">
-                <div class="report-header">
-                    <div class="report-badge">TACTICAL ANALYSIS</div>
-                    <h1>Your Action Plan</h1>
+            <div class="report-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    </div>
+                    <h2 class="card-title">Tactical Playbook</h2>
                 </div>
-                <div class="report-section">
-                    ${this.enhanceAnalysisContent(htmlContent)}
-                </div>
+                <div class="analysis-content">${htmlContent}</div>
             </div>`;
-        
         this.elements.resultsContainer.innerHTML = analysisHtml;
-    }
-
-    enhanceAnalysisContent(html) {
-        // Transform headers to Bloomberg style
-        html = html.replace(/<h1[^>]*>(.*?)<\/h1>/g, '<h2 class="text-2xl font-900 uppercase mb-4 border-b-4 border-bloomberg-orange pb-2">$1</h2>');
-        html = html.replace(/<h2[^>]*>(.*?)<\/h2>/g, '<h3 class="text-lg font-800 uppercase mt-6 mb-3">$1</h3>');
-        html = html.replace(/<h3[^>]*>(.*?)<\/h3>/g, '<h4 class="text-base font-700 uppercase mt-4 mb-2">$1</h4>');
-        
-        // Style paragraphs
-        html = html.replace(/<p>/g, '<p class="mb-4 leading-relaxed">');
-        
-        // Transform lists to power lists
-        html = html.replace(/<ul>/g, '<ul class="power-list mb-4">');
-        html = html.replace(/<ol>/g, '<ol class="power-list mb-4">');
-        
-        // Style blockquotes as insight boxes
-        html = html.replace(/<blockquote>(.*?)<\/blockquote>/g, '<div class="insight-box"><p>$1</p></div>');
-        
-        // Bold important phrases
-        html = html.replace(/<strong>(.*?)<\/strong>/g, '<span class="font-800 text-bloomberg-orange">$1</span>');
-        
-        return html;
     }
 
     displayBattlePlan(data) {
         const { 
-            account_name, 
-            executive_summary, 
-            strategic_assessment, 
-            partner_ecosystem, 
-            next_steps,
-            win_probability,
-            key_metrics
+            account_name, executive_summary, strategic_assessment, 
+            partner_ecosystem, next_steps, win_probability, key_metrics
         } = data;
         
-        let html = `
-            <div class="power-report flash-in">
-                <div class="report-header">
-                    <div class="report-badge">BATTLE PLAN</div>
-                    <h1>${account_name || 'Federal Sales Playbook'}</h1>
-                </div>`;
-        
-        // Executive Summary with Metrics
-        if (executive_summary || key_metrics) {
-            html += `
-                <div class="report-section">
-                    ${executive_summary ? `
-                        <div class="mb-4">
-                            <h3 class="text-xs font-bold uppercase tracking-wider mb-2">EXECUTIVE SUMMARY</h3>
-                            <p class="text-lg font-semibold leading-tight">${executive_summary}</p>
+        let cardsHtml = '';
+
+        // Card 1: Executive Summary & Win Probability
+        if (executive_summary || win_probability) {
+            cardsHtml += `
+                <div class="report-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
-                    ` : ''}
-                    
-                    ${key_metrics ? this.renderMetrics(key_metrics) : ''}
-                    
+                        <h2 class="card-title">${account_name || 'Executive Summary'}</h2>
+                    </div>
+                    <p class="text-brand-muted mb-4">${executive_summary || ''}</p>
                     ${win_probability ? `
                         <div class="mt-4">
-                            <h3 class="text-xs font-bold uppercase tracking-wider mb-2">WIN PROBABILITY</h3>
-                            <div class="win-meter">
-                                <div class="win-meter-fill" style="width: ${win_probability}%"></div>
-                                <div class="win-meter-label">${win_probability}%</div>
+                            <label class="font-semibold text-sm text-brand-text mb-2 block">Win Probability</label>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-gradient-to-r from-brand-blue to-brand-purple h-2.5 rounded-full" style="width: ${win_probability}%"></div>
                             </div>
+                            <p class="text-right font-bold text-brand-purple text-lg mt-1">${win_probability}%</p>
                         </div>
                     ` : ''}
                 </div>`;
         }
-        
-        // Strategic Assessment
-        if (strategic_assessment) {
-            html += `
-                <div class="report-section">
-                    <h3 class="text-xs font-bold uppercase tracking-wider mb-4">SITUATION ANALYSIS</h3>
-                    
-                    ${strategic_assessment.current_state ? `
-                        <div class="mb-4">
-                            <p class="leading-relaxed">${strategic_assessment.current_state}</p>
+
+        // Card 2: Key Metrics
+        if (key_metrics) {
+            cardsHtml += `
+                <div class="report-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
                         </div>
-                    ` : ''}
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <h2 class="card-title">Key Metrics</h2>
+                    </div>
+                    <div class="metric-grid">
+                        ${Object.entries(key_metrics).map(([key, value]) => `
+                            <div class="metric-item">
+                                <div class="metric-value">${value.value}</div>
+                                <div class="metric-label">${key.replace(/_/g, ' ')}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
+        }
+
+        // Card 3: Strategic Assessment
+        if (strategic_assessment) {
+            cardsHtml += `
+                <div class="report-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </div>
+                        <h2 class="card-title">Situation Analysis</h2>
+                    </div>
+                    <div class="space-y-4">
                         ${strategic_assessment.key_challenges?.length ? `
                             <div>
-                                <h4 class="font-bold text-red-600 uppercase text-sm mb-2">⚠️ THREATS</h4>
-                                <ul class="power-list">
-                                    ${strategic_assessment.key_challenges.map(challenge => 
-                                        `<li>${challenge}</li>`
-                                    ).join('')}
+                                <h4 class="font-semibold text-red-500 text-sm mb-2">Threats & Challenges</h4>
+                                <ul class="list-disc list-inside text-sm text-brand-muted space-y-1">
+                                    ${strategic_assessment.key_challenges.map(c => `<li>${c}</li>`).join('')}
                                 </ul>
-                            </div>
-                        ` : ''}
-                        
+                            </div>` : ''}
                         ${strategic_assessment.opportunities?.length ? `
                             <div>
-                                <h4 class="font-bold text-green-600 uppercase text-sm mb-2">✓ OPPORTUNITIES</h4>
-                                <ul class="power-list">
-                                    ${strategic_assessment.opportunities.map(opp => 
-                                        `<li>${opp}</li>`
-                                    ).join('')}
+                                <h4 class="font-semibold text-green-500 text-sm mb-2">Opportunities</h4>
+                                <ul class="list-disc list-inside text-sm text-brand-muted space-y-1">
+                                    ${strategic_assessment.opportunities.map(o => `<li>${o}</li>`).join('')}
                                 </ul>
-                            </div>
-                        ` : ''}
+                            </div>` : ''}
                     </div>
                 </div>`;
         }
         
-        // Partner Intel
-        if (partner_ecosystem) {
-            html += this.renderPartnerIntel(partner_ecosystem);
-        }
-        
-        // Action Plan
+        // Card 4: Action Plan
         if (next_steps?.length) {
-            html += `
-                <div class="report-section">
-                    <h3 class="text-xs font-bold uppercase tracking-wider mb-4">🎯 ACTION PLAN - EXECUTE NOW</h3>
-                    ${next_steps.map((step, index) => {
-                        const isUrgent = step.priority === 'immediate' || index === 0;
-                        return `
-                            <div class="action-card ${isUrgent ? 'urgent' : ''}">
-                                <div class="action-title">${step.action}</div>
-                                <div class="action-detail">${step.rationale}</div>
-                                <div class="action-meta">
-                                    <span>
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                        ${step.timeline}
-                                    </span>
-                                    <span class="uppercase">${step.priority} Priority</span>
-                                </div>
+            cardsHtml += `
+                <div class="report-card md:col-span-2">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        </div>
+                        <h2 class="card-title">Immediate Action Plan</h2>
+                    </div>
+                    <div class="space-y-3">
+                        ${next_steps.map(step => `
+                            <div class="action-item">
+                                <p class="action-item-title">${step.action}</p>
+                                <p class="action-item-detail">${step.rationale}</p>
                             </div>
-                        `;
-                    }).join('')}
+                        `).join('')}
+                    </div>
                 </div>`;
         }
-        
-        html += '</div>';
-        
-        this.elements.resultsContainer.innerHTML = html;
-    }
 
-    renderMetrics(metrics) {
-        return `
-            <div class="metric-grid">
-                ${Object.entries(metrics).map(([key, value]) => {
-                    const isPositive = value.trend === 'up';
-                    return `
-                        <div class="metric-card ${isPositive ? 'green' : 'red'}">
-                            <div class="metric-value">${value.value}</div>
-                            <div class="metric-label">${key.replace(/_/g, ' ')}</div>
-                        </div>
-                    `;
-                }).join('')}
-            </div>
-        `;
+        this.elements.resultsContainer.innerHTML = `<div class="report-grid">${cardsHtml}</div>`;
     }
-
-    renderPartnerIntel(ecosystem) {
-        return `
-            <div class="report-section">
-                <h3 class="text-xs font-bold uppercase tracking-wider mb-4">PARTNER INTELLIGENCE</h3>
-                
-                ${ecosystem.competitive_landscape ? `
-                    <div class="insight-box mb-4">
-                        <p>${ecosystem.competitive_landscape}</p>
-                    </div>
-                ` : ''}
-                
-                <table class="partner-table">
-                    <thead>
-                        <tr>
-                            <th>Partner Type</th>
-                            <th>Company</th>
-							<th>Fit Score</th>
-                           <th>Why Them</th>
-                       </tr>
-                   </thead>
-                   <tbody>
-                       ${ecosystem.top_prime_contractors?.map(prime => `
-                           <tr>
-                               <td><span class="font-bold">PRIME</span></td>
-                               <td>${prime.name || prime}</td>
-                               <td><span class="partner-score high">HIGH</span></td>
-                               <td>${prime.rationale || 'Strong federal presence'}</td>
-                           </tr>
-                       `).join('') || ''}
-                       
-                       ${ecosystem.potential_isv_partners?.map(isv => `
-                           <tr>
-                               <td><span class="font-bold">ISV</span></td>
-                               <td>${isv.name || isv}</td>
-                               <td><span class="partner-score medium">MED</span></td>
-                               <td>${isv.rationale || 'Tech complementarity'}</td>
-                           </tr>
-                       `).join('') || ''}
-                   </tbody>
-               </table>
-           </div>
-       `;
-   }
 }
 
-// Initialize the app when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-   new AskArtiApp();
-});
+document.addEventListener('DOMContentLoaded', () => new AskArtiApp());
 </script>
 </body>
 </html>
