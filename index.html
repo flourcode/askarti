@@ -711,56 +711,58 @@ class AskArti {
         }
     }
 
-    // UPDATED: Enhanced chat message handling
-    async sendChatMessage() {
-        const message = this.elements.chatInput.value.trim();
-        
-        if (this.state.pendingRequest || !message) return;
+async sendChatMessage() {
+    const message = this.elements.chatInput.value.trim();
+    
+    if (this.state.pendingRequest || !message) return;
 
-        // Clear previous results if any
-        if (this.state.hasActiveResults) {
-            this.clearResults();
+    // Clear previous results if any
+    if (this.state.hasActiveResults) {
+        this.clearResults();
+    }
+
+    // Add user message
+    this.addChatMessage(message, true);
+    this.elements.chatInput.value = '';
+    this.state.lastQuery = message;
+    
+    // Update history
+    this.state.chatHistory.push({ role: 'user', content: message });
+    this.state.messageCount++;
+
+    // Show typing
+    this.showTypingIndicator();
+    this.state.pendingRequest = true;
+
+    try {
+        const response = await this.makeChatRequest(message);
+        this.hideTypingIndicator();
+        
+        const aiMessage = response.message || "Tell me more.";
+        this.addChatMessage(aiMessage, false);
+        this.state.chatHistory.push({ role: 'assistant', content: aiMessage });
+        this.state.lastQuery = '';
+
+        // NEW: Auto-generate plan if ready, or show button
+        if (response.ready_for_plan) {
+            // Auto-generate the plan immediately
+            setTimeout(() => {
+                this.generateStrategicPlan();
+            }, 1000); // Small delay for better UX
+        } else if (response.readiness_score >= 7 && !document.getElementById('generate-plan-container')) {
+            // Show button if we have enough context but user hasn't requested it yet
+            this.addStrategicPlanButton();
         }
 
-        // Add user message
-        this.addChatMessage(message, true);
-        this.elements.chatInput.value = '';
-        this.state.lastQuery = message;
-        
-        // Update history
-        this.state.chatHistory.push({ role: 'user', content: message });
-        this.state.messageCount++;
-
-        // Show typing
-        this.showTypingIndicator();
-        this.state.pendingRequest = true;
-
-        try {
-            const response = await this.makeChatRequest(message);
-            this.hideTypingIndicator();
-            
-            const aiMessage = response.message || "Tell me more.";
-            this.addChatMessage(aiMessage, false);
-            this.state.chatHistory.push({ role: 'assistant', content: aiMessage });
-            this.state.lastQuery = '';
-
-            // NEW: Show strategic plan button when ready (instead of confusing bubbles)
-            if (response.ready_for_plan && !document.getElementById('generate-plan-container')) {
-                this.addStrategicPlanButton();
-            }
-
-            // REMOVED: No more suggestion bubbles that confuse users
-
-       } catch (error) {
-           console.error('Chat request failed:', error);
-           this.hideTypingIndicator();
-           this.addChatMessage("Connection issues. Try again?", false);
-           this.showError();
-       } finally {
-           this.state.pendingRequest = false;
-       }
-   }
-
+    } catch (error) {
+        console.error('Chat request failed:', error);
+        this.hideTypingIndicator();
+        this.addChatMessage("Connection issues. Try again?", false);
+        this.showError();
+    } finally {
+        this.state.pendingRequest = false;
+    }
+}
    async makeChatRequest(message) {
        const contextToSend = this.state.chatHistory.length > 20 
            ? [this.state.chatHistory[0], ...this.state.chatHistory.slice(-19)]
