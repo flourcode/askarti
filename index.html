@@ -167,74 +167,72 @@
         border: 1px solid #E5E7EB;
         padding: 1.5rem;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1rem;
     }
 
-    /* Scenario buttons */
-    .scenario-btn {
-        background-color: #F3F4F6;
-        color: #374151;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        font-size: 0.875rem;
-        font-weight: 500;
-        transition: all 0.2s ease;
-        border: 1px solid transparent;
-    }
-
-    .scenario-btn:hover {
-        background-color: #E5E7EB;
-        border-color: #D1D5DB;
-        transform: translateY(-1px);
-    }
-
-    .scenario-btn:active {
-        transform: translateY(0);
-    }
-
-    /* Mobile-first responsive design */
-    .chat-container {
-        height: 50vh;
-        max-height: 400px;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    @media (min-width: 640px) {
-        .chat-container {
-            height: 60vh;
-            max-height: 500px;
-        }
-    }
-
-    /* Clean scrollbar */
-    .chat-container::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    .chat-container::-webkit-scrollbar-track {
-        background: #F9FAFB;
-    }
-
-    .chat-container::-webkit-scrollbar-thumb {
-        background: #D1D5DB;
-        border-radius: 3px;
-    }
-
-    .chat-container::-webkit-scrollbar-thumb:hover {
-        background: #9CA3AF;
-    }
-
-    /* Chart container styles */
-    .chart-container {
+    /* Playbook specific styles */
+    .playbook-header {
+        background: linear-gradient(135deg, #7C6BBE 0%, #5A4E8C 100%);
+        color: white;
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
         position: relative;
-        height: 400px;
-        background-color: #F9FAFB;
-        border-radius: 8px;
-        padding: 1rem;
-        margin: 1rem 0;
+        overflow: hidden;
     }
 
-    .metric-card {
+    .playbook-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        transform: translate(50%, -50%);
+    }
+
+    .playbook-section {
+        border-left: 4px solid #7C6BBE;
+        padding-left: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .timeline-item {
+        position: relative;
+        padding-left: 2rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.5rem;
+        width: 12px;
+        height: 12px;
+        background: #7C6BBE;
+        border-radius: 50%;
+        border: 3px solid white;
+        box-shadow: 0 0 0 3px #E5E7EB;
+    }
+
+    .timeline-item::after {
+        content: '';
+        position: absolute;
+        left: 5px;
+        top: 1.5rem;
+        width: 2px;
+        height: calc(100% - 1rem);
+        background: #E5E7EB;
+    }
+
+    .timeline-item:last-child::after {
+        display: none;
+    }
+
+    .metric-highlight {
         background: linear-gradient(135deg, #F6F5FB 0%, #E8E4F7 100%);
         border-radius: 8px;
         padding: 1rem;
@@ -255,71 +253,68 @@
         font-weight: 500;
     }
 
-    .chart-controls {
-        display: flex;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-        justify-content: flex-end;
-    }
-
-    .chart-btn {
-        padding: 0.375rem 0.75rem;
+    /* Scenario buttons */
+    .scenario-btn {
         background-color: #F3F4F6;
         color: #374151;
-        border-radius: 6px;
-        font-size: 0.75rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-size: 0.875rem;
         font-weight: 500;
+        transition: all 0.2s ease;
         border: 1px solid transparent;
         cursor: pointer;
-        transition: all 0.2s ease;
+        text-align: center;
+        display: block;
+        width: 100%;
     }
 
-    .chart-btn:hover {
-        background-color: #E5E7EB;
+    .scenario-btn:hover {
+        background-color: #7C6BBE;
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(124, 107, 190, 0.3);
     }
 
-    /* Results typography */
-    .result-card h3 {
-        font-size: 1.125rem;
-        font-weight: 700;
-        color: #111827;
-        margin-bottom: 1rem;
+    .scenario-btn.active {
+        background-color: #7C6BBE;
+        color: white;
     }
 
-    .result-card p, .result-card li {
-        font-size: 0.875rem;
-        line-height: 1.6;
-        color: #4B5563;
+    /* Progress indicators */
+    .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #E5E7EB;
+        border-radius: 4px;
+        overflow: hidden;
     }
 
-    .result-card strong {
-        color: #1F2937;
-        font-weight: 600;
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #7C6BBE 0%, #5A4E8C 100%);
+        border-radius: 4px;
+        transition: width 0.5s ease;
     }
 
-    /* Account plan specific styles */
-    .account-plan-header {
-        background: linear-gradient(135deg, #F6F5FB 0%, #E8E4F7 100%);
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
+    /* Action items */
+    .action-item {
+        background: #F9FAFB;
+        border: 1px solid #E5E7EB;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        position: relative;
     }
 
-    /* Table styles */
-    .data-table {
-        font-size: 0.875rem;
+    .action-item.urgent {
+        border-left: 4px solid #EF4444;
+        background: #FEF2F2;
     }
 
-    .data-table th {
-        font-weight: 600;
-        color: #6B7280;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 0.05em;
-    }
-
-    .data-table td {
-        color: #374151;
+    .action-item.high-impact {
+        border-left: 4px solid #10B981;
+        background: #F0FDF4;
     }
 
     /* Mobile optimizations */
@@ -328,17 +323,17 @@
             padding: 1rem;
         }
 
+        .playbook-header {
+            padding: 1.5rem;
+        }
+
+        .playbook-section {
+            padding-left: 1rem;
+        }
+
         .scenario-btn {
             font-size: 0.8125rem;
-            padding: 0.375rem 0.75rem;
-        }
-
-        input[type="text"] {
-            font-size: 16px !important; /* Prevent zoom on iOS */
-        }
-
-        .chart-container {
-            height: 300px; /* Smaller on mobile */
+            padding: 0.5rem 1rem;
         }
     }
 
@@ -362,7 +357,7 @@
 
 </head>
 <body class="bg-gray-50 text-gray-900">
-    <div class="max-w-3xl mx-auto px-4 py-6 min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 py-6 min-h-screen">
         <!-- Clean header -->
         <header class="text-center mb-6">
             <a href="/" aria-label="AskArti Home">
@@ -370,86 +365,74 @@
             </a>
         </header>
 
-        <!-- Main chat interface -->
-        <main class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+        <!-- Scenario Selection -->
+        <div id="scenario-selector" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
             <div class="p-4 sm:p-6">
-                <!-- Chat messages -->
-                <div class="chat-container mb-4" id="chat-messages">
-                    <div class="flex items-start gap-3 mb-4">
-                        <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
-                        <div class="chat-message-arti px-4 py-2.5 max-w-[85%]">
-                            <p class="text-sm">
-                                Hey, I'm Arti, your Federal Sales Buddy. 
-                                What's on your mind?
-                            </p>
-                        </div>
+                <h2 class="text-xl font-bold text-gray-900 mb-4 text-center">What's your situation?</h2>
+                
+                <!-- Quick Input -->
+                <div class="mb-6">
+                    <div class="flex gap-2">
+                        <input 
+                            type="text" 
+                            id="situation-input"
+                            class="flex-1 px-4 py-3 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-customPurple-500 focus:border-transparent outline-none transition-all"
+                            placeholder="e.g., 'Selling cybersecurity to DHS' or 'Partner team conflict on deals'"
+                            maxlength="200">
+                        <button 
+                            id="generate-playbook-btn" 
+                            class="px-6 py-3 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg transition-colors">
+                            Generate Playbook
+                        </button>
                     </div>
                 </div>
 
-                <!-- Input area -->
-                <div class="flex gap-2">
-                    <button 
-                        id="clear-chat-btn"
-                        class="p-2.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors no-print"
-                        title="Clear chat">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                        </svg>
+                <!-- Common Scenarios -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <button class="scenario-btn" data-scenario="federal-cyber-sale">
+                        🛡️ <strong>Federal Cyber Sale</strong><br>
+                        <span class="text-sm opacity-75">Selling cybersecurity to federal agencies</span>
                     </button>
-                    <input 
-                        type="text" 
-                        id="chat-input"
-                        class="flex-1 px-4 py-2.5 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-customPurple-500 focus:border-transparent outline-none transition-all"
-                        placeholder="What's going on with your deal?"
-                        maxlength="500">
-                    <button 
-                        id="chat-send-btn" 
-                        class="px-4 sm:px-6 py-2.5 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2 no-print">
-                        <span class="hidden sm:inline">Send</span>
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                        </svg>
+                    <button class="scenario-btn" data-scenario="partner-alignment">
+                        🤝 <strong>Partner Alignment</strong><br>
+                        <span class="text-sm opacity-75">Resolving partner/account team conflicts</span>
                     </button>
-                </div>
-            </div>
-
-            <!-- Quick scenarios -->
-            <div class="border-t border-gray-200 px-4 py-3 bg-gray-50 no-print">
-                <div class="flex flex-wrap gap-2 justify-center">
-                    <button class="scenario-btn" onclick="app.quickAnalysis('Buyer ghosted me after pricing. CIO loves our competitor.')">
-                        👻Buyer Ghosted Me
+                    <button class="scenario-btn" data-scenario="gtm-strategy">
+                        🎯 <strong>GTM Strategy</strong><br>
+                        <span class="text-sm opacity-75">Building go-to-market plans</span>
                     </button>
-                    <button class="scenario-btn" onclick="app.quickAnalysis('Help me prep for an AWS Federal Sales Interview.')">
-                        💼 Interview Prep
+                    <button class="scenario-btn" data-scenario="deal-rescue">
+                        🚨 <strong>Deal Rescue</strong><br>
+                        <span class="text-sm opacity-75">Saving stalled or at-risk deals</span>
                     </button>
-                    <button class="scenario-btn" onclick="app.quickAnalysis('My internal Partner and Account reps are battling over deals, pipeline, and revenue recognition.')">
-                        🤝 Partner Drama
+                    <button class="scenario-btn" data-scenario="stakeholder-mapping">
+                        👥 <strong>Stakeholder Mapping</strong><br>
+                        <span class="text-sm opacity-75">Navigating complex decision processes</span>
                     </button>
-                    <button class="scenario-btn" onclick="app.autoCreateAccountPlan()">
-                        📋 Write My Plan
+                    <button class="scenario-btn" data-scenario="competitive-displacement">
+                        ⚔️ <strong>Competitive Displacement</strong><br>
+                        <span class="text-sm opacity-75">Displacing entrenched incumbents</span>
                     </button>
                 </div>
             </div>
-        </main>
+        </div>
 
         <!-- Loading state -->
-        <div id="loading-container" class="hidden text-center py-4">
+        <div id="loading-container" class="hidden text-center py-8">
             <div class="inline-flex items-center gap-3 text-gray-600">
-                <span id="loading-message" class="text-sm font-medium"></span>
+                <div class="loader"></div>
+                <span id="loading-message" class="text-sm font-medium">Building your personalized playbook...</span>
             </div>
         </div>
 
         <!-- Error state -->
         <div id="error-message" class="hidden bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-            <p class="text-red-700 font-medium text-sm">Connection issues. Even the servers are ghosting us.</p>
+            <p class="text-red-700 font-medium text-sm">Something went wrong. Let's try that again.</p>
             <button id="retry-btn" class="mt-2 text-red-700 underline text-sm">Try again</button>
         </div>
 
-        <!-- Results container -->
-        <div id="results-container" class="space-y-4"></div>
-        
-        <!-- Account Plan container -->
-        <div id="account-plan-container" class="hidden space-y-4"></div>
+        <!-- Playbook Container -->
+        <div id="playbook-container" class="hidden space-y-4"></div>
 
         <!-- Footer -->
         <footer class="text-center mt-12 space-y-4 pb-8 no-print">
@@ -527,398 +510,759 @@ const CONFIG = {
     REQUEST_TIMEOUT: 25000,
     MAX_RETRIES: 2,
     RETRY_DELAY: 2000,
-    MAX_INPUT_LENGTH: 500,
-    LOADING_MESSAGES: [
-        "Working backwards...",
-        "Thinking big...",
-        "Circling back...",
-        "Unpacking this...",
-        "Putting a pin in it..."
-    ]
+    MAX_INPUT_LENGTH: 200
 };
 
-// Enhanced Chart Manager Class
-class ChartManager {
-    constructor() {
-        this.charts = new Map();
-        this.chartCounter = 0;
-        this.initializeChartDefaults();
-    }
-
-    initializeChartDefaults() {
-        // Set Chart.js global defaults
-        if (typeof Chart !== 'undefined') {
-            Chart.defaults.font.family = 'Inter';
-            Chart.defaults.color = '#6B7280';
-            Chart.defaults.borderColor = '#E5E7EB';
-        }
-    }
-
-    createChartFromConfig(config, containerId = null) {
-        if (!config || !config.data) {
-            console.warn('Invalid chart config provided');
-            return null;
-        }
-
-        const {
-            title = 'Chart',
-            subtitle = '',
-            type = 'bar',
-            data,
-            options = {},
-            metrics = null,
-            description = ''
-        } = config;
-
-        // Create container if not provided
-        if (!containerId) {
-            containerId = this.createChartContainer(title, subtitle, description);
-        }
-
-        // Add metrics if provided
-        if (metrics && metrics.length > 0) {
-            this.addMetrics(containerId, metrics);
-        }
-
-        const canvas = document.getElementById(containerId);
-        if (!canvas) {
-            console.error(`Canvas with id ${containerId} not found`);
-            return null;
-        }
-
-        const ctx = canvas.getContext('2d');
-
-        const chartConfig = {
-            type: type,
-            data: data,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: {
-                            usePointStyle: true,
-                            padding: 20
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        borderColor: '#7C6BBE',
-                        borderWidth: 1,
-                        cornerRadius: 8,
-                        displayColors: true
-                    }
-                },
-                scales: this.getScalesConfig(type),
-                ...options
-            }
-        };
-
-        try {
-            const chart = new Chart(ctx, chartConfig);
-            this.charts.set(containerId, chart);
-            return containerId;
-        } catch (error) {
-            console.error('Error creating chart:', error);
-            return null;
-        }
-    }
-
-    createChartContainer(title, subtitle = '', description = '') {
-        this.chartCounter++;
-        const containerId = `chart-${this.chartCounter}`;
-        
-        const container = document.createElement('div');
-        container.className = 'result-card';
-        container.innerHTML = `
-            <div class="flex justify-between items-start mb-4">
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900">${title}</h3>
-                    ${subtitle ? `<p class="text-sm text-gray-600 mt-1">${subtitle}</p>` : ''}
-                    ${description ? `<p class="text-xs text-gray-500 mt-1">${description}</p>` : ''}
-                </div>
-                <div class="chart-controls">
-                    <button onclick="app.chartManager.exportChart('${containerId}')" class="chart-btn" title="Export">
-                        📊
-                    </button>
-                    <button onclick="app.chartManager.removeChart('${containerId}')" class="chart-btn" title="Remove">
-                        ✕
-                    </button>
-                </div>
-            </div>
-            <div class="chart-container">
-                <canvas id="${containerId}"></canvas>
-            </div>
-        `;
-        
-        // Add to results container
-        const resultsContainer = document.getElementById('results-container');
-        if (resultsContainer) {
-            resultsContainer.appendChild(container);
-        }
-        
-        return containerId;
-    }
-
-    addMetrics(containerId, metrics) {
-        const container = document.getElementById(containerId).parentElement.parentElement;
-        const metricsHtml = `
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                ${metrics.map(metric => `
-                    <div class="metric-card">
-                        <div class="metric-value">${metric.value}</div>
-                        <div class="metric-label">${metric.label}</div>
-                    </div>
-                `).join('')}
-            </div>
-        `;
-        
-        const chartContainer = container.querySelector('.chart-container');
-        chartContainer.insertAdjacentHTML('beforebegin', metricsHtml);
-    }
-
-    getScalesConfig(type) {
-        if (type === 'pie' || type === 'doughnut' || type === 'polarArea') {
-            return {};
-        }
-
-        return {
-            x: {
-                grid: { color: '#F3F4F6' },
-                ticks: { color: '#6B7280' }
-            },
-            y: {
-                grid: { color: '#F3F4F6' },
-                ticks: {
-                    color: '#6B7280',
-                    callback: function(value) {
-                        if (value >= 1000000) {
-                            return '$' + (value / 1000000).toFixed(1) + 'M';
-                        } else if (value >= 1000) {
-                            return '$' + (value / 1000).toFixed(0) + 'K';
-                        }
-                        return '$' + value;
-                    }
+// Playbook Templates Library
+const PLAYBOOK_TEMPLATES = {
+    'federal-cyber-sale': {
+        title: 'Federal Cybersecurity Sales Playbook',
+        subtitle: 'Your complete guide to selling cyber solutions to federal agencies',
+        icon: '🛡️',
+        context_keywords: ['cyber', 'security', 'federal', 'government', 'dhs', 'cisa', 'dod'],
+        sections: {
+            situation_analysis: {
+                title: 'Situation Analysis',
+                content: {
+                    market_dynamics: [
+                        'Federal cyber spending at $18.8B annually with 12% YoY growth',
+                        'Zero Trust mandate driving urgency across all agencies',
+                        'CISA directives creating compliance deadlines',
+                        'Supply chain security requirements tightening'
+                    ],
+                    key_challenges: [
+                        'Complex Authority to Operate (ATO) processes',
+                        'FedRAMP authorization requirements',
+                        'Budget cycle constraints (Oct-Sep)',
+                        'Incumbent vendor relationships'
+                    ]
                 }
-            }
-        };
-    }
-
-    exportChart(containerId) {
-        const chart = this.charts.get(containerId);
-        if (chart) {
-            const url = chart.toBase64Image();
-            const link = document.createElement('a');
-            link.download = `chart-${containerId}.png`;
-            link.href = url;
-            link.click();
-        }
-    }
-
-    removeChart(containerId) {
-        const chart = this.charts.get(containerId);
-        if (chart) {
-            chart.destroy();
-            this.charts.delete(containerId);
-        }
-        
-        const element = document.getElementById(containerId);
-        if (element) {
-            element.closest('.result-card').remove();
-        }
-    }
-
-    // Process natural language queries for charts
-    processNaturalLanguageQuery(query) {
-        const lowercaseQuery = query.toLowerCase();
-        
-        // Simple pattern matching for demo
-        if (lowercaseQuery.includes('pipeline') || lowercaseQuery.includes('sales')) {
-            return this.createSamplePipelineChart();
-        } else if (lowercaseQuery.includes('revenue') || lowercaseQuery.includes('quarterly')) {
-            return this.createSampleRevenueChart();
-        } else if (lowercaseQuery.includes('stakeholder') || lowercaseQuery.includes('influence')) {
-            return this.createSampleStakeholderChart();
-        } else {
-            // Extract data from query and create custom chart
-            return this.createCustomChartFromQuery(query);
-        }
-    }
-
-    createSamplePipelineChart() {
-        const config = {
-            title: "Sales Pipeline Analysis",
-            type: "bar",
-            data: {
-                labels: ["Discovery", "Qualification", "Proposal", "Negotiation", "Closed Won"],
-                datasets: [{
-                    label: "Pipeline Value ($M)",
-                    data: [12.5, 8.3, 5.2, 3.1, 2.8],
-                    backgroundColor: "rgba(124, 107, 190, 0.8)",
-                    borderColor: "#7C6BBE",
-                    borderWidth: 2
-                }]
             },
-            metrics: [
-                { label: "Total Pipeline", value: "$32.9M" },
-                { label: "Win Rate", value: "34%" },
-                { label: "Avg Deal Size", value: "$1.2M" },
-                { label: "Sales Cycle", value: "180 days" }
-            ]
-        };
-        return this.createChartFromConfig(config);
-    }
+            key_moves: {
+                title: 'Your Next Moves',
+                timeline: [
+                    {
+                        timeframe: 'Week 1-2',
+                        action: 'Map the Security Architecture',
+                        details: 'Identify CISO, Deputy CISO, and security architects. Understand current stack and pain points.',
+                        priority: 'urgent'
+                    },
+                    {
+                        timeframe: 'Week 3-4', 
+                        action: 'Build Compliance Narrative',
+                        details: 'Position your solution against NIST, FISMA, and agency-specific requirements.',
+                        priority: 'high-impact'
+                    },
+                    {
+                        timeframe: 'Week 5-8',
+                        action: 'Demonstrate ROI & Risk Reduction',
+                        details: 'Show measurable security improvements and cost savings vs. current tools.',
+                        priority: 'high-impact'
+                    }
+                ]
+            },
+            stakeholder_strategy: {
+                title: 'Stakeholder Strategy',
+                stakeholders: [
+                    {
+                        role: 'CISO/Deputy CISO',
+                        influence: 'high',
+                        priorities: ['Risk reduction', 'Compliance', 'Team efficiency'],
+                        approach: 'Lead with risk metrics and compliance coverage'
+                    },
+                    {
+                        role: 'Security Architects',
+                        influence: 'high',
+                        priorities: ['Technical fit', 'Integration ease', 'Performance'],
+                        approach: 'Deep technical discussions and proof of concepts'
+                    },
+                    {
+                        role: 'Procurement/Contracting',
+                        influence: 'medium',
+                        priorities: ['Price', 'Contract terms', 'Vendor stability'],
+                        approach: 'Emphasize value and long-term partnership'
+                    }
+                ]
+            },
+            talking_points: {
+                title: 'Power Questions & Talking Points',
+                discovery_questions: [
+                    'What percentage of your security alerts actually get investigated?',
+                    'How long does your current ATO process take?',
+                    'Which CISA directives are you struggling to implement?',
+                    'What would a 50% reduction in false positives mean to your team?'
+                ],
+                value_props: [
+                    'Accelerated ATO with pre-built compliance documentation',
+                    'FedRAMP authorized and IL-4/5 ready out of the box',
+                    'Integrates with your existing SIEM and SOAR tools',
+                    'Proven ROI: 40% reduction in security analyst workload'
+                ]
+            },
+            competitive_strategy: {
+                title: 'Competitive Strategy',
+                likely_competitors: [
+                    {
+                        name: 'Incumbent Legacy Vendor',
+                        weakness: 'Slow to innovate, expensive maintenance',
+                        counter: 'Show modern architecture and total cost comparison'
+                    },
+                    {
+                        name: 'Pure-play Security Vendor',
+                        weakness: 'Limited federal compliance experience',
+                        counter: 'Emphasize your federal compliance expertise and support'
+                    }
+                ]
+            },
+            resources: {
+                title: 'Key Resources & Next Steps',
+                immediate_actions: [
+                    'Request copy of their cybersecurity framework assessment',
+                    'Schedule technical deep-dive with security architects',
+                    'Provide FedRAMP compliance documentation',
+                    'Connect with their systems integrator partner'
+                ],
+                helpful_resources: [
+                    'NIST Cybersecurity Framework mapping document',
+                    'ROI calculator for federal agencies',
+                    'Customer reference from similar agency',
+                    'Proof of concept deployment guide'
+                ]
+            }
+        },
+        metrics: [
+            { label: 'Avg Deal Size', value: '$2.3M' },
+            { label: 'Sales Cycle', value: '18 months' },
+            { label: 'Win Rate', value: '34%' },
+            { label: 'Market Growth', value: '+12% YoY' }
+        ]
+    },
 
-    createSampleRevenueChart() {
-        const config = {
-           title: "Quarterly Revenue Trends",
-           type: "line",
-           data: {
-               labels: ["Q1 2024", "Q2 2024", "Q3 2024", "Q4 2024"],
-               datasets: [{
-                   label: "Revenue",
-                   data: [1800000, 2100000, 2300000, 2500000],
-                   borderColor: "#7C6BBE",
-                   backgroundColor: "rgba(124, 107, 190, 0.1)",
-                   tension: 0.4,
-                   fill: true
-               }]
-           },
-           metrics: [
-               { label: "YoY Growth", value: "+23%" },
-               { label: "Q4 Total", value: "$2.5M" },
-               { label: "Best Quarter", value: "Q4" },
-               { label: "Forecast", value: "$2.8M" }
-           ]
-       };
-       return this.createChartFromConfig(config);
-   }
+    'partner-alignment': {
+        title: 'Partner & Account Team Alignment Playbook',
+        subtitle: 'Resolving conflicts and building collaborative partnerships',
+        icon: '🤝',
+        context_keywords: ['partner', 'conflict', 'team', 'alignment', 'collaboration'],
+        sections: {
+            situation_analysis: {
+                title: 'Conflict Assessment',
+                content: {
+                    common_issues: [
+                        'Unclear territory or account ownership',
+                        'Revenue recognition disputes',
+                        'Conflicting customer messaging',
+                        'Resource allocation disagreements'
+                    ],
+                    impact_areas: [
+                        'Customer experience and trust',
+                        'Deal velocity and closure rates',
+                        'Team morale and retention',
+                        'Company reputation in market'
+                    ]
+                }
+            },
+            key_moves: {
+                title: 'Resolution Strategy',
+                timeline: [
+                    {
+                        timeframe: 'Day 1-3',
+                        action: 'Diagnose Root Causes',
+                        details: 'Meet 1:1 with each party to understand underlying issues and motivations.',
+                        priority: 'urgent'
+                    },
+                    {
+                        timeframe: 'Week 1',
+                        action: 'Establish Clear Rules of Engagement',
+                        details: 'Document account ownership, revenue splits, and customer interaction protocols.',
+                        priority: 'high-impact'
+                    },
+                    {
+                        timeframe: 'Week 2-4',
+                        action: 'Create Joint Success Metrics',
+                        details: 'Align on shared KPIs and accountability measures that benefit both teams.',
+                        priority: 'high-impact'
+                    }
+                ]
+            },
+            stakeholder_strategy: {
+                title: 'Key Players',
+                stakeholders: [
+                    {
+                        role: 'Direct Account Rep',
+                        influence: 'high',
+                        priorities: ['Quota attainment', 'Customer relationships', 'Commission'],
+                        approach: 'Acknowledge their customer investment and ensure fair recognition'
+                    },
+                    {
+                        role: 'Partner Rep',
+                        influence: 'high', 
+                        priorities: ['Partner satisfaction', 'Deal registration', 'Support'],
+                        approach: 'Emphasize mutual value and long-term partnership benefits'
+                    },
+                    {
+                        role: 'Sales Leadership',
+                        influence: 'high',
+                        priorities: ['Revenue goals', 'Team harmony', 'Customer success'],
+                        approach: 'Present win-win solutions that protect revenue and relationships'
+                    }
+                ]
+            },
+            talking_points: {
+                title: 'Facilitation Framework',
+                mediation_questions: [
+                    'What does success look like for each of you?',
+                    'Where do your priorities actually align?',
+                    'What would make this partnership truly valuable?',
+                    'How can we protect the customer experience above all?'
+                ],
+                alignment_principles: [
+                    'Customer success drives everyone\'s success',
+                    'Clear accountability prevents future conflicts',
+                    'Shared metrics create shared incentives',
+                    'Regular communication prevents small issues from becoming big problems'
+                ]
+            },
+            competitive_strategy: {
+                title: 'Governance Framework',
+                likely_competitors: [
+                    {
+                        name: 'Status Quo (Continued Conflict)',
+                        weakness: 'Damages all parties and customers',
+                        counter: 'Show concrete examples of lost deals due to internal friction'
+                    }
+                ]
+            },
+            resources: {
+                title: 'Implementation Tools',
+                immediate_actions: [
+                    'Draft territory and account assignment matrix',
+                    'Create customer interaction protocols',
+                    'Establish regular partnership review meetings',
+                    'Set up shared CRM visibility and updates'
+                ],
+                helpful_resources: [
+                    'Partner conflict resolution template',
+                    'Joint account planning framework',
+                    'Customer handoff process documentation',
+                    'Success metrics tracking dashboard'
+                ]
+            }
+        },
+        metrics: [
+            { label: 'Resolution Time', value: '2-4 weeks' },
+            { label: 'Success Rate', value: '78%' },
+            { label: 'Team Satisfaction', value: '+45%' },
+            { label: 'Deal Velocity', value: '+23%' }
+        ]
+    },
 
-   createSampleStakeholderChart() {
-       const config = {
-           title: "Stakeholder Influence Analysis",
-           type: "doughnut",
-           data: {
-               labels: ["Champions", "Supporters", "Neutral", "Skeptics", "Blockers"],
-               datasets: [{
-                   data: [15, 25, 30, 20, 10],
-                   backgroundColor: ["#10B981", "#7C6BBE", "#F59E0B", "#F97316", "#EF4444"]
-               }]
-           },
-           metrics: [
-               { label: "Total Stakeholders", value: "47" },
-               { label: "Support Level", value: "73%" },
-               { label: "Key Champions", value: "7" },
-               { label: "Risk Level", value: "Medium" }
-           ]
-       };
-       return this.createChartFromConfig(config);
-   }
-
-   createCustomChartFromQuery(query) {
-       // Extract data from query using regex patterns
-       const dataPoints = this.extractDataFromQuery(query);
-       
-       if (dataPoints.length === 0) {
-           console.warn('No data extracted from query:', query);
-           return null;
-       }
-
-       const labels = dataPoints.map(d => d.label);
-       const values = dataPoints.map(d => d.value);
-       
-       const colors = [
-           '#7C6BBE', '#10B981', '#F59E0B', '#EF4444', 
-           '#8B5CF6', '#06B6D4', '#84CC16', '#F97316'
-       ];
-
-       const config = {
-           title: "Generated from Query",
-           subtitle: `"${query}"`,
-           type: "bar",
-           data: {
-               labels: labels,
-               datasets: [{
-                   label: "Value",
-                   data: values,
-                   backgroundColor: colors.slice(0, values.length),
-                   borderColor: colors.slice(0, values.length),
-                   borderWidth: 2
-               }]
-           },
-           metrics: [
-               { label: "Total Value", value: `$${(values.reduce((a, b) => a + b, 0) / 1000000).toFixed(1)}M` },
-               { label: "Data Points", value: values.length.toString() },
-               { label: "Avg Value", value: `$${(values.reduce((a, b) => a + b, 0) / values.length / 1000000).toFixed(1)}M` },
-               { label: "Top Performer", value: labels[values.indexOf(Math.max(...values))] }
-           ]
-       };
-
-       return this.createChartFromConfig(config);
-   }
-
-   extractDataFromQuery(query) {
-       // Enhanced data extraction patterns
-       const patterns = [
-           /([A-Za-z\s]+)\s+(?:at\s+|leading\s+at\s+)?\$?([\d.]+)([MK]?)/gi,
-           /(\w+):\s*\$?([\d.]+)([MK]?)/gi,
-           /\$?([\d.]+)([MK]?)\s+(?:for\s+)?([A-Za-z\s]+)/gi
-       ];
-
-       const data = [];
-       let match;
-
-       for (const pattern of patterns) {
-           pattern.lastIndex = 0; // Reset regex
-           while ((match = pattern.exec(query)) !== null) {
-               let value = parseFloat(match[2] || match[1]);
-               const unit = match[3] || match[2];
-               let label = match[1] || match[3];
-
-               if (unit === 'M') value *= 1000000;
-               if (unit === 'K') value *= 1000;
-
-               if (label && value && !isNaN(value)) {
-                   label = label.trim().replace(/\b\w/g, l => l.toUpperCase());
-                   data.push({ label, value });
+    'gtm-strategy': {
+       title: 'Go-to-Market Strategy Playbook',
+       subtitle: 'Building winning GTM plans for federal markets',
+       icon: '🎯',
+       context_keywords: ['gtm', 'go-to-market', 'strategy', 'launch', 'market', 'plan'],
+       sections: {
+           situation_analysis: {
+               title: 'Market Assessment',
+               content: {
+                   market_dynamics: [
+                       'Federal IT spending at $102B annually with digital transformation driving growth',
+                       'Cloud-first mandates creating new opportunities',
+                       'Procurement modernization enabling faster acquisitions',
+                       'Small business set-asides requiring strategic partnerships'
+                   ],
+                   key_considerations: [
+                       'Compliance requirements (FedRAMP, FISMA, etc.)',
+                       'Budget cycles and procurement timelines',
+                       'Security clearance requirements',
+                       'Incumbent vendor relationships and switching costs'
+                   ]
                }
+           },
+           key_moves: {
+               title: 'GTM Execution Plan',
+               timeline: [
+                   {
+                       timeframe: 'Month 1',
+                       action: 'Market Intelligence & Positioning',
+                       details: 'Research target agencies, analyze competitors, and define unique value proposition.',
+                       priority: 'urgent'
+                   },
+                   {
+                       timeframe: 'Month 2-3',
+                       action: 'Build Partner Ecosystem',
+                       details: 'Identify and onboard key systems integrators and reseller partners.',
+                       priority: 'high-impact'
+                   },
+                   {
+                       timeframe: 'Month 4-6',
+                       action: 'Execute Demand Generation',
+                       details: 'Launch targeted campaigns, attend federal events, and build sales pipeline.',
+                       priority: 'high-impact'
+                   }
+               ]
+           },
+           stakeholder_strategy: {
+               title: 'Target Audience Mapping',
+               stakeholders: [
+                   {
+                       role: 'IT Directors/CIOs',
+                       influence: 'high',
+                       priorities: ['Modernization', 'Cost reduction', 'Mission support'],
+                       approach: 'Focus on strategic business outcomes and transformation'
+                   },
+                   {
+                       role: 'Technical Teams',
+                       influence: 'medium',
+                       priorities: ['Performance', 'Integration', 'Support'],
+                       approach: 'Provide detailed technical specifications and proof points'
+                   },
+                   {
+                       role: 'Procurement Officers',
+                       influence: 'high',
+                       priorities: ['Compliance', 'Price', 'Contract terms'],
+                       approach: 'Ensure all documentation and certifications are complete'
+                   }
+               ]
+           },
+           talking_points: {
+               title: 'Messaging & Positioning',
+               discovery_questions: [
+                   'What are your top 3 IT modernization priorities?',
+                   'How do you currently measure mission success?',
+                   'What compliance requirements are most challenging?',
+                   'Which vendors do you consider your trusted partners?'
+               ],
+               value_props: [
+                   'Purpose-built for federal compliance and security requirements',
+                   'Proven ROI with agencies similar to yours',
+                   'Comprehensive support from implementation to optimization',
+                   'Scalable solution that grows with your mission needs'
+               ]
+           },
+           competitive_strategy: {
+               title: 'Competitive Positioning',
+               likely_competitors: [
+                   {
+                       name: 'Legacy Federal Contractors',
+                       weakness: 'Slow innovation, high costs, outdated technology',
+                       counter: 'Demonstrate modern capabilities and cost-effectiveness'
+                   },
+                   {
+                       name: 'Commercial Leaders',
+                       weakness: 'Limited federal experience and compliance',
+                       counter: 'Emphasize federal-specific features and expertise'
+                   }
+               ]
+           },
+           resources: {
+               title: 'Launch Toolkit',
+               immediate_actions: [
+                   'Complete FedRAMP or other required certifications',
+                   'Develop federal-specific marketing collateral',
+                   'Establish GSA Schedule or other contract vehicles',
+                   'Build partner channel program and training'
+               ],
+               helpful_resources: [
+                   'Federal market sizing and opportunity analysis',
+                   'Competitive battle cards for federal scenarios',
+                   'Partner onboarding and certification program',
+                   'Federal sales training curriculum'
+               ]
            }
-       }
+       },
+       metrics: [
+           { label: 'Time to Market', value: '6 months' },
+           { label: 'Pipeline Goal', value: '$5M+' },
+           { label: 'Partner Count', value: '8-12' },
+           { label: 'Market Share', value: '3-5%' }
+       ]
+   },
 
-       return data;
+   'deal-rescue': {
+       title: 'Deal Rescue Playbook',
+       subtitle: 'Saving stalled and at-risk federal deals',
+       icon: '🚨',
+       context_keywords: ['stalled', 'stuck', 'rescue', 'risk', 'losing', 'problem'],
+       sections: {
+           situation_analysis: {
+               title: 'Deal Diagnosis',
+               content: {
+                   common_stall_points: [
+                       'Technical evaluation delays or objections',
+                       'Budget or procurement complications',
+                       'Stakeholder changes or competing priorities',
+                       'Competitive pressure or new entrants'
+                   ],
+                   warning_signs: [
+                       'Decreased communication frequency',
+                       'Meeting cancellations or delays',
+                       'Requests for additional information',
+                       'Introduction of new evaluation criteria'
+                   ]
+               }
+           },
+           key_moves: {
+               title: 'Recovery Strategy',
+               timeline: [
+                   {
+                       timeframe: 'Week 1',
+                       action: 'Conduct Deal Autopsy',
+                       details: 'Interview all stakeholders to understand real issues and decision process.',
+                       priority: 'urgent'
+                   },
+                   {
+                       timeframe: 'Week 2',
+                       action: 'Rebuild Champion Network',
+                       details: 'Re-engage supporters and identify new champions who can advocate internally.',
+                       priority: 'urgent'
+                   },
+                   {
+                       timeframe: 'Week 3-4',
+                       action: 'Address Core Objections',
+                       details: 'Develop specific responses to technical, financial, or procedural concerns.',
+                       priority: 'high-impact'
+                   }
+               ]
+           },
+           stakeholder_strategy: {
+               title: 'Stakeholder Recovery',
+               stakeholders: [
+                   {
+                       role: 'Original Champion',
+                       influence: 'medium',
+                       priorities: ['Personal success', 'Risk avoidance', 'Solution delivery'],
+                       approach: 'Understand what changed and how to re-energize their support'
+                   },
+                   {
+                       role: 'New Decision Makers',
+                       influence: 'high',
+                       priorities: ['Due diligence', 'Risk mitigation', 'Best value'],
+                       approach: 'Build relationships quickly and establish credibility'
+                   },
+                   {
+                       role: 'Technical Evaluators',
+                       influence: 'high',
+                       priorities: ['Technical fit', 'Implementation risk', 'Support quality'],
+                       approach: 'Address technical concerns with detailed proof and references'
+                   }
+               ]
+           },
+           talking_points: {
+               title: 'Recovery Conversations',
+               diagnostic_questions: [
+                   'What changed since we last spoke?',
+                   'What concerns weren\'t we addressing effectively?',
+                   'Who else has become involved in this decision?',
+                   'What would need to happen for this to move forward?'
+               ],
+               recovery_messaging: [
+                   'We\'re committed to making this successful for you',
+                   'Let\'s address your concerns directly and specifically',
+                   'Here\'s how we\'ve solved similar challenges for other agencies',
+                   'What additional assurance or proof do you need?'
+               ]
+           },
+           competitive_strategy: {
+               title: 'Competitive Recovery',
+               likely_competitors: [
+                   {
+                       name: 'Status Quo/Do Nothing',
+                       weakness: 'Doesn\'t solve the original problem',
+                       counter: 'Remind them of the original pain points and urgency'
+                   },
+                   {
+                       name: 'New Competitive Entrant',
+                       weakness: 'Unknown quantity with unproven federal track record',
+                       counter: 'Emphasize your proven experience and lower implementation risk'
+                   }
+               ]
+           },
+           resources: {
+               title: 'Recovery Toolkit',
+               immediate_actions: [
+                   'Schedule stakeholder interviews within 48 hours',
+                   'Prepare detailed objection handling documentation',
+                   'Engage executive sponsors for high-level discussions',
+                   'Develop modified proposal addressing new requirements'
+               ],
+               helpful_resources: [
+                   'Deal rescue checklist and timeline',
+                   'Stakeholder interview script and templates',
+                   'Competitive response frameworks',
+                   'Executive escalation protocols'
+               ]
+           }
+       },
+       metrics: [
+           { label: 'Rescue Success Rate', value: '42%' },
+           { label: 'Avg Recovery Time', value: '6-8 weeks' },
+           { label: 'Effort Required', value: 'High' },
+           { label: 'Learning Value', value: 'Very High' }
+       ]
+   },
+
+   'stakeholder-mapping': {
+       title: 'Stakeholder Mapping Playbook',
+       subtitle: 'Navigating complex federal decision processes',
+       icon: '👥',
+       context_keywords: ['stakeholder', 'decision', 'influence', 'mapping', 'politics'],
+       sections: {
+           situation_analysis: {
+               title: 'Decision Process Analysis',
+               content: {
+                   complexity_factors: [
+                       'Multiple agencies or departments involved',
+                       'Technical and business stakeholders with different priorities',
+                       'Procurement and legal review requirements',
+                       'Security and compliance approval processes'
+                   ],
+                   influence_types: [
+                       'Decision makers (formal authority)',
+                       'Influencers (trusted advisors)',
+                       'Champions (internal advocates)',
+                       'Blockers (potential obstacles)'
+                   ]
+               }
+           },
+           key_moves: {
+               title: 'Mapping Strategy',
+               timeline: [
+                   {
+                       timeframe: 'Week 1-2',
+                       action: 'Identify All Stakeholders',
+                       details: 'Map formal and informal decision makers across technical, business, and procurement.',
+                       priority: 'urgent'
+                   },
+                   {
+                       timeframe: 'Week 3-4',
+                       action: 'Assess Influence & Priorities',
+                       details: 'Understand each stakeholder\'s role, influence level, and key priorities.',
+                       priority: 'high-impact'
+                   },
+                   {
+                       timeframe: 'Week 5-8',
+                       action: 'Build Stakeholder Relationships',
+                       details: 'Develop tailored engagement strategies for each key stakeholder.',
+                       priority: 'high-impact'
+                   }
+               ]
+           },
+           stakeholder_strategy: {
+               title: 'Stakeholder Categories',
+               stakeholders: [
+                   {
+                       role: 'Program Manager/Business Owner',
+                       influence: 'high',
+                       priorities: ['Mission success', 'Budget efficiency', 'Timeline adherence'],
+                       approach: 'Focus on business outcomes and mission impact'
+                   },
+                   {
+                       role: 'Technical Lead/Architect',
+                       influence: 'high',
+                       priorities: ['Technical requirements', 'Integration complexity', 'Performance'],
+                       approach: 'Provide detailed technical information and proof of concepts'
+                   },
+                   {
+                       role: 'Security Officer',
+                       influence: 'high',
+                       priorities: ['Risk mitigation', 'Compliance', 'Security controls'],
+                       approach: 'Demonstrate security features and compliance certifications'
+                   },
+                   {
+                       role: 'Procurement/Contracting',
+                       influence: 'medium',
+                       priorities: ['Process compliance', 'Fair competition', 'Contract terms'],
+                       approach: 'Ensure all documentation is complete and accurate'
+                   }
+               ]
+           },
+           talking_points: {
+               title: 'Stakeholder Engagement',
+               mapping_questions: [
+                   'Who else is involved in evaluating this type of solution?',
+                   'How are decisions typically made in your organization?',
+                   'What approval processes will this need to go through?',
+                   'Who would be most concerned about [specific aspect]?'
+               ],
+               relationship_building: [
+                   'Tailor your message to each stakeholder\'s priorities',
+                   'Provide value in every interaction',
+                   'Build trust through transparency and expertise',
+                   'Create champions by helping them succeed'
+               ]
+           },
+           competitive_strategy: {
+               title: 'Influence Strategy',
+               likely_competitors: [
+                   {
+                       name: 'Incumbent with Existing Relationships',
+                       weakness: 'May not have relationships with new stakeholders',
+                       counter: 'Build new relationships and demonstrate fresh perspective'
+                   }
+               ]
+           },
+           resources: {
+               title: 'Mapping Tools',
+               immediate_actions: [
+                   'Create stakeholder influence matrix',
+                   'Develop persona-based messaging for each group',
+                   'Map decision process timeline and checkpoints',
+                   'Identify relationship-building opportunities'
+               ],
+               helpful_resources: [
+                   'Stakeholder mapping template and tools',
+                   'Federal decision process flowcharts',
+                   'Influence strategy worksheets',
+                   'Relationship tracking systems'
+               ]
+           }
+       },
+       metrics: [
+           { label: 'Stakeholder Coverage', value: '85%+' },
+           { label: 'Champion Ratio', value: '3:1' },
+           { label: 'Decision Clarity', value: 'High' },
+           { label: 'Relationship Quality', value: 'Strong' }
+       ]
+   },
+
+   'competitive-displacement': {
+       title: 'Competitive Displacement Playbook',
+       subtitle: 'Strategies for displacing entrenched incumbents',
+       icon: '⚔️',
+       context_keywords: ['competitive', 'incumbent', 'displacement', 'competition', 'replace'],
+       sections: {
+           situation_analysis: {
+               title: 'Competitive Assessment',
+               content: {
+                   incumbent_advantages: [
+                       'Existing relationships and trust',
+                       'Deployed solutions and user familiarity',
+                       'Switching cost concerns',
+                       'Risk aversion to change'
+                   ],
+                   displacement_opportunities: [
+                       'Technology evolution and modernization needs',
+                       'Performance or security gaps',
+                       'Cost optimization pressures',
+                       'New requirements or compliance mandates'
+                   ]
+               }
+           },
+           key_moves: {
+               title: 'Displacement Strategy',
+               timeline: [
+                   {
+                       timeframe: 'Month 1',
+                       action: 'Competitive Intelligence',
+                       details: 'Thoroughly research incumbent\'s strengths, weaknesses, and customer satisfaction.',
+                       priority: 'urgent'
+                   },
+                   {
+                       timeframe: 'Month 2',
+                       action: 'Differentiation Strategy',
+                       details: 'Develop compelling differentiation based on incumbent\'s proven weaknesses.',
+                       priority: 'high-impact'
+                   },
+                   {
+                       timeframe: 'Month 3-6',
+                       action: 'Proof & Validation',
+                       details: 'Provide concrete evidence of superior capabilities through pilots or references.',
+                       priority: 'high-impact'
+                   }
+               ]
+           },
+           stakeholder_strategy: {
+               title: 'Displacement Stakeholders',
+               stakeholders: [
+                   {
+                       role: 'Frustrated Users',
+                       influence: 'medium',
+                       priorities: ['Better performance', 'Easier usability', 'Feature gaps'],
+                       approach: 'Become their internal advocate for change'
+                   },
+                   {
+                       role: 'Change Champions',
+                       influence: 'high',
+                       priorities: ['Innovation', 'Competitive advantage', 'Modernization'],
+                       approach: 'Position as strategic transformation opportunity'
+                   },
+                   {
+                       role: 'Risk-Averse Leadership',
+                       influence: 'high',
+                       priorities: ['Stability', 'Proven solutions', 'Minimal disruption'],
+                       approach: 'Demonstrate lower risk through proof and gradual transition'
+                   }
+               ]
+           },
+           talking_points: {
+               title: 'Displacement Messaging',
+               competitive_questions: [
+                   'How satisfied are you with your current solution\'s performance?',
+                   'What features or capabilities are you missing?',
+                   'How does your current cost compare to market benchmarks?',
+                   'What would justify the effort of making a change?'
+               ],
+               displacement_themes: [
+                   'Technology evolution requires platform evolution',
+                   'Hidden costs of staying with legacy solutions',
+                   'Competitive advantage through superior capabilities',
+                   'Risk mitigation through proven alternatives'
+               ]
+           },
+           competitive_strategy: {
+               title: 'Battle Plan',
+               likely_competitors: [
+                   {
+                       name: 'Entrenched Incumbent',
+                       weakness: 'Legacy technology, high maintenance costs, limited innovation',
+                       counter: 'Demonstrate modern capabilities, cost savings, and future roadmap'
+                   }
+               ]
+           },
+           resources: {
+               title: 'Displacement Toolkit',
+               immediate_actions: [
+                   'Conduct competitive analysis and SWOT assessment',
+                   'Develop side-by-side comparison materials',
+                   'Prepare risk mitigation and transition plans',
+                   'Gather compelling customer references and case studies'
+               ],
+               helpful_resources: [
+                   'Competitive battle cards and objection handling',
+                   'ROI and TCO comparison tools',
+                   'Migration and transition planning templates',
+                   'Reference customer introduction protocols'
+               ]
+           }
+       },
+       metrics: [
+           { label: 'Displacement Success', value: '28%' },
+           { label: 'Avg Sales Cycle', value: '24 months' },
+           { label: 'Deal Size Premium', value: '+40%' },
+           { label: 'Customer Satisfaction', value: '94%' }
+       ]
    }
-}
+};
 
-// Clean, focused application class
-class AskArti {
+// Context-Driven Playbook Generator
+class PlaybookGenerator {
    constructor() {
        this.elements = this.getElements();
-       this.state = {
-           pendingRequest: false,
-           lastQuery: '',
-           chatHistory: [],
-           messageCount: 0,
-           hasActiveResults: false
-       };
-       this.chartManager = new ChartManager();
+       this.currentPlaybook = null;
        this.init();
    }
 
    getElements() {
        return {
-           chatMessages: document.getElementById('chat-messages'),
-           chatInput: document.getElementById('chat-input'),
-           chatSendBtn: document.getElementById('chat-send-btn'),
-           clearChatBtn: document.getElementById('clear-chat-btn'),
+           scenarioSelector: document.getElementById('scenario-selector'),
+           situationInput: document.getElementById('situation-input'),
+           generateBtn: document.getElementById('generate-playbook-btn'),
            loadingContainer: document.getElementById('loading-container'),
            loadingMessage: document.getElementById('loading-message'),
            errorMessage: document.getElementById('error-message'),
            retryBtn: document.getElementById('retry-btn'),
-           resultsContainer: document.getElementById('results-container'),
-           accountPlanContainer: document.getElementById('account-plan-container'),
+           playbookContainer: document.getElementById('playbook-container'),
            aboutBtn: document.getElementById('about-btn'),
            aboutModal: document.getElementById('about-modal'),
            closeAbout: document.getElementById('close-about'),
@@ -928,21 +1272,26 @@ class AskArti {
 
    init() {
        this.setupEventListeners();
-       this.elements.chatInput.focus();
+       this.elements.situationInput.focus();
    }
 
    setupEventListeners() {
-       // Chat events
-       this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
-       this.elements.chatInput.addEventListener('keydown', (e) => {
-           if (e.key === 'Enter' && !e.shiftKey) {
+       // Generate playbook
+       this.elements.generateBtn.addEventListener('click', () => this.generatePlaybook());
+       this.elements.situationInput.addEventListener('keydown', (e) => {
+           if (e.key === 'Enter') {
                e.preventDefault();
-               this.sendChatMessage();
+               this.generatePlaybook();
            }
        });
 
-       this.elements.clearChatBtn.addEventListener('click', () => this.clearChat());
-       this.elements.retryBtn.addEventListener('click', () => this.retry());
+       // Scenario buttons
+       document.querySelectorAll('.scenario-btn').forEach(btn => {
+           btn.addEventListener('click', (e) => {
+               const scenario = e.currentTarget.getAttribute('data-scenario');
+               this.selectScenario(scenario);
+           });
+       });
 
        // Modal events
        this.elements.aboutBtn.addEventListener('click', () => this.showModal());
@@ -953,6 +1302,7 @@ class AskArti {
 
        // Share
        this.elements.shareBtn.addEventListener('click', () => this.share());
+       this.elements.retryBtn.addEventListener('click', () => this.generatePlaybook());
 
        // Escape key
        document.addEventListener('keydown', (e) => {
@@ -960,141 +1310,626 @@ class AskArti {
        });
    }
 
-   clearChat() {
-       this.state.chatHistory = [];
-       this.state.messageCount = 0;
-       this.state.hasActiveResults = false;
+   selectScenario(scenarioKey) {
+       // Update UI
+       document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
+       document.querySelector(`[data-scenario="${scenarioKey}"]`).classList.add('active');
        
-       // Reset chat to welcome message
-       this.elements.chatMessages.innerHTML = `
-           <div class="flex items-start gap-3 mb-4">
-               <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
-               <div class="chat-message-arti px-4 py-2.5 max-w-[85%]">
-                   <p class="text-sm">
-                       Fresh start. What's on your mind?
-                   </p>
-               </div>
-           </div>`;
-       
-       // Clear other areas
-       this.elements.chatInput.value = '';
-       this.clearResults();
-       
-       // Remove any generate plan buttons
-       const planBtns = document.querySelectorAll('#generate-plan-container, #chart-recommendation-container');
-       planBtns.forEach(btn => btn.remove());
-       
-       this.elements.chatInput.focus();
+       // Generate playbook immediately
+       this.generatePlaybookFromTemplate(scenarioKey);
    }
 
-   clearResults() {
-       // Clear previous results before showing new ones
-       this.elements.resultsContainer.innerHTML = '';
-       this.elements.accountPlanContainer.innerHTML = '';
-       this.elements.accountPlanContainer.classList.add('hidden');
+   async generatePlaybook() {
+       const situation = this.elements.situationInput.value.trim();
        
-       // Clear all charts
-       this.chartManager.charts.forEach((chart, id) => {
-           this.chartManager.removeChart(id);
-       });
+       if (!situation) {
+           this.showError('Please describe your situation or select a scenario below.');
+           return;
+       }
+
+       this.showLoading();
+       this.hideScenarioSelector();
+
+       try {
+           // Detect context from user input
+           const detectedScenario = this.detectScenarioFromInput(situation);
+           
+           if (detectedScenario) {
+               // Generate from template with customization
+               await this.generateCustomizedPlaybook(detectedScenario, situation);
+           } else {
+               // Fallback to API call for custom scenarios
+               await this.generateAPIPlaybook(situation);
+           }
+       } catch (error) {
+           console.error('Playbook generation failed:', error);
+           this.showError('Something went wrong. Let\'s try that again.');
+       } finally {
+           this.hideLoading();
+       }
    }
 
-   async quickAnalysis(scenario) {
-       // Clear previous results
-       if (this.state.hasActiveResults) {
-           this.clearResults();
+   detectScenarioFromInput(input) {
+       const lowerInput = input.toLowerCase();
+       
+       for (const [scenarioKey, template] of Object.entries(PLAYBOOK_TEMPLATES)) {
+           const keywords = template.context_keywords;
+           const matches = keywords.filter(keyword => lowerInput.includes(keyword));
+           
+           if (matches.length >= 2) { // Need at least 2 keyword matches
+               return scenarioKey;
+           }
        }
        
-       // Add user message
-       this.addChatMessage(scenario, true);
+       return null;
+   }
+
+   generatePlaybookFromTemplate(scenarioKey) {
+       this.showLoading();
+       this.hideScenarioSelector();
+
+       // Simulate processing time for better UX
+       setTimeout(() => {
+           const template = PLAYBOOK_TEMPLATES[scenarioKey];
+           this.currentPlaybook = this.customizeTemplate(template, '');
+           this.displayPlaybook(this.currentPlaybook);
+           this.hideLoading();
+       }, 1500);
+   }
+
+   async generateCustomizedPlaybook(scenarioKey, userInput) {
+       const template = PLAYBOOK_TEMPLATES[scenarioKey];
        
-       // Show typing
-       this.showTypingIndicator();
-       this.state.pendingRequest = true;
+       // Simulate processing time
+       await new Promise(resolve => setTimeout(resolve, 2000));
        
-       try {
-           this.state.chatHistory.push({ role: 'user', content: scenario });
-           this.state.messageCount++;
+       this.currentPlaybook = this.customizeTemplate(template, userInput);
+       this.displayPlaybook(this.currentPlaybook);
+   }
+
+   customizeTemplate(template, userInput) {
+       // Create a deep copy of the template
+       const customized = JSON.parse(JSON.stringify(template));
+       
+       // Basic customization based on user input
+       if (userInput) {
+           const agencies = this.extractAgencies(userInput);
+           const technologies = this.extractTechnologies(userInput);
            
+           if (agencies.length > 0) {
+               customized.subtitle = `Tailored for ${agencies[0]} and similar agencies`;
+           }
+           
+           // Add context-specific insights
+           customized.user_context = {
+               input: userInput,
+               detected_agencies: agencies,
+               detected_technologies: technologies
+           };
+       }
+       
+       return customized;
+   }
+
+   extractAgencies(input) {
+       const agencies = [
+           'DHS', 'Department of Homeland Security',
+           'DOD', 'Department of Defense',
+           'VA', 'Veterans Affairs',
+           'CISA', 'Treasury', 'Justice', 'FBI',
+           'NASA', 'NOAA', 'EPA'
+       ];
+       
+       return agencies.filter(agency => 
+           input.toLowerCase().includes(agency.toLowerCase())
+       );
+   }
+
+   extractTechnologies(input) {
+       const technologies = [
+           'cybersecurity', 'cloud', 'AI', 'machine learning',
+           'data analytics', 'automation', 'DevOps'
+       ];
+       
+       return technologies.filter(tech => 
+           input.toLowerCase().includes(tech.toLowerCase())
+       );
+   }
+
+   async generateAPIPlaybook(situation) {
+       // Fallback to API for custom scenarios
+       try {
            const response = await fetch(CONFIG.API_ENDPOINT, {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
                body: JSON.stringify({ 
-                   situation: scenario,
+                   situation: situation,
+                   mode: 'playbook',
                    currentDate: new Date().toISOString().split('T')[0]
                })
            });
            
+           if (!response.ok) throw new Error('API request failed');
+           
            const data = await response.json();
-           this.hideTypingIndicator();
-           
-           // Add response
-           const responseMessage = `I hear you. ${data.quick_take || "Let me break this down for you."}`;
-           this.addChatMessage(responseMessage, false);
-           
-           this.state.chatHistory.push({ role: 'assistant', content: responseMessage });
-           
-           // Display results
-           this.state.hasActiveResults = true;
-           this.displayAdvice(data);
-           
-           // Smooth scroll to results
-           setTimeout(() => {
-               this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-           }, 100);
+           this.currentPlaybook = this.formatAPIResponse(data, situation);
+           this.displayPlaybook(this.currentPlaybook);
            
        } catch (error) {
-           console.error('Quick analysis failed:', error);
-           this.hideTypingIndicator();
-           this.addChatMessage("Connection issues. Try again?", false);
-       } finally {
-           this.state.pendingRequest = false;
+           // If API fails, use generic template
+           console.warn('API failed, using generic template');
+           this.currentPlaybook = this.createGenericPlaybook(situation);
+           this.displayPlaybook(this.currentPlaybook);
        }
    }
 
-   addChatMessage(content, isUser = false) {
-       const messageHtml = isUser ? `
-           <div class="flex justify-end mb-4 fade-in">
-               <div class="chat-message-user px-4 py-2.5 max-w-[85%] text-sm">
-                   ${content}
+   formatAPIResponse(apiData, situation) {
+       // Format API response into playbook structure
+       return {
+           title: 'Custom Sales Playbook',
+           subtitle: 'Tailored strategy for your specific situation',
+           icon: '🎯',
+           user_context: { input: situation },
+           sections: {
+               situation_analysis: {
+                   title: 'Situation Analysis',
+                   content: {
+                       market_dynamics: [apiData.quick_take || 'Custom situation analysis'],
+                       key_challenges: apiData.challenges || ['Analyze your specific challenges']
+                   }
+               },
+               key_moves: {
+                   title: 'Your Next Moves',
+                   timeline: (apiData.key_moves || []).map((move, i) => ({
+                       timeframe: `Week ${i + 1}`,
+                       action: move.action || 'Action needed',
+                       details: move.why || 'Strategic reasoning',
+                       priority: i === 0 ? 'urgent' : 'high-impact'
+                   }))
+               },
+               talking_points: {
+                   title: 'Key Talking Points',
+                   discovery_questions: apiData.talking_points || [
+                       'What are your biggest challenges?',
+                       'How do you measure success?',
+                       'What would change mean for your team?'
+                   ],
+                   value_props: [
+                       'Addresses your specific needs',
+                       'Proven results in similar situations',
+                       'Comprehensive support throughout'
+                   ]
+               },
+               resources: {
+                   title: 'Next Steps',
+                   immediate_actions: [
+                       'Schedule follow-up discussion',
+                       'Gather additional requirements',
+                       'Prepare detailed proposal',
+                       'Connect with key stakeholders'
+                   ]
+               }
+           },
+           metrics: [
+               { label: 'Confidence', value: 'High' },
+               { label: 'Complexity', value: 'Medium' },
+               { label: 'Timeline', value: '4-8 weeks' },
+               { label: 'Success Rate', value: '65%' }
+           ]
+       };
+   }
+
+   createGenericPlaybook(situation) {
+       return {
+           title: 'Federal Sales Playbook',
+           subtitle: 'Strategic approach for your situation',
+           icon: '🎯',
+           user_context: { input: situation },
+           sections: {
+               situation_analysis: {
+                   title: 'Situation Analysis',
+                   content: {
+                       market_dynamics: [
+                           'Federal market opportunities continue to grow',
+                           'Digital transformation driving new requirements',
+                           'Compliance and security remain critical factors',
+                           'Procurement processes are becoming more efficient'
+                       ],
+                       key_challenges: [
+                           'Complex decision-making processes',
+                           'Long sales cycles and evaluation periods',
+                           'Multiple stakeholder alignment required',
+                           'Competitive landscape and incumbent relationships'
+                       ]
+                   }
+               },
+               key_moves: {
+                   title: 'Strategic Approach',
+                   timeline: [
+                       {
+                           timeframe: 'Week 1-2',
+                           action: 'Stakeholder Discovery',
+                           details: 'Identify and understand all decision makers and influencers.',
+                           priority: 'urgent'
+                       },
+                       {
+                           timeframe: 'Week 3-4',
+                           action: 'Value Proposition Development',
+                           details: 'Craft compelling messaging tailored to specific agency needs.',
+                           priority: 'high-impact'
+                       },
+                       {
+                           timeframe: 'Week 5-8',
+                           action: 'Proof & Validation',
+                           details: 'Provide evidence of capabilities through demos, pilots, or references.',
+                           priority: 'high-impact'
+                       }
+                   ]
+               },
+               talking_points: {
+                   title: 'Essential Questions',
+                   discovery_questions: [
+                       'What are your top mission priorities this year?',
+                       'How do you currently address this challenge?',
+                       'What would success look like for your organization?',
+                       'Who else is involved in this type of decision?'
+                   ],
+                   value_props: [
+                       'Purpose-built for federal requirements',
+                       'Proven track record with similar agencies',
+                       'Comprehensive support and partnership approach',
+                       'Cost-effective solution with measurable ROI'
+                   ]
+               },
+               resources: {
+                   title: 'Next Steps',
+                   immediate_actions: [
+                       'Schedule stakeholder discovery meetings',
+                       'Prepare agency-specific value proposition',
+                       'Gather relevant case studies and references',
+                       'Develop proof of concept or pilot proposal'
+                   ]
+               }
+           },
+           metrics: [
+               { label: 'Approach', value: 'Consultative' },
+               { label: 'Timeline', value: '6-12 weeks' },
+               { label: 'Effort Level', value: 'High' },
+               { label: 'Success Factors', value: 'Relationship' }
+           ]
+       };
+   }
+
+   displayPlaybook(playbook) {
+       const html = `
+           <div class="playbook-header fade-in">
+               <div class="relative z-10">
+                   <div class="flex items-center gap-3 mb-3">
+                       <span class="text-3xl">${playbook.icon}</span>
+                       <div>
+                           <h1 class="text-2xl font-bold">${playbook.title}</h1>
+                           <p class="text-purple-100 text-sm">${playbook.subtitle}</p>
+                       </div>
+                   </div>
+                   ${playbook.user_context ? `
+                       <div class="bg-white/10 rounded-lg p-3 mt-4">
+                           <p class="text-sm text-purple-100">
+                               <strong>Your Situation:</strong> "${playbook.user_context.input}"
+                           </p>
+                       </div>
+                   ` : ''}
+                   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                       ${playbook.metrics.map(metric => `
+                           <div class="text-center">
+                               <div class="text-xl font-bold text-white">${metric.value}</div>
+                               <div class="text-xs text-purple-200">${metric.label}</div>
+                           </div>
+                       `).join('')}
+                   </div>
                </div>
            </div>
-       ` : `
-           <div class="flex items-start gap-3 mb-4 fade-in">
-               <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
-               <div class="chat-message-arti px-4 py-2.5 max-w-[85%]">
-                   <div class="text-sm">${marked.parse(content)}</div>
+
+           ${this.renderSection(playbook.sections.situation_analysis)}
+           ${this.renderTimelineSection(playbook.sections.key_moves)}
+           ${playbook.sections.stakeholder_strategy ? this.renderStakeholderSection(playbook.sections.stakeholder_strategy) : ''}
+           ${this.renderTalkingPointsSection(playbook.sections.talking_points)}
+           ${playbook.sections.competitive_strategy ? this.renderCompetitiveSection(playbook.sections.competitive_strategy) : ''}
+           ${this.renderResourcesSection(playbook.sections.resources)}
+           
+           <div class="result-card text-center">
+               <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                   <button onclick="playbookGenerator.copyPlaybook()" 
+                       class="px-6 py-3 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg transition-colors">
+                       📋 Copy Playbook
+                   </button>
+                   <button onclick="playbookGenerator.printPlaybook()" 
+                       class="px-6 py-3 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded-lg border border-gray-200 transition-colors">
+                       🖨️ Print Playbook
+                   </button>
+                   <button onclick="playbookGenerator.startOver()" 
+                       class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors">
+                       🔄 New Playbook
+                   </button>
                </div>
            </div>
        `;
        
-       this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
-       this.scrollChatToBottom();
+       this.elements.playbookContainer.innerHTML = html;
+       this.elements.playbookContainer.classList.remove('hidden');
+       
+       // Smooth scroll to playbook
+       setTimeout(() => {
+           this.elements.playbookContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+       }, 100);
    }
 
-   showTypingIndicator() {
-       const typingHtml = `
-           <div id="typing-indicator" class="flex items-start gap-3 mb-4">
-               <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0 opacity-50">
-               <div class="typing-indicator">
-                   <div class="typing-dot"></div>
-                   <div class="typing-dot"></div>
-                   <div class="typing-dot"></div>
+   renderSection(section) {
+       if (!section) return '';
+       
+       return `
+           <div class="result-card fade-in">
+               <div class="playbook-section">
+                   <h2 class="text-xl font-bold text-gray-900 mb-4">${section.title}</h2>
+                   ${section.content.market_dynamics ? `
+                       <div class="mb-6">
+                           <h3 class="font-semibold text-gray-800 mb-3">Market Dynamics</h3>
+                           <ul class="space-y-2">
+                               ${section.content.market_dynamics.map(item => `
+                                   <li class="flex items-start gap-2">
+                                       <span class="text-green-500 mt-1 flex-shrink-0">📈</span>
+                                       <span class="text-sm">${item}</span>
+                                   </li>
+                               `).join('')}
+                           </ul>
+                       </div>
+                   ` : ''}
+                   ${section.content.key_challenges ? `
+                       <div>
+                           <h3 class="font-semibold text-gray-800 mb-3">Key Challenges</h3>
+                           <ul class="space-y-2">
+                               ${section.content.key_challenges.map(item => `
+                                   <li class="flex items-start gap-2">
+                                       <span class="text-orange-500 mt-1 flex-shrink-0">⚠️</span>
+                                       <span class="text-sm">${item}</span>
+                                   </li>
+                               `).join('')}
+                           </ul>
+                       </div>
+                   ` : ''}
+                   ${section.content.common_issues ? `
+                       <div class="mb-6">
+                           <h3 class="font-semibold text-gray-800 mb-3">Common Issues</h3>
+                           <ul class="space-y-2">
+                               ${section.content.common_issues.map(item => `
+                                   <li class="flex items-start gap-2">
+                                       <span class="text-red-500 mt-1 flex-shrink-0">🚩</span>
+                                       <span class="text-sm">${item}</span>
+                                   </li>
+                               `).join('')}
+                           </ul>
+                       </div>
+                   ` : ''}
+                   ${section.content.impact_areas ? `
+                       <div>
+                           <h3 class="font-semibold text-gray-800 mb-3">Impact Areas</h3>
+                           <ul class="space-y-2">
+                               ${section.content.impact_areas.map(item => `
+                                   <li class="flex items-start gap-2">
+                                       <span class="text-purple-500 mt-1 flex-shrink-0">💡</span>
+                                       <span class="text-sm">${item}</span>
+                                   </li>
+                               `).join('')}
+                           </ul>
+                       </div>
+                   ` : ''}
                </div>
            </div>
        `;
-       this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
-       this.scrollChatToBottom();
    }
 
-   hideTypingIndicator() {
-       const indicator = document.getElementById('typing-indicator');
-       if (indicator) indicator.remove();
+   renderTimelineSection(section) {
+       if (!section || !section.timeline) return '';
+       
+       return `
+           <div class="result-card fade-in">
+               <div class="playbook-section">
+                   <h2 class="text-xl font-bold text-gray-900 mb-6">${section.title}</h2>
+                   <div class="space-y-4">
+                       ${section.timeline.map(item => `
+                           <div class="timeline-item ${item.priority || ''}">
+                               <div class="action-item ${item.priority || ''}">
+                                   <div class="flex justify-between items-start mb-2">
+                                       <h3 class="font-semibold text-gray-900">${item.action}</h3>
+                                       <span class="text-xs font-medium px-2 py-1 rounded-full ${
+                                           item.priority === 'urgent' ? 'bg-red-100 text-red-800' :
+                                           item.priority === 'high-impact' ? 'bg-green-100 text-green-800' :
+                                           'bg-gray-100 text-gray-800'
+                                       }">${item.timeframe}</span>
+                                   </div>
+                                   <p class="text-sm text-gray-600">${item.details}</p>
+                               </div>
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>
+           </div>
+       `;
+   }
+
+   renderStakeholderSection(section) {
+       if (!section || !section.stakeholders) return '';
+       
+       return `
+           <div class="result-card fade-in">
+               <div class="playbook-section">
+                   <h2 class="text-xl font-bold text-gray-900 mb-6">${section.title}</h2>
+                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       ${section.stakeholders.map(stakeholder => `
+                           <div class="border border-gray-200 rounded-lg p-4">
+                               <div class="flex justify-between items-start mb-3">
+                                   <h3 class="font-semibold text-gray-900">${stakeholder.role}</h3>
+                                   <span class="text-xs font-medium px-2 py-1 rounded-full ${
+                                       stakeholder.influence === 'high' ? 'bg-red-100 text-red-800' :
+                                       stakeholder.influence === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                                       'bg-gray-100 text-gray-800'
+                                   }">${stakeholder.influence} influence</span>
+                               </div>
+                               <div class="mb-3">
+                                   <h4 class="text-sm font-medium text-gray-700 mb-1">Priorities:</h4>
+                                   <ul class="text-sm text-gray-600">
+                                       ${stakeholder.priorities.map(priority => `
+                                           <li>• ${priority}</li>
+                                       `).join('')}
+                                   </ul>
+                               </div>
+                               <div>
+                                   <h4 class="text-sm font-medium text-gray-700 mb-1">Approach:</h4>
+                                   <p class="text-sm text-gray-600">${stakeholder.approach}</p>
+                               </div>
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>
+           </div>
+       `;
+   }
+
+   renderTalkingPointsSection(section) {
+       if (!section) return '';
+       
+       return `
+           <div class="result-card fade-in">
+               <div class="playbook-section">
+                   <h2 class="text-xl font-bold text-gray-900 mb-6">${section.title}</h2>
+                   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                       ${section.discovery_questions ? `
+                           <div>
+                               <h3 class="font-semibold text-gray-800 mb-3">🔍 Discovery Questions</h3>
+                               <ul class="space-y-2">
+                                   ${section.discovery_questions.map(question => `
+                                       <li class="flex items-start gap-2">
+                                           <span class="text-blue-500 mt-1">▶</span>
+                                           <span class="text-sm">${question}</span>
+                                       </li>
+                                   `).join('')}
+                               </ul>
+                           </div>
+                       ` : ''}
+                       ${section.value_props ? `
+                           <div>
+                               <h3 class="font-semibold text-gray-800 mb-3">💎 Value Propositions</h3>
+                               <ul class="space-y-2">
+                                   ${section.value_props.map(prop => `
+                                       <li class="flex items-start gap-2">
+                                           <span class="text-green-500 mt-1">✓</span>
+                                           <span class="text-sm">${prop}</span>
+                                       </li>
+                                   `).join('')}
+                               </ul>
+                           </div>
+                       ` : ''}
+                       ${section.mediation_questions ? `
+                           <div>
+                               <h3 class="font-semibold text-gray-800 mb-3">🤝 Mediation Questions</h3>
+                               <ul class="space-y-2">
+                                   ${section.mediation_questions.map(question => `
+                                       <li class="flex items-start gap-2">
+                                           <span class="text-purple-500 mt-1">▶</span>
+                                           <span class="text-sm">${question}</span>
+                                       </li>
+                                   `).join('')}
+                               </ul>
+                           </div>
+                       ` : ''}
+                       ${section.alignment_principles ? `
+                           <div>
+                               <h3 class="font-semibold text-gray-800 mb-3">⚖️ Alignment Principles</h3>
+                               <ul class="space-y-2">
+                                   ${section.alignment_principles.map(principle => `
+                                       <li class="flex items-start gap-2">
+                                           <span class="text-indigo-500 mt-1">◆</span>
+                                           <span class="text-sm">${principle}</span>
+                                       </li>
+                                   `).join('')}
+                               </ul>
+                           </div>
+                       ` : ''}
+                   </div>
+               </div>
+           </div>
+       `;
+   }
+
+   renderCompetitiveSection(section) {
+       if (!section || !section.likely_competitors) return '';
+       
+       return `
+           <div class="result-card fade-in">
+               <div class="playbook-section">
+                   <h2 class="text-xl font-bold text-gray-900 mb-6">${section.title}</h2>
+                   <div class="space-y-4">
+                       ${section.likely_competitors.map(competitor => `
+                           <div class="border border-gray-200 rounded-lg p-4">
+                               <h3 class="font-semibold text-gray-900 mb-2">${competitor.name}</h3>
+                               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                   <div>
+                                       <h4 class="text-sm font-medium text-red-700 mb-1">Their Weakness:</h4>
+                                       <p class="text-sm text-gray-600">${competitor.weakness}</p>
+                                   </div>
+                                   <div>
+                                       <h4 class="text-sm font-medium text-green-700 mb-1">Your Counter:</h4>
+                                       <p class="text-sm text-gray-600">${competitor.counter}</p>
+                                   </div>
+                               </div>
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>
+           </div>
+       `;
+   }
+
+   renderResourcesSection(section) {
+       if (!section) return '';
+       
+       return `
+           <div class="result-card fade-in">
+               <div class="playbook-section">
+                   <h2 class="text-xl font-bold text-gray-900 mb-6">${section.title}</h2>
+                   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                       ${section.immediate_actions ? `
+                           <div>
+                               <h3 class="font-semibold text-gray-800 mb-3">🎯 Immediate Actions</h3>
+                               <ul class="space-y-2">
+                                   ${section.immediate_actions.map(action => `
+                                       <li class="flex items-start gap-2">
+                                           <span class="text-orange-500 mt-1">→</span>
+                                           <span class="text-sm">${action}</span>
+                                       </li>
+                                   `).join('')}
+                               </ul>
+                           </div>
+                       ` : ''}
+                       ${section.helpful_resources ? `
+                           <div>
+                               <h3 class="font-semibold text-gray-800 mb-3">📚 Helpful Resources</h3>
+                               <ul class="space-y-2">
+                                   ${section.helpful_resources.map(resource => `
+                                       <li class="flex items-start gap-2">
+                                           <span class="text-blue-500 mt-1">📄</span>
+                                           <span class="text-sm">${resource}</span>
+                                       </li>
+                                   `).join('')}
+                               </ul>
+                           </div>
+                       ` : ''}
+                   </div>
+               </div>
+           </div>
+       `;
    }
 
    showLoading() {
-       const message = CONFIG.LOADING_MESSAGES[Math.floor(Math.random() * CONFIG.LOADING_MESSAGES.length)];
-       this.elements.loadingMessage.textContent = message;
        this.elements.loadingContainer.classList.remove('hidden');
    }
 
@@ -1102,657 +1937,58 @@ class AskArti {
        this.elements.loadingContainer.classList.add('hidden');
    }
 
-   scrollChatToBottom() {
-       const container = document.querySelector('.chat-container');
-       if (container) {
-           container.scrollTop = container.scrollHeight;
-       }
+   hideScenarioSelector() {
+       this.elements.scenarioSelector.style.display = 'none';
    }
 
-   async sendChatMessage() {
-       const message = this.elements.chatInput.value.trim();
-       
-       if (this.state.pendingRequest || !message) return;
-
-       // Clear previous results if any
-       if (this.state.hasActiveResults) {
-           this.clearResults();
-       }
-
-       // Add user message
-       this.addChatMessage(message, true);
-       this.elements.chatInput.value = '';
-       this.state.lastQuery = message;
-       
-       // Update history
-       this.state.chatHistory.push({ role: 'user', content: message });
-       this.state.messageCount++;
-
-       // Show typing
-       this.showTypingIndicator();
-       this.state.pendingRequest = true;
-
-       try {
-           const response = await this.makeChatRequest(message);
-           this.hideTypingIndicator();
-           
-           const aiMessage = response.message || "Tell me more.";
-           // Add response
-           this.addChatMessage(aiMessage, false);
-           this.state.chatHistory.push({ role: 'assistant', content: aiMessage });
-           this.state.lastQuery = '';
-
-           // Check if charts are recommended
-           if (response.recommend_charts) {
-               this.addChartRecommendationButton();
-           }
-
-           // Show account plan button if the AI indicates it's ready
-           if (aiMessage.includes("generate an action plan now") && !document.getElementById('generate-plan-container')) {
-               this.addAccountPlanButton();
-           }
-
-           // Add follow-up suggestions
-           if (response.suggestions && response.suggestions.length > 0) {
-               this.addFollowUpSuggestions(response.suggestions);
-           }
-
-       } catch (error) {
-           console.error('Chat request failed:', error);
-           this.hideTypingIndicator();
-           this.addChatMessage("Connection issues. Try again?", false);
-           this.showError();
-       } finally {
-           this.state.pendingRequest = false;
-       }
+   showScenarioSelector() {
+       this.elements.scenarioSelector.style.display = 'block';
    }
 
-   async makeChatRequest(message) {
-       const contextToSend = this.state.chatHistory.length > 20 
-           ? [this.state.chatHistory[0], ...this.state.chatHistory.slice(-19)]
-           : this.state.chatHistory;
-       
-       const response = await fetch(CONFIG.API_ENDPOINT, {
-           method: 'POST',
-           headers: { 'Content-Type': 'application/json' },
-           body: JSON.stringify({ 
-               situation: message,
-               mode: 'chat',
-               conversationHistory: contextToSend,
-               currentDate: new Date().toISOString().split('T')[0]
-           })
-       });
-
-       if (!response.ok) throw new Error('Request failed');
-       return await response.json();
+   showError(message) {
+       this.elements.errorMessage.querySelector('p').textContent = message;
+       this.elements.errorMessage.classList.remove('hidden');
+       setTimeout(() => {
+           this.elements.errorMessage.classList.add('hidden');
+       }, 5000);
    }
 
-   addFollowUpSuggestions(suggestions) {
-       const suggestionsHtml = `
-           <div class="flex flex-wrap gap-2 justify-center my-4 px-4">
-               ${suggestions.map(s => `
-                   <button class="scenario-btn text-xs" 
-                           onclick="app.elements.chatInput.value='${s.replace(/'/g, "\\'")}'; app.sendChatMessage();">
-                       ${s}
-                   </button>
-               `).join('')}
-           </div>
-       `;
-       this.elements.chatMessages.insertAdjacentHTML('beforeend', suggestionsHtml);
-       this.scrollChatToBottom();
-   }
-
-   addAccountPlanButton() {
-       const btnHtml = `
-           <div id="generate-plan-container" class="flex justify-center my-4">
-               <button onclick="app.generateAccountPlan()" 
-                   class="px-4 py-2 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg text-sm transition-colors">
-                   Generate Account Plan
-               </button>
-           </div>
-       `;
-       this.elements.chatMessages.insertAdjacentHTML('beforeend', btnHtml);
-       this.scrollChatToBottom();
-   }
-
-   addChartRecommendationButton() {
-       const btnHtml = `
-           <div id="chart-recommendation-container" class="flex justify-center my-4">
-               <button onclick="app.generateChartFromConversation()" 
-                   class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white font-medium rounded-lg text-sm transition-colors">
-                   📊 Generate Charts
-               </button>
-           </div>
-       `;
-       this.elements.chatMessages.insertAdjacentHTML('beforeend', btnHtml);
-       this.scrollChatToBottom();
-   }
-
-   generateChartFromConversation() {
-       // Analyze conversation history for chart opportunities
-       const conversationText = this.state.chatHistory.map(h => h.content).join(' ');
-       
-       if (conversationText.toLowerCase().includes('pipeline')) {
-           this.chartManager.createSamplePipelineChart();
-       } else if (conversationText.toLowerCase().includes('revenue') || conversationText.toLowerCase().includes('quarterly')) {
-           this.chartManager.createSampleRevenueChart();
-       } else if (conversationText.toLowerCase().includes('stakeholder')) {
-           this.chartManager.createSampleStakeholderChart();
-       } else {
-           // Default to pipeline chart
-           this.chartManager.createSamplePipelineChart();
-       }
-       
-       // Remove the recommendation button
-       const container = document.getElementById('chart-recommendation-container');
-       if (container) container.remove();
-   }
-
-   autoCreateAccountPlan() {
-       // Avoid running if a request is already in progress
-       if (this.state.pendingRequest) return;
-
-       // If there are results from a previous query, clear them out.
-       if (this.state.hasActiveResults) {
-            this.clearResults();
-       }
-       
-       // Define a clear, conversational message to start the process
-       const message = "Help me build an action plan.";
-       
-       // Place the message in the input box and send it immediately
-       this.elements.chatInput.value = message;
-       this.sendChatMessage();
-   }
-
-   async generateAccountPlan() {
-       if (this.state.pendingRequest) return;
-       
-       // Clear any existing results
-       this.clearResults();
-       
-       this.showLoading();
-       this.elements.accountPlanContainer.innerHTML = `
-           <div class="result-card text-center p-6">
-               <div class="loader mx-auto mb-3"></div>
-               <p class="text-sm text-gray-600">Building your account plan...</p>
-           </div>
-       `;
-       this.elements.accountPlanContainer.classList.remove('hidden');
-       
-       this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
-       
-       this.state.pendingRequest = true;
-       
-       try {
-           const contextToSend = this.state.chatHistory.length > 20 
-               ? [this.state.chatHistory[0], ...this.state.chatHistory.slice(-19)]
-               : this.state.chatHistory;
-           
-           const response = await fetch(CONFIG.API_ENDPOINT, {
-               method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ 
-                   situation: "Generate account plan",
-                   mode: 'account_plan',
-                   conversationHistory: contextToSend,
-                   currentDate: new Date().toISOString().split('T')[0]
-               })
-           });
-           
-           if (!response.ok) throw new Error('Request failed');
-           
-           const data = await response.json();
-           this.hideLoading();
-           this.state.hasActiveResults = true;
-           this.displayAccountPlan(data);
-           
-       } catch (error) {
-           console.error('Account plan generation failed:', error);
-           this.hideLoading();
-           this.elements.accountPlanContainer.innerHTML = `
-               <div class="result-card text-center">
-                   <p class="text-red-600 font-medium text-sm mb-3">Couldn't generate your plan.</p>
-                   <button onclick="app.generateAccountPlan()" 
-                       class="text-red-700 underline text-sm">Try again</button>
-               </div>
-           `;
-       } finally {
-           this.state.pendingRequest = false;
-       }
-   }
-
-   displayAccountPlan(data) {
-       const { 
-           account_name = 'Federal Agency',
-           objectives = [],
-           stakeholders = [],
-           opportunities = [],
-           challenges = [],
-           success_metrics = [],
-           action_items = [],
-           chart_configs = []
-       } = data;
-       
-       if (!account_name || account_name === 'Federal Agency') {
-           this.elements.accountPlanContainer.innerHTML = `
-               <div class="result-card text-center p-6">
-                   <p class="text-gray-700 font-medium mb-2">Need More Details</p>
-                   <p class="text-sm text-gray-600">Tell me more about your target agency and what you're selling.</p>
-               </div>
-           `;
-           return;
-       }
-       
-       let html = `
-           <div class="account-plan-header">
-               <div class="flex justify-between items-center">
-                   <div>
-                       <h2 class="text-xl font-bold text-gray-900">${account_name}</h2>
-                       <p class="text-sm text-gray-600">Account Strategy</p>
-                   </div>
-                   <div class="flex gap-2">
-                       <button onclick="app.copyAccountPlan()" 
-                           class="p-2 text-gray-600 hover:text-gray-800 hover:bg-white/50 rounded-lg transition-colors" 
-                           title="Copy">
-                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                           </svg>
-                       </button>
-                       <button onclick="window.print()" 
-                           class="p-2 text-gray-600 hover:text-gray-800 hover:bg-white/50 rounded-lg transition-colors" 
-                           title="Print">
-                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2z" />
-                           </svg>
-                       </button>
-                   </div>
-               </div>
-           </div>
-
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <!-- Objectives -->
-               <div class="result-card">
-                   <h3>Key Objectives</h3>
-                   <ul class="space-y-2">
-                       ${objectives.map(o => `
-                           <li class="flex items-start gap-2">
-                               <span class="text-customPurple-500 mt-1">•</span>
-                               <span>${o}</span>
-                           </li>
-                       `).join('') || '<li class="text-gray-500 italic">No objectives defined</li>'}
-                   </ul>
-               </div>
-               
-               <!-- Challenges -->
-               <div class="result-card">
-                   <h3>Challenges</h3>
-                   <ul class="space-y-2">
-                       ${challenges.map(c => `
-                           <li class="flex items-start gap-2">
-                               <span class="text-red-500 mt-1">•</span>
-                               <span>${c}</span>
-                           </li>
-                       `).join('') || '<li class="text-gray-500 italic">No challenges identified</li>'}
-                   </ul>
-               </div>
-           </div>
-           
-           <!-- Stakeholders -->
-           <div class="result-card">
-               <h3>Key Stakeholders</h3>
-               <div class="overflow-x-auto">
-                   <table class="data-table w-full">
-                       <thead>
-                           <tr class="border-b border-gray-200">
-                               <th class="text-left py-2 px-3">Name/Role</th>
-                               <th class="text-left py-2 px-3">Influence</th>
-                               <th class="text-left py-2 px-3">Notes</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                           ${stakeholders.map(s => `
-                               <tr class="border-b border-gray-100">
-                                   <td class="py-2 px-3 font-medium">${s.name || 'Unknown'}</td>
-                                   <td class="py-2 px-3">
-                                       <span class="inline-block px-2 py-1 rounded text-xs font-medium ${
-                                           s.influence?.toLowerCase() === 'high' ? 'bg-green-100 text-green-800' :
-                                           s.influence?.toLowerCase() === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                                           'bg-gray-100 text-gray-800'
-                                       }">${s.influence || 'Unknown'}</span>
-                                   </td>
-                                   <td class="py-2 px-3 text-sm">${s.notes || '—'}</td>
-                               </tr>
-                           `).join('') || `
-                               <tr>
-                                   <td colspan="3" class="py-4 text-center text-gray-500 italic">
-                                       No stakeholders identified
-                                   </td>
-                               </tr>
-                           `}
-                       </tbody>
-                   </table>
-               </div>
-           </div>
-           
-           <!-- Opportunities -->
-           <div class="result-card">
-               <h3>Opportunities</h3>
-               <div class="overflow-x-auto">
-                   <table class="data-table w-full">
-                       <thead>
-                           <tr class="border-b border-gray-200">
-                               <th class="text-left py-2 px-3">Opportunity</th>
-                               <th class="text-left py-2 px-3">Value</th>
-                               <th class="text-left py-2 px-3">Status</th>
-                               <th class="text-left py-2 px-3">Next Steps</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                           ${opportunities.map(o => `
-                               <tr class="border-b border-gray-100">
-                                   <td class="py-2 px-3 font-medium">${o.name || 'Unknown'}</td>
-                                   <td class="py-2 px-3 font-bold text-green-700">${o.value || '—'}</td>
-                                   <td class="py-2 px-3 text-sm">${o.status || '—'}</td>
-                                   <td class="py-2 px-3 text-sm">${o.next_steps || '—'}</td>
-                               </tr>
-                           `).join('') || `
-                               <tr>
-                                   <td colspan="4" class="py-4 text-center text-gray-500 italic">
-                                       No opportunities identified
-                                   </td>
-                               </tr>
-                           `}
-                       </tbody>
-                   </table>
-               </div>
-           </div>
-
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <!-- Success Metrics -->
-               <div class="result-card">
-                   <h3>Success Metrics</h3>
-                   <ul class="space-y-2">
-                       ${success_metrics.map(m => `
-                           <li class="flex items-start gap-2">
-                               <span class="text-green-500 mt-1">✓</span>
-                               <span>${m}</span>
-                           </li>
-                       `).join('') || '<li class="text-gray-500 italic">No metrics defined</li>'}
-                   </ul>
-               </div>
-               
-               <!-- Action Items -->
-               <div class="result-card">
-                   <h3>Next Actions</h3>
-                   <ul class="space-y-2">
-                       ${action_items.map(a => `
-                           <li class="flex items-start gap-2">
-                               <span class="text-customPurple-500 mt-1">→</span>
-                               <span>${a}</span>
-                           </li>
-                       `).join('') || '<li class="text-gray-500 italic">No actions defined</li>'}
-                   </ul>
-               </div>
-           </div>
-       `;
-       
-       this.elements.accountPlanContainer.innerHTML = html;
-       
-       // Add charts after the account plan content
-       if (chart_configs && Array.isArray(chart_configs)) {
-           chart_configs.forEach(config => {
-               this.chartManager.createChartFromConfig(config);
-           });
-       }
-   }
-   
-   copyAccountPlan() {
-       const content = this.elements.accountPlanContainer.innerText;
+   copyPlaybook() {
+       const content = this.elements.playbookContainer.innerText;
        
        if (!content) {
-           alert('No plan to copy');
+           alert('No playbook to copy');
            return;
        }
        
        navigator.clipboard.writeText(content)
            .then(() => {
-               alert('Account plan copied!');
+               alert('Playbook copied to clipboard!');
            })
            .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
    }
 
-   displayAdvice(data) {
-       const { response_type, chart_config, chart_configs } = data;
-       
-       try {
-           if (response_type === 'prospect') {
-               this.displayProspectAdvice(data);
-           } else {
-               this.displayGeneralAdvice(data);
-           }
-           
-           // Add charts if they exist
-           if (chart_config) {
-               this.chartManager.createChartFromConfig(chart_config);
-           }
-           
-           if (chart_configs && Array.isArray(chart_configs)) {
-               chart_configs.forEach(config => {
-                   this.chartManager.createChartFromConfig(config);
-               });
-           }
-           
-           this.addActionButtons();
-           
-       } catch (error) {
-           console.error('Display error:', error);
-           this.elements.resultsContainer.innerHTML = `
-               <div class="result-card text-center">
-                   <p class="text-red-600 font-medium">Display error. Try again.</p>
-               </div>
-           `;
-       }
+   printPlaybook() {
+       window.print();
    }
 
-   displayProspectAdvice(data) {
-       const { 
-           summary = '',
-           top_s_is = [],
-           top_software_and_cloud = [],
-           company_capabilities = [],
-           naics_codes = [],
-           prospect_recommendations = []
-       } = data;
+   startOver() {
+       this.elements.playbookContainer.classList.add('hidden');
+       this.elements.playbookContainer.innerHTML = '';
+       this.elements.situationInput.value = '';
+       this.currentPlaybook = null;
        
-       const html = `
-       <div class="space-y-4 fade-in">
-           <div class="result-card bg-customPurple-50 border-customPurple-200">
-               <div class="prose prose-sm max-w-none">${marked.parse(summary)}</div>
-           </div>
-
-           <div class="result-card">
-               <h3>Top Systems Integrators</h3>
-               <div class="space-y-3">
-                   ${top_s_is.map((item, i) => `
-                       <div class="border-l-3 border-customPurple-500 pl-3">
-                           <div class="font-medium">${i + 1}. ${item.company || 'Unknown'}</div>
-                           <div class="text-sm text-gray-600">${item.value || 'N/A'}</div>
-                       </div>
-                   `).join('') || '<p class="text-gray-500 italic">No data available</p>'}
-               </div>
-           </div>
-           
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <div class="result-card">
-                   <h3>Key Capabilities</h3>
-                   <ul class="space-y-2">
-                       ${company_capabilities.map(c => `
-                           <li class="flex gap-2">
-                               <span class="text-green-500 mt-1">✓</span>
-                               <span>${c}</span>
-                           </li>
-                       `).join('')}
-                   </ul>
-               </div>
-               
-               <div class="result-card">
-                   <h3>NAICS Codes</h3>
-                   <ul class="space-y-1">
-                       ${naics_codes.map(n => `
-                           <li class="text-sm font-mono">${n}</li>
-                       `).join('')}
-                   </ul>
-               </div>
-           </div>
-
-           <div class="result-card">
-               <h3>Software & Cloud Players</h3>
-               <div class="space-y-3">
-                   ${top_software_and_cloud.map((item, i) => `
-                       <div class="border-l-3 border-blue-500 pl-3">
-                           <div class="font-medium">${i + 1}. ${item.company || 'Unknown'}</div>
-                           <div class="text-sm text-gray-600">${item.value || 'N/A'}</div>
-                       </div>
-                   `).join('') || '<p class="text-gray-500 italic">No data available</p>'}
-               </div>
-           </div>
-
-           <div class="result-card">
-               <h3>Strategic Recommendations</h3>
-               <ul class="space-y-3">
-                   ${prospect_recommendations.map(r => `
-                       <li class="flex gap-3">
-                           <span class="text-customPurple-500 font-bold">→</span>
-                           <span>${r}</span>
-                       </li>
-                   `).join('')}
-               </ul>
-           </div>
-       </div>`;
+       // Reset scenario buttons
+       document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
        
-       this.elements.resultsContainer.innerHTML = html;
-   }
-
-   displayGeneralAdvice(data) {
-       const { 
-           quick_take = '',
-           key_moves = [],
-           talking_points = [],
-           email_template = '',
-           next_steps = '',
-           response_type = 'deal'
-       } = data;
-       
-       const html = `
-       <div class="space-y-4 fade-in">
-           <div class="result-card bg-customPurple-50 border-customPurple-200">
-               <div class="flex gap-3">
-                   <img src="/images/arti_right.png" alt="Arti" class="w-10 h-10 rounded-full flex-shrink-0">
-                   <div class="prose prose-sm max-w-none">${marked.parse(quick_take)}</div>
-               </div>
-           </div>
-
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <div class="result-card">
-                   <h3>Your Next Moves</h3>
-                   <div class="space-y-3">
-                       ${key_moves.slice(0, 3).map((m, i) => `
-                           <div class="flex gap-3">
-                               <span class="flex-shrink-0 w-6 h-6 bg-customPurple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">${i + 1}</span>
-                               <div>
-                                   <p class="font-medium">${m.action}</p>
-                                   <p class="text-sm text-gray-600 mt-1">${m.why}</p>
-                               </div>
-                           </div>
-                       `).join('')}
-                   </div>
-               </div>
-               
-               <div class="result-card">
-                   <h3>Strategy Overview</h3>
-                   <p class="text-gray-500 text-center py-8">Charts will appear here when generated by AI</p>
-               </div>
-           </div>
-
-           ${(talking_points?.length > 0 || email_template) ? `
-           <div class="result-card">
-               <h3>Communications</h3>
-               <div class="grid grid-cols-1 ${email_template && talking_points?.length > 0 ? 'md:grid-cols-2' : ''} gap-6">
-                   ${talking_points?.length > 0 ? `
-                       <div>
-                           <h4 class="font-semibold text-gray-800 mb-3">
-                               ${response_type === 'interview' ? 'Interview Questions' : 'Power Questions'}
-                           </h4>
-                           <ul class="space-y-2">
-                               ${talking_points.map(t => `
-                                   <li class="flex gap-2">
-                                       <span class="text-green-500 mt-1">•</span>
-                                       <span class="text-sm">${t}</span>
-                                   </li>
-                               `).join('')}
-                           </ul>
-                       </div>
-                   ` : ''}
-                   
-                   ${email_template ? `
-                       <div>
-                           <h4 class="font-semibold text-gray-800 mb-3">Email Template</h4>
-                           <div class="bg-gray-50 rounded-lg p-3 text-xs font-mono whitespace-pre-wrap border border-gray-200">${email_template}</div>
-                       </div>
-                   ` : ''}
-               </div>
-           </div>
-           ` : ''}
-           
-           ${next_steps ? `
-               <div class="result-card bg-customPurple-50 border-customPurple-200">
-                   <p class="text-sm">
-                       <strong>Remember:</strong> ${next_steps}
-                   </p>
-               </div>
-           ` : ''}
-       </div>`;
-       
-       this.elements.resultsContainer.innerHTML = html;
-   }
-
-   addActionButtons() {
-       const buttonsHtml = `
-           <div class="mt-6 flex flex-col sm:flex-row gap-3">
-               <button onclick="app.copyResults()" 
-                   class="flex-1 px-4 py-2.5 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg transition-colors text-sm">
-                   Copy Results
-               </button>
-               <button onclick="app.clearChat()" 
-                   class="flex-1 px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded-lg border border-gray-200 transition-colors text-sm">
-                   New Session
-               </button>
-           </div>
-       `;
-       
-       this.elements.resultsContainer.insertAdjacentHTML('beforeend', buttonsHtml);
-   }
-
-   copyResults() {
-       const content = this.elements.resultsContainer.innerText;
-       
-       if (!content) {
-           alert('No results to copy');
-           return;
-       }
-       
-       navigator.clipboard.writeText(content)
-           .then(() => {
-               alert('Results copied!');
-           })
-           .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
+       this.showScenarioSelector();
+       this.elements.situationInput.focus();
    }
 
    share() {
        const shareData = {
-           title: 'AskArti',
-           text: 'Federal sales advice that actually works',
+           title: 'AskArti - Federal Sales Playbooks',
+           text: 'Get personalized federal sales strategies instantly',
            url: 'https://askarti.com'
        };
        
@@ -1768,21 +2004,6 @@ class AskArti {
        }
    }
 
-   showError() {
-       this.elements.errorMessage.classList.remove('hidden');
-       setTimeout(() => {
-           this.elements.errorMessage.classList.add('hidden');
-       }, 5000);
-   }
-
-   retry() {
-       this.elements.errorMessage.classList.add('hidden');
-       if (this.state.lastQuery) {
-           this.elements.chatInput.value = this.state.lastQuery;
-           this.sendChatMessage();
-       }
-   }
-
    showModal() {
        this.elements.aboutModal.classList.remove('hidden');
    }
@@ -1792,8 +2013,8 @@ class AskArti {
    }
 }
 
-// Initialize
-const app = new AskArti();
+// Initialize the playbook generator
+const playbookGenerator = new PlaybookGenerator();
 </script>
 </body>
 </html>
