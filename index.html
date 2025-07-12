@@ -621,59 +621,60 @@ class AskArti {
         }
     }
 
-    // Enhanced chat message handling with auto-plan generation
-    async sendChatMessage() {
-        const message = this.elements.chatInput.value.trim();
-        
-        if (this.state.pendingRequest || !message) return;
+// Enhanced chat message handling that preserves context
+async sendChatMessage() {
+    const message = this.elements.chatInput.value.trim();
+    
+    if (this.state.pendingRequest || !message) return;
 
-        // Clear previous results if any
-        if (this.state.hasActiveResults) {
-            this.clearResults();
-        }
-
-        // Add user message
-        this.addChatMessage(message, true);
-        this.elements.chatInput.value = '';
-        this.state.lastQuery = message;
-        
-        // Update history
-        this.state.chatHistory.push({ role: 'user', content: message });
-        this.state.messageCount++;
-
-        // Show typing
-        this.showTypingIndicator();
-        this.state.pendingRequest = true;
-
-        try {
-            const response = await this.makeChatRequest(message);
-            this.hideTypingIndicator();
-            
-            const aiMessage = response.message || "Tell me more.";
-            this.addChatMessage(aiMessage, false);
-            this.state.chatHistory.push({ role: 'assistant', content: aiMessage });
-            this.state.lastQuery = '';
-
-            // Auto-generate plan if ready, or show button
-            if (response.ready_for_plan) {
-                // Auto-generate the plan immediately
-                setTimeout(() => {
-                    this.generateStrategicPlan();
-                }, 1000); // Small delay for better UX
-            } else if (response.readiness_score >= 7 && !document.getElementById('generate-plan-container')) {
-                // Show button if we have enough context but user hasn't requested it yet
-                this.addStrategicPlanButton();
-            }
-
-        } catch (error) {
-            console.error('Chat request failed:', error);
-            this.hideTypingIndicator();
-            this.addChatMessage("Connection issues. Try again?", false);
-            this.showError();
-        } finally {
-            this.state.pendingRequest = false;
-        }
+    // Clear previous results if any
+    if (this.state.hasActiveResults) {
+        this.clearResults();
     }
+
+    // Add user message
+    this.addChatMessage(message, true);
+    this.elements.chatInput.value = '';
+    this.state.lastQuery = message;
+    
+    // Update history BEFORE sending request
+    this.state.chatHistory.push({ role: 'user', content: message });
+    this.state.messageCount++;
+
+    // Show typing
+    this.showTypingIndicator();
+    this.state.pendingRequest = true;
+
+    try {
+        const response = await this.makeChatRequest(message);
+        this.hideTypingIndicator();
+        
+        const aiMessage = response.message || "Tell me more.";
+        this.addChatMessage(aiMessage, false);
+        
+        // CRITICAL: Add AI response to history immediately
+        this.state.chatHistory.push({ role: 'assistant', content: aiMessage });
+        
+        this.state.lastQuery = '';
+
+        // Auto-generate plan if ready, or show button
+        if (response.ready_for_plan) {
+            setTimeout(() => {
+                this.generateStrategicPlan();
+            }, 1000);
+        } else if (response.readiness_score >= 7 && !document.getElementById('generate-plan-container')) {
+            this.addStrategicPlanButton();
+        }
+
+    } catch (error) {
+        console.error('Chat request failed:', error);
+        this.hideTypingIndicator();
+        this.addChatMessage("Connection issues. Try again?", false);
+        this.showError();
+    } finally {
+        this.state.pendingRequest = false;
+    }
+}
 
     async makeChatRequest(message) {
     const contextToSend = this.state.chatHistory.length > 20 
@@ -709,59 +710,59 @@ class AskArti {
         this.scrollChatToBottom();
     }
 
-    // Enhanced strategic plan generation
-    async generateStrategicPlan() {
-        if (this.state.pendingRequest) return;
+  // Enhanced plan generation that includes full conversation context
+async generateStrategicPlan() {
+    if (this.state.pendingRequest) return;
+    
+    this.clearResults();
+    this.showLoading();
+    this.elements.accountPlanContainer.innerHTML = `
+        <div class="result-card text-center p-6">
+            <div class="loader mx-auto mb-3"></div>
+            <p class="text-sm text-gray-600">Creating your strategic plan based on our conversation...</p>
+        </div>
+    `;
+    this.elements.accountPlanContainer.classList.remove('hidden');
+    this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
+    
+    this.state.pendingRequest = true;
+    
+    try {
+        const response = await fetch(CONFIG.API_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                situation: "Generate strategic plan based on our conversation",
+                mode: 'strategic_plan',
+                // CRITICAL: Send the FULL conversation history including AI responses
+                conversationHistory: this.state.chatHistory,
+                currentDate: new Date().toISOString().split('T')[0]
+            })
+        });
         
-        this.clearResults();
-        this.showLoading();
+        if (!response.ok) throw new Error('Request failed');
+        
+        const data = await response.json();
+        this.hideLoading();
+        this.state.hasActiveResults = true;
+        
+        // Display the strategic plan
+        this.displayAccountPlan(data);
+        
+    } catch (error) {
+        console.error('Strategic plan generation failed:', error);
+        this.hideLoading();
         this.elements.accountPlanContainer.innerHTML = `
-            <div class="result-card text-center p-6">
-                <div class="loader mx-auto mb-3"></div>
-                <p class="text-sm text-gray-600">Creating your strategic plan...</p>
+            <div class="result-card text-center">
+                <p class="text-red-600 font-medium text-sm mb-3">Couldn't generate your plan.</p>
+                <button onclick="app.generateStrategicPlan()" 
+                    class="text-red-700 underline text-sm">Try again</button>
             </div>
         `;
-        this.elements.accountPlanContainer.classList.remove('hidden');
-        this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
-        
-        this.state.pendingRequest = true;
-        
-        try {
-            const response = await fetch(CONFIG.API_ENDPOINT, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    situation: "Generate strategic plan",
-                    mode: 'strategic_plan',
-                    conversationHistory: this.state.chatHistory,
-                    currentDate: new Date().toISOString().split('T')[0]
-                })
-            });
-            
-            if (!response.ok) throw new Error('Request failed');
-            
-            const data = await response.json();
-            this.hideLoading();
-            this.state.hasActiveResults = true;
-            
-            // Display the strategic plan
-            this.displayAccountPlan(data);
-            
-        } catch (error) {
-            console.error('Strategic plan generation failed:', error);
-            this.hideLoading();
-            this.elements.accountPlanContainer.innerHTML = `
-                <div class="result-card text-center">
-                    <p class="text-red-600 font-medium text-sm mb-3">Couldn't generate your plan.</p>
-                    <button onclick="app.generateStrategicPlan()" 
-                        class="text-red-700 underline text-sm">Try again</button>
-                </div>
-            `;
-        } finally {
-            this.state.pendingRequest = false;
-        }
+    } finally {
+        this.state.pendingRequest = false;
     }
-
+}
     displayAccountPlan(data) {
         const { 
             account_name = 'Strategic Plan',
