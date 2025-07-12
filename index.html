@@ -291,6 +291,58 @@
            break-inside: avoid;
        }
    }
+   /* Enhanced chat container styles */
+.chat-container {
+    height: 50vh;
+    max-height: 400px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Add padding at bottom to ensure buttons are visible */
+    padding-bottom: 20px;
+    /* Ensure smooth scrolling */
+    scroll-behavior: smooth;
+}
+
+@media (min-width: 640px) {
+    .chat-container {
+        height: 60vh;
+        max-height: 500px;
+        padding-bottom: 20px;
+    }
+}
+
+/* Ensure generate plan button is always visible */
+#generate-plan-container {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    /* Ensure it doesn't get cut off */
+    min-height: 60px;
+}
+
+#generate-plan-container button {
+    /* Make sure button has good contrast and visibility */
+    min-height: 44px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Better scrollbar for the chat */
+.chat-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-container::-webkit-scrollbar-track {
+    background: #F9FAFB;
+    border-radius: 3px;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+    border-radius: 3px;
+}
+
+.chat-container::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+}
 </style>
 
 </head>
@@ -620,8 +672,6 @@ class AskArti {
             container.scrollTop = container.scrollHeight;
         }
     }
-
-// Enhanced chat message handling that preserves context
 async sendChatMessage() {
     const message = this.elements.chatInput.value.trim();
     
@@ -652,7 +702,7 @@ async sendChatMessage() {
         const aiMessage = response.message || "Tell me more.";
         this.addChatMessage(aiMessage, false);
         
-        // CRITICAL: Add AI response to history immediately
+        // Add AI response to history
         this.state.chatHistory.push({ role: 'assistant', content: aiMessage });
         
         this.state.lastQuery = '';
@@ -663,7 +713,10 @@ async sendChatMessage() {
                 this.generateStrategicPlan();
             }, 1000);
         } else if (response.readiness_score >= 7 && !document.getElementById('generate-plan-container')) {
-            this.addStrategicPlanButton();
+            // Add delay to ensure message is rendered first
+            setTimeout(() => {
+                this.addStrategicPlanButton();
+            }, 500);
         }
 
     } catch (error) {
@@ -675,7 +728,6 @@ async sendChatMessage() {
         this.state.pendingRequest = false;
     }
 }
-
     async makeChatRequest(message) {
     const contextToSend = this.state.chatHistory.length > 20 
         ? [this.state.chatHistory[0], ...this.state.chatHistory.slice(-19)]
@@ -698,16 +750,47 @@ async sendChatMessage() {
 
     // Instead of adding to chatMessages, add it after the chat container
 addStrategicPlanButton() {
+    // Remove any existing plan button first
+    const existingBtn = document.getElementById('generate-plan-container');
+    if (existingBtn) {
+        existingBtn.remove();
+    }
+    
     const btnHtml = `
-        <div id="generate-plan-container" class="flex justify-center my-4">
+        <div id="generate-plan-container" class="flex justify-center my-4 px-4">
             <button onclick="app.generateStrategicPlan()" 
-                class="px-6 py-3 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg text-sm transition-colors">
-                Generate Plan
+                class="px-6 py-3 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg text-sm transition-colors shadow-md">
+                Generate Strategic Plan
             </button>
         </div>
     `;
-    // Add after the chat container instead of inside it
-    this.elements.chatMessages.parentElement.insertAdjacentHTML('afterend', btnHtml);
+    this.elements.chatMessages.insertAdjacentHTML('beforeend', btnHtml);
+    
+    // CRITICAL: Ensure the button is visible by scrolling
+    setTimeout(() => {
+        this.scrollChatToBottom();
+        
+        // Double-check the button is visible
+        const button = document.getElementById('generate-plan-container');
+        if (button) {
+            button.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'end',
+                inline: 'nearest'
+            });
+        }
+    }, 100);
+}
+
+// Enhanced scrollChatToBottom method
+scrollChatToBottom() {
+    const container = this.elements.chatMessages;
+    if (container) {
+        // Force scroll to absolute bottom
+        setTimeout(() => {
+            container.scrollTop = container.scrollHeight;
+        }, 50);
+    }
 }
 
   // Enhanced plan generation that includes full conversation context
