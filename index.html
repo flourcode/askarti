@@ -1602,14 +1602,13 @@ class AskArti {
                        </div>
                        <h3 class="font-bold text-gray-800">The Political Landscape</h3>
                    </div>
-                   <div class="mermaid-container bg-gradient-to-br from-white to-blue-50 rounded-xl p-6 border border-blue-100">
-                       <div class="flex justify-center items-center absolute inset-0" id="mermaid-loading">
-                           <div class="loader"></div>
-                       </div>
-                       <div id="mermaid-diagram" class="mermaid opacity-0 transition-opacity duration-500">
-                           ${mermaid_chart}
-                       </div>
-                   </div>
+                   <div class="mermaid-container ...">
+    <div class="mermaid-loading flex justify-center items-center absolute inset-0"> <div class="loader"></div>
+    </div>
+    <div id="mermaid-diagram" class="mermaid opacity-0 ...">
+        ${mermaid_chart}
+    </div>
+</div>
                </div>
            `;
        }
@@ -1646,26 +1645,38 @@ class AskArti {
    }
 
    renderMermaidChart() {
-       try {
-           setTimeout(async () => {
-               const element = document.getElementById('mermaid-diagram');
-               if (!element) return;
-               
-               await mermaid.run();
-               
-               element.style.opacity = '1';
-               
-               const loader = document.getElementById('mermaid-loading');
-               if (loader) loader.style.display = 'none';
-           }, 300);
-       } catch (error) {
-           console.error('Mermaid rendering error:', error);
-           const container = document.querySelector('.mermaid-container');
-           if (container) {
-               container.innerHTML = '<div class="p-6 bg-gray-100 text-gray-700 rounded-xl text-center">Visualization got stage fright. The show must go on without it.</div>';
-           }
-       }
-   }
+    try {
+        setTimeout(async () => {
+            // Find all Mermaid diagrams that haven't been processed yet
+            const diagrams = document.querySelectorAll('.mermaid:not([data-processed="true"])');
+
+            if (diagrams.length === 0) return;
+
+            // Render all the found diagrams
+            await mermaid.run({ nodes: diagrams });
+
+            // For each diagram that was just rendered, hide its specific loader
+            diagrams.forEach(element => {
+                element.style.opacity = '1';
+                const container = element.closest('.mermaid-container');
+                if (container) {
+                    const loader = container.querySelector('.mermaid-loading');
+                    if (loader) {
+                        loader.style.display = 'none';
+                    }
+                }
+            });
+        }, 300);
+    } catch (error) {
+        console.error('Mermaid rendering error:', error);
+        const containers = document.querySelectorAll('.mermaid-container');
+        containers.forEach(container => {
+            if (!container.querySelector('[data-processed="true"]')) {
+                 container.innerHTML = '<div class="p-6 bg-gray-100 text-gray-700 rounded-xl text-center">Visualization got stage fright. The show must go on without it.</div>';
+            }
+        });
+    }
+}
 
    displayAdvice(data) {
        const { response_type } = data;
@@ -1812,7 +1823,7 @@ class AskArti {
                    </h3>
                    <div class="space-y-4">${key_moves.slice(0, 3).map((m, i) => `
                        <div class="flex gap-3 group hover:translate-x-1 transition-transform">
-                           <span class="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-customPurple-400 to-customPurple-600 text-white rounded-full flex items-center justify-center text-sm font-bold shadow-md group-hover:shadow-lg transition-shadow">${i + 1}</span>
+                           <span class="flex-shrink-0 w-8 h-8 bg-customPurple-700 text-white rounded-full flex items-center justify-center text-sm font-bold shadow-md group-hover:shadow-lg transition-shadow">${i + 1}</span>
                            <div class="flex-1">
                                <p class="font-bold text-gray-900">${m.action}</p>
                                <p class="text-sm text-gray-600 mt-1 italic">${m.why}</p>
@@ -1827,11 +1838,10 @@ class AskArti {
                    </h3>
                    ${mermaid_chart ? `
                        <div class="mermaid-container">
-                           <div class="mermaid-loading">
-                               <div class="loader"></div>
-                           </div>
-                           <div id="mermaid-diagram" class="mermaid" style="opacity: 0;">${mermaid_chart}</div>
-                       </div>` : 
+    <div class="mermaid-loading"> <div class="loader"></div>
+    </div>
+    <div id="mermaid-diagram" class="mermaid" style="opacity: 0;">${mermaid_chart}</div>
+</div>` : 
                        '<div class="p-6 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl text-center"><p class="text-gray-600 font-medium">Visual strategy unavailable. Use your imagination. 🎨</p></div>'
                    }
                </div>
