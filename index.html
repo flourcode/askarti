@@ -3,121 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FedSales AI Advisor</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { background-color: #f8f9fa; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
-        .advisor-container { max-width: 800px; margin: 2rem auto; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        .response-card { border: 1px solid #dee2e6; border-radius: 8px; padding: 1.5rem; margin-top: 1.5rem; }
-        .response-card h4 { font-weight: 600; color: #212529; }
-        .response-card ul { padding-left: 1.25rem; margin-top: 1rem; }
-        .response-card li { margin-bottom: 0.5rem; }
-        .loader { width: 1.25rem; height: 1.25rem; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-    </style>
+    <title>AskArti - Your AI Sales Buddy</title>
+    <meta name="description" content="AI strategic advice for complex business challenges.">
+    <link rel="icon" href="/images/favicon.ico" sizes="any">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5A4E8C',
+                        secondary: '#4A90E2',
+                        light: '#F8F9FA',
+                        text: {
+                            DEFAULT: '#212529',
+                            muted: '#6C757D'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+<style>
+    body { font-family: 'Inter', sans-serif; background-color: #F8F9FA; -webkit-font-smoothing: antialiased; }
+    .loader { border: 3px solid #E9ECEF; border-top: 3px solid #5A4E8C; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .fade-in { animation: fadeIn 0.4s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .chat-message-user { background-color: #5A4E8C; color: white; border-radius: 18px 18px 4px 18px; }
+    .chat-message-arti { background-color: #FFFFFF; color: #212529; border-radius: 18px 18px 18px 4px; border: 1px solid #DEE2E6; }
+    .briefing-card { background-color: white; border-radius: 12px; border: 1px solid #E9ECEF; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .card-header { display: flex; align-items: center; gap: 0.75rem; padding-bottom: 0.75rem; margin-bottom: 1rem; border-bottom: 1px solid #E9ECEF; }
+    .card-icon { color: #5A4E8C; flex-shrink: 0; }
+    .card-title { font-size: 1.125rem; font-weight: 600; color: #212529; }
+</style>
 </head>
-<body>
-    <div class="advisor-container">
-        <div class="text-center mb-4">
-            <h2 class="h3 fw-bold">FedSales AI Advisor</h2>
-            <p class="text-muted">Your Federal Sales Wingman. What challenge can I help with today?</p>
-        </div>
+<body class="text-text">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <header class="text-center mb-8">
+            <img src="/images/asklite.png" alt="AskArti" class="h-16 mx-auto">
+            <p class="text-sm text-text-muted mt-2">Your AI Sales Buddy</p>
+        </header>
 
-        <form id="advisor-form">
-            <div class="mb-3">
-                <label for="intent-select" class="form-label fw-semibold">Select Your Objective:</label>
-                <select class="form-select" id="intent-select">
-                    <option value="strategic_analysis" selected>Build a GTM or Account Strategy</option>
-                    <option value="federal_lead_gen">Generate a List of Prospects</option>
-                    <option value="compliance_advice">Get FAR/DFARS Compliance Advice</option>
-                </select>
+        <main class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+            <div class="p-4 sm:p-6">
+                <div id="chat-messages" class="max-h-[50vh] overflow-y-auto mb-4 pr-2">
+                    <div class="flex items-start gap-3 mb-4">
+                        <img src="/images/arti_right.png" alt="Arti" class="w-9 h-9 rounded-full flex-shrink-0">
+                        <div class="chat-message-arti px-4 py-3 max-w-[85%]">
+                            <p class="text-sm">What information do you need?</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <textarea id="chat-input" class="flex-1 px-4 py-2.5 bg-light border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none transition-all resize-none" placeholder="e.g., Who are the top contractors at DHS? or Help me build a strategy to compete with the incumbent..." rows="2"></textarea>
+                    <button id="chat-send-btn" class="px-5 py-2.5 bg-primary hover:bg-opacity-90 text-white font-medium rounded-lg transition-colors flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </button>
+                </div>
             </div>
-            <div class="mb-3">
-                 <label for="situation-input" class="form-label fw-semibold">Describe the Situation:</label>
-                <textarea class="form-control" id="situation-input" rows="3" placeholder="e.g., 'Help me build a go-to-market plan for selling cybersecurity solutions to DHS components like CISA and FEMA.'"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary w-100 fw-bold py-2 d-flex align-items-center justify-content-center">
-                <span id="button-text">Ask Advisor</span>
-                <div id="loading-spinner" class="loader ms-2 d-none"></div>
-            </button>
-        </form>
-
-        <div id="response-area" class="mt-4"></div>
-        <div class="text-center mt-3" id="integration-buttons" style="display: none;">
-            <button class="btn btn-sm btn-outline-secondary">Export to Salesforce</button>
-            <button class="btn btn-sm btn-outline-secondary">Export to HubSpot</button>
-        </div>
+        </main>
+        
+        <div id="results-container" class="space-y-6"></div>
+        
     </div>
 
-    <script>
-        document.getElementById('advisor-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const intent = document.getElementById('intent-select').value;
-            const situation = document.getElementById('situation-input').value;
-            const responseArea = document.getElementById('response-area');
-            const buttonText = document.getElementById('button-text');
-            const loadingSpinner = document.getElementById('loading-spinner');
-            const integrationButtons = document.getElementById('integration-buttons');
-            const submitButton = e.target.querySelector('button[type="submit"]');
+<script>
+class StrategicAdvisorApp {
+    constructor() {
+        this.elements = {
+            chatMessages: document.getElementById('chat-messages'),
+            chatInput: document.getElementById('chat-input'),
+            chatSendBtn: document.getElementById('chat-send-btn'),
+            resultsContainer: document.getElementById('results-container'),
+        };
+        this.state = {
+            isProcessing: false,
+            conversationHistory: []
+        };
+        this.apiEndpoint = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
+        this.init();
+    }
 
-            if (!situation) {
-                responseArea.innerHTML = `<div class="alert alert-warning">Please describe your situation.</div>`;
-                return;
-            }
+    init() {
+        mermaid.initialize({ startOnLoad: false, theme: 'base', securityLevel: 'strict' });
+        this.setupEventListeners();
+    }
 
-            // --- UI state for loading ---
-            submitButton.disabled = true;
-            buttonText.textContent = 'Analyzing...';
-            loadingSpinner.classList.remove('d-none');
-            responseArea.innerHTML = '';
-            integrationButtons.style.display = 'none';
-
-            try {
-                const response = await fetch('https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ situation, intent }) // Send the selected intent to the backend
-                });
-
-                if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
-                
-                const data = await response.json();
-                
-                // --- Render response card ---
-                let contentHtml = '';
-                if (data.items) {
-                    contentHtml = `<ul>${data.items.map(item => `<li>${item}</li>`).join('')}</ul>`;
-                } else if (data.keyChallenges) {
-                    const recommendationsHtml = data.strategicRecommendations.map(rec => `<li><strong>${rec.recommendation}:</strong> ${rec.rationale}</li>`).join('');
-                    const challengesHtml = data.keyChallenges.map(c => `<li>${c}</li>`).join('');
-                    contentHtml = `
-                        <p>${data.executiveSummary}</p>
-                        <h5 class="mt-4">Key Challenges</h5><ul>${challengesHtml}</ul>
-                        <h5 class="mt-4">Strategic Recommendations</h5><ul>${recommendationsHtml}</ul>
-                        `;
-                } else if (data.advice) {
-                    contentHtml = `<p>${data.advice}</p><h5>Key Considerations:</h5><ul>${data.considerations.map(c => `<li>${c}</li>`).join('')}</ul>`;
-                }
-
-                responseArea.innerHTML = `
-                    <div class="response-card">
-                        <h4>${data.title || data.executiveSummary || 'Your Analysis'}</h4>
-                        ${contentHtml}
-                        <p class="text-muted small mt-3">Disclaimer: AI-generated advice. Always verify with official sources and do not share sensitive information.</p>
-                    </div>`;
-                
-                integrationButtons.style.display = 'block';
-
-            } catch (error) {
-                console.error('Fetch error:', error);
-                responseArea.innerHTML = `<div class="alert alert-danger">Failed to get a response from the advisor. Please try again.</div>`;
-            } finally {
-                // --- Restore UI state ---
-                submitButton.disabled = false;
-                buttonText.textContent = 'Ask Advisor';
-                loadingSpinner.classList.add('d-none');
+    setupEventListeners() {
+        this.elements.chatSendBtn.addEventListener('click', () => this.getResponse());
+        this.elements.chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                this.getResponse();
             }
         });
-    </script>
+    }
+
+    showLoading() {
+        this.elements.resultsContainer.innerHTML = `
+            <div class="flex justify-center items-center p-8 fade-in">
+                <div class="loader"></div>
+                <p class="ml-4 text-text-muted font-medium">Analyzing...</p>
+            </div>`;
+    }
+
+    addChatMessage(content, role) {
+        const isUser = role === 'user';
+        const messageHtml = `
+            <div class="flex items-start gap-3 mb-4 fade-in ${isUser ? 'justify-end' : ''}">
+                ${!isUser ? `<img src="/images/arti_right.png" alt="Arti" class="w-9 h-9 rounded-full flex-shrink-0">` : ''}
+                <div class="${isUser ? 'chat-message-user' : 'chat-message-arti'} px-4 py-3 max-w-[85%] text-sm">${content}</div>
+            </div>`;
+        this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
+        this.elements.chatMessages.scrollTop = this.elements.chatMessages.scrollHeight;
+    }
+
+    async getResponse() {
+        const situation = this.elements.chatInput.value.trim();
+        if (!situation || this.state.isProcessing) return;
+
+        this.state.isProcessing = true;
+        this.elements.chatSendBtn.disabled = true;
+        this.elements.chatSendBtn.innerHTML = `<div class="loader w-6 h-6"></div>`;
+
+        this.addChatMessage(situation, 'user');
+        this.state.conversationHistory.push({ role: 'user', content: situation });
+        this.elements.chatInput.value = '';
+        this.showLoading();
+
+        try {
+            const response = await fetch(this.apiEndpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    situation,
+                    conversationHistory: this.state.conversationHistory
+                })
+            });
+
+            if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+            
+            const data = await response.json();
+            // We don't add the full JSON to history anymore to keep it clean.
+            // A summary message could be added if desired.
+            
+            this.displayResponse(data);
+
+        } catch (error) {
+            console.error('Error fetching response:', error);
+            this.elements.resultsContainer.innerHTML = `<div class="briefing-card text-red-500"><strong>Error:</strong> Failed to generate a response. Please check the console for details.</div>`;
+        } finally {
+            this.state.isProcessing = false;
+            this.elements.chatSendBtn.disabled = false;
+            this.elements.chatSendBtn.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>`;
+        }
+    }
+    
+    // --- NEW RESPONSE ROUTER ---
+    displayResponse(data) {
+        switch(data.response_type) {
+            case 'list':
+                this.displayList(data);
+                break;
+            case 'briefing':
+                this.displayStrategicBriefing(data);
+                break;
+            default:
+                this.elements.resultsContainer.innerHTML = `<div class="briefing-card text-orange-500"><strong>Warning:</strong> Received an unknown response type.</div>`;
+                console.warn("Unknown response type:", data);
+        }
+    }
+
+    // --- NEW: Function to display a simple list ---
+    displayList(data) {
+        const { title, items } = data;
+        let html = this.createCard(title, 'M3 4h18M3 8h18M3 12h18M3 16h18', 
+            `<ul class="list-disc list-inside space-y-2 text-text-muted">
+                ${items.map(item => `<li>${item}</li>`).join('')}
+            </ul>`
+        );
+        this.elements.resultsContainer.innerHTML = html;
+    }
+
+    // --- Function to display a complex briefing ---
+    displayStrategicBriefing(data) {
+        const { executiveSummary, keyChallenges, strategicRecommendations, actionPlan, successMetrics, mermaidChart } = data;
+        let html = '';
+
+        if (executiveSummary) {
+            html += this.createCard('Executive Summary', 'M21 12a9 9 0 11-18 0 9 9 0 0118 0z', `<div class="prose prose-sm max-w-none">${marked.parse(executiveSummary)}</div>`);
+        }
+        if (strategicRecommendations && strategicRecommendations.length) {
+            html += this.createCard('Strategic Recommendations', 'M13 10V3L4 14h7v7l9-11h-7z',
+                `<div class="space-y-4">${strategicRecommendations.map(p => `<div><h4 class="font-semibold text-text">${p.recommendation}</h4><p class="text-text-muted text-sm">${p.rationale}</p></div>`).join('')}</div>`
+            );
+        }
+        if (actionPlan && actionPlan.length) {
+            html += this.createCard('Action Plan', 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
+                `<ul class="list-none space-y-3">${actionPlan.map(a => `<li class="flex items-start gap-3"><span class="text-secondary font-bold mt-1">→</span><span><strong>${a.owner}:</strong> ${a.task}</span></li>`).join('')}</ul>`
+            );
+        }
+        if (mermaidChart) {
+             html += this.createCard('Visual Model', 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341A6.002 6.002 0 006 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9', 
+                `<div class="bg-light p-4 rounded-lg overflow-x-auto"><div class="mermaid">${mermaidChart}</div></div>`
+            );
+        }
+
+        this.elements.resultsContainer.innerHTML = `<div class="space-y-6">${html}</div>`;
+        if (mermaidChart) {
+            setTimeout(() => mermaid.run(), 100);
+        }
+    }
+
+    createCard(title, iconPath, content) {
+        return `
+            <div class="briefing-card fade-in">
+                <div class="card-header">
+                    <svg class="card-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${iconPath}"></path></svg>
+                    <h3 class="card-title">${title}</h3>
+                </div>
+                <div>${content}</div>
+            </div>`;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => new StrategicAdvisorApp());
+</script>
 </body>
 </html>
