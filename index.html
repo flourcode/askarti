@@ -702,7 +702,7 @@ async sendChatMessage() {
             <div id="generate-plan-container" class="flex justify-center my-4">
                 <button onclick="app.generateStrategicPlan()" 
                     class="px-6 py-3 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg text-sm transition-colors">
-                    Generate Strategic Plan
+                    Generate Plan
                 </button>
             </div>
         `;
@@ -719,7 +719,7 @@ async generateStrategicPlan() {
     this.elements.accountPlanContainer.innerHTML = `
         <div class="result-card text-center p-6">
             <div class="loader mx-auto mb-3"></div>
-            <p class="text-sm text-gray-600">Creating your strategic plan based on our conversation...</p>
+            <p class="text-sm text-gray-600">Creating a plan based on our conversation...</p>
         </div>
     `;
     this.elements.accountPlanContainer.classList.remove('hidden');
@@ -765,7 +765,7 @@ async generateStrategicPlan() {
 }
     displayAccountPlan(data) {
         const { 
-            account_name = 'Strategic Plan',
+            account_name = 'Plan',
             executive_summary = '',
             next_steps = [],
             strategic_assessment = {},
@@ -782,7 +782,7 @@ async generateStrategicPlan() {
                 <div class="flex justify-between items-center">
                     <div>
                         <h2 class="text-xl font-bold text-gray-900">${account_name}</h2>
-                        <p class="text-sm text-gray-600">Strategic Analysis & Recommendations</p>
+                        <p class="text-sm text-gray-600">Analysis & Recommendations</p>
                     </div>
                     <div class="flex gap-2">
                         <button onclick="app.copyAccountPlan()" 
@@ -812,7 +812,7 @@ async generateStrategicPlan() {
 
             ${strategic_assessment && Object.keys(strategic_assessment).length > 0 ? `
                 <div class="result-card">
-                    <h3>Strategic Assessment</h3>
+                    <h3>Assessment</h3>
                     ${strategic_assessment.current_state ? `
                         <div class="mb-4">
                             <h4 class="font-semibold text-gray-800 mb-2">Current State</h4>
@@ -835,7 +835,7 @@ async generateStrategicPlan() {
                         ` : ''}
                         ${strategic_assessment.opportunities ? `
                             <div>
-                                <h4 class="font-semibold text-gray-800 mb-2">Strategic Opportunities</h4>
+                                <h4 class="font-semibold text-gray-800 mb-2">Opportunities</h4>
                                 <ul class="space-y-1">
                                     ${strategic_assessment.opportunities.map(o => `
                                         <li class="flex items-start gap-2">
@@ -852,7 +852,7 @@ async generateStrategicPlan() {
 
             ${next_steps && next_steps.length > 0 ? `
                 <div class="result-card">
-                    <h3>Strategic Next Steps</h3>
+                    <h3>Next Steps</h3>
                     <div class="space-y-4">
                         ${next_steps.map((step, i) => `
                             <div class="border-l-4 ${
@@ -978,7 +978,7 @@ async generateStrategicPlan() {
 
             ${strategic_diagram && strategic_diagram.trim() ? `
                 <div class="result-card" id="strategic-chart-container">
-                    <h3>Strategic Framework</h3>
+                    <h3>Framework</h3>
                     <div class="mermaid-container">
                         <div id="mermaid-diagram" class="mermaid">
                             ${strategic_diagram}
@@ -1005,7 +1005,7 @@ async generateStrategicPlan() {
         
         navigator.clipboard.writeText(content)
             .then(() => {
-                alert('Strategic plan copied!');
+                alert('Plan copied!');
             })
             .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
     }
