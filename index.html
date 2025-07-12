@@ -676,24 +676,24 @@ class AskArti {
     }
 
     async makeChatRequest(message) {
-        const contextToSend = this.state.chatHistory.length > 20 
-            ? [this.state.chatHistory[0], ...this.state.chatHistory.slice(-19)]
-            : this.state.chatHistory;
-        
-        const response = await fetch(CONFIG.API_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                situation: message,
-                mode: 'chat',
-                conversationHistory: contextToSend,
-                currentDate: new Date().toISOString().split('T')[0]
-            })
-        });
+    const contextToSend = this.state.chatHistory.length > 20 
+        ? [this.state.chatHistory[0], ...this.state.chatHistory.slice(-19)]
+        : this.state.chatHistory;
+    
+    const response = await fetch(CONFIG.API_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            situation: message,
+            mode: 'chat',
+            conversationHistory: contextToSend,
+            currentDate: new Date().toISOString().split('T')[0] // Always current date
+        })
+    });
 
-        if (!response.ok) throw new Error('Request failed');
-        return await response.json();
-    }
+    if (!response.ok) throw new Error('Request failed');
+    return await response.json();
+}
 
     // Strategic plan button (replaces confusing suggestion bubbles)
     addStrategicPlanButton() {
