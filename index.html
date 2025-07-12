@@ -815,18 +815,20 @@ class AskArti {
        // Avoid running if a request is already in progress
        if (this.state.pendingRequest) return;
 
-       const message = "Help me build an account plan for selling cloud services to DHS";
+       const planTopic = prompt("What would you like to create a plan for?\n\ne.g., 'selling to the VA' or 'improving my relationship with my boss'");
 
-       // 1. Manually add the user's request to the chat UI for visual context.
-       this.addChatMessage(message, true);
+       if (planTopic && planTopic.trim().length > 0) {
+            const message = `Help me build a plan for: ${planTopic}`;
+            // Manually add the user's request to the chat UI for visual context.
+            this.addChatMessage(message, true);
 
-       // 2. Manually update the internal conversation history state.
-       this.state.chatHistory.push({ role: 'user', content: message });
-       this.state.messageCount++; // Keep the count accurate
+            // Manually update the internal conversation history state.
+            this.state.chatHistory.push({ role: 'user', content: message });
+            this.state.messageCount++; // Keep the count accurate
 
-       // 3. Immediately call the function to generate the plan.
-       // This bypasses the unnecessary chat API call and directly triggers the plan.
-       this.generateAccountPlan();
+            // Immediately call the function to generate the plan.
+            this.generateAccountPlan();
+       }
    }
    async generateAccountPlan() {
        if (this.state.pendingRequest) return;
