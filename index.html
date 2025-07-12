@@ -711,7 +711,7 @@ class AskArti {
         }
     }
 
-    async sendChatMessage() {
+  async sendChatMessage() {
         const message = this.elements.chatInput.value.trim();
         
         if (this.state.pendingRequest || !message) return;
@@ -738,15 +738,16 @@ class AskArti {
             const response = await this.makeChatRequest(message);
             this.hideTypingIndicator();
             
+            const aiMessage = response.message || "Tell me more.";
             // Add response
-            this.addChatMessage(response.message || "Tell me more.", false);
-			this.state.chatHistory.push({ role: 'assistant', content: response.message });
+            this.addChatMessage(aiMessage, false);
+			this.state.chatHistory.push({ role: 'assistant', content: aiMessage });
            this.state.lastQuery = '';
 
-           // Show account plan button after a few messages
-if (this.state.messageCount >= 3 && !document.getElementById('generate-plan-container')) {
-    this.addAccountPlanButton();
-}
+           // Show account plan button if the AI indicates it's ready
+            if (aiMessage.includes("generate an action plan now") && !document.getElementById('generate-plan-container')) {
+                this.addAccountPlanButton();
+            }
 
            // Add follow-up suggestions
            if (response.suggestions && response.suggestions.length > 0) {
@@ -762,7 +763,6 @@ if (this.state.messageCount >= 3 && !document.getElementById('generate-plan-cont
            this.state.pendingRequest = false;
        }
    }
-
    async makeChatRequest(message) {
        const contextToSend = this.state.chatHistory.length > 20 
            ? [this.state.chatHistory[0], ...this.state.chatHistory.slice(-19)]
