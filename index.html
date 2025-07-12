@@ -450,7 +450,15 @@
                         </div>
                     </div>
                 </div>
-
+<div id="plan-button-container" class="hidden animate-fade-in p-4 border-t border-gray-200">
+        <button id="generate-plan-btn" onclick="app.generateAccountPlan()"
+                class="w-full bg-gradient-to-r from-accountBlue-500 to-accountBlue-700 hover:from-accountBlue-600 hover:to-accountBlue-800 text-white font-bold px-6 py-3 rounded-xl text-sm flex items-center justify-center gap-2 transition-all transform hover:scale-105 shadow-lg">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+            </svg>
+            Okay, let's make a plan from what we've got
+        </button>
+    </div>
                 <!-- Input area with therapy vibes -->
                 <div class="flex gap-2 sticky bottom-0 bg-white/80 backdrop-blur-sm pt-3 z-10 rounded-xl">
                     <button 
@@ -944,11 +952,12 @@ class AskArti {
        
        // Clear other elements
        this.elements.chatInput.value = '';
-       this.elements.resultsContainer.innerHTML = '';
-       this.elements.accountPlanContainer.classList.add('hidden');
-       this.elements.accountPlanContainer.innerHTML = '';
-       
-       // Remove generate plan button
+    this.elements.resultsContainer.innerHTML = '';
+    this.elements.accountPlanContainer.classList.add('hidden');
+    this.elements.accountPlanContainer.innerHTML = '';
+    document.getElementById('plan-button-container').classList.add('hidden'); 
+
+    // Remove generate plan button
        const generatePlanContainer = document.getElementById('generate-plan-container');
        if (generatePlanContainer) {
            generatePlanContainer.remove();
@@ -1130,25 +1139,10 @@ class AskArti {
            // Clear lastQuery on success
            this.state.lastQuery = '';
 
-           // Show account plan button if appropriate
-           if ((this.state.messageCount >= 3 || 
-                message.toLowerCase().includes('account') || 
-                message.toLowerCase().includes('plan')) &&
-               !document.getElementById('generate-plan-btn')) {
-               
-               const generateBtnHtml = `
-                   <div id="generate-plan-container" class="flex justify-center mt-6 mb-2 animate-fade-in">
-                       <button id="generate-plan-btn" onclick="app.generateAccountPlan()" 
-                           class="bg-gradient-to-r from-accountBlue-500 to-accountBlue-700 hover:from-accountBlue-600 hover:to-accountBlue-800 text-white font-bold px-6 py-3 rounded-xl text-sm flex items-center gap-2 transition-all transform hover:scale-105 shadow-lg">
-                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                           </svg>
-                           Let's Build That Account Plan
-                       </button>
-                   </div>
-               `;
-               this.elements.chatMessages.insertAdjacentHTML('beforeend', generateBtnHtml);
-           }
+// Show the plan generation button if enough context is built
+if (this.state.messageCount >= 3 && document.getElementById('plan-button-container')?.classList.contains('hidden')) {
+    document.getElementById('plan-button-container').classList.remove('hidden');
+}
 
            // Add follow-up suggestions if provided
            if (response.suggestions && response.suggestions.length > 0) {
@@ -1261,7 +1255,8 @@ class AskArti {
    }
 
    async generateAccountPlan() {
-       if (this.state.pendingRequest) return;
+    if (this.state.pendingRequest) return;
+    document.getElementById('plan-button-container').classList.add('hidden');
 	   this.elements.resultsContainer.innerHTML = '';
        
        // Show loading
