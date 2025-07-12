@@ -1482,7 +1482,21 @@ if (this.state.messageCount >= 3 && document.getElementById('plan-button-contain
 }
 
    displayAdvice(data) {
-       const { response_type } = data;
+       if (data.response_type === 'factual_answer' && data.answer) {
+        const html = `
+            <div class="therapy-card animate-fade-in">
+                <div class="prose prose-sm max-w-none text-gray-800">
+                    ${marked.parse(data.answer)}
+                </div>
+            </div>
+        `;
+        this.elements.resultsContainer.innerHTML = html;
+        this.addActionButtons(); // Optional: You can still add the 'Copy' and 'New Session' buttons
+        return; // End the function here
+    }
+
+	   
+	   const { response_type } = data;
        
        try {
            if (response_type === 'prospect') {
