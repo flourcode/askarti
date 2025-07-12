@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AskArti - Your Fed Sales Strategist</title>
+    <title>AskArti - Your Fed Sales Weapon</title>
     
     <meta name="description" content="When your customer ghosts you and your boss wants impossible quota. Real federal sales advice that actually works.">
     <link rel="canonical" href="https://askarti.com">
@@ -15,7 +15,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600;8..60,700&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -23,46 +23,33 @@
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
-                        serif: ['Source Serif 4', 'serif'],
-                        display: ['Playfair Display', 'serif'],
-                        crimson: ['Crimson Text', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
                     },
                     colors: {
-                        primary: '#7C6BBE',
-                        customPurple: { 
-                            50: '#F6F5FB', 
-                            100: '#E8E4F7', 
-                            200: '#D8D2EF', 
-                            300: '#C0B6E3', 
-                            500: '#7C6BBE', 
-                            700: '#5A4E8C', 
-                            900: '#403866' 
-                        },
-                        hbr: {
-                            red: '#CE0E2D',
-                            darkred: '#A30C24',
-                            gold: '#B8860B',
-                            navy: '#1A365D',
-                            cream: '#FBF8F3'
+                        bloomberg: {
+                            black: '#000000',
+                            orange: '#FF6600',
+                            blue: '#0033CC',
+                            darkblue: '#001F5C',
+                            green: '#00C851',
+                            red: '#FF3B30',
+                            gray: '#F5F5F5',
+                            yellow: '#FFD700'
                         }
                     },
                     animation: {
-                        'pulse-subtle': 'pulseSubtle 3s ease-in-out infinite',
-                        'slide-up': 'slideUp 0.6s ease-out',
-                        'fade-in-slow': 'fadeInSlow 1s ease-out',
+                        'flash': 'flash 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
-                        pulseSubtle: {
+                        flash: {
                             '0%, 100%': { opacity: '1' },
-                            '50%': { opacity: '0.8' },
+                            '50%': { opacity: '0.5' },
                         },
                         slideUp: {
-                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '0%': { transform: 'translateY(10px)', opacity: '0' },
                             '100%': { transform: 'translateY(0)', opacity: '1' },
-                        },
-                        fadeInSlow: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
                         },
                     },
                 }
@@ -71,39 +58,23 @@
     </script>
     
 <style>
-    /* Base Styles */
+    /* Base Styles - Sharp, Bloomberg-like */
     body { 
         font-family: 'Inter', sans-serif; 
-        background: linear-gradient(180deg, #FAFBFC 0%, #F3F4F6 100%);
+        background-color: #FFFFFF;
         -webkit-font-smoothing: antialiased; 
         min-height: 100vh;
     }
     
-    /* Loader with Premium Feel */
-    .loader-container {
-        position: relative;
-        width: 60px;
-        height: 60px;
-        margin: 0 auto;
-    }
-    
+    /* Power Loader */
     .loader {
-        position: absolute;
-        inset: 0;
-        border: 3px solid rgba(124, 107, 190, 0.1);
-        border-top: 3px solid #7C6BBE;
+        width: 40px;
+        height: 40px;
+        border: 3px solid #F5F5F5;
+        border-top: 3px solid #FF6600;
         border-radius: 50%;
-        animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
-    }
-    
-    .loader::after {
-        content: '';
-        position: absolute;
-        inset: 8px;
-        border: 2px solid rgba(124, 107, 190, 0.1);
-        border-top: 2px solid #A395D9;
-        border-radius: 50%;
-        animation: spin 1.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite reverse;
+        animation: spin 0.8s linear infinite;
+        margin: 0 auto;
     }
     
     @keyframes spin { 
@@ -111,452 +82,422 @@
         100% { transform: rotate(360deg); } 
     }
     
-    /* Chat Styles */
+    /* Chat Styles - Clean and Direct */
     .chat-message-user { 
-        background: linear-gradient(135deg, #7C6BBE 0%, #6B5CAE 100%);
+        background-color: #0033CC;
         color: white; 
-        border-radius: 24px 24px 4px 24px;
-        box-shadow: 0 2px 8px rgba(124, 107, 190, 0.3);
+        border-radius: 4px;
+        font-weight: 500;
     }
     
     .chat-message-arti { 
-        background: linear-gradient(135deg, #FFFFFF 0%, #F9FAFB 100%);
-        color: #1F2937; 
-        border-radius: 24px 24px 24px 4px;
-        border: 1px solid rgba(229, 231, 235, 0.8);
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    }
-    
-    /* Magazine-Quality Article Styles */
-    .magazine-article {
-        background: white;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-        position: relative;
-    }
-    
-    .magazine-header {
-        background: linear-gradient(135deg, #1A365D 0%, #2C5282 100%);
-        color: white;
-        padding: 3rem 3rem 2.5rem;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .magazine-header::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -10%;
-        width: 60%;
-        height: 200%;
-        background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
-        transform: rotate(45deg);
-    }
-    
-    .magazine-label {
-        font-family: 'Inter', sans-serif;
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.15em;
-        color: rgba(255, 255, 255, 0.9);
-        margin-bottom: 1rem;
-        display: inline-block;
-        background: rgba(255, 255, 255, 0.1);
-        padding: 0.25rem 0.75rem;
+        background-color: #F5F5F5;
+        color: #000000; 
         border-radius: 4px;
+        border-left: 4px solid #FF6600;
     }
     
-    .magazine-content {
-        padding: 3rem;
-        position: relative;
-    }
-    
-    .magazine-content::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 3rem;
-        right: 3rem;
-        height: 1px;
-        background: linear-gradient(90deg, transparent 0%, #E5E7EB 20%, #E5E7EB 80%, transparent 100%);
-    }
-    
-    /* HBR Article Typography */
-    .hbr-article h1 {
-        font-family: 'Playfair Display', serif;
-        font-size: 2.75rem;
-        font-weight: 900;
-        color: white;
-        line-height: 1.15;
-        letter-spacing: -0.02em;
-        margin-bottom: 1rem;
-        position: relative;
-        z-index: 1;
-    }
-    
-    .hbr-article .subtitle {
-        font-family: 'Inter', sans-serif;
-        font-size: 1.125rem;
-        font-weight: 400;
-        color: rgba(255, 255, 255, 0.9);
-        line-height: 1.6;
-        position: relative;
-        z-index: 1;
-    }
-    
-    .hbr-article .executive-summary {
-        font-family: 'Crimson Text', serif;
-        font-size: 1.25rem;
-        line-height: 1.8;
-        color: #374151;
-        font-style: italic;
-        border-left: 4px solid #CE0E2D;
-        padding-left: 1.5rem;
-        margin: 2rem 0;
-        position: relative;
-    }
-    
-    .hbr-article h2 {
-        font-family: 'Playfair Display', serif;
-        font-size: 2rem;
-        font-weight: 700;
-        color: #111827;
-        margin-top: 3rem;
-        margin-bottom: 1.5rem;
-        position: relative;
-        padding-bottom: 0.75rem;
-    }
-    
-    .hbr-article h2::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 60px;
-        height: 3px;
-        background: #CE0E2D;
-    }
-    
-    .hbr-article h3 {
-        font-family: 'Inter', sans-serif;
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #1F2937;
-        margin-top: 2rem;
-        margin-bottom: 1rem;
-        text-transform: uppercase;
-        letter-spacing: 0.025em;
-    }
-    
-    .hbr-article p {
-        font-family: 'Source Serif 4', serif;
-        font-size: 1.125rem;
-        line-height: 1.8;
-        color: #374151;
-        margin-bottom: 1.5rem;
-    }
-    
-    .hbr-article ul, .hbr-article ol {
-        margin: 1.5rem 0;
-        padding-left: 0;
-    }
-    
-    .hbr-article li {
-        font-family: 'Source Serif 4', serif;
-        font-size: 1.125rem;
-        line-height: 1.8;
-        color: #374151;
-        margin-bottom: 0.75rem;
-        padding-left: 2rem;
-        position: relative;
-    }
-    
-    .hbr-article ul li::before {
-        content: '▸';
-        position: absolute;
-        left: 0;
-        color: #CE0E2D;
-        font-size: 1.25rem;
-        font-weight: bold;
-    }
-    
-    .hbr-article blockquote {
-        font-family: 'Playfair Display', serif;
-        font-size: 1.5rem;
-        font-weight: 400;
-        font-style: italic;
-        color: #1A365D;
-        border-left: 4px solid #B8860B;
-        padding-left: 2rem;
-        margin: 2.5rem 0;
-        line-height: 1.6;
-    }
-    
-    .hbr-article strong {
-        font-weight: 700;
-        color: #111827;
-    }
-    
-    .hbr-article em {
-        font-family: 'Crimson Text', serif;
-        font-style: italic;
-        color: #4B5563;
-    }
-    
-    /* Strategic Plan Styles */
-    .strategy-plan {
-        background: white;
-        border-radius: 16px;
+    /* POWER REPORT STYLES - Bloomberg Terminal Meets Sales Playbook */
+    .power-report {
+        background: #FFFFFF;
+        border: 2px solid #000000;
+        border-radius: 0;
         overflow: hidden;
-        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+        box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
     }
     
-    .strategy-header {
-        background: linear-gradient(135deg, #7C6BBE 0%, #5A4E8C 100%);
-        color: white;
-        padding: 2.5rem 3rem;
-        position: relative;
+    .report-header {
+        background: #000000;
+        color: #FFFFFF;
+        padding: 1.5rem;
+        border-bottom: 4px solid #FF6600;
     }
     
-    .strategy-header h2 {
-        font-family: 'Playfair Display', serif;
-        font-size: 2.25rem;
+    .report-header h1 {
+        font-size: 1.75rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+        margin: 0;
+    }
+    
+    .report-badge {
+        display: inline-block;
+        background: #FF6600;
+        color: #FFFFFF;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
         font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
         margin-bottom: 0.5rem;
     }
     
-    .strategy-header .account-type {
-        font-family: 'Inter', sans-serif;
-        font-size: 0.875rem;
-        font-weight: 500;
-        opacity: 0.9;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
+    .report-section {
+        padding: 1.5rem;
+        border-bottom: 1px solid #E5E5E5;
     }
     
-    .strategy-section {
-        padding: 2.5rem 3rem;
-        border-bottom: 1px solid #E5E7EB;
-    }
-    
-    .strategy-section:last-child {
+    .report-section:last-child {
         border-bottom: none;
     }
     
-    .strategy-section h3 {
-        font-family: 'Inter', sans-serif;
-        font-size: 0.875rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: #6B7280;
+    /* KILLER METRICS */
+    .metric-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
         margin-bottom: 1.5rem;
     }
     
-    .strategy-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 2rem;
+    .metric-card {
+        background: #F5F5F5;
+        border-left: 4px solid #FF6600;
+        padding: 1rem;
+        position: relative;
+        overflow: hidden;
     }
     
-    .strategy-card {
-        background: #F9FAFB;
-        border-radius: 12px;
-        padding: 1.5rem;
-        border: 1px solid #E5E7EB;
-        transition: all 0.3s ease;
+    .metric-card.green {
+        border-left-color: #00C851;
     }
     
-    .strategy-card:hover {
-        border-color: #C0B6E3;
-        box-shadow: 0 4px 12px rgba(124, 107, 190, 0.1);
+    .metric-card.red {
+        border-left-color: #FF3B30;
     }
     
-    .strategy-card h4 {
-        font-family: 'Inter', sans-serif;
-        font-size: 1rem;
-        font-weight: 600;
-        color: #111827;
-        margin-bottom: 0.75rem;
+    .metric-value {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #000000;
+        line-height: 1;
     }
     
-    .strategy-card p {
-        font-family: 'Inter', sans-serif;
-        font-size: 0.875rem;
-        line-height: 1.6;
-        color: #4B5563;
-    }
-    
-    .action-item {
-        background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
-        border-left: 4px solid #7C6BBE;
-        border-radius: 8px;
-        padding: 1.5rem;
-        margin-bottom: 1rem;
-        transition: all 0.3s ease;
-    }
-    
-    .action-item:hover {
-        transform: translateX(4px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-    
-    .action-item h4 {
-        font-family: 'Inter', sans-serif;
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: #111827;
-        margin-bottom: 0.5rem;
-    }
-    
-    .action-item .timeline {
-        display: inline-block;
+    .metric-label {
         font-size: 0.75rem;
         font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        color: #666666;
+        margin-top: 0.25rem;
+    }
+    
+    /* ACTION ITEMS - What to Do NOW */
+    .action-card {
+        background: #FFFFFF;
+        border: 2px solid #000000;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+        position: relative;
+        transition: all 0.2s ease;
+    }
+    
+    .action-card:hover {
+        transform: translateX(4px);
+        box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+    }
+    
+    .action-card.urgent {
+        border-color: #FF3B30;
+        background: #FFF5F5;
+    }
+    
+    .action-card.urgent::before {
+        content: 'URGENT';
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: #FF3B30;
         color: white;
-        background: #7C6BBE;
         padding: 0.25rem 0.75rem;
-        border-radius: 4px;
-        margin-top: 0.75rem;
+        font-size: 0.625rem;
+        font-weight: 700;
     }
     
-    /* Premium Input Styling */
-    .input-container {
-        background: white;
-        border-radius: 16px;
-        padding: 1.5rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        border: 1px solid #E5E7EB;
-        transition: all 0.3s ease;
+    .action-title {
+        font-size: 1.125rem;
+        font-weight: 800;
+        color: #000000;
+        margin-bottom: 0.5rem;
     }
     
-    .input-container:focus-within {
-        box-shadow: 0 4px 16px rgba(124, 107, 190, 0.15);
-        border-color: #C0B6E3;
-    }
-    
-    #chat-input {
-        background: transparent;
-        border: none;
-        outline: none;
-        font-size: 1rem;
-        color: #111827;
-        width: 100%;
-        resize: none;
-        line-height: 1.6;
-    }
-    
-    #chat-input::placeholder {
-        color: #9CA3AF;
-    }
-    
-    /* Button Enhancement */
-    .send-button {
-        background: linear-gradient(135deg, #7C6BBE 0%, #6B5CAE 100%);
-        color: white;
-        border: none;
-        border-radius: 12px;
-        padding: 0.75rem 1.5rem;
-        font-weight: 600;
+    .action-detail {
         font-size: 0.875rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(124, 107, 190, 0.3);
+        color: #333333;
+        line-height: 1.5;
+    }
+    
+    .action-meta {
+        display: flex;
+        gap: 1rem;
+        margin-top: 0.75rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #666666;
+    }
+    
+    .action-meta span {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.25rem;
     }
     
-    .send-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 16px rgba(124, 107, 190, 0.4);
+    /* BLOOMBERG-STYLE LISTS */
+    .power-list {
+        padding-left: 0;
+        margin: 0;
     }
     
-    .send-button:active {
-        transform: translateY(0);
+    .power-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+        font-size: 0.9375rem;
+        line-height: 1.5;
     }
     
-    /* Fade and Slide Animations */
-    .fade-in {
-        animation: fadeIn 0.4s ease-out;
+    .power-list li::before {
+        content: '►';
+        color: #FF6600;
+        font-weight: 700;
+        flex-shrink: 0;
+        margin-top: 0.125rem;
     }
     
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    /* KEY INSIGHTS BOX */
+    .insight-box {
+        background: #000000;
+        color: #FFFFFF;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        position: relative;
     }
     
-    /* Print Styles */
-    @media print {
-        .no-print { display: none !important; }
-        .magazine-article, .strategy-plan { box-shadow: none; }
-        .magazine-header { background: #1A365D !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-        .strategy-header { background: #7C6BBE !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .insight-box::before {
+        content: '💡 KEY INSIGHT';
+        position: absolute;
+        top: -0.75rem;
+        left: 1rem;
+        background: #FF6600;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.625rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
     }
     
-    /* Responsive Adjustments */
+    .insight-box p {
+        margin: 0;
+        font-size: 1.125rem;
+        font-weight: 600;
+        line-height: 1.4;
+    }
+    
+    /* COMPETITIVE INTEL GRID */
+    .intel-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+    
+    .intel-card {
+        background: #FFFFFF;
+        border: 1px solid #E5E5E5;
+        padding: 1rem;
+    }
+    
+    .intel-card h4 {
+        font-size: 0.875rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+        color: #000000;
+    }
+    
+    .intel-card p {
+        font-size: 0.875rem;
+        color: #333333;
+        line-height: 1.4;
+    }
+    
+    /* WIN PROBABILITY */
+    .win-meter {
+        background: #F5F5F5;
+        height: 40px;
+        position: relative;
+        margin: 1rem 0;
+        border: 2px solid #000000;
+    }
+    
+    .win-meter-fill {
+        height: 100%;
+        background: #00C851;
+        transition: width 1s ease-out;
+        position: relative;
+    }
+    
+    .win-meter-label {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.25rem;
+        font-weight: 900;
+        color: #000000;
+    }
+    
+    /* PARTNER MATRIX */
+    .partner-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+    
+    .partner-table th,
+    .partner-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid #E5E5E5;
+    }
+    
+    .partner-table th {
+        background: #000000;
+        color: #FFFFFF;
+        font-weight: 700;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    
+    .partner-table td {
+        font-size: 0.875rem;
+    }
+    
+    .partner-score {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        border-radius: 2px;
+    }
+    
+    .partner-score.high {
+        background: #00C851;
+        color: white;
+    }
+    
+    .partner-score.medium {
+        background: #FFD700;
+        color: #000000;
+    }
+    
+    .partner-score.low {
+        background: #FF3B30;
+        color: white;
+    }
+    
+    /* Input Enhancement */
+    .power-input {
+        background: #F5F5F5;
+        border: 2px solid #000000;
+        padding: 1rem;
+        font-size: 1rem;
+        font-weight: 500;
+        color: #000000;
+        transition: all 0.2s ease;
+    }
+    
+    .power-input:focus {
+        background: #FFFFFF;
+        border-color: #FF6600;
+        outline: none;
+        box-shadow: 4px 4px 0 rgba(255, 102, 0, 0.2);
+    }
+    
+    .power-button {
+        background: #FF6600;
+        color: #FFFFFF;
+        border: 2px solid #000000;
+        padding: 0.75rem 1.5rem;
+        font-weight: 800;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+    
+    .power-button:hover {
+        background: #000000;
+        transform: translate(-2px, -2px);
+        box-shadow: 4px 4px 0 #FF6600;
+    }
+    
+    .power-button:active {
+        transform: translate(0, 0);
+        box-shadow: none;
+    }
+    
+    /* Animations */
+    @keyframes flash-in {
+        0% { opacity: 0; transform: scale(0.95); }
+        50% { opacity: 1; transform: scale(1.02); }
+        100% { opacity: 1; transform: scale(1); }
+    }
+    
+    .flash-in {
+        animation: flash-in 0.4s ease-out;
+    }
+    
+    /* Responsive */
     @media (max-width: 768px) {
-        .magazine-content, .strategy-section { padding: 2rem; }
-        .magazine-header { padding: 2rem 2rem 1.5rem; }
-        .hbr-article h1 { font-size: 2rem; }
-        .hbr-article h2 { font-size: 1.5rem; }
+        .report-section { padding: 1rem; }
+        .metric-grid { grid-template-columns: 1fr; }
+        .intel-grid { grid-template-columns: 1fr; }
     }
 </style>
 
 </head>
 <body>
-   <div class="max-w-4xl mx-auto px-4 py-8 min-h-screen">
-       <header class="text-center mb-8 animate-fade-in-slow">
+   <div class="max-w-5xl mx-auto px-4 py-6">
+       <header class="text-center mb-6">
            <a href="/" aria-label="AskArti Home">
-               <img src="/images/asklite.png" alt="AskArti" class="h-20 sm:h-24 mx-auto mb-2">
+               <img src="/images/asklite.png" alt="AskArti" class="h-16 sm:h-20 mx-auto mb-2">
            </a>
-           <p class="text-sm text-gray-600 font-medium">Federal Sales Intelligence · Strategic Advisory</p>
+           <p class="text-xs font-bold uppercase tracking-wider text-gray-600">FEDERAL SALES INTELLIGENCE • INSTANT PLAYBOOKS</p>
        </header>
 
-       <main class="mb-8">
-           <div class="input-container">
+       <main class="bg-white border-2 border-black mb-6">
+           <div class="p-4">
                <div class="chat-container mb-4" id="chat-history">
                    <div class="flex items-start gap-3 mb-4">
-                       <img src="/images/arti_right.png" alt="Arti" class="w-10 h-10 rounded-full flex-shrink-0 border-2 border-gray-100">
-                       <div class="chat-message-arti px-5 py-3 max-w-[85%]">
-                           <p class="text-sm leading-relaxed">Welcome. I'm Arti, your federal sales strategist. Share your situation and I'll provide magazine-quality analysis and actionable insights.</p>
+                       <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 flex-shrink-0">
+                       <div class="chat-message-arti px-4 py-2.5 max-w-[85%]">
+                           <p class="text-sm font-medium">What's your situation? I'll give you exactly what you need to win.</p>
                        </div>
                    </div>
                </div>
-               <div class="flex gap-3 items-end">
-                   <textarea 
+               <div class="flex gap-2">
+                   <input 
+                       type="text" 
                        id="chat-input" 
-                       rows="1"
-                       placeholder="Describe your challenge... (e.g., 'How do I navigate a competitive RFP with Deloitte as the incumbent?')" 
-                       maxlength="1000"
-                   ></textarea>
-                   <button id="chat-send-btn" class="send-button no-print">
-                       <span>Analyze</span>
-                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                       </svg>
+                       class="power-input flex-1" 
+                       placeholder="e.g., Losing to Booz Allen on DHS deal, need a comeback plan NOW" 
+                       maxlength="500"
+                   >
+                   <button id="chat-send-btn" class="power-button no-print">
+                       GET PLAN →
                    </button>
                </div>
            </div>
        </main>
 
-       <div id="results-container" class="space-y-6"></div>
+       <div id="results-container"></div>
 
-       <footer class="text-center mt-16 space-y-3 pb-8 no-print">
-            <p class="text-xs text-gray-500 max-w-2xl mx-auto">
-                © 2025 AskArti · Premium Federal Sales Intelligence<br>
-                AI-powered analysis for complex government sales strategies
+       <footer class="text-center mt-12 pb-8 no-print">
+            <p class="text-xs text-gray-600 font-medium">
+                © 2025 AskArti · AI-POWERED FEDERAL SALES INTELLIGENCE<br>
+                <span class="text-gray-500">Not responsible for deals you close using our advice</span>
             </p>
        </footer>
    </div>
@@ -576,36 +517,26 @@ class AskArtiApp {
         };
         this.apiEndpoint = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
         this.setupEventListeners();
-        this.setupTextareaAutoResize();
     }
 
     setupEventListeners() {
         this.elements.chatSendBtn.addEventListener('click', () => this.sendMessage());
         this.elements.chatInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
+            if (e.key === 'Enter') {
                 e.preventDefault();
                 this.sendMessage();
             }
         });
     }
 
-    setupTextareaAutoResize() {
-        const textarea = this.elements.chatInput;
-        textarea.addEventListener('input', () => {
-            textarea.style.height = 'auto';
-            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
-        });
-    }
-
     addMessageToUI(content, isUser) {
         const messageClass = isUser ? 'chat-message-user' : 'chat-message-arti';
         const justifyClass = isUser ? 'justify-end' : 'justify-start';
-        const avatarHtml = !isUser ? '<img src="/images/arti_right.png" alt="Arti" class="w-10 h-10 rounded-full flex-shrink-0 border-2 border-gray-100">' : '';
         
         const messageHtml = `
-            <div class="flex ${justifyClass} mb-4 fade-in">
-                ${!isUser ? avatarHtml : ''}
-                <div class="${messageClass} px-5 py-3 max-w-[85%] text-sm leading-relaxed ${isUser ? 'mr-3' : 'ml-3'}">${content}</div>
+            <div class="flex ${justifyClass} mb-4 animate-slide-up">
+                ${!isUser ? '<img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 flex-shrink-0 mr-3">' : ''}
+                <div class="${messageClass} px-4 py-2.5 max-w-[85%] text-sm font-medium">${content}</div>
             </div>`;
         
         this.elements.chatHistory.insertAdjacentHTML('beforeend', messageHtml);
@@ -614,17 +545,11 @@ class AskArtiApp {
 
     showLoading() {
         this.elements.resultsContainer.innerHTML = `
-            <div class="magazine-article">
-                <div class="magazine-content text-center py-12">
-                    <div class="loader-container mb-4">
-                        <div class="loader"></div>
-                    </div>
-                    <p class="text-sm text-gray-600 font-medium animate-pulse-subtle">
-                        Crafting your strategic analysis...
-                    </p>
-                    <p class="text-xs text-gray-500 mt-2">
-                        This typically takes 10-15 seconds
-                    </p>
+            <div class="power-report">
+                <div class="report-section text-center py-8">
+                    <div class="loader mb-3"></div>
+                    <p class="font-bold text-sm uppercase tracking-wider">GENERATING YOUR PLAYBOOK...</p>
+                    <p class="text-xs text-gray-600 mt-1">10 seconds to tactical brilliance</p>
                 </div>
             </div>`;
     }
@@ -635,10 +560,10 @@ class AskArtiApp {
 
         this.state.isProcessing = true;
         this.elements.chatSendBtn.disabled = true;
+        this.elements.chatSendBtn.textContent = 'PROCESSING...';
         
         this.addMessageToUI(message, true);
         this.elements.chatInput.value = '';
-        this.elements.chatInput.style.height = 'auto';
         this.showLoading();
 
         this.state.conversationHistory.push({ role: 'user', content: message });
@@ -657,7 +582,6 @@ class AskArtiApp {
             
             const data = await response.json();
             
-            // Add a contextual response to chat
             const contextualResponse = this.getContextualResponse(data);
             this.addMessageToUI(contextualResponse, false);
             
@@ -671,36 +595,40 @@ class AskArtiApp {
         } catch (error) {
             console.error('Error:', error);
             this.elements.resultsContainer.innerHTML = `
-                <div class="magazine-article">
-                    <div class="magazine-content text-center text-red-600 py-8">
-                        <p class="font-medium">Unable to generate analysis</p>
-                        <p class="text-sm text-gray-600 mt-2">Please try again in a moment</p>
+                <div class="power-report">
+                    <div class="report-section text-center text-red-600 py-6">
+                        <p class="font-bold">SYSTEM ERROR</p>
+                        <p class="text-sm mt-2">Try again. The AI hamsters need a coffee break.</p>
                     </div>
                 </div>`;
         } finally {
             this.state.isProcessing = false;
             this.elements.chatSendBtn.disabled = false;
+            this.elements.chatSendBtn.textContent = 'GET PLAN →';
         }
     }
 
     getContextualResponse(data) {
-        if (data.response_type === 'analysis') {
-            return "I've prepared a comprehensive strategic analysis for your situation. You'll find actionable insights and frameworks below.";
-        } else {
-            return "I've developed a detailed strategic plan tailored to your federal sales opportunity. Review the executive summary and recommended actions below.";
-        }
+        const responses = [
+            "Boom! Here's your tactical playbook. Execute this and watch the magic happen.",
+            "Got it. Here's exactly what you need to do to turn this around.",
+            "Analysis complete. This playbook will get you back in the game.",
+            "Here's your action plan. Follow this and you'll crush it.",
+            "Locked and loaded. Here's how you win this."
+        ];
+        return responses[Math.floor(Math.random() * responses.length)];
     }
 
     displayResponse(data) {
         this.elements.resultsContainer.innerHTML = '';
         
         if (data.response_type === 'analysis' && data.analysis_markdown) {
-            this.displayHbrArticle(data.analysis_markdown);
+            this.displayTacticalAnalysis(data.analysis_markdown);
         } else {
-            this.displayStrategicPlan(data);
+            this.displayBattlePlan(data);
         }
         
-        // Smooth scroll to results
+        // Flash animation on new content
         setTimeout(() => {
             this.elements.resultsContainer.scrollIntoView({ 
                 behavior: 'smooth', 
@@ -709,120 +637,120 @@ class AskArtiApp {
         }, 100);
     }
 
-    displayHbrArticle(markdown) {
-        // Parse the markdown and extract title if it exists
-        const lines = markdown.split('\n');
-        let title = '';
-        let content = markdown;
+    displayTacticalAnalysis(markdown) {
+        // Parse and enhance the markdown for Bloomberg-style presentation
+        const htmlContent = marked.parse(markdown);
         
-        if (lines[0].startsWith('# ')) {
-            title = lines[0].replace('# ', '').trim();
-            content = lines.slice(1).join('\n');
-        }
-        
-        const articleHtml = `
-            <div class="magazine-article fade-in animate-slide-up">
-                <div class="magazine-header">
-                    <div class="magazine-label">Strategic Analysis</div>
-                    ${title ? `<h1>${title}</h1>` : '<h1>Strategic Framework Analysis</h1>'}
-                    <div class="subtitle">A comprehensive examination of your federal sales challenge</div>
+        const analysisHtml = `
+            <div class="power-report flash-in">
+                <div class="report-header">
+                    <div class="report-badge">TACTICAL ANALYSIS</div>
+                    <h1>Your Action Plan</h1>
                 </div>
-                <div class="magazine-content hbr-article">
-                    ${this.enhanceMarkdown(marked.parse(content))}
+                <div class="report-section">
+                    ${this.enhanceAnalysisContent(htmlContent)}
                 </div>
             </div>`;
         
-        this.elements.resultsContainer.innerHTML = articleHtml;
+        this.elements.resultsContainer.innerHTML = analysisHtml;
     }
 
-    enhanceMarkdown(html) {
-        // Enhance the parsed markdown with better styling
-        html = html.replace(/<p>(.*?)<\/p>/g, (match, p1) => {
-            // Check if this is the first substantial paragraph (executive summary)
-            if (p1.length > 100 && !html.includes('class="executive-summary"')) {
-                return `<p class="executive-summary">${p1}</p>`;
-            }
-            return match;
-        });
+    enhanceAnalysisContent(html) {
+        // Transform headers to Bloomberg style
+        html = html.replace(/<h1[^>]*>(.*?)<\/h1>/g, '<h2 class="text-2xl font-900 uppercase mb-4 border-b-4 border-bloomberg-orange pb-2">$1</h2>');
+        html = html.replace(/<h2[^>]*>(.*?)<\/h2>/g, '<h3 class="text-lg font-800 uppercase mt-6 mb-3">$1</h3>');
+        html = html.replace(/<h3[^>]*>(.*?)<\/h3>/g, '<h4 class="text-base font-700 uppercase mt-4 mb-2">$1</h4>');
         
-        // Add custom bullet styling
-        html = html.replace(/<ul>/g, '<ul class="custom-bullets">');
+        // Style paragraphs
+        html = html.replace(/<p>/g, '<p class="mb-4 leading-relaxed">');
+        
+        // Transform lists to power lists
+        html = html.replace(/<ul>/g, '<ul class="power-list mb-4">');
+        html = html.replace(/<ol>/g, '<ol class="power-list mb-4">');
+        
+        // Style blockquotes as insight boxes
+        html = html.replace(/<blockquote>(.*?)<\/blockquote>/g, '<div class="insight-box"><p>$1</p></div>');
+        
+        // Bold important phrases
+        html = html.replace(/<strong>(.*?)<\/strong>/g, '<span class="font-800 text-bloomberg-orange">$1</span>');
         
         return html;
     }
 
-    displayStrategicPlan(data) {
+    displayBattlePlan(data) {
         const { 
             account_name, 
             executive_summary, 
             strategic_assessment, 
             partner_ecosystem, 
-            next_steps 
+            next_steps,
+            win_probability,
+            key_metrics
         } = data;
         
         let html = `
-            <div class="strategy-plan fade-in animate-slide-up">
-                <div class="strategy-header">
-                    <div class="account-type">Federal Strategic Plan</div>
-                    <h2>${account_name || 'Strategic Sales Plan'}</h2>
+            <div class="power-report flash-in">
+                <div class="report-header">
+                    <div class="report-badge">BATTLE PLAN</div>
+                    <h1>${account_name || 'Federal Sales Playbook'}</h1>
                 </div>`;
         
-        if (executive_summary) {
+        // Executive Summary with Metrics
+        if (executive_summary || key_metrics) {
             html += `
-                <div class="strategy-section">
-                    <h3>Executive Summary</h3>
-                    <div class="bg-gradient-to-r from-customPurple-50 to-transparent border-l-4 border-customPurple-500 pl-6 py-4 rounded-r-lg">
-                        <p class="text-gray-700 leading-relaxed">${executive_summary}</p>
-                    </div>
-                </div>`;
-        }
-        
-        if (strategic_assessment) {
-            html += `
-                <div class="strategy-section">
-                    <h3>Strategic Assessment</h3>
-                    ${strategic_assessment.current_state ? `
-                        <div class="mb-6">
-                            <h4 class="text-lg font-semibold text-gray-900 mb-3">Current State Analysis</h4>
-                            <p class="text-gray-700 leading-relaxed">${strategic_assessment.current_state}</p>
+                <div class="report-section">
+                    ${executive_summary ? `
+                        <div class="mb-4">
+                            <h3 class="text-xs font-bold uppercase tracking-wider mb-2">EXECUTIVE SUMMARY</h3>
+                            <p class="text-lg font-semibold leading-tight">${executive_summary}</p>
                         </div>
                     ` : ''}
                     
-                    <div class="strategy-grid">
+                    ${key_metrics ? this.renderMetrics(key_metrics) : ''}
+                    
+                    ${win_probability ? `
+                        <div class="mt-4">
+                            <h3 class="text-xs font-bold uppercase tracking-wider mb-2">WIN PROBABILITY</h3>
+                            <div class="win-meter">
+                                <div class="win-meter-fill" style="width: ${win_probability}%"></div>
+                                <div class="win-meter-label">${win_probability}%</div>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>`;
+        }
+        
+        // Strategic Assessment
+        if (strategic_assessment) {
+            html += `
+                <div class="report-section">
+                    <h3 class="text-xs font-bold uppercase tracking-wider mb-4">SITUATION ANALYSIS</h3>
+                    
+                    ${strategic_assessment.current_state ? `
+                        <div class="mb-4">
+                            <p class="leading-relaxed">${strategic_assessment.current_state}</p>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         ${strategic_assessment.key_challenges?.length ? `
-                            <div class="strategy-card">
-                                <h4 class="flex items-center gap-2">
-                                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                                    </svg>
-                                    Key Challenges
-                                </h4>
-                                <ul class="mt-3 space-y-2">
-                                    ${strategic_assessment.key_challenges.map(challenge => `
-                                        <li class="flex items-start gap-2">
-                                            <span class="text-red-500 mt-1">▸</span>
-                                            <span class="text-sm">${challenge}</span>
-                                        </li>
-                                    `).join('')}
+                            <div>
+                                <h4 class="font-bold text-red-600 uppercase text-sm mb-2">⚠️ THREATS</h4>
+                                <ul class="power-list">
+                                    ${strategic_assessment.key_challenges.map(challenge => 
+                                        `<li>${challenge}</li>`
+                                    ).join('')}
                                 </ul>
                             </div>
                         ` : ''}
                         
                         ${strategic_assessment.opportunities?.length ? `
-                            <div class="strategy-card">
-                                <h4 class="flex items-center gap-2">
-                                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    Strategic Opportunities
-                                </h4>
-                                <ul class="mt-3 space-y-2">
-                                    ${strategic_assessment.opportunities.map(opp => `
-                                        <li class="flex items-start gap-2">
-                                            <span class="text-green-500 mt-1">▸</span>
-                                            <span class="text-sm">${opp}</span>
-                                        </li>
-                                    `).join('')}
+                            <div>
+                                <h4 class="font-bold text-green-600 uppercase text-sm mb-2">✓ OPPORTUNITIES</h4>
+                                <ul class="power-list">
+                                    ${strategic_assessment.opportunities.map(opp => 
+                                        `<li>${opp}</li>`
+                                    ).join('')}
                                 </ul>
                             </div>
                         ` : ''}
@@ -830,106 +758,106 @@ class AskArtiApp {
                 </div>`;
         }
         
+        // Partner Intel
         if (partner_ecosystem) {
-            html += `
-                <div class="strategy-section">
-                    <h3>Partner Ecosystem Analysis</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        ${partner_ecosystem.top_prime_contractors?.length ? `
-                            <div class="bg-gradient-to-br from-blue-50 to-transparent p-6 rounded-lg border border-blue-100">
-                                <h4 class="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                                    </svg>
-                                    Prime Contractors
-                                </h4>
-                                <ul class="space-y-2">
-                                    ${partner_ecosystem.top_prime_contractors.map(contractor => `
-                                        <li class="text-sm text-gray-700 flex items-center gap-2">
-                                            <span class="w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
-                                            ${contractor}
-                                        </li>
-                                    `).join('')}
-                                </ul>
-                            </div>
-                        ` : ''}
-                        
-                        ${partner_ecosystem.potential_isv_partners?.length ? `
-                            <div class="bg-gradient-to-br from-purple-50 to-transparent p-6 rounded-lg border border-purple-100">
-                                <h4 class="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
-                                    </svg>
-                                    ISV Partners
-                                </h4>
-                                <ul class="space-y-2">
-                                    ${partner_ecosystem.potential_isv_partners.map(partner => `
-                                        <li class="text-sm text-gray-700 flex items-center gap-2">
-                                            <span class="w-1.5 h-1.5 bg-purple-600 rounded-full"></span>
-                                            ${partner}
-                                        </li>
-                                    `).join('')}
-                                </ul>
-                            </div>
-                        ` : ''}
-                        
-                        ${partner_ecosystem.competitive_landscape ? `
-                            <div class="bg-gradient-to-br from-amber-50 to-transparent p-6 rounded-lg border border-amber-100">
-                                <h4 class="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                                    <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                    </svg>
-                                    Competitive Landscape
-                                </h4>
-                                <p class="text-sm text-gray-700">${partner_ecosystem.competitive_landscape}</p>
-                            </div>
-                        ` : ''}
-                    </div>
-                </div>`;
+            html += this.renderPartnerIntel(partner_ecosystem);
         }
-
+        
+        // Action Plan
         if (next_steps?.length) {
             html += `
-                <div class="strategy-section">
-                    <h3>Action Plan</h3>
-                    <div class="space-y-3">
-                        ${next_steps.map((step, index) => {
-                            const priorityColors = {
-                                immediate: 'bg-red-500',
-                                high: 'bg-orange-500',
-                                medium: 'bg-blue-500',
-                                low: 'bg-gray-500'
-                            };
-                            const bgColor = priorityColors[step.priority] || 'bg-gray-500';
-                            
-                            return `
-                                <div class="action-item" style="animation-delay: ${index * 0.1}s">
-                                    <div class="flex items-start justify-between">
-                                        <div class="flex-1">
-                                            <h4>${step.action}</h4>
-                                            <p class="text-sm text-gray-600 mt-2">${step.rationale}</p>
-                                        </div>
-                                        <div class="flex flex-col items-end gap-2 ml-4">
-                                            <span class="timeline ${bgColor}">${step.timeline}</span>
-                                            <span class="text-xs text-gray-500 font-medium uppercase">${step.priority} Priority</span>
-                                        </div>
-                                    </div>
+                <div class="report-section">
+                    <h3 class="text-xs font-bold uppercase tracking-wider mb-4">🎯 ACTION PLAN - EXECUTE NOW</h3>
+                    ${next_steps.map((step, index) => {
+                        const isUrgent = step.priority === 'immediate' || index === 0;
+                        return `
+                            <div class="action-card ${isUrgent ? 'urgent' : ''}">
+                                <div class="action-title">${step.action}</div>
+                                <div class="action-detail">${step.rationale}</div>
+                                <div class="action-meta">
+                                    <span>
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        ${step.timeline}
+                                    </span>
+                                    <span class="uppercase">${step.priority} Priority</span>
                                 </div>
-                            `;
-                        }).join('')}
-                    </div>
+                            </div>
+                        `;
+                    }).join('')}
                 </div>`;
         }
-
+        
         html += '</div>';
         
         this.elements.resultsContainer.innerHTML = html;
     }
+
+    renderMetrics(metrics) {
+        return `
+            <div class="metric-grid">
+                ${Object.entries(metrics).map(([key, value]) => {
+                    const isPositive = value.trend === 'up';
+                    return `
+                        <div class="metric-card ${isPositive ? 'green' : 'red'}">
+                            <div class="metric-value">${value.value}</div>
+                            <div class="metric-label">${key.replace(/_/g, ' ')}</div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+    }
+
+    renderPartnerIntel(ecosystem) {
+        return `
+            <div class="report-section">
+                <h3 class="text-xs font-bold uppercase tracking-wider mb-4">PARTNER INTELLIGENCE</h3>
+                
+                ${ecosystem.competitive_landscape ? `
+                    <div class="insight-box mb-4">
+                        <p>${ecosystem.competitive_landscape}</p>
+                    </div>
+                ` : ''}
+                
+                <table class="partner-table">
+                    <thead>
+                        <tr>
+                            <th>Partner Type</th>
+                            <th>Company</th>
+							<th>Fit Score</th>
+                           <th>Why Them</th>
+                       </tr>
+                   </thead>
+                   <tbody>
+                       ${ecosystem.top_prime_contractors?.map(prime => `
+                           <tr>
+                               <td><span class="font-bold">PRIME</span></td>
+                               <td>${prime.name || prime}</td>
+                               <td><span class="partner-score high">HIGH</span></td>
+                               <td>${prime.rationale || 'Strong federal presence'}</td>
+                           </tr>
+                       `).join('') || ''}
+                       
+                       ${ecosystem.potential_isv_partners?.map(isv => `
+                           <tr>
+                               <td><span class="font-bold">ISV</span></td>
+                               <td>${isv.name || isv}</td>
+                               <td><span class="partner-score medium">MED</span></td>
+                               <td>${isv.rationale || 'Tech complementarity'}</td>
+                           </tr>
+                       `).join('') || ''}
+                   </tbody>
+               </table>
+           </div>
+       `;
+   }
 }
 
 // Initialize the app when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    new AskArtiApp();
+   new AskArtiApp();
 });
 </script>
 </body>
