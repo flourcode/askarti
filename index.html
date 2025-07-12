@@ -5,28 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AskArti - Your Fed Sales Buddy</title>
     
-    <!-- Meta Tags -->
     <meta name="description" content="When your customer ghosts you and your boss wants impossible quota. Real federal sales advice that actually works.">
     <meta name="keywords" content="federal sales, government sales, sales strategy, federal contractors, govcon">
     <meta name="author" content="Mark">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://askarti.com">
     
-    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://askarti.com/">
     <meta property="og:title" content="AskArti - Your Federal Sales Buddy">
     <meta property="og:description" content="Real federal sales advice from someone who gets it. No BS, just results.">
     <meta property="og:image" content="https://askarti.com/images/asklite.png">
     
-    <!-- Twitter -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:url" content="https://askarti.com/">
     <meta name="twitter:title" content="AskArti - Your Federal Sales Buddy">
     <meta name="twitter:description" content="Real federal sales advice that actually works.">
     <meta name="twitter:image" content="https://askarti.com/images/asklite.png">
     
-    <!-- Favicons -->
     <link rel="icon" href="/images/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
@@ -34,23 +30,19 @@
     <link rel="manifest" href="/site.webmanifest">
     <meta name="theme-color" content="#7C6BBE">
     
-    <!-- Preconnect -->
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Preload critical assets -->
     <link rel="preload" href="/images/asklite.png" as="image">
     <link rel="preload" href="/images/arti_right.png" as="image">
     
-    <!-- Styles and Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WLGEPY5H4G"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -184,6 +176,7 @@
         max-height: 400px;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
     }
 
     @media (min-width: 640px) {
@@ -226,6 +219,11 @@
         color: #111827;
         margin-bottom: 1rem;
     }
+    .result-card h4 {
+        font-weight: 600;
+        color: #1F2937;
+        margin-bottom: 0.5rem;
+    }
 
     .result-card p, .result-card li {
         font-size: 0.875rem;
@@ -246,30 +244,11 @@
        margin-bottom: 1.5rem;
    }
 
-   /* Table styles */
-   .data-table {
-       font-size: 0.875rem;
-   }
-
-   .data-table th {
-       font-weight: 600;
-       color: #6B7280;
-       text-transform: uppercase;
-       font-size: 0.75rem;
-       letter-spacing: 0.05em;
-   }
-
-   .data-table td {
-       color: #374151;
-   }
-
    /* Mobile optimizations */
    @media (max-width: 640px) {
        .result-card {
            padding: 1rem;
        }
-
-
        input[type="text"] {
            font-size: 16px !important; /* Prevent zoom on iOS */
        }
@@ -280,85 +259,28 @@
        body {
            background-color: white;
        }
-       
        .no-print {
            display: none !important;
        }
-       
        .result-card {
            box-shadow: none;
            border: 1px solid #E5E7EB;
            break-inside: avoid;
        }
    }
-   /* Enhanced chat container styles */
-.chat-container {
-    height: 50vh;
-    max-height: 400px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    /* Add padding at bottom to ensure buttons are visible */
-    padding-bottom: 20px;
-    /* Ensure smooth scrolling */
-    scroll-behavior: smooth;
-}
-
-@media (min-width: 640px) {
-    .chat-container {
-        height: 60vh;
-        max-height: 500px;
-        padding-bottom: 20px;
-    }
-}
-
-/* Ensure generate plan button is always visible */
-#generate-plan-container {
-    margin-top: 16px;
-    margin-bottom: 16px;
-    /* Ensure it doesn't get cut off */
-    min-height: 60px;
-}
-
-#generate-plan-container button {
-    /* Make sure button has good contrast and visibility */
-    min-height: 44px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Better scrollbar for the chat */
-.chat-container::-webkit-scrollbar {
-    width: 6px;
-}
-
-.chat-container::-webkit-scrollbar-track {
-    background: #F9FAFB;
-    border-radius: 3px;
-}
-
-.chat-container::-webkit-scrollbar-thumb {
-    background: #D1D5DB;
-    border-radius: 3px;
-}
-
-.chat-container::-webkit-scrollbar-thumb:hover {
-    background: #9CA3AF;
-}
 </style>
 
 </head>
 <body class="bg-gray-50 text-gray-900">
    <div class="max-w-3xl mx-auto px-4 py-6 min-h-screen">
-       <!-- Clean header -->
        <header class="text-center mb-6">
            <a href="/" aria-label="AskArti Home">
                <img src="/images/asklite.png" alt="AskArti" class="h-16 sm:h-20 mx-auto">
            </a>
        </header>
 
-       <!-- Main chat interface -->
        <main class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
            <div class="p-4 sm:p-6">
-               <!-- Chat messages -->
                <div class="chat-container mb-4" id="chat-messages">
                    <div class="flex items-start gap-3 mb-4">
                        <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
@@ -371,7 +293,6 @@
                    </div>
                </div>
 
-               <!-- Input area -->
                <div class="flex gap-2">
                    <button 
                        id="clear-chat-btn"
@@ -397,29 +318,22 @@
                    </button>
                </div>
            </div>
-
        </main>
 
-       <!-- Loading state -->
        <div id="loading-container" class="hidden text-center py-4">
            <div class="inline-flex items-center gap-3 text-gray-600">
+                <div class="loader"></div>
                <span id="loading-message" class="text-sm font-medium"></span>
            </div>
        </div>
 
-       <!-- Error state -->
        <div id="error-message" class="hidden bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
            <p class="text-red-700 font-medium text-sm">Connection issues. Even the servers are ghosting us.</p>
            <button id="retry-btn" class="mt-2 text-red-700 underline text-sm">Try again</button>
        </div>
-
-       <!-- Results container -->
-       <div id="results-container" class="space-y-4"></div>
        
-       <!-- Account Plan container -->
        <div id="account-plan-container" class="hidden space-y-4"></div>
 
-       <!-- Footer -->
        <footer class="text-center mt-12 space-y-4 pb-8 no-print">
            <div class="flex justify-center gap-6 text-sm">
                <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">About</button>
@@ -427,7 +341,6 @@
                <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Contact</a>
            </div>
 
-           <!-- Sponsor message -->
            <div class="max-w-xl mx-auto bg-customPurple-50 border border-customPurple-200 rounded-lg p-4 text-sm">
                <p class="text-customPurple-900 font-medium mb-1">Hey there! Enjoying these results?</p>
                <p class="text-customPurple-700">
@@ -448,7 +361,6 @@
        </footer>
    </div>
 
-   <!-- About Modal -->
    <div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
        <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
            <div class="flex justify-between items-start mb-4">
@@ -496,11 +408,10 @@ const CONFIG = {
     RETRY_DELAY: 2000,
     MAX_INPUT_LENGTH: 500,
     LOADING_MESSAGES: [
-        "Working backwards...",
-        "Thinking big...",
-        "Circling back...",
-        "Unpacking this...",
-        "Putting a pin in it..."
+        "Analyzing the market...",
+        "Deconstructing the situation...",
+        "Consulting the knowledge base...",
+        "Synthesizing strategy..."
     ]
 };
 
@@ -512,7 +423,6 @@ class AskArti {
             pendingRequest: false,
             lastQuery: '',
             chatHistory: [],
-            messageCount: 0,
             hasActiveResults: false
         };
         this.init();
@@ -555,7 +465,6 @@ class AskArti {
     }
 
     setupEventListeners() {
-        // Chat events
         this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
         this.elements.chatInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -563,21 +472,14 @@ class AskArti {
                 this.sendChatMessage();
             }
         });
-
         this.elements.clearChatBtn.addEventListener('click', () => this.clearChat());
         this.elements.retryBtn.addEventListener('click', () => this.retry());
-
-        // Modal events
         this.elements.aboutBtn.addEventListener('click', () => this.showModal());
         this.elements.closeAbout.addEventListener('click', () => this.hideModal());
         this.elements.aboutModal.addEventListener('click', (e) => {
             if (e.target === this.elements.aboutModal) this.hideModal();
         });
-
-        // Share
         this.elements.shareBtn.addEventListener('click', () => this.share());
-
-        // Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') this.hideModal();
         });
@@ -585,10 +487,8 @@ class AskArti {
 
     clearChat() {
         this.state.chatHistory = [];
-        this.state.messageCount = 0;
         this.state.hasActiveResults = false;
         
-        // Reset chat to welcome message
         this.elements.chatMessages.innerHTML = `
             <div class="flex items-start gap-3 mb-4">
                 <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 rounded-full flex-shrink-0">
@@ -599,11 +499,9 @@ class AskArti {
                 </div>
             </div>`;
         
-        // Clear other areas
         this.elements.chatInput.value = '';
         this.clearResults();
         
-        // Remove any generate plan buttons
         const planBtns = document.querySelectorAll('#generate-plan-container');
         planBtns.forEach(btn => btn.remove());
         
@@ -611,7 +509,6 @@ class AskArti {
     }
 
     clearResults() {
-        // Clear previous results before showing new ones
         this.elements.accountPlanContainer.innerHTML = '';
         this.elements.accountPlanContainer.classList.add('hidden');
     }
@@ -631,7 +528,6 @@ class AskArti {
                 </div>
             </div>
         `;
-        
         this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
         this.scrollChatToBottom();
     }
@@ -667,190 +563,147 @@ class AskArti {
     }
 
     scrollChatToBottom() {
-        const container = document.querySelector('.chat-container');
+        const container = this.elements.chatMessages;
         if (container) {
-            container.scrollTop = container.scrollHeight;
+            setTimeout(() => { container.scrollTop = container.scrollHeight; }, 50);
         }
     }
-async sendChatMessage() {
-    const message = this.elements.chatInput.value.trim();
-    
-    if (this.state.pendingRequest || !message) return;
 
-    // Clear previous results if any
-    if (this.state.hasActiveResults) {
+    async sendChatMessage() {
+        const message = this.elements.chatInput.value.trim();
+        if (this.state.pendingRequest || !message) return;
+
         this.clearResults();
-    }
-
-    // Add user message
-    this.addChatMessage(message, true);
-    this.elements.chatInput.value = '';
-    this.state.lastQuery = message;
-    
-    // Update history BEFORE sending request
-    this.state.chatHistory.push({ role: 'user', content: message });
-    this.state.messageCount++;
-
-    // Show typing
-    this.showTypingIndicator();
-    this.state.pendingRequest = true;
-
-    try {
-        const response = await this.makeChatRequest(message);
-        this.hideTypingIndicator();
+        this.addChatMessage(message, true);
+        this.elements.chatInput.value = '';
+        this.state.lastQuery = message;
         
-        const aiMessage = response.message || "Tell me more.";
-        this.addChatMessage(aiMessage, false);
-        
-        // Add AI response to history
-        this.state.chatHistory.push({ role: 'assistant', content: aiMessage });
-        
-        this.state.lastQuery = '';
+        const isFirstMessage = this.state.chatHistory.length === 0;
+        this.state.chatHistory.push({ role: 'user', content: message });
 
-        // Auto-generate plan if ready, or show button
-        if (response.ready_for_plan) {
-            setTimeout(() => {
-                this.generateStrategicPlan();
-            }, 1000);
-        } else if (response.readiness_score >= 7 && !document.getElementById('generate-plan-container')) {
-            // Add delay to ensure message is rendered first
-            setTimeout(() => {
-                this.addStrategicPlanButton();
-            }, 500);
+        this.state.pendingRequest = true;
+
+        if (isFirstMessage) {
+            this.showLoading();
+        } else {
+            this.showTypingIndicator();
         }
 
-    } catch (error) {
-        console.error('Chat request failed:', error);
-        this.hideTypingIndicator();
-        this.addChatMessage("Connection issues. Try again?", false);
-        this.showError();
-    } finally {
-        this.state.pendingRequest = false;
-    }
-}
-    async makeChatRequest(message) {
-    const contextToSend = this.state.chatHistory.length > 20 
-        ? [this.state.chatHistory[0], ...this.state.chatHistory.slice(-19)]
-        : this.state.chatHistory;
-    
-    const response = await fetch(CONFIG.API_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            situation: message,
-            mode: 'chat',
-            conversationHistory: contextToSend,
-            currentDate: new Date().toISOString().split('T')[0] // Always current date
-        })
-    });
-
-    if (!response.ok) throw new Error('Request failed');
-    return await response.json();
-}
-
-    // Instead of adding to chatMessages, add it after the chat container
-addStrategicPlanButton() {
-    const btnHtml = `
-        <div id="generate-plan-container" class="flex justify-center my-4 px-4">
-            <button onclick="app.generateStrategicPlan()" 
-                class="px-6 py-3 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg text-sm transition-colors shadow-md">
-                Get Your Plan →
-            </button>
-        </div>
-    `;
-    this.elements.chatMessages.insertAdjacentHTML('beforeend', btnHtml);
-    
-    // CRITICAL: Ensure the button is visible by scrolling
-    setTimeout(() => {
-        this.scrollChatToBottom();
-        
-        // Double-check the button is visible
-        const button = document.getElementById('generate-plan-container');
-        if (button) {
-            button.scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'end',
-                inline: 'nearest'
+        try {
+            const response = await this.makeApiRequest({
+                situation: message,
+                conversationHistory: this.state.chatHistory
             });
+
+            this.hideTypingIndicator();
+            this.hideLoading();
+
+            // --- KEY CHANGE: Detect response type (Zero-Shot Plan vs. Chat) ---
+            if (response.account_name) {
+                console.log('Zero-shot plan received, displaying directly.');
+                this.state.hasActiveResults = true;
+                // Add a placeholder assistant message to history so the next turn has context
+                this.state.chatHistory.push({ role: 'assistant', content: "Generated a strategic plan." });
+                this.displayAccountPlan(response);
+            } else {
+                // Handle as a standard chat message
+                const aiMessage = response.message || "Tell me more.";
+                this.addChatMessage(aiMessage, false);
+                this.state.chatHistory.push({ role: 'assistant', content: aiMessage });
+
+                if (response.ready_for_plan) {
+                    setTimeout(() => { this.generateStrategicPlan(); }, 1000);
+                } else if (response.readiness_score >= 7 && !document.getElementById('generate-plan-container')) {
+                    setTimeout(() => { this.addStrategicPlanButton(); }, 500);
+                }
+            }
+            this.state.lastQuery = '';
+        } catch (error) {
+            console.error('API request failed:', error);
+            this.hideTypingIndicator();
+            this.hideLoading();
+            this.showError();
+        } finally {
+            this.state.pendingRequest = false;
         }
-    }, 100);
-}
-
-// Enhanced scrollChatToBottom method
-scrollChatToBottom() {
-    const container = this.elements.chatMessages;
-    if (container) {
-        // Force scroll to absolute bottom
-        setTimeout(() => {
-            container.scrollTop = container.scrollHeight;
-        }, 50);
     }
-}
-
-  // Enhanced plan generation that includes full conversation context
-async generateStrategicPlan() {
-    if (this.state.pendingRequest) return;
     
-    this.clearResults();
-    this.showLoading();
-    this.elements.accountPlanContainer.innerHTML = `
-        <div class="result-card text-center p-6">
-            <div class="loader mx-auto mb-3"></div>
-            <p class="text-sm text-gray-600">Creating a plan based on our conversation...</p>
-        </div>
-    `;
-    this.elements.accountPlanContainer.classList.remove('hidden');
-    this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
-    
-    this.state.pendingRequest = true;
-    
-    try {
+    async makeApiRequest(payload) {
+        // This single function now handles all API calls.
+        // The backend determines the logic based on conversationHistory.
         const response = await fetch(CONFIG.API_ENDPOINT, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                situation: "Generate strategic plan based on our conversation",
-                mode: 'strategic_plan',
-                // CRITICAL: Send the FULL conversation history including AI responses
-                conversationHistory: this.state.chatHistory,
+            body: JSON.stringify({
+                ...payload,
+                mode: payload.mode || 'chat', // default to chat if not specified
                 currentDate: new Date().toISOString().split('T')[0]
             })
         });
-        
-        if (!response.ok) throw new Error('Request failed');
-        
-        const data = await response.json();
-        this.hideLoading();
-        this.state.hasActiveResults = true;
-        
-        // Display the strategic plan
-        this.displayAccountPlan(data);
-        
-    } catch (error) {
-        console.error('Strategic plan generation failed:', error);
-        this.hideLoading();
-        this.elements.accountPlanContainer.innerHTML = `
-            <div class="result-card text-center">
-                <p class="text-red-600 font-medium text-sm mb-3">Couldn't generate your plan.</p>
+
+        if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
+        return await response.json();
+    }
+
+    addStrategicPlanButton() {
+        // Only add button if one doesn't already exist
+        if (document.getElementById('generate-plan-container')) return;
+
+        const btnHtml = `
+            <div id="generate-plan-container" class="flex justify-center my-4 px-4 fade-in">
                 <button onclick="app.generateStrategicPlan()" 
-                    class="text-red-700 underline text-sm">Try again</button>
+                    class="px-6 py-3 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium rounded-lg text-sm transition-colors shadow-md">
+                    Create My Strategic Plan →
+                </button>
             </div>
         `;
-    } finally {
-        this.state.pendingRequest = false;
+        this.elements.chatMessages.insertAdjacentHTML('beforeend', btnHtml);
+        this.scrollChatToBottom();
     }
-}
+
+    async generateStrategicPlan() {
+        if (this.state.pendingRequest) return;
+        
+        const planContainer = document.getElementById('generate-plan-container');
+        if (planContainer) planContainer.remove();
+
+        this.clearResults();
+        this.showLoading();
+        
+        this.elements.accountPlanContainer.classList.remove('hidden');
+        this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
+        
+        this.state.pendingRequest = true;
+        
+        try {
+            const response = await this.makeApiRequest({ 
+                situation: "Generate strategic plan based on our conversation",
+                mode: 'strategic_plan',
+                conversationHistory: this.state.chatHistory
+            });
+            
+            this.hideLoading();
+            this.state.hasActiveResults = true;
+            this.displayAccountPlan(response);
+            
+        } catch (error) {
+            console.error('Strategic plan generation failed:', error);
+            this.hideLoading();
+            this.showError();
+        } finally {
+            this.state.pendingRequest = false;
+        }
+    }
+
     displayAccountPlan(data) {
         const { 
-            account_name = 'Plan',
+            account_name = 'Strategic Plan',
             executive_summary = '',
-            next_steps = [],
             strategic_assessment = {},
+            partner_ecosystem = {}, // New field
+            next_steps = [],
             stakeholder_strategy = [],
             communication_framework = {},
-            top_contractors = [],
-            technology_plays = [],
-            market_intelligence = {},
             strategic_diagram
         } = data;
         
@@ -861,68 +714,35 @@ async generateStrategicPlan() {
                         <h2 class="text-xl font-bold text-gray-900">${account_name}</h2>
                         <p class="text-sm text-gray-600">Analysis & Recommendations</p>
                     </div>
-                    <div class="flex gap-2">
-                        <button onclick="app.copyAccountPlan()" 
-                            class="p-2 text-gray-600 hover:text-gray-800 hover:bg-white/50 rounded-lg transition-colors" 
-                            title="Copy">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                            </svg>
-                        </button>
-                        <button onclick="window.print()" 
-                            class="p-2 text-gray-600 hover:text-gray-800 hover:bg-white/50 rounded-lg transition-colors" 
-                            title="Print">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2z" />
-                            </svg>
+                    <div class="flex gap-2 no-print">
+                        <button onclick="window.print()" class="p-2 text-gray-600 hover:text-gray-800 hover:bg-white/50 rounded-lg transition-colors" title="Print">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2z" /></svg>
                         </button>
                     </div>
                 </div>
             </div>
 
-            ${executive_summary ? `
-                <div class="result-card bg-customPurple-50 border-customPurple-200">
-                    <h3>Executive Summary</h3>
-                    <p>${executive_summary}</p>
-                </div>
-            ` : ''}
+            ${executive_summary ? `<div class="result-card bg-customPurple-50 border-customPurple-200"><h3>Executive Summary</h3><p>${executive_summary}</p></div>` : ''}
 
             ${strategic_assessment && Object.keys(strategic_assessment).length > 0 ? `
                 <div class="result-card">
-                    <h3>Assessment</h3>
-                    ${strategic_assessment.current_state ? `
-                        <div class="mb-4">
-                            <h4 class="font-semibold text-gray-800 mb-2">Current State</h4>
-                            <p class="text-sm">${strategic_assessment.current_state}</p>
-                        </div>
-                    ` : ''}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${strategic_assessment.key_challenges ? `
-                            <div>
-                                <h4 class="font-semibold text-gray-800 mb-2">Key Challenges</h4>
-                                <ul class="space-y-1">
-                                    ${strategic_assessment.key_challenges.map(c => `
-                                        <li class="flex items-start gap-2">
-                                            <span class="text-red-500 mt-1 text-xs">▪</span>
-                                            <span class="text-sm">${c}</span>
-                                        </li>
-                                    `).join('')}
-                                </ul>
-                            </div>
-                        ` : ''}
-                        ${strategic_assessment.opportunities ? `
-                            <div>
-                                <h4 class="font-semibold text-gray-800 mb-2">Opportunities</h4>
-                                <ul class="space-y-1">
-                                    ${strategic_assessment.opportunities.map(o => `
-                                        <li class="flex items-start gap-2">
-                                            <span class="text-green-500 mt-1 text-xs">▪</span>
-                                            <span class="text-sm">${o}</span>
-                                        </li>
-                                    `).join('')}
-                                </ul>
-                            </div>
-                        ` : ''}
+                    <h3>Strategic Assessment</h3>
+                    ${strategic_assessment.current_state ? `<div class="mb-4"><h4>Current State</h4><p>${strategic_assessment.current_state}</p></div>` : ''}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        ${strategic_assessment.key_challenges ? `<div><h4>Key Challenges</h4><ul class="space-y-1">${strategic_assessment.key_challenges.map(c => `<li class="flex items-start gap-2"><span class="text-red-500 mt-1.5 text-xs">▪</span><span>${c}</span></li>`).join('')}</ul></div>` : ''}
+                        ${strategic_assessment.opportunities ? `<div><h4>Opportunities</h4><ul class="space-y-1">${strategic_assessment.opportunities.map(o => `<li class="flex items-start gap-2"><span class="text-green-500 mt-1.5 text-xs">▪</span><span>${o}</span></li>`).join('')}</ul></div>` : ''}
+                    </div>
+                </div>
+            ` : ''}
+            
+            ${/* --- NEW: RENDER PARTNER ECOSYSTEM --- */''}
+            ${partner_ecosystem && Object.keys(partner_ecosystem).length > 0 ? `
+                <div class="result-card">
+                    <h3>Partner Ecosystem Analysis</h3>
+                    <div class="space-y-4">
+                        ${partner_ecosystem.top_prime_contractors ? `<div><h4>Top Prime Contractors</h4><ul class="space-y-2">${partner_ecosystem.top_prime_contractors.map(c => `<li><strong>${c.split(':')[0]}:</strong> ${c.split(':')[1] || ''}</li>`).join('')}</ul></div>` : ''}
+                        ${partner_ecosystem.potential_isv_partners ? `<div><h4>Potential ISV Partners</h4><ul class="space-y-2">${partner_ecosystem.potential_isv_partners.map(p => `<li><strong>${p.split(':')[0]}:</strong> ${p.split(':')[1] || ''}</li>`).join('')}</ul></div>` : ''}
+                        ${partner_ecosystem.competitive_landscape ? `<div><h4>Competitive Landscape</h4><p>${partner_ecosystem.competitive_landscape}</p></div>` : ''}
                     </div>
                 </div>
             ` : ''}
@@ -930,77 +750,14 @@ async generateStrategicPlan() {
             ${next_steps && next_steps.length > 0 ? `
                 <div class="result-card">
                     <h3>Next Steps</h3>
-                    <div class="space-y-4">
-                        ${next_steps.map((step, i) => `
-                            <div class="border-l-4 ${
-                                step.priority === 'immediate' ? 'border-red-500 bg-red-50' :
-                                step.priority === 'high' ? 'border-orange-500 bg-orange-50' :
-                                'border-blue-500 bg-blue-50'
-                            } pl-4 py-3">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h4 class="font-semibold text-gray-900">${step.action}</h4>
-                                    <span class="text-xs font-medium px-2 py-1 rounded ${
-                                        step.priority === 'immediate' ? 'bg-red-100 text-red-800' :
-                                        step.priority === 'high' ? 'bg-orange-100 text-orange-800' :
-                                        'bg-blue-100 text-blue-800'
-                                    }">${step.priority} • ${step.timeline}</span>
-                                </div>
-                                <p class="text-sm text-gray-700">${step.rationale}</p>
+                    <div class="space-y-4">${next_steps.map(step => `
+                        <div class="border-l-4 ${step.priority === 'immediate' ? 'border-red-500' : step.priority === 'high' ? 'border-orange-500' : 'border-blue-500'} pl-4 py-2">
+                            <div class="flex justify-between items-start gap-2 mb-1">
+                                <h4 class="font-semibold text-gray-900 leading-tight">${step.action}</h4>
+                                <span class="text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap ${step.priority === 'immediate' ? 'bg-red-100 text-red-800' : step.priority === 'high' ? 'bg-orange-100 text-orange-800' : 'bg-blue-100 text-blue-800'}">${step.priority} | ${step.timeline}</span>
                             </div>
-                        `).join('')}
-                    </div>
-                </div>
-            ` : ''}
-
-            ${market_intelligence && Object.keys(market_intelligence).length > 0 ? `
-                <div class="result-card">
-                    <h3>Market Intelligence</h3>
-                    ${market_intelligence.market_size ? `<p class="text-sm mb-3"><strong>Market Size:</strong> ${market_intelligence.market_size}</p>` : ''}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${market_intelligence.key_trends ? `
-                            <div>
-                                <h4 class="font-semibold text-gray-800 mb-2">Key Market Trends</h4>
-                                <ul class="space-y-1">
-                                    ${market_intelligence.key_trends.map(t => `<li class="text-sm">• ${t}</li>`).join('')}
-                                </ul>
-                            </div>
-                        ` : ''}
-                        ${market_intelligence.procurement_landscape ? `
-                            <div>
-                                <h4 class="font-semibold text-gray-800 mb-2">Procurement Landscape</h4>
-                                <p class="text-sm">${market_intelligence.procurement_landscape}</p>
-                            </div>
-                        ` : ''}
-                    </div>
-                </div>
-            ` : ''}
-
-            ${top_contractors && top_contractors.length > 0 ? `
-                <div class="result-card">
-                    <h3>Key Contractors & Partners</h3>
-                    <div class="space-y-3">
-                        ${top_contractors.map(contractor => `
-                            <div class="border border-gray-200 rounded-lg p-3">
-                                <h4 class="font-semibold text-gray-900">${contractor.name}</h4>
-                                <p class="text-sm text-gray-600 mb-2">${contractor.strength}</p>
-                                <p class="text-sm"><strong>Engagement Opportunity:</strong> ${contractor.opportunity}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            ` : ''}
-
-            ${technology_plays && technology_plays.length > 0 ? `
-                <div class="result-card">
-                    <h3>Technology Landscape</h3>
-                    <div class="space-y-3">
-                        ${technology_plays.map(tech => `
-                            <div class="border border-gray-200 rounded-lg p-3">
-                                <h4 class="font-semibold text-gray-900">${tech.technology}</h4>
-                                <p class="text-sm text-gray-600 mb-2">${tech.federal_adoption}</p>
-                                <p class="text-sm"><strong>Your Positioning:</strong> ${tech.opportunity}</p>
-                            </div>
-                        `).join('')}
+                            <p class="text-sm text-gray-700">${step.rationale}</p>
+                        </div>`).join('')}
                     </div>
                 </div>
             ` : ''}
@@ -1008,25 +765,15 @@ async generateStrategicPlan() {
             ${stakeholder_strategy && stakeholder_strategy.length > 0 ? `
                 <div class="result-card">
                     <h3>Stakeholder Strategy</h3>
-                    <div class="space-y-4">
-                        ${stakeholder_strategy.map(group => `
-                            <div class="border border-gray-200 rounded-lg p-4">
-                                <h4 class="font-semibold text-gray-900 mb-2">${group.stakeholder_group}</h4>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                                    <div>
-                                        <strong>Approach:</strong> ${group.approach}
-                                    </div>
-                                    <div>
-                                        <strong>Key Messages:</strong> ${group.key_messages}
-                                    </div>
-                                </div>
-                                ${group.success_metrics ? `
-                                    <div class="mt-2 text-sm">
-                                        <strong>Success Metrics:</strong> ${group.success_metrics}
-                                    </div>
-                                ` : ''}
+                    <div class="space-y-4">${stakeholder_strategy.map(group => `
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h4 class="mb-2">${group.stakeholder_group}</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                <div><strong>Approach:</strong> ${group.approach}</div>
+                                <div><strong>Key Messages:</strong> ${group.key_messages}</div>
                             </div>
-                        `).join('')}
+                            ${group.success_metrics ? `<div class="mt-3 text-sm"><strong>Success Metrics:</strong> ${group.success_metrics}</div>` : ''}
+                        </div>`).join('')}
                     </div>
                 </div>
             ` : ''}
@@ -1034,32 +781,16 @@ async generateStrategicPlan() {
             ${communication_framework && Object.keys(communication_framework).length > 0 ? `
                 <div class="result-card">
                     <h3>Communication Framework</h3>
-                    ${communication_framework.key_messages ? `
-                        <div class="mb-4">
-                            <h4 class="font-semibold text-gray-800 mb-2">Key Messages</h4>
-                            <ul class="space-y-1">
-                                ${communication_framework.key_messages.map(msg => `
-                                    <li class="text-sm">• ${msg}</li>
-                                `).join('')}
-                            </ul>
-                        </div>
-                    ` : ''}
-                    ${communication_framework.email_template ? `
-                        <div>
-                            <h4 class="font-semibold text-gray-800 mb-2">Email Template</h4>
-                            <div class="bg-gray-50 rounded-lg p-3 text-xs font-mono whitespace-pre-wrap border border-gray-200">${communication_framework.email_template}</div>
-                        </div>
-                    ` : ''}
+                    ${communication_framework.key_messages ? `<div class="mb-4"><h4>Key Messages</h4><ul class="space-y-1 list-disc list-inside">${communication_framework.key_messages.map(msg => `<li>${msg}</li>`).join('')}</ul></div>` : ''}
+                    ${communication_framework.email_template ? `<div><h4>Email Template</h4><div class="bg-gray-50 rounded-lg p-3 text-xs font-mono whitespace-pre-wrap border border-gray-200">${communication_framework.email_template}</div></div>` : ''}
                 </div>
             ` : ''}
 
             ${strategic_diagram && strategic_diagram.trim() ? `
-                <div class="result-card" id="strategic-chart-container">
+                <div class="result-card">
                     <h3>Framework</h3>
                     <div class="mermaid-container">
-                        <div id="mermaid-diagram" class="mermaid">
-                            ${strategic_diagram}
-                        </div>
+                        <div id="mermaid-diagram" class="mermaid">${strategic_diagram}</div>
                     </div>
                 </div>
             ` : ''}
@@ -1072,71 +803,29 @@ async generateStrategicPlan() {
         }
     }
     
-    copyAccountPlan() {
-        const content = this.elements.accountPlanContainer.innerText;
-        
-        if (!content) {
-            alert('No plan to copy');
-            return;
-        }
-        
-        navigator.clipboard.writeText(content)
-            .then(() => {
-                alert('Plan copied!');
-            })
-            .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
-    }
-
-    // Updated chart rendering - no fallbacks, just hide on failure
     renderMermaidChart() {
         setTimeout(async () => {
             try {
                 const mermaidElement = document.querySelector('#mermaid-diagram');
-                if (!mermaidElement || !mermaidElement.textContent.trim()) {
-                    this.hideMermaidContainer();
-                    return;
-                }
-
-                // Clean the mermaid syntax but don't replace with fallbacks
-                let mermaidCode = this.cleanMermaidSyntax(mermaidElement.textContent.trim());
+                if (!mermaidElement || !mermaidElement.textContent.trim()) return;
                 
-                // Update the element with cleaned code
-                mermaidElement.textContent = mermaidCode;
+                mermaidElement.textContent = this.cleanMermaidSyntax(mermaidElement.textContent.trim());
+                await mermaid.run({ nodes: [mermaidElement] });
                 
-                // Try to render the AI-generated chart
-                await mermaid.run();
-                
-                // Check if rendering actually worked
                 const svgElement = mermaidElement.querySelector('svg');
                 if (!svgElement || svgElement.children.length === 0) {
-                    throw new Error('Mermaid rendering failed');
+                    throw new Error('Mermaid rendering produced an empty SVG.');
                 }
-                
             } catch (error) {
-                console.error('AI-generated chart failed to render:', error);
-                // No fallback - just hide the entire chart section
-                this.hideMermaidContainer();
+                console.error('Chart failed to render:', error);
+                const container = document.querySelector('#mermaid-diagram')?.closest('.result-card');
+                if (container) container.style.display = 'none';
             }
         }, 100);
     }
 
-    cleanMermaidSyntax(mermaidCode) {
-        // Only clean syntax issues, don't replace content
-        return mermaidCode
-            .replace(/[""]/g, '"')  // Fix smart quotes
-            .replace(/['']/g, "'")  // Fix smart apostrophes
-            .replace(/[–—]/g, '-')  // Fix em/en dashes
-            .replace(/\\n/g, '\n')  // Fix escaped newlines
-            .replace(/\n\s*\n/g, '\n')  // Remove empty lines
-            .trim();
-    }
-
-    hideMermaidContainer() {
-        const container = document.querySelector('.result-card:has(#mermaid-diagram)') || 
-                         document.querySelector('#mermaid-diagram')?.closest('.result-card');
-        if (container) {
-            container.style.display = 'none';
-        }
+    cleanMermaidSyntax(code) {
+        return code.replace(/["“]/g, '"').replace(/['‘]/g, "'").trim();
     }
 
     share() {
@@ -1153,16 +842,12 @@ async generateStrategicPlan() {
                 .then(() => {
                     this.elements.shareBtn.textContent = 'Link Copied!';
                     setTimeout(() => this.elements.shareBtn.textContent = 'Share', 2000);
-                })
-                .catch(() => alert('Please copy: https://askarti.com'));
+                });
         }
     }
 
     showError() {
         this.elements.errorMessage.classList.remove('hidden');
-        setTimeout(() => {
-            this.elements.errorMessage.classList.add('hidden');
-        }, 5000);
     }
 
     retry() {
