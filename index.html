@@ -574,6 +574,44 @@
             max-height: calc(100vh - 4rem);
         }
     }
+	/* Mobile-optimized mermaid styling */
+.mermaid-container .mermaid {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.mermaid-container .mermaid svg {
+    max-width: 100%;
+    height: auto !important;
+    min-height: 200px;
+}
+
+/* Ensure mermaid charts scale properly on mobile */
+@media (max-width: 640px) {
+    .mermaid-container {
+        min-height: 180px;
+        padding: 0.5rem;
+    }
+    
+    .mermaid-container .mermaid svg {
+        min-height: 150px;
+        font-size: 12px;
+    }
+    
+    /* Make mermaid nodes more touch-friendly */
+    .mermaid-container .mermaid .node rect,
+    .mermaid-container .mermaid .node circle {
+        min-width: 44px !important;
+        min-height: 32px !important;
+    }
+}
+
+@media (min-width: 641px) {
+    .mermaid-container .mermaid svg {
+        min-height: 200px;
+        font-size: 14px;
+    }
+}
 </style>
 </head>
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900 min-h-screen">
@@ -892,16 +930,22 @@ class AskArti {
    }
 
    initializeMermaid() {
-       mermaid.initialize({ 
-           startOnLoad: false,
-           securityLevel: 'strict',
-           theme: 'default',
-           flowchart: {
-               htmlLabels: true,
-               curve: 'basis'
-           }
-       });
-   }
+    mermaid.initialize({ 
+        startOnLoad: false,
+        securityLevel: 'strict',
+        theme: 'default',
+        flowchart: {
+            htmlLabels: true,
+            curve: 'basis',
+            // Force top-down direction for mobile
+            rankdir: 'TD'
+        },
+        // Global config to prefer top-down layouts
+        gantt: {
+            axisFormat: '%m/%d'
+        }
+    });
+}
 
    setupEventListeners() {
        // Chat events
@@ -1542,35 +1586,53 @@ async generateAccountPlan() {
    }
 
    renderMermaidChart() {
-       try {
-           setTimeout(async () => {
-               const diagrams = document.querySelectorAll('.mermaid:not([data-processed="true"])');
+    try {
+        setTimeout(async () => {
+            const diagrams = document.querySelectorAll('.mermaid:not([data-processed="true"])');
 
-               if (diagrams.length === 0) return;
+            if (diagrams.length === 0) return;
 
-               await mermaid.run({ nodes: diagrams });
+            // Force all charts to be top-down before rendering
+            diagrams.forEach(element => {
+                let chartContent = element.textContent || element.innerHTML;
+                
+                // Convert any non-TD charts to TD format
+                chartContent = chartContent
+                    .replace(/graph\s+(LR|RL|BT)/gi, 'graph TD')
+                    .replace(/flowchart\s+(LR|RL|BT)/gi, 'graph TD')
+                    .replace(/graph(?!\s+(TD|TB))/gi, 'graph TD');
+                
+                // Ensure we have graph TD if no direction specified
+                if (!/graph\s+TD/i.test(chartContent) && !/graph\s+TB/i.test(chartContent)) {
+                    chartContent = chartContent.replace(/^(\s*)(graph|flowchart)/i, '$1graph TD');
+                }
+                
+                element.textContent = chartContent;
+            });
 
-               diagrams.forEach(element => {
-                   element.style.opacity = '1';
-                   const container = element.closest('.mermaid-container');
-                   if (container) {
-                       const loader = container.querySelector('.mermaid-loading');
-                       if (loader) {
-                           loader.style.display = 'none';
-                       }
-                   }
-               });
-           }, 300);
-       } catch (error) {
-           console.error('Mermaid rendering error:', error);
-           const containers = document.querySelectorAll('.mermaid-container');
-           containers.forEach(container => {
-               if (!container.querySelector('[data-processed="true"]')) {
-                   container.innerHTML = '<div class="p-4 sm:p-6 bg-gray-100 text-gray-700 rounded-lg text-center text-sm">Visualization got stage fright.</div>';
-               }
-           });
-       }
-   }
+            await mermaid.run({ nodes: diagrams });
+
+            diagrams.forEach(element => {
+                element.style.opacity = '1';
+                const container = element.closest('.mermaid-container');
+                if (container) {
+                    const loader = container.querySelector('.mermaid-loading');
+                    if (loader) {
+                        loader.style.display = 'none';
+                    }
+                }
+            });
+        }, 300);
+    } catch (error) {
+        console.error('Mermaid rendering error:', error);
+        const containers = document.querySelectorAll('.mermaid-container');
+        containers.forEach(container => {
+            if (!container.querySelector('[data-processed="true"]')) {
+                container.innerHTML = '<div class="p-4 sm:p-6 bg-gray-100 text-gray-700 rounded-lg text-center text-sm">Visualization got stage fright.</div>';
+            }
+        });
+    }
+}
 
    share() {
        const shareData = {
