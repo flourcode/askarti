@@ -52,10 +52,12 @@
         --color-surface: var(--color-white); 
         --color-surface-muted: var(--color-purple-light);
         --color-text-primary: var(--color-black);
-        --color-text-secondary: #525252; /* Maintained for accessibility */
-        --color-text-muted: #737373; /* Maintained for accessibility */
+        --color-text-secondary: #525252;
+        --color-text-muted: #737373;
         --color-border: var(--color-purple-light);
-        --color-border-light: #E9E7F2; 
+        --color-border-light: #E9E7F2;
+        --color-success: #059669;
+        --color-warning: #d97706;
     }
 
     body { 
@@ -140,6 +142,17 @@
     textarea:focus {
         --tw-ring-color: var(--color-primary);
         border-color: var(--color-primary);
+    }
+
+    /* Character counter */
+    .char-counter {
+        text-align: right;
+        font-size: 0.75rem;
+        color: var(--color-text-muted);
+        margin-top: 0.25rem;
+    }
+    .char-counter.warning {
+        color: var(--color-warning);
     }
 
     /* Magazine Report Styles */
@@ -362,6 +375,33 @@
         border: 1px solid var(--color-border);
         margin-top: 1.5rem;
     }
+
+    /* Action Tags */
+    .action-tags {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .action-tag {
+        background: var(--color-primary);
+        color: var(--color-white);
+        padding: 0.25rem 0.75rem;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-radius: 9999px;
+    }
+
+    .action-tag.warm {
+        background: var(--color-success);
+    }
+
+    .action-tag.cold {
+        background: var(--color-warning);
+    }
     
     /* Subsections */
     .subsection {
@@ -423,7 +463,6 @@
     .data-table tr:last-child td { border-bottom: none; }
     .data-table tr:nth-child(even) { background-color: var(--color-background); }
 
-
     .company-name {
         font-weight: 600;
         color: var(--color-text-primary);
@@ -434,6 +473,19 @@
     .company-note {
         font-size: 0.8rem;
         color: var(--color-text-muted);
+    }
+
+    /* Priority Badge */
+    .priority-badge {
+        background: var(--color-success);
+        color: var(--color-white);
+        padding: 0.2rem 0.5rem;
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-left: 0.5rem;
+        border-radius: 4px;
     }
     
     /* Partner & Intel Grids */
@@ -598,6 +650,31 @@
         white-space: pre-wrap;
     }
 
+    /* Quick Actions */
+    .quick-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .quick-action-btn {
+        background: var(--color-background);
+        border: 1px solid var(--color-border);
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        transition: all 0.2s;
+        border-radius: 0.25rem;
+    }
+
+    .quick-action-btn:hover {
+        background: var(--color-primary);
+        color: var(--color-white);
+        border-color: var(--color-primary);
+    }
+
     /* Prose Content */
     .prose-content {
         color: var(--color-text-secondary);
@@ -609,7 +686,6 @@
     }
     .prose-content p { margin-bottom: 1rem; }
     .prose-content p:last-child { margin-bottom: 0; }
-
 
     /* Action Buttons */
     .action-buttons {
@@ -653,6 +729,42 @@
         color: var(--color-white);
         border-color: var(--color-text-primary);
     }
+
+    /* Saved Reports */
+    .saved-reports {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: var(--color-background);
+        border-radius: 0.5rem;
+    }
+
+    .saved-reports h3 {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        margin-bottom: 0.5rem;
+    }
+
+    .saved-report-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.875rem;
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .saved-report-item:hover {
+        background: var(--color-surface);
+    }
+
+    .saved-report-date {
+        font-size: 0.75rem;
+        color: var(--color-text-muted);
+    }
     
     /* Footer & Modal Styles */
     .footer-link {
@@ -684,10 +796,6 @@
         background-color: var(--color-primary-hover);
         transform: scale(1.03);
     }
-
-    /* Hide unused elements for now */
-    .metrics-grid { display: none; }
-
 
     /* Mobile Responsive */
     @media (max-width: 768px) {
@@ -722,9 +830,9 @@
         }
 
         .data-table-container { 
-            display: none; /* Hiding complex table on mobile, consider a card-based view if needed */
+            margin: 0 -1.5rem;
+            width: calc(100% + 3rem);
         }
-        .subsection .data-table-container + * { margin-top: 1rem; } /* Add margin if table is hidden */
 
         .partner-grid, .intel-grid {
             grid-template-columns: 1fr;
@@ -746,6 +854,10 @@
         }
 
         .magazine-report * { box-sizing: border-box; }
+
+        .quick-actions {
+            flex-wrap: wrap;
+        }
     }
 </style>
 </head>
@@ -764,9 +876,11 @@
                    class="w-full p-4 text-base resize-none placeholder-gray-500"
                    placeholder="Need to prospect cybersecurity solutions into DOD. Looking for Tier 1 SIs who can get me in."
                    maxlength="500"></textarea>
+               <div class="char-counter">
+                   <span id="char-count">0</span> / 500
+               </div>
            </div>
-
-           <div class="flex flex-wrap gap-2 justify-center mb-4">
+			<div class="flex flex-wrap gap-2 justify-center mb-4">
                <button class="quick-prompt"
                        data-text="Need to prospect cloud migration services into civilian agencies. Who are the top SIs?">
                    Cloud Migration SIs
@@ -795,10 +909,19 @@
                    <div id="loader" class="loader hidden"></div>
                </button>
            </div>
+
+           <!-- Saved Reports Section -->
+           <div id="saved-reports" class="saved-reports hidden">
+               <h3>Recent Reports</h3>
+               <div id="saved-reports-list"></div>
+           </div>
        </main>
 
        <div id="loading-container" class="text-center py-4 hidden">
            <p id="loading-message" class="text-gray-600"></p>
+           <div class="mt-2">
+               <span class="text-xs text-gray-500">Pro tip: <span id="loading-tip"></span></span>
+           </div>
        </div>
 
        <div id="error-container" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center mb-4 hidden">
@@ -817,6 +940,7 @@
            <p class="text-xs text-gray-400">© 2025 AskArti. Federal Prospecting Intelligence</p>
        </footer>
    </div>
+
 <div id="about-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
     <div class="bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-sm sm:max-w-md modal-mobile transform transition-all">
         <div class="p-4 sm:p-6">
@@ -864,12 +988,25 @@
         </div>
     </div>
 </div>
-  
 
 <script>
 const CONFIG = {
    API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
-   LOADING_MESSAGES: ["Researching federal market...", "Analyzing partner ecosystem...", "Gathering competitive intel...", "Mapping decision makers...", "Compiling opportunities..."]
+   LOADING_MESSAGES: [
+       "Researching federal market...", 
+       "Analyzing partner ecosystem...", 
+       "Gathering competitive intel...", 
+       "Mapping decision makers...", 
+       "Compiling opportunities..."
+   ],
+   LOADING_TIPS: [
+       "Be specific about your solution type for better results",
+       "Include your company size to get tailored partner recommendations",
+       "Mention any existing federal relationships for warm intro paths",
+       "Specify target agency types (DOD, Civilian, Intel) for focused intel",
+       "Include your contract vehicles for better opportunity matching"
+   ],
+   MAX_SAVED_REPORTS: 5
 };
 
 class ProspectingTool {
@@ -881,6 +1018,7 @@ class ProspectingTool {
            loader: document.getElementById('loader'),
            loadingContainer: document.getElementById('loading-container'),
            loadingMessage: document.getElementById('loading-message'),
+           loadingTip: document.getElementById('loading-tip'),
            errorContainer: document.getElementById('error-container'),
            errorDetails: document.getElementById('error-details'),
            retryBtn: document.getElementById('retry-btn'),
@@ -888,15 +1026,26 @@ class ProspectingTool {
            aboutBtn: document.getElementById('about-btn'),
            aboutModal: document.getElementById('about-modal'),
            closeAbout: document.getElementById('close-about'),
-           quickPrompts: document.querySelectorAll('.quick-prompt')
+           quickPrompts: document.querySelectorAll('.quick-prompt'),
+           charCount: document.getElementById('char-count'),
+           savedReports: document.getElementById('saved-reports'),
+           savedReportsList: document.getElementById('saved-reports-list')
        };
        
-       this.state = { pendingRequest: false, lastQuery: '', loadingInterval: null };
+       this.state = { 
+           pendingRequest: false, 
+           lastQuery: '', 
+           loadingInterval: null,
+           tipInterval: null,
+           currentReport: null
+       };
+       
        this.init();
    }
 
    init() {
        this.setupEventListeners();
+       this.loadSavedReports();
        this.elements.situationInput.focus();
    }
 
@@ -904,6 +1053,7 @@ class ProspectingTool {
        this.elements.quickPrompts.forEach(btn => {
            btn.addEventListener('click', (e) => {
                this.elements.situationInput.value = e.currentTarget.dataset.text;
+               this.updateCharCount();
                this.getIntelligence();
            });
        });
@@ -915,6 +1065,8 @@ class ProspectingTool {
                this.getIntelligence();
            }
        });
+
+       this.elements.situationInput.addEventListener('input', () => this.updateCharCount());
 
        this.elements.retryBtn.addEventListener('click', () => {
            this.elements.errorContainer.classList.add('hidden');
@@ -929,6 +1081,25 @@ class ProspectingTool {
        this.elements.aboutModal.addEventListener('click', (e) => {
            if (e.target === this.elements.aboutModal) this.hideModal();
        });
+
+       // Keyboard shortcuts
+       document.addEventListener('keydown', (e) => {
+           if (e.ctrlKey || e.metaKey) {
+               if (e.key === 'Enter') {
+                   e.preventDefault();
+                   this.getIntelligence();
+               } else if (e.key === 'k') {
+                   e.preventDefault();
+                   this.elements.situationInput.focus();
+               }
+           }
+       });
+   }
+
+   updateCharCount() {
+       const count = this.elements.situationInput.value.length;
+       this.elements.charCount.textContent = count;
+       this.elements.charCount.parentElement.classList.toggle('warning', count > 400);
    }
 
    async getIntelligence() {
@@ -949,7 +1120,9 @@ class ProspectingTool {
        
        try {
            const data = await this.makeRequest(situation);
+           this.state.currentReport = { query: situation, data, timestamp: new Date() };
            this.displayIntelligence(data);
+           this.saveReport();
        } catch (error) {
            this.showError(error.message || "Research failed. Please try again.");
        } finally {
@@ -1032,6 +1205,15 @@ class ProspectingTool {
                                <div class="approach-section">
                                    <h4>Recommended Approach</h4>
                                    <p>${agency.best_approach}</p>
+                                   <div class="action-tags">
+                                       ${agency.best_approach.toLowerCase().includes('warm') ? 
+                                           '<span class="action-tag warm">WARM INTRO</span>' : 
+                                           '<span class="action-tag cold">COLD OUTREACH</span>'
+                                       }
+                                       ${agency.best_approach.toLowerCase().includes('event') ? 
+                                           '<span class="action-tag">EVENT OPPORTUNITY</span>' : ''
+                                       }
+                                   </div>
                                </div>
                            </div>
                        </article>
@@ -1059,7 +1241,10 @@ class ProspectingTool {
                                ${ecosystem_mapping.tier_1_sis.map((si, index) => `
                                    <tr>
                                        <td>
-                                           <div class="company-name">${si.company}</div>
+                                           <div class="company-name">
+                                               ${si.company}
+                                               ${index === 0 ? '<span class="priority-badge">TOP PICK</span>' : ''}
+                                           </div>
                                            <div class="company-note">${si.current_priorities}</div>
                                        </td>
                                        <td>${si.federal_focus}</td>
@@ -1141,12 +1326,20 @@ class ProspectingTool {
                <div class="template-block">
                    <h3>Agency Outreach Template</h3>
                    <pre class="template-content">${tactical_execution.message_frameworks.agency_outreach}</pre>
+                   <div class="quick-actions">
+                       <button class="quick-action-btn" onclick="app.copyTemplate('agency_outreach')">Copy Template</button>
+                       <button class="quick-action-btn" onclick="app.customizeTemplate('agency_outreach')">Customize</button>
+                   </div>
                </div>` : ''}
                
                ${tactical_execution.message_frameworks.partner_outreach ? `
                <div class="template-block">
                    <h3>Partner Outreach Template</h3>
                    <pre class="template-content">${tactical_execution.message_frameworks.partner_outreach}</pre>
+                   <div class="quick-actions">
+                       <button class="quick-action-btn" onclick="app.copyTemplate('partner_outreach')">Copy Template</button>
+                       <button class="quick-action-btn" onclick="app.customizeTemplate('partner_outreach')">Customize</button>
+                   </div>
                </div>` : ''}
            </section>` : ''}
 
@@ -1188,8 +1381,22 @@ class ProspectingTool {
                </div>
            </section>
 
+           ${success_metrics?.length ? `
+           <section class="content-section">
+               <h2>Success Metrics</h2>
+               <div class="timeline-grid">
+                   ${success_metrics.map(metric => `
+                       <div class="timeline-item">
+                           <h4>${metric.metric}</h4>
+                           <p><strong>Target:</strong> ${metric.target}</p>
+                           <p><strong>Timeline:</strong> ${metric.timeline}</p>
+                       </div>
+                   `).join('')}
+               </div>
+           </section>` : ''}
+
            <div class="action-buttons">
-               <button onclick="app.copyResults()" class="btn-primary">Export Intelligence Report</button>
+               <button onclick="app.exportReport()" class="btn-primary">Export Intelligence Report</button>
                <button onclick="app.startOver()" class="btn-secondary">New Prospecting Query</button>
            </div>
        </div>`;
@@ -1214,16 +1421,23 @@ class ProspectingTool {
    showLoadingMessages() {
        this.elements.loadingContainer.classList.remove('hidden');
        this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[0];
+       this.elements.loadingTip.textContent = CONFIG.LOADING_TIPS[Math.floor(Math.random() * CONFIG.LOADING_TIPS.length)];
        
        let messageIndex = 0;
        this.state.loadingInterval = setInterval(() => {
            messageIndex = (messageIndex + 1) % CONFIG.LOADING_MESSAGES.length;
            this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[messageIndex];
        }, 2000);
+
+       // Change tips every 5 seconds
+       this.state.tipInterval = setInterval(() => {
+           this.elements.loadingTip.textContent = CONFIG.LOADING_TIPS[Math.floor(Math.random() * CONFIG.LOADING_TIPS.length)];
+       }, 5000);
    }
 
    hideLoadingMessages() {
        clearInterval(this.state.loadingInterval);
+       clearInterval(this.state.tipInterval);
        this.elements.loadingContainer.classList.add('hidden');
    }
 
@@ -1234,66 +1448,164 @@ class ProspectingTool {
        this.setLoading(false);
    }
 
-   copyResults() {
-        const report = this.elements.resultsContainer.querySelector('.magazine-report');
-        if (!report) {
-            alert('No intelligence to copy');
-            return;
-        }
+   copyTemplate(type) {
+       const template = this.state.currentReport?.data?.tactical_execution?.message_frameworks?.[type];
+       if (!template) return;
 
-        // Temporarily create an element to format text
-        const tempElement = document.createElement('div');
-        tempElement.innerHTML = report.innerHTML;
-
-        // A simple conversion from HTML to plain text
-        // This can be improved with a more robust library if needed
-        let textToCopy = '';
-        tempElement.querySelectorAll('h1, h2, h3, h4, p, li, .value, .label, .company-name, .company-note, td, th').forEach(el => {
-            const tagName = el.tagName.toLowerCase();
-            let prefix = '';
-            let suffix = '\n';
-            
-            if (['h1', 'h2', 'h3'].includes(tagName)) {
-                prefix = '\n';
-                suffix = '\n\n';
-            } else if (tagName === 'td') {
-                suffix = '\t';
-            } else if (tagName === 'tr') {
-                suffix = '\n';
-            }
-            
-            textToCopy += prefix + el.innerText.trim() + suffix;
-        });
-
-        navigator.clipboard.writeText(textToCopy.trim())
-            .then(() => {
-                const btn = report.querySelector('.btn-primary');
-                if (btn) {
-                    const originalText = btn.textContent;
-                    btn.textContent = 'Copied!';
-                    setTimeout(() => btn.textContent = originalText, 2000);
-                }
-            })
-            .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
-    }
-
-   startOver() {
-       this.elements.situationInput.value = '';
-       this.elements.situationInput.focus();
-       this.elements.resultsContainer.innerHTML = '';
-       this.hideLoadingMessages();
-       this.elements.errorContainer.classList.add('hidden');
-       this.state.pendingRequest = false;
-       window.scrollTo({ top: 0, behavior: 'smooth' });
+       navigator.clipboard.writeText(template)
+           .then(() => {
+               const btn = event.target;
+               const originalText = btn.textContent;
+               btn.textContent = 'Copied!';
+               setTimeout(() => btn.textContent = originalText, 2000);
+           })
+           .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
    }
 
-   showModal() {
-       this.elements.aboutModal.classList.remove('hidden');
+   customizeTemplate(type) {
+       const template = this.state.currentReport?.data?.tactical_execution?.message_frameworks?.[type];
+       if (!template) return;
+
+       const customized = prompt('Customize this template:', template);
+       if (customized) {
+           navigator.clipboard.writeText(customized)
+               .then(() => alert('Customized template copied to clipboard!'))
+               .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
+       }
    }
 
-   hideModal() {
-       this.elements.aboutModal.classList.add('hidden');
+   exportReport() {
+       const report = this.elements.resultsContainer.querySelector('.magazine-report');
+       if (!report) {
+           alert('No intelligence to export');
+           return;
+       }
+
+       // Create a comprehensive text export
+       let exportText = `FEDERAL SALES INTELLIGENCE REPORT
+Generated: ${new Date().toLocaleString()}
+Query: ${this.state.lastQuery}
+
+========================================
+
+`;
+
+       // Extract all text content in a structured way
+       report.querySelectorAll('h1, h2, h3, h4, p, li, .value, .label, .company-name, .company-note, td, th, pre').forEach(el => {
+           const tagName = el.tagName.toLowerCase();
+           let prefix = '';
+           let suffix = '\n';
+           
+           if (tagName === 'h1') {
+               prefix = '\n=== ';
+               suffix = ' ===\n\n';
+           } else if (tagName === 'h2') {
+               prefix = '\n## ';
+               suffix = '\n\n';
+           } else if (tagName === 'h3') {
+               prefix = '\n### ';
+               suffix = '\n\n';
+           } else if (tagName === 'h4') {
+               prefix = '- ';
+               suffix = '\n';
+           } else if (tagName === 'pre') {
+               prefix = '\n```\n';
+               suffix = '\n```\n\n';
+           }
+           
+           const text = el.innerText.trim();
+           if (text) {
+               exportText += prefix + text + suffix;
+           }
+       });
+
+       // Create and download file
+       const blob = new Blob([exportText], { type: 'text/plain' });
+       const url = URL.createObjectURL(blob);
+       const a = document.createElement('a');
+       a.href = url;
+       a.download = `AskArti_Report_${new Date().toISOString().split('T')[0]}.txt`;
+       document.body.appendChild(a);
+       a.click();
+       document.body.removeChild(a);
+       URL.revokeObjectURL(url);
+
+       // Update button to show success
+       const btn = this.elements.resultsContainer.querySelector('.btn-primary');
+       if (btn) {
+           const originalText = btn.textContent;
+           btn.textContent = 'Report Exported!';
+           setTimeout(() => btn.textContent = originalText, 2000);
+       }
    }
+
+   saveReport() {
+       if (!this.state.currentReport) return;
+
+       let savedReports = JSON.parse(localStorage.getItem('askarti_reports') || '[]');
+       
+       // Add new report
+       savedReports.unshift({
+           query: this.state.currentReport.query,
+           timestamp: this.state.currentReport.timestamp,
+           preview: this.state.currentReport.data.market_intelligence.opportunity_assessment?.substring(0, 100) + '...'
+       });
+
+       // Keep only the most recent reports
+       savedReports = savedReports.slice(0, CONFIG.MAX_SAVED_REPORTS);
+       
+       localStorage.setItem('askarti_reports', JSON.stringify(savedReports));
+       this.loadSavedReports();
+   }
+
+   loadSavedReports() {
+       const savedReports = JSON.parse(localStorage.getItem('askarti_reports') || '[]');
+       
+       if (savedReports.length === 0) {
+           this.elements.savedReports.classList.add('hidden');
+           return;
+       }
+
+       this.elements.savedReports.classList.remove('hidden');
+       this.elements.savedReportsList.innerHTML = savedReports.map((report, index) => `
+           <div class="saved-report-item" data-index="${index}">
+               <div>
+                   <strong>${report.query.substring(0, 50)}${report.query.length > 50 ? '...' : ''}</strong>
+                   <div class="saved-report-date">${new Date(report.timestamp).toLocaleDateString()}</div>
+               </div>
+           </div>
+       `).join('');
+
+       // Add click handlers
+       this.elements.savedReportsList.querySelectorAll('.saved-report-item').forEach(item => {
+           item.addEventListener('click', (e) => {
+               const index = parseInt(e.currentTarget.dataset.index);
+               const report = savedReports[index];
+               this.elements.situationInput.value = report.query;
+               this.updateCharCount();
+			   this.getIntelligence();
+          });
+      });
+  }
+
+  startOver() {
+      this.elements.situationInput.value = '';
+      this.elements.situationInput.focus();
+      this.elements.resultsContainer.innerHTML = '';
+      this.hideLoadingMessages();
+      this.elements.errorContainer.classList.add('hidden');
+      this.state.pendingRequest = false;
+      this.updateCharCount();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  showModal() {
+      this.elements.aboutModal.classList.remove('hidden');
+  }
+
+  hideModal() {
+      this.elements.aboutModal.classList.add('hidden');
+  }
 }
 
 // Initialize the prospecting tool
@@ -1301,3 +1613,4 @@ const app = new ProspectingTool();
 </script>
 </body>
 </html>
+           
