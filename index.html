@@ -887,10 +887,11 @@
 const CONFIG = {
    API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
    LOADING_MESSAGES: [
-        "Step 1: Analyzing prospecting challenge...", 
-        "Step 1: Deconstructing key objectives...",
-        "Step 2: Synthesizing insider intelligence...",
-        "Step 2: Building strategic report..."
+        "Researching federal market...", 
+        "Analyzing partner ecosystem...", 
+        "Gathering competitive intel...", 
+        "Mapping decision makers...", 
+        "Compiling opportunities..."
     ]
 };
 
@@ -1251,7 +1252,7 @@ class ProspectingTool {
        this.state.loadingInterval = setInterval(() => {
            messageIndex = (messageIndex + 1) % CONFIG.LOADING_MESSAGES.length;
            this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[messageIndex];
-       }, 2500); // Adjusted timing for better feel with new messages
+       }, 2500);
    }
 
    hideLoadingMessages() {
@@ -1273,12 +1274,9 @@ class ProspectingTool {
             return;
         }
 
-        // Temporarily create an element to format text
         const tempElement = document.createElement('div');
         tempElement.innerHTML = report.innerHTML;
 
-        // A simple conversion from HTML to plain text
-        // This can be improved with a more robust library if needed
         let textToCopy = '';
         tempElement.querySelectorAll('h1, h2, h3, h4, p, li, .value, .label, .company-name, .company-note, td, th').forEach(el => {
             const tagName = el.tagName.toLowerCase();
@@ -1328,7 +1326,6 @@ class ProspectingTool {
    }
 }
 
-// Initialize the prospecting tool
 const app = new ProspectingTool();
 </script>
 </body>
