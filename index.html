@@ -839,18 +839,11 @@ footer button {
 // Mobile-first configuration
 const CONFIG = {
     API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
-    REQUEST_TIMEOUT: 60000, // Increased from 25000 to 60000 (60 seconds)
-    MAX_RETRIES: 2,
-    RETRY_DELAY: 3000, // Increased retry delay
+    REQUEST_TIMEOUT: 90000, // 90 seconds
+    MAX_RETRIES: 3,
+    RETRY_DELAY: 5000,
     MAX_INPUT_LENGTH: 500,
-    MIN_REQUEST_INTERVAL: 2000,
-    LOADING_MESSAGES: [
-        "Working Backwards...",
-        "Unpacking This...",
-        "Putting a Pin in It...",
-        "Circling Back...",
-        "Doing Significant Things..."
-    ]
+    MIN_REQUEST_INTERVAL: 2000
 };
 
 // Enhanced Application class with mobile optimizations
@@ -1257,25 +1250,23 @@ async generateAccountPlan() {
     this.elements.planButtonContainer.classList.add('hidden');
     this.elements.resultsContainer.innerHTML = '';
     
-    // Show loading with expectation setting
-    this.showTemporaryMessage('Crafting your strategic account plan... this may take up to 60 seconds for detailed analysis.', 'info');
+    this.showTemporaryMessage('Building your detailed strategic plan... this may take up to 90 seconds.', 'info');
     this.elements.accountPlanContainer.innerHTML = `
         <div class="therapy-card text-center p-6 sm:p-8 animate-pulse-slow">
             <div class="loader mx-auto mb-4"></div>
-            <p class="text-base sm:text-lg font-medium text-gray-700">Building your strategic account plan...</p>
-            <p class="text-sm text-gray-500 mt-2">Analyzing market intelligence and competitive landscape...</p>
-            <p class="text-xs text-gray-400 mt-3">This may take up to 60 seconds for comprehensive analysis</p>
+            <p class="text-base sm:text-lg font-medium text-gray-700">Generating comprehensive account plan...</p>
+            <p class="text-sm text-gray-500 mt-2">Analyzing competitive landscape and market intelligence...</p>
+            <p class="text-xs text-gray-400 mt-3">Complex plans take time - please wait up to 90 seconds</p>
         </div>
     `;
     this.elements.accountPlanContainer.classList.remove('hidden');
-    
-    // Smooth scroll
     this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
     
     this.state.pendingRequest = true;
+    
     try {
         let contextToSend = this.state.chatHistory;
-        const maxContextSize = 20;
+        const maxContextSize = 15;
         if (contextToSend.length > maxContextSize) {
             contextToSend = [
                 contextToSend[0],
@@ -1283,7 +1274,10 @@ async generateAccountPlan() {
             ];
         }
         
-        // Longer timeout for plan generation
+        const controller = new AbortController();
+        // 90 second timeout on frontend
+        const timeoutId = setTimeout(() => controller.abort(), 90000);
+        
         const response = await fetch(CONFIG.API_ENDPOINT, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1292,55 +1286,68 @@ async generateAccountPlan() {
                 mode: 'account_plan',
                 conversationHistory: contextToSend,
                 currentDate: new Date().toISOString().split('T')[0]
-            })
+            }),
+            signal: controller.signal
         });
         
-        if (!response.ok) throw new Error('Request failed');
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Response error:', errorText);
+            throw new Error(`Request failed with status: ${response.status}`);
+        }
         
         const data = await response.json();
         
-        // Handle context gathering mode
         if (data.mode === 'context_gathering') {
             this.elements.accountPlanContainer.classList.add('hidden');
             this.hideLoadingMessage();
-            
-            // Add the context gathering message to chat
             this.addChatMessage(data.message, false);
             this.state.chatHistory.push({ role: 'assistant', content: data.message });
-            
-            // Add follow-up suggestions if provided
             if (data.suggestions && data.suggestions.length > 0) {
                 this.addFollowUpSuggestions(data.suggestions);
             }
-            
-            this.showTemporaryMessage("I need a bit more info to create the best plan for you.", 'info');
+            this.showTemporaryMessage("I need more context to create the best plan.", 'info');
             return;
         }
 
-        // Check if we got a valid plan
         if (data.plan_title || data.account_name) {
             this.displayMobileCRMAccountPlan(data);
-            this.showTemporaryMessage("Account plan generated! Time to execute.", 'info');
+            this.showTemporaryMessage("Strategic plan generated successfully!", 'info');
         } else {
-            throw new Error('Incomplete plan data received');
+            console.error('Incomplete plan data:', data);
+            throw new Error('Plan generation returned incomplete data');
         }
         
     } catch (error) {
         console.error('Account plan generation failed:', error);
-        this.elements.accountPlanContainer.innerHTML = `
-            <div class="therapy-card text-center p-4 sm:p-6">
-                <p class="text-red-600 mb-3 font-medium">Plan generation took longer than expected.</p>
-                <p class="text-gray-600 text-sm mb-4">Complex plans sometimes need more time. Let's try again with a shorter timeout.</p>
-                <button onclick="app.generateAccountPlan()" class="bg-gradient-to-r from-red-100 to-pink-100 hover:from-red-200 hover:to-pink-200 text-red-700 font-medium btn-mobile transition-all transform hover:scale-105 tap-target">
-                    Try Again
-                </button>
-            </div>
-        `;
+        
+        if (error.name === 'AbortError') {
+            this.elements.accountPlanContainer.innerHTML = `
+                <div class="therapy-card text-center p-4 sm:p-6">
+                    <p class="text-amber-600 mb-3 font-medium">Plan generation timed out after 90 seconds.</p>
+                    <p class="text-gray-600 text-sm mb-4">Your request is complex - let's try again.</p>
+                    <button onclick="app.generateAccountPlan()" class="bg-gradient-to-r from-amber-100 to-orange-100 hover:from-amber-200 hover:to-orange-200 text-amber-700 font-medium btn-mobile transition-all transform hover:scale-105 tap-target">
+                        Generate Plan Again
+                    </button>
+                </div>
+            `;
+        } else {
+            this.elements.accountPlanContainer.innerHTML = `
+                <div class="therapy-card text-center p-4 sm:p-6">
+                    <p class="text-red-600 mb-3 font-medium">Technical issue during plan generation.</p>
+                    <p class="text-gray-600 text-sm mb-4">Let's try again - this usually works on the second attempt.</p>
+                    <button onclick="app.generateAccountPlan()" class="bg-gradient-to-r from-red-100 to-pink-100 hover:from-red-200 hover:to-pink-200 text-red-700 font-medium btn-mobile transition-all transform hover:scale-105 tap-target">
+                        Try Again
+                    </button>
+                </div>
+            `;
+        }
     } finally {
         this.state.pendingRequest = false;
     }
 }
-
    addFollowUpSuggestions(suggestions) {
        const suggestionsHtml = `
            <div class="flex justify-center gap-2 mt-4 flex-wrap animate-fade-in">
