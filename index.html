@@ -1489,58 +1489,151 @@ async generateAccountPlan() {
                ` : ''}
 
                ${opportunity_breakdown?.length > 0 ? `
-               <div class="crm-section">
-                   <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Opportunity Breakdown</h3>
-                   <div class="space-y-3 sm:space-y-4">
-                       ${opportunity_breakdown.map(opp => `
-                           <div class="border border-gray-200 rounded-lg p-3 sm:p-4">
-                               <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-2">
-                                   <h4 class="font-semibold text-gray-900 text-sm sm:text-base">${opp.opportunity_name || 'Unnamed Opportunity'}</h4>
-                                   <div class="text-left sm:text-right">
-                                       <div class="font-bold text-customPurple-700 text-sm sm:text-base">${opp.value || 'TBD'}</div>
-                                       <div class="text-xs sm:text-sm text-gray-600">${opp.probability || 'TBD'} probability</div>
-                                   </div>
-                               </div>
-                               <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm">
-                                   <div>
-                                       <span class="font-medium text-gray-700">Timeline:</span>
-                                       <p class="text-gray-600">${opp.timeline || 'TBD'}</p>
-                                   </div>
-                                   <div>
-                                       <span class="font-medium text-gray-700">Stage:</span>
-                                       <p class="text-gray-600">${opp.stage || 'TBD'}</p>
-                                   </div>
-                                   <div>
-                                       <span class="font-medium text-gray-700">Position:</span>
-                                       <p class="text-gray-600">${opp.competitive_position || 'TBD'}</p>
-                                   </div>
-                               </div>
-                               ${opp.key_requirements ? `
-                               <div class="mt-3">
-                                   <span class="font-medium text-gray-700 text-xs sm:text-sm">Key Requirements:</span>
-                                   <p class="text-gray-600 text-xs sm:text-sm">${opp.key_requirements}</p>
-                               </div>
-                               ` : ''}
-                           </div>
-                       `).join('')}
-                   </div>
-               </div>
-               ` : ''}
+<div class="crm-section">
+    <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Opportunity Breakdown</h3>
+    <div class="space-y-3 sm:space-y-4">
+        ${opportunity_breakdown.map(opp => `
+            <div class="border border-gray-200 rounded-lg p-3 sm:p-4">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-2">
+                    <h4 class="font-semibold text-gray-900 text-sm sm:text-base">${opp.opportunity_name || 'Unnamed Opportunity'}</h4>
+                    <div class="text-left sm:text-right">
+                        <div class="font-bold text-customPurple-700 text-sm sm:text-base">${opp.value || 'TBD'}</div>
+                        <div class="text-xs sm:text-sm text-gray-600">${opp.probability || 'TBD'} probability</div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm">
+                    <div>
+                        <span class="font-medium text-gray-700">Timeline:</span>
+                        <p class="text-gray-600">${opp.timeline || 'TBD'}</p>
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-700">Stage:</span>
+                        <p class="text-gray-600">${opp.stage || 'TBD'}</p>
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-700">Position:</span>
+                        <p class="text-gray-600">${opp.competitive_position || 'TBD'}</p>
+                    </div>
+                </div>
+                ${opp.key_requirements ? `
+                <div class="mt-3">
+                    <span class="font-medium text-gray-700 text-xs sm:text-sm">Key Requirements:</span>
+                    <p class="text-gray-600 text-xs sm:text-sm">${opp.key_requirements}</p>
+                </div>
+                ` : ''}
+                ${opp.competitive_threats ? `
+                <div class="mt-2">
+                    <span class="font-medium text-gray-700 text-xs sm:text-sm">Competitive Threats:</span>
+                    <p class="text-gray-600 text-xs sm:text-sm">${opp.competitive_threats}</p>
+                </div>
+                ` : ''}
+            </div>
+        `).join('')}
+    </div>
+</div>
+` : ''}
 
-               <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
-                   ${strategic_initiatives?.length > 0 ? `
-                   <div class="crm-section">
-                       <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Strategic Initiatives</h3>
-                       <ul class="space-y-2 sm:space-y-3">
-                           ${strategic_initiatives.map((initiative, i) => `
-                               <li class="flex gap-2 sm:gap-3">
-                                   <span class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-customPurple-700 text-white rounded-full flex items-center justify-center text-xs font-bold">${i + 1}</span>
-                                   <span class="text-gray-700 text-xs sm:text-sm">${initiative}</span>
-                               </li>
-                           `).join('')}
-                       </ul>
-                   </div>
-                   ` : ''}
+${data.competitive_intelligence ? `
+<div class="crm-section">
+    <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Competitive Landscape</h3>
+    
+    ${data.competitive_intelligence.top_systems_integrators?.length > 0 ? `
+    <div class="mb-4">
+        <h4 class="font-semibold text-gray-800 text-sm mb-2">🏢 Major Prime Contractors</h4>
+        <div class="space-y-2">
+            ${data.competitive_intelligence.top_systems_integrators.map(si => `
+                <div class="border border-gray-200 rounded-lg p-3">
+                    <div class="flex justify-between items-start mb-1">
+                        <h5 class="font-medium text-gray-900 text-sm">${si.company}</h5>
+                        <span class="text-xs px-2 py-1 bg-red-100 text-red-700 rounded">Threat</span>
+                    </div>
+                    <p class="text-xs text-gray-600 mb-1">${si.federal_presence}</p>
+                    <div class="text-xs">
+                        <span class="text-green-700">Strengths:</span> ${si.strengths}
+                        <br><span class="text-orange-700">Vulnerabilities:</span> ${si.vulnerabilities}
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    </div>
+    ` : ''}
+    
+    ${data.competitive_intelligence.top_software_cloud_providers?.length > 0 ? `
+    <div class="mb-4">
+        <h4 class="font-semibold text-gray-800 text-sm mb-2">☁️ Major Tech Providers</h4>
+        <div class="space-y-2">
+            ${data.competitive_intelligence.top_software_cloud_providers.map(tech => `
+                <div class="border border-gray-200 rounded-lg p-3">
+                    <div class="flex justify-between items-start mb-1">
+                        <h5 class="font-medium text-gray-900 text-sm">${tech.company}</h5>
+                        <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded">Tech</span>
+                    </div>
+                    <p class="text-xs text-gray-600 mb-1">${tech.market_position}</p>
+                    <p class="text-xs text-gray-700"><strong>Offerings:</strong> ${tech.key_offerings}</p>
+                </div>
+            `).join('')}
+        </div>
+    </div>
+    ` : ''}
+    
+    ${data.competitive_intelligence.emerging_players?.length > 0 ? `
+    <div>
+        <h4 class="font-semibold text-gray-800 text-sm mb-2">🚀 Emerging Players</h4>
+        <ul class="text-xs text-gray-700 space-y-1">
+            ${data.competitive_intelligence.emerging_players.map(player => `
+                <li class="flex gap-2"><span class="text-green-500">•</span>${player}</li>
+            `).join('')}
+        </ul>
+    </div>
+    ` : ''}
+</div>
+
+${data.market_analysis ? `
+<div class="crm-section bg-blue-50 border-blue-200">
+    <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+        </svg>
+        Market Intelligence
+    </h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+        <div>
+            <h4 class="font-semibold text-blue-800 mb-1">NAICS Codes</h4>
+            <ul class="text-blue-700 text-xs space-y-1">
+                ${data.market_analysis.relevant_naics_codes?.map(code => `
+                    <li>${code}</li>
+                `).join('') || '<li>Standard B2G codes apply</li>'}
+            </ul>
+        </div>
+        <div>
+            <h4 class="font-semibold text-blue-800 mb-1">Market Size</h4>
+            <p class="text-blue-700 text-xs">${data.market_analysis.market_size || 'Market sizing TBD'}</p>
+        </div>
+        ${data.market_analysis.procurement_trends ? `
+        <div class="sm:col-span-2">
+            <h4 class="font-semibold text-blue-800 mb-1">Procurement Trends</h4>
+            <p class="text-blue-700 text-xs">${data.market_analysis.procurement_trends}</p>
+        </div>
+        ` : ''}
+    </div>
+</div>
+` : ''}
+` : ''}
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+    ${strategic_initiatives?.length > 0 ? `
+    <div class="crm-section">
+        <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Strategic Initiatives</h3>
+        <ul class="space-y-2 sm:space-y-3">
+            ${strategic_initiatives.map((initiative, i) => `
+                <li class="flex gap-2 sm:gap-3">
+                    <span class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-customPurple-700 text-white rounded-full flex items-center justify-center text-xs font-bold">${i + 1}</span>
+                    <span class="text-gray-700 text-xs sm:text-sm">${initiative}</span>
+                </li>
+            `).join('')}
+        </ul>
+    </div>
+    ` : ''}
 
                    ${risk_mitigation?.length > 0 ? `
                    <div class="crm-section">
