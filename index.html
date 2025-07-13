@@ -349,25 +349,8 @@
         letter-spacing: 0.05em;
         margin: 0 0 0.75rem 0;
     }
-    
-    .agency-rationale {
-        margin-top: 1.5rem;
-        background-color: var(--color-background);
-        border: 1px solid var(--color-border);
-        border-left: 3px solid var(--color-primary-hover);
-        padding: 1.25rem;
-    }
 
-    .agency-rationale h4 {
-        font-size: 0.875rem;
-        font-weight: 700;
-        color: var(--color-text-primary);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin: 0 0 0.75rem 0;
-    }
-    
-    .agency-rationale p, .detail-item p, .approach-section p {
+    .detail-item p, .approach-section p {
         color: var(--color-text-secondary);
         margin: 0;
         line-height: 1.6;
@@ -886,13 +869,7 @@
 <script>
 const CONFIG = {
    API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
-   LOADING_MESSAGES: [
-        "Researching federal market...", 
-        "Analyzing partner ecosystem...", 
-        "Gathering competitive intel...", 
-        "Mapping decision makers...", 
-        "Compiling opportunities..."
-    ]
+   LOADING_MESSAGES: ["Researching federal market...", "Analyzing partner ecosystem...", "Gathering competitive intel...", "Mapping decision makers...", "Compiling opportunities..."]
 };
 
 class ProspectingTool {
@@ -988,10 +965,7 @@ class ProspectingTool {
            body: JSON.stringify({ situation })
        });
        
-       if (!response.ok) {
-            const errorBody = await response.json();
-            throw new Error(errorBody.message || `Server error (${response.status})`);
-       }
+       if (!response.ok) throw new Error(`Server error (${response.status})`);
        
        const data = await response.json();
        if (data.error) throw new Error(data.message || data.error);
@@ -1055,13 +1029,6 @@ class ProspectingTool {
                                    </div>
                                </div>
                                
-                               ${agency.rationale ? `
-                               <div class="agency-rationale">
-                                   <h4>Strategic Rationale</h4>
-                                   <p>${agency.rationale}</p>
-                               </div>
-                               ` : ''}
-
                                <div class="approach-section">
                                    <h4>Recommended Approach</h4>
                                    <p>${agency.best_approach}</p>
@@ -1252,7 +1219,7 @@ class ProspectingTool {
        this.state.loadingInterval = setInterval(() => {
            messageIndex = (messageIndex + 1) % CONFIG.LOADING_MESSAGES.length;
            this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[messageIndex];
-       }, 2500);
+       }, 2000);
    }
 
    hideLoadingMessages() {
@@ -1274,9 +1241,12 @@ class ProspectingTool {
             return;
         }
 
+        // Temporarily create an element to format text
         const tempElement = document.createElement('div');
         tempElement.innerHTML = report.innerHTML;
 
+        // A simple conversion from HTML to plain text
+        // This can be improved with a more robust library if needed
         let textToCopy = '';
         tempElement.querySelectorAll('h1, h2, h3, h4, p, li, .value, .label, .company-name, .company-note, td, th').forEach(el => {
             const tagName = el.tagName.toLowerCase();
@@ -1326,6 +1296,7 @@ class ProspectingTool {
    }
 }
 
+// Initialize the prospecting tool
 const app = new ProspectingTool();
 </script>
 </body>
