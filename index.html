@@ -20,7 +20,7 @@
    <link rel="icon" href="/images/favicon.ico" sizes="any">
    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-   <meta name="theme-color" content="#77B8CB">
+   <meta name="theme-color" content="#756bb1">
    
    <script src="https://cdn.tailwindcss.com"></script>
    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -33,44 +33,29 @@
        gtag('js', new Date());
        gtag('config', 'G-WLGEPY5H4G');
    </script>
-<script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                colors: {
-                    primary: '#77B8CB',
-                    platinum: '#E6E7E6',
-                    battleship: '#939493',
-                    eerie: '#252525',
-                    skyblue: '#77B8CB',
-                    silver: '#A3A3A3'
-                }
-            }
-        }
-    }
-</script>
 
 <style>
     :root {
-        /* New Color Palette */
-        --color-platinum: #E6E7E6;
-        --color-battleship-gray: #939493;
-        --color-eerie-black: #252525;
-        --color-sky-blue: #77B8CB;
-        --color-silver: #A3A3A3;
+        /* New Purple-Toned Color Palette */
+        --color-purple-lightest: #f2f0f7;
+        --color-purple-light: #dadaeb;
+        --color-purple-mid-light: #bcbddc;
+        --color-purple-mid: #9e9ac8;
+        --color-purple-dark: #756bb1;
+        --color-black: #252525;
         --color-white: #ffffff;
 
         /* Semantic Colors */
-        --color-primary: var(--color-sky-blue);
-        --color-secondary: var(--color-battleship-gray);
-        --color-background: #F8F9FA; /* A very light gray for the page background */
-        --color-surface: var(--color-white); /* White for card backgrounds */
-        --color-surface-muted: var(--color-platinum); /* Muted background for some elements */
-        --color-text-primary: var(--color-eerie-black);
-        --color-text-secondary: #525252; /* UPDATED: Darker grey for accessibility (WCAG AA) */
-        --color-text-muted: #737373; /* UPDATED: Darker silver for accessibility */
-        --color-border: var(--color-platinum);
-        --color-border-light: #F1F3F5; /* A lighter border for subtle divisions */
+        --color-primary: var(--color-purple-dark);
+        --color-primary-hover: var(--color-purple-mid);
+        --color-background: var(--color-purple-lightest); 
+        --color-surface: var(--color-white); 
+        --color-surface-muted: var(--color-purple-light);
+        --color-text-primary: var(--color-black);
+        --color-text-secondary: #525252; /* Maintained for accessibility */
+        --color-text-muted: #737373; /* Maintained for accessibility */
+        --color-border: var(--color-purple-light);
+        --color-border-light: #E9E7F2; 
     }
 
     body { 
@@ -110,8 +95,33 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); 
     }
     
+    #prospect-btn {
+        background-color: var(--color-primary);
+        color: var(--color-white);
+        font-weight: 600;
+        padding: 0.75rem 2rem;
+        border-radius: 9999px;
+        transition: all 0.2s ease-in-out;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    }
+
+    #prospect-btn:hover {
+        background-color: var(--color-primary-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+    
     .quick-prompt {
         border: 1px solid var(--color-border);
+        background-color: #fafafa;
+        border-radius: 9999px;
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--color-text-secondary);
         transition: all 0.2s ease;
     }
 
@@ -124,6 +134,12 @@
     
     input[type="text"], textarea { 
         font-size: 16px !important; 
+        border: 1px solid var(--color-border);
+        border-radius: 0.5rem;
+    }
+    textarea:focus {
+        --tw-ring-color: var(--color-primary);
+        border-color: var(--color-primary);
     }
 
     /* Magazine Report Styles */
@@ -181,7 +197,7 @@
     }
 
     .confidential-badge {
-        background: var(--color-eerie-black);
+        background: var(--color-black);
         color: var(--color-white);
         padding: 0.5rem 1rem;
         font-size: 0.75rem;
@@ -571,16 +587,16 @@
     }
 
     .template-content {
-    background: var(--color-background); /* Switched from black to light grey */
-    color: var(--color-text-secondary); /* Switched from light text to accessible dark grey text */
-    border: 1px solid var(--color-border); /* A subtle border to frame the content */
-    padding: 1.5rem;
-    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-    font-size: 0.875rem;
-    line-height: 1.7;
-    overflow-x: auto;
-    white-space: pre-wrap;
-}
+        background: var(--color-background);
+        color: var(--color-text-secondary);
+        border: 1px solid var(--color-border);
+        padding: 1.5rem;
+        font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+        font-size: 0.875rem;
+        line-height: 1.7;
+        overflow-x: auto;
+        white-space: pre-wrap;
+    }
 
     /* Prose Content */
     .prose-content {
@@ -622,8 +638,8 @@
     }
 
     .btn-primary:hover {
-        background: #62a9c0; /* Darker sky blue */
-        border-color: #62a9c0;
+        background: var(--color-primary-hover);
+        border-color: var(--color-primary-hover);
     }
 
     .btn-secondary {
@@ -638,6 +654,37 @@
         border-color: var(--color-text-primary);
     }
     
+    /* Footer & Modal Styles */
+    .footer-link {
+        color: var(--color-primary);
+        font-weight: 500;
+        text-decoration: none;
+    }
+    .footer-link:hover {
+        text-decoration: underline;
+    }
+    
+    #about-modal .modal-image {
+        border: 3px solid var(--color-primary);
+    }
+    
+    #about-modal .modal-button {
+        background-color: var(--color-primary);
+        color: var(--color-white);
+        font-weight: 700;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        text-align: center;
+        transition: all 0.2s ease;
+        display: block;
+        width: 100%;
+        text-decoration: none;
+    }
+    #about-modal .modal-button:hover {
+        background-color: var(--color-primary-hover);
+        transform: scale(1.03);
+    }
+
     /* Hide unused elements for now */
     .metrics-grid { display: none; }
 
@@ -714,36 +761,36 @@
                <textarea 
                    id="situation-input" 
                    rows="3" 
-                   class="w-full p-4 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary resize-none placeholder-gray-500"
+                   class="w-full p-4 text-base resize-none placeholder-gray-500"
                    placeholder="Need to prospect cybersecurity solutions into DOD. Looking for Tier 1 SIs who can get me in."
                    maxlength="500"></textarea>
            </div>
 
            <div class="flex flex-wrap gap-2 justify-center mb-4">
-               <button class="quick-prompt px-3 py-1.5 bg-gray-100 rounded-full text-sm text-gray-700 font-medium"
+               <button class="quick-prompt"
                        data-text="Need to prospect cloud migration services into civilian agencies. Who are the top SIs?">
                    Cloud Migration SIs
                </button>
-               <button class="quick-prompt px-3 py-1.5 bg-gray-100 rounded-full text-sm text-gray-700 font-medium"
+               <button class="quick-prompt"
                        data-text="Looking for VARs and distributors who can sell our cybersecurity platform to federal agencies.">
                    Cyber VARs
                </button>
-               <button class="quick-prompt px-3 py-1.5 bg-gray-100 rounded-full text-sm text-gray-700 font-medium"
+               <button class="quick-prompt"
                        data-text="Which agencies are buying AI/ML solutions right now? Need warm introduction paths.">
                    AI/ML Opportunities
                </button>
-               <button class="quick-prompt px-3 py-1.5 bg-gray-100 rounded-full text-sm text-gray-700 font-medium"
+               <button class="quick-prompt"
                        data-text="Small business set-aside opportunities in data analytics. Which agencies have active RFPs?">
                    Small Business Opps
                </button>
-               <button class="quick-prompt px-3 py-1.5 bg-gray-100 rounded-full text-sm text-gray-700 font-medium"
+               <button class="quick-prompt"
                        data-text="ISVs and SaaS companies that need federal sales partners for their solutions.">
                    ISV Partnerships
                </button>
            </div>
 
            <div class="text-center">
-               <button id="prospect-btn" class="bg-skyblue hover:bg-battleship text-white font-semibold py-3 px-8 rounded-full transition-all inline-flex items-center gap-2 shadow-lg hover:shadow-xl">
+               <button id="prospect-btn">
                    <span id="btn-text">Get Prospecting Intel</span>
                    <div id="loader" class="loader hidden"></div>
                </button>
@@ -764,8 +811,8 @@
 
        <footer class="text-center mt-12 space-y-4 pb-20">
            <div class="flex justify-center gap-6 text-sm">
-               <button id="about-btn" class="text-skyblue-500 hover:text-skyblue-700 font-medium">About</button>
-               <a href="mailto:mark@subhoo.com" class="text-skyblue-500 hover:text-skyblue-700 font-medium">Contact</a>
+               <button id="about-btn" class="footer-link">About</button>
+               <a href="mailto:mark@subhoo.com" class="footer-link">Contact</a>
            </div>
            <p class="text-xs text-gray-400">© 2025 AskArti. Federal Prospecting Intelligence</p>
        </footer>
@@ -775,7 +822,7 @@
         <div class="p-4 sm:p-6">
             <div class="flex justify-between items-start mb-4">
                 <div class="flex items-center gap-3">
-                    <img src="images/oldmark.jpg" alt="Mark Flournoy" class="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-3 border-skyblue animate-float">
+                    <img src="images/oldmark.jpg" alt="Mark Flournoy" class="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover modal-image">
                     <div>
                         <h2 class="text-lg sm:text-xl font-bold text-eerie">Hey, I'm Mark</h2>
                         <p class="text-xs text-battleship">Retired Fed Sales Guy</p>
@@ -791,9 +838,9 @@
                 <p class="leading-relaxed"> AskArti came from those nights I spent wide awake, pretty sure my champion had been abducted by aliens and my boss was drafting my "improvement" plan. If your deals aren't closing, your pipeline might be fiction. Does every deal have a dollar amount, a close date, and someone who owns it? Arti's not perfect, but he's up all night so you can finally build that 3x pipeline your boss has always dreamed of.</p>
                 
                 <div class="pt-3 sm:pt-4 border-t border-platinum">
-                    <div class="bg-gradient-to-r from-platinum to-silver/20 rounded-lg p-3 sm:p-4 text-sm border border-silver/30">
+                    <div class="bg-gradient-to-r from-purple-lightest to-purple-light/20 rounded-lg p-3 sm:p-4 text-sm border border-purple-light/30">
                         <h3 class="font-semibold text-eerie mb-2 flex items-center text-sm sm:text-base">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-skyblue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
                             Privacy
@@ -806,7 +853,7 @@
                 
                 <div class="pt-3 sm:pt-4">
                     <a href="https://calendly.com/markflournoy/30min" target="_blank" 
-                       class="block w-full bg-skyblue hover:bg-battleship text-white font-bold py-3 px-6 rounded-lg text-center transition-all transform hover:scale-105 tap-target">
+                       class="modal-button">
                         Let's Commiserate Over Coffee ☕
                     </a>
                     <p class="text-xs text-center text-battleship mt-2">
