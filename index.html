@@ -679,12 +679,10 @@ footer button {
    <p class="text-gray-800 leading-relaxed">
        <strong>Hey there.</strong> I'm Arti. Federal sales got you pulling your hair out? I've been there.
        <br>
-       <strong>I can help:</strong>
+       <strong>I can help you:</strong>
        <br>• <em>Generate account plans</em> - say "help me sell [solution] to [agency]" or "I need a strategy for..."
        <br>• <em>Find opportunities</em> - try "find opps at [company]" or "help me prospect into [sector]"
        <br>• <em>Vent about work stress</em> - "I'm frustrated with..." or "why is [situation] so hard?"
-       <br>
-       <span class="text-xs text-gray-500">Try: "Help me sell cybersecurity to DHS" or "My boss doesn't like me"</span>
    </p>
 </div>
 </div>
@@ -838,12 +836,21 @@ footer button {
 <script>
 // Mobile-first configuration
 const CONFIG = {
-    API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
-    REQUEST_TIMEOUT: 90000, // 90 seconds
-    MAX_RETRIES: 3,
-    RETRY_DELAY: 5000,
-    MAX_INPUT_LENGTH: 500,
-    MIN_REQUEST_INTERVAL: 2000
+   API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
+   REQUEST_TIMEOUT: 25000,
+   MAX_RETRIES: 2,
+   RETRY_DELAY: 2000,
+   MAX_INPUT_LENGTH: 500,
+   MIN_REQUEST_INTERVAL: 2000,
+   LOADING_MESSAGES: [
+       "Reading between the lines...",
+       "Channeling my inner COTR...",
+       "Consulting the FAR...",
+       "Finding the real decision maker...",
+       "Translating government speak...",
+       "Brewing strong coffee...",
+       "Activating empathy mode..."
+   ]
 };
 
 // Enhanced Application class with mobile optimizations
@@ -1246,108 +1253,87 @@ showHelpfulTips() {
        }
    }
 async generateAccountPlan() {
-    if (this.state.pendingRequest) return;
-    this.elements.planButtonContainer.classList.add('hidden');
-    this.elements.resultsContainer.innerHTML = '';
-    
-    this.showTemporaryMessage('Building your detailed strategic plan... this may take up to 90 seconds.', 'info');
-    this.elements.accountPlanContainer.innerHTML = `
-        <div class="therapy-card text-center p-6 sm:p-8 animate-pulse-slow">
-            <div class="loader mx-auto mb-4"></div>
-            <p class="text-base sm:text-lg font-medium text-gray-700">Generating comprehensive account plan...</p>
-            <p class="text-sm text-gray-500 mt-2">Analyzing competitive landscape and market intelligence...</p>
-            <p class="text-xs text-gray-400 mt-3">Complex plans take time - please wait up to 90 seconds</p>
-        </div>
-    `;
-    this.elements.accountPlanContainer.classList.remove('hidden');
-    this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
-    
-    this.state.pendingRequest = true;
-    
-    try {
-        let contextToSend = this.state.chatHistory;
-        const maxContextSize = 15;
-        if (contextToSend.length > maxContextSize) {
-            contextToSend = [
-                contextToSend[0],
-                ...contextToSend.slice(-maxContextSize + 1)
-            ];
-        }
-        
-        const controller = new AbortController();
-        // 90 second timeout on frontend
-        const timeoutId = setTimeout(() => controller.abort(), 90000);
-        
-        const response = await fetch(CONFIG.API_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                situation: "Generate account plan",
-                mode: 'account_plan',
-                conversationHistory: contextToSend,
-                currentDate: new Date().toISOString().split('T')[0]
-            }),
-            signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Response error:', errorText);
-            throw new Error(`Request failed with status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        
-        if (data.mode === 'context_gathering') {
-            this.elements.accountPlanContainer.classList.add('hidden');
-            this.hideLoadingMessage();
-            this.addChatMessage(data.message, false);
-            this.state.chatHistory.push({ role: 'assistant', content: data.message });
-            if (data.suggestions && data.suggestions.length > 0) {
-                this.addFollowUpSuggestions(data.suggestions);
-            }
-            this.showTemporaryMessage("I need more context to create the best plan.", 'info');
-            return;
-        }
+       if (this.state.pendingRequest) return;
+       this.elements.planButtonContainer.classList.add('hidden');
+       this.elements.resultsContainer.innerHTML = '';
+       
+       // Show loading
+       this.showTemporaryMessage('Crafting your plan...', 'info');
+       this.elements.accountPlanContainer.innerHTML = `
+           <div class="therapy-card text-center p-6 sm:p-8 animate-pulse-slow">
+               <div class="loader mx-auto mb-4"></div>
+               <p class="text-base sm:text-lg font-medium text-gray-700">Building your plan...</p>
+               <p class="text-sm text-gray-500 mt-2">This is going to be good.</p>
+           </div>
+       `;
+       this.elements.accountPlanContainer.classList.remove('hidden');
+       
+       // Smooth scroll
+       this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
+       
+       this.state.pendingRequest = true;
+       try {
+           let contextToSend = this.state.chatHistory;
+           const maxContextSize = 20;
+           if (contextToSend.length > maxContextSize) {
+               contextToSend = [
+                   contextToSend[0],
+                   ...contextToSend.slice(-maxContextSize + 1)
+               ];
+           }
+           
+           const response = await fetch(CONFIG.API_ENDPOINT, {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({ 
+                   situation: "Generate account plan",
+                   mode: 'account_plan',
+                   conversationHistory: contextToSend,
+                   currentDate: new Date().toISOString().split('T')[0]
+               })
+           });
+           
+           if (!response.ok) throw new Error('Request failed');
+           
+           const data = await response.json();
+           
+           // Handle context gathering mode
+           if (data.mode === 'context_gathering') {
+               this.elements.accountPlanContainer.classList.add('hidden');
+               this.hideLoadingMessage();
+               
+               // Add the context gathering message to chat
+               this.addChatMessage(data.message, false);
+               this.state.chatHistory.push({ role: 'assistant', content: data.message });
+               
+               // Add follow-up suggestions if provided
+               if (data.suggestions && data.suggestions.length > 0) {
+                   this.addFollowUpSuggestions(data.suggestions);
+               }
+               
+               this.showTemporaryMessage("I need a bit more info to create the best plan for you.", 'info');
+               return;
+           }
+           
+           this.displayMobileCRMAccountPlan(data);
+           this.showTemporaryMessage("Account plan generated! Time to execute.", 'info');
+           
+       } catch (error) {
+           console.error('Account plan generation failed:', error);
+           this.elements.accountPlanContainer.innerHTML = `
+               <div class="therapy-card text-center p-4 sm:p-6">
+                   <p class="text-red-600 mb-3 font-medium">Plan generation hit a snag.</p>
+                   <p class="text-gray-600 text-sm mb-4">Even my AI needs a coffee break sometimes.</p>
+                   <button onclick="app.generateAccountPlan()" class="bg-gradient-to-r from-red-100 to-pink-100 hover:from-red-200 hover:to-pink-200 text-red-700 font-medium btn-mobile transition-all transform hover:scale-105 tap-target">
+                       Try Again
+                   </button>
+               </div>
+           `;
+       } finally {
+           this.state.pendingRequest = false;
+       }
+   }
 
-        if (data.plan_title || data.account_name) {
-            this.displayMobileCRMAccountPlan(data);
-            this.showTemporaryMessage("Strategic plan generated successfully!", 'info');
-        } else {
-            console.error('Incomplete plan data:', data);
-            throw new Error('Plan generation returned incomplete data');
-        }
-        
-    } catch (error) {
-        console.error('Account plan generation failed:', error);
-        
-        if (error.name === 'AbortError') {
-            this.elements.accountPlanContainer.innerHTML = `
-                <div class="therapy-card text-center p-4 sm:p-6">
-                    <p class="text-amber-600 mb-3 font-medium">Plan generation timed out after 90 seconds.</p>
-                    <p class="text-gray-600 text-sm mb-4">Your request is complex - let's try again.</p>
-                    <button onclick="app.generateAccountPlan()" class="bg-gradient-to-r from-amber-100 to-orange-100 hover:from-amber-200 hover:to-orange-200 text-amber-700 font-medium btn-mobile transition-all transform hover:scale-105 tap-target">
-                        Generate Plan Again
-                    </button>
-                </div>
-            `;
-        } else {
-            this.elements.accountPlanContainer.innerHTML = `
-                <div class="therapy-card text-center p-4 sm:p-6">
-                    <p class="text-red-600 mb-3 font-medium">Technical issue during plan generation.</p>
-                    <p class="text-gray-600 text-sm mb-4">Let's try again - this usually works on the second attempt.</p>
-                    <button onclick="app.generateAccountPlan()" class="bg-gradient-to-r from-red-100 to-pink-100 hover:from-red-200 hover:to-pink-200 text-red-700 font-medium btn-mobile transition-all transform hover:scale-105 tap-target">
-                        Try Again
-                    </button>
-                </div>
-            `;
-        }
-    } finally {
-        this.state.pendingRequest = false;
-    }
-}
    addFollowUpSuggestions(suggestions) {
        const suggestionsHtml = `
            <div class="flex justify-center gap-2 mt-4 flex-wrap animate-fade-in">
@@ -1818,29 +1804,27 @@ ${data.market_analysis ? `
        }
    }
    
-   showTemporaryMessage(message, type = 'info', duration = 3000) {
-    this.elements.loadingMessageContainer.classList.remove('hidden');
-    this.elements.loadingMessage.textContent = message;
-    
-    // Remove loader for temporary messages unless it's a loading message
-    const loader = this.elements.loadingMessageContainer.querySelector('.loader');
-    if (loader && !message.includes('may take up to')) {
-        loader.style.display = 'none';
-    }
-    
-    const colorClasses = {
-        error: 'text-red-700 font-bold',
-        warning: 'text-orange-700 font-bold',
-        info: 'text-gray-700 font-medium'
-    };
-    
-    this.elements.loadingMessage.className = colorClasses[type] || colorClasses.info;
-    
-    setTimeout(() => {
-        this.elements.loadingMessageContainer.classList.add('hidden');
-        if (loader) loader.style.display = 'block';
-    }, duration);
-}
+   showTemporaryMessage(message, type = 'info') {
+       this.elements.loadingMessageContainer.classList.remove('hidden');
+       this.elements.loadingMessage.textContent = message;
+       
+       // Remove loader for temporary messages
+       const loader = this.elements.loadingMessageContainer.querySelector('.loader');
+       if (loader) loader.style.display = 'none';
+       
+       const colorClasses = {
+           error: 'text-red-700 font-bold',
+           warning: 'text-orange-700 font-bold',
+           info: 'text-gray-700 font-medium'
+       };
+       
+       this.elements.loadingMessage.className = colorClasses[type] || colorClasses.info;
+       
+       setTimeout(() => {
+           this.elements.loadingMessageContainer.classList.add('hidden');
+           if (loader) loader.style.display = 'block';
+       }, 3000);
+   }
 
    showModal() {
        this.elements.aboutModal.classList.remove('hidden');
