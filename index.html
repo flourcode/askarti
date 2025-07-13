@@ -113,14 +113,49 @@
         min-height: 100vh;
     }
 
+    /* Mobile-first responsive design */
+    .container-mobile {
+        padding: 0.75rem;
+        margin: 0 auto;
+        max-width: 100%;
+    }
+
+    @media (min-width: 640px) {
+        .container-mobile {
+            padding: 1rem;
+            max-width: 640px;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .container-mobile {
+            padding: 1.5rem;
+            max-width: 768px;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .container-mobile {
+            padding: 2rem;
+            max-width: 1024px;
+        }
+    }
+
     /* Enhanced loader */
     .loader {
         border: 3px solid #e5e7eb;
         border-top: 3px solid #7C6BBE;
         border-radius: 50%;
-        width: 24px;
-        height: 24px;
+        width: 20px;
+        height: 20px;
         animation: spin 1s linear infinite;
+    }
+
+    @media (min-width: 640px) {
+        .loader {
+            width: 24px;
+            height: 24px;
+        }
     }
 
     .loader-text {
@@ -132,25 +167,43 @@
         100% { transform: rotate(360deg); }
     }
 
-    /* Chat bubbles with personality */
+    /* Mobile-optimized chat bubbles */
     .chat-message-user {
         background: linear-gradient(135deg, #7C6BBE 0%, #5A4E8C 100%);
         color: white;
         position: relative;
         box-shadow: 0 2px 10px rgba(124, 107, 190, 0.3);
+        font-size: 0.875rem;
+        line-height: 1.4;
+    }
+
+    @media (min-width: 640px) {
+        .chat-message-user {
+            font-size: 1rem;
+            line-height: 1.5;
+        }
     }
 
     .chat-message-user::after {
         content: '';
         position: absolute;
-        right: -8px;
+        right: -6px;
         top: 50%;
         transform: translateY(-50%);
         width: 0;
         height: 0;
-        border-left: 8px solid #5A4E8C;
-        border-top: 8px solid transparent;
-        border-bottom: 8px solid transparent;
+        border-left: 6px solid #5A4E8C;
+        border-top: 6px solid transparent;
+        border-bottom: 6px solid transparent;
+    }
+
+    @media (min-width: 640px) {
+        .chat-message-user::after {
+            right: -8px;
+            border-left: 8px solid #5A4E8C;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
     }
 
     .chat-message-arti {
@@ -159,29 +212,54 @@
         border: 1px solid #e5e7eb;
         position: relative;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        font-size: 0.875rem;
+        line-height: 1.4;
+    }
+
+    @media (min-width: 640px) {
+        .chat-message-arti {
+            font-size: 1rem;
+            line-height: 1.5;
+        }
     }
 
     .chat-message-arti::after {
         content: '';
         position: absolute;
-        left: -8px;
+        left: -6px;
         top: 50%;
         transform: translateY(-50%);
         width: 0;
         height: 0;
-        border-right: 8px solid white;
-        border-top: 8px solid transparent;
-        border-bottom: 8px solid transparent;
+        border-right: 6px solid white;
+        border-top: 6px solid transparent;
+        border-bottom: 6px solid transparent;
     }
 
-    /* Therapy session vibes */
+    @media (min-width: 640px) {
+        .chat-message-arti::after {
+            left: -8px;
+            border-right: 8px solid white;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
+    }
+
+    /* Mobile-first therapy card */
     .therapy-card {
         background: white;
-        border-radius: 1rem;
-        padding: 1.5rem;
+        border-radius: 0.75rem;
+        padding: 1rem;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         border: 1px solid rgba(124, 107, 190, 0.1);
         transition: all 0.3s ease;
+    }
+
+    @media (min-width: 640px) {
+        .therapy-card {
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
     }
 
     .therapy-card:hover {
@@ -189,22 +267,37 @@
         transform: translateY(-2px);
     }
 
-    /* Typing indicator with personality */
+    /* Mobile-optimized typing indicator */
     .typing-indicator {
         display: flex;
-        gap: 4px;
-        padding: 16px 20px;
+        gap: 3px;
+        padding: 12px 16px;
         background: white;
-        border-radius: 20px;
+        border-radius: 16px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     }
 
+    @media (min-width: 640px) {
+        .typing-indicator {
+            gap: 4px;
+            padding: 16px 20px;
+            border-radius: 20px;
+        }
+    }
+
     .typing-dot {
-        width: 10px;
-        height: 10px;
+        width: 8px;
+        height: 8px;
         background: linear-gradient(135deg, #7C6BBE 0%, #5A4E8C 100%);
         border-radius: 50%;
         animation: typing 1.4s infinite ease-in-out;
+    }
+
+    @media (min-width: 640px) {
+        .typing-dot {
+            width: 10px;
+            height: 10px;
+        }
     }
 
     .typing-dot:nth-child(1) { animation-delay: -0.32s; }
@@ -222,33 +315,55 @@
         }
     }
 
-    /* Enhanced mermaid container */
+    /* Mobile-optimized mermaid container */
     .mermaid-container {
         text-align: center;
-        min-height: 200px;
+        min-height: 150px;
         position: relative;
         background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
-        border-radius: 0.75rem;
-        padding: 1rem;
+        border-radius: 0.5rem;
+        padding: 0.75rem;
     }
 
-    /* Sponsor ad with personality */
+    @media (min-width: 640px) {
+        .mermaid-container {
+            min-height: 200px;
+            border-radius: 0.75rem;
+            padding: 1rem;
+        }
+    }
+
+    /* Mobile-first sponsor ad */
     .sponsor-ad {
         background: linear-gradient(135deg, rgba(124, 107, 190, 0.05), rgba(124, 107, 190, 0.02));
         border: 2px dashed rgba(124, 107, 190, 0.2);
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
+        font-size: 0.8125rem;
+    }
+
+    @media (min-width: 640px) {
+        .sponsor-ad {
+            font-size: 0.875rem;
+        }
     }
 
     .sponsor-ad::before {
         content: '💸';
         position: absolute;
-        top: -20px;
-        right: -20px;
-        font-size: 60px;
+        top: -15px;
+        right: -15px;
+        font-size: 40px;
         opacity: 0.1;
         transform: rotate(-15deg);
+    }
+	@media (min-width: 640px) {
+        .sponsor-ad::before {
+            top: -20px;
+            right: -20px;
+            font-size: 60px;
+        }
     }
 
     .sponsor-ad:hover {
@@ -257,179 +372,249 @@
         transform: translateY(-1px);
     }
 
-    /* Mobile optimizations */
-    @media (max-width: 640px) {
-        .chat-container {
-            height: 50dvh;
-            max-height: 400px;
-        }
+    /* Mobile-first input optimization */
+    input[type="text"],
+    input[type="email"],
+    textarea {
+        font-size: 16px !important; /* Prevents zoom on iOS */
+    }
 
-        .therapy-card {
-            padding: 1rem;
-        }
+    /* Mobile-first chat container */
+    .chat-container-mobile {
+        height: 50vh;
+        max-height: 350px;
+        min-height: 250px;
+    }
 
-        input[type="text"],
-        input[type="email"],
-        textarea {
-            font-size: 16px !important;
+    @media (min-width: 640px) {
+        .chat-container-mobile {
+            height: 60vh;
+            max-height: 500px;
+            min-height: 350px;
         }
     }
 
-    /* Dark mode support */
-    @media (prefers-color-scheme: dark) {
-        body {
-            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-            color: #f9fafb;
-        }
-
-        .therapy-card {
-            background: #374151;
-            border-color: rgba(124, 107, 190, 0.3);
-        }
-
-        .chat-message-arti {
-            background: #374151;
-            color: #f9fafb;
-            border-color: #4b5563;
+    @media (min-width: 1024px) {
+        .chat-container-mobile {
+            height: 65vh;
+            max-height: 600px;
         }
     }
 
-	/* --- UNIFIED CARD TYPOGRAPHY --- */
-.therapy-card h3 {
-    font-size: 1.1rem; /* 17.6px */
-    font-weight: 800; /* Extra-bold for clear headings */
-    color: #1f2937;
-}
+    /* CRM-style table styling - mobile responsive */
+    .crm-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.75rem;
+    }
 
-.therapy-card p, 
-.therapy-card li, 
-.therapy-card td,
-.therapy-card .prose {
-    font-size: 0.9rem; /* 14.4px */
-    line-height: 1.65;
-    color: #374151; /* A standard, readable text color */
-}
+    @media (min-width: 640px) {
+        .crm-table {
+            font-size: 0.875rem;
+        }
+    }
 
-/* Ensure prose styles don't override the base therapy-card styles */
-.therapy-card .prose p, 
-.therapy-card .prose li {
-    font-size: inherit;
-    line-height: inherit;
-    color: inherit;
-}
+    .crm-table th,
+    .crm-table td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+    }
 
-.therapy-card strong {
-    color: #111827; /* Make bolded text stand out */
-    font-weight: 700;
-}
+    @media (min-width: 640px) {
+        .crm-table th,
+        .crm-table td {
+            padding: 12px;
+        }
+    }
 
-/* CRM-style table styling */
-.crm-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+    .crm-table th {
+        background-color: #f9fafb;
+        font-weight: 600;
+        color: #374151;
+        text-transform: uppercase;
+        font-size: 0.625rem;
+        letter-spacing: 0.05em;
+    }
 
-.crm-table th,
-.crm-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #e5e7eb;
-}
+    @media (min-width: 640px) {
+        .crm-table th {
+            font-size: 0.75rem;
+        }
+    }
 
-.crm-table th {
-    background-color: #f9fafb;
-    font-weight: 600;
-    color: #374151;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-}
+    .crm-section {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 12px;
+    }
 
-.crm-section {
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 16px;
-}
+    @media (min-width: 640px) {
+        .crm-section {
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+    }
 
-.crm-header {
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 24px;
-    margin-bottom: 24px;
-}
+    .crm-header {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+    }
 
-.status-badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
+    @media (min-width: 640px) {
+        .crm-header {
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+    }
 
-.status-high { background-color: #fef2f2; color: #991b1b; }
-.status-medium { background-color: #fefce8; color: #92400e; }
-.status-low { background-color: #f0fdf4; color: #166534; }
-.status-champion { background-color: #ecfdf5; color: #047857; }
-.status-neutral { background-color: #f8fafc; color: #475569; }
-.status-blocker { background-color: #fef2f2; color: #dc2626; }
+    .status-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 9999px;
+        font-size: 0.625rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    @media (min-width: 640px) {
+        .status-badge {
+            padding: 4px 12px;
+            font-size: 0.75rem;
+        }
+    }
+
+    .status-high { background-color: #fef2f2; color: #991b1b; }
+    .status-medium { background-color: #fefce8; color: #92400e; }
+    .status-low { background-color: #f0fdf4; color: #166534; }
+    .status-champion { background-color: #ecfdf5; color: #047857; }
+    .status-neutral { background-color: #f8fafc; color: #475569; }
+    .status-blocker { background-color: #fef2f2; color: #dc2626; }
+
+    /* Mobile-first typography */
+    .therapy-card h3 {
+        font-size: 1rem;
+        font-weight: 800;
+        color: #1f2937;
+    }
+
+    @media (min-width: 640px) {
+        .therapy-card h3 {
+            font-size: 1.1rem;
+        }
+    }
+
+    .therapy-card p, 
+    .therapy-card li, 
+    .therapy-card td,
+    .therapy-card .prose {
+        font-size: 0.8125rem;
+        line-height: 1.6;
+        color: #374151;
+    }
+
+    @media (min-width: 640px) {
+        .therapy-card p, 
+        .therapy-card li, 
+        .therapy-card td,
+        .therapy-card .prose {
+            font-size: 0.9rem;
+            line-height: 1.65;
+        }
+    }
+
+    .therapy-card strong {
+        color: #111827;
+        font-weight: 700;
+    }
+
+    /* Mobile-first button styling */
+    .btn-mobile {
+        padding: 12px 16px;
+        font-size: 0.875rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    @media (min-width: 640px) {
+        .btn-mobile {
+            padding: 14px 20px;
+            font-size: 1rem;
+            border-radius: 14px;
+        }
+    }
+
+    .btn-mobile:active {
+        transform: scale(0.98);
+    }
+
+    /* Quick tap target sizes for mobile */
+    .tap-target {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Mobile-first modal */
+    .modal-mobile {
+        margin: 1rem;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+    }
+
+    @media (min-width: 640px) {
+        .modal-mobile {
+            margin: 2rem;
+            max-height: calc(100vh - 4rem);
+        }
+    }
 </style>
-
 </head>
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900 min-h-screen">
-    <div class="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20">
-        <!-- Header with personality -->
-        <header class="text-center mb-6 animate-fade-in">
+    <div class="container-mobile pt-4 pb-16">
+        <!-- Mobile-first header -->
+        <header class="text-center mb-4 animate-fade-in">
             <a href="/" aria-label="AskArti Home" class="inline-block group">
-                <img src="/images/asklite.png" alt="AskArti" class="h-16 w-auto md:h-20 lg:h-24 transition-transform group-hover:scale-105">
+                <img src="/images/asklite.png" alt="AskArti" class="h-12 w-auto sm:h-16 md:h-20 lg:h-24 transition-transform group-hover:scale-105">
             </a>
-            <p class="mt-2 text-sm text-gray-600 font-medium">
+            <p class="mt-2 text-xs sm:text-sm text-gray-600 font-medium">
                 <span id="greeting-text" class="transition-all">Your Federal Sales Therapist</span>
             </p>
         </header>
 
-        <main class="therapy-card mb-6 animate-slide-in">
-            <!-- Unified chat interface -->
+        <main class="therapy-card mb-4 animate-slide-in">
+            <!-- Mobile-optimized chat interface -->
             <div id="chat-interface">
-                <div class="chat-container h-[60vh] sm:h-96 max-h-[500px] overflow-y-auto mb-4 rounded-xl p-4 sm:p-6 transition-all bg-gradient-to-br from-gray-50 to-slate-100" id="chat-container">
-                    <div id="chat-messages" class="space-y-4">
-                        <!-- Welcome message with more personality -->
-                        <div class="flex items-start gap-3">
-                           <img src="/images/arti_right.png" alt="Arti" class="w-10 h-10 rounded-full animate-bounce-slow">
-                            <div class="chat-message-arti rounded-2xl px-4 py-3 max-w-[85%] animate-fade-in">
-                                <p class="text-gray-800 text-sm sm:text-base leading-relaxed">
-                                    <strong>Hey there.</strong> I'm Arti. I've been where you are - 
-                                    impossible quotas, vanishing stakeholders, and customers who treat your emails like spam. 
+                <div class="chat-container-mobile overflow-y-auto mb-3 rounded-lg p-3 sm:p-4 transition-all bg-gradient-to-br from-gray-50 to-slate-100" id="chat-container">
+                    <div id="chat-messages" class="space-y-3">
+                        <!-- Welcome message optimized for mobile -->
+                        <div class="flex items-start gap-2 sm:gap-3">
+                            <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full animate-bounce-slow flex-shrink-0">
+                            <div class="chat-message-arti rounded-xl sm:rounded-2xl px-3 py-2 sm:px-4 sm:py-3 max-w-[85%] animate-fade-in">
+                                <p class="text-gray-800 leading-relaxed">
+                                    <strong>Hey there.</strong> I'm Arti. Need help selling to the feds? 
                                     <br><br>
-                                    <em>What's got you pulling your hair out today?</em> 
-                                    <span class="text-gray-500 text-xs block mt-2">Tell me what's really going on...</span>
+                                    <em>What agency are you targeting and what are you selling?</em> 
+                                    <span class="text-gray-500 text-xs block mt-2">The more specific, the better plan I can build...</span>
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div id="plan-button-container" class="hidden animate-fade-in p-4 border-t border-gray-200">
-                    <button id="generate-plan-btn" onclick="app.generateAccountPlan()"
-                            class="w-full bg-gradient-to-r from-accountBlue-500 to-accountBlue-700 hover:from-accountBlue-600 hover:to-accountBlue-800 text-white font-bold px-6 py-3 rounded-xl text-sm flex items-center justify-center gap-2 transition-all transform hover:scale-105 shadow-lg">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                        </svg>
-                        Generate Strategic Account Plan
-                    </button>
-                </div>
-
-                <!-- Input area with therapy vibes -->
-                <div class="flex gap-2 sticky bottom-0 bg-white/80 backdrop-blur-sm pt-3 z-10 rounded-xl">
+                <!-- Mobile-first input area -->
+                <div class="flex gap-2 sticky bottom-0 bg-white/80 backdrop-blur-sm pt-2 z-10 rounded-lg">
                     <button 
                         id="clear-chat-btn"
-                        class="p-2.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all group"
+                        class="tap-target p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all group flex-shrink-0"
                         title="Start fresh">
-                        <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                         </svg>
                     </button>
@@ -441,36 +626,47 @@
                         autocorrect="on"
                         autocapitalize="sentences"
                         spellcheck="true"
-                        class="flex-1 p-3 text-[16px] sm:text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary min-h-[44px] transition-all hover:border-gray-300"
-                        placeholder="Tell me what's really going on..."
+                        class="flex-1 p-3 text-base border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary tap-target transition-all hover:border-gray-300"
+                        placeholder="e.g., Need help selling AI to DHS..."
                         maxlength="500">
                     <button 
                         id="chat-send-btn" 
-                        class="bg-gradient-to-r from-customPurple-500 to-customPurple-700 hover:from-customPurple-600 hover:to-customPurple-800 text-white font-medium px-4 sm:px-6 py-3 rounded-xl transition-all text-sm sm:text-base min-h-[44px] whitespace-nowrap transform hover:scale-105 active:scale-95">
+                        class="bg-gradient-to-r from-customPurple-500 to-customPurple-700 hover:from-customPurple-600 hover:to-customPurple-800 text-white font-medium px-4 py-3 rounded-lg transition-all tap-target whitespace-nowrap transform hover:scale-105 active:scale-95">
                         <span class="flex items-center gap-2">
-                            <span>Send</span>
+                            <span class="hidden xs:inline">Send</span>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
                             </svg>
                         </span>
                     </button>
                 </div>
+
+                <!-- Dynamic plan button that appears when AI detects plan intent -->
+                <div id="plan-button-container" class="hidden animate-fade-in mt-3 p-3 border-t border-gray-200">
+                    <button id="generate-plan-btn" onclick="app.generateAccountPlan()"
+                            class="w-full bg-gradient-to-r from-accountBlue-500 to-accountBlue-700 hover:from-accountBlue-600 hover:to-accountBlue-800 text-white font-bold btn-mobile text-center flex items-center justify-center gap-2 transition-all transform hover:scale-105 shadow-lg tap-target">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                        </svg>
+                        <span class="text-sm sm:text-base">Generate Strategic Account Plan</span>
+                    </button>
+                </div>
             </div>
         </main>
 
-        <!-- Loading with personality -->
-        <div id="loading-message-container" class="text-center py-4 hidden">
-            <div class="inline-flex items-center gap-3 bg-white px-6 py-3 rounded-full shadow-lg">
+        <!-- Mobile-optimized loading -->
+        <div id="loading-message-container" class="text-center py-3 hidden">
+            <div class="inline-flex items-center gap-2 sm:gap-3 bg-white px-4 py-2 sm:px-6 sm:py-3 rounded-full shadow-lg">
                 <div class="loader"></div>
-                <p id="loading-message" class="text-gray-700 font-medium loader-text"></p>
+                <p id="loading-message" class="text-gray-700 font-medium loader-text text-sm sm:text-base"></p>
             </div>
         </div>
 
-        <!-- Error with empathy -->
-        <div id="error-message" class="bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-200 rounded-xl p-6 text-center mb-4 hidden">
-            <p class="text-red-700 font-bold mb-2 text-lg">Oof. Technical Difficulties.</p>
+        <!-- Mobile-optimized error -->
+        <div id="error-message" class="bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-200 rounded-lg p-4 sm:p-6 text-center mb-4 hidden">
+            <p class="text-red-700 font-bold mb-2 text-base sm:text-lg">Oof. Technical Difficulties.</p>
             <p class="text-red-600 text-sm" id="error-details">Even my servers need therapy sometimes. Let's try this again.</p>
-            <button id="retry-btn" class="mt-4 bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-6 rounded-lg text-sm transition-all transform hover:scale-105">
+            <button id="retry-btn" class="mt-3 bg-red-100 hover:bg-red-200 text-red-700 font-medium btn-mobile text-sm transition-all transform hover:scale-105 tap-target">
                 Deep Breath & Retry
             </button>
         </div>
@@ -479,23 +675,23 @@
         <div id="results-container"></div>
         
         <!-- Account Plan Results -->
-        <div id="account-plan-container" class="hidden mt-6 space-y-4"></div>
+        <div id="account-plan-container" class="hidden mt-4 space-y-3 sm:space-y-4"></div>
 
-        <!-- Footer with personality -->
-        <footer class="text-center mt-12 space-y-4 pb-20">
-            <div class="flex justify-center gap-6 text-sm">
-                <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium transition-all hover:underline">About Arti</button>
-                <button id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium transition-all hover:underline">Share the Therapy</button>
-                <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium transition-all hover:underline">Talk to a Human</a>
+        <!-- Mobile-first footer -->
+        <footer class="text-center mt-8 sm:mt-12 space-y-3 sm:space-y-4 pb-16 sm:pb-20">
+            <div class="flex justify-center gap-4 sm:gap-6 text-xs sm:text-sm flex-wrap">
+                <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium transition-all hover:underline tap-target">About Arti</button>
+                <button id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium transition-all hover:underline tap-target">Share</button>
+                <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium transition-all hover:underline tap-target">Contact</a>
             </div>
 
-            <!-- Sponsor ad with more personality -->
-            <div class="sponsor-ad rounded-xl p-4 mb-4 text-sm bg-white border-2 border-dashed not-italic text-left leading-relaxed">
+            <!-- Mobile-optimized sponsor ad -->
+            <div class="sponsor-ad rounded-lg p-3 sm:p-4 mb-4 bg-white border-2 border-dashed not-italic text-left leading-relaxed">
                 <div class="flex items-center gap-2 mb-2">
-                    <span class="text-xs font-bold text-gray-600 bg-gradient-to-r from-yellow-200 to-amber-200 px-3 py-1 rounded-full uppercase">Sponsor Therapy</span>
-                    <span class="text-gray-800 font-bold">Hey, stressed seller!</span>
+                    <span class="text-xs font-bold text-gray-600 bg-gradient-to-r from-yellow-200 to-amber-200 px-2 py-1 rounded-full uppercase">Sponsor</span>
+                    <span class="text-gray-800 font-bold text-sm sm:text-base">Hey, stressed seller!</span>
                 </div>
-                <p class="text-sm leading-relaxed text-gray-700">
+                <p class="text-xs sm:text-sm leading-relaxed text-gray-700">
                     Every time you vent to Arti, I'm paying for the therapy session. My AWS bill is starting to look like your Q4 quota - 
                     <strong>completely unrealistic</strong>. 
                 </p>
@@ -503,86 +699,87 @@
                     Help me help you. Sponsor this spot for just $99/mo. 
                     <br>That's like 2 overpriced airport drinks. Worth it.
                 </p>
-                <p class="mt-3 text-sm text-customPurple-600 font-bold">
-                    <a href="mailto:mark@subhoo.com" class="hover:underline">
+                <p class="mt-3 text-xs sm:text-sm text-customPurple-600 font-bold">
+                    <a href="mailto:mark@subhoo.com" class="hover:underline tap-target">
                         Save my sanity (and Lambda bill) →
                     </a>
                 </p>
             </div>
 
-            <p class="text-xs text-gray-500 max-w-2xl mx-auto leading-relaxed">
+            <p class="text-xs text-gray-500 max-w-2xl mx-auto leading-relaxed px-2">
                 <strong>Therapy Disclaimer:</strong> AskArti provides emotional support and strategic advice for federal sales professionals. 
                 Not a replacement for actual therapy (though sometimes it feels like you need both). 
                 AI-powered insights may occasionally hallucinate - just like your quota.
             </p>
 
-            <p class="text-xs text-gray-400 font-medium">
+            <p class="text-xs text-gray-400 font-medium px-2">
                 © 2025 AskArti · Built by sellers who've been burned · For sellers currently on fire 🔥
             </p>
         </footer>
     </div>
 
-    <!-- Enhanced About Modal -->
-    <div id="about-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 modal-backdrop">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 modal-content transform transition-all">
-            <div class="flex justify-between items-start mb-4">
-                <div class="flex items-center gap-3">
-                    <img src="images/oldmark.jpg" alt="Mark Flournoy" class="w-14 h-14 rounded-full object-cover border-3 border-customPurple-200 animate-float">
-                    <div>
-                        <h2 class="text-xl font-bold text-gray-900">Hey, I'm Mark</h2>
-                        <p class="text-xs text-gray-600">Fellow Fed Sales Survivor</p>
+    <!-- Mobile-optimized About Modal -->
+    <div id="about-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-sm sm:max-w-md modal-mobile transform transition-all">
+            <div class="p-4 sm:p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex items-center gap-3">
+                        <img src="images/oldmark.jpg" alt="Mark Flournoy" class="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-3 border-customPurple-200 animate-float">
+                        <div>
+                            <h2 class="text-lg sm:text-xl font-bold text-gray-900">Hey, I'm Mark</h2>
+                            <p class="text-xs text-gray-600">Fellow Fed Sales Survivor</p>
+                        </div>
                     </div>
+                    <button id="close-about" class="text-gray-400 hover:text-gray-600 transition-colors tap-target">
+                        <svg class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
-                <button id="close-about" class="text-gray-400 hover:text-gray-600 transition-colors">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <div class="space-y-4 text-gray-700">
-                <p class="leading-relaxed">
-                    I built AskArti after too many nights staring at the ceiling, wondering why my champion went dark 
-                    and whether I'd hit my impossible quota.
-                </p>
-                <p class="leading-relaxed">
-                    Sound familiar? Yeah, I thought so.
-                </p>
-                <p class="text-sm leading-relaxed">
-                    Arti's not perfect (what in federal sales is?), but he's here 24/7 when you need to vent, 
-                    strategize, or just remember that you're not losing your mind - federal sales is just Like That™.
-                </p>
-                
-                <div class="mt-6 pt-4 border-t border-gray-200">
-                    <div class="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl p-4 text-sm">
-                        <h3 class="font-semibold text-gray-800 mb-2 flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                            </svg>
-                            Your Data = Your Business
-                        </h3>
-                        <p class="text-gray-600 mb-2">
-                            Zero storage. Zero tracking. Zero BS. 
-                            Everything happens in-memory and vanishes faster than your stakeholder's promises. 
-                            The AI models (Gemini, Claude, GPT) might learn from our chats, but I don't keep anything.
+                <div class="space-y-3 sm:space-y-4 text-gray-700 text-sm sm:text-base">
+                    <p class="leading-relaxed">
+                        I built AskArti after too many nights staring at the ceiling, wondering why my champion went dark 
+                        and whether I'd hit my impossible quota.
+                    </p>
+                    <p class="leading-relaxed">
+                        Sound familiar? Yeah, I thought so.
+                    </p>
+                    <p class="text-sm leading-relaxed">
+                        Arti's not perfect (what in federal sales is?), but he's here 24/7 when you need to vent, 
+                        strategize, or just remember that you're not losing your mind - federal sales is just Like That™.
+                    </p>
+                    
+                    <div class="pt-3 sm:pt-4 border-t border-gray-200">
+                        <div class="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg p-3 sm:p-4 text-sm">
+                            <h3 class="font-semibold text-gray-800 mb-2 flex items-center text-sm sm:text-base">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                                Your Data = Your Business
+                            </h3>
+                            <p class="text-gray-600 text-xs sm:text-sm">
+                                Zero storage. Zero tracking. Zero BS. 
+                                Everything happens in-memory and vanishes faster than your stakeholder's promises.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-3 sm:pt-4">
+                        <a href="https://calendly.com/markflournoy/30min" target="_blank" 
+                           class="block w-full bg-gradient-to-r from-customPurple-500 to-customPurple-700 hover:from-customPurple-600 hover:to-customPurple-800 text-white font-bold btn-mobile text-center transition-all transform hover:scale-105 tap-target">
+                            Let's Commiserate Over Coffee ☕
+                        </a>
+                        <p class="text-xs text-center text-gray-500 mt-2">
+                            Virtual coffee. Real federal sales talk.
                         </p>
                     </div>
-                </div>
-                
-                <div class="pt-4">
-                    <a href="https://calendly.com/markflournoy/30min" target="_blank" 
-                       class="block w-full bg-gradient-to-r from-customPurple-500 to-customPurple-700 hover:from-customPurple-600 hover:to-customPurple-800 text-white font-bold py-3 px-4 rounded-xl text-center transition-all transform hover:scale-105">
-                        Let's Commiserate Over Coffee ☕ →
-                    </a>
-                    <p class="text-xs text-center text-gray-500 mt-2">
-                        Virtual coffee. Real federal sales talk.
-                    </p>
                 </div>
             </div>
         </div>
     </div>
 
 <script>
-// Configuration with personality
+// Mobile-first configuration
 const CONFIG = {
    API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
    REQUEST_TIMEOUT: 25000,
@@ -593,17 +790,15 @@ const CONFIG = {
    LOADING_MESSAGES: [
        "Reading between the lines...",
        "Channeling my inner COTR...",
-       "Consulting the Federal Acquisition Regulation...",
-       "Calculating your actual close probability...",
+       "Consulting the FAR...",
        "Finding the real decision maker...",
        "Translating government speak...",
        "Brewing strong coffee...",
-       "Reviewing similar train wrecks...",
        "Activating empathy mode..."
    ]
 };
 
-// Enhanced Application class
+// Enhanced Application class with mobile optimizations
 class AskArti {
    constructor() {
        this.elements = this.getElements();
@@ -638,7 +833,8 @@ class AskArti {
            closeAbout: document.getElementById('close-about'),
            shareBtn: document.getElementById('share-btn'),
            greetingText: document.getElementById('greeting-text'),
-           chatContainer: document.getElementById('chat-container')
+           chatContainer: document.getElementById('chat-container'),
+           planButtonContainer: document.getElementById('plan-button-container')
        };
    }
 
@@ -647,6 +843,32 @@ class AskArti {
        this.setupEventListeners();
        this.updateGreeting();
        this.elements.chatInput.focus();
+       this.optimizeForMobile();
+   }
+
+   optimizeForMobile() {
+       // Detect mobile and add specific optimizations
+       const isMobile = window.innerWidth <= 768;
+       
+       if (isMobile) {
+           // Prevent zoom on input focus for iOS
+           document.addEventListener('touchstart', {}, true);
+           
+           // Add mobile-specific event listeners
+           this.elements.chatInput.addEventListener('focus', () => {
+               // Small delay to ensure keyboard is up
+               setTimeout(() => {
+                   this.scrollChatToBottom();
+               }, 300);
+           });
+       }
+       
+       // Handle orientation changes
+       window.addEventListener('orientationchange', () => {
+           setTimeout(() => {
+               this.scrollChatToBottom();
+           }, 500);
+       });
    }
 
    updateGreeting() {
@@ -655,15 +877,15 @@ class AskArti {
        
        let greeting;
        if (day === 0 || day === 6) {
-           greeting = "No rest for the quota-crushed?";
+           greeting = "Weekend warrior?";
        } else if (hour < 12) {
-           greeting = "Rough morning already?";
+           greeting = "Early bird or rough night?";
        } else if (hour < 17) {
-           greeting = "Afternoon crisis mode?";
+           greeting = "Midday crisis?";
        } else if (hour < 21) {
-           greeting = "Still at it? Respect.";
+           greeting = "Still grinding?";
        } else {
-           greeting = "Burning the midnight oil?";
+           greeting = "Burning midnight oil?";
        }
        
        this.elements.greetingText.textContent = greeting;
@@ -699,8 +921,8 @@ class AskArti {
 
        // Clear chat with confirmation
        this.elements.clearChatBtn.addEventListener('click', () => {
-           if (this.state.messageCount > 2) {
-               if (confirm('Start fresh? (Your current therapy session will be erased)')) {
+           if (this.state.messageCount > 1) {
+               if (confirm('Start fresh?')) {
                    this.clearChat();
                }
            } else {
@@ -716,7 +938,7 @@ class AskArti {
            }
        });
 
-       // Share
+       // Share - mobile optimized
        this.elements.shareBtn.addEventListener('click', () => this.share());
 
        // About modal
@@ -742,13 +964,13 @@ class AskArti {
        
        // Clear messages but keep welcome
        this.elements.chatMessages.innerHTML = `
-           <div class="flex items-start gap-3">
-               <img src="/images/arti_right.png" alt="Arti" class="w-10 h-10 rounded-full animate-bounce-slow">
-               <div class="chat-message-arti rounded-2xl px-4 py-3 max-w-[85%] animate-fade-in">
-                   <p class="text-gray-800 text-sm sm:text-base leading-relaxed">
+           <div class="flex items-start gap-2 sm:gap-3">
+               <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full animate-bounce-slow flex-shrink-0">
+               <div class="chat-message-arti rounded-xl sm:rounded-2xl px-3 py-2 sm:px-4 sm:py-3 max-w-[85%] animate-fade-in">
+                   <p class="text-gray-800 leading-relaxed">
                        <strong>Fresh start.</strong> Sometimes that's exactly what we need.
                        <br><br>
-                       <em>What's on your mind?</em>
+                       <em>What agency are you targeting and what are you selling?</em>
                    </p>
                </div>
            </div>`;
@@ -758,7 +980,7 @@ class AskArti {
        this.elements.resultsContainer.innerHTML = '';
        this.elements.accountPlanContainer.classList.add('hidden');
        this.elements.accountPlanContainer.innerHTML = '';
-       document.getElementById('plan-button-container').classList.add('hidden'); 
+       this.elements.planButtonContainer.classList.add('hidden');
        
        this.elements.chatInput.focus();
        this.showTemporaryMessage('Clean slate. Let\'s go.', 'info');
@@ -767,14 +989,14 @@ class AskArti {
    addChatMessage(content, isUser = false) {
        const messageHtml = isUser ? `
            <div class="flex justify-end animate-slide-in">
-               <div class="chat-message-user rounded-2xl px-4 py-3 max-w-[85%] shadow-lg">
+               <div class="chat-message-user rounded-xl sm:rounded-2xl px-3 py-2 sm:px-4 sm:py-3 max-w-[85%] shadow-lg">
                    ${content}
                </div>
            </div>
        ` : `
-           <div class="flex items-start gap-3 animate-slide-in">
-               <img src="/images/arti_right.png" alt="Arti" class="w-10 h-10 rounded-full">
-               <div class="chat-message-arti rounded-2xl px-4 py-3 max-w-[85%]">
+           <div class="flex items-start gap-2 sm:gap-3 animate-slide-in">
+               <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex-shrink-0">
+               <div class="chat-message-arti rounded-xl sm:rounded-2xl px-3 py-2 sm:px-4 sm:py-3 max-w-[85%]">
                    ${marked.parse(content)}
                </div>
            </div>
@@ -786,8 +1008,8 @@ class AskArti {
 
    showTypingIndicator() {
        const typingHtml = `
-           <div id="typing-indicator" class="flex items-start gap-3 animate-fade-in">
-               <img src="/images/arti_right.png" alt="Arti" class="w-10 h-10 rounded-full opacity-50">
+           <div id="typing-indicator" class="flex items-start gap-2 sm:gap-3 animate-fade-in">
+               <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full opacity-50 flex-shrink-0">
                <div class="typing-indicator">
                    <div class="typing-dot"></div>
                    <div class="typing-dot"></div>
@@ -815,7 +1037,7 @@ class AskArti {
    }
 
    scrollChatToBottom() {
-       const scrollContainer = document.querySelector('.chat-container');
+       const scrollContainer = document.querySelector('.chat-container-mobile');
        if (!scrollContainer) return;
 
        requestAnimationFrame(() => {
@@ -867,15 +1089,15 @@ class AskArti {
                // Add Arti's response
                this.addChatMessage(response.message || "I hear you. Tell me more about what's happening.", false);
                this.state.chatHistory.push({ role: 'assistant', content: response.message });
+
+               // Show plan button if AI detected plan intent
+               if (response.show_plan_button) {
+                   this.elements.planButtonContainer.classList.remove('hidden');
+               }
            }
 
            // Clear lastQuery on success
            this.state.lastQuery = '';
-
-           // Show the plan generation button if enough context is built
-           if (this.state.messageCount >= 3 && document.getElementById('plan-button-container')?.classList.contains('hidden')) {
-               document.getElementById('plan-button-container').classList.remove('hidden');
-           }
 
        } catch (error) {
            console.error('Chat request failed:', error);
@@ -886,10 +1108,10 @@ class AskArti {
            // Update send button for retry
            this.elements.chatSendBtn.innerHTML = `
                <span class="flex items-center gap-2">
-                   <svg class="w-5 h-5 retry-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <svg class="w-4 h-4 retry-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                    </svg>
-                   <span>Retry</span>
+                   <span class="hidden xs:inline">Retry</span>
                </span>
            `;
            this.elements.chatSendBtn.classList.add('bg-gradient-to-r', 'from-yellow-500', 'to-amber-600');
@@ -901,13 +1123,13 @@ class AskArti {
    resetSendButton() {
        this.elements.chatSendBtn.innerHTML = `
            <span class="flex items-center gap-2">
-               <span>Send</span>
+               <span class="hidden xs:inline">Send</span>
                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
                </svg>
            </span>
        `;
-       this.elements.chatSendBtn.className = 'bg-gradient-to-r from-customPurple-500 to-customPurple-700 hover:from-customPurple-600 hover:to-customPurple-800 text-white font-medium px-4 sm:px-6 py-3 rounded-xl transition-all text-sm sm:text-base min-h-[44px] whitespace-nowrap transform hover:scale-105 active:scale-95';
+       this.elements.chatSendBtn.className = 'bg-gradient-to-r from-customPurple-500 to-customPurple-700 hover:from-customPurple-600 hover:to-customPurple-800 text-white font-medium px-4 py-3 rounded-lg transition-all tap-target whitespace-nowrap transform hover:scale-105 active:scale-95';
    }
 
    async makeChatRequest(message) {
@@ -938,15 +1160,15 @@ class AskArti {
 
    async generateAccountPlan() {
        if (this.state.pendingRequest) return;
-       document.getElementById('plan-button-container').classList.add('hidden');
+       this.elements.planButtonContainer.classList.add('hidden');
        this.elements.resultsContainer.innerHTML = '';
        
        // Show loading
-       this.showTemporaryMessage('Crafting your CRM-style account plan...', 'info');
+       this.showTemporaryMessage('Crafting your strategic account plan...', 'info');
        this.elements.accountPlanContainer.innerHTML = `
-           <div class="therapy-card text-center p-8 animate-pulse-slow">
+           <div class="therapy-card text-center p-6 sm:p-8 animate-pulse-slow">
                <div class="loader mx-auto mb-4"></div>
-               <p class="text-lg font-medium text-gray-700">Building your strategic account plan...</p>
+               <p class="text-base sm:text-lg font-medium text-gray-700">Building your strategic account plan...</p>
                <p class="text-sm text-gray-500 mt-2">This is going to be good.</p>
            </div>
        `;
@@ -980,17 +1202,17 @@ class AskArti {
            if (!response.ok) throw new Error('Request failed');
            
            const data = await response.json();
-           this.displayCRMAccountPlan(data);
+           this.displayMobileCRMAccountPlan(data);
            
            this.showTemporaryMessage("Account plan generated! Time to execute.", 'info');
            
        } catch (error) {
            console.error('Account plan generation failed:', error);
            this.elements.accountPlanContainer.innerHTML = `
-               <div class="therapy-card text-center p-6">
+               <div class="therapy-card text-center p-4 sm:p-6">
                    <p class="text-red-600 mb-3 font-medium">Plan generation hit a snag.</p>
                    <p class="text-gray-600 text-sm mb-4">Even my AI needs a coffee break sometimes.</p>
-                   <button onclick="app.generateAccountPlan()" class="bg-gradient-to-r from-red-100 to-pink-100 hover:from-red-200 hover:to-pink-200 text-red-700 font-medium py-2 px-6 rounded-xl text-sm transition-all transform hover:scale-105">
+                   <button onclick="app.generateAccountPlan()" class="bg-gradient-to-r from-red-100 to-pink-100 hover:from-red-200 hover:to-pink-200 text-red-700 font-medium btn-mobile transition-all transform hover:scale-105 tap-target">
                        Try Again
                    </button>
                </div>
@@ -1000,7 +1222,7 @@ class AskArti {
        }
    }
 
-   displayCRMAccountPlan(data) {
+   displayMobileCRMAccountPlan(data) {
        const { 
            account_name,
            account_tier,
@@ -1014,142 +1236,161 @@ class AskArti {
            risk_mitigation,
            success_metrics,
            next_30_days,
+           assumptions_made,
            mermaid_chart
        } = data;
 
        if (!account_name) {
-           this.elements.accountPlanContainer.innerHTML = `<div class="therapy-card text-center p-8"><p class="text-gray-800 font-bold">Could not generate an account plan from the conversation. Please provide more context.</p></div>`;
+           this.elements.accountPlanContainer.innerHTML = `<div class="therapy-card text-center p-6 sm:p-8"><p class="text-gray-800 font-bold">Could not generate an account plan from the conversation. Please provide more context.</p></div>`;
            return;
        }
 
        let html = `
-           <div class="crm-header mb-6 animate-fade-in">
-               <div class="flex justify-between items-start mb-4">
-                   <div>
-                       <h1 class="text-3xl font-bold text-gray-900">${account_name}</h1>
-                       <div class="flex gap-4 mt-2">
+           <div class="crm-header mb-4 sm:mb-6 animate-fade-in">
+               <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 gap-3">
+                   <div class="flex-1">
+                       <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-2">${account_name}</h1>
+                       <div class="flex flex-wrap gap-2 sm:gap-4">
                            <span class="status-badge status-high">${account_tier || 'Strategic'}</span>
-                           <span class="text-lg font-semibold text-gray-700">${total_opportunity_value || 'TBD'}</span>
-                           <span class="text-lg font-semibold text-green-700">${probability_to_close || 'TBD'}</span>
+                           <span class="text-sm sm:text-lg font-semibold text-gray-700">${total_opportunity_value || 'TBD'}</span>
+                           <span class="text-sm sm:text-lg font-semibold text-green-700">${probability_to_close || 'TBD'}</span>
                        </div>
                    </div>
-                   <button onclick="app.copyAccountPlan()" class="bg-customPurple-500 hover:bg-customPurple-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                   <button onclick="app.copyAccountPlan()" class="bg-customPurple-500 hover:bg-customPurple-600 text-white btn-mobile transition-colors tap-target">
                        Copy Plan
                    </button>
                </div>
-               <p class="text-gray-700 text-lg leading-relaxed">${executive_summary || 'No summary available.'}</p>
+               <p class="text-gray-700 text-sm sm:text-lg leading-relaxed">${executive_summary || 'No summary available.'}</p>
            </div>
 
-           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-               <div class="lg:col-span-2">
-                   ${account_overview ? `
-                   <div class="crm-section mb-4">
-                       <h3 class="text-lg font-bold text-gray-900 mb-4">Account Overview</h3>
-                       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                           <div>
-                               <h4 class="font-semibold text-gray-700 text-sm mb-1">Decision Cycle</h4>
-                               <p class="text-gray-600">${account_overview.decision_cycle || 'TBD'}</p>
-                           </div>
-                           <div>
-                               <h4 class="font-semibold text-gray-700 text-sm mb-1">Budget Cycle</h4>
-                               <p class="text-gray-600">${account_overview.budget_cycle || 'TBD'}</p>
-                           </div>
-                           <div>
-                               <h4 class="font-semibold text-gray-700 text-sm mb-1">Competitive Landscape</h4>
-                               <p class="text-gray-600">${account_overview.competitive_landscape || 'TBD'}</p>
-                           </div>
-                           <div>
-                               <h4 class="font-semibold text-gray-700 text-sm mb-1">Relationship Strength</h4>
-                               <p class="text-gray-600">${account_overview.relationship_strength || 'TBD'}</p>
-                           </div>
+           <div class="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
+               ${account_overview ? `
+               <div class="crm-section">
+                   <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Account Overview</h3>
+                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                       <div>
+                           <h4 class="font-semibold text-gray-700 text-xs sm:text-sm mb-1">Decision Cycle</h4>
+                           <p class="text-gray-600 text-sm">${account_overview.decision_cycle || 'TBD'}</p>
+                       </div>
+                       <div>
+                           <h4 class="font-semibold text-gray-700 text-xs sm:text-sm mb-1">Budget Cycle</h4>
+                           <p class="text-gray-600 text-sm">${account_overview.budget_cycle || 'TBD'}</p>
+                       </div>
+                       <div>
+                           <h4 class="font-semibold text-gray-700 text-xs sm:text-sm mb-1">Competitive Landscape</h4>
+                           <p class="text-gray-600 text-sm">${account_overview.competitive_landscape || 'TBD'}</p>
+                       </div>
+                       <div>
+                           <h4 class="font-semibold text-gray-700 text-xs sm:text-sm mb-1">Relationship Strength</h4>
+                           <p class="text-gray-600 text-sm">${account_overview.relationship_strength || 'TBD'}</p>
                        </div>
                    </div>
-                   ` : ''}
-
-                   ${stakeholder_analysis?.length > 0 ? `
-                   <div class="crm-section mb-4">
-                       <h3 class="text-lg font-bold text-gray-900 mb-4">Stakeholder Analysis</h3>
-                       <div class="overflow-x-auto">
-                           <table class="crm-table">
-                               <thead>
-                                   <tr>
-                                       <th>Name/Title</th>
-                                       <th>Role</th>
-                                       <th>Status</th>
-                                       <th>Influence</th>
-                                       <th>Next Action</th>
-                                   </tr>
-                               </thead>
-                               <tbody>
-                                   ${stakeholder_analysis.map(s => {
-                                       const statusClass = s.relationship_status?.toLowerCase() === 'champion' ? 'status-champion' : 
-                                                          s.relationship_status?.toLowerCase() === 'blocker' ? 'status-blocker' : 'status-neutral';
-                                       const influenceClass = s.influence_level?.toLowerCase() === 'high' ? 'status-high' : 
-                                                             s.influence_level?.toLowerCase() === 'medium' ? 'status-medium' : 'status-low';
-                                       return `
-                                       <tr>
-                                           <td class="font-medium">${s.name || 'TBD'}</td>
-                                           <td>${s.role || 'TBD'}</td>
-                                           <td><span class="status-badge ${statusClass}">${s.relationship_status || 'TBD'}</span></td>
-                                           <td><span class="status-badge ${influenceClass}">${s.influence_level || 'TBD'}</span></td>
-                                           <td class="text-sm">${s.next_action || 'TBD'}</td>
-                                       </tr>`;
-                                   }).join('')}
-                               </tbody>
-                           </table>
-                       </div>
-                   </div>
-                   ` : ''}
-
-                   ${opportunity_breakdown?.length > 0 ? `
-                   <div class="crm-section mb-4">
-                       <h3 class="text-lg font-bold text-gray-900 mb-4">Opportunity Breakdown</h3>
-                       <div class="space-y-4">
-                           ${opportunity_breakdown.map(opp => `
-                               <div class="border border-gray-200 rounded-lg p-4">
-                                   <div class="flex justify-between items-start mb-2">
-                                       <h4 class="font-semibold text-gray-900">${opp.opportunity_name || 'Unnamed Opportunity'}</h4>
-                                       <div class="text-right">
-                                           <div class="font-bold text-customPurple-700">${opp.value || 'TBD'}</div>
-                                           <div class="text-sm text-gray-600">${opp.probability || 'TBD'} probability</div>
-                                       </div>
-                                   </div>
-                                   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                                       <div>
-                                           <span class="font-medium text-gray-700">Timeline:</span>
-                                           <p class="text-gray-600">${opp.timeline || 'TBD'}</p>
-                                       </div>
-                                       <div>
-                                           <span class="font-medium text-gray-700">Stage:</span>
-                                           <p class="text-gray-600">${opp.stage || 'TBD'}</p>
-                                       </div>
-                                       <div>
-                                           <span class="font-medium text-gray-700">Position:</span>
-                                           <p class="text-gray-600">${opp.competitive_position || 'TBD'}</p>
-                                       </div>
-                                   </div>
-                                   ${opp.key_requirements ? `
-                                   <div class="mt-3">
-                                       <span class="font-medium text-gray-700">Key Requirements:</span>
-                                       <p class="text-gray-600 text-sm">${opp.key_requirements}</p>
-                                   </div>
-                                   ` : ''}
-                               </div>
-                           `).join('')}
-                       </div>
-                   </div>
-                   ` : ''}
                </div>
+               ` : ''}
 
-               <div class="lg:col-span-1">
+               ${stakeholder_analysis?.length > 0 ? `
+               <div class="crm-section">
+                   <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Stakeholder Analysis</h3>
+                   <div class="space-y-3 sm:hidden">
+                       ${stakeholder_analysis.map(s => {
+                           const statusClass = s.relationship_status?.toLowerCase() === 'champion' ? 'status-champion' : 
+                                              s.relationship_status?.toLowerCase() === 'blocker' ? 'status-blocker' : 'status-neutral';
+                           const influenceClass = s.influence_level?.toLowerCase() === 'high' ? 'status-high' : 
+                                                 s.influence_level?.toLowerCase() === 'medium' ? 'status-medium' : 'status-low';
+                           return `
+                           <div class="border border-gray-200 rounded-lg p-3">
+                               <div class="flex justify-between items-start mb-2">
+                                   <h4 class="font-medium text-sm">${s.name || 'TBD'}</h4>
+                                   <span class="status-badge ${statusClass}">${s.relationship_status || 'TBD'}</span>
+                               </div>
+                               <div class="flex justify-between text-xs text-gray-600 mb-2">
+                                   <span>${s.role || 'TBD'}</span>
+                                   <span class="status-badge ${influenceClass}">${s.influence_level || 'TBD'}</span>
+                               </div>
+                               <p class="text-xs text-gray-600">${s.next_action || 'TBD'}</p>
+                           </div>`;
+                       }).join('')}
+                   </div>
+                   <div class="overflow-x-auto hidden sm:block">
+                       <table class="crm-table">
+                           <thead>
+                               <tr>
+                                   <th>Name/Title</th>
+                                   <th>Role</th>
+                                   <th>Status</th>
+                                   <th>Influence</th>
+                                   <th>Next Action</th>
+                               </tr>
+                           </thead>
+                           <tbody>
+                               ${stakeholder_analysis.map(s => {
+                                   const statusClass = s.relationship_status?.toLowerCase() === 'champion' ? 'status-champion' : 
+                                                      s.relationship_status?.toLowerCase() === 'blocker' ? 'status-blocker' : 'status-neutral';
+                                   const influenceClass = s.influence_level?.toLowerCase() === 'high' ? 'status-high' : 
+                                                         s.influence_level?.toLowerCase() === 'medium' ? 'status-medium' : 'status-low';
+                                   return `
+                                   <tr>
+                                       <td class="font-medium">${s.name || 'TBD'}</td>
+                                       <td>${s.role || 'TBD'}</td>
+                                       <td><span class="status-badge ${statusClass}">${s.relationship_status || 'TBD'}</span></td>
+                                       <td><span class="status-badge ${influenceClass}">${s.influence_level || 'TBD'}</span></td>
+                                       <td class="text-sm">${s.next_action || 'TBD'}</td>
+                                   </tr>`;
+                               }).join('')}
+                           </tbody>
+                       </table>
+                   </div>
+               </div>
+               ` : ''}
+
+               ${opportunity_breakdown?.length > 0 ? `
+               <div class="crm-section">
+                   <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Opportunity Breakdown</h3>
+                   <div class="space-y-3 sm:space-y-4">
+                       ${opportunity_breakdown.map(opp => `
+                           <div class="border border-gray-200 rounded-lg p-3 sm:p-4">
+                               <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-2">
+                                   <h4 class="font-semibold text-gray-900 text-sm sm:text-base">${opp.opportunity_name || 'Unnamed Opportunity'}</h4>
+                                   <div class="text-left sm:text-right">
+                                       <div class="font-bold text-customPurple-700 text-sm sm:text-base">${opp.value || 'TBD'}</div>
+                                       <div class="text-xs sm:text-sm text-gray-600">${opp.probability || 'TBD'} probability</div>
+                                   </div>
+                               </div>
+                               <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm">
+                                   <div>
+                                       <span class="font-medium text-gray-700">Timeline:</span>
+                                       <p class="text-gray-600">${opp.timeline || 'TBD'}</p>
+                                   </div>
+                                   <div>
+                                       <span class="font-medium text-gray-700">Stage:</span>
+                                       <p class="text-gray-600">${opp.stage || 'TBD'}</p>
+                                   </div>
+                                   <div>
+                                       <span class="font-medium text-gray-700">Position:</span>
+                                       <p class="text-gray-600">${opp.competitive_position || 'TBD'}</p>
+                                   </div>
+                               </div>
+                               ${opp.key_requirements ? `
+                               <div class="mt-3">
+                                   <span class="font-medium text-gray-700 text-xs sm:text-sm">Key Requirements:</span>
+                                   <p class="text-gray-600 text-xs sm:text-sm">${opp.key_requirements}</p>
+                               </div>
+                               ` : ''}
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>
+               ` : ''}
+
+               <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
                    ${strategic_initiatives?.length > 0 ? `
-                   <div class="crm-section mb-4">
-                       <h3 class="text-lg font-bold text-gray-900 mb-4">Strategic Initiatives</h3>
-                       <ul class="space-y-3">
+                   <div class="crm-section">
+                       <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Strategic Initiatives</h3>
+                       <ul class="space-y-2 sm:space-y-3">
                            ${strategic_initiatives.map((initiative, i) => `
-                               <li class="flex gap-3">
-                                   <span class="flex-shrink-0 w-6 h-6 bg-customPurple-700 text-white rounded-full flex items-center justify-center text-xs font-bold">${i + 1}</span>
-                                   <span class="text-gray-700 text-sm">${initiative}</span>
+                               <li class="flex gap-2 sm:gap-3">
+                                   <span class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-customPurple-700 text-white rounded-full flex items-center justify-center text-xs font-bold">${i + 1}</span>
+                                   <span class="text-gray-700 text-xs sm:text-sm">${initiative}</span>
                                </li>
                            `).join('')}
                        </ul>
@@ -1157,73 +1398,93 @@ class AskArti {
                    ` : ''}
 
                    ${risk_mitigation?.length > 0 ? `
-                   <div class="crm-section mb-4">
-                       <h3 class="text-lg font-bold text-gray-900 mb-4">Risk Mitigation</h3>
-                       <div class="space-y-3">
+                   <div class="crm-section">
+                       <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Risk Mitigation</h3>
+                       <div class="space-y-2 sm:space-y-3">
                            ${risk_mitigation.map(risk => {
                                const riskClass = risk.probability?.toLowerCase() === 'high' ? 'status-high' : 
                                                risk.probability?.toLowerCase() === 'medium' ? 'status-medium' : 'status-low';
                                return `
                                <div class="border-l-4 border-red-400 pl-3">
-                                   <div class="flex justify-between items-center mb-1">
-                                       <h4 class="font-medium text-gray-900 text-sm">${risk.risk || 'Unknown Risk'}</h4>
-                                       <span class="status-badge ${riskClass}">${risk.probability || 'TBD'}</span>
+                                   <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-1 gap-1">
+                                       <h4 class="font-medium text-gray-900 text-xs sm:text-sm">${risk.risk || 'Unknown Risk'}</h4>
+                                       <span class="status-badge ${riskClass} self-start sm:self-center">${risk.probability || 'TBD'}</span>
                                    </div>
-                                   <p class="text-gray-600 text-sm">${risk.mitigation_strategy || 'No mitigation defined'}</p>
+                                   <p class="text-gray-600 text-xs sm:text-sm">${risk.mitigation_strategy || 'No mitigation defined'}</p>
                                </div>`;
                            }).join('')}
                        </div>
                    </div>
                    ` : ''}
+               </div>
 
-                   ${success_metrics?.length > 0 ? `
-                   <div class="crm-section mb-4">
-                       <h3 class="text-lg font-bold text-gray-900 mb-4">Success Metrics</h3>
-                       <div class="space-y-3">
-                           ${success_metrics.map(metric => `
-                               <div class="bg-gray-50 rounded-lg p-3">
-                                   <h4 class="font-medium text-gray-900 text-sm">${metric.metric || 'Unknown Metric'}</h4>
-                                   <div class="flex justify-between text-sm mt-1">
-                                       <span class="text-gray-600">Target: ${metric.target || 'TBD'}</span>
-                                       <span class="text-gray-600">${metric.timeline || 'TBD'}</span>
-                                   </div>
-                                   <p class="text-gray-500 text-xs mt-1">${metric.tracking_method || 'TBD'}</p>
+               ${success_metrics?.length > 0 ? `
+               <div class="crm-section">
+                   <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Success Metrics</h3>
+                   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
+                       ${success_metrics.map(metric => `
+                           <div class="bg-gray-50 rounded-lg p-3">
+                               <h4 class="font-medium text-gray-900 text-xs sm:text-sm">${metric.metric || 'Unknown Metric'}</h4>
+                               <div class="flex flex-col sm:flex-row sm:justify-between text-xs mt-1 gap-1">
+                                   <span class="text-gray-600">Target: ${metric.target || 'TBD'}</span>
+                                   <span class="text-gray-600">${metric.timeline || 'TBD'}</span>
                                </div>
-                           `).join('')}
-                       </div>
-                   </div>
-                   ` : ''}
-
-                   ${mermaid_chart ? `
-                   <div class="crm-section">
-                       <h3 class="text-lg font-bold text-gray-900 mb-4">Stakeholder Map</h3>
-                       <div class="mermaid-container">
-                           <div class="mermaid-loading flex justify-center items-center absolute inset-0">
-                               <div class="loader"></div>
+                               <p class="text-gray-500 text-xs mt-1">${metric.tracking_method || 'TBD'}</p>
                            </div>
-                           <div class="mermaid opacity-0">${mermaid_chart}</div>
-                       </div>
+                       `).join('')}
                    </div>
-                   ` : ''}
                </div>
-           </div>
+               ` : ''}
 
-           ${next_30_days?.length > 0 ? `
-           <div class="crm-section">
-               <h3 class="text-lg font-bold text-gray-900 mb-4">Next 30 Days - Action Items</h3>
-               <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                   ${next_30_days.map((action, i) => `
-                       <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                           <div class="flex items-center gap-2 mb-2">
-                               <span class="w-6 h-6 bg-yellow-400 text-yellow-900 rounded-full flex items-center justify-center text-xs font-bold">${i + 1}</span>
-                               <span class="font-medium text-yellow-900">Priority ${i + 1}</span>
-                           </div>
-                           <p class="text-yellow-800 text-sm">${action}</p>
-                       </div>
-                   `).join('')}
+               ${assumptions_made?.length > 0 ? `
+               <div class="crm-section bg-yellow-50 border-yellow-200">
+                   <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                       <svg class="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                       </svg>
+                       Key Assumptions Made
+                   </h3>
+                   <ul class="space-y-1 sm:space-y-2">
+                       ${assumptions_made.map(assumption => `
+                           <li class="flex gap-2 text-xs sm:text-sm text-yellow-800">
+                               <span class="text-yellow-600 flex-shrink-0">⚠</span>
+                               <span>${assumption}</span>
+                           </li>
+                       `).join('')}
+                   </ul>
+                   <p class="text-xs text-yellow-700 mt-2 sm:mt-3 italic">Please validate these assumptions to improve plan accuracy.</p>
                </div>
+               ` : ''}
+
+               ${next_30_days?.length > 0 ? `
+               <div class="crm-section">
+                   <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Next 30 Days - Action Items</h3>
+                   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                       ${next_30_days.map((action, i) => `
+                           <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 sm:p-4">
+                               <div class="flex items-center gap-2 mb-2">
+                                   <span class="w-5 h-5 sm:w-6 sm:h-6 bg-yellow-400 text-yellow-900 rounded-full flex items-center justify-center text-xs font-bold">${i + 1}</span>
+                                   <span class="font-medium text-yellow-900 text-xs sm:text-sm">Priority ${i + 1}</span>
+                               </div>
+                               <p class="text-yellow-800 text-xs sm:text-sm">${action}</p>
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>
+               ` : ''}
+
+               ${mermaid_chart ? `
+               <div class="crm-section">
+                   <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Stakeholder Map</h3>
+                   <div class="mermaid-container">
+                       <div class="mermaid-loading flex justify-center items-center absolute inset-0">
+                           <div class="loader"></div>
+                       </div>
+                       <div class="mermaid opacity-0">${mermaid_chart}</div>
+                   </div>
+               </div>
+               ` : ''}
            </div>
-           ` : ''}
        `;
 
        this.elements.accountPlanContainer.innerHTML = html;
@@ -1243,7 +1504,7 @@ class AskArti {
        
        navigator.clipboard.writeText(content)
            .then(() => {
-               this.showTemporaryMessage('Account plan copied! Go forth and conquer! 💪', 'info');
+               this.showTemporaryMessage('Account plan copied! 💪', 'info');
            })
            .catch(() => alert('Copy failed. Try selecting and copying manually.'));
    }
@@ -1273,7 +1534,7 @@ class AskArti {
            const containers = document.querySelectorAll('.mermaid-container');
            containers.forEach(container => {
                if (!container.querySelector('[data-processed="true"]')) {
-                   container.innerHTML = '<div class="p-6 bg-gray-100 text-gray-700 rounded-xl text-center">Visualization got stage fright. The show must go on without it.</div>';
+                   container.innerHTML = '<div class="p-4 sm:p-6 bg-gray-100 text-gray-700 rounded-lg text-center text-sm">Visualization got stage fright.</div>';
                }
            });
        }
@@ -1291,8 +1552,8 @@ class AskArti {
        } else {
            navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`)
                .then(() => {
-                   this.elements.shareBtn.textContent = 'Link Copied! 📋';
-                   setTimeout(() => this.elements.shareBtn.textContent = 'Share the Therapy', 2000);
+                   this.elements.shareBtn.textContent = 'Copied! 📋';
+                   setTimeout(() => this.elements.shareBtn.textContent = 'Share', 2000);
                })
                .catch(() => alert('Please copy the URL manually: https://askarti.com'));
        }
@@ -1322,14 +1583,18 @@ class AskArti {
 
    showModal() {
        this.elements.aboutModal.classList.remove('hidden');
+       // Prevent body scroll on mobile
+       document.body.style.overflow = 'hidden';
        requestAnimationFrame(() => {
-           this.elements.aboutModal.querySelector('.modal-content').classList.add('show');
+           this.elements.aboutModal.querySelector('.modal-mobile').classList.add('show');
        });
    }
 
    hideModal() {
-       const content = this.elements.aboutModal.querySelector('.modal-content');
+       const content = this.elements.aboutModal.querySelector('.modal-mobile');
        content.classList.remove('show');
+       // Restore body scroll
+       document.body.style.overflow = '';
        setTimeout(() => this.elements.aboutModal.classList.add('hidden'), 200);
    }
 
@@ -1359,6 +1624,11 @@ class AskArti {
                } else {
                    this.addChatMessage(response.message || "Got it. Tell me more.", false);
                    this.state.chatHistory.push({ role: 'assistant', content: response.message });
+
+                   // Show plan button if AI detected plan intent
+                   if (response.show_plan_button) {
+                       this.elements.planButtonContainer.classList.remove('hidden');
+                   }
                }
                
                this.state.lastQuery = '';
@@ -1377,6 +1647,31 @@ class AskArti {
 
 // Initialize the therapy session
 const app = new AskArti();
+
+// Add mobile-specific optimizations
+document.addEventListener('DOMContentLoaded', () => {
+   // Prevent zoom on double tap for iOS
+   let lastTouchEnd = 0;
+   document.addEventListener('touchend', function (event) {
+       const now = (new Date()).getTime();
+       if (now - lastTouchEnd <= 300) {
+           event.preventDefault();
+       }
+       lastTouchEnd = now;
+   }, false);
+
+   // Handle viewport changes on mobile
+   const setVH = () => {
+       const vh = window.innerHeight * 0.01;
+       document.documentElement.style.setProperty('--vh', `${vh}px`);
+   };
+   
+   setVH();
+   window.addEventListener('resize', setVH);
+   window.addEventListener('orientationchange', () => {
+       setTimeout(setVH, 500);
+   });
+});
 
 // Add some personality to page visibility changes
 document.addEventListener('visibilitychange', () => {
@@ -1398,6 +1693,19 @@ console.log(
    consoleMessages[Math.floor(Math.random() * consoleMessages.length)],
    'color: #7C6BBE; font-weight: bold; font-size: 14px;'
 );
+
+// Add service worker for better mobile performance (optional)
+if ('serviceWorker' in navigator) {
+   window.addEventListener('load', () => {
+       navigator.serviceWorker.register('/sw.js')
+           .then((registration) => {
+               console.log('SW registered: ', registration);
+           })
+           .catch((registrationError) => {
+               console.log('SW registration failed: ', registrationError);
+           });
+   });
+}
 </script>
 </body>
 </html>
