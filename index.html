@@ -681,18 +681,22 @@ footer button {
             <div id="chat-interface">
                 <div class="chat-container-mobile overflow-y-auto mb-3 rounded-lg p-3 sm:p-4 transition-all bg-gradient-to-br from-gray-50 to-slate-100" id="chat-container">
                     <div id="chat-messages" class="space-y-3">
-                        <!-- Welcome message optimized for mobile -->
-                        <div class="flex items-start gap-2 sm:gap-3">
-                            <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full animate-bounce-slow flex-shrink-0">
-                            <div class="chat-message-arti rounded-xl sm:rounded-2xl px-3 py-2 sm:px-4 sm:py-3 max-w-[85%] animate-fade-in">
-                                <p class="text-gray-800 leading-relaxed">
-                                    <strong>Hey there.</strong> I'm Arti. Need help selling to the feds? 
-                                    <br><br>
-                                    <em>What agency are you targeting and what are you selling?</em> 
-                                    <span class="text-gray-500 text-xs block mt-2">The more specific, the better plan I can build...</span>
-                                </p>
-                            </div>
-                        </div>
+                        <!-- Welcome message with tips for better interaction -->
+<div class="flex items-start gap-2 sm:gap-3">
+    <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full animate-bounce-slow flex-shrink-0">
+    <div class="chat-message-arti rounded-xl sm:rounded-2xl px-3 py-2 sm:px-4 sm:py-3 max-w-[85%] animate-fade-in">
+        <p class="text-gray-800 leading-relaxed">
+            <strong>Hey there.</strong> I'm Arti. I've been crushed by quotas and ghosted by agencies for 30+ years. I get it.
+            <br><br>
+            <strong>I can help you:</strong>
+            <br>• <em>Generate strategic account plans</em> - just say "help me sell [solution] to [agency]"
+            <br>• <em>Vent about deal stress</em> - I'm here when you're frustrated or burned out  
+            <br>• <em>Get practical advice</em> - from someone who's seen every fed sales nightmare
+            <br><br>
+            <em>What's going on with your deals today?</em>
+        </p>
+    </div>
+</div>
                     </div>
                 </div>
 
@@ -783,7 +787,7 @@ footer button {
             </p>
 
             <p class="text-xs text-gray-400 font-medium px-2">
-                © 2025 AskArti · Built for sellers who are going through some things. 🔥
+                © 2025 AskArti 🔥 Built for sellers feeling the heat.
             </p>
         </footer>
     </div>
@@ -1054,25 +1058,59 @@ class AskArti {
        this.showTemporaryMessage('Clean slate. Let\'s go.', 'info');
    }
 
-   addChatMessage(content, isUser = false) {
-       const messageHtml = isUser ? `
-           <div class="flex justify-end animate-slide-in">
-               <div class="chat-message-user rounded-xl sm:rounded-2xl px-3 py-2 sm:px-4 sm:py-3 max-w-[85%] shadow-lg">
-                   ${content}
-               </div>
-           </div>
-       ` : `
-           <div class="flex items-start gap-2 sm:gap-3 animate-slide-in">
-               <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex-shrink-0">
-               <div class="chat-message-arti rounded-xl sm:rounded-2xl px-3 py-2 sm:px-4 sm:py-3 max-w-[85%]">
-                   ${marked.parse(content)}
-               </div>
-           </div>
-       `;
-       
-       this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
-       this.scrollChatToBottom();
-   }
+   // Add this to the addChatMessage function in the JavaScript
+addChatMessage(content, isUser = false) {
+    const messageHtml = isUser ? `
+        <div class="flex justify-end animate-slide-in">
+            <div class="chat-message-user rounded-xl sm:rounded-2xl px-3 py-2 sm:px-4 sm:py-3 max-w-[85%] shadow-lg">
+                ${content}
+            </div>
+        </div>
+    ` : `
+        <div class="flex items-start gap-2 sm:gap-3 animate-slide-in">
+            <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex-shrink-0">
+            <div class="chat-message-arti rounded-xl sm:rounded-2xl px-3 py-2 sm:px-4 sm:py-3 max-w-[85%]">
+                ${marked.parse(content)}
+            </div>
+        </div>
+    `;
+    
+    this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
+    
+    // Show tips after first user message
+    if (isUser && this.state.messageCount === 1) {
+        setTimeout(() => {
+            this.showHelpfulTips();
+        }, 2000);
+    }
+    
+    this.scrollChatToBottom();
+}
+
+// Add this new method
+showHelpfulTips() {
+    const tipsHtml = `
+        <div class="mx-auto my-4 p-3 bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-lg text-center animate-fade-in">
+            <p class="text-xs sm:text-sm text-purple-700 font-medium mb-2">💡 Pro Tips:</p>
+            <div class="text-xs text-purple-600 space-y-1">
+                <p><strong>For plans:</strong> "Help me sell [solution] to [agency]"</p>
+                <p><strong>For venting:</strong> "I'm frustrated with..." or "Why is [situation] so hard?"</p>
+                <p><strong>For advice:</strong> Ask about specific challenges you're facing</p>
+            </div>
+        </div>
+    `;
+    this.elements.chatMessages.insertAdjacentHTML('beforeend', tipsHtml);
+    this.scrollChatToBottom();
+    
+    // Auto-hide tips after 10 seconds
+    setTimeout(() => {
+        const tipsElement = this.elements.chatMessages.querySelector('.bg-gradient-to-r.from-purple-50');
+        if (tipsElement) {
+            tipsElement.style.opacity = '0';
+            setTimeout(() => tipsElement.remove(), 500);
+        }
+    }, 10000);
+}
 
    showTypingIndicator() {
        const typingHtml = `
