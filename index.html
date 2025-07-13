@@ -1,617 +1,1264 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AskArti - Federal Sales Prospecting Intelligence</title>
-    
-    <meta name="description" content="Get real federal sales prospecting intelligence. Find agencies, systems integrators, partners, and opportunities with insider-level market research.">
-    <meta name="keywords" content="federal sales prospecting, government sales intelligence, systems integrators, federal contractors, govcon prospecting">
-    <meta name="author" content="Mark">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://askarti.com">
-    
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://askarti.com/">
-    <meta property="og:title" content="AskArti - Federal Sales Prospecting Intelligence">
-    <meta property="og:description" content="Get real federal sales prospecting intelligence from someone who knows the market.">
-    <meta property="og:image" content="https://askarti.com/images/asklite.png">
-    
-    <link rel="icon" href="/images/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-    <meta name="theme-color" content="#523f9e">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WLGEPY5H4G"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-WLGEPY5H4G');
-    </script>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#7C6BBE',
-                        customPurple: { 100: '#E8E4F7', 500: '#7C6BBE', 700: '#5A4E8C' }
-                    }
-                }
-            }
-        }
-    </script>
-    
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>AskArti - Federal Sales Prospecting Intelligence</title>
+   
+   <meta name="description" content="Get real federal sales prospecting intelligence. Find agencies, systems integrators, partners, and opportunities with insider-level market research.">
+   <meta name="keywords" content="federal sales prospecting, government sales intelligence, systems integrators, federal contractors, govcon prospecting">
+   <meta name="author" content="Mark">
+   <meta name="robots" content="index, follow">
+   <link rel="canonical" href="https://askarti.com">
+   
+   <meta property="og:type" content="website">
+   <meta property="og:url" content="https://askarti.com/">
+   <meta property="og:title" content="AskArti - Federal Sales Prospecting Intelligence">
+   <meta property="og:description" content="Get real federal sales prospecting intelligence from someone who knows the market.">
+   <meta property="og:image" content="https://askarti.com/images/asklite.png">
+   
+   <link rel="icon" href="/images/favicon.ico" sizes="any">
+   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+   <meta name="theme-color" content="#523f9e">
+   
+   <script src="https://cdn.tailwindcss.com"></script>
+   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+   
+   <script async src="https://www.googletagmanager.com/gtag/js?id=G-WLGEPY5H4G"></script>
+   <script>
+       window.dataLayer = window.dataLayer || [];
+       function gtag(){dataLayer.push(arguments);}
+       gtag('js', new Date());
+       gtag('config', 'G-WLGEPY5H4G');
+   </script>
+   
+   <script>
+       tailwind.config = {
+           theme: {
+               extend: {
+                   colors: {
+                       primary: '#7C6BBE',
+                       customPurple: { 100: '#E8E4F7', 500: '#7C6BBE', 700: '#5A4E8C' }
+                   }
+               }
+           }
+       }
+   </script>
+   
 <style>
-    body { font-family: 'Inter', sans-serif; }
-    .loader { border: 2px solid #e5e7eb; border-top: 2px solid #7C6BBE; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .fade-in { animation: fadeIn 0.5s ease-in-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .prospect-card { background-color: white; border-radius: 0.75rem; border: 1px solid #e5e7eb; padding: 1.5rem; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); }
-    .quick-prompt:hover { background-color: rgba(124, 107, 190, 0.1); transform: scale(1.02); }
-    input[type="text"], textarea { font-size: 16px !important; }
+   body { 
+       font-family: 'Inter', sans-serif; 
+   }
+   
+   .loader { 
+       border: 2px solid #e5e7eb; 
+       border-top: 2px solid #7C6BBE; 
+       border-radius: 50%; 
+       width: 20px; 
+       height: 20px; 
+       animation: spin 1s linear infinite; 
+   }
+   
+   @keyframes spin { 
+       0% { transform: rotate(0deg); } 
+       100% { transform: rotate(360deg); } 
+   }
+   
+   .fade-in { 
+       animation: fadeIn 0.5s ease-in-out; 
+   }
+   
+   @keyframes fadeIn { 
+       from { opacity: 0; transform: translateY(10px); } 
+       to { opacity: 1; transform: translateY(0); } 
+   }
+   
+   .prospect-card { 
+       background-color: white; 
+       border-radius: 0.75rem; 
+       border: 1px solid #e5e7eb; 
+       padding: 1.5rem; 
+       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); 
+   }
+   
+   .quick-prompt:hover { 
+       background-color: rgba(124, 107, 190, 0.1); 
+       transform: scale(1.02); 
+   }
+   
+   input[type="text"], textarea { 
+       font-size: 16px !important; 
+   }
+
+   /* Magazine Report Styles */
+   .magazine-report {
+       max-width: 1200px;
+       margin: 0 auto;
+       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+       line-height: 1.4;
+       color: #1a1a1a;
+   }
+
+   /* Header */
+   .report-header {
+       background: white;
+       border: 1px solid #d4d4d8;
+       margin-bottom: 2rem;
+       padding: 2rem;
+   }
+
+   .header-content {
+       display: flex;
+       justify-content: space-between;
+       align-items: flex-start;
+       margin-bottom: 2rem;
+       flex-wrap: wrap;
+       gap: 1rem;
+   }
+
+   .title-section h1 {
+       font-size: 2.5rem;
+       font-weight: 700;
+       color: #1a1a1a;
+       margin: 0 0 0.5rem 0;
+       letter-spacing: -0.025em;
+   }
+
+   .subtitle {
+       font-size: 1.125rem;
+       color: #64748b;
+       margin: 0;
+       font-weight: 500;
+   }
+
+   .meta-section {
+       text-align: right;
+       flex-shrink: 0;
+   }
+
+   .report-date {
+       font-size: 0.875rem;
+       color: #64748b;
+       margin-bottom: 0.5rem;
+       font-weight: 500;
+   }
+
+   .confidential-badge {
+       background: #1e40af;
+       color: white;
+       padding: 0.5rem 1rem;
+       font-size: 0.75rem;
+       font-weight: 700;
+       text-transform: uppercase;
+       letter-spacing: 0.05em;
+   }
+
+   .executive-summary {
+       background: #f8fafc;
+       padding: 1.5rem;
+       border: 1px solid #e2e8f0;
+   }
+
+   .executive-summary h2 {
+       font-size: 1.5rem;
+       font-weight: 700;
+       color: #1a1a1a;
+       margin: 0 0 1rem 0;
+   }
+
+   .summary-content {
+       color: #374151;
+       line-height: 1.6;
+   }
+
+   /* Metrics Grid */
+   .metrics-grid {
+       display: grid;
+       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+       gap: 1.5rem;
+       margin-bottom: 2rem;
+   }
+
+   .metric-card {
+       background: white;
+       border: 1px solid #d4d4d8;
+       padding: 1.5rem;
+   }
+
+   .metric-header {
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       margin-bottom: 1rem;
+   }
+
+   .metric-number {
+       background: #1e40af;
+       color: white;
+       width: 2rem;
+       height: 2rem;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       font-weight: 700;
+       font-size: 0.875rem;
+   }
+
+   .metric-timeline {
+       font-size: 0.75rem;
+       color: #64748b;
+       font-weight: 600;
+       text-transform: uppercase;
+       letter-spacing: 0.05em;
+   }
+
+   .metric-target {
+       font-size: 1.25rem;
+       font-weight: 700;
+       color: #1a1a1a;
+       margin: 0 0 0.5rem 0;
+   }
+
+   .metric-description {
+       color: #64748b;
+       font-size: 0.875rem;
+       margin: 0 0 1rem 0;
+   }
+
+   .progress-bar {
+       height: 4px;
+       background: #e2e8f0;
+   }
+
+   .progress-fill {
+       height: 100%;
+       background: #1e40af;
+       width: 25%;
+   }
+
+   /* Content Sections */
+   .content-section {
+       background: white;
+       border: 1px solid #d4d4d8;
+       padding: 2rem;
+       margin-bottom: 2rem;
+   }
+
+   .content-section h2 {
+       font-size: 2rem;
+       font-weight: 700;
+       color: #1a1a1a;
+       margin: 0 0 1.5rem 0;
+       letter-spacing: -0.025em;
+   }
+
+   .section-header {
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       margin-bottom: 1.5rem;
+       flex-wrap: wrap;
+       gap: 1rem;
+   }
+
+   .section-count {
+       background: #1a1a1a;
+       color: white;
+       padding: 0.5rem 1rem;
+       font-size: 0.75rem;
+       font-weight: 700;
+       text-transform: uppercase;
+       letter-spacing: 0.05em;
+   }
+
+   /* Agencies */
+   .agencies-list {
+       display: flex;
+       flex-direction: column;
+       gap: 2rem;
+   }
+
+   .agency-item {
+       display: flex;
+       gap: 1.5rem;
+       padding-bottom: 2rem;
+       border-bottom: 1px solid #e2e8f0;
+   }
+
+   .agency-item:last-child {
+       border-bottom: none;
+       padding-bottom: 0;
+   }
+
+   .agency-number {
+       background: #1e40af;
+       color: white;
+       width: 3rem;
+       height: 3rem;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       font-weight: 700;
+       font-size: 1.25rem;
+       flex-shrink: 0;
+   }
+
+   .agency-content {
+       flex: 1;
+   }
+
+   .agency-header {
+       display: flex;
+       justify-content: space-between;
+       align-items: flex-start;
+       margin-bottom: 1.5rem;
+       flex-wrap: wrap;
+       gap: 1rem;
+   }
+
+   .agency-header h3 {
+       font-size: 1.5rem;
+       font-weight: 700;
+       color: #1a1a1a;
+       margin: 0;
+   }
+
+   .opportunity-value {
+       text-align: right;
+       flex-shrink: 0;
+   }
+
+   .value {
+       display: block;
+       font-size: 1.5rem;
+       font-weight: 700;
+       color: #1a1a1a;
+   }
+
+   .label {
+       font-size: 0.75rem;
+       color: #64748b;
+       text-transform: uppercase;
+       letter-spacing: 0.05em;
+       font-weight: 600;
+   }
+
+   .agency-details {
+       display: grid;
+       grid-template-columns: 1fr 1fr;
+       gap: 1.5rem;
+       margin-bottom: 1.5rem;
+   }
+
+   .detail-item h4 {
+       font-size: 0.75rem;
+       font-weight: 700;
+       color: #1a1a1a;
+       text-transform: uppercase;
+       letter-spacing: 0.05em;
+       margin: 0 0 0.5rem 0;
+   }
+
+   .detail-item p {
+       color: #374151;
+       margin: 0;
+       line-height: 1.5;
+   }
+
+   .approach-section {
+       background: #f8fafc;
+       padding: 1rem;
+       border: 1px solid #e2e8f0;
+   }
+
+   .approach-section h4 {
+       font-size: 0.75rem;
+       font-weight: 700;
+       color: #1a1a1a;
+       text-transform: uppercase;
+       letter-spacing: 0.05em;
+       margin: 0 0 0.5rem 0;
+   }
+
+   .approach-section p {
+       color: #374151;
+       margin: 0;
+       line-height: 1.5;
+   }
+
+   /* Subsections */
+   .subsection {
+       margin-bottom: 2rem;
+   }
+
+   .subsection:last-child {
+       margin-bottom: 0;
+   }
+
+   .subsection h3 {
+       font-size: 1.25rem;
+       font-weight: 700;
+       color: #1a1a1a;
+       margin: 0 0 1rem 0;
+       display: flex;
+       align-items: center;
+       gap: 0.75rem;
+   }
+
+   .subsection h3::before {
+       content: '';
+       width: 1rem;
+       height: 1rem;
+       background: #1e40af;
+       flex-shrink: 0;
+   }
+
+   /* Data Table */
+   .data-table {
+       overflow-x: auto;
+       border: 1px solid #d4d4d8;
+   }
+
+   .data-table table {
+       width: 100%;
+       border-collapse: collapse;
+       font-size: 0.875rem;
+   }
+
+   .data-table th {
+       background: #f8fafc;
+       padding: 0.75rem;
+       text-align: left;
+       font-weight: 700;
+       color: #1a1a1a;
+       text-transform: uppercase;
+       letter-spacing: 0.05em;
+       font-size: 0.75rem;
+       border-bottom: 1px solid #d4d4d8;
+   }
+
+   .data-table td {
+       padding: 1rem 0.75rem;
+       border-bottom: 1px solid #e2e8f0;
+       vertical-align: top;
+   }
+
+   .data-table tr:last-child td {
+       border-bottom: none;
+   }
+
+   .data-table tr:nth-child(even) {
+       background: #f8fafc;
+   }
+
+   .company-name {
+       font-weight: 700;
+       color: #1a1a1a;
+       margin-bottom: 0.25rem;
+   }
+
+   .company-note {
+       font-size: 0.75rem;
+       color: #64748b;
+   }
+
+   /* Partner Grid */
+   .partner-grid {
+       display: grid;
+       grid-template-columns: 1fr 1fr;
+       gap: 2rem;
+   }
+
+   .partner-category h3 {
+       font-size: 1.25rem;
+       font-weight: 700;
+       color: #1a1a1a;
+       margin: 0 0 1rem 0;
+       display: flex;
+       align-items: center;
+       gap: 0.75rem;
+   }
+
+   .partner-category:first-child h3::before {
+       content: '';
+       width: 1rem;
+       height: 1rem;
+       background: #64748b;
+   }
+
+   .partner-category:last-child h3::before {
+       content: '';
+       width: 1rem;
+       height: 1rem;
+       background: #9ca3af;
+   }
+
+   .partner-list {
+       display: flex;
+       flex-direction: column;
+       gap: 1rem;
+   }
+
+   .partner-item {
+       border: 1px solid #d4d4d8;
+       padding: 1rem;
+       transition: background-color 0.2s;
+   }
+
+   .partner-item:hover {
+       background: #f8fafc;
+   }
+
+   .partner-item h4 {
+       font-weight: 700;
+       color: #1a1a1a;
+       margin: 0 0 0.5rem 0;
+   }
+
+   .partner-item p {
+       color: #374151;
+       margin: 0 0 0.75rem 0;
+       line-height: 1.5;
+   }
+
+   .partner-tag {
+       background: #1e40af;
+       color: white;
+       padding: 0.25rem 0.75rem;
+       font-size: 0.75rem;
+       font-weight: 600;
+       text-transform: uppercase;
+       letter-spacing: 0.05em;
+   }
+
+   /* Action List */
+   .action-list {
+       display: flex;
+       flex-direction: column;
+       gap: 1rem;
+   }
+
+   .action-item {
+       display: flex;
+       gap: 1rem;
+       align-items: flex-start;
+       background: #f8fafc;
+       padding: 1rem;
+       border: 1px solid #e2e8f0;
+   }
+
+   .action-number {
+       background: #1e40af;
+       color: white;
+       width: 2rem;
+       height: 2rem;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       font-weight: 700;
+       font-size: 0.875rem;
+       flex-shrink: 0;
+   }
+
+   .action-item p {
+       color: #374151;
+       margin: 0;
+       line-height: 1.5;
+   }
+
+   /* Timeline Grid */
+   .timeline-grid {
+       display: grid;
+       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+       gap: 1rem;
+   }
+
+   .timeline-item {
+       border: 1px solid #d4d4d8;
+       padding: 1rem;
+       transition: background-color 0.2s;
+   }
+
+   .timeline-item:hover {
+       background: #f8fafc;
+   }
+
+   .timeline-item h4 {
+       color: #1e40af;
+       font-weight: 700;
+       text-transform: uppercase;
+       letter-spacing: 0.05em;
+       font-size: 0.875rem;
+       margin: 0 0 0.75rem 0;
+   }
+
+   .timeline-item p {
+       color: #374151;
+       margin: 0;
+       line-height: 1.5;
+   }
+
+   /* Templates */
+   .template-block {
+       margin-bottom: 2rem;
+   }
+
+   .template-block:last-child {
+       margin-bottom: 0;
+   }
+
+   .template-block h3 {
+       font-size: 1.25rem;
+       font-weight: 700;
+       color: #1a1a1a;
+       margin: 0 0 1rem 0;
+   }
+
+   .template-content {
+       background: #f8fafc;
+       padding: 1.5rem;
+       font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+       font-size: 0.875rem;
+       line-height: 1.6;
+       color: #374151;
+       overflow-x: auto;
+       border: 1px solid #e2e8f0;
+       white-space: pre-wrap;
+   }
+
+   /* Intel Section */
+   .intel-section {
+       background: #f8fafc;
+       border: 1px solid #e2e8f0;
+   }
+
+   .intel-grid {
+       display: grid;
+       grid-template-columns: 1fr 1fr;
+       gap: 2rem;
+   }
+
+   .intel-category h3 {
+       font-size: 1.25rem;
+       font-weight: 700;
+       color: #1a1a1a;
+       margin: 0 0 1rem 0;
+   }
+
+   .intel-list {
+       display: flex;
+       flex-direction: column;
+       gap: 0.75rem;
+   }
+
+   .intel-item {
+       display: flex;
+       gap: 0.75rem;
+       align-items: flex-start;
+       background: white;
+       padding: 1rem;
+       border: 1px solid #d4d4d8;
+   }
+
+   .bullet {
+       width: 0.5rem;
+       height: 0.5rem;
+       background: #1e40af;
+       flex-shrink: 0;
+       margin-top: 0.375rem;
+   }
+
+   .intel-item p {
+       color: #374151;
+       margin: 0;
+       line-height: 1.5;
+   }
+
+   /* Prose Content */
+   .prose-content {
+       color: #374151;
+       line-height: 1.6;
+   }
+
+   .prose-content h1, .prose-content h2, .prose-content h3 {
+       color: #1a1a1a;
+       font-weight: 700;
+   }
+
+   /* Action Buttons */
+   .action-buttons {
+       display: flex;
+       gap: 1rem;
+       margin-top: 2rem;
+   }
+
+   .btn-primary, .btn-secondary {
+       flex: 1;
+       padding: 1rem 2rem;
+       font-weight: 700;
+       text-transform: uppercase;
+       letter-spacing: 0.05em;
+       font-size: 0.875rem;
+       border: none;
+       cursor: pointer;
+       transition: all 0.2s;
+   }
+
+   .btn-primary {
+       background: #1e40af;
+       color: white;
+   }
+
+   .btn-primary:hover {
+       background: #1e3a8a;
+   }
+
+   .btn-secondary {
+       background: white;
+       color: #1a1a1a;
+       border: 1px solid #9ca3af;
+   }
+
+   .btn-secondary:hover {
+       background: #f8fafc;
+       border-color: #6b7280;
+   }
+
+   /* Mobile Responsive */
+   @media (max-width: 768px) {
+       .magazine-report {
+           padding: 1rem;
+       }
+
+       .report-header, .content-section {
+           padding: 1.5rem;
+       }
+
+       .title-section h1 {
+           font-size: 2rem;
+       }
+
+       .header-content {
+           flex-direction: column;
+           gap: 1rem;
+       }
+
+       .meta-section {
+           text-align: left;
+       }
+
+       .metrics-grid {
+           grid-template-columns: 1fr;
+           gap: 1rem;
+       }
+
+       .agency-item {
+           flex-direction: column;
+           gap: 1rem;
+       }
+
+       .agency-details {
+           grid-template-columns: 1fr;
+           gap: 1rem;
+       }
+
+       .data-table {
+           display: none;
+       }
+
+       .partner-grid, .intel-grid {
+           grid-template-columns: 1fr;
+           gap: 1.5rem;
+       }
+
+       .timeline-grid {
+           grid-template-columns: 1fr;
+       }
+
+       .action-buttons {
+           flex-direction: column;
+       }
+   }
 </style>
 
 </head>
 <body class="bg-gray-50 text-gray-900">
-    <div class="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-20">
-        <header class="text-center mb-4">
-            <img src="/images/asklite.png" alt="AskArti" class="h-16 w-auto md:h-20 lg:h-24 mx-auto">
-            <p class="mt-2 text-lg font-semibold text-gray-700">Federal Sales Prospecting</p>
-        </header>
+   <div class="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-20">
+       <header class="text-center mb-4">
+           <img src="/images/asklite.png" alt="AskArti" class="h-16 w-auto md:h-20 lg:h-24 mx-auto">
+           <p class="mt-2 text-lg font-semibold text-gray-700">Federal Sales Prospecting</p>
+       </header>
 
-        <main class="prospect-card mb-3">
-            <div class="mb-4">
-                <textarea 
-                    id="situation-input" 
-                    rows="3" 
-                    class="w-full p-4 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary resize-none placeholder-gray-500"
-                    placeholder="Need to prospect cybersecurity solutions into DOD. Looking for Tier 1 SIs who can get me in."
-                    maxlength="500"></textarea>
-            </div>
-
-            <div class="flex flex-wrap gap-2 justify-center mb-4">
-                <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
-                        data-text="Need to prospect cloud migration services into civilian agencies. Who are the top SIs?">
-                    Cloud Migration SIs
-                </button>
-                <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
-                        data-text="Looking for VARs and distributors who can sell our cybersecurity platform to federal agencies.">
-                    Cyber VARs
-                </button>
-                <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
-                        data-text="Which agencies are buying AI/ML solutions right now? Need warm introduction paths.">
-                    AI/ML Opportunities
-                </button>
-                <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
-                        data-text="Small business set-aside opportunities in data analytics. Which agencies have active RFPs?">
-                    Small Business Opps
-                </button>
-                <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
-                        data-text="ISVs and SaaS companies that need federal sales partners for their solutions.">
-                    ISV Partnerships
-                </button>
-            </div>
-
-            <div class="text-center">
-                <button id="prospect-btn" class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-semibold py-3 px-8 rounded-full transition-all inline-flex items-center gap-2 shadow-lg hover:shadow-xl">
-                    <span id="btn-text">Get Prospecting Intel</span>
-                    <div id="loader" class="loader hidden"></div>
-                </button>
-            </div>
-        </main>
-
-        <div id="loading-container" class="text-center py-4 hidden">
-            <p id="loading-message" class="text-gray-600"></p>
-        </div>
-
-        <div id="error-container" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center mb-4 hidden">
-            <p class="text-red-700 font-medium mb-2">Research hit a snag</p>
-            <p class="text-red-600 text-sm" id="error-details">Please try again</p>
-            <button id="retry-btn" class="mt-3 bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg text-sm">Try Again</button>
-        </div>
-
-        <div id="results-container"></div>
-
-        <footer class="text-center mt-12 space-y-4 pb-20">
-            <div class="flex justify-center gap-6 text-sm">
-                <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">About</button>
-                <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Contact</a>
-            </div>
-            <p class="text-xs text-gray-400">© 2025 AskArti. Federal Prospecting Intelligence</p>
-        </footer>
-    </div>
-
-    <!-- Mobile-optimized About Modal -->
-   <div id="about-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-       <div class="bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-sm sm:max-w-md modal-mobile transform transition-all">
-           <div class="p-4 sm:p-6">
-               <div class="flex justify-between items-start mb-4">
-                   <div class="flex items-center gap-3">
-                       <img src="images/oldmark.jpg" alt="Mark Flournoy" class="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-3 border-customPurple-200 animate-float">
-                       <div>
-                           <h2 class="text-lg sm:text-xl font-bold text-gray-900">Hey, I'm Mark</h2>
-                           <p class="text-xs text-gray-600">Retired Fed Sales Guy</p>
-                       </div>
-                   </div>
-                   <button id="close-about" class="text-gray-400 hover:text-gray-600 transition-colors tap-target">
-                       <svg class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                       </svg>
-                   </button>
-               </div>
-               <div class="space-y-3 sm:space-y-4 text-gray-700 text-sm sm:text-base">
-                   <p class="leading-relaxed"> AskArti came from those nights I spent wide awake, pretty sure my champion had been abducted by aliens and my boss was drafting my “improvement" plan. If your deals aren’t closing, your pipeline might be fiction. Does every deal have a dollar amount, a close date, and someone who owns it? Arti’s not perfect, but he’s up all night so you can finally build that 3x pipeline your boss has always dreamed of.</p>
-                   
-                   <div class="pt-3 sm:pt-4 border-t border-gray-200">
-                       <div class="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg p-3 sm:p-4 text-sm">
-                           <h3 class="font-semibold text-gray-800 mb-2 flex items-center text-sm sm:text-base">
-                               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                   <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                               </svg>
-                               Privacy
-                           </h3>
-                           <p class="text-gray-600 text-xs sm:text-sm">
-                               We don't store any of your chats. Everything happens in-memory using AWS Lambda and vanishes after execution.
-                           </p>
-                       </div>
-                   </div>
-                   
-                   <div class="pt-3 sm:pt-4">
-                       <a href="https://calendly.com/markflournoy/30min" target="_blank" 
-                          class="block w-full bg-gradient-to-r from-customPurple-500 to-customPurple-700 hover:from-customPurple-600 hover:to-customPurple-800 text-white font-bold btn-mobile text-center transition-all transform hover:scale-105 tap-target">
-                           Let's Commiserate Over Coffee ☕
-                       </a>
-                       <p class="text-xs text-center text-gray-500 mt-2">
-                           Virtual coffee. Real sales talk.
-                       </p>
-                   </div>
-               </div>
+       <main class="prospect-card mb-3">
+           <div class="mb-4">
+               <textarea 
+                   id="situation-input" 
+                   rows="3" 
+                   class="w-full p-4 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary resize-none placeholder-gray-500"
+                   placeholder="Need to prospect cybersecurity solutions into DOD. Looking for Tier 1 SIs who can get me in."
+                   maxlength="500"></textarea>
            </div>
+
+           <div class="flex flex-wrap gap-2 justify-center mb-4">
+               <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
+                       data-text="Need to prospect cloud migration services into civilian agencies. Who are the top SIs?">
+                   Cloud Migration SIs
+               </button>
+               <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
+                       data-text="Looking for VARs and distributors who can sell our cybersecurity platform to federal agencies.">
+                   Cyber VARs
+               </button>
+               <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
+                       data-text="Which agencies are buying AI/ML solutions right now? Need warm introduction paths.">
+                   AI/ML Opportunities
+               </button>
+               <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
+                       data-text="Small business set-aside opportunities in data analytics. Which agencies have active RFPs?">
+                   Small Business Opps
+               </button>
+               <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
+                       data-text="ISVs and SaaS companies that need federal sales partners for their solutions.">
+                   ISV Partnerships
+               </button>
+           </div>
+
+           <div class="text-center">
+               <button id="prospect-btn" class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-semibold py-3 px-8 rounded-full transition-all inline-flex items-center gap-2 shadow-lg hover:shadow-xl">
+                   <span id="btn-text">Get Prospecting Intel</span>
+                   <div id="loader" class="loader hidden"></div>
+               </button>
+           </div>
+       </main>
+
+       <div id="loading-container" class="text-center py-4 hidden">
+           <p id="loading-message" class="text-gray-600"></p>
        </div>
+
+       <div id="error-container" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center mb-4 hidden">
+           <p class="text-red-700 font-medium mb-2">Research hit a snag</p>
+           <p class="text-red-600 text-sm" id="error-details">Please try again</p>
+           <button id="retry-btn" class="mt-3 bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg text-sm">Try Again</button>
+       </div>
+
+       <div id="results-container"></div>
+
+       <footer class="text-center mt-12 space-y-4 pb-20">
+           <div class="flex justify-center gap-6 text-sm">
+               <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">About</button>
+               <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Contact</a>
+           </div>
+           <p class="text-xs text-gray-400">© 2025 AskArti. Federal Prospecting Intelligence</p>
+       </footer>
    </div>
+
+   <!-- Mobile-optimized About Modal -->
+  <div id="about-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      <div class="bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-sm sm:max-w-md modal-mobile transform transition-all">
+          <div class="p-4 sm:p-6">
+              <div class="flex justify-between items-start mb-4">
+                  <div class="flex items-center gap-3">
+                      <img src="images/oldmark.jpg" alt="Mark Flournoy" class="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-3 border-customPurple-200 animate-float">
+                      <div>
+                          <h2 class="text-lg sm:text-xl font-bold text-gray-900">Hey, I'm Mark</h2>
+                          <p class="text-xs text-gray-600">Retired Fed Sales Guy</p>
+                      </div>
+                  </div>
+                  <button id="close-about" class="text-gray-400 hover:text-gray-600 transition-colors tap-target">
+                      <svg class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                  </button>
+              </div>
+              <div class="space-y-3 sm:space-y-4 text-gray-700 text-sm sm:text-base">
+                  <p class="leading-relaxed"> AskArti came from those nights I spent wide awake, pretty sure my champion had been abducted by aliens and my boss was drafting my "improvement" plan. If your deals aren't closing, your pipeline might be fiction. Does every deal have a dollar amount, a close date, and someone who owns it? Arti's not perfect, but he's up all night so you can finally build that 3x pipeline your boss is dreaming of.</p>
+                  
+                  <div class="pt-3 sm:pt-4 border-t border-gray-200">
+                      <div class="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg p-3 sm:p-4 text-sm">
+                          <h3 class="font-semibold text-gray-800 mb-2 flex items-center text-sm sm:text-base">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 01122.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                              </svg>
+                              Privacy
+                          </h3>
+                          <p class="text-gray-600 text-xs sm:text-sm">
+                              We don't store any of your chats. Everything happens in-memory using AWS Lambda and vanishes after execution.
+                          </p>
+                      </div>
+                  </div>
+                  
+                  <div class="pt-3 sm:pt-4">
+                      <a href="https://calendly.com/markflournoy/30min" target="_blank" 
+                         class="block w-full bg-gradient-to-r from-customPurple-500 to-customPurple-700 hover:from-customPurple-600 hover:to-customPurple-800 text-white font-bold btn-mobile text-center transition-all transform hover:scale-105 tap-target">
+                          Let's Commiserate Over Coffee ☕
+                      </a>
+                      <p class="text-xs text-center text-gray-500 mt-2">
+                          Virtual coffee. Real sales talk.
+                      </p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
 
 <script>
 const CONFIG = {
-    API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
-    LOADING_MESSAGES: ["Researching federal market...", "Analyzing partner ecosystem...", "Gathering competitive intel...", "Mapping decision makers...", "Compiling opportunities..."]
+   API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
+   LOADING_MESSAGES: ["Researching federal market...", "Analyzing partner ecosystem...", "Gathering competitive intel...", "Mapping decision makers...", "Compiling opportunities..."]
 };
 
 class ProspectingTool {
-    constructor() {
-        this.elements = {
-            situationInput: document.getElementById('situation-input'),
-            prospectBtn: document.getElementById('prospect-btn'),
-            btnText: document.getElementById('btn-text'),
-            loader: document.getElementById('loader'),
-            loadingContainer: document.getElementById('loading-container'),
-            loadingMessage: document.getElementById('loading-message'),
-            errorContainer: document.getElementById('error-container'),
-            errorDetails: document.getElementById('error-details'),
-            retryBtn: document.getElementById('retry-btn'),
-            resultsContainer: document.getElementById('results-container'),
-            aboutBtn: document.getElementById('about-btn'),
-            aboutModal: document.getElementById('about-modal'),
-            closeAbout: document.getElementById('close-about'),
-            quickPrompts: document.querySelectorAll('.quick-prompt')
-        };
-        
-        this.state = { pendingRequest: false, lastQuery: '', loadingInterval: null };
-        this.init();
-    }
+   constructor() {
+       this.elements = {
+           situationInput: document.getElementById('situation-input'),
+           prospectBtn: document.getElementById('prospect-btn'),
+           btnText: document.getElementById('btn-text'),
+           loader: document.getElementById('loader'),
+           loadingContainer: document.getElementById('loading-container'),
+           loadingMessage: document.getElementById('loading-message'),
+           errorContainer: document.getElementById('error-container'),
+           errorDetails: document.getElementById('error-details'),
+           retryBtn: document.getElementById('retry-btn'),
+           resultsContainer: document.getElementById('results-container'),
+           aboutBtn: document.getElementById('about-btn'),
+           aboutModal: document.getElementById('about-modal'),
+           closeAbout: document.getElementById('close-about'),
+           quickPrompts: document.querySelectorAll('.quick-prompt')
+       };
+       
+       this.state = { pendingRequest: false, lastQuery: '', loadingInterval: null };
+       this.init();
+   }
 
-    init() {
-        this.setupEventListeners();
-        this.elements.situationInput.focus();
-    }
+   init() {
+       this.setupEventListeners();
+       this.elements.situationInput.focus();
+   }
 
-    setupEventListeners() {
-        this.elements.quickPrompts.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                this.elements.situationInput.value = e.currentTarget.dataset.text;
-                this.getIntelligence();
-            });
-        });
+   setupEventListeners() {
+       this.elements.quickPrompts.forEach(btn => {
+           btn.addEventListener('click', (e) => {
+               this.elements.situationInput.value = e.currentTarget.dataset.text;
+               this.getIntelligence();
+           });
+       });
 
-        this.elements.prospectBtn.addEventListener('click', () => this.getIntelligence());
-        this.elements.situationInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                this.getIntelligence();
-            }
-        });
+       this.elements.prospectBtn.addEventListener('click', () => this.getIntelligence());
+       this.elements.situationInput.addEventListener('keydown', (e) => {
+           if (e.key === 'Enter' && !e.shiftKey) {
+               e.preventDefault();
+               this.getIntelligence();
+           }
+       });
 
-        this.elements.retryBtn.addEventListener('click', () => {
-            this.elements.errorContainer.classList.add('hidden');
-            if (this.state.lastQuery) {
-                this.elements.situationInput.value = this.state.lastQuery;
-                this.getIntelligence();
-            }
-        });
+       this.elements.retryBtn.addEventListener('click', () => {
+           this.elements.errorContainer.classList.add('hidden');
+           if (this.state.lastQuery) {
+               this.elements.situationInput.value = this.state.lastQuery;
+               this.getIntelligence();
+           }
+       });
 
-        this.elements.aboutBtn.addEventListener('click', () => this.showModal());
-        this.elements.closeAbout.addEventListener('click', () => this.hideModal());
-        this.elements.aboutModal.addEventListener('click', (e) => {
-            if (e.target === this.elements.aboutModal) this.hideModal();
-        });
-    }
+       this.elements.aboutBtn.addEventListener('click', () => this.showModal());
+       this.elements.closeAbout.addEventListener('click', () => this.hideModal());
+       this.elements.aboutModal.addEventListener('click', (e) => {
+           if (e.target === this.elements.aboutModal) this.hideModal();
+       });
+   }
 
-    async getIntelligence() {
-        const situation = this.elements.situationInput.value.trim();
-        
-        if (!situation) {
-            this.showError("Tell me what you're trying to prospect 👆");
-            return;
-        }
-        
-        if (this.state.pendingRequest) return;
-        
-        this.state.lastQuery = situation;
-        this.state.pendingRequest = true;
-        
-        this.elements.resultsContainer.innerHTML = '';
-        this.setLoading(true);
-        
-        try {
-            const data = await this.makeRequest(situation);
-            this.displayIntelligence(data);
-        } catch (error) {
-            this.showError(error.message || "Research failed. Please try again.");
-        } finally {
-            this.state.pendingRequest = false;
-            this.setLoading(false);
-        }
-    }
+   async getIntelligence() {
+       const situation = this.elements.situationInput.value.trim();
+       
+       if (!situation) {
+           this.showError("Tell me what you're trying to prospect 👆");
+           return;
+       }
+       
+       if (this.state.pendingRequest) return;
+       
+       this.state.lastQuery = situation;
+       this.state.pendingRequest = true;
+       
+       this.elements.resultsContainer.innerHTML = '';
+       this.setLoading(true);
+       
+       try {
+           const data = await this.makeRequest(situation);
+           this.displayIntelligence(data);
+       } catch (error) {
+           this.showError(error.message || "Research failed. Please try again.");
+       } finally {
+           this.state.pendingRequest = false;
+           this.setLoading(false);
+       }
+   }
 
-    async makeRequest(situation) {
-        const response = await fetch(CONFIG.API_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ situation })
-        });
-        
-        if (!response.ok) throw new Error(`Server error (${response.status})`);
-        
-        const data = await response.json();
-        if (data.error) throw new Error(data.message || data.error);
-        
-        return data;
-    }
+   async makeRequest(situation) {
+       const response = await fetch(CONFIG.API_ENDPOINT, {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify({ situation })
+       });
+       
+       if (!response.ok) throw new Error(`Server error (${response.status})`);
+       
+       const data = await response.json();
+       if (data.error) throw new Error(data.message || data.error);
+       
+       return data;
+   }
 
-    displayIntelligence(data) {
-   const { market_intelligence, ecosystem_mapping, tactical_execution, insider_intel, success_metrics } = data;
-   
-   const html = `
-   <div class="fade-in">
-       <!-- Monochromatic Report Header -->
-       <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-8 mb-4 sm:mb-6">
-           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
-               <div class="mb-4 sm:mb-0">
-                   <h1 class="text-xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">Federal Sales Intelligence</h1>
-                   <p class="text-sm sm:text-lg text-gray-600">Prospecting Research Report</p>
-               </div>
-               <div class="text-left sm:text-right">
-                   <div class="text-xs sm:text-sm text-gray-500 mb-1">${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
-                   <div class="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">
-                       CONFIDENTIAL
+   displayIntelligence(data) {
+       const { market_intelligence, ecosystem_mapping, tactical_execution, insider_intel, success_metrics } = data;
+       
+       const html = `
+       <div class="magazine-report">
+           <!-- Report Header -->
+           <header class="report-header">
+               <div class="header-content">
+                   <div class="title-section">
+                       <h1>Federal Sales Intelligence</h1>
+                       <p class="subtitle">Prospecting Research Report</p>
                    </div>
-               </div>
-           </div>
-           
-           <!-- Executive Summary -->
-           <div class="bg-purple-50 rounded-lg p-4 sm:p-6 border border-purple-100">
-               <h2 class="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Executive Summary</h2>
-               <div class="text-gray-700 prose prose-sm max-w-none text-sm sm:text-base">
-                   ${marked.parse(market_intelligence.opportunity_assessment || 'Market analysis pending...')}
-               </div>
-           </div>
-       </div>
-
-       <!-- Monochromatic Key Metrics -->
-       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
-           ${success_metrics?.map((metric, index) => `
-               <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
-                   <div class="flex items-center justify-between mb-2 sm:mb-3">
-                       <div class="w-6 h-6 sm:w-8 sm:h-8 bg-purple-100 border border-purple-200 rounded-full flex items-center justify-center">
-                           <span class="text-purple-700 font-bold text-xs sm:text-sm">${index + 1}</span>
-                       </div>
-                       <span class="text-xs text-gray-500 font-medium">${metric.timeline}</span>
+                   <div class="meta-section">
+                       <div class="report-date">${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                       <div class="confidential-badge">Confidential</div>
                    </div>
-                   <h3 class="text-sm sm:text-lg font-bold text-gray-900 mb-1">${metric.target}</h3>
-                   <p class="text-xs sm:text-sm text-gray-600">${metric.metric}</p>
-                   <div class="mt-2 sm:mt-3 bg-gray-100 rounded-full h-1.5 sm:h-2">
-                       <div class="bg-purple-400 h-1.5 sm:h-2 rounded-full" style="width: 25%"></div>
-                   </div>
-               </div>
-           `).join('') || ''}
-       </div>
-
-       <!-- Monochromatic Target Agencies -->
-       ${market_intelligence.key_agencies?.length ? `
-       <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-8 mb-4 sm:mb-6">
-           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
-               <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-0">Target Agencies</h2>
-               <span class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">${market_intelligence.key_agencies.length} Priority Targets</span>
-           </div>
-           
-           <div class="space-y-4 sm:space-y-6">
-               ${market_intelligence.key_agencies.map((agency, index) => `
-                   <div class="relative">
-                       <div class="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6">
-                           <div class="flex-shrink-0 self-center sm:self-start">
-                               <div class="w-10 h-10 sm:w-12 sm:h-12 bg-purple-500 rounded-lg flex items-center justify-center">
-                                   <span class="text-white font-bold text-sm sm:text-base">${index + 1}</span>
-                               </div>
-                           </div>
-                           <div class="flex-1 min-w-0">
-                               <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 gap-2">
-                                   <h3 class="text-lg sm:text-xl font-bold text-gray-900">${agency.agency}</h3>
-                                   <div class="text-left sm:text-right">
-                                       <div class="text-xl sm:text-2xl font-bold text-gray-900">${agency.opportunity_size}</div>
-                                       <div class="text-xs sm:text-sm text-gray-500">Est. Opportunity</div>
-                                   </div>
-                               </div>
-                               
-                               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                                   <div>
-                                       <h4 class="text-xs sm:text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Decision Makers</h4>
-                                       <p class="text-sm sm:text-base text-gray-600">${agency.decision_makers}</p>
-                                   </div>
-                                   <div>
-                                       <h4 class="text-xs sm:text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Current Initiatives</h4>
-                                       <p class="text-sm sm:text-base text-gray-600">${agency.current_initiatives}</p>
-                                   </div>
-                               </div>
-                               
-                               <div class="mt-4 p-3 sm:p-4 bg-purple-50 border border-purple-100 rounded-lg">
-                                   <h4 class="text-xs sm:text-sm font-semibold text-purple-700 mb-2 uppercase tracking-wide">Recommended Approach</h4>
-                                   <p class="text-sm sm:text-base text-purple-800">${agency.best_approach}</p>
-                               </div>
-                           </div>
-                       </div>
-                       ${index < market_intelligence.key_agencies.length - 1 ? '<hr class="mt-4 sm:mt-6 border-gray-200">' : ''}
-                   </div>
-               `).join('')}
-           </div>
-       </div>` : ''}
-
-       <!-- Monochromatic Partner Ecosystem -->
-       <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-8 mb-4 sm:mb-6">
-           <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Partner Ecosystem Analysis</h2>
-           
-           <!-- Tier 1 Systems Integrators -->
-           ${ecosystem_mapping.tier_1_sis?.length ? `
-           <div class="mb-6 sm:mb-8">
-               <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                   <div class="w-4 h-4 sm:w-6 sm:h-6 bg-purple-500 rounded-full"></div>
-                   <h3 class="text-base sm:text-lg font-bold text-gray-800">Tier 1 Systems Integrators</h3>
                </div>
                
-               <!-- Mobile: Card Layout -->
-               <div class="block sm:hidden space-y-4">
-                   ${ecosystem_mapping.tier_1_sis.map(si => `
-                       <div class="border border-gray-200 rounded-lg p-4">
-                           <h4 class="font-bold text-gray-900 mb-2">${si.company}</h4>
-                           <div class="space-y-2 text-sm">
-                               <div><span class="font-medium text-gray-700">Focus:</span> <span class="text-gray-600">${si.federal_focus}</span></div>
-                               <div><span class="font-medium text-gray-700">Partnership:</span> <span class="text-gray-600">${si.partnership_angle}</span></div>
-                               <div><span class="font-medium text-gray-700">Contacts:</span> <span class="text-gray-600">${si.key_contacts}</span></div>
-                               <div class="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded mt-2">${si.current_priorities}</div>
-                           </div>
+               <div class="executive-summary">
+                   <h2>Executive Summary</h2>
+                   <div class="summary-content">
+                       ${marked.parse(market_intelligence.opportunity_assessment || 'Market analysis pending...')}
+                   </div>
+               </div>
+           </header>
+
+           <!-- Key Metrics -->
+           <section class="metrics-grid">
+               ${success_metrics?.map((metric, index) => `
+                   <div class="metric-card">
+                       <div class="metric-header">
+                           <span class="metric-number">${String(index + 1).padStart(2, '0')}</span>
+                           <span class="metric-timeline">${metric.timeline}</span>
                        </div>
+                       <h3 class="metric-target">${metric.target}</h3>
+                       <p class="metric-description">${metric.metric}</p>
+                       <div class="progress-bar">
+                           <div class="progress-fill"></div>
+                       </div>
+                   </div>
+               `).join('') || ''}
+           </section>
+
+           <!-- Target Agencies -->
+           ${market_intelligence.key_agencies?.length ? `
+           <section class="content-section">
+               <div class="section-header">
+                   <h2>Target Agencies</h2>
+                   <span class="section-count">${market_intelligence.key_agencies.length} Priority Targets</span>
+               </div>
+               
+               <div class="agencies-list">
+                   ${market_intelligence.key_agencies.map((agency, index) => `
+                       <article class="agency-item">
+                           <div class="agency-number">${String(index + 1).padStart(2, '0')}</div>
+                           <div class="agency-content">
+                               <div class="agency-header">
+                                   <h3>${agency.agency}</h3>
+                                   <div class="opportunity-value">
+                                       <span class="value">${agency.opportunity_size}</span>
+                                       <span class="label">Est. Opportunity</span>
+                                   </div>
+                               </div>
+                               
+                               <div class="agency-details">
+                                   <div class="detail-item">
+                                       <h4>Decision Makers</h4>
+                                       <p>${agency.decision_makers}</p>
+                                   </div>
+                                   <div class="detail-item">
+                                       <h4>Current Initiatives</h4>
+                                       <p>${agency.current_initiatives}</p>
+                                   </div>
+                               </div>
+                               
+                               <div class="approach-section">
+                                   <h4>Recommended Approach</h4>
+                                   <p>${agency.best_approach}</p>
+                               </div>
+                           </div>
+                       </article>
                    `).join('')}
                </div>
+           </section>` : ''}
+
+           <!-- Partner Ecosystem -->
+           <section class="content-section">
+               <h2>Partner Ecosystem Analysis</h2>
                
-               <!-- Desktop: Table Layout -->
-               <div class="hidden sm:block overflow-hidden border border-gray-200 rounded-lg">
-                   <table class="min-w-full divide-y divide-gray-200">
-                       <thead class="bg-gray-50">
-                           <tr>
-                               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
-                               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Federal Focus</th>
-                               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Partnership Angle</th>
-                               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact Strategy</th>
-                           </tr>
-                       </thead>
-                       <tbody class="bg-white divide-y divide-gray-200">
-                           ${ecosystem_mapping.tier_1_sis.map(si => `
-                               <tr class="hover:bg-gray-50">
-                                   <td class="px-6 py-4 whitespace-nowrap">
-                                       <div class="font-bold text-gray-900">${si.company}</div>
-                                       <div class="text-sm text-gray-500">${si.current_priorities}</div>
-                                   </td>
-                                   <td class="px-6 py-4">
-                                       <div class="text-sm text-gray-600">${si.federal_focus}</div>
-                                   </td>
-                                   <td class="px-6 py-4">
-                                       <div class="text-sm text-gray-600">${si.partnership_angle}</div>
-                                   </td>
-                                   <td class="px-6 py-4">
-                                       <div class="text-sm text-gray-600">${si.key_contacts}</div>
-                                   </td>
+               ${ecosystem_mapping.tier_1_sis?.length ? `
+               <div class="subsection">
+                   <h3>Tier 1 Systems Integrators</h3>
+                   <div class="data-table">
+                       <table>
+                           <thead>
+                               <tr>
+                                   <th>Company</th>
+                                   <th>Federal Focus</th>
+                                   <th>Partnership Angle</th>
+                                   <th>Contact Strategy</th>
                                </tr>
+                           </thead>
+                           <tbody>
+                               ${ecosystem_mapping.tier_1_sis.map((si, index) => `
+                                   <tr>
+                                       <td>
+                                           <div class="company-name">${si.company}</div>
+                                           <div class="company-note">${si.current_priorities}</div>
+                                       </td>
+                                       <td>${si.federal_focus}</td>
+                                       <td>${si.partnership_angle}</td>
+                                       <td>${si.key_contacts}</td>
+                                   </tr>
+                               `).join('')}
+                           </tbody>
+                       </table>
+                   </div>
+               </div>` : ''}
+
+               <div class="partner-grid">
+                   ${ecosystem_mapping.emerging_players?.length ? `
+                   <div class="partner-category">
+                       <h3>Emerging Players</h3>
+                       <div class="partner-list">
+                           ${ecosystem_mapping.emerging_players.map(player => `
+                               <div class="partner-item">
+                                   <h4>${player.company}</h4>
+                                   <p>${player.why_hot}</p>
+                                   <span class="partner-tag">${player.approach}</span>
+                               </div>
                            `).join('')}
-                       </tbody>
-                   </table>
-               </div>
-           </div>` : ''}
+                       </div>
+                   </div>` : ''}
 
-           <!-- Monochromatic Emerging Players & Tech Vendors -->
-           <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
-               ${ecosystem_mapping.emerging_players?.length ? `
-               <div>
-                   <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                       <div class="w-4 h-4 sm:w-6 sm:h-6 bg-purple-400 rounded-full"></div>
-                       <h3 class="text-base sm:text-lg font-bold text-gray-800">Emerging Players</h3>
-                   </div>
-                   <div class="space-y-3 sm:space-y-4">
-                       ${ecosystem_mapping.emerging_players.map(player => `
-                           <div class="border border-gray-200 rounded-lg p-3 sm:p-4 hover:bg-gray-50 transition-colors">
-                               <h4 class="font-bold text-gray-900 mb-2 text-sm sm:text-base">${player.company}</h4>
-                               <p class="text-xs sm:text-sm text-gray-600 mb-2">${player.why_hot}</p>
-                               <div class="text-xs text-purple-700 bg-purple-50 border border-purple-100 px-2 py-1 rounded-full inline-block">
-                                   ${player.approach}
+                   ${ecosystem_mapping.technology_vendors?.length ? `
+                   <div class="partner-category">
+                       <h3>Technology Partners</h3>
+                       <div class="partner-list">
+                           ${ecosystem_mapping.technology_vendors.map(vendor => `
+                               <div class="partner-item">
+                                   <h4>${vendor.company}</h4>
+                                   <p>${vendor.federal_play}</p>
+                                   <span class="partner-tag">${vendor.partnership_opportunity}</span>
                                </div>
+                           `).join('')}
+                       </div>
+                   </div>` : ''}
+               </div>
+           </section>
+
+           <!-- Tactical Execution -->
+           <section class="content-section">
+               <h2>Tactical Execution Plan</h2>
+               
+               ${tactical_execution.immediate_actions?.length ? `
+               <div class="subsection">
+                   <h3>Immediate Actions</h3>
+                   <div class="action-list">
+                       ${tactical_execution.immediate_actions.map((action, i) => `
+                           <div class="action-item">
+                               <span class="action-number">${String(i + 1).padStart(2, '0')}</span>
+                               <p>${action}</p>
                            </div>
                        `).join('')}
                    </div>
                </div>` : ''}
 
-               ${ecosystem_mapping.technology_vendors?.length ? `
-               <div>
-                   <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                       <div class="w-4 h-4 sm:w-6 sm:h-6 bg-purple-300 rounded-full"></div>
-                       <h3 class="text-base sm:text-lg font-bold text-gray-800">Technology Partners</h3>
-                   </div>
-                   <div class="space-y-3 sm:space-y-4">
-                       ${ecosystem_mapping.technology_vendors.map(vendor => `
-                           <div class="border border-gray-200 rounded-lg p-3 sm:p-4 hover:bg-gray-50 transition-colors">
-                               <h4 class="font-bold text-gray-900 mb-2 text-sm sm:text-base">${vendor.company}</h4>
-                               <p class="text-xs sm:text-sm text-gray-600 mb-2">${vendor.federal_play}</p>
-                               <div class="text-xs text-purple-700 bg-purple-50 border border-purple-100 px-2 py-1 rounded-full inline-block">
-                                   ${vendor.partnership_opportunity}
-                               </div>
+               ${tactical_execution.prospecting_sequence ? `
+               <div class="subsection">
+                   <h3>4-Week Prospecting Timeline</h3>
+                   <div class="timeline-grid">
+                       ${Object.entries(tactical_execution.prospecting_sequence).map(([week, activity]) => `
+                           <div class="timeline-item">
+                               <h4>${week.replace('_', ' ')}</h4>
+                               <p>${activity}</p>
                            </div>
                        `).join('')}
                    </div>
                </div>` : ''}
-           </div>
-       </div>
+           </section>
 
-       <!-- Monochromatic Tactical Execution -->
-       <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-8 mb-4 sm:mb-6">
-           <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Tactical Execution Plan</h2>
-           
-           <!-- Immediate Actions -->
-           ${tactical_execution.immediate_actions?.length ? `
-           <div class="mb-6 sm:mb-8">
-               <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4">Immediate Actions</h3>
-               <div class="space-y-3 sm:space-y-4">
-                   ${tactical_execution.immediate_actions.map((action, i) => `
-                       <div class="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 bg-purple-50 border border-purple-100 rounded-lg">
-                           <div class="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-xs sm:text-sm">
-                               ${i + 1}
-                           </div>
-                           <div class="flex-1">
-                               <p class="text-gray-800 text-sm sm:text-base">${action}</p>
-                           </div>
-                       </div>
-                   `).join('')}
-               </div>
-           </div>` : ''}
-
-           <!-- 4-Week Timeline -->
-           ${tactical_execution.prospecting_sequence ? `
-           <div class="mb-6 sm:mb-8">
-               <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4">4-Week Prospecting Timeline</h3>
+           <!-- Communication Templates -->
+           ${tactical_execution.message_frameworks ? `
+           <section class="content-section templates-section">
+               <h2>Communication Templates</h2>
                
-               <!-- Mobile: Stacked Layout -->
-               <div class="block sm:hidden space-y-3">
-                   ${Object.entries(tactical_execution.prospecting_sequence).map(([week, activity]) => `
-                       <div class="bg-white border border-purple-200 rounded-lg p-4">
-                           <div class="text-sm font-bold text-purple-600 mb-2 uppercase">${week.replace('_', ' ')}</div>
-                           <p class="text-sm text-gray-600">${activity}</p>
-                       </div>
-                   `).join('')}
-               </div>
-               
-               <!-- Desktop: Grid Layout -->
-               <div class="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                   ${Object.entries(tactical_execution.prospecting_sequence).map(([week, activity]) => `
-                       <div class="bg-white border border-purple-200 rounded-lg p-4 hover:bg-purple-50 transition-colors">
-                           <div class="text-sm font-bold text-purple-600 mb-2 uppercase">${week.replace('_', ' ')}</div>
-                           <p class="text-sm text-gray-600">${activity}</p>
-                       </div>
-                   `).join('')}
-               </div>
-           </div>` : ''}
-       </div>
-
-       <!-- Monochromatic Message Templates -->
-       ${tactical_execution.message_frameworks ? `
-       <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-8 mb-4 sm:mb-6">
-           <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Communication Templates</h2>
-           
-           <div class="space-y-4 sm:space-y-6">
                ${tactical_execution.message_frameworks.agency_outreach ? `
-               <div>
-                   <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">Agency Outreach Template</h3>
-                   <div class="bg-gray-50 rounded-lg p-3 sm:p-6 border-l-4 border-purple-400 overflow-x-auto">
-                       <pre class="text-xs sm:text-sm text-gray-700 whitespace-pre-wrap font-mono">${tactical_execution.message_frameworks.agency_outreach}</pre>
-                   </div>
+               <div class="template-block">
+                   <h3>Agency Outreach Template</h3>
+                   <pre class="template-content">${tactical_execution.message_frameworks.agency_outreach}</pre>
                </div>` : ''}
                
                ${tactical_execution.message_frameworks.partner_outreach ? `
-               <div>
-                   <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">Partner Outreach Template</h3>
-                   <div class="bg-gray-50 rounded-lg p-3 sm:p-6 border-l-4 border-purple-300 overflow-x-auto">
-                       <pre class="text-xs sm:text-sm text-gray-700 whitespace-pre-wrap font-mono">${tactical_execution.message_frameworks.partner_outreach}</pre>
-                   </div>
+               <div class="template-block">
+                   <h3>Partner Outreach Template</h3>
+                   <pre class="template-content">${tactical_execution.message_frameworks.partner_outreach}</pre>
                </div>` : ''}
+           </section>` : ''}
+
+           <!-- Insider Intelligence -->
+           <section class="content-section intel-section">
+               <h2>Insider Intelligence</h2>
+               
+               <div class="intel-grid">
+                   ${insider_intel.hot_opportunities?.length ? `
+                   <div class="intel-category">
+                       <h3>Hot Opportunities</h3>
+                       <div class="intel-list">
+                           ${insider_intel.hot_opportunities.map(opp => `
+                               <div class="intel-item">
+                                   <span class="bullet"></span>
+                                   <p>${opp}</p>
+                               </div>
+                           `).join('')}
+                       </div>
+                   </div>` : ''}
+
+                   ${insider_intel.relationship_leverage?.length ? `
+                   <div class="intel-category">
+                       <h3>Relationship Leverage</h3>
+                       <div class="intel-list">
+                           ${insider_intel.relationship_leverage.map(rel => `
+                               <div class="intel-item">
+                                   <span class="bullet"></span>
+                                   <p>${rel}</p>
+                               </div>
+                           `).join('')}
+                       </div>
+                   </div>` : ''}
+               </div>
+           </section>
+
+           <!-- Competitive Landscape -->
+           <section class="content-section">
+               <h2>Competitive Landscape</h2>
+               <div class="prose-content">
+                   ${marked.parse(market_intelligence.competitive_landscape || 'Competitive analysis pending...')}
+               </div>
+           </section>
+
+           <!-- Action Buttons -->
+           <div class="action-buttons">
+               <button onclick="app.copyResults()" class="btn-primary">Export Intelligence Report</button>
+               <button onclick="app.startOver()" class="btn-secondary">New Prospecting Query</button>
            </div>
-       </div>` : ''}
-
-       <!-- Monochromatic Insider Intelligence -->
-       <div class="bg-purple-50 border border-purple-100 rounded-lg shadow-sm p-4 sm:p-8 mb-4 sm:mb-6">
-           <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Insider Intelligence</h2>
-           
-           <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
-               ${insider_intel.hot_opportunities?.length ? `
-               <div>
-                   <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4">Hot Opportunities</h3>
-                   <div class="space-y-2 sm:space-y-3">
-                       ${insider_intel.hot_opportunities.map(opp => `
-                           <div class="flex items-start gap-2 sm:gap-3 p-2 sm:p-3 bg-white rounded-lg border border-gray-200">
-                               <div class="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
-                               <p class="text-xs sm:text-sm text-gray-700">${opp}</p>
-                           </div>
-                       `).join('')}
-                   </div>
-               </div>` : ''}
-
-               ${insider_intel.relationship_leverage?.length ? `
-               <div>
-                   <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4">Relationship Leverage</h3>
-                   <div class="space-y-2 sm:space-y-3">
-                       ${insider_intel.relationship_leverage.map(rel => `
-                           <div class="flex items-start gap-2 sm:gap-3 p-2 sm:p-3 bg-white rounded-lg border border-gray-200">
-                               <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
-                               <p class="text-xs sm:text-sm text-gray-700">${rel}</p>
-                           </div>
-                       `).join('')}
-                   </div>
-               </div>` : ''}
-           </div>
-       </div>
-
-       <!-- Monochromatic Competitive Intelligence -->
-       <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-8 mb-4 sm:mb-6">
-           <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Competitive Landscape</h2>
-           <div class="prose prose-gray max-w-none text-sm sm:text-base">
-               ${marked.parse(market_intelligence.competitive_landscape || 'Competitive analysis pending...')}
-           </div>
-       </div>
-
-       <!-- Monochromatic Action Buttons -->
-       <div class="flex flex-col gap-3 sm:flex-row sm:gap-4">
-           <button onclick="app.copyResults()" class="w-full sm:flex-1 bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-lg transition-all shadow-sm hover:shadow-md text-sm sm:text-base">
-               📋 Export Intelligence Report
-           </button>
-           <button onclick="app.startOver()" class="w-full sm:flex-1 bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-lg border border-gray-300 hover:border-gray-400 transition-all text-sm sm:text-base">
-               🔍 New Prospecting Query
-           </button>
-       </div>
-   </div>`;
-   
-   this.elements.resultsContainer.innerHTML = html;
-   this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
+       </div>`;
+       
+       this.elements.resultsContainer.innerHTML = html;
+       this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+   }
 
    setLoading(loading) {
        this.elements.btnText.style.display = loading ? 'none' : 'inline';
