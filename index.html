@@ -68,9 +68,6 @@
 
         <main class="prospect-card mb-3">
             <div class="mb-4">
-                <label for="situation-input" class="block text-lg font-semibold text-gray-900 mb-2 text-center">
-                    What opportunities are you trying to close?
-                </label>
                 <textarea 
                     id="situation-input" 
                     rows="3" 
@@ -288,332 +285,332 @@ class ProspectingTool {
     }
 
     displayIntelligence(data) {
-    const { market_intelligence, ecosystem_mapping, tactical_execution, insider_intel, success_metrics } = data;
-    
-    const html = `
-    <div class="fade-in">
-        <!-- Mobile-Optimized Report Header -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-8 mb-4 sm:mb-6">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
-                <div class="mb-4 sm:mb-0">
-                    <h1 class="text-xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">Federal Sales Intelligence</h1>
-                    <p class="text-sm sm:text-lg text-gray-600">Prospecting Research Report</p>
-                </div>
-                <div class="text-left sm:text-right">
-                    <div class="text-xs sm:text-sm text-gray-500 mb-1">${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
-                    <div class="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                        CONFIDENTIAL
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Executive Summary -->
-            <div class="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg p-4 sm:p-6">
-                <h2 class="text-lg sm:text-xl font-bold text-purple-900 mb-2 sm:mb-3">Executive Summary</h2>
-                <div class="text-purple-800 prose prose-sm max-w-none text-sm sm:text-base">
-                    ${marked.parse(market_intelligence.opportunity_assessment || 'Market analysis pending...')}
-                </div>
-            </div>
-        </div>
+   const { market_intelligence, ecosystem_mapping, tactical_execution, insider_intel, success_metrics } = data;
+   
+   const html = `
+   <div class="fade-in">
+       <!-- Monochromatic Report Header -->
+       <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-8 mb-4 sm:mb-6">
+           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
+               <div class="mb-4 sm:mb-0">
+                   <h1 class="text-xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">Federal Sales Intelligence</h1>
+                   <p class="text-sm sm:text-lg text-gray-600">Prospecting Research Report</p>
+               </div>
+               <div class="text-left sm:text-right">
+                   <div class="text-xs sm:text-sm text-gray-500 mb-1">${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                   <div class="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">
+                       CONFIDENTIAL
+                   </div>
+               </div>
+           </div>
+           
+           <!-- Executive Summary -->
+           <div class="bg-purple-50 rounded-lg p-4 sm:p-6 border border-purple-100">
+               <h2 class="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Executive Summary</h2>
+               <div class="text-gray-700 prose prose-sm max-w-none text-sm sm:text-base">
+                   ${marked.parse(market_intelligence.opportunity_assessment || 'Market analysis pending...')}
+               </div>
+           </div>
+       </div>
 
-        <!-- Mobile-Optimized Key Metrics -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
-            ${success_metrics?.map((metric, index) => `
-                <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-6">
-                    <div class="flex items-center justify-between mb-2 sm:mb-3">
-                        <div class="w-6 h-6 sm:w-8 sm:h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                            <span class="text-purple-600 font-bold text-xs sm:text-sm">${index + 1}</span>
-                        </div>
-                        <span class="text-xs text-gray-500 font-medium">${metric.timeline}</span>
-                    </div>
-                    <h3 class="text-sm sm:text-lg font-bold text-gray-900 mb-1">${metric.target}</h3>
-                    <p class="text-xs sm:text-sm text-gray-600">${metric.metric}</p>
-                    <div class="mt-2 sm:mt-3 bg-purple-50 rounded-full h-1.5 sm:h-2">
-                        <div class="bg-purple-400 h-1.5 sm:h-2 rounded-full" style="width: 0%"></div>
-                    </div>
-                </div>
-            `).join('') || ''}
-        </div>
+       <!-- Monochromatic Key Metrics -->
+       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
+           ${success_metrics?.map((metric, index) => `
+               <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+                   <div class="flex items-center justify-between mb-2 sm:mb-3">
+                       <div class="w-6 h-6 sm:w-8 sm:h-8 bg-purple-100 border border-purple-200 rounded-full flex items-center justify-center">
+                           <span class="text-purple-700 font-bold text-xs sm:text-sm">${index + 1}</span>
+                       </div>
+                       <span class="text-xs text-gray-500 font-medium">${metric.timeline}</span>
+                   </div>
+                   <h3 class="text-sm sm:text-lg font-bold text-gray-900 mb-1">${metric.target}</h3>
+                   <p class="text-xs sm:text-sm text-gray-600">${metric.metric}</p>
+                   <div class="mt-2 sm:mt-3 bg-gray-100 rounded-full h-1.5 sm:h-2">
+                       <div class="bg-purple-400 h-1.5 sm:h-2 rounded-full" style="width: 25%"></div>
+                   </div>
+               </div>
+           `).join('') || ''}
+       </div>
 
-        <!-- Mobile-Optimized Target Agencies -->
-        ${market_intelligence.key_agencies?.length ? `
-        <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-8 mb-4 sm:mb-6">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
-                <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-0">Target Agencies</h2>
-                <span class="text-sm text-gray-500">${market_intelligence.key_agencies.length} Priority Targets</span>
-            </div>
-            
-            <div class="space-y-4 sm:space-y-6">
-                ${market_intelligence.key_agencies.map((agency, index) => `
-                    <div class="relative">
-                        <div class="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6">
-                            <div class="flex-shrink-0 self-center sm:self-start">
-                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-400 to-indigo-500 rounded-lg flex items-center justify-center">
-                                    <span class="text-white font-bold text-sm sm:text-base">${index + 1}</span>
-                                </div>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 gap-2">
-                                    <h3 class="text-lg sm:text-xl font-bold text-gray-900">${agency.agency}</h3>
-                                    <div class="text-left sm:text-right">
-                                        <div class="text-xl sm:text-2xl font-bold text-green-600">${agency.opportunity_size}</div>
-                                        <div class="text-xs sm:text-sm text-gray-500">Est. Opportunity</div>
-                                    </div>
-                                </div>
-                                
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                                    <div>
-                                        <h4 class="text-xs sm:text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Decision Makers</h4>
-                                        <p class="text-sm sm:text-base text-gray-600">${agency.decision_makers}</p>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-xs sm:text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Current Initiatives</h4>
-                                        <p class="text-sm sm:text-base text-gray-600">${agency.current_initiatives}</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="mt-4 p-3 sm:p-4 bg-purple-50 rounded-lg">
-                                    <h4 class="text-xs sm:text-sm font-semibold text-purple-700 mb-2 uppercase tracking-wide">Recommended Approach</h4>
-                                    <p class="text-sm sm:text-base text-purple-800">${agency.best_approach}</p>
-                                </div>
-                            </div>
-                        </div>
-                        ${index < market_intelligence.key_agencies.length - 1 ? '<hr class="mt-4 sm:mt-6 border-gray-200">' : ''}
-                    </div>
-                `).join('')}
-            </div>
-        </div>` : ''}
+       <!-- Monochromatic Target Agencies -->
+       ${market_intelligence.key_agencies?.length ? `
+       <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-8 mb-4 sm:mb-6">
+           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
+               <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-0">Target Agencies</h2>
+               <span class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">${market_intelligence.key_agencies.length} Priority Targets</span>
+           </div>
+           
+           <div class="space-y-4 sm:space-y-6">
+               ${market_intelligence.key_agencies.map((agency, index) => `
+                   <div class="relative">
+                       <div class="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6">
+                           <div class="flex-shrink-0 self-center sm:self-start">
+                               <div class="w-10 h-10 sm:w-12 sm:h-12 bg-purple-500 rounded-lg flex items-center justify-center">
+                                   <span class="text-white font-bold text-sm sm:text-base">${index + 1}</span>
+                               </div>
+                           </div>
+                           <div class="flex-1 min-w-0">
+                               <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 gap-2">
+                                   <h3 class="text-lg sm:text-xl font-bold text-gray-900">${agency.agency}</h3>
+                                   <div class="text-left sm:text-right">
+                                       <div class="text-xl sm:text-2xl font-bold text-gray-900">${agency.opportunity_size}</div>
+                                       <div class="text-xs sm:text-sm text-gray-500">Est. Opportunity</div>
+                                   </div>
+                               </div>
+                               
+                               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                                   <div>
+                                       <h4 class="text-xs sm:text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Decision Makers</h4>
+                                       <p class="text-sm sm:text-base text-gray-600">${agency.decision_makers}</p>
+                                   </div>
+                                   <div>
+                                       <h4 class="text-xs sm:text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Current Initiatives</h4>
+                                       <p class="text-sm sm:text-base text-gray-600">${agency.current_initiatives}</p>
+                                   </div>
+                               </div>
+                               
+                               <div class="mt-4 p-3 sm:p-4 bg-purple-50 border border-purple-100 rounded-lg">
+                                   <h4 class="text-xs sm:text-sm font-semibold text-purple-700 mb-2 uppercase tracking-wide">Recommended Approach</h4>
+                                   <p class="text-sm sm:text-base text-purple-800">${agency.best_approach}</p>
+                               </div>
+                           </div>
+                       </div>
+                       ${index < market_intelligence.key_agencies.length - 1 ? '<hr class="mt-4 sm:mt-6 border-gray-200">' : ''}
+                   </div>
+               `).join('')}
+           </div>
+       </div>` : ''}
 
-        <!-- Mobile-Optimized Partner Ecosystem -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-8 mb-4 sm:mb-6">
-            <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Partner Ecosystem Analysis</h2>
-            
-            <!-- Tier 1 Systems Integrators - Mobile Table -->
-            ${ecosystem_mapping.tier_1_sis?.length ? `
-            <div class="mb-6 sm:mb-8">
-                <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                    <div class="w-4 h-4 sm:w-6 sm:h-6 bg-blue-500 rounded-full"></div>
-                    <h3 class="text-base sm:text-lg font-bold text-gray-800">Tier 1 Systems Integrators</h3>
-                </div>
-                
-                <!-- Mobile: Card Layout -->
-                <div class="block sm:hidden space-y-4">
-                    ${ecosystem_mapping.tier_1_sis.map(si => `
-                        <div class="border border-gray-200 rounded-lg p-4">
-                            <h4 class="font-bold text-gray-900 mb-2">${si.company}</h4>
-                            <div class="space-y-2 text-sm">
-                                <div><span class="font-medium text-gray-700">Focus:</span> ${si.federal_focus}</div>
-                                <div><span class="font-medium text-gray-700">Partnership:</span> ${si.partnership_angle}</div>
-                                <div><span class="font-medium text-gray-700">Contacts:</span> ${si.key_contacts}</div>
-                                <div class="text-xs text-gray-500 mt-2">${si.current_priorities}</div>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-                
-                <!-- Desktop: Table Layout -->
-                <div class="hidden sm:block overflow-hidden">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Federal Focus</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Partnership Angle</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact Strategy</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            ${ecosystem_mapping.tier_1_sis.map(si => `
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="font-bold text-gray-900">${si.company}</div>
-                                        <div class="text-sm text-gray-500">${si.current_priorities}</div>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm text-gray-600">${si.federal_focus}</div>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm text-gray-600">${si.partnership_angle}</div>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm text-gray-600">${si.key_contacts}</div>
-                                    </td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-            </div>` : ''}
+       <!-- Monochromatic Partner Ecosystem -->
+       <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-8 mb-4 sm:mb-6">
+           <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Partner Ecosystem Analysis</h2>
+           
+           <!-- Tier 1 Systems Integrators -->
+           ${ecosystem_mapping.tier_1_sis?.length ? `
+           <div class="mb-6 sm:mb-8">
+               <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                   <div class="w-4 h-4 sm:w-6 sm:h-6 bg-purple-500 rounded-full"></div>
+                   <h3 class="text-base sm:text-lg font-bold text-gray-800">Tier 1 Systems Integrators</h3>
+               </div>
+               
+               <!-- Mobile: Card Layout -->
+               <div class="block sm:hidden space-y-4">
+                   ${ecosystem_mapping.tier_1_sis.map(si => `
+                       <div class="border border-gray-200 rounded-lg p-4">
+                           <h4 class="font-bold text-gray-900 mb-2">${si.company}</h4>
+                           <div class="space-y-2 text-sm">
+                               <div><span class="font-medium text-gray-700">Focus:</span> <span class="text-gray-600">${si.federal_focus}</span></div>
+                               <div><span class="font-medium text-gray-700">Partnership:</span> <span class="text-gray-600">${si.partnership_angle}</span></div>
+                               <div><span class="font-medium text-gray-700">Contacts:</span> <span class="text-gray-600">${si.key_contacts}</span></div>
+                               <div class="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded mt-2">${si.current_priorities}</div>
+                           </div>
+                       </div>
+                   `).join('')}
+               </div>
+               
+               <!-- Desktop: Table Layout -->
+               <div class="hidden sm:block overflow-hidden border border-gray-200 rounded-lg">
+                   <table class="min-w-full divide-y divide-gray-200">
+                       <thead class="bg-gray-50">
+                           <tr>
+                               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
+                               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Federal Focus</th>
+                               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Partnership Angle</th>
+                               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact Strategy</th>
+                           </tr>
+                       </thead>
+                       <tbody class="bg-white divide-y divide-gray-200">
+                           ${ecosystem_mapping.tier_1_sis.map(si => `
+                               <tr class="hover:bg-gray-50">
+                                   <td class="px-6 py-4 whitespace-nowrap">
+                                       <div class="font-bold text-gray-900">${si.company}</div>
+                                       <div class="text-sm text-gray-500">${si.current_priorities}</div>
+                                   </td>
+                                   <td class="px-6 py-4">
+                                       <div class="text-sm text-gray-600">${si.federal_focus}</div>
+                                   </td>
+                                   <td class="px-6 py-4">
+                                       <div class="text-sm text-gray-600">${si.partnership_angle}</div>
+                                   </td>
+                                   <td class="px-6 py-4">
+                                       <div class="text-sm text-gray-600">${si.key_contacts}</div>
+                                   </td>
+                               </tr>
+                           `).join('')}
+                       </tbody>
+                   </table>
+               </div>
+           </div>` : ''}
 
-            <!-- Mobile-Optimized Emerging Players & Tech Vendors -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
-                ${ecosystem_mapping.emerging_players?.length ? `
-                <div>
-                    <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                        <div class="w-4 h-4 sm:w-6 sm:h-6 bg-green-500 rounded-full"></div>
-                        <h3 class="text-base sm:text-lg font-bold text-gray-800">Emerging Players</h3>
-                    </div>
-                    <div class="space-y-3 sm:space-y-4">
-                        ${ecosystem_mapping.emerging_players.map(player => `
-                            <div class="border border-gray-200 rounded-lg p-3 sm:p-4 hover:shadow-md transition-shadow">
-                                <h4 class="font-bold text-gray-900 mb-2 text-sm sm:text-base">${player.company}</h4>
-                                <p class="text-xs sm:text-sm text-gray-600 mb-2">${player.why_hot}</p>
-                                <div class="text-xs text-green-700 bg-green-50 px-2 py-1 rounded-full inline-block">
-                                    ${player.approach}
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>` : ''}
+           <!-- Monochromatic Emerging Players & Tech Vendors -->
+           <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
+               ${ecosystem_mapping.emerging_players?.length ? `
+               <div>
+                   <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                       <div class="w-4 h-4 sm:w-6 sm:h-6 bg-purple-400 rounded-full"></div>
+                       <h3 class="text-base sm:text-lg font-bold text-gray-800">Emerging Players</h3>
+                   </div>
+                   <div class="space-y-3 sm:space-y-4">
+                       ${ecosystem_mapping.emerging_players.map(player => `
+                           <div class="border border-gray-200 rounded-lg p-3 sm:p-4 hover:bg-gray-50 transition-colors">
+                               <h4 class="font-bold text-gray-900 mb-2 text-sm sm:text-base">${player.company}</h4>
+                               <p class="text-xs sm:text-sm text-gray-600 mb-2">${player.why_hot}</p>
+                               <div class="text-xs text-purple-700 bg-purple-50 border border-purple-100 px-2 py-1 rounded-full inline-block">
+                                   ${player.approach}
+                               </div>
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>` : ''}
 
-                ${ecosystem_mapping.technology_vendors?.length ? `
-                <div>
-                    <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                        <div class="w-4 h-4 sm:w-6 sm:h-6 bg-purple-500 rounded-full"></div>
-                        <h3 class="text-base sm:text-lg font-bold text-gray-800">Technology Partners</h3>
-                    </div>
-                    <div class="space-y-3 sm:space-y-4">
-                        ${ecosystem_mapping.technology_vendors.map(vendor => `
-                            <div class="border border-gray-200 rounded-lg p-3 sm:p-4 hover:shadow-md transition-shadow">
-                                <h4 class="font-bold text-gray-900 mb-2 text-sm sm:text-base">${vendor.company}</h4>
-                                <p class="text-xs sm:text-sm text-gray-600 mb-2">${vendor.federal_play}</p>
-                                <div class="text-xs text-purple-700 bg-purple-50 px-2 py-1 rounded-full inline-block">
-                                    ${vendor.partnership_opportunity}
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>` : ''}
-            </div>
-        </div>
+               ${ecosystem_mapping.technology_vendors?.length ? `
+               <div>
+                   <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                       <div class="w-4 h-4 sm:w-6 sm:h-6 bg-purple-300 rounded-full"></div>
+                       <h3 class="text-base sm:text-lg font-bold text-gray-800">Technology Partners</h3>
+                   </div>
+                   <div class="space-y-3 sm:space-y-4">
+                       ${ecosystem_mapping.technology_vendors.map(vendor => `
+                           <div class="border border-gray-200 rounded-lg p-3 sm:p-4 hover:bg-gray-50 transition-colors">
+                               <h4 class="font-bold text-gray-900 mb-2 text-sm sm:text-base">${vendor.company}</h4>
+                               <p class="text-xs sm:text-sm text-gray-600 mb-2">${vendor.federal_play}</p>
+                               <div class="text-xs text-purple-700 bg-purple-50 border border-purple-100 px-2 py-1 rounded-full inline-block">
+                                   ${vendor.partnership_opportunity}
+                               </div>
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>` : ''}
+           </div>
+       </div>
 
-        <!-- Mobile-Optimized Tactical Execution -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-8 mb-4 sm:mb-6">
-            <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Tactical Execution Plan</h2>
-            
-            <!-- Immediate Actions -->
-            ${tactical_execution.immediate_actions?.length ? `
-            <div class="mb-6 sm:mb-8">
-                <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4">Immediate Actions</h3>
-                <div class="space-y-3 sm:space-y-4">
-                    ${tactical_execution.immediate_actions.map((action, i) => `
-                        <div class="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg">
-                            <div class="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-xs sm:text-sm">
-                                ${i + 1}
-                            </div>
-                            <div class="flex-1">
-                                <p class="text-gray-800 text-sm sm:text-base">${action}</p>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>` : ''}
+       <!-- Monochromatic Tactical Execution -->
+       <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-8 mb-4 sm:mb-6">
+           <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Tactical Execution Plan</h2>
+           
+           <!-- Immediate Actions -->
+           ${tactical_execution.immediate_actions?.length ? `
+           <div class="mb-6 sm:mb-8">
+               <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4">Immediate Actions</h3>
+               <div class="space-y-3 sm:space-y-4">
+                   ${tactical_execution.immediate_actions.map((action, i) => `
+                       <div class="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 bg-purple-50 border border-purple-100 rounded-lg">
+                           <div class="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-xs sm:text-sm">
+                               ${i + 1}
+                           </div>
+                           <div class="flex-1">
+                               <p class="text-gray-800 text-sm sm:text-base">${action}</p>
+                           </div>
+                       </div>
+                   `).join('')}
+               </div>
+           </div>` : ''}
 
-            <!-- 4-Week Timeline - Mobile Stacked -->
-            ${tactical_execution.prospecting_sequence ? `
-            <div class="mb-6 sm:mb-8">
-                <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4">4-Week Prospecting Timeline</h3>
-                
-                <!-- Mobile: Stacked Layout -->
-                <div class="block sm:hidden space-y-3">
-                    ${Object.entries(tactical_execution.prospecting_sequence).map(([week, activity]) => `
-                        <div class="bg-white border-2 border-purple-200 rounded-lg p-4">
-                            <div class="text-sm font-bold text-purple-600 mb-2 uppercase">${week.replace('_', ' ')}</div>
-                            <p class="text-sm text-gray-600">${activity}</p>
-                        </div>
-                    `).join('')}
-                </div>
-                
-                <!-- Desktop: Grid Layout -->
-                <div class="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    ${Object.entries(tactical_execution.prospecting_sequence).map(([week, activity]) => `
-                        <div class="bg-white border-2 border-purple-200 rounded-lg p-4 hover:border-purple-400 transition-colors">
-                            <div class="text-sm font-bold text-purple-600 mb-2 uppercase">${week.replace('_', ' ')}</div>
-                            <p class="text-sm text-gray-600">${activity}</p>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>` : ''}
-        </div>
+           <!-- 4-Week Timeline -->
+           ${tactical_execution.prospecting_sequence ? `
+           <div class="mb-6 sm:mb-8">
+               <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4">4-Week Prospecting Timeline</h3>
+               
+               <!-- Mobile: Stacked Layout -->
+               <div class="block sm:hidden space-y-3">
+                   ${Object.entries(tactical_execution.prospecting_sequence).map(([week, activity]) => `
+                       <div class="bg-white border border-purple-200 rounded-lg p-4">
+                           <div class="text-sm font-bold text-purple-600 mb-2 uppercase">${week.replace('_', ' ')}</div>
+                           <p class="text-sm text-gray-600">${activity}</p>
+                       </div>
+                   `).join('')}
+               </div>
+               
+               <!-- Desktop: Grid Layout -->
+               <div class="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                   ${Object.entries(tactical_execution.prospecting_sequence).map(([week, activity]) => `
+                       <div class="bg-white border border-purple-200 rounded-lg p-4 hover:bg-purple-50 transition-colors">
+                           <div class="text-sm font-bold text-purple-600 mb-2 uppercase">${week.replace('_', ' ')}</div>
+                           <p class="text-sm text-gray-600">${activity}</p>
+                       </div>
+                   `).join('')}
+               </div>
+           </div>` : ''}
+       </div>
 
-        <!-- Mobile-Optimized Message Templates -->
-        ${tactical_execution.message_frameworks ? `
-        <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-8 mb-4 sm:mb-6">
-            <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Communication Templates</h2>
-            
-            <div class="space-y-4 sm:space-y-6">
-                ${tactical_execution.message_frameworks.agency_outreach ? `
-                <div>
-                    <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">Agency Outreach Template</h3>
-                    <div class="bg-gray-50 rounded-lg p-3 sm:p-6 border-l-4 border-purple-400 overflow-x-auto">
-                        <pre class="text-xs sm:text-sm text-gray-700 whitespace-pre-wrap font-mono">${tactical_execution.message_frameworks.agency_outreach}</pre>
-                    </div>
-                </div>` : ''}
-                
-                ${tactical_execution.message_frameworks.partner_outreach ? `
-                <div>
-                    <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">Partner Outreach Template</h3>
-                    <div class="bg-gray-50 rounded-lg p-3 sm:p-6 border-l-4 border-blue-400 overflow-x-auto">
-                        <pre class="text-xs sm:text-sm text-gray-700 whitespace-pre-wrap font-mono">${tactical_execution.message_frameworks.partner_outreach}</pre>
-                    </div>
-                </div>` : ''}
-            </div>
-        </div>` : ''}
+       <!-- Monochromatic Message Templates -->
+       ${tactical_execution.message_frameworks ? `
+       <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-8 mb-4 sm:mb-6">
+           <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Communication Templates</h2>
+           
+           <div class="space-y-4 sm:space-y-6">
+               ${tactical_execution.message_frameworks.agency_outreach ? `
+               <div>
+                   <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">Agency Outreach Template</h3>
+                   <div class="bg-gray-50 rounded-lg p-3 sm:p-6 border-l-4 border-purple-400 overflow-x-auto">
+                       <pre class="text-xs sm:text-sm text-gray-700 whitespace-pre-wrap font-mono">${tactical_execution.message_frameworks.agency_outreach}</pre>
+                   </div>
+               </div>` : ''}
+               
+               ${tactical_execution.message_frameworks.partner_outreach ? `
+               <div>
+                   <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">Partner Outreach Template</h3>
+                   <div class="bg-gray-50 rounded-lg p-3 sm:p-6 border-l-4 border-purple-300 overflow-x-auto">
+                       <pre class="text-xs sm:text-sm text-gray-700 whitespace-pre-wrap font-mono">${tactical_execution.message_frameworks.partner_outreach}</pre>
+                   </div>
+               </div>` : ''}
+           </div>
+       </div>` : ''}
 
-        <!-- Mobile-Optimized Insider Intelligence -->
-        <div class="bg-gradient-to-r from-orange-50 to-red-50 rounded-lg shadow-sm border border-orange-200 p-4 sm:p-8 mb-4 sm:mb-6">
-            <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">🔥 Insider Intelligence</h2>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
-                ${insider_intel.hot_opportunities?.length ? `
-                <div>
-                    <h3 class="text-base sm:text-lg font-bold text-orange-800 mb-3 sm:mb-4">Hot Opportunities</h3>
-                    <div class="space-y-2 sm:space-y-3">
-                        ${insider_intel.hot_opportunities.map(opp => `
-                            <div class="flex items-start gap-2 sm:gap-3 p-2 sm:p-3 bg-white rounded-lg border border-orange-200">
-                                <div class="w-2 h-2 bg-orange-500 rounded-full mt-2 flex-shrink-0"></div>
-                                <p class="text-xs sm:text-sm text-gray-700">${opp}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>` : ''}
+       <!-- Monochromatic Insider Intelligence -->
+       <div class="bg-purple-50 border border-purple-100 rounded-lg shadow-sm p-4 sm:p-8 mb-4 sm:mb-6">
+           <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Insider Intelligence</h2>
+           
+           <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
+               ${insider_intel.hot_opportunities?.length ? `
+               <div>
+                   <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4">Hot Opportunities</h3>
+                   <div class="space-y-2 sm:space-y-3">
+                       ${insider_intel.hot_opportunities.map(opp => `
+                           <div class="flex items-start gap-2 sm:gap-3 p-2 sm:p-3 bg-white rounded-lg border border-gray-200">
+                               <div class="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
+                               <p class="text-xs sm:text-sm text-gray-700">${opp}</p>
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>` : ''}
 
-                ${insider_intel.relationship_leverage?.length ? `
-                <div>
-                    <h3 class="text-base sm:text-lg font-bold text-blue-800 mb-3 sm:mb-4">Relationship Leverage</h3>
-                    <div class="space-y-2 sm:space-y-3">
-                        ${insider_intel.relationship_leverage.map(rel => `
-                            <div class="flex items-start gap-2 sm:gap-3 p-2 sm:p-3 bg-white rounded-lg border border-blue-200">
-                                <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                                <p class="text-xs sm:text-sm text-gray-700">${rel}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>` : ''}
-            </div>
-        </div>
+               ${insider_intel.relationship_leverage?.length ? `
+               <div>
+                   <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4">Relationship Leverage</h3>
+                   <div class="space-y-2 sm:space-y-3">
+                       ${insider_intel.relationship_leverage.map(rel => `
+                           <div class="flex items-start gap-2 sm:gap-3 p-2 sm:p-3 bg-white rounded-lg border border-gray-200">
+                               <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                               <p class="text-xs sm:text-sm text-gray-700">${rel}</p>
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>` : ''}
+           </div>
+       </div>
 
-        <!-- Mobile-Optimized Competitive Intelligence -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-8 mb-4 sm:mb-6">
-            <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Competitive Landscape</h2>
-            <div class="prose prose-gray max-w-none text-sm sm:text-base">
-                ${marked.parse(market_intelligence.competitive_landscape || 'Competitive analysis pending...')}
-            </div>
-        </div>
+       <!-- Monochromatic Competitive Intelligence -->
+       <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-8 mb-4 sm:mb-6">
+           <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Competitive Landscape</h2>
+           <div class="prose prose-gray max-w-none text-sm sm:text-base">
+               ${marked.parse(market_intelligence.competitive_landscape || 'Competitive analysis pending...')}
+           </div>
+       </div>
 
-        <!-- Mobile-Optimized Action Buttons -->
-        <div class="flex flex-col gap-3 sm:flex-row sm:gap-4">
-            <button onclick="app.copyResults()" class="w-full sm:flex-1 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-lg transition-all shadow-lg hover:shadow-xl text-sm sm:text-base">
-                📋 Export Intelligence Report
-            </button>
-            <button onclick="app.startOver()" class="w-full sm:flex-1 bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all text-sm sm:text-base">
-                🔍 New Prospecting Query
-            </button>
-        </div>
-    </div>`;
-    
-    this.elements.resultsContainer.innerHTML = html;
-    this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+       <!-- Monochromatic Action Buttons -->
+       <div class="flex flex-col gap-3 sm:flex-row sm:gap-4">
+           <button onclick="app.copyResults()" class="w-full sm:flex-1 bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-lg transition-all shadow-sm hover:shadow-md text-sm sm:text-base">
+               📋 Export Intelligence Report
+           </button>
+           <button onclick="app.startOver()" class="w-full sm:flex-1 bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-lg border border-gray-300 hover:border-gray-400 transition-all text-sm sm:text-base">
+               🔍 New Prospecting Query
+           </button>
+       </div>
+   </div>`;
+   
+   this.elements.resultsContainer.innerHTML = html;
+   this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
    setLoading(loading) {
