@@ -676,15 +676,15 @@ footer button {
 <div class="flex items-start gap-2 sm:gap-3">
     <img src="/images/arti_right.png" alt="Arti" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full animate-bounce-slow flex-shrink-0">
     <div class="chat-message-arti rounded-xl sm:rounded-2xl px-3 py-2 sm:px-4 sm:py-3 max-w-[85%] animate-fade-in">
-   <p class="text-gray-800 leading-relaxed">
-       <strong>Hey there.</strong> I'm Arti. Federal sales got you pulling your hair out? I've been there.
-       <br>
-       <strong>I can help you:</strong>
-       <br>• <em>Generate account plans</em> - say "help me sell [solution] to [agency]" or "I need a strategy for..."
-       <br>• <em>Find opportunities</em> - try "find opps at [company]" or "help me prospect into [sector]"
-       <br>• <em>Vent about work stress</em> - "I'm frustrated with..." or "why is [situation] so hard?"
-   </p>
-</div>
+        <p class="text-gray-800 leading-relaxed">
+            <strong>Hey there.</strong> I'm Arti. Federal sales got you pulling your hair out? I've been there.
+            <br>
+            <strong>I can help you:</strong>
+            <br>• <em>Generate account plans</em> - just say "help me sell [solution] to [agency]"
+            <br>• <em>Vent about work issues</em> - I'm here when you're frustrated or burned out  
+            <br>• <em>Get practical advice</em> - from someone who's seen every fed sales nightmare
+        </p>
+    </div>
 </div>
                     </div>
                 </div>
@@ -1253,110 +1253,87 @@ showHelpfulTips() {
        }
    }
 async generateAccountPlan() {
-    if (this.state.pendingRequest) return;
-    this.elements.planButtonContainer.classList.add('hidden');
-    this.elements.resultsContainer.innerHTML = '';
-    
-    // Show loading with proper expectation
-    this.showTemporaryMessage('Crafting your detailed plan... this may take 60-90 seconds', 'info');
-    this.elements.accountPlanContainer.innerHTML = `
-        <div class="therapy-card text-center p-6 sm:p-8 animate-pulse-slow">
-            <div class="loader mx-auto mb-4"></div>
-            <p class="text-base sm:text-lg font-medium text-gray-700">Building your comprehensive account plan...</p>
-            <p class="text-sm text-gray-500 mt-2">Analyzing competitive landscape and stakeholders...</p>
-            <p class="text-xs text-gray-400 mt-3">Complex plans take time - please wait up to 90 seconds</p>
-        </div>
-    `;
-    this.elements.accountPlanContainer.classList.remove('hidden');
-    this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
-    
-    this.state.pendingRequest = true;
-    try {
-        let contextToSend = this.state.chatHistory;
-        const maxContextSize = 15; // Reduce context size slightly
-        if (contextToSend.length > maxContextSize) {
-            contextToSend = [
-                contextToSend[0],
-                ...contextToSend.slice(-maxContextSize + 1)
-            ];
-        }
-        
-        // Add timeout to frontend request to match lambda
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 90000); // 90 seconds
-        
-        const response = await fetch(CONFIG.API_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                situation: "Generate account plan",
-                mode: 'account_plan',
-                conversationHistory: contextToSend,
-                currentDate: new Date().toISOString().split('T')[0]
-            }),
-            signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Response error:', errorText);
-            throw new Error(`Request failed with status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        
-        // Handle context gathering mode
-        if (data.mode === 'context_gathering') {
-            this.elements.accountPlanContainer.classList.add('hidden');
-            this.hideLoadingMessage();
-            this.addChatMessage(data.message, false);
-            this.state.chatHistory.push({ role: 'assistant', content: data.message });
-            if (data.suggestions && data.suggestions.length > 0) {
-                this.addFollowUpSuggestions(data.suggestions);
-            }
-            this.showTemporaryMessage("I need more context to create the best plan.", 'info');
-            return;
-        }
+       if (this.state.pendingRequest) return;
+       this.elements.planButtonContainer.classList.add('hidden');
+       this.elements.resultsContainer.innerHTML = '';
+       
+       // Show loading
+       this.showTemporaryMessage('Crafting your plan...', 'info');
+       this.elements.accountPlanContainer.innerHTML = `
+           <div class="therapy-card text-center p-6 sm:p-8 animate-pulse-slow">
+               <div class="loader mx-auto mb-4"></div>
+               <p class="text-base sm:text-lg font-medium text-gray-700">Building your plan...</p>
+               <p class="text-sm text-gray-500 mt-2">This is going to be good.</p>
+           </div>
+       `;
+       this.elements.accountPlanContainer.classList.remove('hidden');
+       
+       // Smooth scroll
+       this.elements.accountPlanContainer.scrollIntoView({ behavior: 'smooth' });
+       
+       this.state.pendingRequest = true;
+       try {
+           let contextToSend = this.state.chatHistory;
+           const maxContextSize = 20;
+           if (contextToSend.length > maxContextSize) {
+               contextToSend = [
+                   contextToSend[0],
+                   ...contextToSend.slice(-maxContextSize + 1)
+               ];
+           }
+           
+           const response = await fetch(CONFIG.API_ENDPOINT, {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({ 
+                   situation: "Generate account plan",
+                   mode: 'account_plan',
+                   conversationHistory: contextToSend,
+                   currentDate: new Date().toISOString().split('T')[0]
+               })
+           });
+           
+           if (!response.ok) throw new Error('Request failed');
+           
+           const data = await response.json();
+           
+           // Handle context gathering mode
+           if (data.mode === 'context_gathering') {
+               this.elements.accountPlanContainer.classList.add('hidden');
+               this.hideLoadingMessage();
+               
+               // Add the context gathering message to chat
+               this.addChatMessage(data.message, false);
+               this.state.chatHistory.push({ role: 'assistant', content: data.message });
+               
+               // Add follow-up suggestions if provided
+               if (data.suggestions && data.suggestions.length > 0) {
+                   this.addFollowUpSuggestions(data.suggestions);
+               }
+               
+               this.showTemporaryMessage("I need a bit more info to create the best plan for you.", 'info');
+               return;
+           }
+           
+           this.displayMobileCRMAccountPlan(data);
+           this.showTemporaryMessage("Account plan generated! Time to execute.", 'info');
+           
+       } catch (error) {
+           console.error('Account plan generation failed:', error);
+           this.elements.accountPlanContainer.innerHTML = `
+               <div class="therapy-card text-center p-4 sm:p-6">
+                   <p class="text-red-600 mb-3 font-medium">Plan generation hit a snag.</p>
+                   <p class="text-gray-600 text-sm mb-4">Even my AI needs a coffee break sometimes.</p>
+                   <button onclick="app.generateAccountPlan()" class="bg-gradient-to-r from-red-100 to-pink-100 hover:from-red-200 hover:to-pink-200 text-red-700 font-medium btn-mobile transition-all transform hover:scale-105 tap-target">
+                       Try Again
+                   </button>
+               </div>
+           `;
+       } finally {
+           this.state.pendingRequest = false;
+       }
+   }
 
-        // Check for valid plan data
-        if (data.account_name || data.plan_title) {
-            this.displayMobileCRMAccountPlan(data);
-            this.showTemporaryMessage("Strategic plan generated successfully!", 'info');
-        } else {
-            console.error('Plan data incomplete:', data);
-            throw new Error('Plan generation returned incomplete data');
-        }
-        
-    } catch (error) {
-        console.error('Account plan generation failed:', error);
-        
-        if (error.name === 'AbortError') {
-            this.elements.accountPlanContainer.innerHTML = `
-                <div class="therapy-card text-center p-4 sm:p-6">
-                    <p class="text-amber-600 mb-3 font-medium">Plan generation timed out after 90 seconds.</p>
-                    <p class="text-gray-600 text-sm mb-4">Your scenario is complex. Let's try again.</p>
-                    <button onclick="app.generateAccountPlan()" class="bg-gradient-to-r from-amber-100 to-orange-100 hover:from-amber-200 hover:to-orange-200 text-amber-700 font-medium btn-mobile transition-all transform hover:scale-105 tap-target">
-                        Generate Plan Again
-                    </button>
-                </div>
-            `;
-        } else {
-            this.elements.accountPlanContainer.innerHTML = `
-                <div class="therapy-card text-center p-4 sm:p-6">
-                    <p class="text-red-600 mb-3 font-medium">Plan generation hit a snag.</p>
-                    <p class="text-gray-600 text-sm mb-4">Even my AI needs a coffee break sometimes.</p>
-                    <button onclick="app.generateAccountPlan()" class="bg-gradient-to-r from-red-100 to-pink-100 hover:from-red-200 hover:to-pink-200 text-red-700 font-medium btn-mobile transition-all transform hover:scale-105 tap-target">
-                        Try Again
-                    </button>
-                </div>
-            `;
-        }
-    } finally {
-        this.state.pendingRequest = false;
-    }
-}
    addFollowUpSuggestions(suggestions) {
        const suggestionsHtml = `
            <div class="flex justify-center gap-2 mt-4 flex-wrap animate-fade-in">
@@ -1507,151 +1484,58 @@ async generateAccountPlan() {
                ` : ''}
 
                ${opportunity_breakdown?.length > 0 ? `
-<div class="crm-section">
-    <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Opportunity Breakdown</h3>
-    <div class="space-y-3 sm:space-y-4">
-        ${opportunity_breakdown.map(opp => `
-            <div class="border border-gray-200 rounded-lg p-3 sm:p-4">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-2">
-                    <h4 class="font-semibold text-gray-900 text-sm sm:text-base">${opp.opportunity_name || 'Unnamed Opportunity'}</h4>
-                    <div class="text-left sm:text-right">
-                        <div class="font-bold text-customPurple-700 text-sm sm:text-base">${opp.value || 'TBD'}</div>
-                        <div class="text-xs sm:text-sm text-gray-600">${opp.probability || 'TBD'} probability</div>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm">
-                    <div>
-                        <span class="font-medium text-gray-700">Timeline:</span>
-                        <p class="text-gray-600">${opp.timeline || 'TBD'}</p>
-                    </div>
-                    <div>
-                        <span class="font-medium text-gray-700">Stage:</span>
-                        <p class="text-gray-600">${opp.stage || 'TBD'}</p>
-                    </div>
-                    <div>
-                        <span class="font-medium text-gray-700">Position:</span>
-                        <p class="text-gray-600">${opp.competitive_position || 'TBD'}</p>
-                    </div>
-                </div>
-                ${opp.key_requirements ? `
-                <div class="mt-3">
-                    <span class="font-medium text-gray-700 text-xs sm:text-sm">Key Requirements:</span>
-                    <p class="text-gray-600 text-xs sm:text-sm">${opp.key_requirements}</p>
-                </div>
-                ` : ''}
-                ${opp.competitive_threats ? `
-                <div class="mt-2">
-                    <span class="font-medium text-gray-700 text-xs sm:text-sm">Competitive Threats:</span>
-                    <p class="text-gray-600 text-xs sm:text-sm">${opp.competitive_threats}</p>
-                </div>
-                ` : ''}
-            </div>
-        `).join('')}
-    </div>
-</div>
-` : ''}
+               <div class="crm-section">
+                   <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Opportunity Breakdown</h3>
+                   <div class="space-y-3 sm:space-y-4">
+                       ${opportunity_breakdown.map(opp => `
+                           <div class="border border-gray-200 rounded-lg p-3 sm:p-4">
+                               <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-2">
+                                   <h4 class="font-semibold text-gray-900 text-sm sm:text-base">${opp.opportunity_name || 'Unnamed Opportunity'}</h4>
+                                   <div class="text-left sm:text-right">
+                                       <div class="font-bold text-customPurple-700 text-sm sm:text-base">${opp.value || 'TBD'}</div>
+                                       <div class="text-xs sm:text-sm text-gray-600">${opp.probability || 'TBD'} probability</div>
+                                   </div>
+                               </div>
+                               <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm">
+                                   <div>
+                                       <span class="font-medium text-gray-700">Timeline:</span>
+                                       <p class="text-gray-600">${opp.timeline || 'TBD'}</p>
+                                   </div>
+                                   <div>
+                                       <span class="font-medium text-gray-700">Stage:</span>
+                                       <p class="text-gray-600">${opp.stage || 'TBD'}</p>
+                                   </div>
+                                   <div>
+                                       <span class="font-medium text-gray-700">Position:</span>
+                                       <p class="text-gray-600">${opp.competitive_position || 'TBD'}</p>
+                                   </div>
+                               </div>
+                               ${opp.key_requirements ? `
+                               <div class="mt-3">
+                                   <span class="font-medium text-gray-700 text-xs sm:text-sm">Key Requirements:</span>
+                                   <p class="text-gray-600 text-xs sm:text-sm">${opp.key_requirements}</p>
+                               </div>
+                               ` : ''}
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>
+               ` : ''}
 
-${data.competitive_intelligence ? `
-<div class="crm-section">
-    <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Competitive Landscape</h3>
-    
-    ${data.competitive_intelligence.top_systems_integrators?.length > 0 ? `
-    <div class="mb-4">
-        <h4 class="font-semibold text-gray-800 text-sm mb-2">🏢 Major Prime Contractors</h4>
-        <div class="space-y-2">
-            ${data.competitive_intelligence.top_systems_integrators.map(si => `
-                <div class="border border-gray-200 rounded-lg p-3">
-                    <div class="flex justify-between items-start mb-1">
-                        <h5 class="font-medium text-gray-900 text-sm">${si.company}</h5>
-                        <span class="text-xs px-2 py-1 bg-red-100 text-red-700 rounded">Threat</span>
-                    </div>
-                    <p class="text-xs text-gray-600 mb-1">${si.federal_presence}</p>
-                    <div class="text-xs">
-                        <span class="text-green-700">Strengths:</span> ${si.strengths}
-                        <br><span class="text-orange-700">Vulnerabilities:</span> ${si.vulnerabilities}
-                    </div>
-                </div>
-            `).join('')}
-        </div>
-    </div>
-    ` : ''}
-    
-    ${data.competitive_intelligence.top_software_cloud_providers?.length > 0 ? `
-    <div class="mb-4">
-        <h4 class="font-semibold text-gray-800 text-sm mb-2">☁️ Major Tech Providers</h4>
-        <div class="space-y-2">
-            ${data.competitive_intelligence.top_software_cloud_providers.map(tech => `
-                <div class="border border-gray-200 rounded-lg p-3">
-                    <div class="flex justify-between items-start mb-1">
-                        <h5 class="font-medium text-gray-900 text-sm">${tech.company}</h5>
-                        <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded">Tech</span>
-                    </div>
-                    <p class="text-xs text-gray-600 mb-1">${tech.market_position}</p>
-                    <p class="text-xs text-gray-700"><strong>Offerings:</strong> ${tech.key_offerings}</p>
-                </div>
-            `).join('')}
-        </div>
-    </div>
-    ` : ''}
-    
-    ${data.competitive_intelligence.emerging_players?.length > 0 ? `
-    <div>
-        <h4 class="font-semibold text-gray-800 text-sm mb-2">🚀 Emerging Players</h4>
-        <ul class="text-xs text-gray-700 space-y-1">
-            ${data.competitive_intelligence.emerging_players.map(player => `
-                <li class="flex gap-2"><span class="text-green-500">•</span>${player}</li>
-            `).join('')}
-        </ul>
-    </div>
-    ` : ''}
-</div>
-
-${data.market_analysis ? `
-<div class="crm-section bg-blue-50 border-blue-200">
-    <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-        </svg>
-        Market Intelligence
-    </h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-        <div>
-            <h4 class="font-semibold text-blue-800 mb-1">NAICS Codes</h4>
-            <ul class="text-blue-700 text-xs space-y-1">
-                ${data.market_analysis.relevant_naics_codes?.map(code => `
-                    <li>${code}</li>
-                `).join('') || '<li>Standard B2G codes apply</li>'}
-            </ul>
-        </div>
-        <div>
-            <h4 class="font-semibold text-blue-800 mb-1">Market Size</h4>
-            <p class="text-blue-700 text-xs">${data.market_analysis.market_size || 'Market sizing TBD'}</p>
-        </div>
-        ${data.market_analysis.procurement_trends ? `
-        <div class="sm:col-span-2">
-            <h4 class="font-semibold text-blue-800 mb-1">Procurement Trends</h4>
-            <p class="text-blue-700 text-xs">${data.market_analysis.procurement_trends}</p>
-        </div>
-        ` : ''}
-    </div>
-</div>
-` : ''}
-` : ''}
-
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
-    ${strategic_initiatives?.length > 0 ? `
-    <div class="crm-section">
-        <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Strategic Initiatives</h3>
-        <ul class="space-y-2 sm:space-y-3">
-            ${strategic_initiatives.map((initiative, i) => `
-                <li class="flex gap-2 sm:gap-3">
-                    <span class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-customPurple-700 text-white rounded-full flex items-center justify-center text-xs font-bold">${i + 1}</span>
-                    <span class="text-gray-700 text-xs sm:text-sm">${initiative}</span>
-                </li>
-            `).join('')}
-        </ul>
-    </div>
-    ` : ''}
+               <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+                   ${strategic_initiatives?.length > 0 ? `
+                   <div class="crm-section">
+                       <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Strategic Initiatives</h3>
+                       <ul class="space-y-2 sm:space-y-3">
+                           ${strategic_initiatives.map((initiative, i) => `
+                               <li class="flex gap-2 sm:gap-3">
+                                   <span class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-customPurple-700 text-white rounded-full flex items-center justify-center text-xs font-bold">${i + 1}</span>
+                                   <span class="text-gray-700 text-xs sm:text-sm">${initiative}</span>
+                               </li>
+                           `).join('')}
+                       </ul>
+                   </div>
+                   ` : ''}
 
                    ${risk_mitigation?.length > 0 ? `
                    <div class="crm-section">
