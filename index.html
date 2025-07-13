@@ -899,7 +899,6 @@ class AskArti {
           aboutModal: document.getElementById('about-modal'),
           closeAbout: document.getElementById('close-about'),
           shareBtn: document.getElementById('share-btn'),
-          greetingText: document.getElementById('greeting-text'),
           chatContainer: document.getElementById('chat-container'),
           planButtonContainer: document.getElementById('plan-button-container')
       };
@@ -908,7 +907,6 @@ class AskArti {
   init() {
       this.initializeMermaid();
       this.setupEventListeners();
-      this.updateGreeting();
       this.elements.chatInput.focus();
       this.optimizeForMobile();
   }
@@ -933,25 +931,6 @@ class AskArti {
       });
   }
 
-  updateGreeting() {
-      const hour = new Date().getHours();
-      const day = new Date().getDay();
-      
-      let greeting;
-      if (day === 0 || day === 6) {
-          greeting = "Weekend warrior?";
-      } else if (hour < 12) {
-          greeting = "Early bird or rough night?";
-      } else if (hour < 17) {
-          greeting = "Midday crisis?";
-      } else if (hour < 21) {
-          greeting = "Still grinding?";
-      } else {
-          greeting = "Burning midnight oil?";
-      }
-      
-      this.elements.greetingText.textContent = greeting;
-  }
 
   initializeMermaid() {
       mermaid.initialize({ 
@@ -1016,7 +995,6 @@ class AskArti {
   clearChat() {
       this.state.chatHistory = [];
       this.state.messageCount = 0;
-      this.updateGreeting();
       
       this.elements.chatMessages.innerHTML = `
           <div class="flex items-start gap-2 sm:gap-3">
@@ -1848,7 +1826,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden && app.state.messageCount > 0) {
-      app.updateGreeting();
   }
 });
 
