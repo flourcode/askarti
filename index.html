@@ -639,6 +639,29 @@
     position: absolute !important;
     inset: 0 !important;
 }
+/* Fix for misaligned footer links */
+.footer-links-container {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+@media (min-width: 640px) {
+    .footer-links-container {
+        gap: 1.5rem;
+    }
+}
+
+/* Ensure all footer links have consistent baseline alignment */
+footer a, 
+footer button {
+    vertical-align: baseline !important;
+    line-height: 1.2 !important;
+    display: inline-block !important;
+}
 </style>
 </head>
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900 min-h-screen">
@@ -744,11 +767,11 @@
 
         <!-- Mobile-first footer -->
         <footer class="text-center mt-8 sm:mt-12 space-y-3 sm:space-y-4 pb-16 sm:pb-20">
-            <div class="flex justify-center gap-4 sm:gap-6 text-xs sm:text-sm flex-wrap">
-                <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium transition-all hover:underline tap-target">About Arti</button>
-                <button id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium transition-all hover:underline tap-target">Share</button>
-                <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium transition-all hover:underline tap-target">Contact</a>
-            </div>
+            <div class="footer-links-container text-xs sm:text-sm">
+    <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium transition-all hover:underline tap-target">About Arti</button>
+    <button id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium transition-all hover:underline tap-target">Share</button>
+    <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium transition-all hover:underline tap-target">Contact</a>
+</div>
 
             <!-- Mobile-optimized sponsor ad -->
             <div class="sponsor-ad rounded-lg p-3 sm:p-4 mb-4 bg-white border-2 border-dashed not-italic text-left leading-relaxed">
@@ -757,12 +780,11 @@
                     <span class="text-gray-800 font-bold text-sm sm:text-base">Hey, stressed seller!</span>
                 </div>
                 <p class="text-xs sm:text-sm leading-relaxed text-gray-700">
-                    Every time you vent to Arti, I'm paying for the therapy session. My AWS bill is starting to look like your Q4 quota - 
+                    Every time you vent to Arti, my AWS bill starts looking like your Q4 quota - 
                     <strong>completely unrealistic</strong>. 
                 </p>
                 <p class="mt-2 text-xs italic text-gray-600">
                     Help me help you. Sponsor this spot for just $99/mo. 
-                    <br>That's like 2 overpriced airport drinks. Worth it.
                 </p>
                 <p class="mt-3 text-xs sm:text-sm text-customPurple-600 font-bold">
                     <a href="mailto:mark@subhoo.com" class="hover:underline tap-target">
@@ -778,7 +800,7 @@
             </p>
 
             <p class="text-xs text-gray-400 font-medium px-2">
-                © 2025 AskArti · Built by sellers who've been burned · For sellers currently on fire 🔥
+                © 2025 AskArti · Built for sellers who are going through some things. 🔥
             </p>
         </footer>
     </div>
@@ -804,11 +826,7 @@
                 <div class="space-y-3 sm:space-y-4 text-gray-700 text-sm sm:text-base">
                     <p class="leading-relaxed">
                         I built AskArti after too many nights staring at the ceiling, wondering why my champion went dark 
-                        and when my boss would finally put me on a plan. Sound familiar?
-                    </p>
-                    <p class="text-sm leading-relaxed">
-                        Arti's not perfect (what in federal sales is?), but he's here 24/7 when you need to vent, 
-                        strategize, or just remember that you're not losing your mind.
+                        and when my boss would finally put me on a plan. Arti's not perfect, but he's here 24/7 when you need to vent, strategize, or just remember that you're not losing your mind.
                     </p>
                     
                     <div class="pt-3 sm:pt-4 border-t border-gray-200">
@@ -817,10 +835,10 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                 </svg>
-                                Your Data = Your Business
+                                Privacy
                             </h3>
                             <p class="text-gray-600 text-xs sm:text-sm">
-                                Zero storage. Zero tracking. Everything happens in-memory using AWS Lambda and vanishes faster than your stakeholder's promises.
+                                We don't store any of your chats. Everything happens in-memory using AWS Lambda and vanishes faster than your stakeholder's promises.
                             </p>
                         </div>
                     </div>
@@ -831,7 +849,7 @@
                             Let's Commiserate Over Coffee ☕
                         </a>
                         <p class="text-xs text-center text-gray-500 mt-2">
-                            Virtual coffee. Real federal sales talk.
+                            Virtual coffee. Real sales talk.
                         </p>
                     </div>
                 </div>
