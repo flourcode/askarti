@@ -319,6 +319,31 @@
 	.mode-content.hidden + #results-container {
     display: none;
 }
+/* Add these styles to your CSS */
+@media (max-width: 360px) {
+    #chat-send-btn {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+    
+    #reset-chat-btn {
+        padding: 0.5rem;
+    }
+    
+    .chat-container {
+        padding: 0.5rem;
+    }
+}
+
+/* Make sure buttons don't overflow */
+#reset-chat-btn, #chat-send-btn {
+    flex-shrink: 0;
+}
+
+/* Ensure input takes available space but allows buttons to fit */
+#chat-input {
+    min-width: 0;
+}
 </style>
 
 </head>
@@ -405,34 +430,37 @@
                     </div>
                 </div>
 
-                <div class="flex gap-2 sticky bottom-0 bg-white pt-2 z-10">
-                    <input 
-                        type="text" 
-                        id="chat-input"
-                        inputmode="text"
-                        autocomplete="off"
-                        autocorrect="on"
-                        autocapitalize="sentences"
-                        spellcheck="true"
-                        class="flex-1 p-2.5 sm:p-3 text-[16px] sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary min-h-[44px]"
-                        placeholder="Type your message..."
-                        maxlength="500">
-                    <button 
-                        id="chat-send-btn" 
-                        class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg transition-all text-sm sm:text-base min-h-[44px] whitespace-nowrap"
-                        style="touch-action: manipulation;">
-                        Send
-                    </button>
-                    <button 
-                        id="reset-chat-btn" 
-                        class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-2 sm:px-3 py-2.5 sm:py-3 rounded-lg transition-all text-sm sm:text-base min-h-[44px] ml-1"
-                        title="Start a new chat"
-                        style="touch-action: manipulation;">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                    </button>
-                </div>
+                <!-- Update the chat input container in the HTML -->
+<div class="flex gap-2 sticky bottom-0 bg-white pt-2 z-10">
+    <input 
+        type="text" 
+        id="chat-input"
+        inputmode="text"
+        autocomplete="off"
+        autocorrect="on"
+        autocapitalize="sentences"
+        spellcheck="true"
+        class="flex-1 p-2.5 sm:p-3 text-[16px] sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary min-h-[44px]"
+        placeholder="Type your message..."
+        maxlength="500">
+    <div class="flex gap-1">
+        <button 
+            id="chat-send-btn" 
+            class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium px-3 sm:px-6 py-2.5 sm:py-3 rounded-lg transition-all text-sm sm:text-base min-h-[44px] whitespace-nowrap"
+            style="touch-action: manipulation;">
+            Send
+        </button>
+        <button 
+            id="reset-chat-btn" 
+            class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-2 py-2.5 rounded-lg transition-all text-sm min-h-[44px]"
+            title="Start a new chat"
+            style="touch-action: manipulation; aspect-ratio: 1/1;">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+        </button>
+    </div>
+</div>
             </div>
         </main>
 
