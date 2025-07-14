@@ -641,7 +641,6 @@ class ProspectingTool {
        this.elements.situationInput.addEventListener('input', () => this.updateCharCount());
 
        this.elements.retryBtn.addEventListener('click', () => {
-           this.elements.errorContainer.classList.add('hidden');
            if (this.state.lastQuery) {
                this.elements.situationInput.value = this.state.lastQuery;
                this.getIntelligence();
@@ -659,27 +658,31 @@ class ProspectingTool {
        const situation = this.elements.situationInput.value.trim();
        
        if (!situation) {
-           this.showError("Please provide a prospecting situation.");
+           this.showError("Please provide a prospecting situation to get started.");
            return;
        }
        
        if (this.state.pendingRequest) return;
        
-       this.state.lastQuery = situation;
        this.state.pendingRequest = true;
-       
-       this.elements.resultsContainer.innerHTML = '';
+       this.state.lastQuery = situation;
        this.setLoading(true);
+       this.elements.resultsContainer.innerHTML = '';
        
        try {
            const data = await this.makeRequest(situation);
+
+           if (!data || Object.keys(data).length === 0 || !data.market_intelligence) {
+                throw new Error("The research returned an empty or invalid result. Please try rephrasing your request.");
+           }
+
            this.state.currentReport = { query: situation, data, timestamp: new Date() };
            this.displayIntelligence(data);
+           this.setLoading(false);
+           this.state.pendingRequest = false;
        } catch (error) {
            this.showError(error.message || "Research failed. Please try again.");
-       } finally {
            this.state.pendingRequest = false;
-           this.setLoading(false);
        }
    }
 
@@ -938,7 +941,9 @@ class ProspectingTool {
        this.hideLoadingMessages();
        this.elements.errorContainer.classList.remove('hidden');
        this.elements.errorDetails.textContent = message;
-       this.setLoading(false);
+       
+       // Manually reset button to idle state
+       this.elements.prospectBtn.disabled = false;
        this.elements.loader.classList.add('hidden');
        this.elements.btnText.classList.remove('hidden');
    }
