@@ -544,21 +544,23 @@ const CONFIG = {
 // Application class for better organization
 class AskArti {
    constructor() {
-       this.elements = this.getElements();
-       this.state = {
-           pendingRequest: false,
-           lastRequestTime: 0,
-           loadingInterval: null,
-           abortController: null,
-           lastQuery: '',
-           currentMode: 'quick',
-           chatHistory: [],
-           messageCount: 0,
-           lastChatMessage: '',
-           errorRetries: 0
-       };
-       this.init();
-   }
+    this.elements = this.getElements();
+    this.state = {
+        pendingRequest: false,
+        lastRequestTime: 0,
+        loadingInterval: null,
+        abortController: null,
+        lastQuery: '',
+        currentMode: 'quick',
+        chatHistory: [],
+        messageCount: 0,
+        lastChatMessage: '',
+        errorRetries: 0,
+        hasCompletedFirstRequest: false,
+        hasCompletedSuccessfulRequest: false
+    };
+    this.init();
+}
 
    getElements() {
        return {
@@ -607,13 +609,32 @@ class AskArti {
 
    setupEventListeners() {
        // Quick prompts
-       this.elements.quickPromptBtns.forEach(btn => {
-           btn.addEventListener('click', (e) => {
-               this.elements.situationInput.value = e.currentTarget.dataset.text;
-               this.getAdvice();
-           });
-       });
-
+       // Update the setupEventListeners method:
+// Quick prompts
+this.elements.quickPromptBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        // Prevent multiple clicks
+        if (btn.dataset.loading === 'true' || this.state.pendingRequest) {
+            return;
+        }
+        
+        // Mark button as loading
+        btn.dataset.loading = 'true';
+        const originalText = btn.textContent;
+        btn.textContent = 'Loading...';
+        
+        // Set the input value
+        this.elements.situationInput.value = e.currentTarget.dataset.text;
+        
+        // Process the request
+        this.getAdvice()
+            .finally(() => {
+                // Reset button state after request completes
+                btn.dataset.loading = 'false';
+                btn.textContent = originalText;
+            });
+    });
+});
        // Main button
        this.elements.askBtn.addEventListener('click', () => this.getAdvice());
        
@@ -1096,44 +1117,68 @@ class AskArti {
        }, duration);
    }
 
-   async getAdvice() {
-       const situation = this.elements.situationInput.value.trim();
-       
-       // Rate limiting
-       const now = Date.now();
-       if (now - this.state.lastRequestTime < CONFIG.MIN_REQUEST_INTERVAL) {
-           this.showTemporaryMessage("Easy there, killer. Give me a sec to catch my breath.", 'warning');
-           return;
-       }
-       
-       // Validation
-       if (!situation) {
-           this.showTemporaryMessage("Drop your situation in the box above 👆", 'error');
-           return;
-       }
-       
-       // Prevent duplicate requests
-       if (this.state.pendingRequest) return;
-       
-       this.state.lastRequestTime = now;
-       this.state.lastQuery = situation;
-       this.state.pendingRequest = true;
-       
-       // Clear previous results and show loading
-       this.elements.resultsContainer.innerHTML = '';
-       this.setLoading(true);
-       
-       try {
-           const data = await this.makeRequest(situation);
-           this.displayAdvice(data);
-       } catch (error) {
-           console.error('Request failed:', error);
-           this.showError(error.message || "We're having trouble connecting to Arti. Please try again.");
-       } finally {
-           this.state.pendingRequest = false;
-           this.setLoading(false);
-       }
-   }
+   // Update the getAdvice method in the AskArti class:
+async getAdvice() {
+    const situation = this.elements.situationInput.value.trim();
+    
+    // Rate limiting
+    const now = Date.now();
+    if (now - this.state.lastRequestTime < CONFIG.MIN_REQUEST_INTERVAL) {
+        this.showTemporaryMessage("Easy there, killer. Give me a sec to catch my breath.", 'warning');
+        return;
+    }
+    
+    // Validation
+    if (!situation) {
+        this.showTemporaryMessage("Drop your situation in the box above 👆", 'error');
+        return;
+    }
+    
+    // Prevent duplicate requests
+    if (this.state.pendingRequest) return;
+    
+    this.state.lastRequestTime = now;
+    this.state.lastQuery = situation;
+    this.state.pendingRequest = true;
+    
+    // Clear previous results and show loading
+    this.elements.resultsContainer.innerHTML = '';
+    this.setLoading(true);
+    
+    try {
+        // Add a small delay before the first request to ensure everything is initialized
+        if (!this.state.hasCompletedFirstRequest) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            this.state.hasCompletedFirstRequest = true;
+        }
+        
+        const data = await this.makeRequest(situation);
+        
+        // Ensure data is valid
+        if (!data || typeof data !== 'object' || !data.response_type) {
+            throw new Error('Invalid response data');
+        }
+        
+        this.displayAdvice(data);
+    } catch (error) {
+        console.error('Request failed:', error);
+        this.showError(error.message || "We're having trouble connecting to Arti. Please try again.");
+        
+        // Retry after a small delay for first-time failures
+        if (!this.state.hasCompletedSuccessfulRequest) {
+            setTimeout(() => {
+                if (this.state.lastQuery === situation) {
+                    console.log('Auto-retrying first request...');
+                    this.state.pendingRequest = false;
+                    this.getAdvice();
+                }
+            }, 1500);
+        }
+    } finally {
+        this.state.pendingRequest = false;
+        this.setLoading(false);
+    }
+}
 
    async makeRequest(situation) {
        this.state.abortController = new AbortController();
@@ -1172,26 +1217,29 @@ class AskArti {
    }
 
    displayAdvice(data) {
-       const { response_type } = data;
-       
-       try {
-           if (response_type === 'prospect') {
-               this.displayProspectAdvice(data);
-           } else {
-               this.displayGeneralAdvice(data);
-           }
-           
-           // Add action buttons
-           this.addActionButtons();
-           
-           // Smooth scroll to results
-           this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-           
-       } catch (error) {
-           console.error('Display error:', error);
-           this.showError("Failed to display results. Please try again.");
-       }
-   }
+    const { response_type } = data;
+    
+    try {
+        if (response_type === 'prospect') {
+            this.displayProspectAdvice(data);
+        } else {
+            this.displayGeneralAdvice(data);
+        }
+        
+        // Add action buttons
+        this.addActionButtons();
+        
+        // Smooth scroll to results
+        this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        
+        // Mark that we've completed a successful request
+        this.state.hasCompletedSuccessfulRequest = true;
+        
+    } catch (error) {
+        console.error('Display error:', error);
+        this.showError("Failed to display results. Please try again.");
+    }
+}
 
    displayProspectAdvice(data) {
        const { 
