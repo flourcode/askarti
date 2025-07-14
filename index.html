@@ -384,6 +384,44 @@
             padding-right: 0.75rem;
         }
     }
+	/* Add this to your existing <style> section */
+.action-highlight {
+    background: linear-gradient(to right, 
+        transparent 0%, 
+        rgba(255, 235, 59, 0.2) 5%, 
+        rgba(255, 235, 59, 0.3) 50%, 
+        rgba(255, 235, 59, 0.2) 95%, 
+        transparent 100%);
+    padding: 0.125rem 0.5rem;
+    margin: 0 -0.25rem;
+    border-radius: 0.25rem;
+    display: inline;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+
+/* Subtle animation on hover */
+.action-highlight:hover {
+    background: linear-gradient(to right, 
+        transparent 0%, 
+        rgba(255, 235, 59, 0.3) 5%, 
+        rgba(255, 235, 59, 0.4) 50%, 
+        rgba(255, 235, 59, 0.3) 95%, 
+        transparent 100%);
+    transition: background 0.2s ease;
+}
+
+/* For mobile, make the highlight slightly more visible */
+@media (max-width: 640px) {
+    .action-highlight {
+        background: linear-gradient(to right, 
+            transparent 0%, 
+            rgba(255, 235, 59, 0.25) 5%, 
+            rgba(255, 235, 59, 0.35) 50%, 
+            rgba(255, 235, 59, 0.25) 95%, 
+            transparent 100%);
+    }
+}
 </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
@@ -789,14 +827,26 @@ this.elements.quickPromptBtns.forEach(btn => {
     this.hideLoadingMessages();
 }
 
-   // Update the addChatMessage method in the index.html file
-addChatMessage(content, isUser = false) {
-    // Remove timestamp from regular display - optional toggle later if needed
+   addChatMessage(content, isUser = false) {
+    let processedContent = content;
+    
+    // Process action tags for Arti's messages
+    if (!isUser) {
+        // Replace <action></action> tags with highlighted spans
+        processedContent = content.replace(
+            /<action>(.*?)<\/action>/g, 
+            '<span class="action-highlight">$1</span>'
+        );
+        
+        // Parse markdown after processing action tags
+        processedContent = marked.parse(processedContent);
+    }
+    
     const messageHtml = `
         <div class="flex ${isUser ? 'justify-end' : 'justify-start'}">
             <div class="${isUser ? 'chat-message-user' : 'chat-message-arti'} 
                         rounded-lg px-4 py-3 max-w-[80%] sm:max-w-[80%] md:max-w-[70%] shadow-sm">
-                ${isUser ? content : marked.parse(content)}
+                ${isUser ? content : processedContent}
             </div>
         </div>
     `;
