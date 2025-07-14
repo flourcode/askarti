@@ -316,6 +316,9 @@
             -webkit-overflow-scrolling: touch;
         }
     }
+	.mode-content.hidden + #results-container {
+    display: none;
+}
 </style>
 
 </head>
@@ -689,24 +692,35 @@ this.elements.quickPromptBtns.forEach(btn => {
    }
 
    switchMode(mode) {
-       this.state.currentMode = mode;
-       
-       // Update button states
-       this.elements.modeButtons.forEach(btn => {
-           btn.classList.toggle('active', btn.dataset.mode === mode);
-       });
+    this.state.currentMode = mode;
+    
+    // Update button states
+    this.elements.modeButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
+    });
 
-       // Show/hide content
-       if (mode === 'quick') {
-           this.elements.quickMode.classList.remove('hidden');
-           this.elements.chatMode.classList.add('hidden');
-           this.elements.situationInput.focus();
-       } else {
-           this.elements.quickMode.classList.add('hidden');
-           this.elements.chatMode.classList.remove('hidden');
-           this.elements.chatInput.focus();
-       }
-   }
+    // Clear results container when switching modes
+    this.elements.resultsContainer.innerHTML = '';
+
+    // Show/hide content
+    if (mode === 'quick') {
+        this.elements.quickMode.classList.remove('hidden');
+        this.elements.chatMode.classList.add('hidden');
+        this.elements.situationInput.focus();
+    } else {
+        this.elements.quickMode.classList.add('hidden');
+        this.elements.chatMode.classList.remove('hidden');
+        this.elements.chatInput.focus();
+        
+        // Reset error-related state when switching to chat mode
+        this.state.errorRetries = 0;
+        this.state.lastChatMessage = '';
+    }
+    
+    // Hide any error messages or loading indicators
+    this.elements.errorMessage.classList.add('hidden');
+    this.hideLoadingMessages();
+}
 
    addChatMessage(content, isUser = false) {
        const now = new Date();
