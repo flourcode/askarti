@@ -344,6 +344,19 @@
 #chat-input {
     min-width: 0;
 }
+/* Add this to your CSS style section */
+@media (max-width: 640px) {
+    .chat-message-arti, .chat-message-user {
+        max-width: 90% !important;
+        padding: 0.75rem !important;
+        font-size: 0.9rem;
+    }
+    
+    .chat-container {
+        padding: 0.5rem;
+    }
+}
+
 /* Add these to your style section */
 @media (max-width: 640px) {
     .chat-message-arti, .chat-message-user {
@@ -808,7 +821,9 @@ this.elements.quickPromptBtns.forEach(btn => {
     this.hideLoadingMessages();
 }
 
-   addChatMessage(content, isUser = false) {
+   // Update the addChatMessage method in the index.html file
+addChatMessage(content, isUser = false) {
+    // Remove timestamp from regular display - optional toggle later if needed
     const messageHtml = `
         <div class="flex ${isUser ? 'justify-end' : 'justify-start'}">
             <div class="${isUser ? 'chat-message-user' : 'chat-message-arti'} 
@@ -820,7 +835,6 @@ this.elements.quickPromptBtns.forEach(btn => {
     
     this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
     this.scrollChatToBottom();
-}scrollChatToBottom();
 }
 
    showTypingIndicator() {
