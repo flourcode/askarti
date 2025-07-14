@@ -491,6 +491,103 @@
         box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
     }
 
+    /* Subsections */
+    .subsection {
+        margin-bottom: 2.5rem;
+    }
+    .subsection:last-child { margin-bottom: 0; }
+
+    .subsection h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-text-primary);
+        margin: 0 0 1.5rem 0;
+        letter-spacing: -0.02em;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .subsection h3::before {
+        content: '';
+        width: 1rem;
+        height: 1rem;
+        background: var(--color-primary);
+        flex-shrink: 0;
+        border-radius: 0.25rem;
+    }
+
+    /* Action Lists */
+    .action-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .action-item {
+        display: flex;
+        gap: 1.5rem;
+        align-items: flex-start;
+        background: var(--color-background);
+        padding: 1.5rem;
+        border: 1px solid var(--color-border);
+        border-radius: 0.75rem;
+    }
+
+    .action-number {
+        background: var(--color-primary);
+        color: var(--color-white);
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1rem;
+        flex-shrink: 0;
+        border-radius: 0.5rem;
+    }
+
+    .action-item p {
+        color: var(--color-text-secondary);
+        margin: 0;
+        line-height: 1.6;
+        padding-top: 0.25rem;
+    }
+
+    /* Intel Items */
+    .intel-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .intel-item {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+        background: var(--color-background);
+        padding: 1.25rem;
+        border: 1px solid var(--color-border);
+        border-radius: 0.5rem;
+    }
+
+    .bullet {
+        width: 0.5rem;
+        height: 0.5rem;
+        background: var(--color-primary);
+        flex-shrink: 0;
+        margin-top: 0.5rem;
+        border-radius: 50%;
+    }
+
+    .intel-item p {
+        color: var(--color-text-secondary);
+        margin: 0;
+        line-height: 1.6;
+        flex: 1;
+    }
+
     /* Enhanced Action Buttons */
     .action-buttons {
         display: flex;
@@ -539,6 +636,18 @@
     }
 
     /* Enhanced Templates */
+    .template-block {
+        margin-bottom: 2rem;
+    }
+    .template-block:last-child { margin-bottom: 0; }
+
+    .template-block h4 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--color-text-primary);
+        margin: 0 0 1rem 0;
+    }
+
     .template-content {
         background: var(--color-background);
         color: var(--color-text-secondary);
@@ -549,6 +658,13 @@
         line-height: 1.7;
         border-radius: 0.75rem;
         box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+        white-space: pre-wrap;
+    }
+
+    .quick-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
     }
 
     .quick-action-btn {
@@ -571,6 +687,18 @@
         box-shadow: 0 4px 12px rgba(117, 107, 177, 0.3);
     }
 
+    /* Prose Content */
+    .prose-content {
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+    }
+    .prose-content h1, .prose-content h2, .prose-content h3 {
+        color: var(--color-text-primary);
+        font-weight: 700;
+    }
+    .prose-content p { margin-bottom: 1rem; }
+    .prose-content p:last-child { margin-bottom: 0; }
+
     /* Mobile Responsive */
     @media (max-width: 768px) {
         .magazine-report { padding: 0.5rem; }
@@ -581,14 +709,17 @@
         .action-buttons { flex-direction: column; }
         .agency-item { padding: 1.5rem; }
         .agency-number { width: 2.5rem; height: 2.5rem; font-size: 1.25rem; }
+        .action-item { flex-direction: column; gap: 1rem; }
+        .action-number { align-self: flex-start; }
     }
 </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
    <div class="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-20">
        <header class="text-center mb-4">
-           <img src="/images/asklite.png" alt="AskArti" class="h-16 w-auto md:h-20 lg:h-24 mx-auto">
-           <p class="mt-2 text-lg font-semibold text-gray-700">Federal Sales Prospecting</p>
+           <a href="/" aria-label="AskArti Home" class="inline-block">
+                <img src="/images/asklite.png" alt="AskArti" class="h-16 w-auto md:h-20 lg:h-24">
+            </a>
        </header>
 
        <main class="prospect-card mb-3">
@@ -597,7 +728,7 @@
                    id="situation-input" 
                    rows="3" 
                    class="w-full p-4 text-base resize-none placeholder-gray-500"
-                   placeholder="Need to prospect cybersecurity solutions into DOD. Looking for Tier 1 SIs who can get me in."
+                   placeholder="Try prospect for cyber opps at DHS or whatever you want to sell to whoever."
                    maxlength="500"></textarea>
                <div class="char-counter">
                    <span id="char-count">0</span> / 500
@@ -792,15 +923,16 @@ class ProspectingTool {
                    </div>
                </div>
                
+               ${market_intelligence?.opportunity_assessment ? `
                <div class="executive-summary">
                    <h2>Market Overview</h2>
                    <div class="summary-content">
-                       ${marked.parse(market_intelligence.opportunity_assessment || 'Market analysis pending...')}
+                       ${marked.parse(market_intelligence.opportunity_assessment)}
                    </div>
-               </div>
+               </div>` : ''}
            </header>
 
-           ${market_intelligence.key_agencies?.length ? `
+           ${market_intelligence?.key_agencies?.length ? `
            <section class="content-section">
                <div class="section-header">
                    <h2>Priority Agencies</h2>
@@ -814,37 +946,41 @@ class ProspectingTool {
                            <div class="agency-content">
                                <div class="agency-header">
                                    <h3>${agency.agency}</h3>
+                                   ${agency.opportunity_size ? `
                                    <div class="opportunity-value">
                                        <span class="label">Market Opportunity</span>
                                        <span class="value">${agency.opportunity_size}</span>
-                                   </div>
+                                   </div>` : ''}
                                </div>
                                
                                <div class="agency-details">
+                                   ${agency.current_initiatives ? `
                                    <div class="detail-item">
                                        <h4>Current Initiatives</h4>
                                        <p>${agency.current_initiatives}</p>
-                                   </div>
+                                   </div>` : ''}
+                                   ${agency.decision_makers ? `
                                    <div class="detail-item">
                                        <h4>Key Decision Makers</h4>
                                        <p>${agency.decision_makers}</p>
-                                   </div>
+                                   </div>` : ''}
                                </div>
                                
+                               ${agency.best_approach ? `
                                <div class="approach-section">
                                    <h4>Recommended Approach</h4>
                                    <p>${agency.best_approach}</p>
-                               </div>
+                               </div>` : ''}
                            </div>
                        </article>
                    `).join('')}
                </div>
            </section>` : ''}
 
+           ${ecosystem_mapping?.tier_1_sis?.length ? `
            <section class="content-section">
                <h2>Partner Ecosystem</h2>
                
-               ${ecosystem_mapping.tier_1_sis?.length ? `
                <div class="subsection">
                    <h3>Tier 1 Systems Integrators</h3>
                    <div class="data-table-container">
@@ -865,23 +1001,23 @@ class ProspectingTool {
                                                ${si.company}
                                                ${index === 0 ? '<span class="priority-badge">TOP PICK</span>' : ''}
                                            </div>
-                                           <div class="company-note">${si.current_priorities}</div>
+                                           ${si.current_priorities ? `<div class="company-note">${si.current_priorities}</div>` : ''}
                                        </td>
-                                       <td>${si.federal_focus}</td>
-                                       <td>${si.partnership_angle}</td>
-                                       <td>${si.key_contacts}</td>
+                                       <td>${si.federal_focus || ''}</td>
+                                       <td>${si.partnership_angle || ''}</td>
+                                       <td>${si.key_contacts || ''}</td>
                                    </tr>
                                `).join('')}
                            </tbody>
                        </table>
                    </div>
-               </div>` : ''}
-           </section>
+               </div>
+           </section>` : ''}
 
+           ${tactical_execution?.immediate_actions?.length ? `
            <section class="content-section">
                <h2>Tactical Execution</h2>
                
-               ${tactical_execution.immediate_actions?.length ? `
                <div class="subsection">
                    <h3>Immediate Actions</h3>
                    <div class="action-list">
@@ -892,7 +1028,7 @@ class ProspectingTool {
                            </div>
                        `).join('')}
                    </div>
-               </div>` : ''}
+               </div>
 
                ${tactical_execution.message_frameworks ? `
                <div class="subsection">
@@ -915,9 +1051,9 @@ class ProspectingTool {
                        </div>
                    </div>` : ''}
                </div>` : ''}
-           </section>
+           </section>` : ''}
 
-           ${insider_intel.hot_opportunities?.length ? `
+           ${insider_intel?.hot_opportunities?.length ? `
            <section class="content-section">
                <h2>Hot Opportunities</h2>
                <div class="intel-list">
@@ -930,12 +1066,13 @@ class ProspectingTool {
                </div>
            </section>` : ''}
 
+           ${market_intelligence?.competitive_landscape ? `
            <section class="content-section">
                <h2>Competitive Landscape</h2>
                <div class="prose-content">
-                   ${marked.parse(market_intelligence.competitive_landscape || 'Competitive analysis pending...')}
+                   ${marked.parse(market_intelligence.competitive_landscape)}
                </div>
-           </section>
+           </section>` : ''}
 
            <div class="action-buttons">
                <button onclick="app.exportReport()" class="btn-primary">Export Report</button>
