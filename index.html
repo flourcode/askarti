@@ -344,6 +344,64 @@
 #chat-input {
     min-width: 0;
 }
+/* Add these to your style section */
+@media (max-width: 640px) {
+    .chat-message-arti, .chat-message-user {
+        max-width: 85% !important;
+        padding: 0.75rem !important;
+        font-size: 0.9rem;
+    }
+    
+    .chat-container {
+        padding: 0.5rem;
+    }
+    
+    #chat-input {
+        font-size: 0.9rem !important;
+    }
+    
+    /* Make message content slightly smaller on mobile */
+    .chat-message-arti p, .chat-message-user {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+}
+
+/* For very small screens, make everything even more compact */
+@media (max-width: 360px) {
+    .chat-message-arti, .chat-message-user {
+        max-width: 90% !important;
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.85rem;
+    }
+    
+    #chat-input {
+        font-size: 0.85rem !important;
+        padding: 0.5rem 0.75rem;
+    }
+    
+    /* Even smaller text for tiny screens */
+    .chat-message-arti p, .chat-message-user {
+        font-size: 0.85rem;
+        line-height: 1.3;
+    }
+    
+    /* Make buttons slightly smaller too */
+    #chat-send-btn, #reset-chat-btn {
+        padding: 0.5rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Fix any markdown-generated content to be responsive */
+.chat-message-arti img {
+    max-width: 100%;
+    height: auto;
+}
+
+.chat-message-arti ul, .chat-message-arti ol {
+    padding-left: 1rem;
+}
 </style>
 
 </head>
@@ -751,22 +809,19 @@ this.elements.quickPromptBtns.forEach(btn => {
 }
 
    addChatMessage(content, isUser = false) {
-       const now = new Date();
-       const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-       
-       const messageHtml = `
-           <div class="flex ${isUser ? 'justify-end' : 'justify-start'}">
-               <div class="${isUser ? 'chat-message-user' : 'chat-message-arti'} 
-                           rounded-lg px-4 py-3 max-w-[80%] shadow-sm">
-                   ${isUser ? content : marked.parse(content)}
-                   <div class="text-xs ${isUser ? 'text-white/70' : 'text-gray-400'} mt-1 text-right">${timeString}</div>
-               </div>
-           </div>
-       `;
-       
-       this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
-       this.scrollChatToBottom();
-   }
+    const messageHtml = `
+        <div class="flex ${isUser ? 'justify-end' : 'justify-start'}">
+            <div class="${isUser ? 'chat-message-user' : 'chat-message-arti'} 
+                        rounded-lg px-4 py-3 max-w-[80%] sm:max-w-[80%] md:max-w-[70%] shadow-sm">
+                ${isUser ? content : marked.parse(content)}
+            </div>
+        </div>
+    `;
+    
+    this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
+    this.scrollChatToBottom();
+}scrollChatToBottom();
+}
 
    showTypingIndicator() {
        const typingHtml = `
