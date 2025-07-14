@@ -908,257 +908,243 @@ this.elements.quickPromptBtns.forEach(btn => {
    }
 
    async sendChatMessage() {
-       const message = this.elements.chatInput.value.trim();
-       if (!message || this.state.pendingRequest) return;
+    const message = this.elements.chatInput.value.trim();
+    if (!message || this.state.pendingRequest) return;
 
-       // Add more robust input sanitization
-       const sanitizedMessage = message
-           .replace(/<\/?[^>]+(>|$)/g, "") // Remove any HTML tags
-           .trim();
-           
-       if (!sanitizedMessage) {
-           this.showTemporaryMessage("Please enter a valid message", "warning");
-           return;
-       }
+    // Add more robust input sanitization
+    const sanitizedMessage = message
+        .replace(/<\/?[^>]+(>|$)/g, "") // Remove any HTML tags
+        .trim();
+        
+    if (!sanitizedMessage) {
+        this.showTemporaryMessage("Please enter a valid message", "warning");
+        return;
+    }
 
-       // Validate message length
-       if (sanitizedMessage.length > CONFIG.MAX_INPUT_LENGTH) {
-           this.addChatMessage("That message is a bit long. Try breaking it into smaller parts.", false);
-           return;
-       }
+    // Validate message length
+    if (sanitizedMessage.length > CONFIG.MAX_INPUT_LENGTH) {
+        this.addChatMessage("That message is a bit long. Try breaking it into smaller parts.", false);
+        return;
+    }
 
-       // Save message for potential retry
-       this.state.lastChatMessage = sanitizedMessage;
+    // Save message for potential retry
+    this.state.lastChatMessage = sanitizedMessage;
 
-       // Add user message
-       this.addChatMessage(sanitizedMessage, true);
-       this.elements.chatInput.value = '';
-       
-       // Add to chat history
-       this.state.chatHistory.push({ role: 'user', content: sanitizedMessage });
-       this.state.messageCount++;
+    // Add user message
+    this.addChatMessage(sanitizedMessage, true);
+    this.elements.chatInput.value = '';
+    
+    // Add to chat history
+    this.state.chatHistory.push({ role: 'user', content: sanitizedMessage });
+    this.state.messageCount++;
 
-       // Show typing indicator
-       this.showTypingIndicator();
-       this.state.pendingRequest = true;
+    // Show typing indicator
+    this.showTypingIndicator();
+    this.state.pendingRequest = true;
 
-       try {
-           const response = await this.makeChatRequest(sanitizedMessage);
-           
-           // Add a short, random delay to make the typing feel more natural
-           const typingDelay = 500 + Math.random() * 1000; // 0.5 to 1.5 seconds
-           await new Promise(resolve => setTimeout(resolve, typingDelay));
-           
-           this.hideTypingIndicator();
-           
-           // Validate response structure
-           if (!response || typeof response !== 'object') {
-               throw new Error('Invalid response format');
-           }
+    try {
+        const response = await this.makeChatRequest(sanitizedMessage);
+        
+        // Add a short, random delay to make the typing feel more natural
+        const typingDelay = 500 + Math.random() * 1000; // 0.5 to 1.5 seconds
+        await new Promise(resolve => setTimeout(resolve, typingDelay));
+        
+        this.hideTypingIndicator();
+        
+        // Validate response structure
+        if (!response || typeof response !== 'object') {
+            throw new Error('Invalid response format');
+        }
 
-           const messageContent = response.message;
-           if (!messageContent) {
-               console.error('Missing message in response:', response);
-               throw new Error('No message in response');
-           }
-           
-           // Add Arti's response
-           this.addChatMessage(messageContent);
-           this.state.chatHistory.push({ role: 'assistant', content: messageContent });
+        const messageContent = response.message;
+        if (!messageContent) {
+            console.error('Missing message in response:', response);
+            throw new Error('No message in response');
+        }
+        
+        // Add Arti's response
+        this.addChatMessage(messageContent);
+        this.state.chatHistory.push({ role: 'assistant', content: messageContent });
 
-           // Reset error retry counter on success
-           this.state.errorRetries = 0;
+        // Reset error retry counter on success
+        this.state.errorRetries = 0;
 
-           // Add follow-up suggestions if provided
-           if (response.suggestions && Array.isArray(response.suggestions) && response.suggestions.length > 0) {
-               this.addFollowUpSuggestions(response.suggestions);
-           }
+        // Remove follow-up suggestions section - we want natural conversation flow
 
-       } catch (error) {
-           this.hideTypingIndicator();
-           console.error('Chat error details:', error);
-           
-           // Increment error counter
-           this.state.errorRetries++;
-           
-           // More specific error messages
-           let errorMessage = "I'm having trouble connecting right now.";
-           let errorType = "connection";
-           
-           if (error.message.includes('timeout') || error.name === 'AbortError') {
-               errorMessage = "That took too long to process. Please try a shorter message.";
-               errorType = "timeout";
-           } else if (error.message.includes('400')) {
-               errorMessage = "There was an issue with your message format. Please try rephrasing.";
-               errorType = "format";
-           } else if (error.message.includes('500') || error.message.includes('server')) {
-               errorMessage = "I'm having server issues. Please try again in a moment.";
-               errorType = "server";
-           } else if (error.message.includes('parse') || error.message.includes('Invalid response')) {
-               errorMessage = "I received an invalid response from the server. Let's try again.";
-               errorType = "parsing";
-           }
-           
-           // Add retry button with error message
-           const errorHtml = `
-               <div class="flex justify-start">
-                   <div class="bg-red-50 rounded-lg px-4 py-3 max-w-[90%] shadow-sm border border-red-200">
-                       <p class="text-red-700 text-sm">${errorMessage}</p>
-                       <button id="chat-retry-btn" class="mt-2 text-xs bg-red-100 hover:bg-red-200 text-red-700 font-medium py-1 px-2 rounded">
-                           Retry message
-                       </button>
-                   </div>
-               </div>
-           `;
-           this.elements.chatMessages.insertAdjacentHTML('beforeend', errorHtml);
-           this.scrollChatToBottom();
-           
-           // Add event listener to the retry button
-           document.getElementById('chat-retry-btn').addEventListener('click', () => this.retryLastChatMessage());
-           
-           // For certain types of errors, automatically retry once after a delay
-           if ((errorType === "server" || errorType === "connection" || errorType === "parsing") && this.state.errorRetries <= 1) {
-               setTimeout(() => {
-                   const retryButton = document.getElementById('chat-retry-btn');
-                   if (retryButton) {
-                       // Only auto-retry if the button still exists (user hasn't manually retried)
-                       this.retryLastChatMessage();
-                   }
-               }, 3000);
-           }
-           
-           // If we've had multiple server errors, provide a fallback response
-           if (this.state.errorRetries >= 2) {
-               this.provideFallbackResponse();
-           }
-       } finally {
-           this.state.pendingRequest = false;
-       }
-   }
+    } catch (error) {
+        this.hideTypingIndicator();
+        console.error('Chat error details:', error);
+        
+        // Increment error counter
+        this.state.errorRetries++;
+        
+        // More specific error messages
+        let errorMessage = "I'm having trouble connecting right now.";
+        let errorType = "connection";
+        
+        if (error.message.includes('timeout') || error.name === 'AbortError') {
+            errorMessage = "That took too long to process. Please try a shorter message.";
+            errorType = "timeout";
+        } else if (error.message.includes('400')) {
+            errorMessage = "There was an issue with your message format. Please try rephrasing.";
+            errorType = "format";
+        } else if (error.message.includes('500') || error.message.includes('server')) {
+            errorMessage = "I'm having server issues. Please try again in a moment.";
+            errorType = "server";
+        } else if (error.message.includes('parse') || error.message.includes('Invalid response')) {
+            errorMessage = "I received an invalid response from the server. Let's try again.";
+            errorType = "parsing";
+        }
+        
+        // Add retry button with error message
+        const errorHtml = `
+            <div class="flex justify-start">
+                <div class="bg-red-50 rounded-lg px-4 py-3 max-w-[90%] shadow-sm border border-red-200">
+                    <p class="text-red-700 text-sm">${errorMessage}</p>
+                    <button id="chat-retry-btn" class="mt-2 text-xs bg-red-100 hover:bg-red-200 text-red-700 font-medium py-1 px-2 rounded">
+                        Retry message
+                    </button>
+                </div>
+            </div>
+        `;
+        this.elements.chatMessages.insertAdjacentHTML('beforeend', errorHtml);
+        this.scrollChatToBottom();
+        
+        // Add event listener to the retry button
+        document.getElementById('chat-retry-btn').addEventListener('click', () => this.retryLastChatMessage());
+        
+        // For certain types of errors, automatically retry once after a delay
+        if ((errorType === "server" || errorType === "connection" || errorType === "parsing") && this.state.errorRetries <= 1) {
+            setTimeout(() => {
+                const retryButton = document.getElementById('chat-retry-btn');
+                if (retryButton) {
+                    // Only auto-retry if the button still exists (user hasn't manually retried)
+                    this.retryLastChatMessage();
+                }
+            }, 3000);
+        }
+        
+        // If we've had multiple server errors, provide a fallback response
+        if (this.state.errorRetries >= 2) {
+            this.provideFallbackResponse();
+        }
+    } finally {
+        this.state.pendingRequest = false;
+    }
+}
 
-   provideFallbackResponse() {
-       const fallbackResponses = [
-           "I'm having some trouble connecting to my systems right now. Could you try again in a moment?",
-           "Sorry about that - I seem to be having a technical hiccup. Let's try again.",
-           "My server connection is unstable at the moment. Please try again shortly.",
-           "I apologize for the interruption. Let's get back on track - could you repeat your last question?"
-       ];
-       
-       const randomResponse = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
-       
-       // Add the fallback response as if it came from Arti
-       this.addChatMessage(randomResponse);
-       
-       // Add a simple set of suggestions
-       const suggestionsHtml = `
-           <div class="mt-4 px-2">
-               <p class="text-xs text-gray-500 mb-2 text-center">Would you like to:</p>
-               <div class="flex gap-2 flex-wrap justify-center">
-                   <button class="chat-suggestion px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-full text-sm text-blue-700 hover:text-blue-800 transition-all"
-                           onclick="app.resetChat()">
-                       Start a new conversation
-                   </button>
-                   <button class="chat-suggestion px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-full text-sm text-blue-700 hover:text-blue-800 transition-all"
-                           onclick="app.retryLastChatMessage()">
-                       Try again
-                   </button>
-               </div>
-           </div>
-       `;
-       this.elements.chatMessages.insertAdjacentHTML('beforeend', suggestionsHtml);
-       this.scrollChatToBottom();
-   }
+provideFallbackResponse() {
+    const fallbackResponses = [
+        "I'm having some trouble connecting to my systems right now. Could you try again in a moment?",
+        "Sorry about that - I seem to be having a technical hiccup. Let's try again.",
+        "My server connection is unstable at the moment. Please try again shortly.",
+        "I apologize for the interruption. Let's get back on track - could you repeat your last question?"
+    ];
+    
+    const randomResponse = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+    
+    // Add the fallback response as if it came from Arti
+    this.addChatMessage(randomResponse);
+    
+    // Add simple action buttons without suggestions
+    const actionHtml = `
+        <div class="mt-4 px-2">
+            <div class="flex gap-2 flex-wrap justify-center">
+                <button class="chat-suggestion px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-full text-sm text-blue-700 hover:text-blue-800 transition-all"
+                        onclick="app.resetChat()">
+                    Start a new conversation
+                </button>
+                <button class="chat-suggestion px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-full text-sm text-blue-700 hover:text-blue-800 transition-all"
+                        onclick="app.retryLastChatMessage()">
+                    Try again
+                </button>
+            </div>
+        </div>
+    `;
+    this.elements.chatMessages.insertAdjacentHTML('beforeend', actionHtml);
+    this.scrollChatToBottom();
+}
 
-   async retryLastChatMessage() {
-       if (!this.state.lastChatMessage || this.state.pendingRequest) return;
-       
-       // Remove the error message with retry button
-       const errorElement = document.getElementById('chat-retry-btn')?.closest('.flex');
-       if (errorElement) {
-           errorElement.remove();
-       }
-       
-       // Set the message back in the input field and send it
-       this.elements.chatInput.value = this.state.lastChatMessage;
-       this.sendChatMessage();
-   }
+async retryLastChatMessage() {
+    if (!this.state.lastChatMessage || this.state.pendingRequest) return;
+    
+    // Remove the error message with retry button
+    const errorElement = document.getElementById('chat-retry-btn')?.closest('.flex');
+    if (errorElement) {
+        errorElement.remove();
+    }
+    
+    // Set the message back in the input field and send it
+    this.elements.chatInput.value = this.state.lastChatMessage;
+    this.sendChatMessage();
+}
 
-   addFollowUpSuggestions(suggestions) {
-       const suggestionsHtml = `
-           <div class="mt-4 px-2">
-               <p class="text-xs text-gray-500 mb-2 text-center">Tell me more or tap a suggestion:</p>
-               <div class="flex gap-2 flex-wrap justify-center">
-                   ${suggestions.map(s => `
-                       <button class="chat-suggestion px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-full text-sm text-blue-700 hover:text-blue-800 transition-all"
-                               onclick="app.useSuggestion('${s.replace(/'/g, "\\'")}')">
-                           ${s}
-                       </button>
-                   `).join('')}
-               </div>
-           </div>
-       `;
-       this.elements.chatMessages.insertAdjacentHTML('beforeend', suggestionsHtml);
-       this.scrollChatToBottom();
-   }
+// We're removing these methods since we don't want the clickable speech bubbles
+// But keep empty implementations in case there are references elsewhere
 
-   useSuggestion(suggestion) {
-       this.elements.chatInput.value = suggestion;
-       this.sendChatMessage();
-   }
+addFollowUpSuggestions(suggestions) {
+    // Intentionally empty - we're not using suggestions anymore
+    return;
+}
 
-   setLoading(loading) {
-       this.elements.btnText.style.display = loading ? 'none' : 'inline';
-       this.elements.loader.style.display = loading ? 'block' : 'none';
-       this.elements.askBtn.disabled = loading;
-       this.elements.errorMessage.classList.add('hidden');
-       
-       if (loading) {
-           this.showLoadingMessages();
-       } else {
-           this.hideLoadingMessages();
-       }
-   }
+useSuggestion(suggestion) {
+    // Keep a minimal implementation in case there are other references
+    this.elements.chatInput.value = suggestion;
+    this.sendChatMessage();
+}
 
-   showLoadingMessages() {
-       this.elements.loadingMessageContainer.classList.remove('hidden');
-       this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[0];
-       
-       let messageIndex = 0;
-       this.state.loadingInterval = setInterval(() => {
-           messageIndex = (messageIndex + 1) % CONFIG.LOADING_MESSAGES.length;
-           this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[messageIndex];
-       }, 2000);
-   }
+setLoading(loading) {
+    this.elements.btnText.style.display = loading ? 'none' : 'inline';
+    this.elements.loader.style.display = loading ? 'block' : 'none';
+    this.elements.askBtn.disabled = loading;
+    this.elements.errorMessage.classList.add('hidden');
+    
+    if (loading) {
+        this.showLoadingMessages();
+    } else {
+        this.hideLoadingMessages();
+    }
+}
 
-   hideLoadingMessages() {
-       clearInterval(this.state.loadingInterval);
-       this.elements.loadingMessageContainer.classList.add('hidden');
-   }
+showLoadingMessages() {
+    this.elements.loadingMessageContainer.classList.remove('hidden');
+    this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[0];
+    
+    let messageIndex = 0;
+    this.state.loadingInterval = setInterval(() => {
+        messageIndex = (messageIndex + 1) % CONFIG.LOADING_MESSAGES.length;
+        this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[messageIndex];
+    }, 2000);
+}
 
-   showError(message) {
-       this.hideLoadingMessages();
-       this.elements.errorMessage.classList.remove('hidden');
-       this.elements.errorDetails.textContent = message;
-       this.setLoading(false);
-   }
+hideLoadingMessages() {
+    clearInterval(this.state.loadingInterval);
+    this.elements.loadingMessageContainer.classList.add('hidden');
+}
 
-   showTemporaryMessage(message, type = 'info', duration = 2000) {
-       this.elements.loadingMessageContainer.classList.remove('hidden');
-       this.elements.loadingMessage.textContent = message;
-       
-       const colorClasses = {
-           error: 'text-red-700 font-medium',
-           warning: 'text-orange-700 font-medium',
-           info: 'text-gray-600'
-       };
-       
-       this.elements.loadingMessage.className = colorClasses[type] || colorClasses.info;
-       
-       setTimeout(() => {
-           this.elements.loadingMessageContainer.classList.add('hidden');
-       }, duration);
-   }
+showError(message) {
+    this.hideLoadingMessages();
+    this.elements.errorMessage.classList.remove('hidden');
+    this.elements.errorDetails.textContent = message;
+    this.setLoading(false);
+}
 
+showTemporaryMessage(message, type = 'info', duration = 2000) {
+    this.elements.loadingMessageContainer.classList.remove('hidden');
+    this.elements.loadingMessage.textContent = message;
+    
+    const colorClasses = {
+        error: 'text-red-700 font-medium',
+        warning: 'text-orange-700 font-medium',
+        info: 'text-gray-600'
+    };
+    
+    this.elements.loadingMessage.className = colorClasses[type] || colorClasses.info;
+    
+    setTimeout(() => {
+        this.elements.loadingMessageContainer.classList.add('hidden');
+    }, duration);
+}
    // Update the getAdvice method in the AskArti class:
 async getAdvice() {
     const situation = this.elements.situationInput.value.trim();
