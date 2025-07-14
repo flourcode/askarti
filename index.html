@@ -193,17 +193,17 @@
     }
 
     .chat-container {
-    height: 60dvh;
-    max-height: 500px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-}
+        height: 60dvh;
+        max-height: 500px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
 
-@supports not (height: 100dvh) {
-  .chat-container {
-    height: 60vh;
-  }
-}
+    @supports not (height: 100dvh) {
+      .chat-container {
+        height: 60vh;
+      }
+    }
 
     .chat-container::-webkit-scrollbar {
         width: 6px;
@@ -258,9 +258,15 @@
         }
     }
 
+    .chat-suggestion {
+        transition: all 0.2s ease;
+        border: 1px solid rgba(124, 107, 190, 0.3);
+    }
+
     .chat-suggestion:hover {
         background-color: rgba(124, 107, 190, 0.1);
         transform: scale(1.02);
+        border-color: rgba(124, 107, 190, 0.5);
     }
 
     /* Mobile layout improvements */
@@ -384,135 +390,137 @@
                </div>
            </div>
 
-<div id="chat-mode" class="mode-content hidden">
-   <div class="chat-container h-[60vh] sm:h-96 max-h-[400px] overflow-y-auto mb-4 bg-gray-50 rounded-lg p-3 sm:p-4" style="height: 60dvh;">
-       <div id="chat-messages" class="space-y-3 sm:space-y-4">
-           <div class="flex justify-start">
-               <div class="bg-white rounded-lg px-3 py-2 sm:px-4 sm:py-3 max-w-[90%] sm:max-w-[80%] shadow-sm">
-                   <p class="text-gray-800 text-sm sm:text-base">Hey! I'm Arti. Tell me what's going on with your deal and I'll help you work through it. What's the situation?</p>
-               </div>
-           </div>
-       </div>
-   </div>
+            <!-- Chat Mode -->
+            <div id="chat-mode" class="mode-content hidden">
+                <div class="chat-container h-[60vh] sm:h-96 max-h-[400px] overflow-y-auto mb-4 bg-gray-50 rounded-lg p-3 sm:p-4" style="height: 60dvh;">
+                    <div id="chat-messages" class="space-y-3 sm:space-y-4">
+                        <div class="flex justify-start">
+                            <div class="bg-white rounded-lg px-3 py-2 sm:px-4 sm:py-3 max-w-[90%] sm:max-w-[80%] shadow-sm">
+                                <p class="text-gray-800 text-sm sm:text-base">Hey! I'm Arti. Sales life got you down? How can I help?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-   <div class="flex gap-2 sticky bottom-0 bg-white pt-2 z-10">
-       <input 
-           type="text" 
-           id="chat-input"
-           inputmode="text"
-           autocomplete="off"
-           autocorrect="on"
-           autocapitalize="sentences"
-           spellcheck="true"
-           class="flex-1 p-2.5 sm:p-3 text-[16px] sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary min-h-[44px]"
-           placeholder="Type your message..."
-           maxlength="500">
-       <button 
-           id="chat-send-btn" 
-           class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg transition-all text-sm sm:text-base min-h-[44px] whitespace-nowrap"
-           style="touch-action: manipulation;">
-           Send
-       </button>
-   </div>
+                <div class="flex gap-2 sticky bottom-0 bg-white pt-2 z-10">
+                    <input 
+                        type="text" 
+                        id="chat-input"
+                        inputmode="text"
+                        autocomplete="off"
+                        autocorrect="on"
+                        autocapitalize="sentences"
+                        spellcheck="true"
+                        class="flex-1 p-2.5 sm:p-3 text-[16px] sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary min-h-[44px]"
+                        placeholder="Type your message..."
+                        maxlength="500">
+                    <button 
+                        id="chat-send-btn" 
+                        class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg transition-all text-sm sm:text-base min-h-[44px] whitespace-nowrap"
+                        style="touch-action: manipulation;">
+                        Send
+                    </button>
+					<button 
+    id="reset-chat-btn" 
+    class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-2 sm:px-3 py-2.5 sm:py-3 rounded-lg transition-all text-sm sm:text-base min-h-[44px] ml-1"
+    title="Start a new chat"
+    style="touch-action: manipulation;">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+    </svg>
+</button>
+                </div>
+            </div>
+        </main>
 
-   <div class="mt-3 text-center">
-       <button id="generate-report-btn" class="bg-green-600 hover:bg-green-700 text-white font-medium px-5 sm:px-6 py-2.5 sm:py-2 rounded-lg transition-all text-sm sm:text-base min-h-[44px] hidden">
-           Generate Action Plan
-       </button>
-   </div>
-</div>
+        <!-- Loading Message -->
+        <div id="loading-message-container" class="text-center py-4 hidden">
+            <p id="loading-message" class="text-gray-600"></p>
+        </div>
 
-       </main>
+        <!-- Error Message -->
+        <div id="error-message" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center mb-4 hidden">
+            <p class="text-red-700 font-medium mb-2">Something went wrong</p>
+            <p class="text-red-600 text-sm" id="error-details">We're having trouble connecting to Arti. Please try again in a moment.</p>
+            <button id="retry-btn" class="mt-3 bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg text-sm">
+                Try Again
+            </button>
+        </div>
 
-       <!-- Loading Message -->
-       <div id="loading-message-container" class="text-center py-4 hidden">
-           <p id="loading-message" class="text-gray-600"></p>
-       </div>
+        <!-- Results -->
+        <div id="results-container"></div>
 
-       <!-- Error Message -->
-       <div id="error-message" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center mb-4 hidden">
-           <p class="text-red-700 font-medium mb-2">Something went wrong</p>
-           <p class="text-red-600 text-sm" id="error-details">We're having trouble connecting to Arti. Please try again in a moment.</p>
-           <button id="retry-btn" class="mt-3 bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg text-sm">
-               Try Again
-           </button>
-       </div>
+        <!-- Footer -->
+        <footer class="text-center mt-8 sm:mt-12 space-y-3 sm:space-y-4 pb-20">
+            <div class="flex justify-center gap-6 text-sm">
+                <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">About</button>
+                <button id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Share</button>
+                <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Contact</a>
+            </div>
 
-       <!-- Results -->
-       <div id="results-container"></div>
+            <div class="sponsor-ad rounded-lg p-3 mb-4 text-sm bg-white border border-gray-200 not-italic text-left leading-normal text-gray-700">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded-full">SPONSOR</span>
+                    <span class="text-gray-800 font-semibold">Hey there! Enjoyin' these results?</span>
+                </div>
+                <p class="text-sm leading-relaxed text-gray-700">
+                    By the time I pay off all my scientists, all the lab coats, and my Lambda bill…I'm losin' money every time you press that Ask Arti button.
+                </p>
+                <p class="mt-2 text-xs italic text-gray-500">
+                    Don't let my loss be your loss. Sponsor this ad for the low low price of $99/mo.
+                </p>
+                <p class="mt-2 text-xs text-customPurple-600 font-medium">
+                    <a href="mailto:mark@subhoo.com" class="hover:underline">Contact me to reserve this premium spot →</a>
+                </p>
+            </div>
 
-       <!-- Footer -->
-       <footer class="text-center mt-8 sm:mt-12 space-y-3 sm:space-y-4 pb-20">
-           <div class="flex justify-center gap-6 text-sm">
-               <button id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">About</button>
-               <button id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Share</button>
-               <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Contact</a>
-           </div>
+            <p class="text-xs text-gray-400">
+                AskArti.com results are provided for informational and educational purposes only and do not constitute professional business advice. AI can make errors or provide recommendations that may not suit your specific situation. Please consult qualified professionals before making important business decisions.
+            </p>
 
-           <div class="sponsor-ad rounded-lg p-3 mb-4 text-sm bg-white border border-gray-200 not-italic text-left leading-normal text-gray-700">
-               <div class="flex items-center gap-2 mb-2">
-                   <span class="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded-full">SPONSOR</span>
-                   <span class="text-gray-800 font-semibold">Hey there! Enjoyin' these results?</span>
-               </div>
-               <p class="text-sm leading-relaxed text-gray-700">
-                   By the time I pay off all my scientists, all the lab coats, and my Lambda bill…I'm losin' money every time you press that Ask Arti button.
-               </p>
-               <p class="mt-2 text-xs italic text-gray-500">
-                   Don't let my loss be your loss. Sponsor this ad for the low low price of $99/mo.
-               </p>
-               <p class="mt-2 text-xs text-customPurple-600 font-medium">
-                   <a href="mailto:mark@subhoo.com" class="hover:underline">Contact me to reserve this premium spot →</a>
-               </p>
-           </div>
+            <br>
 
-           <p class="text-xs text-gray-400">
-               AskArti.com results are provided for informational and educational purposes only and do not constitute professional business advice. AI can make errors or provide recommendations that may not suit your specific situation. Please consult qualified professionals before making important business decisions.
-           </p>
+            <p class="text-xs text-gray-400">© 2025 AskArti. Made for Sellers by Sellers.</p>
+        </footer>
+    </div>
 
-           <br>
-
-           <p class="text-xs text-gray-400">© 2025 AskArti. Made for Sellers by Sellers.</p>
-
-       </footer>
-   </div>
-
-   <!-- About Modal -->
-   <div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 modal-backdrop">
-       <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 modal-content">
-           <div class="flex justify-between items-start mb-4">
-               <div class="flex items-center gap-3">
-                   <img src="images/oldmark.jpg" alt="Mark Flournoy" class="w-12 h-12 rounded-full object-cover border-2 border-customPurple-200">
-                   <h2 class="text-xl font-bold text-gray-900">Hi, I'm Mark</h2>
-               </div>
-               <button id="close-about" class="text-gray-400 hover:text-gray-600">
-                   <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                   </svg>
-               </button>
-           </div>
-           <div class="space-y-4 text-gray-700">
-               <p>I built AskArti to help salespeople use AI in a practical way to better support federal customers. Arti's not perfect, so use your judgment, but he's available 24/7 when you need to talk through a stuck deal or prep for a tough meeting.</p>
-               
-               <div class="mt-6 pt-4 border-t border-gray-200">
-                   <div class="bg-gray-50 rounded-lg p-4 text-sm">
-                       <h3 class="font-semibold text-gray-800 mb-2 flex items-center">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                               <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                           </svg>
-                           Privacy & Technology
-                       </h3>
-                       <p class="text-gray-600 mb-2">AskArti uses models that may include Gemini, Claude, and ChatGPT. These models may use API inputs to improve responses. We do not store, log, or persist any prompt or response data. All processing occurs in-memory using AWS Lambda and is discarded after execution.</p>
-                   </div>
-               </div>
-               
-               <div class="pt-4">
-                   <a href="https://calendly.com/markflournoy/30min" target="_blank" class="block w-full bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-lg text-center transition-colors">
-                       Let's chat about AI or Fed Sales →
-                   </a>
-               </div>
-           </div>
-       </div>
-   </div>
+    <!-- About Modal -->
+    <div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 modal-backdrop">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 modal-content">
+            <div class="flex justify-between items-start mb-4">
+                <div class="flex items-center gap-3">
+                    <img src="images/oldmark.jpg" alt="Mark Flournoy" class="w-12 h-12 rounded-full object-cover border-2 border-customPurple-200">
+                    <h2 class="text-xl font-bold text-gray-900">Hi, I'm Mark</h2>
+                </div>
+                <button id="close-about" class="text-gray-400 hover:text-gray-600">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="space-y-4 text-gray-700">
+                <p>I built AskArti to help salespeople use AI in a practical way to better support federal customers. Arti's not perfect, so use your judgment, but he's available 24/7 when you need to talk through a stuck deal or prep for a tough meeting.</p>
+                
+                <div class="mt-6 pt-4 border-t border-gray-200">
+                    <div class="bg-gray-50 rounded-lg p-4 text-sm">
+                        <h3 class="font-semibold text-gray-800 mb-2 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Privacy & Technology
+                        </h3>
+                        <p class="text-gray-600 mb-2">AskArti uses models that may include Gemini, Claude, and ChatGPT. These models may use API inputs to improve responses. We do not store, log, or persist any prompt or response data. All processing occurs in-memory using AWS Lambda and is discarded after execution.</p>
+                    </div>
+                </div>
+                
+                <div class="pt-4">
+                    <a href="https://calendly.com/markflournoy/30min" target="_blank" class="block w-full bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-lg text-center transition-colors">
+                        Let's chat about AI or Fed Sales →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <script>
 // Configuration
@@ -545,7 +553,8 @@ class AskArti {
            lastQuery: '',
            currentMode: 'quick',
            chatHistory: [],
-           messageCount: 0
+           messageCount: 0,
+           lastChatMessage: ''
        };
        this.init();
    }
@@ -573,7 +582,7 @@ class AskArti {
            chatMessages: document.getElementById('chat-messages'),
            chatInput: document.getElementById('chat-input'),
            chatSendBtn: document.getElementById('chat-send-btn'),
-           generateReportBtn: document.getElementById('generate-report-btn')
+           resetChatBtn: document.getElementById('reset-chat-btn')
        };
    }
 
@@ -623,7 +632,10 @@ class AskArti {
                this.getAdvice();
            }
        });
-
+       
+       // Reset chat button
+       this.elements.resetChatBtn.addEventListener('click', () => this.resetChat());
+       
        // Share
        this.elements.shareBtn.addEventListener('click', () => this.share());
 
@@ -652,9 +664,6 @@ class AskArti {
                this.sendChatMessage();
            }
        });
-
-       // Generate report from chat
-       this.elements.generateReportBtn.addEventListener('click', () => this.generateFullReport());
    }
 
    switchMode(mode) {
@@ -709,7 +718,31 @@ class AskArti {
        const indicator = document.getElementById('typing-indicator');
        if (indicator) indicator.remove();
    }
-
+   
+   resetChat() {
+       // Clear chat history
+       this.state.chatHistory = [];
+       this.state.messageCount = 0;
+       this.state.lastChatMessage = '';
+       
+       // Clear chat UI
+       this.elements.chatMessages.innerHTML = '';
+       this.elements.chatInput.value = '';
+       
+       // Add welcome message
+       const welcomeMessage = `
+           <div class="flex justify-start">
+               <div class="bg-white rounded-lg px-3 py-2 sm:px-4 sm:py-3 max-w-[90%] sm:max-w-[80%] shadow-sm">
+                   <p class="text-gray-800 text-sm sm:text-base">Hey! I'm Arti. Tell me what's going on with your deal and I'll help you work through it. What's the situation?</p>
+               </div>
+           </div>
+       `;
+       this.elements.chatMessages.innerHTML = welcomeMessage;
+       
+       // Focus on input
+       this.elements.chatInput.focus();
+   }
+   
    scrollChatToBottom() {
        const scrollContainer = document.querySelector('.chat-container');
        if (!scrollContainer) return;
@@ -729,20 +762,19 @@ class AskArti {
    }
 
    async makeChatRequest(message) {
-       // Increase context window and add smarter truncation
-       let conversationContext = this.state.chatHistory.slice(-10); // Last 5 exchanges
+       // Process conversation history with smart truncation
+       let conversationContext = this.state.chatHistory;
        
-       // If context is getting too long, summarize older messages
-       const contextString = conversationContext.map(h => `${h.role}: ${h.content}`).join('\n');
-       if (contextString.length > 1500) {
-           // Keep only the most recent 3 exchanges
-           conversationContext = this.state.chatHistory.slice(-6);
+       // If history is getting long, keep only more recent exchanges but preserve some context
+       const fullHistoryLength = JSON.stringify(conversationContext).length;
+       if (fullHistoryLength > 4000) {
+           // Keep most recent exchanges
+           conversationContext = this.state.chatHistory.slice(-15);
        }
        
        console.log('Chat History Length:', this.state.chatHistory.length);
        console.log('Message Count:', this.state.messageCount);
-       console.log('Sending context:', conversationContext);
-       console.log('Total context chars:', JSON.stringify(conversationContext).length);
+       console.log('Context Length:', JSON.stringify(conversationContext).length);
        
        try {
            const response = await fetch(CONFIG.API_ENDPOINT, {
@@ -753,7 +785,7 @@ class AskArti {
                    mode: 'chat',
                    conversationHistory: conversationContext
                }),
-               signal: this.createTimeoutSignal(20000) // Add timeout
+               signal: this.createTimeoutSignal(CONFIG.REQUEST_TIMEOUT)
            });
 
            if (!response.ok) {
@@ -781,10 +813,13 @@ class AskArti {
        if (!message || this.state.pendingRequest) return;
 
        // Validate message length
-       if (message.length > 500) {
+       if (message.length > CONFIG.MAX_INPUT_LENGTH) {
            this.addChatMessage("That message is a bit long. Try breaking it into smaller parts.", false);
            return;
        }
+
+       // Save message for potential retry
+       this.state.lastChatMessage = message;
 
        // Add user message
        this.addChatMessage(message, true);
@@ -817,11 +852,6 @@ class AskArti {
            this.addChatMessage(messageContent);
            this.state.chatHistory.push({ role: 'assistant', content: messageContent });
 
-           // Show generate report button after 2+ exchanges
-           if (this.state.messageCount >= 2) {
-               this.elements.generateReportBtn.classList.remove('hidden');
-           }
-
            // Add follow-up suggestions if provided
            if (response.suggestions && Array.isArray(response.suggestions) && response.suggestions.length > 0) {
                this.addFollowUpSuggestions(response.suggestions);
@@ -841,20 +871,49 @@ class AskArti {
                errorMessage = "I'm having server issues. Please try again in a moment.";
            }
            
-           this.addChatMessage(errorMessage, false);
+           // Add retry button with error message
+           const errorHtml = `
+               <div class="flex justify-start">
+                   <div class="bg-red-50 rounded-lg px-4 py-3 max-w-[90%] shadow-sm border border-red-200">
+                       <p class="text-red-700 text-sm">${errorMessage}</p>
+                       <button id="chat-retry-btn" class="mt-2 text-xs bg-red-100 hover:bg-red-200 text-red-700 font-medium py-1 px-2 rounded">
+                           Retry message
+                       </button>
+                   </div>
+               </div>
+           `;
+           this.elements.chatMessages.insertAdjacentHTML('beforeend', errorHtml);
+           this.scrollChatToBottom();
+           
+           // Add event listener to the retry button
+           document.getElementById('chat-retry-btn').addEventListener('click', () => this.retryLastChatMessage());
        } finally {
            this.state.pendingRequest = false;
        }
    }
 
+   async retryLastChatMessage() {
+       if (!this.state.lastChatMessage || this.state.pendingRequest) return;
+       
+       // Remove the error message with retry button
+       const errorElement = document.getElementById('chat-retry-btn').closest('.flex');
+       if (errorElement) {
+           errorElement.remove();
+       }
+       
+       // Set the message back in the input field and send it
+       this.elements.chatInput.value = this.state.lastChatMessage;
+       this.sendChatMessage();
+   }
+
    addFollowUpSuggestions(suggestions) {
        const suggestionsHtml = `
            <div class="mt-4 px-2">
-               <p class="text-xs text-gray-500 mb-2 text-center">Tell me more or tap what's relevant:</p>
+               <p class="text-xs text-gray-500 mb-2 text-center">Tell me more or tap a suggestion:</p>
                <div class="flex gap-2 flex-wrap justify-center">
                    ${suggestions.map(s => `
-                       <button class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 rounded-full text-sm text-blue-700 hover:text-blue-800 transition-all"
-                               onclick="app.elements.chatInput.value='${s.replace(/'/g, "\\'")}'; app.sendChatMessage();">
+                       <button class="chat-suggestion px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-full text-sm text-blue-700 hover:text-blue-800 transition-all"
+                               onclick="app.useSuggestion('${s.replace(/'/g, "\\'")}')">
                            ${s}
                        </button>
                    `).join('')}
@@ -865,35 +924,9 @@ class AskArti {
        this.scrollChatToBottom();
    }
 
-   async generateFullReport() {
-       // Collect all context from chat
-       const fullContext = this.state.chatHistory.map(h => 
-           `${h.role === 'user' ? 'User' : 'Arti'}: ${h.content}`
-       ).join('\n');
-
-       // Show loading in results area
-       this.elements.resultsContainer.innerHTML = '<div class="text-center py-8"><div class="loader mx-auto"></div><p class="mt-4 text-gray-600">Generating your action plan...</p></div>';
-       
-       // Smooth scroll to results
-       this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-       try {
-           const response = await fetch(CONFIG.API_ENDPOINT, {
-               method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ 
-                   situation: `Based on our chat conversation, please provide a comprehensive action plan. Context: ${fullContext}`,
-                   mode: 'report',
-                   generateFullReport: true
-               })
-           });
-
-           const data = await response.json();
-           this.displayAdvice(data); // Use your existing display function
-           
-       } catch (error) {
-           this.showError("Failed to generate report. Please try again.");
-       }
+   useSuggestion(suggestion) {
+       this.elements.chatInput.value = suggestion;
+       this.sendChatMessage();
    }
 
    setLoading(loading) {
