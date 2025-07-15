@@ -437,6 +437,31 @@
                transparent 100%);
        }
    }
+   /* Add this to your existing styles */
+.relative {
+    position: relative;
+}
+
+#clear-input-btn {
+    transition: all 0.2s ease;
+}
+
+#clear-input-btn:hover {
+    background-color: #f3f4f6;
+    transform: scale(1.05);
+}
+
+/* Ensure the textarea padding accounts for the button */
+#situation-input {
+    padding-right: 3rem;
+}
+
+@media (max-width: 640px) {
+    #clear-input-btn {
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+}
 </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
@@ -461,20 +486,31 @@
            <!-- Quick Mode (current interface) -->
            <div id="quick-mode" class="mode-content">
                <div class="mb-4">
-                   <label for="situation-input" class="block text-lg font-semibold text-gray-900 mb-2 text-center">
-                       Hi, I'm Arti, your 24/7 Sales Buddy.
-                   </label>
-                   <textarea 
-                       id="situation-input" 
-                       rows="4" 
-                       class="w-full p-4 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary resize-none placeholder-gray-500"
-                       placeholder="Champion ghosted me after seeing pricing. $2M deal at DHS. Q4 commit. OR paste a news article for GTM analysis."
-                       maxlength="2000"></textarea>
-                   <div class="text-xs text-gray-500 mt-1 flex justify-between">
-                       <span class="hint-text">Paste government news for GTM analysis, or describe your sales situation for coaching.</span>
-                       <span id="char-count" class="text-gray-400">0/2000</span>
-                   </div>
-               </div>
+    <label for="situation-input" class="block text-lg font-semibold text-gray-900 mb-2 text-center">
+        Hi, I'm Arti, your 24/7 Sales Buddy.
+    </label>
+    <div class="relative">
+        <textarea 
+            id="situation-input" 
+            rows="4" 
+            class="w-full p-4 pr-12 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary resize-none placeholder-gray-500"
+            placeholder="Champion ghosted me after seeing pricing. $2M deal at DHS. Q4 commit. OR paste a news article for GTM analysis."
+            maxlength="2000"></textarea>
+        <button 
+            id="clear-input-btn"
+            class="absolute top-3 right-3 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition-colors hidden"
+            title="Clear input"
+            type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+        </button>
+    </div>
+    <div class="text-xs text-gray-500 mt-1 flex justify-between">
+        <span class="hint-text">Paste government news for GTM analysis, or describe your sales situation for coaching.</span>
+        <span id="char-count" class="text-gray-400">0/2000</span>
+    </div>
+</div>
 
                <div class="flex flex-wrap gap-2 justify-center mb-4">
                    <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
@@ -816,6 +852,7 @@ class AskArti {
   getElements() {
       return {
           situationInput: document.getElementById('situation-input'),
+		  clearInputBtn: document.getElementById('clear-input-btn'),
           askBtn: document.getElementById('ask-btn'),
           newsBtn: document.getElementById('news-btn'),
           btnText: document.getElementById('btn-text'),
@@ -849,6 +886,7 @@ class AskArti {
       this.setupEventListeners();
       this.elements.situationInput.focus();
       this.updateCharCount();
+	  this.toggleClearButton();
   }
 
   initializeMermaid() {
@@ -864,22 +902,50 @@ class AskArti {
   }
 
   updateCharCount() {
-      const current = this.elements.situationInput.value.length;
-      const max = CONFIG.MAX_INPUT_LENGTH;
-      this.elements.charCount.textContent = `${current}/${max}`;
-      
-      if (current > max * 0.9) {
-          this.elements.charCount.classList.add('text-red-500');
-          this.elements.charCount.classList.remove('text-gray-400');
-      } else {
-          this.elements.charCount.classList.remove('text-red-500');
-          this.elements.charCount.classList.add('text-gray-400');
-      }
-  }
+    const current = this.elements.situationInput.value.length;
+    const max = CONFIG.MAX_INPUT_LENGTH;
+    this.elements.charCount.textContent = `${current}/${max}`;
+    
+    if (current > max * 0.9) {
+        this.elements.charCount.classList.add('text-red-500');
+        this.elements.charCount.classList.remove('text-gray-400');
+    } else {
+        this.elements.charCount.classList.remove('text-red-500');
+        this.elements.charCount.classList.add('text-gray-400');
+    }
+}
 
-  setupEventListeners() {
-      // Character count
-      this.elements.situationInput.addEventListener('input', () => this.updateCharCount());
+// ADD THE NEW METHODS HERE:
+toggleClearButton() {
+    const hasContent = this.elements.situationInput.value.trim().length > 0;
+    if (hasContent) {
+        this.elements.clearInputBtn.classList.remove('hidden');
+    } else {
+        this.elements.clearInputBtn.classList.add('hidden');
+    }
+}
+
+clearInput() {
+    this.elements.situationInput.value = '';
+    this.updateCharCount();
+    this.toggleClearButton();
+    this.elements.situationInput.focus();
+    
+    // Clear results if any
+    this.elements.resultsContainer.innerHTML = '';
+    this.hideLoadingMessages();
+    this.elements.errorMessage.classList.add('hidden');
+}
+
+setupEventListeners() {
+    // Character count and clear button visibility
+    this.elements.situationInput.addEventListener('input', () => {
+        this.updateCharCount();
+        this.toggleClearButton(); // ADD THIS LINE
+    });
+
+    // Clear input button - ADD THIS EVENT LISTENER
+    this.elements.clearInputBtn.addEventListener('click', () => this.clearInput());
 
       // Quick prompts
       this.elements.quickPromptBtns.forEach(btn => {
