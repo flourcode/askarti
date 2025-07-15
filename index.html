@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>AskArti - Your 24/7 Sales Buddy</title>
     
     <!-- Meta Tags -->
@@ -91,6 +91,10 @@
         width: 20px;
         height: 20px;
         animation: spin 1s linear infinite;
+    }
+
+    .news-loader {
+        border-top: 2px solid #3b82f6;
     }
 
     @keyframes spin {
@@ -290,188 +294,200 @@
     /* Ensure input takes available space but allows buttons to fit */
     #chat-input {
         min-width: 0;
-    }
+   }
 
-    /* iOS Safari viewport fix */
-    @supports (-webkit-touch-callout: none) {
-        .chat-container {
-            height: 60dvh;
-        }
+   /* iOS Safari viewport fix */
+   @supports (-webkit-touch-callout: none) {
+       .chat-container {
+           height: 60dvh;
+       }
 
-        html, body {
-            height: 100%;
-            overflow-x: hidden;
-        }
+       html, body {
+           height: 100%;
+           overflow-x: hidden;
+       }
 
-        body {
-            -webkit-overflow-scrolling: touch;
-        }
-    }
+       body {
+           -webkit-overflow-scrolling: touch;
+       }
+   }
 
-    /* Mobile layout improvements - consolidated */
-    @media (max-width: 640px) {
-        .dashboard-card {
-            padding: 1rem;
-        }
+   /* Mobile layout improvements - consolidated */
+   @media (max-width: 640px) {
+       .dashboard-card {
+           padding: 1rem;
+       }
 
-        .chat-container {
-            height: 60dvh;
-            padding: 0.5rem;
-        }
+       .chat-container {
+           height: 60dvh;
+           padding: 0.5rem;
+       }
 
-        .quick-prompt {
-            font-size: 0.875rem;
-            padding: 0.5rem 1rem;
-        }
+       .quick-prompt {
+           font-size: 0.875rem;
+           padding: 0.5rem 1rem;
+       }
 
-        .mode-btn {
-            font-size: 0.875rem;
-            min-height: 44px;
-            flex: 1;
-        }
+       .mode-btn {
+           font-size: 0.875rem;
+           min-height: 44px;
+           flex: 1;
+       }
 
-        input[type="text"],
-        input[type="email"],
-        textarea {
-            font-size: 16px !important; /* Prevent zoom on iOS */
-        }
+       input[type="text"],
+       input[type="email"],
+       textarea {
+           font-size: 16px !important; /* Prevent zoom on iOS */
+       }
 
-        #chat-input {
-            min-height: 44px;
-            font-size: 0.9rem !important;
-        }
-        
-        .chat-message-arti, .chat-message-user {
-            max-width: 85% !important;
-            padding: 0.75rem !important;
-            font-size: 0.9rem;
-        }
-        
-        /* Make message content slightly smaller on mobile */
-        .chat-message-arti p, .chat-message-user {
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-    }
+       #chat-input {
+           min-height: 44px;
+           font-size: 0.9rem !important;
+       }
+       
+       .chat-message-arti, .chat-message-user {
+           max-width: 85% !important;
+           padding: 0.75rem !important;
+           font-size: 0.9rem;
+       }
+       
+       /* Make message content slightly smaller on mobile */
+       .chat-message-arti p, .chat-message-user {
+           font-size: 0.9rem;
+           line-height: 1.4;
+       }
 
-    /* For very small screens, make everything even more compact */
-    @media (max-width: 360px) {
-        .chat-message-arti, .chat-message-user {
-            max-width: 90% !important;
-            padding: 0.5rem 0.75rem !important;
-            font-size: 0.85rem;
-        }
-        
-        #chat-input {
-            font-size: 0.85rem !important;
-            padding: 0.5rem 0.75rem;
-        }
-        
-        /* Even smaller text for tiny screens */
-        .chat-message-arti p, .chat-message-user {
-            font-size: 0.85rem;
-            line-height: 1.3;
-        }
-        
-        /* Make buttons slightly smaller too */
-        #chat-send-btn, #reset-chat-btn {
-            padding: 0.5rem;
-            font-size: 0.85rem;
-        }
-        
-        #chat-send-btn {
-            padding-left: 0.75rem;
-            padding-right: 0.75rem;
-        }
-    }
-	/* Add this to your existing <style> section */
-.action-highlight {
-    background: linear-gradient(to right, 
-        transparent 0%, 
-        rgba(255, 235, 59, 0.2) 5%, 
-        rgba(255, 235, 59, 0.3) 50%, 
-        rgba(255, 235, 59, 0.2) 95%, 
-        transparent 100%);
-    padding: 0.125rem 0.5rem;
-    margin: 0 -0.25rem;
-    border-radius: 0.25rem;
-    display: inline;
-    box-decoration-break: clone;
-    -webkit-box-decoration-break: clone;
-}
+       /* Make buttons stack vertically on very small screens */
+       .button-group {
+           flex-direction: column;
+           gap: 0.75rem;
+       }
 
-/* Subtle animation on hover */
-.action-highlight:hover {
-    background: linear-gradient(to right, 
-        transparent 0%, 
-        rgba(255, 235, 59, 0.3) 5%, 
-        rgba(255, 235, 59, 0.4) 50%, 
-        rgba(255, 235, 59, 0.3) 95%, 
-        transparent 100%);
-    transition: background 0.2s ease;
-}
+       .button-group button {
+           width: 100%;
+       }
+   }
 
-/* For mobile, make the highlight slightly more visible */
-@media (max-width: 640px) {
-    .action-highlight {
-        background: linear-gradient(to right, 
-            transparent 0%, 
-            rgba(255, 235, 59, 0.25) 5%, 
-            rgba(255, 235, 59, 0.35) 50%, 
-            rgba(255, 235, 59, 0.25) 95%, 
-            transparent 100%);
-    }
-}
+   /* For very small screens, make everything even more compact */
+   @media (max-width: 360px) {
+       .chat-message-arti, .chat-message-user {
+           max-width: 90% !important;
+           padding: 0.5rem 0.75rem !important;
+           font-size: 0.85rem;
+       }
+       
+       #chat-input {
+           font-size: 0.85rem !important;
+           padding: 0.5rem 0.75rem;
+       }
+       
+       /* Even smaller text for tiny screens */
+       .chat-message-arti p, .chat-message-user {
+           font-size: 0.85rem;
+           line-height: 1.3;
+       }
+       
+       /* Make buttons slightly smaller too */
+       #chat-send-btn, #reset-chat-btn {
+           padding: 0.5rem;
+           font-size: 0.85rem;
+       }
+       
+       #chat-send-btn {
+           padding-left: 0.75rem;
+           padding-right: 0.75rem;
+       }
+   }
+
+   /* Action highlight for chat messages */
+   .action-highlight {
+       background: linear-gradient(to right, 
+           transparent 0%, 
+           rgba(255, 235, 59, 0.2) 5%, 
+           rgba(255, 235, 59, 0.3) 50%, 
+           rgba(255, 235, 59, 0.2) 95%, 
+           transparent 100%);
+       padding: 0.125rem 0.5rem;
+       margin: 0 -0.25rem;
+       border-radius: 0.25rem;
+       display: inline;
+       box-decoration-break: clone;
+       -webkit-box-decoration-break: clone;
+   }
+
+   /* Subtle animation on hover */
+   .action-highlight:hover {
+       background: linear-gradient(to right, 
+           transparent 0%, 
+           rgba(255, 235, 59, 0.3) 5%, 
+           rgba(255, 235, 59, 0.4) 50%, 
+           rgba(255, 235, 59, 0.3) 95%, 
+           transparent 100%);
+       transition: background 0.2s ease;
+   }
+
+   /* For mobile, make the highlight slightly more visible */
+   @media (max-width: 640px) {
+       .action-highlight {
+           background: linear-gradient(to right, 
+               transparent 0%, 
+               rgba(255, 235, 59, 0.25) 5%, 
+               rgba(255, 235, 59, 0.35) 50%, 
+               rgba(255, 235, 59, 0.25) 95%, 
+               transparent 100%);
+       }
+   }
 </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
-    <div class="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-20">
-        <header class="text-center mb-4">
-            <a href="/" aria-label="AskArti Home" class="inline-block">
-                <img src="/images/asklite.png" alt="AskArti" class="h-16 w-auto md:h-20 lg:h-24">
-            </a>
-        </header>
+   <div class="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-20">
+       <header class="text-center mb-4">
+           <a href="/" aria-label="AskArti Home" class="inline-block">
+               <img src="/images/asklite.png" alt="AskArti" class="h-16 w-auto md:h-20 lg:h-24">
+           </a>
+       </header>
 
-        <main class="dashboard-card mb-3">
-            <!-- Mode Toggle -->
-            <div class="mode-toggle mb-4 flex justify-center gap-2">
-                <button class="mode-btn px-4 py-2 rounded-lg font-medium transition-all active" data-mode="quick">
-                    Game Plans
-                </button>
-                <button class="mode-btn px-4 py-2 rounded-lg font-medium transition-all" data-mode="chat">
-                    Chat with Arti
-                </button>
-            </div>
+       <main class="dashboard-card mb-3">
+           <!-- Mode Toggle -->
+           <div class="mode-toggle mb-4 flex justify-center gap-2">
+               <button class="mode-btn px-4 py-2 rounded-lg font-medium transition-all active" data-mode="quick">
+                   Game Plans
+               </button>
+               <button class="mode-btn px-4 py-2 rounded-lg font-medium transition-all" data-mode="chat">
+                   Chat with Arti
+               </button>
+           </div>
 
-            <!-- Quick Mode (current interface) -->
-            <div id="quick-mode" class="mode-content">
-                <div class="mb-4">
-                    <label for="situation-input" class="block text-lg font-semibold text-gray-900 mb-2 text-center">
-                        Hi, I'm Arti, your 24/7 Sales Buddy.
-                    </label>
-                    <textarea 
-                        id="situation-input" 
-                        rows="3" 
-                        class="w-full p-4 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary resize-none placeholder-gray-500"
-                        placeholder="Champion ghosted me after seeing pricing. $2M deal at DHS. Q4 commit."
-                        maxlength="500"></textarea>
-                    <div class="text-xs text-gray-500 mt-1">
-                        <span class="hint-text">Modify these quick examples with your own goals.</span>
-                    </div>
-                </div>
+           <!-- Quick Mode (current interface) -->
+           <div id="quick-mode" class="mode-content">
+               <div class="mb-4">
+                   <label for="situation-input" class="block text-lg font-semibold text-gray-900 mb-2 text-center">
+                       Hi, I'm Arti, your 24/7 Sales Buddy.
+                   </label>
+                   <textarea 
+                       id="situation-input" 
+                       rows="4" 
+                       class="w-full p-4 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary resize-none placeholder-gray-500"
+                       placeholder="Champion ghosted me after seeing pricing. $2M deal at DHS. Q4 commit. OR paste a news article for GTM analysis."
+                       maxlength="2000"></textarea>
+                   <div class="text-xs text-gray-500 mt-1 flex justify-between">
+                       <span class="hint-text">Paste government news for GTM analysis, or describe your sales situation for coaching.</span>
+                       <span id="char-count" class="text-gray-400">0/2000</span>
+                   </div>
+               </div>
 
-                <div class="flex flex-wrap gap-2 justify-center mb-4">
-                    <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
-                            data-text="Buyer at VA ghosted me after I sent pricing. CISO loves our competitor.">
-                        Buyer Went Dark
-                    </button>
-                    <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
-                            data-text="Demo crashed at DOJ yesterday. CTO walked out. How to recover?">
-                        Demo Crashed
-                    </button>
-                    <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
-                            data-text="Partner reps and Account reps fighting over deals, pipeline, and revenue recognition.">
-							Partner Drama
+               <div class="flex flex-wrap gap-2 justify-center mb-4">
+                   <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
+                           data-text="Buyer at VA ghosted me after I sent pricing. CISO loves our competitor.">
+                       Buyer Went Dark
+                   </button>
+                   <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
+                           data-text="Demo crashed at DOJ yesterday. CTO walked out. How to recover?">
+                       Demo Crashed
+                   </button>
+                   <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
+                           data-text="Partner reps and Account reps fighting over deals, pipeline, and revenue recognition.">
+                       Partner Drama
                    </button>
                    <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
                            data-text="Meeting DHS CIO next week and don't have a Champion. How to position our cybersecurity platform?">
@@ -482,93 +498,101 @@
                        Interview Prep
                    </button>
                    <button class="quick-prompt px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 font-medium transition-all"
-                           data-text="Prospect for janitorial services at VA.">
-                       Prospecting
+                           data-text="CDAO just awarded $200M contracts to Anthropic, Google, OpenAI, and xAI for frontier AI. How do I get in on this action?">
+                       News Analysis
                    </button>
                </div>
 
-               <div class="text-center">
-                   <button id="ask-btn" class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-semibold py-3 px-8 rounded-full transition-all inline-flex items-center gap-2 shadow-lg hover:shadow-xl">
-                       <span id="btn-text">Ask Arti</span>
-                       <div id="loader" class="loader hidden"></div>
-                   </button>
+               <div class="text-center space-y-3">
+                   <div class="button-group flex flex-col sm:flex-row justify-center gap-3">
+                       <button id="ask-btn" class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-semibold py-3 px-8 rounded-full transition-all inline-flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
+                           <span id="btn-text">Ask Arti</span>
+                           <div id="loader" class="loader hidden"></div>
+                       </button>
+                       <button id="news-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full transition-all inline-flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
+                           <span id="news-btn-text">📰 NewsBot</span>
+                           <div id="news-loader" class="loader news-loader hidden"></div>
+                       </button>
+                   </div>
+                   <div class="text-xs text-gray-400 max-w-md mx-auto">
+                       Use NewsBot when you paste government news articles for GTM analysis
+                   </div>
                </div>
            </div>
 
-            <!-- Chat Mode -->
-            <div id="chat-mode" class="mode-content hidden">
-                <div class="chat-container h-[60vh] sm:h-96 max-h-[400px] overflow-y-auto mb-4 bg-gray-50 rounded-lg p-3 sm:p-4" style="height: 60dvh;">
-                    <div id="chat-messages" class="space-y-3 sm:space-y-4">
-                        <div class="flex justify-start">
-                            <div class="bg-white rounded-lg px-3 py-2 sm:px-4 sm:py-3 max-w-[90%] sm:max-w-[80%] shadow-sm">
-                                <p class="text-gray-800 text-sm sm:text-base">Hey! I'm Arti. I can help with stuck deals, boss problems, career, or whatever. If you need a structured plan, flip to the "Game Plans" tab.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+           <!-- Chat Mode -->
+           <div id="chat-mode" class="mode-content hidden">
+               <div class="chat-container h-[60vh] sm:h-96 max-h-[400px] overflow-y-auto mb-4 bg-gray-50 rounded-lg p-3 sm:p-4" style="height: 60dvh;">
+                   <div id="chat-messages" class="space-y-3 sm:space-y-4">
+                       <div class="flex justify-start">
+                           <div class="bg-white rounded-lg px-3 py-2 sm:px-4 sm:py-3 max-w-[90%] sm:max-w-[80%] shadow-sm">
+                               <p class="text-gray-800 text-sm sm:text-base">Hey! I'm Arti. I can help with stuck deals, boss problems, career, or whatever. If you need a structured plan, flip to the "Game Plans" tab.</p>
+                           </div>
+                       </div>
+                   </div>
+               </div>
 
-                <!-- Update the chat input container in the HTML -->
-<div class="flex gap-2 sticky bottom-0 bg-white pt-2 z-10">
-    <input 
-        type="text" 
-        id="chat-input"
-        inputmode="text"
-        autocomplete="off"
-        autocorrect="on"
-        autocapitalize="sentences"
-        spellcheck="true"
-        class="flex-1 p-2.5 sm:p-3 text-[16px] sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary min-h-[44px]"
-        placeholder="Type your message..."
-        maxlength="500">
-    <div class="flex gap-1">
-        <button 
-            id="chat-send-btn" 
-            class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium px-3 sm:px-6 py-2.5 sm:py-3 rounded-lg transition-all text-sm sm:text-base min-h-[44px] whitespace-nowrap"
-            style="touch-action: manipulation;">
-            Send
-        </button>
-        <button 
-            id="reset-chat-btn" 
-            class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-2 py-2.5 rounded-lg transition-all text-sm min-h-[44px]"
-            title="Start a new chat"
-            style="touch-action: manipulation; aspect-ratio: 1/1;">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-        </button>
-    </div>
-</div>
-            </div>
-        </main>
+               <div class="flex gap-2 sticky bottom-0 bg-white pt-2 z-10">
+                   <input 
+                       type="text" 
+                       id="chat-input"
+                       inputmode="text"
+                       autocomplete="off"
+                       autocorrect="on"
+                       autocapitalize="sentences"
+                       spellcheck="true"
+                       class="flex-1 p-2.5 sm:p-3 text-[16px] sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary min-h-[44px]"
+                       placeholder="Type your message..."
+                       maxlength="2000">
+                   <div class="flex gap-1">
+                       <button 
+                           id="chat-send-btn" 
+                           class="bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium px-3 sm:px-6 py-2.5 sm:py-3 rounded-lg transition-all text-sm sm:text-base min-h-[44px] whitespace-nowrap"
+                           style="touch-action: manipulation;">
+                           Send
+                       </button>
+                       <button 
+                           id="reset-chat-btn" 
+                           class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-2 py-2.5 rounded-lg transition-all text-sm min-h-[44px]"
+                           title="Start a new chat"
+                           style="touch-action: manipulation; aspect-ratio: 1/1;">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                           </svg>
+                       </button>
+                   </div>
+               </div>
+           </div>
+       </main>
 
-        <!-- Loading Message -->
-        <div id="loading-message-container" class="text-center py-4 hidden">
-            <p id="loading-message" class="text-gray-600"></p>
-        </div>
+       <!-- Loading Message -->
+       <div id="loading-message-container" class="text-center py-4 hidden">
+           <p id="loading-message" class="text-gray-600"></p>
+       </div>
 
-        <!-- Error Message -->
-        <div id="error-message" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center mb-4 hidden">
-            <p class="text-red-700 font-medium mb-2">Something went wrong</p>
-            <p class="text-red-600 text-sm" id="error-details">We're having trouble connecting to Arti. Please try again in a moment.</p>
-            <button id="retry-btn" class="mt-3 bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg text-sm">
-                Try Again
-            </button>
-        </div>
+       <!-- Error Message -->
+       <div id="error-message" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center mb-4 hidden">
+           <p class="text-red-700 font-medium mb-2">Something went wrong</p>
+           <p class="text-red-600 text-sm" id="error-details">We're having trouble connecting to Arti. Please try again in a moment.</p>
+           <button id="retry-btn" class="mt-3 bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg text-sm">
+               Try Again
+           </button>
+       </div>
 
-        <!-- Results -->
-        <div id="results-container"></div>
+       <!-- Results -->
+       <div id="results-container"></div>
 
-<!-- Enhanced Footer Section -->
-<footer class="text-center mt-8 sm:mt-12 space-y-4 sm:space-y-6 pb-20">
-    <!-- Quick Links -->
-    <div class="flex flex-wrap justify-center gap-6 text-sm mb-6">
-        <a href="#" id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">About AskArti</a>
-        <a href="#" id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Share</a>
-        <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Contact</a>
-    </div>
+       <!-- Enhanced Footer Section -->
+       <footer class="text-center mt-8 sm:mt-12 space-y-4 sm:space-y-6 pb-20">
+           <!-- Quick Links -->
+           <div class="flex flex-wrap justify-center gap-6 text-sm mb-6">
+               <a href="#" id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">About AskArti</a>
+               <a href="#" id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Share</a>
+               <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Contact</a>
+           </div>
 
-    <!-- Sponsor Section -->
-    <div class="sponsor-ad rounded-lg p-3 mb-4 text-sm bg-white border border-gray-200 not-italic text-left leading-normal text-gray-700">
+           <!-- Sponsor Section -->
+           <div class="sponsor-ad rounded-lg p-3 mb-4 text-sm bg-white border border-gray-200 not-italic text-left leading-normal text-gray-700">
                <div class="flex items-center gap-2 mb-2">
                    <span class="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded-full">SPONSOR</span>
                    <span class="text-gray-800 font-semibold">Hey there! Enjoyin' these results?</span>
@@ -583,1186 +607,1326 @@
                    <a href="mailto:mark@subhoo.com" class="hover:underline">Contact me to reserve this premium spot →</a>
                </p>
            </div>
-	<!-- Federal Intelligence Suite Header -->
-    <div class="mb-6">
-        <h3 class="text-lg font-bold text-customPurple-500 mb-2">Complete Federal Intelligence Suite</h3>
-        <p class="text-sm text-gray-600 max-w-2xl mx-auto">
-            Three powerful tools to navigate federal contracting: real-time guidance, contractor intelligence, and contract analysis
-        </p>
-    </div>
 
-    <!-- Three Product Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8 max-w-6xl mx-auto">
-        <!-- AskArti Card (Current Site) -->
-        <div class="bg-white border-2 border-customPurple-500 rounded-lg p-4 shadow-md">
-            <div class="flex items-center gap-3 mb-3">
-                <div class="w-10 h-10 bg-customPurple-500 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8.955 8.955 0 01-2.563-.37l-3.168 1.263a.75.75 0 01-.945-.945l1.263-3.168A7.955 7.955 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8z"/>
-                    </svg>
-                </div>
-                <div>
-                    <h4 class="font-bold text-customPurple-700">AskArti</h4>
-                    <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">YOU ARE HERE</span>
-                </div>
-            </div>
-            <p class="text-sm text-gray-600 mb-3">Your 24/7 AI sales coach for federal contracting. Get instant advice on stuck deals, meeting prep, and strategy.</p>
-            <div class="flex flex-wrap gap-1 mb-3">
-                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Sales Coaching</span>
-                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Deal Strategy</span>
-                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Meeting Prep</span>
-            </div>
-            <button class="w-full bg-gray-100 text-gray-500 px-4 py-2 rounded-md text-sm cursor-not-allowed">
-                Currently Using
-            </button>
-        </div>
+           <!-- Federal Intelligence Suite Header -->
+           <div class="mb-6">
+               <h3 class="text-lg font-bold text-customPurple-500 mb-2">Complete Federal Intelligence Suite</h3>
+               <p class="text-sm text-gray-600 max-w-2xl mx-auto">
+                   Three powerful tools to navigate federal contracting: real-time guidance, contractor intelligence, and contract analysis
+               </p>
+           </div>
 
-        <!-- Subhoo Card -->
-        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow">
-            <div class="flex items-center gap-3 mb-3">
-                <div class="w-10 h-10 bg-customPurple-500 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                    </svg>
-                </div>
-                <div>
-                    <h4 class="font-bold text-customPurple-700">Subhoo</h4>
-                    <span class="text-xs text-gray-500">Contractor Intel</span>
-                </div>
-            </div>
-            <p class="text-sm text-gray-600 mb-3">Discover federal prime contractors with mandatory subcontracting plans. Find partners and unlock opportunities.</p>
-            <div class="flex flex-wrap gap-1 mb-3">
-                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Prime Discovery</span>
-                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Subcontracting</span>
-                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Geographic Maps</span>
-            </div>
-            <a href="https://subhoo.com" target="_blank" rel="noopener noreferrer" 
-               class="w-full bg-customPurple-500 hover:bg-customPurple-600 text-white px-4 py-2 rounded-md text-sm transition-colors flex items-center justify-center gap-2">
-                Explore Subhoo
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                </svg>
-            </a>
-        </div>
+           <!-- Three Product Cards -->
+           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8 max-w-6xl mx-auto">
+               <!-- AskArti Card (Current Site) -->
+               <div class="bg-white border-2 border-customPurple-500 rounded-lg p-4 shadow-md">
+                   <div class="flex items-center gap-3 mb-3">
+                       <div class="w-10 h-10 bg-customPurple-500 rounded-lg flex items-center justify-center">
+                           <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8.955 8.955 0 01-2.563-.37l-3.168 1.263a.75.75 0 01-.945-.945l1.263-3.168A7.955 7.955 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8z"/>
+                           </svg>
+                       </div>
+                       <div>
+                           <h4 class="font-bold text-customPurple-700">AskArti</h4>
+                           <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">YOU ARE HERE</span>
+                       </div>
+                   </div>
+                   <p class="text-sm text-gray-600 mb-3">Your 24/7 AI sales coach for federal contracting. Get instant advice on stuck deals, meeting prep, and strategy.</p>
+                   <div class="flex flex-wrap gap-1 mb-3">
+                       <span class="text-xs bg-gray-100 px-2 py-1 rounded">Sales Coaching</span>
+                       <span class="text-xs bg-gray-100 px-2 py-1 rounded">Deal Strategy</span>
+                       <span class="text-xs bg-gray-100 px-2 py-1 rounded">Meeting Prep</span>
+                   </div>
+                   <button class="w-full bg-gray-100 text-gray-500 px-4 py-2 rounded-md text-sm cursor-not-allowed">
+                       Currently Using
+                   </button>
+               </div>
 
-        <!-- PostAward Card -->
-        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow">
-            <div class="flex items-center gap-3 mb-3">
-                <div class="w-10 h-10 bg-customPurple-500 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                    </svg>
-                </div>
-                <div>
-                    <h4 class="font-bold text-customPurple-700">PostAward</h4>
-                    <span class="text-xs text-gray-500">Contract Analysis</span>
-                </div>
-            </div>
-            <p class="text-sm text-gray-600 mb-3">Upload FPDS.gov CSV files to visualize spending patterns, track contracts, and identify opportunities.</p>
-            <div class="flex flex-wrap gap-1 mb-3">
-                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Data Analysis</span>
-                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Visualizations</span>
-                <span class="text-xs bg-gray-100 px-2 py-1 rounded">CSV Upload</span>
-            </div>
-            <a href="https://postaward.com" target="_blank" rel="noopener noreferrer" 
-               class="w-full bg-customPurple-500 hover:bg-customPurple-600 text-white px-4 py-2 rounded-md text-sm transition-colors flex items-center justify-center gap-2">
-                Try PostAward
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                </svg>
-            </a>
-        </div>
-    </div>
+               <!-- Subhoo Card -->
+               <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow">
+                   <div class="flex items-center gap-3 mb-3">
+                       <div class="w-10 h-10 bg-customPurple-500 rounded-lg flex items-center justify-center">
+                           <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                           </svg>
+                       </div>
+                       <div>
+                           <h4 class="font-bold text-customPurple-700">Subhoo</h4>
+                           <span class="text-xs text-gray-500">Contractor Intel</span>
+                       </div>
+                   </div>
+                   <p class="text-sm text-gray-600 mb-3">Discover federal prime contractors with mandatory subcontracting plans. Find partners and unlock opportunities.</p>
+                   <div class="flex flex-wrap gap-1 mb-3">
+                       <span class="text-xs bg-gray-100 px-2 py-1 rounded">Prime Discovery</span>
+                       <span class="text-xs bg-gray-100 px-2 py-1 rounded">Subcontracting</span>
+                       <span class="text-xs bg-gray-100 px-2 py-1 rounded">Geographic Maps</span>
+                   </div>
+                   <a href="https://subhoo.com" target="_blank" rel="noopener noreferrer" 
+                      class="w-full bg-customPurple-500 hover:bg-customPurple-600 text-white px-4 py-2 rounded-md text-sm transition-colors flex items-center justify-center gap-2">
+                       Explore Subhoo
+                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                       </svg>
+                   </a>
+               </div>
 
-    <!-- Workflow Section -->
-    <div class="bg-gradient-to-r from-customPurple-50 to-customPurple-100 rounded-lg p-6 mb-8 max-w-4xl mx-auto">
-        <h4 class="font-bold text-gray-800 mb-4">Your Complete Federal Sales Workflow</h4>
-        <div class="flex flex-col md:flex-row items-center justify-center gap-4 text-sm">
-            <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg shadow-sm">
-                <span class="w-6 h-6 bg-customPurple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
-                <span class="font-medium">Discover primes with Subhoo</span>
-            </div>
-            <svg class="w-6 h-6 text-gray-400 rotate-90 md:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-            </svg>
-            <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg shadow-sm">
-                <span class="w-6 h-6 bg-customPurple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
-                <span class="font-medium">Analyze contracts with PostAward</span>
-            </div>
-            <svg class="w-6 h-6 text-gray-400 rotate-90 md:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-            </svg>
-            <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg shadow-sm">
-                <span class="w-6 h-6 bg-customPurple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
-                <span class="font-medium">Get sales coaching with AskArti</span>
-            </div>
-        </div>
-    </div>
+               <!-- PostAward Card -->
+               <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow">
+                   <div class="flex items-center gap-3 mb-3">
+                       <div class="w-10 h-10 bg-customPurple-500 rounded-lg flex items-center justify-center">
+                           <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                           </svg>
+                       </div>
+                       <div>
+                           <h4 class="font-bold text-customPurple-700">PostAward</h4>
+                           <span class="text-xs text-gray-500">Contract Analysis</span>
+                       </div>
+                   </div>
+                   <p class="text-sm text-gray-600 mb-3">Upload FPDS.gov CSV files to visualize spending patterns, track contracts, and identify opportunities.</p>
+                   <div class="flex flex-wrap gap-1 mb-3">
+                       <span class="text-xs bg-gray-100 px-2 py-1 rounded">Data Analysis</span>
+                       <span class="text-xs bg-gray-100 px-2 py-1 rounded">Visualizations</span>
+                       <span class="text-xs bg-gray-100 px-2 py-1 rounded">CSV Upload</span>
+                   </div>
+                   <a href="https://postaward.com" target="_blank" rel="noopener noreferrer" 
+                      class="w-full bg-customPurple-500 hover:bg-customPurple-600 text-white px-4 py-2 rounded-md text-sm transition-colors flex items-center justify-center gap-2">
+                       Try PostAward
+                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                       </svg>
+                   </a>
+               </div>
+           </div>
 
+           <!-- Workflow Section -->
+           <div class="bg-gradient-to-r from-customPurple-50 to-customPurple-100 rounded-lg p-6 mb-8 max-w-4xl mx-auto">
+               <h4 class="font-bold text-gray-800 mb-4">Your Complete Federal Sales Workflow</h4>
+               <div class="flex flex-col md:flex-row items-center justify-center gap-4 text-sm">
+                   <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg shadow-sm">
+                       <span class="w-6 h-6 bg-customPurple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
+                       <span class="font-medium">Discover primes with Subhoo</span>
+                   </div>
+                   <svg class="w-6 h-6 text-gray-400 rotate-90 md:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                   </svg>
+                   <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg shadow-sm">
+                       <span class="w-6 h-6 bg-customPurple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
+                       <span class="font-medium">Analyze contracts with PostAward</span>
+                   </div>
+                   <svg class="w-6 h-6 text-gray-400 rotate-90 md:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                   </svg>
+                   <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg shadow-sm">
+                       <span class="w-6 h-6 bg-customPurple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
+                       <span class="font-medium">Get sales coaching with AskArti</span>
+                   </div>
+               </div>
+           </div>
 
-    <!-- Legal Footer -->
-    <div class="text-xs text-gray-400 space-y-2 max-w-4xl mx-auto">
-        <p>
-            All tools provide information for educational purposes only and do not constitute professional business advice. 
-            AI can make errors. Please consult qualified professionals before making important business decisions.
-        </p>
-        <p>© 2025 AskArti.com Made for Federal Sellers by Federal Sellers.</p>
-    </div>
-</footer>
+           <!-- Legal Footer -->
+           <div class="text-xs text-gray-400 space-y-2 max-w-4xl mx-auto">
+               <p>
+                   All tools provide information for educational purposes only and do not constitute professional business advice. 
+                   AI can make errors. Please consult qualified professionals before making important business decisions.
+               </p>
+               <p>© 2025 AskArti.com Made for Federal Sellers by Federal Sellers.</p>
+           </div>
+       </footer>
 
-<!-- Keep your existing About Modal -->
-<div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 modal-backdrop">
-    <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 modal-content">
-        <div class="flex justify-between items-start mb-4">
-            <div class="flex items-center gap-3">
-                <img src="images/oldmark.jpg" alt="Mark Flournoy" class="w-12 h-12 rounded-full object-cover border-2 border-customPurple-200">
-                <h2 class="text-xl font-bold text-gray-900">About AskArti</h2>
-            </div>
-            <button id="close-about" class="text-gray-400 hover:text-gray-600">
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
-        <div class="space-y-4 text-gray-700">
-            <p>AskArti is your 24/7 AI sales coach, designed specifically for federal sales professionals. Get instant advice on stuck deals, meeting preparation, and sales strategy.</p>
-            
-            <div class="mt-6 pt-4 border-t border-gray-200">
-                <div class="bg-gray-50 rounded-lg p-4 text-sm">
-                    <h3 class="font-semibold text-gray-800 mb-2 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Privacy & Technology
-                    </h3>
-                    <p class="text-gray-600 mb-2">AskArti uses advanced AI models for responses. We do not store, log, or persist any conversation data. All processing occurs in-memory and is discarded after each session.</p>
-                </div>
-            </div>
-            
-            <div class="pt-4">
-                <a href="https://calendly.com/markflournoy/30min" target="_blank" class="block w-full bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-lg text-center transition-colors">
-                    Let's chat about AI or Fed Sales →
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
+       <!-- About Modal -->
+       <div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 modal-backdrop">
+           <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 modal-content">
+               <div class="flex justify-between items-start mb-4">
+                   <div class="flex items-center gap-3">
+                       <img src="images/oldmark.jpg" alt="Mark Flournoy" class="w-12 h-12 rounded-full object-cover border-2 border-customPurple-200">
+                       <h2 class="text-xl font-bold text-gray-900">About AskArti</h2>
+                   </div>
+                   <button id="close-about" class="text-gray-400 hover:text-gray-600">
+                       <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                       </svg>
+                   </button>
+               </div>
+               <div class="space-y-4 text-gray-700">
+                   <p>AskArti is your 24/7 AI sales coach, designed specifically for federal sales professionals. Get instant advice on stuck deals, meeting preparation, and sales strategy.</p>
+                   
+                   <div class="mt-6 pt-4 border-t border-gray-200">
+                       <div class="bg-gray-50 rounded-lg p-4 text-sm">
+                           <h3 class="font-semibold text-gray-800 mb-2 flex items-center">
+                               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-customPurple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                   <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                               </svg>
+                               Privacy & Technology
+                           </h3>
+                           <p class="text-gray-600 mb-2">AskArti uses advanced AI models for responses. We do not store, log, or persist any conversation data. All processing occurs in-memory and is discarded after each session.</p>
+                       </div>
+                   </div>
+                   
+                   <div class="pt-4">
+                       <a href="https://calendly.com/markflournoy/30min" target="_blank" class="block w-full bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-4 rounded-lg text-center transition-colors">
+                           Let's chat about AI or Fed Sales →
+                       </a>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </div>
 
 <script>
 // Configuration
 const CONFIG = {
-   API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
-   REQUEST_TIMEOUT: 25000,
-   MAX_RETRIES: 2,
-   RETRY_DELAY: 2000,
-   MAX_INPUT_LENGTH: 500,
-   MIN_REQUEST_INTERVAL: 2000,
-   LOADING_MESSAGES: [
-       "Hang on. I'm...Working Backwards", 
-       "...Diving Deep", 
-       "...Unpacking This", 
-       "...Putting a Pin in it", 
-       "...Circling Back", 
-       "...Thinking Big"
-   ]
+  API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
+  REQUEST_TIMEOUT: 30000, // Increased for news analysis
+  MAX_RETRIES: 2,
+  RETRY_DELAY: 2000,
+  MAX_INPUT_LENGTH: 2000,
+  MIN_REQUEST_INTERVAL: 2000,
+  LOADING_MESSAGES: [
+      "Hang on. I'm...Working Backwards", 
+      "...Diving Deep", 
+      "...Unpacking This", 
+      "...Putting a Pin in it", 
+      "...Circling Back", 
+      "...Thinking Big"
+  ]
 };
 
 // Application class for better organization
 class AskArti {
-   constructor() {
-    this.elements = this.getElements();
-    this.state = {
-        pendingRequest: false,
-        lastRequestTime: 0,
-        loadingInterval: null,
-        abortController: null,
-        lastQuery: '',
-        currentMode: 'quick',
-        chatHistory: [],
-        messageCount: 0,
-        lastChatMessage: '',
-        errorRetries: 0,
-        hasCompletedFirstRequest: false,
-        hasCompletedSuccessfulRequest: false
-    };
-    this.init();
+  constructor() {
+   this.elements = this.getElements();
+   this.state = {
+       pendingRequest: false,
+       lastRequestTime: 0,
+       loadingInterval: null,
+       abortController: null,
+       lastQuery: '',
+       currentMode: 'quick',
+       chatHistory: [],
+       messageCount: 0,
+       lastChatMessage: '',
+       errorRetries: 0,
+       hasCompletedFirstRequest: false,
+       hasCompletedSuccessfulRequest: false
+   };
+   this.init();
 }
 
-   getElements() {
-       return {
-           situationInput: document.getElementById('situation-input'),
-           askBtn: document.getElementById('ask-btn'),
-           btnText: document.getElementById('btn-text'),
-           loader: document.getElementById('loader'),
-           loadingMessageContainer: document.getElementById('loading-message-container'),
-           loadingMessage: document.getElementById('loading-message'),
-           errorMessage: document.getElementById('error-message'),
-           errorDetails: document.getElementById('error-details'),
-           retryBtn: document.getElementById('retry-btn'),
-           resultsContainer: document.getElementById('results-container'),
-           aboutBtn: document.getElementById('about-btn'),
-           aboutModal: document.getElementById('about-modal'),
-           closeAbout: document.getElementById('close-about'),
-           shareBtn: document.getElementById('share-btn'),
-           quickPromptBtns: document.querySelectorAll('.quick-prompt'),
-           modeButtons: document.querySelectorAll('.mode-btn'),
-           quickMode: document.getElementById('quick-mode'),
-           chatMode: document.getElementById('chat-mode'),
-           chatMessages: document.getElementById('chat-messages'),
-           chatInput: document.getElementById('chat-input'),
-           chatSendBtn: document.getElementById('chat-send-btn'),
-           resetChatBtn: document.getElementById('reset-chat-btn')
-       };
-   }
+  getElements() {
+      return {
+          situationInput: document.getElementById('situation-input'),
+          askBtn: document.getElementById('ask-btn'),
+          newsBtn: document.getElementById('news-btn'),
+          btnText: document.getElementById('btn-text'),
+          newsBtnText: document.getElementById('news-btn-text'),
+          loader: document.getElementById('loader'),
+          newsLoader: document.getElementById('news-loader'),
+          charCount: document.getElementById('char-count'),
+          loadingMessageContainer: document.getElementById('loading-message-container'),
+          loadingMessage: document.getElementById('loading-message'),
+          errorMessage: document.getElementById('error-message'),
+          errorDetails: document.getElementById('error-details'),
+          retryBtn: document.getElementById('retry-btn'),
+          resultsContainer: document.getElementById('results-container'),
+          aboutBtn: document.getElementById('about-btn'),
+          aboutModal: document.getElementById('about-modal'),
+          closeAbout: document.getElementById('close-about'),
+          shareBtn: document.getElementById('share-btn'),
+          quickPromptBtns: document.querySelectorAll('.quick-prompt'),
+          modeButtons: document.querySelectorAll('.mode-btn'),
+          quickMode: document.getElementById('quick-mode'),
+          chatMode: document.getElementById('chat-mode'),
+          chatMessages: document.getElementById('chat-messages'),
+          chatInput: document.getElementById('chat-input'),
+          chatSendBtn: document.getElementById('chat-send-btn'),
+          resetChatBtn: document.getElementById('reset-chat-btn')
+      };
+  }
 
-   init() {
-       this.initializeMermaid();
-       this.setupEventListeners();
-       this.elements.situationInput.focus();
-   }
+  init() {
+      this.initializeMermaid();
+      this.setupEventListeners();
+      this.elements.situationInput.focus();
+      this.updateCharCount();
+  }
 
-   initializeMermaid() {
-       mermaid.initialize({ 
-           startOnLoad: false,
-           securityLevel: 'strict',
-           theme: 'default',
-           flowchart: {
-               htmlLabels: true,
-               curve: 'linear'
-           }
-       });
-   }
+  initializeMermaid() {
+      mermaid.initialize({ 
+          startOnLoad: false,
+          securityLevel: 'strict',
+          theme: 'default',
+          flowchart: {
+              htmlLabels: true,
+              curve: 'linear'
+          }
+      });
+  }
 
-   setupEventListeners() {
-       // Quick prompts
-       // Update the setupEventListeners method:
-// Quick prompts
-this.elements.quickPromptBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        // Prevent multiple clicks
-        if (btn.dataset.loading === 'true' || this.state.pendingRequest) {
-            return;
-        }
-        
-        // Mark button as loading
-        btn.dataset.loading = 'true';
-        const originalText = btn.textContent;
-        btn.textContent = 'Loading...';
-        
-        // Set the input value
-        this.elements.situationInput.value = e.currentTarget.dataset.text;
-        
-        // Process the request
-        this.getAdvice()
-            .finally(() => {
-                // Reset button state after request completes
-                btn.dataset.loading = 'false';
-                btn.textContent = originalText;
-            });
-    });
-});
-       // Main button
-       this.elements.askBtn.addEventListener('click', () => this.getAdvice());
-       
-       // Enter key
-       this.elements.situationInput.addEventListener('keydown', (e) => {
-           if (e.key === 'Enter' && !e.shiftKey) {
-               e.preventDefault();
-               this.getAdvice();
-           }
-       });
+  updateCharCount() {
+      const current = this.elements.situationInput.value.length;
+      const max = CONFIG.MAX_INPUT_LENGTH;
+      this.elements.charCount.textContent = `${current}/${max}`;
+      
+      if (current > max * 0.9) {
+          this.elements.charCount.classList.add('text-red-500');
+          this.elements.charCount.classList.remove('text-gray-400');
+      } else {
+          this.elements.charCount.classList.remove('text-red-500');
+          this.elements.charCount.classList.add('text-gray-400');
+      }
+  }
 
-       // Retry
-       this.elements.retryBtn.addEventListener('click', () => {
-           this.elements.errorMessage.classList.add('hidden');
-           if (this.state.lastQuery) {
-               this.elements.situationInput.value = this.state.lastQuery;
-               this.getAdvice();
-           }
-       });
-       
-       // Reset chat button
-       this.elements.resetChatBtn.addEventListener('click', () => this.resetChat());
-       
-       // Share
-       this.elements.shareBtn.addEventListener('click', () => this.share());
+  setupEventListeners() {
+      // Character count
+      this.elements.situationInput.addEventListener('input', () => this.updateCharCount());
 
-       // About modal
-       this.elements.aboutBtn.addEventListener('click', () => this.showModal());
-       this.elements.closeAbout.addEventListener('click', () => this.hideModal());
-       this.elements.aboutModal.addEventListener('click', (e) => {
-           if (e.target === this.elements.aboutModal) this.hideModal();
-       });
+      // Quick prompts
+      this.elements.quickPromptBtns.forEach(btn => {
+          btn.addEventListener('click', (e) => {
+              // Prevent multiple clicks
+              if (btn.dataset.loading === 'true' || this.state.pendingRequest) {
+                  return;
+              }
+              
+              // Mark button as loading
+              btn.dataset.loading = 'true';
+              const originalText = btn.textContent;
+              btn.textContent = 'Loading...';
+              
+              // Set the input value
+              this.elements.situationInput.value = e.currentTarget.dataset.text;
+              this.updateCharCount();
+              
+              // Process the request
+              this.getAdvice()
+                  .finally(() => {
+                      // Reset button state after request completes
+                      btn.dataset.loading = 'false';
+                      btn.textContent = originalText;
+                  });
+          });
+      });
 
-       // Escape key
-       document.addEventListener('keydown', (e) => {
-           if (e.key === 'Escape') this.hideModal();
-       });
+      // Main buttons
+      this.elements.askBtn.addEventListener('click', () => this.getAdvice());
+      this.elements.newsBtn.addEventListener('click', () => this.getAdvice('news'));
+      
+      // Enter key
+      this.elements.situationInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              this.getAdvice();
+          }
+      });
 
-       // Mode toggle
-       this.elements.modeButtons.forEach(btn => {
-           btn.addEventListener('click', (e) => this.switchMode(e.target.dataset.mode));
-       });
+      // Retry
+      this.elements.retryBtn.addEventListener('click', () => {
+          this.elements.errorMessage.classList.add('hidden');
+          if (this.state.lastQuery) {
+              this.elements.situationInput.value = this.state.lastQuery;
+              this.updateCharCount();
+              this.getAdvice();
+          }
+      });
+      
+      // Reset chat button
+      this.elements.resetChatBtn.addEventListener('click', () => this.resetChat());
+      
+      // Share
+      this.elements.shareBtn.addEventListener('click', () => this.share());
 
-       // Chat events
-       this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
-       this.elements.chatInput.addEventListener('keydown', (e) => {
-           if (e.key === 'Enter' && !e.shiftKey) {
-               e.preventDefault();
-               this.sendChatMessage();
-           }
-       });
-   }
+      // About modal
+      this.elements.aboutBtn.addEventListener('click', () => this.showModal());
+      this.elements.closeAbout.addEventListener('click', () => this.hideModal());
+      this.elements.aboutModal.addEventListener('click', (e) => {
+          if (e.target === this.elements.aboutModal) this.hideModal();
+      });
 
-   switchMode(mode) {
-    this.state.currentMode = mode;
-    
-    // Update button states
-    this.elements.modeButtons.forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.mode === mode);
-    });
+      // Escape key
+      document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') this.hideModal();
+      });
 
-    // Clear results container when switching modes
-    this.elements.resultsContainer.innerHTML = '';
+      // Mode toggle
+      this.elements.modeButtons.forEach(btn => {
+          btn.addEventListener('click', (e) => this.switchMode(e.target.dataset.mode));
+      });
 
-    // Show/hide content
-    if (mode === 'quick') {
-        this.elements.quickMode.classList.remove('hidden');
-        this.elements.chatMode.classList.add('hidden');
-        this.elements.situationInput.focus();
-    } else {
-        this.elements.quickMode.classList.add('hidden');
-        this.elements.chatMode.classList.remove('hidden');
-        this.elements.chatInput.focus();
-        
-        // Reset error-related state when switching to chat mode
-        this.state.errorRetries = 0;
-        this.state.lastChatMessage = '';
-    }
-    
-    // Hide any error messages or loading indicators
-    this.elements.errorMessage.classList.add('hidden');
-    this.hideLoadingMessages();
-}
+      // Chat events
+      this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
+      this.elements.chatInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              this.sendChatMessage();
+          }
+      });
+  }
 
-   addChatMessage(content, isUser = false) {
-    let processedContent = content;
-    
-    // Process action tags for Arti's messages
-    if (!isUser) {
-        // Replace <action></action> tags with highlighted spans
-        processedContent = content.replace(
-            /<action>(.*?)<\/action>/g, 
-            '<span class="action-highlight">$1</span>'
-        );
-        
-        // Parse markdown after processing action tags
-        processedContent = marked.parse(processedContent);
-    }
-    
-    const messageHtml = `
-        <div class="flex ${isUser ? 'justify-end' : 'justify-start'}">
-            <div class="${isUser ? 'chat-message-user' : 'chat-message-arti'} 
-                        rounded-lg px-4 py-3 max-w-[80%] sm:max-w-[80%] md:max-w-[70%] shadow-sm">
-                ${isUser ? content : processedContent}
-            </div>
-        </div>
-    `;
-    
-    this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
-    this.scrollChatToBottom();
-}
+  switchMode(mode) {
+      this.state.currentMode = mode;
+      
+      // Update button states
+      this.elements.modeButtons.forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.mode === mode);
+      });
 
-   showTypingIndicator() {
-       const typingHtml = `
-           <div id="typing-indicator" class="flex justify-start">
-               <div class="bg-white rounded-lg shadow-sm typing-indicator">
-                   <div class="typing-dot"></div>
-                   <div class="typing-dot"></div>
-                   <div class="typing-dot"></div>
-               </div>
-           </div>
-       `;
-       this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
-       this.scrollChatToBottom();
-   }
+      // Clear results container when switching modes
+      this.elements.resultsContainer.innerHTML = '';
 
-   hideTypingIndicator() {
-       const indicator = document.getElementById('typing-indicator');
-       if (indicator) indicator.remove();
-   }
-   
-   resetChat() {
-       // Clear chat history
-       this.state.chatHistory = [];
-       this.state.messageCount = 0;
-       this.state.lastChatMessage = '';
-       this.state.errorRetries = 0;
-       
-       // Clear chat UI
-       this.elements.chatMessages.innerHTML = '';
-       this.elements.chatInput.value = '';
-       
-       // Add welcome message
-       const welcomeMessage = `
-           <div class="flex justify-start">
-               <div class="bg-white rounded-lg px-3 py-2 sm:px-4 sm:py-3 max-w-[90%] sm:max-w-[80%] shadow-sm">
-                   <p class="text-gray-800 text-sm sm:text-base">Hey! I'm Arti. Tell me what's going on and I'll help you work through it. What's the situation?</p>
-               </div>
-           </div>
-       `;
-       this.elements.chatMessages.innerHTML = welcomeMessage;
-       
-       // Focus on input
-       this.elements.chatInput.focus();
-   }
-   
-   scrollChatToBottom() {
-       const scrollContainer = document.querySelector('.chat-container');
-       if (!scrollContainer) return;
+      // Show/hide content
+      if (mode === 'quick') {
+          this.elements.quickMode.classList.remove('hidden');
+          this.elements.chatMode.classList.add('hidden');
+          this.elements.situationInput.focus();
+      } else {
+          this.elements.quickMode.classList.add('hidden');
+          this.elements.chatMode.classList.remove('hidden');
+          this.elements.chatInput.focus();
+          
+          // Reset error-related state when switching to chat mode
+          this.state.errorRetries = 0;
+          this.state.lastChatMessage = '';
+      }
+      
+      // Hide any error messages or loading indicators
+      this.elements.errorMessage.classList.add('hidden');
+      this.hideLoadingMessages();
+  }
 
-       requestAnimationFrame(() => {
-           scrollContainer.scrollTop = scrollContainer.scrollHeight;
-           setTimeout(() => {
-               scrollContainer.scrollTop = scrollContainer.scrollHeight;
-           }, 100); // Handles late content rendering like images or Mermaid charts
-       });
-   }
+  addChatMessage(content, isUser = false) {
+      let processedContent = content;
+      
+      // Process action tags for Arti's messages
+      if (!isUser) {
+          // Replace <action></action> tags with highlighted spans
+          processedContent = content.replace(
+              /<action>(.*?)<\/action>/g, 
+              '<span class="action-highlight">$1</span>'
+          );
+          
+          // Parse markdown after processing action tags
+          processedContent = marked.parse(processedContent);
+      }
+      
+      const messageHtml = `
+          <div class="flex ${isUser ? 'justify-end' : 'justify-start'}">
+              <div class="${isUser ? 'chat-message-user' : 'chat-message-arti'} 
+                          rounded-lg px-4 py-3 max-w-[80%] sm:max-w-[80%] md:max-w-[70%] shadow-sm">
+                  ${isUser ? content : processedContent}
+              </div>
+          </div>
+      `;
+      
+      this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
+      this.scrollChatToBottom();
+  }
 
-   createTimeoutSignal(timeoutMs) {
-       const controller = new AbortController();
-       setTimeout(() => controller.abort(), timeoutMs);
-       return controller.signal;
-   }
+  showTypingIndicator() {
+      const typingHtml = `
+          <div id="typing-indicator" class="flex justify-start">
+              <div class="bg-white rounded-lg shadow-sm typing-indicator">
+                  <div class="typing-dot"></div>
+                  <div class="typing-dot"></div>
+                  <div class="typing-dot"></div>
+              </div>
+          </div>
+      `;
+      this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
+      this.scrollChatToBottom();
+  }
 
-   async makeChatRequest(message) {
-       // Process conversation history with smart truncation
-       let conversationContext = this.state.chatHistory;
-       
-       // If history is getting long, keep only more recent exchanges but preserve some context
-       const fullHistoryLength = JSON.stringify(conversationContext).length;
-       if (fullHistoryLength > 4000) {
-           // Keep most recent exchanges
-           conversationContext = this.state.chatHistory.slice(-15);
-       }
-       
-       console.log('Chat History Length:', this.state.chatHistory.length);
-       console.log('Message Count:', this.state.messageCount);
-       console.log('Context Length:', JSON.stringify(conversationContext).length);
-       
-       // Add retry mechanism with exponential backoff
-       let retries = 0;
-       const maxRetries = 2;
-       
-       while (retries <= maxRetries) {
-           try {
-               const response = await fetch(CONFIG.API_ENDPOINT, {
-                   method: 'POST',
-                   headers: { 'Content-Type': 'application/json' },
-                   body: JSON.stringify({ 
-                       situation: message,
-                       mode: 'chat',
-                       conversationHistory: conversationContext
-                   }),
-                   signal: this.createTimeoutSignal(CONFIG.REQUEST_TIMEOUT)
-               });
+  hideTypingIndicator() {
+      const indicator = document.getElementById('typing-indicator');
+      if (indicator) indicator.remove();
+  }
+  
+  resetChat() {
+      // Clear chat history
+      this.state.chatHistory = [];
+      this.state.messageCount = 0;
+      this.state.lastChatMessage = '';
+      this.state.errorRetries = 0;
+      
+      // Clear chat UI
+      this.elements.chatMessages.innerHTML = '';
+      this.elements.chatInput.value = '';
+      
+      // Add welcome message
+      const welcomeMessage = `
+          <div class="flex justify-start">
+              <div class="bg-white rounded-lg px-3 py-2 sm:px-4 sm:py-3 max-w-[90%] sm:max-w-[80%] shadow-sm">
+                  <p class="text-gray-800 text-sm sm:text-base">Hey! I'm Arti. Tell me what's going on and I'll help you work through it. What's the situation?</p>
+              </div>
+          </div>
+      `;
+      this.elements.chatMessages.innerHTML = welcomeMessage;
+      
+      // Focus on input
+      this.elements.chatInput.focus();
+  }
+  
+  scrollChatToBottom() {
+      const scrollContainer = document.querySelector('.chat-container');
+      if (!scrollContainer) return;
 
-               if (!response.ok) {
-                   const errorText = await response.text();
-                   console.error('Chat API Error:', response.status, errorText);
-                   throw new Error(`Server error (${response.status}): ${errorText}`);
-               }
+      requestAnimationFrame(() => {
+          scrollContainer.scrollTop = scrollContainer.scrollHeight;
+          setTimeout(() => {
+              scrollContainer.scrollTop = scrollContainer.scrollHeight;
+          }, 100);
+      });
+  }
 
-               let data;
-               try {
-                   data = await response.json();
-               } catch (jsonError) {
-                   console.error('JSON parse error:', jsonError);
-                   throw new Error('Failed to parse server response');
-               }
-               
-               if (data.error) {
-                   console.error('Chat API returned error:', data);
-                   throw new Error(data.message || data.error);
-               }
-               
-               // Validate response structure here
-               if (!data.message) {
-                   console.error('Invalid response structure:', data);
-                   throw new Error('Invalid response from server');
-               }
-               
-               return data;
-           } catch (error) {
-               console.error(`Chat request failed (attempt ${retries + 1}/${maxRetries + 1}):`, error);
-               
-               // If we've reached max retries, throw the error
-               if (retries === maxRetries) {
-                   throw error;
-               }
-               
-               // Otherwise, wait before retrying
-               const waitTime = Math.pow(2, retries) * 1000; // Exponential backoff
-               await new Promise(resolve => setTimeout(resolve, waitTime));
-               retries++;
-               
-               // Log that we're retrying
-               console.log(`Retrying request, attempt ${retries + 1}/${maxRetries + 1}`);
-           }
-       }
-   }
+  createTimeoutSignal(timeoutMs) {
+      const controller = new AbortController();
+      setTimeout(() => controller.abort(), timeoutMs);
+      return controller.signal;
+  }
 
-   async sendChatMessage() {
-    const message = this.elements.chatInput.value.trim();
-    if (!message || this.state.pendingRequest) return;
+  async makeChatRequest(message) {
+      // Process conversation history with smart truncation
+      let conversationContext = this.state.chatHistory;
+      
+      // If history is getting long, keep only more recent exchanges but preserve some context
+      const fullHistoryLength = JSON.stringify(conversationContext).length;
+      if (fullHistoryLength > 4000) {
+          // Keep most recent exchanges
+          conversationContext = this.state.chatHistory.slice(-15);
+      }
+      
+      console.log('Chat History Length:', this.state.chatHistory.length);
+      console.log('Message Count:', this.state.messageCount);
+      console.log('Context Length:', JSON.stringify(conversationContext).length);
+      
+      // Add retry mechanism with exponential backoff
+      let retries = 0;
+      const maxRetries = 2;
+      
+      while (retries <= maxRetries) {
+          try {
+              const response = await fetch(CONFIG.API_ENDPOINT, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ 
+                      situation: message,
+                      mode: 'chat',
+                      conversationHistory: conversationContext
+                  }),
+                  signal: this.createTimeoutSignal(CONFIG.REQUEST_TIMEOUT)
+              });
 
-    // Add more robust input sanitization
-    const sanitizedMessage = message
-        .replace(/<\/?[^>]+(>|$)/g, "") // Remove any HTML tags
-        .trim();
-        
-    if (!sanitizedMessage) {
-        this.showTemporaryMessage("Please enter a valid message", "warning");
-        return;
-    }
+              if (!response.ok) {
+                  const errorText = await response.text();
+                  console.error('Chat API Error:', response.status, errorText);
+                  throw new Error(`Server error (${response.status}): ${errorText}`);
+              }
 
-    // Validate message length
-    if (sanitizedMessage.length > CONFIG.MAX_INPUT_LENGTH) {
-        this.addChatMessage("That message is a bit long. Try breaking it into smaller parts.", false);
-        return;
-    }
+              let data;
+              try {
+                  data = await response.json();
+              } catch (jsonError) {
+                  console.error('JSON parse error:', jsonError);
+                  throw new Error('Failed to parse server response');
+              }
+              
+              if (data.error) {
+                  console.error('Chat API returned error:', data);
+                  throw new Error(data.message || data.error);
+              }
+              
+              // Validate response structure here
+              if (!data.message) {
+                  console.error('Invalid response structure:', data);
+                  throw new Error('Invalid response from server');
+              }
+              
+              return data;
+          } catch (error) {
+              console.error(`Chat request failed (attempt ${retries + 1}/${maxRetries + 1}):`, error);
+              
+              // If we've reached max retries, throw the error
+              if (retries === maxRetries) {
+                  throw error;
+              }
+              
+              // Otherwise, wait before retrying
+              const waitTime = Math.pow(2, retries) * 1000; // Exponential backoff
+              await new Promise(resolve => setTimeout(resolve, waitTime));
+              retries++;
+              
+              // Log that we're retrying
+              console.log(`Retrying request, attempt ${retries + 1}/${maxRetries + 1}`);
+          }
+      }
+  }
 
-    // Save message for potential retry
-    this.state.lastChatMessage = sanitizedMessage;
+  async sendChatMessage() {
+      const message = this.elements.chatInput.value.trim();
+      if (!message || this.state.pendingRequest) return;
 
-    // Add user message
-    this.addChatMessage(sanitizedMessage, true);
-    this.elements.chatInput.value = '';
-    
-    // Add to chat history
-    this.state.chatHistory.push({ role: 'user', content: sanitizedMessage });
-    this.state.messageCount++;
+      // Add more robust input sanitization
+      const sanitizedMessage = message
+          .replace(/<\/?[^>]+(>|$)/g, "") // Remove any HTML tags
+          .trim();
+          
+      if (!sanitizedMessage) {
+          this.showTemporaryMessage("Please enter a valid message", "warning");
+          return;
+      }
 
-    // Show typing indicator
-    this.showTypingIndicator();
-    this.state.pendingRequest = true;
+      // Validate message length
+      if (sanitizedMessage.length > CONFIG.MAX_INPUT_LENGTH) {
+          this.addChatMessage("That message is a bit long. Try breaking it into smaller parts.", false);
+          return;
+      }
 
-    try {
-        const response = await this.makeChatRequest(sanitizedMessage);
-        
-        // Add a short, random delay to make the typing feel more natural
-        const typingDelay = 500 + Math.random() * 1000; // 0.5 to 1.5 seconds
-        await new Promise(resolve => setTimeout(resolve, typingDelay));
-        
-        this.hideTypingIndicator();
-        
-        // Validate response structure
-        if (!response || typeof response !== 'object') {
-            throw new Error('Invalid response format');
-        }
+      // Save message for potential retry
+      this.state.lastChatMessage = sanitizedMessage;
 
-        const messageContent = response.message;
-        if (!messageContent) {
-            console.error('Missing message in response:', response);
-            throw new Error('No message in response');
-        }
-        
-        // Add Arti's response
-        this.addChatMessage(messageContent);
-        this.state.chatHistory.push({ role: 'assistant', content: messageContent });
+      // Add user message
+      this.addChatMessage(sanitizedMessage, true);
+      this.elements.chatInput.value = '';
+      
+      // Add to chat history
+      this.state.chatHistory.push({ role: 'user', content: sanitizedMessage });
+      this.state.messageCount++;
 
-        // Reset error retry counter on success
-        this.state.errorRetries = 0;
+      // Show typing indicator
+      this.showTypingIndicator();
+      this.state.pendingRequest = true;
 
-        // Remove follow-up suggestions section - we want natural conversation flow
+      try {
+          const response = await this.makeChatRequest(sanitizedMessage);
+          
+          // Add a short, random delay to make the typing feel more natural
+          const typingDelay = 500 + Math.random() * 1000; // 0.5 to 1.5 seconds
+          await new Promise(resolve => setTimeout(resolve, typingDelay));
+          
+          this.hideTypingIndicator();
+          
+          // Validate response structure
+          if (!response || typeof response !== 'object') {
+              throw new Error('Invalid response format');
+          }
 
-    } catch (error) {
-        this.hideTypingIndicator();
-        console.error('Chat error details:', error);
-        
-        // Increment error counter
-        this.state.errorRetries++;
-        
-        // More specific error messages
-        let errorMessage = "I'm having trouble connecting right now.";
-        let errorType = "connection";
-        
-        if (error.message.includes('timeout') || error.name === 'AbortError') {
-            errorMessage = "That took too long to process. Please try a shorter message.";
-            errorType = "timeout";
-        } else if (error.message.includes('400')) {
-            errorMessage = "There was an issue with your message format. Please try rephrasing.";
-            errorType = "format";
-        } else if (error.message.includes('500') || error.message.includes('server')) {
-            errorMessage = "I'm having server issues. Please try again in a moment.";
-            errorType = "server";
-        } else if (error.message.includes('parse') || error.message.includes('Invalid response')) {
-            errorMessage = "I received an invalid response from the server. Let's try again.";
-            errorType = "parsing";
-        }
-        
-        // Add retry button with error message
-        const errorHtml = `
-            <div class="flex justify-start">
-                <div class="bg-red-50 rounded-lg px-4 py-3 max-w-[90%] shadow-sm border border-red-200">
-                    <p class="text-red-700 text-sm">${errorMessage}</p>
-                    <button id="chat-retry-btn" class="mt-2 text-xs bg-red-100 hover:bg-red-200 text-red-700 font-medium py-1 px-2 rounded">
-                        Retry message
-                    </button>
-                </div>
-            </div>
-        `;
-        this.elements.chatMessages.insertAdjacentHTML('beforeend', errorHtml);
-        this.scrollChatToBottom();
-        
-        // Add event listener to the retry button
-        document.getElementById('chat-retry-btn').addEventListener('click', () => this.retryLastChatMessage());
-        
-        // For certain types of errors, automatically retry once after a delay
-        if ((errorType === "server" || errorType === "connection" || errorType === "parsing") && this.state.errorRetries <= 1) {
-            setTimeout(() => {
-                const retryButton = document.getElementById('chat-retry-btn');
-                if (retryButton) {
-                    // Only auto-retry if the button still exists (user hasn't manually retried)
-                    this.retryLastChatMessage();
-                }
-            }, 3000);
-        }
-        
-        // If we've had multiple server errors, provide a fallback response
-        if (this.state.errorRetries >= 2) {
-            this.provideFallbackResponse();
-        }
-    } finally {
-        this.state.pendingRequest = false;
-    }
-}
+          const messageContent = response.message;
+          if (!messageContent) {
+              console.error('Missing message in response:', response);
+              throw new Error('No message in response');
+          }
+          
+          // Add Arti's response
+          this.addChatMessage(messageContent);
+          this.state.chatHistory.push({ role: 'assistant', content: messageContent });
 
-provideFallbackResponse() {
-    const fallbackResponses = [
-        "I'm having some trouble connecting to my systems right now. Could you try again in a moment?",
-        "Sorry about that - I seem to be having a technical hiccup. Let's try again.",
-        "My server connection is unstable at the moment. Please try again shortly.",
-        "I apologize for the interruption. Let's get back on track - could you repeat your last question?"
-    ];
-    
-    const randomResponse = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
-    
-    // Add the fallback response as if it came from Arti
-    this.addChatMessage(randomResponse);
-    
-    // Add simple action buttons without suggestions
-    const actionHtml = `
-        <div class="mt-4 px-2">
-            <div class="flex gap-2 flex-wrap justify-center">
-                <button class="chat-suggestion px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-full text-sm text-blue-700 hover:text-blue-800 transition-all"
-                        onclick="app.resetChat()">
-                    Start a new conversation
-                </button>
-                <button class="chat-suggestion px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-full text-sm text-blue-700 hover:text-blue-800 transition-all"
-                        onclick="app.retryLastChatMessage()">
-                    Try again
-                </button>
-            </div>
-        </div>
-    `;
-    this.elements.chatMessages.insertAdjacentHTML('beforeend', actionHtml);
-    this.scrollChatToBottom();
-}
+          // Reset error retry counter on success
+          this.state.errorRetries = 0;
 
-async retryLastChatMessage() {
-    if (!this.state.lastChatMessage || this.state.pendingRequest) return;
-    
-    // Remove the error message with retry button
-    const errorElement = document.getElementById('chat-retry-btn')?.closest('.flex');
-    if (errorElement) {
-        errorElement.remove();
-    }
-    
-    // Set the message back in the input field and send it
-    this.elements.chatInput.value = this.state.lastChatMessage;
-    this.sendChatMessage();
-}
+      } catch (error) {
+          this.hideTypingIndicator();
+          console.error('Chat error details:', error);
+          
+          // Increment error counter
+          this.state.errorRetries++;
+          
+          // More specific error messages
+          let errorMessage = "I'm having trouble connecting right now.";
+          let errorType = "connection";
+          
+          if (error.message.includes('timeout') || error.name === 'AbortError') {
+              errorMessage = "That took too long to process. Please try a shorter message.";
+              errorType = "timeout";
+          } else if (error.message.includes('400')) {
+              errorMessage = "There was an issue with your message format. Please try rephrasing.";
+              errorType = "format";
+          } else if (error.message.includes('500') || error.message.includes('server')) {
+              errorMessage = "I'm having server issues. Please try again in a moment.";
+              errorType = "server";
+          } else if (error.message.includes('parse') || error.message.includes('Invalid response')) {
+              errorMessage = "I received an invalid response from the server. Let's try again.";
+              errorType = "parsing";
+          }
+          
+          // Add retry button with error message
+          const errorHtml = `
+              <div class="flex justify-start">
+                  <div class="bg-red-50 rounded-lg px-4 py-3 max-w-[90%] shadow-sm border border-red-200">
+                      <p class="text-red-700 text-sm">${errorMessage}</p>
+                      <button id="chat-retry-btn" class="mt-2 text-xs bg-red-100 hover:bg-red-200 text-red-700 font-medium py-1 px-2 rounded">
+                          Retry message
+                      </button>
+                  </div>
+              </div>
+          `;
+          this.elements.chatMessages.insertAdjacentHTML('beforeend', errorHtml);
+          this.scrollChatToBottom();
+          
+          // Add event listener to the retry button
+          document.getElementById('chat-retry-btn').addEventListener('click', () => this.retryLastChatMessage());
+          
+          // For certain types of errors, automatically retry once after a delay
+          if ((errorType === "server" || errorType === "connection" || errorType === "parsing") && this.state.errorRetries <= 1) {
+              setTimeout(() => {
+                  const retryButton = document.getElementById('chat-retry-btn');
+                  if (retryButton) {
+                      // Only auto-retry if the button still exists (user hasn't manually retried)
+                      this.retryLastChatMessage();
+                  }
+              }, 3000);
+          }
+          
+          // If we've had multiple server errors, provide a fallback response
+          if (this.state.errorRetries >= 2) {
+              this.provideFallbackResponse();
+          }
+      } finally {
+          this.state.pendingRequest = false;
+      }
+  }
 
-// We're removing these methods since we don't want the clickable speech bubbles
-// But keep empty implementations in case there are references elsewhere
+  provideFallbackResponse() {
+      const fallbackResponses = [
+          "I'm having some trouble connecting to my systems right now. Could you try again in a moment?",
+          "Sorry about that - I seem to be having a technical hiccup. Let's try again.",
+          "My server connection is unstable at the moment. Please try again shortly.",
+          "I apologize for the interruption. Let's get back on track - could you repeat your last question?"
+      ];
+      
+      const randomResponse = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+      
+      // Add the fallback response as if it came from Arti
+      this.addChatMessage(randomResponse);
+      
+      // Add simple action buttons without suggestions
+      const actionHtml = `
+          <div class="mt-4 px-2">
+              <div class="flex gap-2 flex-wrap justify-center">
+                  <button class="chat-suggestion px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-full text-sm text-blue-700 hover:text-blue-800 transition-all"
+                          onclick="app.resetChat()">
+                      Start a new conversation
+                  </button>
+                  <button class="chat-suggestion px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-full text-sm text-blue-700 hover:text-blue-800 transition-all"
+                          onclick="app.retryLastChatMessage()">
+                      Try again
+                  </button>
+              </div>
+          </div>
+      `;
+      this.elements.chatMessages.insertAdjacentHTML('beforeend', actionHtml);
+      this.scrollChatToBottom();
+  }
 
-addFollowUpSuggestions(suggestions) {
-    // Intentionally empty - we're not using suggestions anymore
-    return;
-}
+  async retryLastChatMessage() {
+      if (!this.state.lastChatMessage || this.state.pendingRequest) return;
+      
+      // Remove the error message with retry button
+      const errorElement = document.getElementById('chat-retry-btn')?.closest('.flex');
+      if (errorElement) {
+          errorElement.remove();
+      }
+      
+      // Set the message back in the input field and send it
+      this.elements.chatInput.value = this.state.lastChatMessage;
+      this.sendChatMessage();
+  }
 
-useSuggestion(suggestion) {
-    // Keep a minimal implementation in case there are other references
-    this.elements.chatInput.value = suggestion;
-    this.sendChatMessage();
-}
+  setLoading(loading, buttonType = null) {
+      if (buttonType === 'news') {
+          this.elements.newsBtnText.style.display = loading ? 'none' : 'inline';
+          this.elements.newsLoader.style.display = loading ? 'block' : 'none';
+          this.elements.newsBtn.disabled = loading;
+      } else {
+          this.elements.btnText.style.display = loading ? 'none' : 'inline';
+          this.elements.loader.style.display = loading ? 'block' : 'none';
+          this.elements.askBtn.disabled = loading;
+      }
+      
+      this.elements.errorMessage.classList.add('hidden');
+      
+      if (loading) {
+          this.showLoadingMessages();
+      } else {
+          this.hideLoadingMessages();
+      }
+  }
 
-setLoading(loading) {
-    this.elements.btnText.style.display = loading ? 'none' : 'inline';
-    this.elements.loader.style.display = loading ? 'block' : 'none';
-    this.elements.askBtn.disabled = loading;
-    this.elements.errorMessage.classList.add('hidden');
-    
-    if (loading) {
-        this.showLoadingMessages();
-    } else {
-        this.hideLoadingMessages();
-    }
-}
+  showLoadingMessages() {
+      this.elements.loadingMessageContainer.classList.remove('hidden');
+      this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[0];
+      
+      let messageIndex = 0;
+      this.state.loadingInterval = setInterval(() => {
+          messageIndex = (messageIndex + 1) % CONFIG.LOADING_MESSAGES.length;
+          this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[messageIndex];
+      }, 2000);
+  }
 
-showLoadingMessages() {
-    this.elements.loadingMessageContainer.classList.remove('hidden');
-    this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[0];
-    
-    let messageIndex = 0;
-    this.state.loadingInterval = setInterval(() => {
-        messageIndex = (messageIndex + 1) % CONFIG.LOADING_MESSAGES.length;
-        this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[messageIndex];
-    }, 2000);
-}
+  hideLoadingMessages() {
+      clearInterval(this.state.loadingInterval);
+      this.elements.loadingMessageContainer.classList.add('hidden');
+  }
 
-hideLoadingMessages() {
-    clearInterval(this.state.loadingInterval);
-    this.elements.loadingMessageContainer.classList.add('hidden');
-}
+  showError(message) {
+      this.hideLoadingMessages();
+      this.elements.errorMessage.classList.remove('hidden');
+      this.elements.errorDetails.textContent = message;
+      this.setLoading(false);
+  }
 
-showError(message) {
-    this.hideLoadingMessages();
-    this.elements.errorMessage.classList.remove('hidden');
-    this.elements.errorDetails.textContent = message;
-    this.setLoading(false);
-}
+  showTemporaryMessage(message, type = 'info', duration = 2000) {
+      this.elements.loadingMessageContainer.classList.remove('hidden');
+      this.elements.loadingMessage.textContent = message;
+      
+      const colorClasses = {
+          error: 'text-red-700 font-medium',
+          warning: 'text-orange-700 font-medium',
+          info: 'text-gray-600'
+      };
+      
+      this.elements.loadingMessage.className = colorClasses[type] || colorClasses.info;
+      
+      setTimeout(() => {
+          this.elements.loadingMessageContainer.classList.add('hidden');
+      }, duration);
+  }
 
-showTemporaryMessage(message, type = 'info', duration = 2000) {
-    this.elements.loadingMessageContainer.classList.remove('hidden');
-    this.elements.loadingMessage.textContent = message;
-    
-    const colorClasses = {
-        error: 'text-red-700 font-medium',
-        warning: 'text-orange-700 font-medium',
-        info: 'text-gray-600'
-    };
-    
-    this.elements.loadingMessage.className = colorClasses[type] || colorClasses.info;
-    
-    setTimeout(() => {
-        this.elements.loadingMessageContainer.classList.add('hidden');
-    }, duration);
-}
-   // Update the getAdvice method in the AskArti class:
-async getAdvice() {
-    const situation = this.elements.situationInput.value.trim();
-    
-    // Rate limiting
-    const now = Date.now();
-    if (now - this.state.lastRequestTime < CONFIG.MIN_REQUEST_INTERVAL) {
-        this.showTemporaryMessage("Easy there, killer. Give me a sec to catch my breath.", 'warning');
-        return;
-    }
-    
-    // Validation
-    if (!situation) {
-        this.showTemporaryMessage("Drop your situation in the box above 👆", 'error');
-        return;
-    }
-    
-    // Prevent duplicate requests
-    if (this.state.pendingRequest) return;
-    
-    this.state.lastRequestTime = now;
-    this.state.lastQuery = situation;
-    this.state.pendingRequest = true;
-    
-    // Clear previous results and show loading
-    this.elements.resultsContainer.innerHTML = '';
-    this.setLoading(true);
-    
-    try {
-        // Add a small delay before the first request to ensure everything is initialized
-        if (!this.state.hasCompletedFirstRequest) {
-            await new Promise(resolve => setTimeout(resolve, 100));
-            this.state.hasCompletedFirstRequest = true;
-        }
-        
-        const data = await this.makeRequest(situation);
-        
-        // Ensure data is valid
-        if (!data || typeof data !== 'object' || !data.response_type) {
-            throw new Error('Invalid response data');
-        }
-        
-        this.displayAdvice(data);
-    } catch (error) {
-        console.error('Request failed:', error);
-        this.showError(error.message || "We're having trouble connecting to Arti. Please try again.");
-        
-        // Retry after a small delay for first-time failures
-        if (!this.state.hasCompletedSuccessfulRequest) {
-            setTimeout(() => {
-                if (this.state.lastQuery === situation) {
-                    console.log('Auto-retrying first request...');
-                    this.state.pendingRequest = false;
-                    this.getAdvice();
-                }
-            }, 1500);
-        }
-    } finally {
-        this.state.pendingRequest = false;
-        this.setLoading(false);
-    }
-}
+  async getAdvice(forceType = null) {
+      const situation = this.elements.situationInput.value.trim();
+      
+      // Rate limiting
+      const now = Date.now();
+      if (now - this.state.lastRequestTime < CONFIG.MIN_REQUEST_INTERVAL) {
+          this.showTemporaryMessage("Easy there, killer. Give me a sec to catch my breath.", 'warning');
+          return;
+      }
+      
+      // Validation
+      if (!situation) {
+          this.showTemporaryMessage("Drop your situation in the box above 👆", 'error');
+          return;
+      }
+      
+      if (situation.length > CONFIG.MAX_INPUT_LENGTH) {
+          this.showTemporaryMessage("That's a bit long. Try shortening it up.", 'error');
+          return;
+      }
+      
+      // Prevent duplicate requests
+      if (this.state.pendingRequest) return;
+      
+      this.state.lastRequestTime = now;
+      this.state.lastQuery = situation;
+      this.state.pendingRequest = true;
+      this.state.requestType = forceType; // Store the forced type
+      
+      // Clear previous results and show loading
+      this.elements.resultsContainer.innerHTML = '';
+      this.setLoading(true, forceType);
+      
+      try {
+          // Add a small delay before the first request to ensure everything is initialized
+          if (!this.state.hasCompletedFirstRequest) {
+              await new Promise(resolve => setTimeout(resolve, 100));
+              this.state.hasCompletedFirstRequest = true;
+          }
+          
+          const data = await this.makeRequest(situation, forceType);
+          
+          // Ensure data is valid
+          if (!data || typeof data !== 'object' || !data.response_type) {
+              throw new Error('Invalid response data');
+          }
+          
+          this.displayAdvice(data);
+      } catch (error) {
+          console.error('Request failed:', error);
+          this.showError(error.message || "We're having trouble connecting to Arti. Please try again.");
+          
+          // Retry after a small delay for first-time failures
+          if (!this.state.hasCompletedSuccessfulRequest) {
+              setTimeout(() => {
+                  if (this.state.lastQuery === situation) {
+                      console.log('Auto-retrying first request...');
+                      this.state.pendingRequest = false;
+                      this.getAdvice(forceType);
+                  }
+              }, 1500);
+          }
+      } finally {
+          this.state.pendingRequest = false;
+          this.setLoading(false);
+      }
+  }
 
-   async makeRequest(situation) {
-       this.state.abortController = new AbortController();
-       
-       const timeoutId = setTimeout(() => {
-           this.state.abortController.abort();
-       }, CONFIG.REQUEST_TIMEOUT);
-       
-       try {
-           const response = await fetch(CONFIG.API_ENDPOINT, {
-               method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ situation }),
-               signal: this.state.abortController.signal
-           });
-           
-           clearTimeout(timeoutId);
-           
-           if (!response.ok) {
-               throw new Error(`Server error (${response.status})`);
-           }
-           
-           const data = await response.json();
-           
-           if (data.error) {
-               throw new Error(data.message || data.error);
-           }
-           
-           return data;
-       } catch (error) {
-           if (error.name === 'AbortError') {
-               throw new Error('Request timed out. Please try again.');
-           }
-           throw error;
-       }
-   }
+  async makeRequest(situation, forceType = null) {
+      this.state.abortController = new AbortController();
+      
+      const timeoutId = setTimeout(() => {
+          this.state.abortController.abort();
+      }, CONFIG.REQUEST_TIMEOUT);
+      
+      try {
+          const requestBody = { situation };
+          if (forceType) {
+              requestBody.forceType = forceType;
+          }
+          
+          const response = await fetch(CONFIG.API_ENDPOINT, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(requestBody),
+              signal: this.state.abortController.signal
+          });
+          
+          clearTimeout(timeoutId);
+          
+          if (!response.ok) {
+              throw new Error(`Server error (${response.status})`);
+          }
+          
+          const data = await response.json();
+          
+          if (data.error) {
+              throw new Error(data.message || data.error);
+          }
+          
+          return data;
+      } catch (error) {
+          if (error.name === 'AbortError') {
+              throw new Error('Request timed out. Please try again.');
+          }
+          throw error;
+      }
+  }
 
-   displayAdvice(data) {
-    const { response_type } = data;
-    
-    try {
-        if (response_type === 'prospect') {
-            this.displayProspectAdvice(data);
-        } else {
-            this.displayGeneralAdvice(data);
-        }
-        
-        // Add action buttons
-        this.addActionButtons();
-        
-        // Smooth scroll to results
-        this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        
-        // Mark that we've completed a successful request
-        this.state.hasCompletedSuccessfulRequest = true;
-        
-    } catch (error) {
-        console.error('Display error:', error);
-        this.showError("Failed to display results. Please try again.");
-    }
-}
+  displayAdvice(data) {
+      const { response_type } = data;
+      
+      try {
+          if (response_type === 'prospect') {
+              this.displayProspectAdvice(data);
+          } else if (response_type === 'news') {
+              this.displayNewsAdvice(data);
+          } else {
+              this.displayGeneralAdvice(data);
+          }
+          
+          // Add action buttons
+          this.addActionButtons();
+          
+          // Smooth scroll to results
+          this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          
+          // Mark that we've completed a successful request
+          this.state.hasCompletedSuccessfulRequest = true;
+          
+      } catch (error) {
+          console.error('Display error:', error);
+          this.showError("Failed to display results. Please try again.");
+      }
+  }
 
-   displayProspectAdvice(data) {
-       const { 
-           summary = '',
-           top_s_is = [],
-           top_software_and_cloud = [],
-           company_capabilities = [],
-           naics_codes = [],
-           prospect_recommendations = []
-       } = data;
-       
-       const renderSimpleList = (items) => {
-           if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
-           
-           return `
-           <div class="space-y-2">
-               ${items.map((item, index) => `
-                   <div class="border-l-4 border-customPurple-500 pl-3 py-1">
-                       <div class="font-medium text-gray-900">
-                           <span class="text-customPurple-600 font-bold">${index + 1}</span> 
-                           ${item.company || 'Unknown'}
-                       </div>
-                       <div class="text-sm text-gray-600">${item.value || 'N/A'}</div>
-                   </div>
-               `).join('')}
-           </div>`;
-       };
-       
-       const html = `
-       <div class="fade-in space-y-6">
-	   <div class="dashboard-card bg-gradient-to-r from-customPurple-100 to-customPurple-200">
-               <h3 class="text-xl font-bold text-customPurple-900 mb-2">Key Market Insights</h3>
-               <div class="text-customPurple-900/90">${marked.parse(summary)}</div>
-           </div>
+  displayProspectAdvice(data) {
+      const { 
+          summary = '',
+          top_s_is = [],
+          top_software_and_cloud = [],
+          company_capabilities = [],
+          naics_codes = [],
+          prospect_recommendations = []
+      } = data;
+      
+      const renderSimpleList = (items) => {
+          if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
+          
+          return `
+          <div class="space-y-2">
+              ${items.map((item, index) => `
+                  <div class="border-l-4 border-customPurple-500 pl-3 py-1">
+                      <div class="font-medium text-gray-900">
+                          <span class="text-customPurple-600 font-bold">${index + 1}</span> 
+                          ${item.company || 'Unknown'}
+                      </div>
+                      <div class="text-sm text-gray-600">${item.value || 'N/A'}</div>
+                  </div>
+              `).join('')}
+          </div>`;
+      };
+      
+      const html = `
+      <div class="fade-in space-y-6">
+          <div class="dashboard-card bg-gradient-to-r from-customPurple-100 to-customPurple-200">
+              <h3 class="text-xl font-bold text-customPurple-900 mb-2">Key Market Insights</h3>
+              <div class="text-customPurple-900/90">${marked.parse(summary)}</div>
+          </div>
 
-           <div class="dashboard-card">
-               <h3 class="font-bold text-gray-900 mb-4 text-lg">Top Contractors</h3>
-               ${renderSimpleList(top_s_is)}
-           </div>
-           
-           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-               <div class="dashboard-card">
-                   <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
-                   <ul class="space-y-2 text-sm">${company_capabilities.map(c => `
-                       <li class="flex gap-2">
-                           <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                               <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                           </svg>
-                           <span>${c}</span>
-                       </li>`).join('')}
-                   </ul>
-               </div>
-               
-               <div class="dashboard-card">
-                   <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
-                   <ul class="space-y-2 text-sm">${naics_codes.map(n => {
-                       const naicsText = typeof n === 'string' ? n : (n.code ? `${n.code} - ${n.description || ''}` : 'Unknown');
-                       return `
-                       <li class="flex gap-2">
-                           <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                               <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                           </svg>
-                           <span>${naicsText}</span>
-                       </li>`;
-                   }).join('')}
-                   </ul>
-               </div>
-           </div>
+          <div class="dashboard-card">
+              <h3 class="font-bold text-gray-900 mb-4 text-lg">Top Contractors</h3>
+              ${renderSimpleList(top_s_is)}
+          </div>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div class="dashboard-card">
+                  <h3 class="font-bold text-gray-900 mb-3">Mission Needs</h3>
+                  <ul class="space-y-2 text-sm">${company_capabilities.map(c => `
+                      <li class="flex gap-2">
+                          <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                          </svg>
+                          <span>${c}</span>
+                      </li>`).join('')}
+                  </ul>
+              </div>
+              
+              <div class="dashboard-card">
+                  <h3 class="font-bold text-gray-900 mb-3">Relevant NAICS Codes</h3>
+                  <ul class="space-y-2 text-sm">${naics_codes.map(n => {
+                      const naicsText = typeof n === 'string' ? n : (n.code ? `${n.code} - ${n.description || ''}` : 'Unknown');
+                      return `
+                      <li class="flex gap-2">
+                          <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                          </svg>
+                          <span>${naicsText}</span>
+                      </li>`;
+                  }).join('')}
+                  </ul>
+              </div>
+          </div>
 
-           <div class="dashboard-card">
-               <h3 class="font-bold text-gray-900 mb-4 text-lg">Potential Software Plays</h3>
-               ${renderSimpleList(top_software_and_cloud)}
-           </div>
+          <div class="dashboard-card">
+              <h3 class="font-bold text-gray-900 mb-4 text-lg">Potential Software Plays</h3>
+              ${renderSimpleList(top_software_and_cloud)}
+          </div>
 
-           <div class="dashboard-card">
-               <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
-               <ul class="space-y-3 text-sm">${prospect_recommendations.map(r => `
-                   <li class="flex gap-3">
-                       <span class="text-customPurple-500 font-bold text-lg flex-shrink-0">→</span>
-                       <span>${r}</span>
-                   </li>`).join('')}
-               </ul>
-           </div>
-       </div>`;
-       
-       this.elements.resultsContainer.innerHTML = html;
-   }
+          <div class="dashboard-card">
+              <h3 class="font-bold text-gray-900 mb-3">Strategic Recommendations</h3>
+              <ul class="space-y-3 text-sm">${prospect_recommendations.map(r => `
+                  <li class="flex gap-3">
+                      <span class="text-customPurple-500 font-bold text-lg flex-shrink-0">→</span>
+                      <span>${r}</span>
+                  </li>`).join('')}
+              </ul>
+          </div>
+      </div>`;
+      
+      this.elements.resultsContainer.innerHTML = html;
+  }
 
-   displayGeneralAdvice(data) {
-       const { 
-           quick_take = '',
-           key_moves = [],
-           mermaid_chart = '',
-           talking_points = [],
-           email_template = '',
-           next_steps = '',
-           response_type = 'deal'
-       } = data;
-       
-       const html = `
-       <div class="fade-in space-y-6">
-           <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6 flow-root">
-               <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
-               <div class="text-customPurple-900/80 space-y-2">${marked.parse(quick_take)}</div>
-           </div>
+  displayNewsAdvice(data) {
+      const { 
+          quick_take = '',
+          key_moves = [],
+          market_analysis = '',
+          key_stakeholders = [],
+          partnership_opportunities = [],
+          competitive_positioning = '',
+          mermaid_chart = '',
+          next_steps = ''
+      } = data;
+      
+      const html = `
+      <div class="fade-in space-y-6">
+          <div class="bg-gradient-to-r from-blue-100 to-blue-200 rounded-xl p-6 flow-root">
+              <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
+              <div class="text-blue-900/90 space-y-2">
+                  <h3 class="font-bold text-lg text-blue-900 mb-2">📰 GTM Opportunity Analysis</h3>
+                  ${marked.parse(quick_take)}
+              </div>
+          </div>
 
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-               <div class="dashboard-card">
-                   <h3 class="font-bold text-gray-900 mb-4">Your Next 3 Moves</h3>
-                   <div class="space-y-3">${key_moves.slice(0, 3).map((m, i) => `
-                       <div class="flex gap-3">
-                           <span class="flex-shrink-0 w-7 h-7 bg-customPurple-200 text-customPurple-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span>
-                           <div class="flex-1">
-                               <p class="font-medium text-gray-900">${m.action}</p>
-                               <p class="text-sm text-gray-600 mt-1">${m.why}</p>
-                           </div>
-                       </div>`).join('')}
-                   </div>
-               </div>
-               
-               <div class="dashboard-card">
-                   <h3 class="font-bold text-gray-900 mb-4">Game Plan</h3>
-                   ${mermaid_chart ? `
-                       <div class="mermaid-container">
-                           <div class="mermaid-loading">
-                               <div class="loader"></div>
-                           </div>
-                           <div id="mermaid-diagram" class="mermaid" style="opacity: 0;">${mermaid_chart}</div>
-                       </div>` : 
-                       '<div class="p-4 bg-gray-50 rounded-lg text-center"><p class="text-gray-600">Visual game plan not available</p></div>'
-                   }
-               </div>
-           </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="dashboard-card">
+                  <h3 class="font-bold text-gray-900 mb-4">Immediate GTM Actions</h3>
+                  <div class="space-y-3">${key_moves.map((m, i) => `
+                      <div class="flex gap-3">
+                          <span class="flex-shrink-0 w-7 h-7 bg-blue-200 text-blue-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span>
+                          <div class="flex-1">
+                              <p class="font-medium text-gray-900">${m.action}</p>
+                              <p class="text-sm text-gray-600 mt-1">${m.why}</p>
+                          </div>
+                      </div>`).join('')}
+                  </div>
+              </div>
+              
+              <div class="dashboard-card">
+                  <h3 class="font-bold text-gray-900 mb-4">GTM Strategy Flow</h3>
+                  ${mermaid_chart ? `
+                      <div class="mermaid-container">
+                          <div class="mermaid-loading">
+                              <div class="loader"></div>
+                          </div>
+                          <div id="mermaid-diagram" class="mermaid" style="opacity: 0;">${mermaid_chart}</div>
+                      </div>` : 
+                      '<div class="p-4 bg-gray-50 rounded-lg text-center"><p class="text-gray-600">Strategy flow not available</p></div>'
+                  }
+              </div>
+          </div>
 
-           ${(talking_points?.length > 0 || email_template) ? `
-           <div class="dashboard-card">
-               <h3 class="font-bold text-gray-900 mb-4">Communications</h3>
-               <div class="grid grid-cols-1 ${email_template && talking_points?.length > 0 ? 'md:grid-cols-2' : ''} gap-6">
-                   ${talking_points?.length > 0 ? `
-                       <div>
-                           <h4 class="font-semibold text-gray-800 mb-3">
-                               ${response_type === 'interview' ? 'What They May Ask' : 'What to Ask'}
-                           </h4>
-                           <ul class="space-y-2 text-sm">${talking_points.map(t => `
-                               <li class="flex gap-2">
-                                   <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                       <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                   </svg>${t}
-                               </li>`).join('')}
-                           </ul>
-                       </div>` : ''}
-                   
-                   ${email_template ? `
-                       <div>
-                           <h4 class="font-semibold text-gray-800 mb-3">Email Template</h4>
-                           <div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap border">${email_template}</div>
-                       </div>` : ''}
-               </div>
-           </div>` : ''}
-           
-           ${next_steps ? `
-               <div class="bg-customPurple-200/60 p-4 rounded-lg text-sm text-customPurple-900">
-                   <b class="font-semibold">A few thoughts:</b> ${next_steps}
-               </div>` : ''}
-       </div>`;
-       
-       this.elements.resultsContainer.innerHTML = html;
-       
-       // Render mermaid chart with proper timing
-       if (mermaid_chart) {
-           this.renderMermaidChart();
-       }
-   }
+          <div class="dashboard-card">
+              <h3 class="font-bold text-gray-900 mb-4">Market Analysis</h3>
+              <div class="text-gray-700">${marked.parse(market_analysis)}</div>
+          </div>
 
-   async renderMermaidChart() {
-       try {
-           // Give DOM time to settle
-           await new Promise(resolve => setTimeout(resolve, 100));
-           
-           const element = document.getElementById('mermaid-diagram');
-           if (!element) return;
-           
-           // Run mermaid
-           await mermaid.run();
-           
-           // Fade in the chart
-           element.style.opacity = '1';
-           element.style.transition = 'opacity 0.3s ease-in';
-           
-           // Hide loader
-           const loader = element.parentElement.querySelector('.mermaid-loading');
-           if (loader) loader.style.display = 'none';
-           
-       } catch (error) {
-           console.error('Mermaid rendering error:', error);
-           const container = document.querySelector('.mermaid-container');
-           if (container) {
-               container.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Game plan visualization unavailable</div>';
-           }
-       }
-   }
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div class="dashboard-card">
+                  <h3 class="font-bold text-gray-900 mb-3">Key Stakeholders to Target</h3>
+                  <ul class="space-y-2 text-sm">${key_stakeholders.map(s => `
+                      <li class="flex gap-2">
+                          <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                          </svg>
+                          <span>${s}</span>
+                      </li>`).join('')}
+                  </ul>
+              </div>
+              
+              <div class="dashboard-card">
+                  <h3 class="font-bold text-gray-900 mb-3">Partnership Opportunities</h3>
+                  <ul class="space-y-2 text-sm">${partnership_opportunities.map(p => `
+                      <li class="flex gap-2">
+                          <svg class="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                          </svg>
+                          <span>${p}</span>
+                      </li>`).join('')}
+                  </ul>
+              </div>
+          </div>
 
-   addActionButtons() {
-       const buttonsHtml = `
-           <div class="mt-8 flex flex-col sm:flex-row gap-3">
-               <button onclick="app.copyResults()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
-                   Copy to Clipboard
-               </button>
-               <button onclick="app.startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">
-                   Ask Another Question
-               </button>
-           </div>`;
-       
-       this.elements.resultsContainer.insertAdjacentHTML('beforeend', buttonsHtml);
-   }
+          <div class="dashboard-card">
+              <h3 class="font-bold text-gray-900 mb-3">Competitive Positioning</h3>
+              <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 text-gray-700">
+                  ${marked.parse(competitive_positioning)}
+              </div>
+          </div>
+          
+          ${next_steps ? `
+              <div class="bg-blue-200/60 p-4 rounded-lg text-sm text-blue-900">
+                  <b class="font-semibold">Timeline & Next Steps:</b> ${next_steps}
+              </div>` : ''}
+      </div>`;
+      
+      this.elements.resultsContainer.innerHTML = html;
+      
+      // Render mermaid chart with proper timing
+      if (mermaid_chart) {
+          this.renderMermaidChart();
+      }
+  }
 
-   copyResults() {
-       const content = this.elements.resultsContainer.innerText;
-       
-       if (!content || content.trim() === '') {
-           alert('No content to copy');
-           return;
-       }
-       
-       navigator.clipboard.writeText(content)
-           .then(() => {
-               const btn = this.elements.resultsContainer.querySelector('button');
-               const originalText = btn.textContent;
-               btn.textContent = 'Copied!';
-               setTimeout(() => btn.textContent = originalText, 2000);
-           })
-           .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
-   }
+  displayGeneralAdvice(data) {
+      const { 
+          quick_take = '',
+          key_moves = [],
+          mermaid_chart = '',
+          talking_points = [],
+          email_template = '',
+          next_steps = '',
+          response_type = 'deal'
+      } = data;
+      
+      const html = `
+      <div class="fade-in space-y-6">
+          <div class="bg-gradient-to-r from-customPurple-100 to-customPurple-200 rounded-xl p-6 flow-root">
+              <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
+              <div class="text-customPurple-900/80 space-y-2">${marked.parse(quick_take)}</div>
+          </div>
 
-   startOver() {
-       if (this.state.abortController) {
-           this.state.abortController.abort();
-       }
-       
-       // Clear based on current mode
-       if (this.state.currentMode === 'quick') {
-           this.elements.situationInput.value = '';
-           this.elements.situationInput.focus();
-       } else {
-           // In chat mode, just clear the input
-           this.elements.chatInput.value = '';
-           this.elements.chatInput.focus();
-       }
-       
-       this.elements.resultsContainer.innerHTML = '';
-       this.hideLoadingMessages();
-       this.elements.errorMessage.classList.add('hidden');
-       
-       clearInterval(this.state.loadingInterval);
-       this.state.pendingRequest = false;
-       
-       window.scrollTo({ top: 0, behavior: 'smooth' });
-   }
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="dashboard-card">
+                  <h3 class="font-bold text-gray-900 mb-4">Your Next 3 Moves</h3>
+                  <div class="space-y-3">${key_moves.slice(0, 3).map((m, i) => `
+                      <div class="flex gap-3">
+                          <span class="flex-shrink-0 w-7 h-7 bg-customPurple-200 text-customPurple-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span>
+                          <div class="flex-1">
+                              <p class="font-medium text-gray-900">${m.action}</p>
+                              <p class="text-sm text-gray-600 mt-1">${m.why}</p>
+                          </div>
+                      </div>`).join('')}
+                  </div>
+              </div>
+              
+              <div class="dashboard-card">
+                  <h3 class="font-bold text-gray-900 mb-4">Game Plan</h3>
+                  ${mermaid_chart ? `
+                      <div class="mermaid-container">
+                          <div class="mermaid-loading">
+                              <div class="loader"></div>
+                          </div>
+                          <div id="mermaid-diagram" class="mermaid" style="opacity: 0;">${mermaid_chart}</div>
+                      </div>` : 
+                      '<div class="p-4 bg-gray-50 rounded-lg text-center"><p class="text-gray-600">Visual game plan not available</p></div>'
+                  }
+              </div>
+          </div>
 
-   share() {
-       const shareData = {
-           title: 'AskArti',
-           text: 'Check out this Fed Sales Bot',
-           url: 'https://askarti.com'
-       };
-       
-       if (navigator.share) {
-           navigator.share(shareData).catch(console.error);
-       } else {
-           navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`)
-               .then(() => {
-                   this.elements.shareBtn.textContent = 'Link Copied!';
-                   setTimeout(() => this.elements.shareBtn.textContent = 'Share', 2000);
-               })
-               .catch(() => alert('Please copy the URL manually: https://askarti.com'));
-       }
-   }
+          ${(talking_points?.length > 0 || email_template) ? `
+          <div class="dashboard-card">
+              <h3 class="font-bold text-gray-900 mb-4">Communications</h3>
+              <div class="grid grid-cols-1 ${email_template && talking_points?.length > 0 ? 'md:grid-cols-2' : ''} gap-6">
+                  ${talking_points?.length > 0 ? `
+                      <div>
+                          <h4 class="font-semibold text-gray-800 mb-3">
+                              ${response_type === 'interview' ? 'What They May Ask' : 'What to Ask'}
+                          </h4>
+                          <ul class="space-y-2 text-sm">${talking_points.map(t => `
+                              <li class="flex gap-2">
+                                  <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                  </svg>${t}
+                              </li>`).join('')}
+                          </ul>
+                      </div>` : ''}
+                  
+                  ${email_template ? `
+                      <div>
+                          <h4 class="font-semibold text-gray-800 mb-3">Email Template</h4>
+                          <div class="bg-gray-50 rounded-lg p-4 font-mono text-sm text-gray-700 whitespace-pre-wrap border">${email_template}</div>
+                      </div>` : ''}
+              </div>
+          </div>` : ''}
+          
+          ${next_steps ? `
+              <div class="bg-customPurple-200/60 p-4 rounded-lg text-sm text-customPurple-900">
+                  <b class="font-semibold">A few thoughts:</b> ${next_steps}
+              </div>` : ''}
+      </div>`;
+      
+      this.elements.resultsContainer.innerHTML = html;
+      
+      // Render mermaid chart with proper timing
+      if (mermaid_chart) {
+          this.renderMermaidChart();
+      }
+  }
 
-   showModal() {
-       this.elements.aboutModal.classList.remove('hidden');
-       requestAnimationFrame(() => {
-           this.elements.aboutModal.querySelector('.modal-content').classList.add('show');
-       });
-   }
+  async renderMermaidChart() {
+      try {
+          // Give DOM time to settle
+          await new Promise(resolve => setTimeout(resolve, 100));
+          
+          const element = document.getElementById('mermaid-diagram');
+          if (!element) return;
+          
+          // Run mermaid
+          await mermaid.run();
+          
+          // Fade in the chart
+          element.style.opacity = '1';
+          element.style.transition = 'opacity 0.3s ease-in';
+          
+          // Hide loader
+          const loader = element.parentElement.querySelector('.mermaid-loading');
+          if (loader) loader.style.display = 'none';
+          
+      } catch (error) {
+          console.error('Mermaid rendering error:', error);
+          const container = document.querySelector('.mermaid-container');
+          if (container) {
+              container.innerHTML = '<div class="p-4 bg-gray-100 text-gray-700 rounded text-center">Game plan visualization unavailable</div>';
+          }
+      }
+  }
 
-   hideModal() {
-       const content = this.elements.aboutModal.querySelector('.modal-content');
-       content.classList.remove('show');
-       setTimeout(() => this.elements.aboutModal.classList.add('hidden'), 200);
-   }
+  addActionButtons() {
+      const buttonsHtml = `
+          <div class="mt-8 flex flex-col sm:flex-row gap-3">
+              <button onclick="app.copyResults()" class="flex-1 bg-customPurple-500 hover:bg-customPurple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                  Copy to Clipboard
+              </button>
+              <button onclick="app.startOver()" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg border border-gray-200 transition-colors">
+                  Ask Another Question
+              </button>
+          </div>`;
+      
+      this.elements.resultsContainer.insertAdjacentHTML('beforeend', buttonsHtml);
+  }
+
+  copyResults() {
+      const content = this.elements.resultsContainer.innerText;
+      
+      if (!content || content.trim() === '') {
+          alert('No content to copy');
+          return;
+      }
+      
+      navigator.clipboard.writeText(content)
+          .then(() => {
+              const btn = this.elements.resultsContainer.querySelector('button');
+              const originalText = btn.textContent;
+              btn.textContent = 'Copied!';
+              setTimeout(() => btn.textContent = originalText, 2000);
+          })
+          .catch(() => alert('Copy failed. Please try selecting and copying manually.'));
+  }
+
+  startOver() {
+      if (this.state.abortController) {
+          this.state.abortController.abort();
+      }
+      
+      // Clear based on current mode
+      if (this.state.currentMode === 'quick') {
+          this.elements.situationInput.value = '';
+          this.updateCharCount();
+          this.elements.situationInput.focus();
+      } else {
+          // In chat mode, just clear the input
+          this.elements.chatInput.value = '';
+          this.elements.chatInput.focus();
+      }
+      
+      this.elements.resultsContainer.innerHTML = '';
+      this.hideLoadingMessages();
+      this.elements.errorMessage.classList.add('hidden');
+      
+      // Reset both buttons
+      this.elements.askBtn.disabled = false;
+      this.elements.newsBtn.disabled = false;
+      this.elements.btnText.style.display = 'inline';
+      this.elements.newsBtnText.style.display = 'inline';
+      this.elements.loader.style.display = 'none';
+      this.elements.newsLoader.style.display = 'none';
+      
+      clearInterval(this.state.loadingInterval);
+      this.state.pendingRequest = false;
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  share() {
+      const shareData = {
+          title: 'AskArti',
+          text: 'Check out this Fed Sales Bot',
+          url: 'https://askarti.com'
+      };
+      
+      if (navigator.share) {
+          navigator.share(shareData).catch(console.error);
+      } else {
+          navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`)
+              .then(() => {
+                  this.elements.shareBtn.textContent = 'Link Copied!';
+                  setTimeout(() => this.elements.shareBtn.textContent = 'Share', 2000);
+              })
+              .catch(() => alert('Please copy the URL manually: https://askarti.com'));
+      }
+  }
+
+  showModal() {
+      this.elements.aboutModal.classList.remove('hidden');
+      requestAnimationFrame(() => {
+          this.elements.aboutModal.querySelector('.modal-content').classList.add('show');
+      });
+  }
+
+  hideModal() {
+      const content = this.elements.aboutModal.querySelector('.modal-content');
+      content.classList.remove('show');
+      setTimeout(() => this.elements.aboutModal.classList.add('hidden'), 200);
+  }
 }
 
 // Initialize app
