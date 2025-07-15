@@ -1332,24 +1332,38 @@ class AskArti {
   }
 
   setLoading(loading, buttonType = null) {
-      if (buttonType === 'news') {
-          this.elements.newsBtnText.style.display = loading ? 'none' : 'inline';
-          this.elements.newsLoader.style.display = loading ? 'block' : 'none';
-          this.elements.newsBtn.disabled = loading;
-      } else {
-          this.elements.btnText.style.display = loading ? 'none' : 'inline';
-          this.elements.loader.style.display = loading ? 'block' : 'none';
-          this.elements.askBtn.disabled = loading;
-      }
-      
-      this.elements.errorMessage.classList.add('hidden');
-      
-      if (loading) {
-          this.showLoadingMessages();
-      } else {
-          this.hideLoadingMessages();
-      }
-  }
+    // Reset both buttons regardless of buttonType when loading is false
+    if (!loading) {
+        // Reset Ask Arti button
+        this.elements.btnText.style.display = 'inline';
+        this.elements.loader.style.display = 'none';
+        this.elements.askBtn.disabled = false;
+        
+        // Reset NewsBot button
+        this.elements.newsBtnText.style.display = 'inline';
+        this.elements.newsLoader.style.display = 'none';
+        this.elements.newsBtn.disabled = false;
+    } else {
+        // When loading, only affect the specific button
+        if (buttonType === 'news') {
+            this.elements.newsBtnText.style.display = 'none';
+            this.elements.newsLoader.style.display = 'block';
+            this.elements.newsBtn.disabled = true;
+        } else {
+            this.elements.btnText.style.display = 'none';
+            this.elements.loader.style.display = 'block';
+            this.elements.askBtn.disabled = true;
+        }
+    }
+    
+    this.elements.errorMessage.classList.add('hidden');
+    
+    if (loading) {
+        this.showLoadingMessages();
+    } else {
+        this.hideLoadingMessages();
+    }
+}
 
   showLoadingMessages() {
       this.elements.loadingMessageContainer.classList.remove('hidden');
@@ -1863,38 +1877,33 @@ class AskArti {
   }
 
   startOver() {
-      if (this.state.abortController) {
-          this.state.abortController.abort();
-      }
-      
-      // Clear based on current mode
-      if (this.state.currentMode === 'quick') {
-          this.elements.situationInput.value = '';
-          this.updateCharCount();
-          this.elements.situationInput.focus();
-      } else {
-          // In chat mode, just clear the input
-          this.elements.chatInput.value = '';
-          this.elements.chatInput.focus();
-      }
-      
-      this.elements.resultsContainer.innerHTML = '';
-      this.hideLoadingMessages();
-      this.elements.errorMessage.classList.add('hidden');
-      
-      // Reset both buttons
-      this.elements.askBtn.disabled = false;
-      this.elements.newsBtn.disabled = false;
-      this.elements.btnText.style.display = 'inline';
-      this.elements.newsBtnText.style.display = 'inline';
-      this.elements.loader.style.display = 'none';
-      this.elements.newsLoader.style.display = 'none';
-      
-      clearInterval(this.state.loadingInterval);
-      this.state.pendingRequest = false;
-      
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+    if (this.state.abortController) {
+        this.state.abortController.abort();
+    }
+    
+    // Clear based on current mode
+    if (this.state.currentMode === 'quick') {
+        this.elements.situationInput.value = '';
+        this.updateCharCount();
+        this.elements.situationInput.focus();
+    } else {
+        // In chat mode, just clear the input
+        this.elements.chatInput.value = '';
+        this.elements.chatInput.focus();
+    }
+    
+    this.elements.resultsContainer.innerHTML = '';
+    this.hideLoadingMessages();
+    this.elements.errorMessage.classList.add('hidden');
+    
+    // Force reset both buttons
+    this.setLoading(false);
+    
+    clearInterval(this.state.loadingInterval);
+    this.state.pendingRequest = false;
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
   share() {
       const shareData = {
