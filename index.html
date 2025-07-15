@@ -1695,174 +1695,106 @@ setupEventListeners() {
   }
 
   displayNewsAdvice(data) {
-    const { 
-        quick_take = '',
-        analysis_summary = {},
-        key_intelligence = {},
-        go_to_market_plan = {},
-        mermaid_chart = '',
-        next_steps = ''
-    } = data;
-    
-    const html = `
-    <div class="fade-in space-y-6">
-        <div class="bg-gradient-to-r from-blue-100 to-blue-200 rounded-xl p-6 flow-root">
-            <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
-            <div class="text-blue-900/90 space-y-2">
-                <h3 class="font-bold text-lg text-blue-900 mb-2">📰 GTM Intelligence Report</h3>
-                ${marked.parse(quick_take)}
-            </div>
-        </div>
+      const { 
+          quick_take = '',
+          key_moves = [],
+          market_analysis = '',
+          key_stakeholders = [],
+          partnership_opportunities = [],
+          competitive_positioning = '',
+          mermaid_chart = '',
+          next_steps = ''
+      } = data;
+      
+      const html = `
+      <div class="fade-in space-y-6">
+          <div class="bg-gradient-to-r from-blue-100 to-blue-200 rounded-xl p-6 flow-root">
+              <img src="/images/arti_right.png" alt="Arti" class="h-12 w-12 float-left mr-4 mb-2">
+              <div class="text-blue-900/90 space-y-2">
+                  <h3 class="font-bold text-lg text-blue-900 mb-2">📰 GTM Opportunity Analysis</h3>
+                  ${marked.parse(quick_take)}
+              </div>
+          </div>
 
-        <!-- Analysis Summary -->
-        <div class="dashboard-card">
-            <h3 class="font-bold text-gray-900 mb-4">Situation Analysis</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <h4 class="font-semibold text-gray-800 mb-2">Background</h4>
-                    <div class="text-gray-700 text-sm">${marked.parse(analysis_summary.background || '')}</div>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-gray-800 mb-2">Market Implications</h4>
-                    <div class="text-gray-700 text-sm">${marked.parse(analysis_summary.implications || '')}</div>
-                </div>
-            </div>
-            ${analysis_summary.potential_objections?.length > 0 ? `
-                <div class="mt-4 p-4 bg-red-50 border-l-4 border-red-400 rounded">
-                    <h4 class="font-semibold text-red-800 mb-2">⚠️ Likely Objections to Prepare For</h4>
-                    <ul class="space-y-1 text-sm text-red-700">
-                        ${analysis_summary.potential_objections.map(obj => `<li>• ${obj}</li>`).join('')}
-                    </ul>
-                </div>
-            ` : ''}
-        </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="dashboard-card">
+                  <h3 class="font-bold text-gray-900 mb-4">Immediate GTM Actions</h3>
+                  <div class="space-y-3">${key_moves.map((m, i) => `
+                      <div class="flex gap-3">
+                          <span class="flex-shrink-0 w-7 h-7 bg-blue-200 text-blue-700 rounded-full flex items-center justify-center text-sm font-bold">${i + 1}</span>
+                          <div class="flex-1">
+                              <p class="font-medium text-gray-900">${m.action}</p>
+                              <p class="text-sm text-gray-600 mt-1">${m.why}</p>
+                          </div>
+                      </div>`).join('')}
+                  </div>
+              </div>
+              
+              <div class="dashboard-card">
+                  <h3 class="font-bold text-gray-900 mb-4">GTM Strategy Flow</h3>
+                  ${mermaid_chart ? `
+                      <div class="mermaid-container">
+                          <div class="mermaid-loading">
+                              <div class="loader"></div>
+                          </div>
+                          <div id="mermaid-diagram" class="mermaid" style="opacity: 0;">${mermaid_chart}</div>
+                      </div>` : 
+                      '<div class="p-4 bg-gray-50 rounded-lg text-center"><p class="text-gray-600">Strategy flow not available</p></div>'
+                  }
+              </div>
+          </div>
 
-        <!-- Key Intelligence -->
-        <div class="dashboard-card">
-            <h3 class="font-bold text-gray-900 mb-4">🎯 Key Intelligence</h3>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div>
-                    <h4 class="font-semibold text-gray-800 mb-2">Agencies Involved</h4>
-                    <ul class="space-y-1 text-sm">${(key_intelligence.agencies_involved || []).map(agency => `
-                        <li class="flex gap-2">
-                            <span class="text-blue-500">🏛️</span>
-                            <span>${agency}</span>
-                        </li>`).join('')}
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-gray-800 mb-2">Prime Contractors & Partners</h4>
-                    <ul class="space-y-1 text-sm">${(key_intelligence.prime_contractors_or_partners || []).map(contractor => `
-                        <li class="flex gap-2">
-                            <span class="text-green-500">🤝</span>
-                            <span>${contractor}</span>
-                        </li>`).join('')}
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-gray-800 mb-2">Contract Vehicles & Programs</h4>
-                    <ul class="space-y-1 text-sm">${(key_intelligence.contract_vehicles_or_programs || []).map(vehicle => `
-                        <li class="flex gap-2">
-                            <span class="text-purple-500">📋</span>
-                            <span>${vehicle}</span>
-                        </li>`).join('')}
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-gray-800 mb-2">Key Terms & Acronyms</h4>
-                    <div class="flex flex-wrap gap-1">${(key_intelligence.terminology_and_acronyms || []).map(term => `
-                        <span class="text-xs bg-gray-100 px-2 py-1 rounded border">${term}</span>`).join('')}
-                    </div>
-                </div>
-            </div>
-        </div>
+          <div class="dashboard-card">
+              <h3 class="font-bold text-gray-900 mb-4">Market Analysis</h3>
+              <div class="text-gray-700">${marked.parse(market_analysis)}</div>
+          </div>
 
-        <!-- GTM Plan -->
-        <div class="dashboard-card">
-            <h3 class="font-bold text-gray-900 mb-4">🚀 Go-to-Market Plan</h3>
-            
-            ${go_to_market_plan.salient_quote ? `
-                <div class="mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded">
-                    <h4 class="font-semibold text-yellow-800 mb-2">💬 Power Quote for Outreach</h4>
-                    <blockquote class="text-yellow-700 italic">"${go_to_market_plan.salient_quote}"</blockquote>
-                </div>
-            ` : ''}
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div class="dashboard-card">
+                  <h3 class="font-bold text-gray-900 mb-3">Key Stakeholders to Target</h3>
+                  <ul class="space-y-2 text-sm">${key_stakeholders.map(s => `
+                      <li class="flex gap-2">
+                          <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                          </svg>
+                          <span>${s}</span>
+                      </li>`).join('')}
+                  </ul>
+              </div>
+              
+              <div class="dashboard-card">
+                  <h3 class="font-bold text-gray-900 mb-3">Partnership Opportunities</h3>
+                  <ul class="space-y-2 text-sm">${partnership_opportunities.map(p => `
+                      <li class="flex gap-2">
+                          <svg class="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                          </svg>
+                          <span>${p}</span>
+                      </li>`).join('')}
+                  </ul>
+              </div>
+          </div>
 
-            ${go_to_market_plan.suggested_opening_lines?.length > 0 ? `
-                <div class="mb-6">
-                    <h4 class="font-semibold text-gray-800 mb-3">📧 Ready-to-Use Email Openers</h4>
-                    <div class="space-y-2">${go_to_market_plan.suggested_opening_lines.map((line, i) => `
-                        <div class="p-3 bg-gray-50 border rounded-md">
-                            <span class="text-xs text-gray-500 font-medium">Option ${i + 1}:</span>
-                            <p class="text-sm text-gray-700 mt-1">${line}</p>
-                        </div>`).join('')}
-                    </div>
-                </div>
-            ` : ''}
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <h4 class="font-semibold text-gray-800 mb-3">⚡ Immediate Actions (0-30 days)</h4>
-                    <div class="space-y-3">${(go_to_market_plan.immediate_actions || []).map((action, i) => `
-                        <div class="flex gap-3">
-                            <span class="flex-shrink-0 w-6 h-6 bg-red-200 text-red-700 rounded-full flex items-center justify-center text-xs font-bold">${i + 1}</span>
-                            <div class="flex-1">
-                                <p class="font-medium text-gray-900 text-sm">${action.action}</p>
-                                <p class="text-xs text-gray-600 mt-1">${action.why}</p>
-                            </div>
-                        </div>`).join('')}
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="font-semibold text-gray-800 mb-3">🎯 Strategic Moves (30-90 days)</h4>
-                    <div class="space-y-3">${(go_to_market_plan.strategic_moves || []).map((move, i) => `
-                        <div class="flex gap-3">
-                            <span class="flex-shrink-0 w-6 h-6 bg-blue-200 text-blue-700 rounded-full flex items-center justify-center text-xs font-bold">${i + 1}</span>
-                            <div class="flex-1">
-                                <p class="font-medium text-gray-900 text-sm">${move.action}</p>
-                                <p class="text-xs text-gray-600 mt-1">${move.why}</p>
-                            </div>
-                        </div>`).join('')}
-                    </div>
-                </div>
-            </div>
-
-            ${go_to_market_plan.competitive_positioning ? `
-                <div class="mt-6 p-4 bg-green-50 border-l-4 border-green-400 rounded">
-                    <h4 class="font-semibold text-green-800 mb-2">🥊 Competitive Positioning</h4>
-                    <div class="text-green-700 text-sm">${marked.parse(go_to_market_plan.competitive_positioning)}</div>
-                </div>
-            ` : ''}
-        </div>
-
-        <!-- GTM Flow Chart -->
-        ${mermaid_chart ? `
-            <div class="dashboard-card">
-                <h3 class="font-bold text-gray-900 mb-4">📊 GTM Strategy Flow</h3>
-                <div class="mermaid-container">
-                    <div class="mermaid-loading">
-                        <div class="loader"></div>
-                    </div>
-                    <div id="mermaid-diagram" class="mermaid" style="opacity: 0;">${mermaid_chart}</div>
-                </div>
-            </div>
-        ` : ''}
-
-        ${next_steps ? `
-            <div class="bg-blue-200/60 p-4 rounded-lg text-sm text-blue-900">
-                <b class="font-semibold">🎯 Bottom Line:</b> ${next_steps}
-            </div>
-        ` : ''}
-    </div>`;
-    
-    this.elements.resultsContainer.innerHTML = html;
-    
-    // Render mermaid chart with proper timing
-    if (mermaid_chart) {
-        this.renderMermaidChart();
-    }
-}
+          <div class="dashboard-card">
+              <h3 class="font-bold text-gray-900 mb-3">Competitive Positioning</h3>
+              <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 text-gray-700">
+                  ${marked.parse(competitive_positioning)}
+              </div>
+          </div>
+          
+          ${next_steps ? `
+              <div class="bg-blue-200/60 p-4 rounded-lg text-sm text-blue-900">
+                  <b class="font-semibold">Timeline & Next Steps:</b> ${next_steps}
+              </div>` : ''}
+      </div>`;
+      
+      this.elements.resultsContainer.innerHTML = html;
+      
+      // Render mermaid chart with proper timing
+      if (mermaid_chart) {
+          this.renderMermaidChart();
+      }
+  }
 
   displayGeneralAdvice(data) {
       const { 
