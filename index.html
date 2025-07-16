@@ -763,67 +763,94 @@ class AskArti {
     }
 
     renderNewsAdvice(data) {
-        const { quick_take, background, implications, suggested_opening_lines, immediate_actions, strategic_moves, mermaid_chart } = data;
-        return `
-            <div class="results-card">
-                <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
-                    <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                    <h2 class="font-bold text-lg text-brand-blue-text">GTM Intelligence Report</h2>
-                </div>
-                <div class="results-card-body space-y-6">
-                    <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">${marked.parse(quick_take)}</div>
-                    
-                    <div>
-                        <h3 class="font-semibold mb-3">Analysis</h3>
-                        <div class="text-sm space-y-3">
-                            <p><strong>Background:</strong> ${background}</p>
-                            <p><strong>Implications:</strong> ${implications}</p>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <h3 class="font-semibold mb-3">Email Openers</h3>
-                        <div class="space-y-2">${suggested_opening_lines.map((line, i) => `
-                            <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-700"><strong>Option ${i + 1}:</strong> ${line}</div>`).join('')}
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                           <h4 class="font-semibold text-gray-800 mb-3">⚡ Immediate Actions</h4>
-                           <div class="space-y-3">${immediate_actions.map((action, i) => `
-                               <div class="flex gap-3 items-start">
-                                   <span class="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
-                                   <div>
-                                       <p class="font-medium text-sm text-gray-900">${action.action}</p>
-                                       <p class="text-xs text-gray-600">${action.why}</p>
-                                   </div>
-                               </div>`).join('')}
-                           </div>
-                        </div>
-                        <div>
-                           <h4 class="font-semibold text-gray-800 mb-3">🎯 Strategic Moves</h4>
-                           <div class="space-y-3">${strategic_moves.map((move, i) => `
-                               <div class="flex gap-3 items-start">
-                                   <span class="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
-                                   <div>
-                                       <p class="font-medium text-sm text-gray-900">${move.action}</p>
-                                       <p class="text-xs text-gray-600">${move.why}</p>
-                                   </div>
-                               </div>`).join('')}
-                           </div>
-                        </div>
-                    </div>
-
-                     ${mermaid_chart ? `
-                    <div>
-                        <h3 class="font-semibold mb-2">GTM Flow</h3>
-                        <div class="mermaid-container p-4 bg-white border rounded-lg"><div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div></div>
-                    </div>` : ''}
-                </div>
+    const { 
+        quick_take, background, implications, suggested_opening_lines, immediate_actions, strategic_moves, mermaid_chart,
+        // Define the new fields to be extracted from the data object
+        key_people_and_titles, suggested_discovery_questions, money_keywords 
+    } = data;
+    
+    return `
+        <div class="results-card">
+            <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
+                <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                <h2 class="font-bold text-lg text-brand-blue-text">GTM Intelligence Report</h2>
             </div>
-        `;
-    }
+            <div class="results-card-body space-y-6">
+                <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">${marked.parse(quick_take)}</div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold mb-3">Key People & Titles</h3>
+                        <div class="space-y-2 text-sm">
+                            ${key_people_and_titles && key_people_and_titles.length > 0 ? key_people_and_titles.map(person => `
+                                <div class="flex items-center gap-2">
+                                    <svg class="h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
+                                    <span>${person}</span>
+                                </div>`).join('') : '<p class="text-gray-500">None mentioned.</p>'}
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-3">Money Keywords</h3>
+                        <div class="flex flex-wrap gap-2">
+                            ${money_keywords && money_keywords.length > 0 ? money_keywords.map(keyword => `
+                                <span class="text-xs font-medium bg-green-100 text-green-800 px-2.5 py-1 rounded-full">${keyword}</span>`
+                            ).join('') : '<p class="text-gray-500">No funding keywords found.</p>'}
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-3">Suggested Discovery Questions</h3>
+                    <div class="space-y-2">
+                        ${suggested_discovery_questions && suggested_discovery_questions.length > 0 ? suggested_discovery_questions.map(q => `
+                            <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-800 flex gap-2">
+                                <span class="font-bold text-brand-purple">Q.</span>
+                                <span>${q}</span>
+                            </div>`).join('') : '<p class="text-gray-500">No questions suggested.</p>'}
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-3">Email Openers</h3>
+                    <div class="space-y-2">${suggested_opening_lines.map((line, i) => `
+                        <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-700"><strong>Option ${i + 1}:</strong> ${line}</div>`).join('')}
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold text-gray-800 mb-3">⚡ Immediate Actions</h4>
+                        <div class="space-y-3">${immediate_actions.map((action, i) => `
+                            <div class="flex gap-3 items-start">
+                                <span class="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
+                                <div>
+                                    <p class="font-medium text-sm text-gray-900">${action.action}</p>
+                                    <p class="text-xs text-gray-600">${action.why}</p>
+                                </div>
+                            </div>`).join('')}
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-800 mb-3">🎯 Strategic Moves</h4>
+                        <div class="space-y-3">${strategic_moves.map((move, i) => `
+                            <div class="flex gap-3 items-start">
+                                <span class="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
+                                <div>
+                                    <p class="font-medium text-sm text-gray-900">${move.action}</p>
+                                    <p class="text-xs text-gray-600">${move.why}</p>
+                                </div>
+                            </div>`).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                ${mermaid_chart ? `
+                <div>
+                    <h3 class="font-semibold mb-2">GTM Flow</h3>
+                    <div class="mermaid-container p-4 bg-white border rounded-lg"><div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div></div>
+                </div>` : ''}
+            </div>
+        </div>
+    `;
+}
 
     async renderMermaidChart() {
         try {
