@@ -266,7 +266,10 @@
                         <button id="news-btn" class="btn btn-secondary w-full sm:w-auto">
                             <span id="news-btn-text">Analyze News</span>
                         </button>
-                    </div>
+                        <button id="investment-btn" class="btn btn-secondary w-full sm:w-auto">
+                            <span>Analyze Investment</span>
+                        </button>
+                        </div>
                 </div>
             </div>
 		
@@ -348,7 +351,6 @@ modeButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         modeButtons.forEach(b => b.classList.remove('active', 'bg-white', 'text-brand-purple'));
         btn.classList.add('active', 'bg-white', 'text-brand-purple');
-        // Update inactive button style
         const inactiveBtn = [...modeButtons].find(b => !b.classList.contains('active'));
         if(inactiveBtn) {
             inactiveBtn.classList.add('text-gray-600');
@@ -356,12 +358,10 @@ modeButtons.forEach(btn => {
         }
     });
 });
-// Set initial active state
 document.querySelector('.mode-btn[data-mode="quick"]').classList.add('bg-white', 'text-brand-purple');
 document.querySelector('.mode-btn[data-mode="chat"]').classList.add('text-gray-600');
 
 
-// --- Original JavaScript (no functional changes needed for this redesign) ---
 const CONFIG = {
   API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
   REQUEST_TIMEOUT: 30000,
@@ -399,6 +399,7 @@ class AskArti {
           situationInput: document.getElementById('situation-input'),
           askBtn: document.getElementById('ask-btn'),
           newsBtn: document.getElementById('news-btn'),
+          investmentBtn: document.getElementById('investment-btn'), // New element
           btnText: document.getElementById('btn-text'),
           loader: document.getElementById('loader'),
           charCount: document.getElementById('char-count'),
@@ -454,6 +455,7 @@ class AskArti {
 
         this.elements.askBtn.addEventListener('click', () => this.getAdvice());
         this.elements.newsBtn.addEventListener('click', () => this.getAdvice('news'));
+        this.elements.investmentBtn.addEventListener('click', () => this.getAdvice('investment')); // New listener
         
         this.elements.situationInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -576,13 +578,13 @@ class AskArti {
             this.elements.loader.classList.remove('hidden');
             this.elements.askBtn.disabled = true;
             this.elements.newsBtn.disabled = true;
-            this.showLoadingMessages();
+            this.elements.investmentBtn.disabled = true; // Disable new button while loading
         } else {
             this.elements.btnText.classList.remove('hidden');
             this.elements.loader.classList.add('hidden');
             this.elements.askBtn.disabled = false;
             this.elements.newsBtn.disabled = false;
-            this.hideLoadingMessages();
+            this.elements.investmentBtn.disabled = false; // Enable new button
         }
     }
 
@@ -626,7 +628,11 @@ class AskArti {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body),
             });
-            if (!response.ok) throw new Error(`Server error: ${response.statusText}`);
+            if (!response.ok) {
+                 const error = new Error(`Server error: ${response.statusText}`);
+                 error.response = response;
+                 throw error;
+            }
             
             const data = await response.json();
             if(data.error) throw new Error(data.message || data.error);
@@ -634,8 +640,16 @@ class AskArti {
             this.displayAdvice(data);
 
         } catch (error) {
-            console.error('Request failed:', error);
-            this.showError(error.message || "An unknown error occurred.");
+             console.error('Request failed:', error);
+            if (error.response && typeof error.response.json === 'function') {
+                error.response.json().then(errorData => {
+                    this.showError(errorData.error || "An unknown error occurred.");
+                }).catch(() => {
+                    this.showError(error.message || "An unknown error occurred.");
+                });
+            } else {
+                this.showError(error.message || "An unknown error occurred.");
+            }
         } finally {
             this.setLoading(false);
         }
@@ -647,9 +661,11 @@ class AskArti {
 
         if (response_type === 'news') {
             html = this.renderNewsAdvice(data);
+        } else if (response_type === 'investment') {
+            html = this.renderInvestmentAdvice(data);
         } else if (response_type === 'prospect') {
             html = this.renderProspectAdvice(data);
-        } else { // Handles 'deal', 'interview', and 'meeting' types
+        } else {
             html = this.renderGeneralAdvice(data);
         }
         
@@ -658,6 +674,76 @@ class AskArti {
             this.renderMermaidChart();
         }
         this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    
+    renderInvestmentAdvice(data) {
+        const {
+            investment_thesis, financial_health, market_position, growth_catalysts,
+            identified_risks, management_outlook, key_financial_metrics, bull_case, bear_case, next_steps
+        } = data;
+
+        return `
+            <div class="results-card">
+                <div class="results-card-header flex items-center gap-4 bg-brand-yellow-bg">
+                    <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                    <h2 class="font-bold text-lg text-brand-yellow-text">Investment Thesis Summary</h2>
+                </div>
+                <div class="results-card-body space-y-6">
+                    <div class="p-4 bg-brand-yellow-bg/50 rounded-lg text-brand-yellow-text">
+                        <p class="font-semibold">Thesis:</p>
+                        ${marked.parse(investment_thesis)}
+                    </div>
+
+                    <div>
+                        <h3 class="font-semibold mb-2">Key Financial Metrics</h3>
+                        <div class="flex flex-wrap gap-2">
+                            ${key_financial_metrics && key_financial_metrics.length > 0 ? key_financial_metrics.map(metric => `
+                                <span class="text-sm font-medium bg-gray-100 text-gray-800 px-3 py-1.5 rounded-lg">${metric}</span>`
+                            ).join('') : '<p class="text-gray-500 text-sm">None mentioned.</p>'}
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 text-sm">
+                        <p><strong>Financial Health:</strong> ${financial_health || 'Not detailed.'}</p>
+                        <p><strong>Market Position:</strong> ${market_position || 'Not detailed.'}</p>
+                        <p><strong>Management Outlook:</strong> ${management_outlook || 'Not detailed.'}</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                           <h4 class="font-semibold text-green-700 mb-3">📈 Growth Catalysts</h4>
+                           <ul class="space-y-2 text-sm">${growth_catalysts && growth_catalysts.length > 0 ? growth_catalysts.map(c => `<li class="flex gap-2 items-start"><span class="text-green-500 mt-1">▲</span><span>${c}</span></li>`).join('') : '<li>None identified.</li>'}</ul>
+                        </div>
+                        <div>
+                           <h4 class="font-semibold text-red-700 mb-3">🚨 Identified Risks</h4>
+                           <ul class="space-y-2 text-sm">${identified_risks && identified_risks.length > 0 ? identified_risks.map(r => `<li class="flex gap-2 items-start"><span class="text-red-500 mt-1">▼</span><span>${r}</span></li>`).join('') : '<li>None identified.</li>'}</ul>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="font-semibold mb-3">Bull vs. Bear Case</h3>
+                        <div class="space-y-4">
+                             <div class="p-3 bg-green-50 border-l-4 border-green-400">
+                                <p class="font-bold text-green-800">Bull Case</p>
+                                <p class="text-sm text-gray-700">${bull_case}</p>
+                             </div>
+                             <div class="p-3 bg-red-50 border-l-4 border-red-400">
+                                <p class="font-bold text-red-800">Bear Case</p>
+                                <p class="text-sm text-gray-700">${bear_case}</p>
+                             </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-4 border-t">
+                        <p class="text-sm font-semibold text-gray-800">${next_steps}</p>
+                    </div>
+                    
+                    <div class="p-3 mt-4 text-xs text-gray-500 bg-gray-50 rounded-lg border border-gray-200">
+                        <strong>Disclaimer:</strong> This content is for informational purposes only and does not constitute financial or investment advice. It is not a recommendation to buy or sell any security. You should always conduct your own research and consult a qualified financial professional before making any investment decisions.
+                    </div>
+                    </div>
+            </div>
+        `;
     }
     
     renderGeneralAdvice(data) {
@@ -673,7 +759,6 @@ class AskArti {
                 </div>
                 <div class="results-card-body space-y-6">
                     <div class="p-4 bg-brand-purple/10 rounded-lg text-brand-purple/90">${marked.parse(quick_take)}</div>
-                    
                     <div>
                         <h3 class="font-semibold mb-3">Your Next 3 Moves</h3>
                         <div class="space-y-3">${key_moves.map((m, i) => `
@@ -686,20 +771,17 @@ class AskArti {
                             </div>`).join('')}
                         </div>
                     </div>
-                    
                     ${mermaid_chart ? `
                     <div>
                         <h3 class="font-semibold mb-2">Visual Strategy</h3>
                         <div class="mermaid-container p-4 bg-white border rounded-lg"><div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div></div>
                     </div>` : ''}
-
                     ${talking_points?.length > 0 ? `
                     <div>
                         <h3 class="font-semibold mb-2">${talkingPointsTitle}</h3>
                         <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${talking_points.map(t => `<li>${t}</li>`).join('')}</ul>
                     </div>
                     ` : ''}
-
                     ${email_template ? `
                     <div>
                         <h3 class="font-semibold mb-2">Email Template</h3>
@@ -731,17 +813,14 @@ class AskArti {
                 </div>
                 <div class="results-card-body space-y-6">
                     <div class="p-4 bg-brand-green-bg/50 rounded-lg text-brand-green-text">${marked.parse(summary)}</div>
-
                     <div>
                         <h3 class="font-semibold mb-3">Top Contractors (SIs)</h3>
                         ${renderList(top_s_is)}
                     </div>
-                    
                     <div>
                         <h3 class="font-semibold mb-3">Top Software & Cloud Partners</h3>
                         ${renderList(top_software_and_cloud)}
                     </div>
-                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                            <h4 class="font-semibold text-gray-800 mb-3">Relevant Capabilities</h4>
@@ -752,7 +831,6 @@ class AskArti {
                            <ul class="space-y-2 text-sm">${naics_codes.map(n => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${n.code ? `${n.code} - ${n.description}`: n}</li>`).join('')}</ul>
                         </div>
                     </div>
-                     
                     <div>
                         <h3 class="font-semibold mb-3">Recommendations</h3>
                         <div class="p-4 bg-gray-50 border rounded-lg text-sm space-y-2">${prospect_recommendations.map(r => `<p>${r}</p>`).join('')}</div>
@@ -765,7 +843,6 @@ class AskArti {
     renderNewsAdvice(data) {
     const { 
         quick_take, background, implications, suggested_opening_lines, immediate_actions, strategic_moves, mermaid_chart,
-        // Define the new fields to be extracted from the data object
         key_people_and_titles, suggested_discovery_questions, money_keywords 
     } = data;
     
@@ -777,7 +854,6 @@ class AskArti {
             </div>
             <div class="results-card-body space-y-6">
                 <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">${marked.parse(quick_take)}</div>
-                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <h3 class="font-semibold mb-3">Key People & Titles</h3>
@@ -814,7 +890,6 @@ class AskArti {
                         <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-700"><strong>Option ${i + 1}:</strong> ${line}</div>`).join('')}
                     </div>
                 </div>
-                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <h4 class="font-semibold text-gray-800 mb-3">⚡ Immediate Actions</h4>
@@ -841,7 +916,6 @@ class AskArti {
                         </div>
                     </div>
                 </div>
-
                 ${mermaid_chart ? `
                 <div>
                     <h3 class="font-semibold mb-2">GTM Flow</h3>
@@ -850,7 +924,7 @@ class AskArti {
             </div>
         </div>
     `;
-}
+    }
 
     async renderMermaidChart() {
         try {
