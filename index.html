@@ -200,7 +200,6 @@
         background-color: #F9FAFB;
         border-radius: 1rem;
         border: 1px solid #E5E7EB;
-        scroll-behavior: smooth;
     }
     .chat-message-user {
         background-color: var(--brand-purple);
@@ -213,141 +212,12 @@
         border: 1px solid #e5e7eb;
         border-radius: 1rem 1rem 1rem 0.25rem;
     }
-    
-    /* --- Accessibility Improvements --- */
-    *:focus-visible {
-        outline: 3px solid #7C6BBE;
-        outline-offset: 2px;
-    }
-
-    /* Better contrast for action items */
-    .text-brand-purple {
-        color: #5d4e99; /* Darker purple for better contrast */
-    }
-
-    /* Reduce motion option */
-    @media (prefers-reduced-motion: reduce) {
-        .fade-in, .quick-prompt:hover {
-            animation: none;
-            transform: none;
-        }
-    }
-    
-    /* Animated typing indicator */
-    .typing-indicator {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.5rem;
-    }
-    
-    .typing-indicator span {
-        height: 8px;
-        width: 8px;
-        margin: 0 2px;
-        background-color: #7C6BBE;
-        border-radius: 50%;
-        opacity: 0.4;
-        animation: typing 1.4s infinite ease-in-out;
-    }
-    
-    .typing-indicator span:nth-child(1) {
-        animation-delay: 0s;
-    }
-    
-    .typing-indicator span:nth-child(2) {
-        animation-delay: 0.2s;
-    }
-    
-    .typing-indicator span:nth-child(3) {
-        animation-delay: 0.4s;
-    }
-    
-    @keyframes typing {
-        0% { transform: scale(1); opacity: 0.4; }
-        50% { transform: scale(1.2); opacity: 1; }
-        100% { transform: scale(1); opacity: 0.4; }
-    }
-    
-    /* Success flash feedback */
-    .flash-success {
-        animation: flashSuccess 2s ease-out;
-    }
-    
-    @keyframes flashSuccess {
-        0% { background-color: rgba(209, 250, 229, 0); }
-        30% { background-color: rgba(209, 250, 229, 0.3); }
-        100% { background-color: rgba(209, 250, 229, 0); }
-    }
-    
-    /* Character count warning styles */
-    .char-count-warning {
-        color: #f59e0b;
-    }
-    
-    .char-count-error {
-        color: #ef4444;
-    }
-    
-    /* Federal term tooltip styles */
-    .fed-term {
-        position: relative;
-        font-weight: 600;
-        color: #5d4e99;
-        cursor: help;
-    }
-    
-    .fed-term .tooltip {
-        visibility: hidden;
-        position: absolute;
-        bottom: 125%;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: #1f2937;
-        color: white;
-        text-align: center;
-        padding: 0.25rem 0.5rem;
-        border-radius: 0.25rem;
-        font-size: 0.75rem;
-        width: max-content;
-        max-width: 200px;
-        opacity: 0;
-        transition: opacity 0.3s;
-        z-index: 10;
-        pointer-events: none;
-        font-weight: normal;
-    }
-    
-    .fed-term:hover .tooltip {
-        visibility: visible;
-        opacity: 1;
-    }
-    
-    /* Action item highlight */
-    .action-item {
-        margin: 0.75rem 0;
-        padding: 0.5rem 0.75rem;
-        background-color: rgba(124, 107, 190, 0.1);
-        border-left: 3px solid #7C6BBE;
-        border-radius: 0 0.25rem 0.25rem 0;
-    }
-    
     /* --- Responsive & Mobile --- */
     @media (max-width: 640px) {
         .main-container { padding: 0.75rem; }
         .io-card, .results-card-body { padding: 1rem; }
         .btn { padding: 0.625rem 1rem; font-size: 0.9rem; }
     }
-	/* Add flash effect for the textarea if not already present */
-@keyframes flashSuccess {
-    0% { background-color: rgba(209, 250, 229, 0); }
-    30% { background-color: rgba(209, 250, 229, 0.3); }
-    100% { background-color: rgba(209, 250, 229, 0); }
-}
-
-.flash-success {
-    animation: flashSuccess 2s ease-out;
-}
 </style>
 
 </head>
@@ -372,102 +242,76 @@
     rows="4" 
     class="w-full p-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-brand-purple resize-none placeholder-gray-500"
     placeholder='e.g., Prospect for cyber opps at DHS. Include keywords like "Prospect" if you are hunting for pipeline or "Interview" if job hunting.'
-    maxlength="2000"
-    aria-describedby="char-count hint-text"></textarea>
+    maxlength="2000"></textarea>
                     <div class="text-xs text-gray-500 mt-1.5 flex justify-between">
-    <span id="hint-text" class="hint-text">Enter a sales deal for a Game Plan, paste any press release or text for News or Market Analysis.</span>
-    <span id="char-count" aria-live="polite">0/2000</span>
+    <span class="hint-text">Enter a sales deal for a Game Plan, paste any press release or text for News or Market Analysis.</span>
+    <span id="char-count">0/2000</span>
 </div>
 
                     <div class="mt-4">
-    <p class="text-sm font-medium text-brand-gray-600 mb-2">Try an example prompt:</p>
-    <div class="flex flex-wrap gap-2">
-        <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Buyer at VA ghosted me after I sent pricing. CISO loves our competitor." aria-label="Example: Buyer went dark">Buyer Went Dark</button>
-        <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Demo crashed at DOJ yesterday. CTO walked out. How to recover?" aria-label="Example: Demo crashed">Demo Crashed</button>
-        <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Internal partner and account reps are fighting over customer access, pipeline, and revenue. Sales are hurting." aria-label="Example: Partner drama">Partner Drama</button>
-        <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="I just took over as Director of DoD for Chiquita Bananas. Help me prospect for opps within Navy." aria-label="Example: Prospecting">Prospecting</button>
-        
-        <!-- Add divider -->
-        <div class="w-full border-t border-gray-200 my-2"></div>
-        
-        <!-- Add Sample Content Buttons -->
-        <button id="sample-press-release" class="px-3 py-1.5 bg-green-50 hover:bg-green-100 text-green-700 rounded-full text-sm flex items-center" aria-label="Load sample DoD contract press release">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            Sample News Analysis
-        </button>
-        <button id="sample-earnings" class="px-3 py-1.5 bg-yellow-50 hover:bg-yellow-100 text-yellow-700 rounded-full text-sm flex items-center" aria-label="Load sample tech earnings report">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
-            Sample Market Analysis
-        </button>
-    </div>
-</div>
+                        <p class="text-sm font-medium text-brand-gray-600 mb-2">Try an example prompt:</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Buyer at VA ghosted me after I sent pricing. CISO loves our competitor.">Buyer Went Dark</button>
+                            <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Demo crashed at DOJ yesterday. CTO walked out. How to recover?">Demo Crashed</button>
+							<button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Internal partner and account reps are fighting over customer access, pipeline, and revenue. Sales are hurting.">Partner Drama</button>
+							<button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="I just took over as Director of DoD for Chiquita Bananas. Help me prospect for opps within Navy.">Prospecting</button>
+                        </div>
+                    </div>
 
                     <div class="mt-6 border-t border-gray-200 pt-4 flex flex-col sm:flex-row gap-3">
-                        <button id="ask-btn" class="btn btn-primary w-full sm:w-auto flex-1" aria-label="Generate Game Plan">
+                        <button id="ask-btn" class="btn btn-primary w-full sm:w-auto flex-1">
                             <span id="btn-text">Game Plan</span>
-                            <div id="loader" class="loader hidden" aria-hidden="true"></div>
+                            <div id="loader" class="loader hidden"></div>
                         </button>
-                        <button id="news-btn" class="btn btn-secondary w-full sm:w-auto" title="For best results, paste the full text of a press release or news article." aria-label="Generate News Analysis">
+                        <button id="news-btn" class="btn btn-secondary w-full sm:w-auto" title="For best results, paste the full text of a press release or news article.">
                             <span id="news-btn-text">News Analysis</span>
                         </button>
-                        <button id="investment-btn" class="btn btn-secondary w-full sm:w-auto" title="For best results, paste the full text of a press release or market news. This feature does not work with stock symbols alone." aria-label="Generate Market Analysis">
-                            <span>Market Analysis</span>
-                        </button>
-                    </div>
+                        <button id="investment-btn" class="btn btn-secondary w-full sm:w-auto" title="For best results, paste the full text of a press release or market news. This feature does not work with stock symbols alone.">
+    <span>Market Analysis</span>
+</button>
+                        </div>
                 </div>
             </div>
 		
             <div id="chat-mode" class="mode-content hidden fade-in">
                 <div class="io-card">
-                    <div class="flex justify-between items-center px-2 mb-2">
-                        <span class="text-xs text-gray-500">
-                            <span id="message-count" aria-live="polite">0</span> messages
-                        </span>
-                        <button id="clear-chat" class="text-xs text-brand-purple hover:underline" aria-label="Clear conversation">
-                            Clear conversation
-                        </button>
-                    </div>
-                    <div class="chat-container mb-4" id="chat-container" role="log" aria-label="Chat conversation with Arti">
+                    <div class="chat-container mb-4" id="chat-container">
                         <div id="chat-messages" class="space-y-4">
                             <div class="flex justify-start">
-                                <div class="chat-message-arti p-3 text-sm max-w-[85%]" role="status">
+                                <div class="chat-message-arti p-3 text-sm max-w-[85%]">
                                     <p>Hey! I'm Arti. I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="flex gap-2">
-                        <input type="text" id="chat-input" class="flex-1 p-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-brand-purple" placeholder="Type your message..." maxlength="2000" aria-label="Chat message">
-                        <button id="chat-send-btn" class="btn btn-primary px-4" aria-label="Send message">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" /></svg>
+                        <input type="text" id="chat-input" class="flex-1 p-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-brand-purple" placeholder="Type your message..." maxlength="2000">
+                        <button id="chat-send-btn" class="btn btn-primary px-4">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" /></svg>
                         </button>
                     </div>
                 </div>
             </div>
        </main>
 
-        <div id="loading-message-container" class="text-center py-6 hidden" aria-live="polite">
+        <div id="loading-message-container" class="text-center py-6 hidden">
             <p id="loading-message" class="text-gray-600 font-medium"></p>
         </div>
-        <div id="error-message" class="bg-red-100 border border-red-300 rounded-lg p-4 text-center my-6 hidden" role="alert" aria-live="assertive">
+        <div id="error-message" class="bg-red-100 border border-red-300 rounded-lg p-4 text-center my-6 hidden">
             <p class="text-red-800 font-semibold mb-1">Something went wrong</p>
             <p class="text-red-700 text-sm" id="error-details">We're having trouble connecting to Arti.</p>
         </div>
 
-       <div id="results-container" class="fade-in" aria-live="polite"></div>
+       <div id="results-container" class="fade-in"></div>
 
        <div class="mt-12 text-center">
            <p class="text-sm text-gray-500 mb-2">Need something different? Switch modes.</p>
            <div class="io-card max-w-sm mx-auto p-2">
-                <div class="flex bg-brand-gray-100 p-1 rounded-xl" role="tablist">
-                    <button class="mode-btn flex-1 px-3 py-2 rounded-lg font-semibold text-sm transition-all active" data-mode="quick" role="tab" aria-selected="true" aria-controls="quick-mode">
+                <div class="flex bg-brand-gray-100 p-1 rounded-xl">
+                    <button class="mode-btn flex-1 px-3 py-2 rounded-lg font-semibold text-sm transition-all active" data-mode="quick">
                         ⚡️ Game Plans
                     </button>
-                    <button class="mode-btn flex-1 px-3 py-2 rounded-lg font-semibold text-sm transition-all" data-mode="chat" role="tab" aria-selected="false" aria-controls="chat-mode">
+                    <button class="mode-btn flex-1 px-3 py-2 rounded-lg font-semibold text-sm transition-all" data-mode="chat">
                         💬 Chat with Arti
                     </button>
                 </div>
@@ -483,12 +327,12 @@
 
    </div>
    
-   <div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50" role="dialog" aria-labelledby="about-title" aria-modal="true">
+   <div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
        <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
            <div class="flex justify-between items-start mb-4">
-               <h2 id="about-title" class="text-xl font-bold text-gray-900">About AskArti</h2>
-               <button id="close-about" class="text-gray-400 hover:text-gray-600" aria-label="Close dialog">
-                   <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+               <h2 class="text-xl font-bold text-gray-900">About AskArti</h2>
+               <button id="close-about" class="text-gray-400 hover:text-gray-600">
+                   <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                </button>
            </div>
            <div class="space-y-4 text-gray-700 text-sm">
@@ -501,6 +345,23 @@
        </div>
    </div>
 <script>
+// --- Mode Toggle Active State ---
+const modeButtons = document.querySelectorAll('.mode-btn');
+modeButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        modeButtons.forEach(b => b.classList.remove('active', 'bg-white', 'text-brand-purple'));
+        btn.classList.add('active', 'bg-white', 'text-brand-purple');
+        const inactiveBtn = [...modeButtons].find(b => !b.classList.contains('active'));
+        if(inactiveBtn) {
+            inactiveBtn.classList.add('text-gray-600');
+            inactiveBtn.classList.remove('bg-white', 'text-brand-purple');
+        }
+    });
+});
+document.querySelector('.mode-btn[data-mode="quick"]').classList.add('bg-white', 'text-brand-purple');
+document.querySelector('.mode-btn[data-mode="chat"]').classList.add('text-gray-600');
+
+
 const CONFIG = {
   API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
   REQUEST_TIMEOUT: 30000,
@@ -515,44 +376,9 @@ const CONFIG = {
       "...Putting a Pin in it", 
       "...Circling Back", 
       "...Thinking Big"
-  ],
-  FEDERAL_TERMS: {
-    'FACA': 'Federal Advisory Committee Act',
-    'DCAA': 'Defense Contract Audit Agency',
-    'opp': 'sales opportunity',
-    'DCMA': 'Defense Contract Management Agency',
-    'DFARS': 'Defense Federal Acquisition Regulation Supplement',
-    'FAR': 'Federal Acquisition Regulation',
-    'FOIA': 'Freedom of Information Act',
-    'FPDS-NG': 'Federal Procurement Data System-Next Generation',
-    'GSA Schedule': 'General Services Administration Schedule',
-    'GWAC': 'Government-Wide Acquisition Contract',
-    'IDIQ': 'Indefinite Delivery/Indefinite Quantity',
-    'LPTA': 'Lowest Price Technically Acceptable',
-    'OTA': 'Other Transaction Authority',
-    'RFI': 'Request for Information',
-    'RFP': 'Request for Proposal',
-    'SAM': 'System for Award Management',
-    'SAT': 'Simplified Acquisition Threshold',
-    'SBA': 'Small Business Administration',
-    'SBIR': 'Small Business Innovation Research',
-    'SDVOSB': 'Service-Disabled Veteran-Owned Small Business',
-    'SOW': 'Statement of Work',
-    'CLIN': 'Contract Line Item Number',
-    'CPARS': 'Contractor Performance Assessment Reporting System',
-    'CTA': 'Contractor Team Arrangement',
-    'FFP': 'Firm Fixed Price',
-    'T&M': 'Time and Materials',
-    'WOSB': 'Woman-Owned Small Business',
-    'HUBZone': 'Historically Underutilized Business Zone',
-    'COTR': 'Contracting Officer Technical Representative',
-    'COR': 'Contracting Officer Representative',
-    'CO': 'Contracting Officer',
-    'KO': 'Contracting Officer',
-    'COTS': 'Commercial Off-The-Shelf',
-    'FedRAMP': 'Federal Risk and Authorization Management Program'
-  }
+  ]
 };
+
 class AskArti {
   constructor() {
    this.elements = this.getElements();
@@ -564,9 +390,6 @@ class AskArti {
        lastQuery: '',
        currentMode: 'quick',
        chatHistory: [],
-       messageCount: 1, // Start at 1 for welcome message
-       requestCount: 0,
-       cooldownActive: false
    };
    this.init();
 }
@@ -576,7 +399,7 @@ class AskArti {
           situationInput: document.getElementById('situation-input'),
           askBtn: document.getElementById('ask-btn'),
           newsBtn: document.getElementById('news-btn'),
-          investmentBtn: document.getElementById('investment-btn'),
+          investmentBtn: document.getElementById('investment-btn'), // New element
           btnText: document.getElementById('btn-text'),
           loader: document.getElementById('loader'),
           charCount: document.getElementById('char-count'),
@@ -595,50 +418,28 @@ class AskArti {
           chatMessages: document.getElementById('chat-messages'),
           chatInput: document.getElementById('chat-input'),
           chatSendBtn: document.getElementById('chat-send-btn'),
-          messageCount: document.getElementById('message-count'),
-          clearChat: document.getElementById('clear-chat'),
-          // New elements for sample content
-          samplePressReleaseBtn: document.getElementById('sample-press-release'),
-          sampleEarningsBtn: document.getElementById('sample-earnings')
       };
   }
 
   init() {
-      mermaid.initialize({ 
-          startOnLoad: false, 
-          securityLevel: 'strict', 
-          theme: 'base', 
-          themeVariables: {
-              primaryColor: '#F3F4F6',
-              primaryTextColor: '#1F2937',
-              primaryBorderColor: '#D1D5DB',
-              lineColor: '#6B7280',
-              textColor: '#111827',
-              fontSize: '14px'
-          }
-      });
+      mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'base', themeVariables: {
+            primaryColor: '#F3F4F6',
+            primaryTextColor: '#1F2937',
+            primaryBorderColor: '#D1D5DB',
+            lineColor: '#6B7280',
+            textColor: '#111827',
+            fontSize: '14px'
+      }});
       this.setupEventListeners();
       this.elements.situationInput.focus();
       this.updateCharCount();
-      this.elements.messageCount.textContent = this.state.messageCount.toString();
   }
 
     updateCharCount() {
         if (!this.elements.situationInput) return;
         const current = this.elements.situationInput.value.length;
         const max = CONFIG.MAX_INPUT_LENGTH;
-        const charCountElement = this.elements.charCount;
-        
-        charCountElement.textContent = `${current}/${max}`;
-        
-        // Add warning styles
-        charCountElement.classList.remove('char-count-warning', 'char-count-error');
-        
-        if (current > max * 0.8 && current < max) {
-            charCountElement.classList.add('char-count-warning');
-        } else if (current >= max) {
-            charCountElement.classList.add('char-count-error');
-        }
+        this.elements.charCount.textContent = `${current}/${max}`;
     }
 
     setupEventListeners() {
@@ -654,7 +455,7 @@ class AskArti {
 
         this.elements.askBtn.addEventListener('click', () => this.getAdvice());
         this.elements.newsBtn.addEventListener('click', () => this.getAdvice('news'));
-        this.elements.investmentBtn.addEventListener('click', () => this.getAdvice('investment')); 
+        this.elements.investmentBtn.addEventListener('click', () => this.getAdvice('investment')); // New listener
         
         this.elements.situationInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -663,10 +464,7 @@ class AskArti {
             }
         });
 
-        this.elements.aboutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            this.showModal();
-        });
+        this.elements.aboutBtn.addEventListener('click', () => this.showModal());
         this.elements.closeAbout.addEventListener('click', () => this.hideModal());
         this.elements.aboutModal.addEventListener('click', (e) => {
             if (e.target === this.elements.aboutModal) this.hideModal();
@@ -686,84 +484,6 @@ class AskArti {
                 this.sendChatMessage();
             }
         });
-        
-        this.elements.clearChat.addEventListener('click', () => this.clearChat());
-        
-        // Sample content buttons
-        this.elements.samplePressReleaseBtn.addEventListener('click', () => {
-            this.loadSampleContent('press-release');
-        });
-        this.elements.sampleEarningsBtn.addEventListener('click', () => {
-            this.loadSampleContent('earnings');
-        });
-    }
-
-    // New method for loading sample content
-    loadSampleContent(type) {
-        let sampleContent = '';
-        
-        if (type === 'press-release') {
-            sampleContent = `FOR IMMEDIATE RELEASE
-    
-WASHINGTON, D.C., July 15, 2025 - The Department of Defense has awarded Raytheon Technologies a $3.2 billion contract to provide next-generation RAM (Rolling Airframe Missile) launchers for the U.S. Navy's fleet of DDG-51 Arleigh Burke-class destroyers and new Constellation-class frigates.
-
-The five-year contract will supply the Navy with 200 MK 49 Mod 4 RAM launchers, representing the largest single order of the defensive weapon system in over two decades. The contract includes options which could bring the total value to $4.8 billion if exercised.
-
-"This contract marks the largest single order of U.S. RAM launchers in over two decades and will ensure our naval assets remain well-protected against anti-ship threats," said Admiral Michael Gilday, Chief of Naval Operations. "As our adversaries continue to advance their capabilities, this critical defensive technology will help maintain our maritime superiority."
-
-The RAM system is designed to provide exceptional protection against anti-ship missiles, aircraft, and surface threats. The new Mod 4 variant features enhanced tracking capabilities, improved electronic countermeasures, and integration with the Navy's latest combat management systems.
-
-Production will be divided between Raytheon's facilities in Louisville, Kentucky and Tucson, Arizona, with additional support from subcontractors across 12 states. The contract is expected to sustain approximately 1,500 direct jobs and create an additional 300 positions across the supply chain.
-
-
-Initial deliveries are scheduled to begin in early 2026, with full rate production expected by mid-2027. The system will be deployed across the fleet as part of the Navy's ongoing modernization efforts.
-
-The contract was competitively procured via the SAM.gov website with two offers received, according to the Department of Defense.`;
-        } else if (type === 'earnings') {
-            sampleContent = `Quantum Dynamics, Inc. today announced the following results for the quarter ended June 30, 2025, as compared to the corresponding period of last fiscal year:
-
-- Revenue was $18.3 billion, up 23% year-over-year
-- Gross margin increased to 68%, up 3 percentage points
-- Operating income was $6.2 billion, up 42%
-- Net income was $5.1 billion, GAAP diluted earnings per share was $5.28
-- Cloud services revenue increased 37% to $8.9 billion
-- Federal sector bookings grew 52% year-over-year to $2.4 billion
-
-"Our record results this quarter demonstrate the strength of our hybrid cloud strategy and growing federal market adoption," said Sarah Chen, CEO of Quantum Dynamics. "As government agencies accelerate their digital transformation, we're seeing unprecedented demand for our FedRAMP High authorized platforms and AI solutions tailored for mission-critical workloads."
-
-The company reported that federal sector growth was primarily driven by Department of Defense and Intelligence Community contracts, with the company's quantum-resistant encryption and edge computing solutions seeing particularly strong adoption. New federal bookings included a $480 million contract with the Department of Homeland Security for secure cloud migration services and a $325 million award from the U.S. Air Force for AI-enabled predictive maintenance solutions.
-
-- Opened new SCIF-equipped facility in Arlington, VA to support classified workloads
-- Federal partner ecosystem grew to over 200 companies, up 40% year-over-year
-- Awarded "Federal Cloud Provider of the Year" by Government Technology Magazine`;
-        }
-        
-        if (sampleContent) {
-            this.elements.situationInput.value = sampleContent;
-            this.updateCharCount();
-            
-            // Scroll to show the beginning of the content
-            this.elements.situationInput.scrollTop = 0;
-            
-            // Show a flash effect to indicate the content has been loaded
-            this.elements.situationInput.classList.add('flash-success');
-            setTimeout(() => {
-                this.elements.situationInput.classList.remove('flash-success');
-            }, 2000);
-            
-            // Suggest appropriate button based on content type
-            if (type === 'press-release') {
-                this.elements.newsBtn.classList.add('flash-success');
-                setTimeout(() => {
-                    this.elements.newsBtn.classList.remove('flash-success');
-                }, 2000);
-            } else if (type === 'earnings') {
-                this.elements.investmentBtn.classList.add('flash-success');
-                setTimeout(() => {
-                    this.elements.investmentBtn.classList.remove('flash-success');
-                }, 2000);
-            }
-        }
     }
 
     switchMode(mode) {
@@ -783,83 +503,25 @@ The company reported that federal sector growth was primarily driven by Departme
         }
     }
 
-    // Process text content for rich formatting
-    processRichResponse(text) {
-        if (!text || typeof text !== 'string') return text;
-        
-        // First safely escape any quotes in the original text
-        // This prevents HTML breaking from nested quotes
-        text = text.replace(/"/g, '&quot;');
-        
-        // Process action tags with a simpler, lighter highlight effect - no title
-        text = text.replace(/<action>(.*?)<\/action>/g, 
-            '<span class="bg-brand-purple/10 text-brand-purple/90 px-1 py-0.5 rounded font-medium">$1</span>'
-        );
-        
-        // Create clickable links
-        text = text.replace(
-            /\b(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/g, 
-            '<a href="$1" target="_blank" class="text-brand-purple underline hover:no-underline">$1</a>'
-        );
-        
-        // Highlight federal terms/acronyms with tooltips
-        Object.entries(CONFIG.FEDERAL_TERMS).forEach(([term, description]) => {
-            const regex = new RegExp(`\\b${term}\\b`, 'g');
-            text = text.replace(regex, `<span class="fed-term">$&<span class="tooltip">${description}</span></span>`);
-        });
-        
-        // Format STAR framework in interview context
-        if (text.includes("STAR") || text.includes("star method")) {
-            text = text.replace(
-                /\b(Situation|Task|Action|Result)\b:?/gi,
-                '<span class="font-bold text-brand-purple">$&</span>'
-            );
-        }
-        
-        return text;
-    }
-
     addChatMessage(content, isUser = false) {
-        // Process content with rich formatting if not a user message
-        let processedContent = isUser ? 
-            content : 
-            this.processRichResponse(content);
-        
-        // Use marked.parse after our custom processing for any markdown
-        if (!isUser) {
-            processedContent = marked.parse(processedContent);
-        }
+        let processedContent = isUser ? content : marked.parse(content.replace(/<action>(.*?)<\/action>/g, '<strong class="text-brand-purple">$1</strong>'));
         
         const messageClass = isUser ? 'chat-message-user justify-end' : 'chat-message-arti justify-start';
         const alignClass = isUser ? 'justify-end' : 'justify-start';
-        const roleAttr = isUser ? 'user' : 'status';
 
         const messageHtml = `
             <div class="flex ${alignClass} fade-in">
-                <div class="${messageClass} p-3 text-sm max-w-[85%]" role="${roleAttr}">
+                <div class="${messageClass} p-3 text-sm max-w-[85%]">
                     ${processedContent}
                 </div>
             </div>
         `;
         this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
         this.scrollChatToBottom();
-        
-        // Update message count
-        this.state.messageCount++;
-        this.elements.messageCount.textContent = this.state.messageCount.toString();
     }
     
     showTypingIndicator() {
-        const typingHtml = `
-            <div id="typing-indicator" class="flex justify-start">
-                <div class="chat-message-arti p-3 text-sm">
-                    <div class="typing-indicator">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </div>
-            </div>`;
+        const typingHtml = `<div id="typing-indicator" class="flex justify-start"><div class="chat-message-arti p-3 text-sm">...</div></div>`;
         this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
         this.scrollChatToBottom();
     }
@@ -875,75 +537,12 @@ The company reported that federal sector growth was primarily driven by Departme
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
     }
-    
-    clearChat() {
-        this.elements.chatMessages.innerHTML = '';
-        this.state.chatHistory = [];
-        this.state.messageCount = 0;
-        
-        // Add initial welcome message back
-        const welcomeMessage = `
-            <div class="flex justify-start">
-                <div class="chat-message-arti p-3 text-sm max-w-[85%]" role="status">
-                    <p>Hey! I'm Arti. I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.</p>
-                </div>
-            </div>
-        `;
-        this.elements.chatMessages.innerHTML = welcomeMessage;
-        this.state.messageCount = 1;
-        this.elements.messageCount.textContent = "1";
-    }
-    
-    checkThrottling() {
-        const now = Date.now();
-        const timeSinceLastRequest = now - this.state.lastRequestTime;
-        
-        // If less than minimum interval has passed
-        if (timeSinceLastRequest < CONFIG.MIN_REQUEST_INTERVAL) {
-            return {
-                throttled: true,
-                message: "Please wait a moment before sending another request."
-            };
-        }
-        
-        // Check for rapid successive requests
-        if (this.state.requestCount > 10) {
-            const oneMinuteAgo = now - 60000;
-            
-            // If we've made more than 10 requests in the last minute
-            if (this.state.lastRequestTime > oneMinuteAgo && !this.state.cooldownActive) {
-                this.state.cooldownActive = true;
-                
-                // Reset after 30 seconds
-                setTimeout(() => {
-                    this.state.requestCount = 0;
-                    this.state.cooldownActive = false;
-                }, 30000);
-                
-                return {
-                    throttled: true,
-                    message: "You've made several requests in a short time. Please wait 30 seconds before trying again."
-                };
-            }
-        }
-        
-        return { throttled: false };
-    }
 
     async sendChatMessage() {
         const message = this.elements.chatInput.value.trim();
         if (!message || this.state.pendingRequest) return;
-        
-        // Check throttling
-        const throttleCheck = this.checkThrottling();
-        if (throttleCheck.throttled) {
-            this.showError(throttleCheck.message);
-            return;
-        }
 
         this.state.pendingRequest = true;
-        this.state.lastRequestTime = Date.now();
-        this.state.requestCount++;
         this.addChatMessage(message, true);
         this.state.chatHistory.push({ role: 'user', content: message });
         this.elements.chatInput.value = '';
@@ -959,14 +558,6 @@ The company reported that federal sector growth was primarily driven by Departme
             
             const data = await response.json();
             this.hideTypingIndicator();
-            
-            // Apply success feedback
-            const chatContainer = document.getElementById('chat-container');
-            chatContainer.classList.add('flash-success');
-            setTimeout(() => {
-                chatContainer.classList.remove('flash-success');
-            }, 2000);
-            
             this.addChatMessage(data.message);
             this.state.chatHistory.push({ role: 'assistant', content: data.message });
 
@@ -987,15 +578,13 @@ The company reported that federal sector growth was primarily driven by Departme
             this.elements.loader.classList.remove('hidden');
             this.elements.askBtn.disabled = true;
             this.elements.newsBtn.disabled = true;
-            this.elements.investmentBtn.disabled = true;
-            this.showLoadingMessages();
+            this.elements.investmentBtn.disabled = true; // Disable new button while loading
         } else {
             this.elements.btnText.classList.remove('hidden');
             this.elements.loader.classList.add('hidden');
             this.elements.askBtn.disabled = false;
             this.elements.newsBtn.disabled = false;
-            this.elements.investmentBtn.disabled = false;
-            this.hideLoadingMessages();
+            this.elements.investmentBtn.disabled = false; // Enable new button
         }
     }
 
@@ -1025,16 +614,7 @@ The company reported that federal sector growth was primarily driven by Departme
         if (!situation) { this.showError("Please enter your situation first."); return; }
         if (this.state.pendingRequest) return;
         
-        // Check throttling
-        const throttleCheck = this.checkThrottling();
-        if (throttleCheck.throttled) {
-            this.showError(throttleCheck.message);
-            return;
-        }
-        
         this.state.pendingRequest = true;
-        this.state.lastRequestTime = Date.now();
-        this.state.requestCount++;
         this.state.lastQuery = situation;
         this.elements.resultsContainer.innerHTML = '';
         this.setLoading(true);
@@ -1081,8 +661,8 @@ The company reported that federal sector growth was primarily driven by Departme
 
         if (response_type === 'news') {
             html = this.renderNewsAdvice(data);
-        } else if (response_type === 'investment') {
-            html = this.renderMarketAnalysis(data);
+        } else if (response_type === 'investment') { // The backend type is still 'investment'
+            html = this.renderMarketAnalysis(data); // Call the newly named function
         } else if (response_type === 'prospect') {
             html = this.renderProspectAdvice(data);
         } else {
@@ -1096,51 +676,7 @@ The company reported that federal sector growth was primarily driven by Departme
         this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    renderStructuredList(items, iconType = 'check') {
-    if (!items || items.length === 0) return '<p class="text-gray-500 text-sm">No items available</p>';
-    
-    const icons = {
-        check: '<svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>',
-        arrow: '<svg class="w-4 h-4 text-brand-purple flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>',
-        warning: '<svg class="w-4 h-4 text-amber-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>'
-    };
-    
-    return `<div class="space-y-2 text-sm">
-        ${items.map(item => `
-            <div class="flex gap-2 items-start">
-                ${icons[iconType] || icons.check}
-                <span>${typeof item === 'string' ? item : (item.text || item.action || item)}</span>
-            </div>
-        `).join('')}
-    </div>`;
-}
-
-    formatEmailTemplate(template) {
-        if (!template) return '';
-        
-        // Identify and format email parts
-        let formatted = template
-            .replace(/^Subject:(.*?)$/im, '<div class="font-medium text-gray-900 mb-2">Subject:$1</div>')
-            .replace(/^To:(.*?)$/im, '<div class="text-gray-700">To:$1</div>')
-            .replace(/^From:(.*?)$/im, '<div class="text-gray-700">From:$1</div>')
-            .replace(/^CC:(.*?)$/im, '<div class="text-gray-700">CC:$1</div>');
-            
-        // Add separator between header and body
-        const headerEnd = Math.max(
-            formatted.lastIndexOf('</div>') + 6,
-            formatted.indexOf('\n\n')
-        );
-        
-        if (headerEnd > 0) {
-            const header = formatted.substring(0, headerEnd);
-            const body = formatted.substring(headerEnd);
-            formatted = `${header}<hr class="my-2 border-gray-200">${body}`;
-        }
-        
-        return `<div class="font-mono text-sm whitespace-pre-wrap">${formatted}</div>`;
-    }
-
-    renderMarketAnalysis(data) {
+    renderMarketAnalysis(data) { // Renamed from renderInvestmentAdvice
         const {
             investment_thesis, financial_health, market_position, growth_catalysts,
             identified_risks, management_outlook, key_financial_metrics, bull_case, bear_case, next_steps
@@ -1154,7 +690,7 @@ The company reported that federal sector growth was primarily driven by Departme
                 </div>
                 <div class="results-card-body space-y-6">
                     <div class="p-4 bg-brand-yellow-bg/50 rounded-lg text-brand-yellow-text">
-                        ${marked.parse(this.processRichResponse(investment_thesis))}
+                        ${marked.parse(investment_thesis)}
                     </div>
 
                     <div>
@@ -1167,19 +703,19 @@ The company reported that federal sector growth was primarily driven by Departme
                     </div>
 
                     <div class="space-y-3 text-sm">
-                        <p><strong>Financial Health:</strong> ${this.processRichResponse(financial_health) || 'Not detailed.'}</p>
-                        <p><strong>Market Position:</strong> ${this.processRichResponse(market_position) || 'Not detailed.'}</p>
-                        <p><strong>Management Outlook:</strong> ${this.processRichResponse(management_outlook) || 'Not detailed.'}</p>
+                        <p><strong>Financial Health:</strong> ${financial_health || 'Not detailed.'}</p>
+                        <p><strong>Market Position:</strong> ${market_position || 'Not detailed.'}</p>
+                        <p><strong>Management Outlook:</strong> ${management_outlook || 'Not detailed.'}</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                            <h4 class="font-semibold text-green-700 mb-3">📈 Growth Catalysts</h4>
-                           ${growth_catalysts && growth_catalysts.length > 0 ? this.renderStructuredList(growth_catalysts.map(c => this.processRichResponse(c)), 'check') : '<p class="text-gray-500 text-sm">None identified.</p>'}
+                           <ul class="space-y-2 text-sm">${growth_catalysts && growth_catalysts.length > 0 ? growth_catalysts.map(c => `<li class="flex gap-2 items-start"><span class="text-green-500 mt-1">▲</span><span>${c}</span></li>`).join('') : '<li>None identified.</li>'}</ul>
                         </div>
                         <div>
                            <h4 class="font-semibold text-red-700 mb-3">🚨 Identified Risks</h4>
-                           ${identified_risks && identified_risks.length > 0 ? this.renderStructuredList(identified_risks.map(r => this.processRichResponse(r)), 'warning') : '<p class="text-gray-500 text-sm">None identified.</p>'}
+                           <ul class="space-y-2 text-sm">${identified_risks && identified_risks.length > 0 ? identified_risks.map(r => `<li class="flex gap-2 items-start"><span class="text-red-500 mt-1">▼</span><span>${r}</span></li>`).join('') : '<li>None identified.</li>'}</ul>
                         </div>
                     </div>
 
@@ -1188,17 +724,17 @@ The company reported that federal sector growth was primarily driven by Departme
                         <div class="space-y-4">
                              <div class="p-3 bg-green-50 border-l-4 border-green-400">
                                 <p class="font-bold text-green-800">Bull Case</p>
-                                <p class="text-sm text-gray-700">${this.processRichResponse(bull_case)}</p>
+                                <p class="text-sm text-gray-700">${bull_case}</p>
                              </div>
                              <div class="p-3 bg-red-50 border-l-4 border-red-400">
                                 <p class="font-bold text-red-800">Bear Case</p>
-                                <p class="text-sm text-gray-700">${this.processRichResponse(bear_case)}</p>
+                                <p class="text-sm text-gray-700">${bear_case}</p>
                              </div>
                         </div>
                     </div>
                     
                     <div class="pt-4 border-t">
-                        <p class="text-sm font-semibold text-gray-800">${this.processRichResponse(next_steps)}</p>
+                        <p class="text-sm font-semibold text-gray-800">${next_steps}</p>
                     </div>
                     
                     <div class="p-3 mt-4 text-xs text-gray-500 bg-gray-50 rounded-lg border border-gray-200">
@@ -1221,15 +757,15 @@ The company reported that federal sector growth was primarily driven by Departme
                     <h2 class="font-bold text-lg text-brand-gray-900">${title}</h2>
                 </div>
                 <div class="results-card-body space-y-6">
-                    <div class="p-4 bg-brand-purple/10 rounded-lg text-brand-purple/90">${marked.parse(this.processRichResponse(quick_take))}</div>
+                    <div class="p-4 bg-brand-purple/10 rounded-lg text-brand-purple/90">${marked.parse(quick_take)}</div>
                     <div>
                         <h3 class="font-semibold mb-3">Your Next 3 Moves</h3>
                         <div class="space-y-3">${key_moves.map((m, i) => `
                             <div class="flex gap-3 items-start">
                                 <span class="flex-shrink-0 w-6 h-6 bg-brand-purple text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
                                 <div>
-                                    <p class="font-medium text-gray-900">${this.processRichResponse(m.action)}</p>
-                                    <p class="text-sm text-gray-600">${this.processRichResponse(m.why)}</p>
+                                    <p class="font-medium text-gray-900">${m.action}</p>
+                                    <p class="text-sm text-gray-600">${m.why}</p>
                                 </div>
                             </div>`).join('')}
                         </div>
@@ -1242,18 +778,15 @@ The company reported that federal sector growth was primarily driven by Departme
                     ${talking_points?.length > 0 ? `
                     <div>
                         <h3 class="font-semibold mb-2">${talkingPointsTitle}</h3>
-                        ${this.renderStructuredList(talking_points.map(t => this.processRichResponse(t)), 'arrow')}
+                        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${talking_points.map(t => `<li>${t}</li>`).join('')}</ul>
                     </div>
                     ` : ''}
                     ${email_template ? `
                     <div>
                         <h3 class="font-semibold mb-2">Email Template</h3>
-                        <div class="bg-gray-50 rounded-lg p-3 border">${this.formatEmailTemplate(email_template)}</div>
+                        <div class="bg-gray-50 rounded-lg p-3 font-mono text-xs text-gray-700 whitespace-pre-wrap border">${email_template}</div>
                     </div>
                     ` : ''}
-                    <div class="pt-4 border-t mt-4">
-                        <p class="text-sm font-semibold text-gray-800">${this.processRichResponse(next_steps)}</p>
-                    </div>
                 </div>
             </div>
         `;
@@ -1265,8 +798,8 @@ The company reported that federal sector growth was primarily driven by Departme
              if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
              return `<div class="space-y-3">${items.map(item => `
                 <div class="p-3 bg-gray-50 border rounded-md">
-                    <p class="font-semibold text-sm text-gray-800">${this.processRichResponse(item.company || 'N/A')}</p>
-                    <p class="text-xs text-gray-600">${this.processRichResponse(item.value || '')}</p>
+                    <p class="font-semibold text-sm text-gray-800">${item.company || 'N/A'}</p>
+                    <p class="text-xs text-gray-600">${item.value || ''}</p>
                 </div>
              `).join('')}</div>`;
         };
@@ -1278,7 +811,7 @@ The company reported that federal sector growth was primarily driven by Departme
                     <h2 class="font-bold text-lg text-brand-green-text">Prospecting Intelligence</h2>
                 </div>
                 <div class="results-card-body space-y-6">
-                    <div class="p-4 bg-brand-green-bg/50 rounded-lg text-brand-green-text">${marked.parse(this.processRichResponse(summary))}</div>
+                    <div class="p-4 bg-brand-green-bg/50 rounded-lg text-brand-green-text">${marked.parse(summary)}</div>
                     <div>
                         <h3 class="font-semibold mb-3">Top Contractors (SIs)</h3>
                         ${renderList(top_s_is)}
@@ -1290,21 +823,16 @@ The company reported that federal sector growth was primarily driven by Departme
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                            <h4 class="font-semibold text-gray-800 mb-3">Relevant Capabilities</h4>
-                           ${this.renderStructuredList(company_capabilities.map(c => this.processRichResponse(c)))}
+                           <ul class="space-y-2 text-sm">${company_capabilities.map(c => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
                         </div>
                         <div>
                            <h4 class="font-semibold text-gray-800 mb-3">NAICS Codes</h4>
-                           ${naics_codes && naics_codes.length > 0 ? this.renderStructuredList(naics_codes.map(n => {
-                                const text = n.code ? `${n.code} - ${n.description}` : n;
-                                return this.processRichResponse(text);
-                            })) : '<p class="text-gray-500 text-sm">None available</p>'}
+                           <ul class="space-y-2 text-sm">${naics_codes.map(n => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${n.code ? `${n.code} - ${n.description}`: n}</li>`).join('')}</ul>
                         </div>
                     </div>
                     <div>
                         <h3 class="font-semibold mb-3">Recommendations</h3>
-                        <div class="p-4 bg-gray-50 border rounded-lg text-sm space-y-2">
-                            ${prospect_recommendations.map(r => `<p>${this.processRichResponse(r)}</p>`).join('')}
-                        </div>
+                        <div class="p-4 bg-gray-50 border rounded-lg text-sm space-y-2">${prospect_recommendations.map(r => `<p>${r}</p>`).join('')}</div>
                     </div>
                 </div>
             </div>
@@ -1312,91 +840,89 @@ The company reported that federal sector growth was primarily driven by Departme
     }
 
     renderNewsAdvice(data) {
-        const { 
-            quick_take, background, implications, suggested_opening_lines, immediate_actions, strategic_moves, mermaid_chart,
-            key_people_and_titles, suggested_discovery_questions, money_keywords, salient_quote 
-        } = data;
-        
-        return `
-            <div class="results-card">
-                <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
-                    <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                    <h2 class="font-bold text-lg text-brand-blue-text">GTM Intelligence Report</h2>
-                </div>
-                <div class="results-card-body space-y-6">
-                    <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">${marked.parse(this.processRichResponse(quick_take))}</div>
-                    
-                    ${salient_quote ? `
-                    <div class="p-4 bg-gray-50 border-l-4 border-brand-blue-border rounded-r-lg">
-                        <p class="text-sm italic text-gray-700">"${this.processRichResponse(salient_quote)}"</p>
-                    </div>` : ''}
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <h3 class="font-semibold mb-3">Key People & Titles</h3>
-                            <div class="space-y-2 text-sm">
-                                ${key_people_and_titles && key_people_and_titles.length > 0 ? this.renderStructuredList(key_people_and_titles.map(person => this.processRichResponse(person))) : '<p class="text-gray-500">None mentioned.</p>'}
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold mb-3">Money Keywords</h3>
-                            <div class="flex flex-wrap gap-2">
-                                ${money_keywords && money_keywords.length > 0 ? money_keywords.map(keyword => `
-                                    <span class="text-xs font-medium bg-green-100 text-green-800 px-2.5 py-1 rounded-full">${this.processRichResponse(keyword)}</span>`
-                                ).join('') : '<p class="text-gray-500">No funding keywords found.</p>'}
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold mb-3">Suggested Discovery Questions</h3>
-                        <div class="space-y-2">
-                            ${suggested_discovery_questions && suggested_discovery_questions.length > 0 ? suggested_discovery_questions.map(q => `
-                                <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-800 flex gap-2">
-                                    <span class="font-bold text-brand-purple">Q.</span>
-                                    <span>${this.processRichResponse(q)}</span>
-                                </div>`).join('') : '<p class="text-gray-500">No questions suggested.</p>'}
-                        </div>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold mb-3">Email Openers</h3>
-                        <div class="space-y-2">${suggested_opening_lines && suggested_opening_lines.map ? suggested_opening_lines.map((line, i) => `
-                            <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-700"><strong>Option ${i + 1}:</strong> ${this.processRichResponse(line)}</div>`).join('') : '<p class="text-gray-500">No email openers available.</p>'}
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <h4 class="font-semibold text-gray-800 mb-3">⚡ Immediate Actions</h4>
-                            <div class="space-y-3">${immediate_actions && immediate_actions.map ? immediate_actions.map((action, i) => `
-                                <div class="flex gap-3 items-start">
-                                    <span class="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
-                                    <div>
-                                        <p class="font-medium text-sm text-gray-900">${this.processRichResponse(action.action)}</p>
-                                        <p class="text-xs text-gray-600">${this.processRichResponse(action.why)}</p>
-                                    </div>
-                                </div>`).join('') : '<p class="text-gray-500">No immediate actions suggested.</p>'}
-                            </div>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-gray-800 mb-3">🎯 Strategic Moves</h4>
-                            <div class="space-y-3">${strategic_moves && strategic_moves.map ? strategic_moves.map((move, i) => `
-                                <div class="flex gap-3 items-start">
-                                    <span class="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
-                                    <div>
-                                        <p class="font-medium text-sm text-gray-900">${this.processRichResponse(move.action)}</p>
-                                        <p class="text-xs text-gray-600">${this.processRichResponse(move.why)}</p>
-                                    </div>
-                                </div>`).join('') : '<p class="text-gray-500">No strategic moves suggested.</p>'}
-                            </div>
-                        </div>
-                    </div>
-                    ${mermaid_chart ? `
-                    <div>
-                        <h3 class="font-semibold mb-2">GTM Flow</h3>
-                        <div class="mermaid-container p-4 bg-white border rounded-lg"><div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div></div>
-                    </div>` : ''}
-                </div>
+    const { 
+        quick_take, background, implications, suggested_opening_lines, immediate_actions, strategic_moves, mermaid_chart,
+        key_people_and_titles, suggested_discovery_questions, money_keywords 
+    } = data;
+    
+    return `
+        <div class="results-card">
+            <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
+                <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                <h2 class="font-bold text-lg text-brand-blue-text">GTM Intelligence Report</h2>
             </div>
-        `;
+            <div class="results-card-body space-y-6">
+                <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">${marked.parse(quick_take)}</div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold mb-3">Key People & Titles</h3>
+                        <div class="space-y-2 text-sm">
+                            ${key_people_and_titles && key_people_and_titles.length > 0 ? key_people_and_titles.map(person => `
+                                <div class="flex items-center gap-2">
+                                    <svg class="h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
+                                    <span>${person}</span>
+                                </div>`).join('') : '<p class="text-gray-500">None mentioned.</p>'}
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-3">Money Keywords</h3>
+                        <div class="flex flex-wrap gap-2">
+                            ${money_keywords && money_keywords.length > 0 ? money_keywords.map(keyword => `
+                                <span class="text-xs font-medium bg-green-100 text-green-800 px-2.5 py-1 rounded-full">${keyword}</span>`
+                            ).join('') : '<p class="text-gray-500">No funding keywords found.</p>'}
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-3">Suggested Discovery Questions</h3>
+                    <div class="space-y-2">
+                        ${suggested_discovery_questions && suggested_discovery_questions.length > 0 ? suggested_discovery_questions.map(q => `
+                            <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-800 flex gap-2">
+                                <span class="font-bold text-brand-purple">Q.</span>
+                                <span>${q}</span>
+                            </div>`).join('') : '<p class="text-gray-500">No questions suggested.</p>'}
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-3">Email Openers</h3>
+                    <div class="space-y-2">${suggested_opening_lines.map((line, i) => `
+                        <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-700"><strong>Option ${i + 1}:</strong> ${line}</div>`).join('')}
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold text-gray-800 mb-3">⚡ Immediate Actions</h4>
+                        <div class="space-y-3">${immediate_actions.map((action, i) => `
+                            <div class="flex gap-3 items-start">
+                                <span class="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
+                                <div>
+                                    <p class="font-medium text-sm text-gray-900">${action.action}</p>
+                                    <p class="text-xs text-gray-600">${action.why}</p>
+                                </div>
+                            </div>`).join('')}
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-800 mb-3">🎯 Strategic Moves</h4>
+                        <div class="space-y-3">${strategic_moves.map((move, i) => `
+                            <div class="flex gap-3 items-start">
+                                <span class="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
+                                <div>
+                                    <p class="font-medium text-sm text-gray-900">${move.action}</p>
+                                    <p class="text-xs text-gray-600">${move.why}</p>
+                                </div>
+                            </div>`).join('')}
+                        </div>
+                    </div>
+                </div>
+                ${mermaid_chart ? `
+                <div>
+                    <h3 class="font-semibold mb-2">GTM Flow</h3>
+                    <div class="mermaid-container p-4 bg-white border rounded-lg"><div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div></div>
+                </div>` : ''}
+            </div>
+        </div>
+    `;
     }
 
     async renderMermaidChart() {
@@ -1409,21 +935,11 @@ The company reported that federal sector growth was primarily driven by Departme
         }
     }
 
-    showModal() { 
-        this.elements.aboutModal.classList.remove('hidden');
-        // Trap focus inside modal
-        document.getElementById('close-about').focus();
-    }
-    
-    hideModal() { 
-        this.elements.aboutModal.classList.add('hidden');
-        // Return focus to the button that opened it
-        this.elements.aboutBtn.focus();
-    }
+    showModal() { this.elements.aboutModal.classList.remove('hidden'); }
+    hideModal() { this.elements.aboutModal.classList.add('hidden'); }
 }
 
 const app = new AskArti();
 </script>
-
 </body>
 </html>
