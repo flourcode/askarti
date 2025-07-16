@@ -32,8 +32,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script> 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WLGEPY5H4G"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -177,6 +177,43 @@
     .btn-secondary:hover {
         background-color: #F9FAFB;
         border-color: #9CA3AF;
+    }
+    .copy-btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background-color: rgba(255, 255, 255, 0.7);
+        border: 1px solid #E5E7EB;
+        border-radius: 0.5rem;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        color: #4B5563;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .copy-btn:hover {
+        background-color: white;
+        border-color: #9CA3AF;
+    }
+    .checklist-item {
+        display: flex;
+        align-items: flex-start;
+        position: relative;
+    }
+    .checklist-item input[type="checkbox"] {
+        accent-color: var(--brand-purple);
+        width: 1rem;
+        height: 1rem;
+        margin-top: 0.25rem;
+        flex-shrink: 0;
+    }
+    .checklist-item label {
+        margin-left: 0.75rem;
+        cursor: pointer;
+    }
+    .checklist-item input[type="checkbox"]:checked + label {
+        text-decoration: line-through;
+        color: #6B7280;
     }
     /* --- Loader --- */
     .loader {
@@ -673,8 +710,13 @@ class AskArti {
         }
         
         this.elements.resultsContainer.innerHTML = html;
+        
+        this.setupInteractiveElements();
+
         if (data.mermaid_chart) {
-            this.renderMermaidChart();
+            this.renderMermaidChart().then(() => {
+                this.setupMermaidDownloadButtons();
+            });
         }
         this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -764,19 +806,25 @@ class AskArti {
                     <div>
                         <h3 class="font-semibold mb-3">Your Next 3 Moves</h3>
                         <div class="space-y-3">${key_moves.map((m, i) => `
-                            <div class="flex gap-3 items-start">
-                                <span class="flex-shrink-0 w-6 h-6 bg-brand-purple text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
-                                <div>
-                                    <p class="font-medium text-gray-900">${m.action}</p>
-                                    <p class="text-sm text-gray-600">${m.why}</p>
-                                </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="move-${i}" class="peer">
+                                <label for="move-${i}" class="w-full">
+                                    <span class="font-medium text-gray-900 peer-checked:text-gray-500">${m.action}</span>
+                                    <span class="block text-sm text-gray-600 peer-checked:text-gray-500">${m.why}</span>
+                                </label>
                             </div>`).join('')}
                         </div>
                     </div>
                     ${mermaid_chart ? `
                     <div>
                         <h3 class="font-semibold mb-2">Visual Strategy</h3>
-                        <div class="mermaid-container p-4 bg-white border rounded-lg"><div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div></div>
+                        <div class="mermaid-container p-4 bg-white border rounded-lg">
+                           <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
+                        </div>
+                        <div class="flex justify-end gap-2 mt-2">
+                           <button class="btn btn-secondary text-xs py-1 px-2" id="download-svg-btn">Download SVG</button>
+                           <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
+                        </div>
                     </div>` : ''}
                     ${talking_points?.length > 0 ? `
                     <div>
@@ -787,7 +835,12 @@ class AskArti {
                     ${email_template ? `
                     <div>
                         <h3 class="font-semibold mb-2">Email Template</h3>
-                        <div class="bg-gray-50 rounded-lg p-3 font-mono text-xs text-gray-700 whitespace-pre-wrap border">${email_template}</div>
+                        <div class="relative">
+                            <div class="copy-target bg-gray-50 rounded-lg p-3 font-mono text-xs text-gray-700 whitespace-pre-wrap border">${email_template}</div>
+                             <button class="copy-btn" title="Copy to clipboard">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                             </button>
+                        </div>
                     </div>
                     ` : ''}
                 </div>
@@ -889,31 +942,36 @@ class AskArti {
                 <div>
                     <h3 class="font-semibold mb-3">Email Openers</h3>
                     <div class="space-y-2">${suggested_opening_lines.map((line, i) => `
-                        <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-700"><strong>Option ${i + 1}:</strong> ${line}</div>`).join('')}
+                        <div class="relative p-3 bg-gray-50 border rounded-md text-sm text-gray-700">
+                             <span class="copy-target"><strong>Option ${i + 1}:</strong> ${line}</span>
+                             <button class="copy-btn" title="Copy to clipboard">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                             </button>
+                        </div>`).join('')}
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <h4 class="font-semibold text-gray-800 mb-3">Immediate Actions</h4>
                         <div class="space-y-3">${immediate_actions.map((action, i) => `
-                            <div class="flex gap-3 items-start">
-                                <span class="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
-                                <div>
-                                    <p class="font-medium text-sm text-gray-900">${action.action}</p>
-                                    <p class="text-xs text-gray-600">${action.why}</p>
-                                </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="immediate-action-${i}" class="peer">
+                                <label for="immediate-action-${i}" class="w-full">
+                                    <span class="font-medium text-gray-900 peer-checked:text-gray-500">${action.action}</span>
+                                    <span class="block text-xs text-gray-600 peer-checked:text-gray-500">${action.why}</span>
+                                </label>
                             </div>`).join('')}
                         </div>
                     </div>
                     <div>
                         <h4 class="font-semibold text-gray-800 mb-3">Strategic Moves</h4>
                         <div class="space-y-3">${strategic_moves.map((move, i) => `
-                            <div class="flex gap-3 items-start">
-                                <span class="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
-                                <div>
-                                    <p class="font-medium text-sm text-gray-900">${move.action}</p>
-                                    <p class="text-xs text-gray-600">${move.why}</p>
-                                </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="strategic-move-${i}" class="peer">
+                                <label for="strategic-move-${i}" class="w-full">
+                                    <span class="font-medium text-gray-900 peer-checked:text-gray-500">${move.action}</span>
+                                    <span class="block text-xs text-gray-600 peer-checked:text-gray-500">${move.why}</span>
+                                </label>
                             </div>`).join('')}
                         </div>
                     </div>
@@ -921,16 +979,96 @@ class AskArti {
                 ${mermaid_chart ? `
                 <div>
                     <h3 class="font-semibold mb-2">GTM Flow</h3>
-                    <div class="mermaid-container p-4 bg-white border rounded-lg"><div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div></div>
+                    <div class="mermaid-container p-4 bg-white border rounded-lg">
+                        <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
+                    </div>
+                    <div class="flex justify-end gap-2 mt-2">
+                       <button class="btn btn-secondary text-xs py-1 px-2" id="download-svg-btn">Download SVG</button>
+                       <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
+                    </div>
                 </div>` : ''}
             </div>
         </div>
     `;
     }
 
+    setupInteractiveElements() {
+        this.setupCopyButtons();
+        // Checklists are handled by CSS, no JS needed unless state needs to be saved.
+    }
+
+    setupCopyButtons() {
+        const copyButtons = this.elements.resultsContainer.querySelectorAll('.copy-btn');
+        copyButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const target = e.currentTarget.parentElement.querySelector('.copy-target');
+                if (target) {
+                    navigator.clipboard.writeText(target.innerText).then(() => {
+                        const originalText = e.currentTarget.innerHTML;
+                        e.currentTarget.innerHTML = 'Copied!';
+                        setTimeout(() => {
+                            e.currentTarget.innerHTML = originalText;
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Failed to copy text: ', err);
+                    });
+                }
+            });
+        });
+    }
+
+    setupMermaidDownloadButtons() {
+        const downloadSvgBtn = document.getElementById('download-svg-btn');
+        const downloadPngBtn = document.getElementById('download-png-btn');
+
+        if (downloadSvgBtn) {
+            downloadSvgBtn.addEventListener('click', () => this.downloadMermaidAsSVG());
+        }
+        if (downloadPngBtn) {
+            downloadPngBtn.addEventListener('click', () => this.downloadMermaidAsPNG());
+        }
+    }
+
+    downloadMermaidAsSVG() {
+        const svgElement = document.querySelector('#mermaid-diagram svg');
+        if (!svgElement) {
+            console.error("Mermaid SVG element not found.");
+            return;
+        }
+        const serializer = new XMLSerializer();
+        const svgString = serializer.serializeToString(svgElement);
+        const blob = new Blob([svgString], {type: "image/svg+xml"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "askarti-diagram.svg";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+    
+    downloadMermaidAsPNG() {
+        const mermaidContainer = document.querySelector('.mermaid-container');
+        if (!mermaidContainer || typeof html2canvas === 'undefined') {
+            console.error("Mermaid container or html2canvas library not found.");
+            return;
+        }
+        html2canvas(mermaidContainer, { backgroundColor: '#ffffff' }).then(canvas => {
+            const a = document.createElement("a");
+            a.href = canvas.toDataURL("image/png");
+            a.download = "askarti-diagram.png";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+    }
+
     async renderMermaidChart() {
         try {
-            await mermaid.run();
+            await mermaid.run({
+                nodes: document.querySelectorAll('.mermaid'),
+            });
         } catch (error) {
             console.error('Mermaid rendering error:', error);
             const container = document.querySelector('.mermaid-container');
