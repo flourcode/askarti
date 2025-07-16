@@ -195,26 +195,6 @@
         background-color: white;
         border-color: #9CA3AF;
     }
-    .checklist-item {
-        display: flex;
-        align-items: flex-start;
-        position: relative;
-    }
-    .checklist-item input[type="checkbox"] {
-        accent-color: var(--brand-purple);
-        width: 1rem;
-        height: 1rem;
-        margin-top: 0.25rem;
-        flex-shrink: 0;
-    }
-    .checklist-item label {
-        margin-left: 0.75rem;
-        cursor: pointer;
-    }
-    .checklist-item input[type="checkbox"]:checked + label {
-        text-decoration: line-through;
-        color: #6B7280;
-    }
     /* --- Loader --- */
     .loader {
         border: 2px solid rgba(255, 255, 255, 0.3);
@@ -440,7 +420,7 @@ class AskArti {
           situationInput: document.getElementById('situation-input'),
           askBtn: document.getElementById('ask-btn'),
           newsBtn: document.getElementById('news-btn'),
-          investmentBtn: document.getElementById('investment-btn'), // New element
+          investmentBtn: document.getElementById('investment-btn'),
           btnText: document.getElementById('btn-text'),
           loader: document.getElementById('loader'),
           charCount: document.getElementById('char-count'),
@@ -496,7 +476,7 @@ class AskArti {
 
         this.elements.askBtn.addEventListener('click', () => this.getAdvice());
         this.elements.newsBtn.addEventListener('click', () => this.getAdvice('news'));
-        this.elements.investmentBtn.addEventListener('click', () => this.getAdvice('investment')); // New listener
+        this.elements.investmentBtn.addEventListener('click', () => this.getAdvice('investment'));
         
         this.elements.situationInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -618,13 +598,13 @@ class AskArti {
             this.elements.loader.classList.remove('hidden');
             this.elements.askBtn.disabled = true;
             this.elements.newsBtn.disabled = true;
-            this.elements.investmentBtn.disabled = true; // Disable new button while loading
+            this.elements.investmentBtn.disabled = true;
         } else {
             this.elements.btnText.classList.remove('hidden');
             this.elements.loader.classList.add('hidden');
             this.elements.askBtn.disabled = false;
             this.elements.newsBtn.disabled = false;
-            this.elements.investmentBtn.disabled = false; // Enable new button
+            this.elements.investmentBtn.disabled = false;
         }
     }
 
@@ -658,6 +638,7 @@ class AskArti {
         this.state.lastQuery = situation;
         this.elements.resultsContainer.innerHTML = '';
         this.setLoading(true);
+        this.showLoadingMessages();
 
         try {
             const body = { situation };
@@ -692,6 +673,7 @@ class AskArti {
             }
         } finally {
             this.setLoading(false);
+            this.hideLoadingMessages();
         }
     }
 
@@ -701,8 +683,8 @@ class AskArti {
 
         if (response_type === 'news') {
             html = this.renderNewsAdvice(data);
-        } else if (response_type === 'investment') { // The backend type is still 'investment'
-            html = this.renderMarketAnalysis(data); // Call the newly named function
+        } else if (response_type === 'investment') {
+            html = this.renderMarketAnalysis(data);
         } else if (response_type === 'prospect') {
             html = this.renderProspectAdvice(data);
         } else {
@@ -715,13 +697,13 @@ class AskArti {
 
         if (data.mermaid_chart) {
             this.renderMermaidChart().then(() => {
-                this.setupMermaidDownloadButtons();
+                this.setupMermaidDownloadButton();
             });
         }
         this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    renderMarketAnalysis(data) { // Renamed from renderInvestmentAdvice
+    renderMarketAnalysis(data) {
         const {
             investment_thesis, financial_health, market_position, growth_catalysts,
             identified_risks, management_outlook, key_financial_metrics, bull_case, bear_case, next_steps
@@ -729,12 +711,12 @@ class AskArti {
 
         return `
             <div class="results-card">
-                <div class="results-card-header flex items-center gap-4 bg-brand-yellow-bg">
+                <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
                     <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                    <h2 class="font-bold text-lg text-brand-yellow-text">Market Analysis Summary</h2>
+                    <h2 class="font-bold text-lg text-brand-blue-text">Market Analysis Summary</h2>
                 </div>
                 <div class="results-card-body space-y-6">
-                    <div class="p-4 bg-brand-yellow-bg/50 rounded-lg text-brand-yellow-text">
+                    <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">
                         ${marked.parse(investment_thesis)}
                     </div>
 
@@ -806,12 +788,12 @@ class AskArti {
                     <div>
                         <h3 class="font-semibold mb-3">Your Next 3 Moves</h3>
                         <div class="space-y-3">${key_moves.map((m, i) => `
-                            <div class="checklist-item">
-                                <input type="checkbox" id="move-${i}" class="peer">
-                                <label for="move-${i}" class="w-full">
-                                    <span class="font-medium text-gray-900 peer-checked:text-gray-500">${m.action}</span>
-                                    <span class="block text-sm text-gray-600 peer-checked:text-gray-500">${m.why}</span>
-                                </label>
+                            <div class="flex gap-3 items-start">
+                                <span class="flex-shrink-0 w-6 h-6 bg-brand-purple text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
+                                <div>
+                                    <p class="font-medium text-gray-900">${m.action}</p>
+                                    <p class="text-sm text-gray-600">${m.why}</p>
+                                </div>
                             </div>`).join('')}
                         </div>
                     </div>
@@ -822,7 +804,6 @@ class AskArti {
                            <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
                         </div>
                         <div class="flex justify-end gap-2 mt-2">
-                           <button class="btn btn-secondary text-xs py-1 px-2" id="download-svg-btn">Download SVG</button>
                            <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
                         </div>
                     </div>` : ''}
@@ -905,7 +886,7 @@ class AskArti {
         <div class="results-card">
             <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
                 <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                <h2 class="font-bold text-lg text-brand-blue-text">GTM Intelligence Report</h2>
+                <h2 class="font-bold text-lg text-brand-blue-text">GTM Analysis</h2>
             </div>
             <div class="results-card-body space-y-6">
                 <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">${marked.parse(quick_take)}</div>
@@ -954,24 +935,24 @@ class AskArti {
                     <div>
                         <h4 class="font-semibold text-gray-800 mb-3">Immediate Actions</h4>
                         <div class="space-y-3">${immediate_actions.map((action, i) => `
-                            <div class="checklist-item">
-                                <input type="checkbox" id="immediate-action-${i}" class="peer">
-                                <label for="immediate-action-${i}" class="w-full">
-                                    <span class="font-medium text-gray-900 peer-checked:text-gray-500">${action.action}</span>
-                                    <span class="block text-xs text-gray-600 peer-checked:text-gray-500">${action.why}</span>
-                                </label>
+                            <div class="flex gap-3 items-start">
+                                <span class="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
+                                <div>
+                                    <p class="font-medium text-sm text-gray-900">${action.action}</p>
+                                    <p class="text-xs text-gray-600">${action.why}</p>
+                                </div>
                             </div>`).join('')}
                         </div>
                     </div>
                     <div>
                         <h4 class="font-semibold text-gray-800 mb-3">Strategic Moves</h4>
                         <div class="space-y-3">${strategic_moves.map((move, i) => `
-                            <div class="checklist-item">
-                                <input type="checkbox" id="strategic-move-${i}" class="peer">
-                                <label for="strategic-move-${i}" class="w-full">
-                                    <span class="font-medium text-gray-900 peer-checked:text-gray-500">${move.action}</span>
-                                    <span class="block text-xs text-gray-600 peer-checked:text-gray-500">${move.why}</span>
-                                </label>
+                            <div class="flex gap-3 items-start">
+                                <span class="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
+                                <div>
+                                    <p class="font-medium text-sm text-gray-900">${move.action}</p>
+                                    <p class="text-xs text-gray-600">${move.why}</p>
+                                </div>
                             </div>`).join('')}
                         </div>
                     </div>
@@ -983,7 +964,6 @@ class AskArti {
                         <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
                     </div>
                     <div class="flex justify-end gap-2 mt-2">
-                       <button class="btn btn-secondary text-xs py-1 px-2" id="download-svg-btn">Download SVG</button>
                        <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
                     </div>
                 </div>` : ''}
@@ -994,7 +974,6 @@ class AskArti {
 
     setupInteractiveElements() {
         this.setupCopyButtons();
-        // Checklists are handled by CSS, no JS needed unless state needs to be saved.
     }
 
     setupCopyButtons() {
@@ -1017,37 +996,14 @@ class AskArti {
         });
     }
 
-    setupMermaidDownloadButtons() {
-        const downloadSvgBtn = document.getElementById('download-svg-btn');
+    setupMermaidDownloadButton() {
         const downloadPngBtn = document.getElementById('download-png-btn');
 
-        if (downloadSvgBtn) {
-            downloadSvgBtn.addEventListener('click', () => this.downloadMermaidAsSVG());
-        }
         if (downloadPngBtn) {
             downloadPngBtn.addEventListener('click', () => this.downloadMermaidAsPNG());
         }
     }
 
-    downloadMermaidAsSVG() {
-        const svgElement = document.querySelector('#mermaid-diagram svg');
-        if (!svgElement) {
-            console.error("Mermaid SVG element not found.");
-            return;
-        }
-        const serializer = new XMLSerializer();
-        const svgString = serializer.serializeToString(svgElement);
-        const blob = new Blob([svgString], {type: "image/svg+xml"});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "askarti-diagram.svg";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }
-    
     downloadMermaidAsPNG() {
         const mermaidContainer = document.querySelector('.mermaid-container');
         if (!mermaidContainer || typeof html2canvas === 'undefined') {
