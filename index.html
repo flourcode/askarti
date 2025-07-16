@@ -700,37 +700,41 @@ class AskArti {
         }
     }
 
-    // Process text content for rich formatting
     processRichResponse(text) {
-        if (!text || typeof text !== 'string') return text;
-        
-        // Process action tags
-        text = text.replace(/<action>(.*?)<\/action>/g, 
-            '<div class="action-item"><span class="block text-xs font-medium text-brand-purple mb-1">RECOMMENDED ACTION</span>$1</div>'
-        );
-        
-        // Create clickable links
+    if (!text || typeof text !== 'string') return text;
+    
+    // First safely escape any quotes in the original text
+    // This prevents HTML breaking from nested quotes
+    text = text.replace(/"/g, '&quot;');
+    
+    // Then continue with the rest of your existing method
+    // Process action tags
+    text = text.replace(/<action>(.*?)<\/action>/g, 
+    '<span class="bg-brand-purple/10 text-brand-purple/90 px-1 py-0.5 rounded font-medium">$1</span>'
+);
+    
+    // Create clickable links
+    text = text.replace(
+        /\b(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/g, 
+        '<a href="$1" target="_blank" class="text-brand-purple underline hover:no-underline">$1</a>'
+    );
+    
+    // Highlight federal terms/acronyms with tooltips
+    Object.entries(CONFIG.FEDERAL_TERMS).forEach(([term, description]) => {
+        const regex = new RegExp(`\\b${term}\\b`, 'g');
+        text = text.replace(regex, `<span class="fed-term">$&<span class="tooltip">${description}</span></span>`);
+    });
+    
+    // Format STAR framework in interview context
+    if (text.includes("STAR") || text.includes("star method")) {
         text = text.replace(
-            /\b(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/g, 
-            '<a href="$1" target="_blank" class="text-brand-purple underline hover:no-underline">$1</a>'
+            /\b(Situation|Task|Action|Result)\b:?/gi,
+            '<span class="font-bold text-brand-purple">$&</span>'
         );
-        
-        // Highlight federal terms/acronyms with tooltips
-        Object.entries(CONFIG.FEDERAL_TERMS).forEach(([term, description]) => {
-            const regex = new RegExp(`\\b${term}\\b`, 'g');
-            text = text.replace(regex, `<span class="fed-term">$&<span class="tooltip">${description}</span></span>`);
-        });
-        
-        // Format STAR framework in interview context
-        if (text.includes("STAR") || text.includes("star method")) {
-            text = text.replace(
-                /\b(Situation|Task|Action|Result)\b:?/gi,
-                '<span class="font-bold text-brand-purple">$&</span>'
-            );
-        }
-        
-        return text;
     }
+    
+    return text;
+}
 
     addChatMessage(content, isUser = false) {
         // Process content with rich formatting if not a user message
