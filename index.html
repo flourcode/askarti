@@ -244,9 +244,9 @@
     placeholder='e.g., Prospect for cyber opps at DHS. Include keywords like "Prospect" if you are hunting for pipeline or "Interview" if job hunting.'
     maxlength="2000"></textarea>
                     <div class="text-xs text-gray-500 mt-1.5 flex justify-between">
-                        <span class="hint-text">Describe your sales situation and press enter, or paste a news article and press Analyze News.</span>
-                        <span id="char-count">0/2000</span>
-                    </div>
+    <span class="hint-text">Enter a sales deal for a Game Plan, GTM news for News Analysis, or a press release for Market Analysis.</span>
+    <span id="char-count">0/2000</span>
+</div>
 
                     <div class="mt-4">
                         <p class="text-sm font-medium text-brand-gray-600 mb-2">Try an example prompt:</p>
@@ -266,9 +266,9 @@
                         <button id="news-btn" class="btn btn-secondary w-full sm:w-auto">
                             <span id="news-btn-text">Analyze News</span>
                         </button>
-                        <button id="investment-btn" class="btn btn-secondary w-full sm:w-auto">
-                            <span>Analyze Investment</span>
-                        </button>
+                        <button id="investment-btn" class="btn btn-secondary w-full sm:w-auto" title="For best results, paste the full text of a press release or market news. This feature does not work with stock symbols alone.">
+    <span>Market Analysis</span>
+</button>
                         </div>
                 </div>
             </div>
@@ -661,8 +661,8 @@ class AskArti {
 
         if (response_type === 'news') {
             html = this.renderNewsAdvice(data);
-        } else if (response_type === 'investment') {
-            html = this.renderInvestmentAdvice(data);
+        } else if (response_type === 'investment') { // The backend type is still 'investment'
+            html = this.renderMarketAnalysis(data); // Call the newly named function
         } else if (response_type === 'prospect') {
             html = this.renderProspectAdvice(data);
         } else {
@@ -675,8 +675,8 @@ class AskArti {
         }
         this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    
-    renderInvestmentAdvice(data) {
+
+    renderMarketAnalysis(data) { // Renamed from renderInvestmentAdvice
         const {
             investment_thesis, financial_health, market_position, growth_catalysts,
             identified_risks, management_outlook, key_financial_metrics, bull_case, bear_case, next_steps
@@ -686,7 +686,7 @@ class AskArti {
             <div class="results-card">
                 <div class="results-card-header flex items-center gap-4 bg-brand-yellow-bg">
                     <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                    <h2 class="font-bold text-lg text-brand-yellow-text">Investment Thesis Summary</h2>
+                    <h2 class="font-bold text-lg text-brand-yellow-text">Market Analysis Summary</h2>
                 </div>
                 <div class="results-card-body space-y-6">
                     <div class="p-4 bg-brand-yellow-bg/50 rounded-lg text-brand-yellow-text">
@@ -741,7 +741,7 @@ class AskArti {
                     <div class="p-3 mt-4 text-xs text-gray-500 bg-gray-50 rounded-lg border border-gray-200">
                         <strong>Disclaimer:</strong> This content is for informational purposes only and does not constitute financial or investment advice. It is not a recommendation to buy or sell any security. You should always conduct your own research and consult a qualified financial professional before making any investment decisions.
                     </div>
-                    </div>
+                </div>
             </div>
         `;
     }
