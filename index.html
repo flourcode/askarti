@@ -1134,46 +1134,38 @@ class AskArti {
                 <h2 class="font-bold text-lg text-brand-gray-900">${title}</h2>
             </div>
             <div class="results-card-body space-y-6">
-                <div class="p-4 bg-brand-purple/10 rounded-lg text-brand-purple/90">${marked.parse(this.processRichResponse(quick_take || ''))}</div>
-                
+                <div class="p-4 bg-brand-purple/10 rounded-lg text-brand-purple/90">${marked.parse(this.processRichResponse(quick_take))}</div>
                 <div>
                     <h3 class="font-semibold mb-3">Your Next 3 Moves</h3>
-                    <div class="space-y-3">
-                        ${key_moves && Array.isArray(key_moves) ? key_moves.map((m, i) => `
+                    <div class="space-y-3">${key_moves.map((m, i) => `
                             <div class="flex gap-3 items-start">
                                 <span class="flex-shrink-0 w-6 h-6 bg-brand-purple text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
                                 <div>
-                                    <p class="font-medium text-gray-900">${this.processRichResponse(m.action || '')}</p>
-                                    <p class="text-sm text-gray-600">${this.processRichResponse(m.why || '')}</p>
+                                    <p class="font-medium text-gray-900">${this.processRichResponse(m.action)}</p>
+                                    <p class="text-sm text-gray-600">${this.processRichResponse(m.why)}</p>
                                 </div>
-                            </div>`).join('') : '<p class="text-gray-500 text-sm">No actions available</p>'}
+                            </div>`).join('')}
                     </div>
                 </div>
-                
                 ${mermaid_chart ? `
                 <div>
                     <h3 class="font-semibold mb-2">Visual Strategy</h3>
-                    <div class="mermaid-container p-4 bg-white border rounded-lg" aria-label="Visual flow diagram of the strategy">
-                        <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                    </div>
+                    <div class="mermaid-container p-4 bg-white border rounded-lg"><div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div></div>
                 </div>` : ''}
-                
-                ${talking_points && talking_points.length > 0 ? `
+                ${talking_points?.length > 0 ? `
                 <div>
                     <h3 class="font-semibold mb-2">${talkingPointsTitle}</h3>
-                    ${this.renderStructuredList(talking_points.map(t => this.processRichResponse(t || '')), 'arrow')}
+                    ${this.renderStructuredList(talking_points.map(t => this.processRichResponse(t)), 'arrow')}
                 </div>
                 ` : ''}
-                
                 ${email_template ? `
                 <div>
                     <h3 class="font-semibold mb-2">Email Template</h3>
                     <div class="bg-gray-50 rounded-lg p-3 border">${this.formatEmailTemplate(email_template)}</div>
                 </div>
                 ` : ''}
-                
-                <div class="pt-4 border-t">
-                    <p class="text-sm font-semibold text-gray-800">${this.processRichResponse(next_steps || '')}</p>
+                <div class="pt-4 border-t mt-4">
+                    <p class="text-sm font-semibold text-gray-800">${this.processRichResponse(next_steps)}</p>
                 </div>
             </div>
         </div>
