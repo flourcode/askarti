@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>AskArti - Your 24/7 Sales Buddy</title>
+    <title>AskArti - Your Personal AI Advisor</title>
     
-    <meta name="description" content="Get personalized federal sales advice from AskArti. Free AI tool provides SMART goals, customer messaging, and deal strategies for government contractors and sales professionals.">
-    <meta name="keywords" content="federal sales, government sales, AI sales coach, sales strategy, federal contractors, govcon, sales advice">
+    <meta name="description" content="Get personalized advice on federal sales, market analysis, and go-to-market strategy from AskArti, your personal AI advisor.">
+    <meta name="keywords" content="federal sales, government sales, AI sales coach, sales strategy, market analysis, federal contractors, govcon, sales advice">
     <meta name="author" content="Mark">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://askarti.com">
     
-    <meta property="og:title" content="AskArti - Your Federal Sales Buddy">
-    <meta property="og:description" content="Get personalized federal sales advice from AskArti.">
+    <meta property="og:title" content="AskArti - Your Personal AI Advisor">
+    <meta property="og:description" content="Get personalized advice on federal sales, market analysis, and more from AskArti.">
     <meta property="og:image" content="https://askarti.com/images/arti_right.png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="AskArti - Your Federal Sales Buddy">
-    <meta name="twitter:description" content="Get personalized federal sales advice from AskArti.">
+    <meta name="twitter:title" content="AskArti - Your Personal AI Advisor">
+    <meta name="twitter:description" content="Get personalized advice on federal sales, market analysis, and more from AskArti.">
     <meta name="twitter:image" content="https://askarti.com/images/arti_right.png">
     
     <link rel="icon" href="/images/favicon.ico" sizes="any">
@@ -27,13 +27,12 @@
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="/images/arti_right.png" as="image">
+    <link rel="preload" href="/images/asklite.png" as="image">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WLGEPY5H4G"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -109,7 +108,6 @@
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
     }
-    /* --- Card Styles --- */
     .io-card {
         background-color: white;
         border-radius: 1rem;
@@ -135,9 +133,8 @@
     .results-card-body {
         padding: 1.5rem;
     }
-    /* --- Form Elements --- */
     textarea, input[type="text"] {
-        font-size: 16px !important; /* Prevent iOS zoom */
+        font-size: 16px !important;
         transition: all 0.2s ease;
     }
     .quick-prompt {
@@ -149,7 +146,6 @@
         box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         border-color: #E5E7EB;
     }
-    /* --- Buttons --- */
     .btn {
         display: inline-flex;
         align-items: center;
@@ -178,7 +174,6 @@
         background-color: #F9FAFB;
         border-color: #9CA3AF;
     }
-    /* --- Loader --- */
     .loader {
         border: 2px solid rgba(255, 255, 255, 0.3);
         border-top: 2px solid white;
@@ -191,7 +186,6 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
     }
-    /* --- Chat specific styles --- */
     .chat-container {
         height: 60dvh;
         max-height: 500px;
@@ -212,7 +206,6 @@
         border: 1px solid #e5e7eb;
         border-radius: 1rem 1rem 1rem 0.25rem;
     }
-    /* --- Responsive & Mobile --- */
     @media (max-width: 640px) {
         .main-container { padding: 0.75rem; }
         .io-card, .results-card-body { padding: 1rem; }
@@ -226,50 +219,50 @@
    <div class="main-container pt-4 pb-20">
        
        <header class="text-center mb-4">
-    <a href="/" aria-label="AskArti Home" class="inline-block">
-        <img src="/images/asklite.png" alt="AskArti Logo" class="h-20 w-auto mx-auto sm:h-24">
-    </a>
-</header>
+            <a href="/" aria-label="AskArti Home" class="inline-block">
+                <img src="/images/asklite.png" alt="AskArti Logo" class="h-20 w-auto mx-auto sm:h-24">
+            </a>
+        </header>
 
        <main id="main-content">
              <div id="quick-mode" class="mode-content fade-in">
                 <div class="io-card">
                     <label for="situation-input" class="block text-md font-semibold text-brand-gray-800 mb-3">
-                        What's your sales situation?
+                        What can I help with?
                     </label>
                     <textarea 
-    id="situation-input" 
-    rows="4" 
-    class="w-full p-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-brand-purple resize-none placeholder-gray-500"
-    placeholder='e.g., Prospect for cyber opps at DHS. Include keywords like "Prospect" if you are hunting for pipeline or "Interview" if job hunting.'
-    maxlength="2000"></textarea>
+                        id="situation-input" 
+                        rows="4" 
+                        class="w-full p-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-brand-purple resize-none placeholder-gray-500"
+                        placeholder='e.g., A buyer went dark after seeing pricing...'
+                        maxlength="2000"></textarea>
                     <div class="text-xs text-gray-500 mt-1.5 flex justify-between">
-    <span class="hint-text">Enter a sales deal for a Game Plan, paste any press release or text for News or Market Analysis.</span>
-    <span id="char-count">0/2000</span>
-</div>
+                        <span class="hint-text">Enter a sales deal for a Game Plan, GTM news for News Analysis, or a press release for Market Analysis.</span>
+                        <span id="char-count">0/2000</span>
+                    </div>
 
                     <div class="mt-4">
                         <p class="text-sm font-medium text-brand-gray-600 mb-2">Try an example prompt:</p>
                         <div class="flex flex-wrap gap-2">
                             <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Buyer at VA ghosted me after I sent pricing. CISO loves our competitor.">Buyer Went Dark</button>
                             <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Demo crashed at DOJ yesterday. CTO walked out. How to recover?">Demo Crashed</button>
-							<button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Internal partner and account reps are fighting over customer access, pipeline, and revenue. Sales are hurting.">Partner Drama</button>
-							<button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="I just took over as Director of DoD for Chiquita Bananas. Help me prospect for opps within Navy.">Prospecting</button>
+                            <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Internal partner and account reps are fighting over customer access, pipeline, and revenue. Sales are hurting.">Partner Drama</button>
+                            <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="I just took over as Director of DoD for Chiquita Bananas. Help me prospect for opps within Navy.">Prospecting</button>
                         </div>
                     </div>
 
-                    <div class="mt-6 border-t border-gray-200 pt-4 flex flex-col sm:flex-row gap-3">
+                    <div class="mt-6 border-t border-gray-200 pt-4 flex flex-col sm:flex-wrap sm:flex-row gap-3">
                         <button id="ask-btn" class="btn btn-primary w-full sm:w-auto flex-1">
                             <span id="btn-text">Game Plan</span>
                             <div id="loader" class="loader hidden"></div>
                         </button>
-                        <button id="news-btn" class="btn btn-secondary w-full sm:w-auto" title="For best results, paste the full text of a press release or news article.">
-                            <span id="news-btn-text">News Analysis</span>
+                        <button id="news-btn" class="btn btn-secondary w-full sm:w-auto">
+                            <span>News Analysis</span>
                         </button>
                         <button id="investment-btn" class="btn btn-secondary w-full sm:w-auto" title="For best results, paste the full text of a press release or market news. This feature does not work with stock symbols alone.">
-    <span>Market Analysis</span>
-</button>
-                        </div>
+                            <span>Market Analysis</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 		
@@ -279,7 +272,7 @@
                         <div id="chat-messages" class="space-y-4">
                             <div class="flex justify-start">
                                 <div class="chat-message-arti p-3 text-sm max-w-[85%]">
-                                    <p>Hey! I'm Arti. I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.</p>
+                                    <p>Hey! I'm Arti. I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" mode.</p>
                                 </div>
                             </div>
                         </div>
@@ -322,7 +315,7 @@
                 <a href="#" id="about-btn" class="font-medium text-brand-purple hover:underline">About AskArti</a>
                 <a href="mailto:mark@subhoo.com" class="font-medium text-brand-purple hover:underline">Contact</a>
             </div>
-            <p>© 2025 AskArti.com. Made for Federal Sellers by Federal Sellers.</p>
+            <p>© 2025 AskArti.com. For Federal Sellers by Federal Sellers.</p>
         </footer>
 
    </div>
@@ -336,7 +329,7 @@
                </button>
            </div>
            <div class="space-y-4 text-gray-700 text-sm">
-               <p>AskArti is your 24/7 AI sales coach, designed for federal sales professionals. Get instant advice on stuck deals, meeting preparation, and sales strategy.</p>
+               <p>AskArti is your 24/7 AI advisor. Get instant advice on stuck deals, meeting preparation, market analysis, and more.</p>
                <div class="mt-4 pt-4 border-t">
                    <h3 class="font-semibold text-gray-800 mb-2">Privacy & Technology</h3>
                    <p class="text-gray-600">AskArti uses advanced AI models. We do not store, log, or persist any conversation data. All processing occurs in-memory and is discarded.</p>
@@ -344,6 +337,7 @@
            </div>
        </div>
    </div>
+
 <script>
 // --- Mode Toggle Active State ---
 const modeButtons = document.querySelectorAll('.mode-btn');
@@ -399,7 +393,7 @@ class AskArti {
           situationInput: document.getElementById('situation-input'),
           askBtn: document.getElementById('ask-btn'),
           newsBtn: document.getElementById('news-btn'),
-          investmentBtn: document.getElementById('investment-btn'), // New element
+          investmentBtn: document.getElementById('investment-btn'),
           btnText: document.getElementById('btn-text'),
           loader: document.getElementById('loader'),
           charCount: document.getElementById('char-count'),
@@ -455,7 +449,7 @@ class AskArti {
 
         this.elements.askBtn.addEventListener('click', () => this.getAdvice());
         this.elements.newsBtn.addEventListener('click', () => this.getAdvice('news'));
-        this.elements.investmentBtn.addEventListener('click', () => this.getAdvice('investment')); // New listener
+        this.elements.investmentBtn.addEventListener('click', () => this.getAdvice('investment'));
         
         this.elements.situationInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -574,17 +568,25 @@ class AskArti {
         this.elements.errorMessage.classList.add('hidden');
 
         if (loading) {
-            this.elements.btnText.classList.add('hidden');
             this.elements.loader.classList.remove('hidden');
             this.elements.askBtn.disabled = true;
             this.elements.newsBtn.disabled = true;
-            this.elements.investmentBtn.disabled = true; // Disable new button while loading
+            this.elements.investmentBtn.disabled = true;
+            // Hide all button texts
+            this.elements.askBtn.querySelector('span').style.visibility = 'hidden';
+            this.elements.newsBtn.querySelector('span').style.visibility = 'hidden';
+            this.elements.investmentBtn.querySelector('span').style.visibility = 'hidden';
+            this.showLoadingMessages();
         } else {
-            this.elements.btnText.classList.remove('hidden');
             this.elements.loader.classList.add('hidden');
             this.elements.askBtn.disabled = false;
             this.elements.newsBtn.disabled = false;
-            this.elements.investmentBtn.disabled = false; // Enable new button
+            this.elements.investmentBtn.disabled = false;
+            // Show all button texts
+            this.elements.askBtn.querySelector('span').style.visibility = 'visible';
+            this.elements.newsBtn.querySelector('span').style.visibility = 'visible';
+            this.elements.investmentBtn.querySelector('span').style.visibility = 'visible';
+            this.hideLoadingMessages();
         }
     }
 
@@ -661,8 +663,8 @@ class AskArti {
 
         if (response_type === 'news') {
             html = this.renderNewsAdvice(data);
-        } else if (response_type === 'investment') { // The backend type is still 'investment'
-            html = this.renderMarketAnalysis(data); // Call the newly named function
+        } else if (response_type === 'investment') {
+            html = this.renderMarketAnalysis(data);
         } else if (response_type === 'prospect') {
             html = this.renderProspectAdvice(data);
         } else {
@@ -676,7 +678,7 @@ class AskArti {
         this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    renderMarketAnalysis(data) { // Renamed from renderInvestmentAdvice
+    renderMarketAnalysis(data) {
         const {
             investment_thesis, financial_health, market_position, growth_catalysts,
             identified_risks, management_outlook, key_financial_metrics, bull_case, bear_case, next_steps
