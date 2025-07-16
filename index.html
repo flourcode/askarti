@@ -1,4 +1,3 @@
-<artifact id="index-updated" type="application/vnd.ant.code" language="html">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -339,6 +338,16 @@
         .io-card, .results-card-body { padding: 1rem; }
         .btn { padding: 0.625rem 1rem; font-size: 0.9rem; }
     }
+	/* Add flash effect for the textarea if not already present */
+@keyframes flashSuccess {
+    0% { background-color: rgba(209, 250, 229, 0); }
+    30% { background-color: rgba(209, 250, 229, 0.3); }
+    100% { background-color: rgba(209, 250, 229, 0); }
+}
+
+.flash-success {
+    animation: flashSuccess 2s ease-out;
+}
 </style>
 
 </head>
@@ -371,14 +380,31 @@
 </div>
 
                     <div class="mt-4">
-                        <p class="text-sm font-medium text-brand-gray-600 mb-2">Try an example prompt:</p>
-                        <div class="flex flex-wrap gap-2">
-                            <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Buyer at VA ghosted me after I sent pricing. CISO loves our competitor." aria-label="Example: Buyer went dark">Buyer Went Dark</button>
-                            <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Demo crashed at DOJ yesterday. CTO walked out. How to recover?" aria-label="Example: Demo crashed">Demo Crashed</button>
-							<button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Internal partner and account reps are fighting over customer access, pipeline, and revenue. Sales are hurting." aria-label="Example: Partner drama">Partner Drama</button>
-							<button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="I just took over as Director of DoD for Chiquita Bananas. Help me prospect for opps within Navy." aria-label="Example: Prospecting">Prospecting</button>
-                        </div>
-                    </div>
+    <p class="text-sm font-medium text-brand-gray-600 mb-2">Try an example prompt:</p>
+    <div class="flex flex-wrap gap-2">
+        <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Buyer at VA ghosted me after I sent pricing. CISO loves our competitor." aria-label="Example: Buyer went dark">Buyer Went Dark</button>
+        <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Demo crashed at DOJ yesterday. CTO walked out. How to recover?" aria-label="Example: Demo crashed">Demo Crashed</button>
+        <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Internal partner and account reps are fighting over customer access, pipeline, and revenue. Sales are hurting." aria-label="Example: Partner drama">Partner Drama</button>
+        <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="I just took over as Director of DoD for Chiquita Bananas. Help me prospect for opps within Navy." aria-label="Example: Prospecting">Prospecting</button>
+        
+        <!-- Add divider -->
+        <div class="w-full border-t border-gray-200 my-2"></div>
+        
+        <!-- Add Sample Content Buttons -->
+        <button id="sample-press-release" class="px-3 py-1.5 bg-green-50 hover:bg-green-100 text-green-700 rounded-full text-sm flex items-center" aria-label="Load sample DoD contract press release">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Sample News Analysis
+        </button>
+        <button id="sample-earnings" class="px-3 py-1.5 bg-yellow-50 hover:bg-yellow-100 text-yellow-700 rounded-full text-sm flex items-center" aria-label="Load sample tech earnings report">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            Sample Market Analysis
+        </button>
+    </div>
+</div>
 
                     <div class="mt-6 border-t border-gray-200 pt-4 flex flex-col sm:flex-row gap-3">
                         <button id="ask-btn" class="btn btn-primary w-full sm:w-auto flex-1" aria-label="Generate Game Plan">
@@ -475,27 +501,6 @@
        </div>
    </div>
 <script>
-// --- Mode Toggle Active State ---
-const modeButtons = document.querySelectorAll('.mode-btn');
-modeButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-        modeButtons.forEach(b => {
-            b.classList.remove('active', 'bg-white', 'text-brand-purple');
-            b.setAttribute('aria-selected', 'false');
-        });
-        btn.classList.add('active', 'bg-white', 'text-brand-purple');
-        btn.setAttribute('aria-selected', 'true');
-        const inactiveBtn = [...modeButtons].find(b => !b.classList.contains('active'));
-        if(inactiveBtn) {
-            inactiveBtn.classList.add('text-gray-600');
-            inactiveBtn.classList.remove('bg-white', 'text-brand-purple');
-        }
-    });
-});
-document.querySelector('.mode-btn[data-mode="quick"]').classList.add('bg-white', 'text-brand-purple');
-document.querySelector('.mode-btn[data-mode="chat"]').classList.add('text-gray-600');
-
-
 const CONFIG = {
   API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
   REQUEST_TIMEOUT: 30000,
@@ -514,7 +519,7 @@ const CONFIG = {
   FEDERAL_TERMS: {
     'FACA': 'Federal Advisory Committee Act',
     'DCAA': 'Defense Contract Audit Agency',
-	'opp': 'sales opportunity',
+    'opp': 'sales opportunity',
     'DCMA': 'Defense Contract Management Agency',
     'DFARS': 'Defense Federal Acquisition Regulation Supplement',
     'FAR': 'Federal Acquisition Regulation',
@@ -548,7 +553,6 @@ const CONFIG = {
     'FedRAMP': 'Federal Risk and Authorization Management Program'
   }
 };
-
 class AskArti {
   constructor() {
    this.elements = this.getElements();
@@ -592,7 +596,10 @@ class AskArti {
           chatInput: document.getElementById('chat-input'),
           chatSendBtn: document.getElementById('chat-send-btn'),
           messageCount: document.getElementById('message-count'),
-          clearChat: document.getElementById('clear-chat')
+          clearChat: document.getElementById('clear-chat'),
+          // New elements for sample content
+          samplePressReleaseBtn: document.getElementById('sample-press-release'),
+          sampleEarningsBtn: document.getElementById('sample-earnings')
       };
   }
 
@@ -681,6 +688,107 @@ class AskArti {
         });
         
         this.elements.clearChat.addEventListener('click', () => this.clearChat());
+        
+        // Sample content buttons
+        this.elements.samplePressReleaseBtn.addEventListener('click', () => {
+            this.loadSampleContent('press-release');
+        });
+        this.elements.sampleEarningsBtn.addEventListener('click', () => {
+            this.loadSampleContent('earnings');
+        });
+    }
+
+    // New method for loading sample content
+    loadSampleContent(type) {
+        let sampleContent = '';
+        
+        if (type === 'press-release') {
+            sampleContent = `FOR IMMEDIATE RELEASE
+    
+WASHINGTON, D.C., July 15, 2025 - The Department of Defense has awarded Raytheon Technologies a $3.2 billion contract to provide next-generation RAM (Rolling Airframe Missile) launchers for the U.S. Navy's fleet of DDG-51 Arleigh Burke-class destroyers and new Constellation-class frigates.
+
+The five-year contract will supply the Navy with 200 MK 49 Mod 4 RAM launchers, representing the largest single order of the defensive weapon system in over two decades. The contract includes options which could bring the total value to $4.8 billion if exercised.
+
+"This contract marks the largest single order of U.S. RAM launchers in over two decades and will ensure our naval assets remain well-protected against anti-ship threats," said Admiral Michael Gilday, Chief of Naval Operations. "As our adversaries continue to advance their capabilities, this critical defensive technology will help maintain our maritime superiority."
+
+The RAM system is designed to provide exceptional protection against anti-ship missiles, aircraft, and surface threats. The new Mod 4 variant features enhanced tracking capabilities, improved electronic countermeasures, and integration with the Navy's latest combat management systems.
+
+Production will be divided between Raytheon's facilities in Louisville, Kentucky and Tucson, Arizona, with additional support from subcontractors across 12 states. The contract is expected to sustain approximately 1,500 direct jobs and create an additional 300 positions across the supply chain.
+
+"This historic contract demonstrates the continued trust in Raytheon's ability to deliver critical defense systems that protect our warfighters," said Christopher Calio, Chief Operating Officer at Raytheon Technologies. "We are proud to continue our decades-long partnership with the U.S. Navy and provide these advanced capabilities."
+
+Initial deliveries are scheduled to begin in early 2026, with full rate production expected by mid-2027. The system will be deployed across the fleet as part of the Navy's ongoing modernization efforts.
+
+The contract was competitively procured via the SAM.gov website with two offers received, according to the Department of Defense.
+
+Contact:
+James Reynolds, Raytheon Media Relations
+james.reynolds@rtx.com | (703) 555-2141
+
+About Raytheon Technologies
+Raytheon Technologies Corporation is an aerospace and defense company that provides advanced systems and services for commercial, military and government customers worldwide. The company was formed in 2020 through the combination of Raytheon Company and the United Technologies Corporation aerospace businesses.`;
+        } else if (type === 'earnings') {
+            sampleContent = `PRESS RELEASE: QUARTERLY FINANCIAL RESULTS
+    
+REDMOND, Wash. — July 10, 2025 — Quantum Dynamics, Inc. today announced the following results for the quarter ended June 30, 2025, as compared to the corresponding period of last fiscal year:
+
+- Revenue was $18.3 billion, up 23% year-over-year
+- Gross margin increased to 68%, up 3 percentage points
+- Operating income was $6.2 billion, up 42%
+- Net income was $5.1 billion, GAAP diluted earnings per share was $5.28
+- Cloud services revenue increased 37% to $8.9 billion
+- Federal sector bookings grew 52% year-over-year to $2.4 billion
+
+"Our record results this quarter demonstrate the strength of our hybrid cloud strategy and growing federal market adoption," said Sarah Chen, CEO of Quantum Dynamics. "As government agencies accelerate their digital transformation, we're seeing unprecedented demand for our FedRAMP High authorized platforms and AI solutions tailored for mission-critical workloads."
+
+The company reported that federal sector growth was primarily driven by Department of Defense and Intelligence Community contracts, with the company's quantum-resistant encryption and edge computing solutions seeing particularly strong adoption. New federal bookings included a $480 million contract with the Department of Homeland Security for secure cloud migration services and a $325 million award from the U.S. Air Force for AI-enabled predictive maintenance solutions.
+
+"We've successfully positioned our government business to capitalize on both the JADC2 and Zero Trust initiatives across the federal landscape," said Marcus Johnson, Executive Vice President of Federal Solutions. "Our investments in obtaining necessary security clearances and certifications are paying off as agencies seek trusted partners for their most sensitive workloads."
+
+Quantum Dynamics returned $3.9 billion to shareholders in the form of share repurchases and dividends in the fourth quarter of fiscal year 2025, bringing the total to $15.5 billion for the full fiscal year.
+
+The company issued the following guidance for the next fiscal quarter:
+
+- Revenue is expected to be between $19.1 billion and $19.4 billion
+- Federal sector revenue is projected to grow 45-50% year-over-year
+- Operating margin is expected to be 37-38%
+
+"Looking ahead, we see continued momentum in our federal business as agencies work to comply with the President's recent Executive Order on AI Security in Government Systems," added Chen. "With our strong balance sheet and strategic federal marketplace position, we're well-positioned to deliver sustained growth through fiscal year 2026."
+
+Business Highlights:
+- Achieved IL5 authorization for Quantum Cloud Platform
+- Expanded federal sales team by 32% to support growing government demand
+- Opened new SCIF-equipped facility in Arlington, VA to support classified workloads
+- Federal partner ecosystem grew to over 200 companies, up 40% year-over-year
+- Awarded "Federal Cloud Provider of the Year" by Government Technology Magazine`;
+        }
+        
+        if (sampleContent) {
+            this.elements.situationInput.value = sampleContent;
+            this.updateCharCount();
+            
+            // Scroll to show the beginning of the content
+            this.elements.situationInput.scrollTop = 0;
+            
+            // Show a flash effect to indicate the content has been loaded
+            this.elements.situationInput.classList.add('flash-success');
+            setTimeout(() => {
+                this.elements.situationInput.classList.remove('flash-success');
+            }, 2000);
+            
+            // Suggest appropriate button based on content type
+            if (type === 'press-release') {
+                this.elements.newsBtn.classList.add('flash-success');
+                setTimeout(() => {
+                    this.elements.newsBtn.classList.remove('flash-success');
+                }, 2000);
+            } else if (type === 'earnings') {
+                this.elements.investmentBtn.classList.add('flash-success');
+                setTimeout(() => {
+                    this.elements.investmentBtn.classList.remove('flash-success');
+                }, 2000);
+            }
+        }
     }
 
     switchMode(mode) {
@@ -700,41 +808,41 @@ class AskArti {
         }
     }
 
+    // Process text content for rich formatting
     processRichResponse(text) {
-    if (!text || typeof text !== 'string') return text;
-    
-    // First safely escape any quotes in the original text
-    // This prevents HTML breaking from nested quotes
-    text = text.replace(/"/g, '&quot;');
-    
-    // Then continue with the rest of your existing method
-    // Process action tags
-    text = text.replace(/<action>(.*?)<\/action>/g, 
-    '<span class="bg-brand-purple/10 text-brand-purple/90 px-1 py-0.5 rounded font-medium">$1</span>'
-);
-    
-    // Create clickable links
-    text = text.replace(
-        /\b(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/g, 
-        '<a href="$1" target="_blank" class="text-brand-purple underline hover:no-underline">$1</a>'
-    );
-    
-    // Highlight federal terms/acronyms with tooltips
-    Object.entries(CONFIG.FEDERAL_TERMS).forEach(([term, description]) => {
-        const regex = new RegExp(`\\b${term}\\b`, 'g');
-        text = text.replace(regex, `<span class="fed-term">$&<span class="tooltip">${description}</span></span>`);
-    });
-    
-    // Format STAR framework in interview context
-    if (text.includes("STAR") || text.includes("star method")) {
-        text = text.replace(
-            /\b(Situation|Task|Action|Result)\b:?/gi,
-            '<span class="font-bold text-brand-purple">$&</span>'
+        if (!text || typeof text !== 'string') return text;
+        
+        // First safely escape any quotes in the original text
+        // This prevents HTML breaking from nested quotes
+        text = text.replace(/"/g, '&quot;');
+        
+        // Process action tags with a simpler, lighter highlight effect - no title
+        text = text.replace(/<action>(.*?)<\/action>/g, 
+            '<span class="bg-brand-purple/10 text-brand-purple/90 px-1 py-0.5 rounded font-medium">$1</span>'
         );
+        
+        // Create clickable links
+        text = text.replace(
+            /\b(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/g, 
+            '<a href="$1" target="_blank" class="text-brand-purple underline hover:no-underline">$1</a>'
+        );
+        
+        // Highlight federal terms/acronyms with tooltips
+        Object.entries(CONFIG.FEDERAL_TERMS).forEach(([term, description]) => {
+            const regex = new RegExp(`\\b${term}\\b`, 'g');
+            text = text.replace(regex, `<span class="fed-term">$&<span class="tooltip">${description}</span></span>`);
+        });
+        
+        // Format STAR framework in interview context
+        if (text.includes("STAR") || text.includes("star method")) {
+            text = text.replace(
+                /\b(Situation|Task|Action|Result)\b:?/gi,
+                '<span class="font-bold text-brand-purple">$&</span>'
+            );
+        }
+        
+        return text;
     }
-    
-    return text;
-}
 
     addChatMessage(content, isUser = false) {
         // Process content with rich formatting if not a user message
@@ -1014,23 +1122,23 @@ class AskArti {
     }
 
     renderStructuredList(items, iconType = 'check') {
-        if (!items || items.length === 0) return '<p class="text-gray-500 text-sm">No items available</p>';
-        
-        const icons = {
-            check: '<svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>',
-            arrow: '<svg class="w-4 h-4 text-brand-purple flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>',
-            warning: '<svg class="w-4 h-4 text-amber-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>'
-        };
-        
-        return `<div class="space-y-2 text-sm">
-            ${items.map(item => `
-                <div class="flex gap-2 items-start">
-                    ${icons[iconType] || icons.check}
-                    <span>${typeof item === 'string' ? item : (item.text || item.action || item)}</span>
-                </div>
-            `).join('')}
-        </div>`;
-    }
+    if (!items || items.length === 0) return '<p class="text-gray-500 text-sm">No items available</p>';
+    
+    const icons = {
+        check: '<svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>',
+        arrow: '<svg class="w-4 h-4 text-brand-purple flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>',
+        warning: '<svg class="w-4 h-4 text-amber-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>'
+    };
+    
+    return `<div class="space-y-2 text-sm">
+        ${items.map(item => `
+            <div class="flex gap-2 items-start">
+                ${icons[iconType] || icons.check}
+                <span>${typeof item === 'string' ? item : (item.text || item.action || item)}</span>
+            </div>
+        `).join('')}
+    </div>`;
+}
 
     formatEmailTemplate(template) {
         if (!template) return '';
@@ -1127,21 +1235,21 @@ class AskArti {
     }
     
     renderGeneralAdvice(data) {
-    const { quick_take, key_moves, mermaid_chart, talking_points, email_template, next_steps, response_type } = data;
-    const title = response_type === 'interview' ? 'Your Interview Plan' : 'Your Game Plan';
-    const talkingPointsTitle = response_type === 'interview' ? 'What They May Ask' : 'Key Questions to Ask';
+        const { quick_take, key_moves, mermaid_chart, talking_points, email_template, next_steps, response_type } = data;
+        const title = response_type === 'interview' ? 'Your Interview Plan' : 'Your Game Plan';
+        const talkingPointsTitle = response_type === 'interview' ? 'What They May Ask' : 'Key Questions to Ask';
 
-    return `
-        <div class="results-card">
-            <div class="results-card-header flex items-center gap-4">
-                <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                <h2 class="font-bold text-lg text-brand-gray-900">${title}</h2>
-            </div>
-            <div class="results-card-body space-y-6">
-                <div class="p-4 bg-brand-purple/10 rounded-lg text-brand-purple/90">${marked.parse(this.processRichResponse(quick_take))}</div>
-                <div>
-                    <h3 class="font-semibold mb-3">Your Next 3 Moves</h3>
-                    <div class="space-y-3">${key_moves.map((m, i) => `
+        return `
+            <div class="results-card">
+                <div class="results-card-header flex items-center gap-4">
+                    <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                    <h2 class="font-bold text-lg text-brand-gray-900">${title}</h2>
+                </div>
+                <div class="results-card-body space-y-6">
+                    <div class="p-4 bg-brand-purple/10 rounded-lg text-brand-purple/90">${marked.parse(this.processRichResponse(quick_take))}</div>
+                    <div>
+                        <h3 class="font-semibold mb-3">Your Next 3 Moves</h3>
+                        <div class="space-y-3">${key_moves.map((m, i) => `
                             <div class="flex gap-3 items-start">
                                 <span class="flex-shrink-0 w-6 h-6 bg-brand-purple text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
                                 <div>
@@ -1149,32 +1257,32 @@ class AskArti {
                                     <p class="text-sm text-gray-600">${this.processRichResponse(m.why)}</p>
                                 </div>
                             </div>`).join('')}
+                        </div>
+                    </div>
+                    ${mermaid_chart ? `
+                    <div>
+                        <h3 class="font-semibold mb-2">Visual Strategy</h3>
+                        <div class="mermaid-container p-4 bg-white border rounded-lg"><div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div></div>
+                    </div>` : ''}
+                    ${talking_points?.length > 0 ? `
+                    <div>
+                        <h3 class="font-semibold mb-2">${talkingPointsTitle}</h3>
+                        ${this.renderStructuredList(talking_points.map(t => this.processRichResponse(t)), 'arrow')}
+                    </div>
+                    ` : ''}
+                    ${email_template ? `
+                    <div>
+                        <h3 class="font-semibold mb-2">Email Template</h3>
+                        <div class="bg-gray-50 rounded-lg p-3 border">${this.formatEmailTemplate(email_template)}</div>
+                    </div>
+                    ` : ''}
+                    <div class="pt-4 border-t mt-4">
+                        <p class="text-sm font-semibold text-gray-800">${this.processRichResponse(next_steps)}</p>
                     </div>
                 </div>
-                ${mermaid_chart ? `
-                <div>
-                    <h3 class="font-semibold mb-2">Visual Strategy</h3>
-                    <div class="mermaid-container p-4 bg-white border rounded-lg"><div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div></div>
-                </div>` : ''}
-                ${talking_points?.length > 0 ? `
-                <div>
-                    <h3 class="font-semibold mb-2">${talkingPointsTitle}</h3>
-                    ${this.renderStructuredList(talking_points.map(t => this.processRichResponse(t)), 'arrow')}
-                </div>
-                ` : ''}
-                ${email_template ? `
-                <div>
-                    <h3 class="font-semibold mb-2">Email Template</h3>
-                    <div class="bg-gray-50 rounded-lg p-3 border">${this.formatEmailTemplate(email_template)}</div>
-                </div>
-                ` : ''}
-                <div class="pt-4 border-t mt-4">
-                    <p class="text-sm font-semibold text-gray-800">${this.processRichResponse(next_steps)}</p>
-                </div>
             </div>
-        </div>
-    `;
-}
+        `;
+    }
     
     renderProspectAdvice(data) {
         const { summary, top_s_is, top_software_and_cloud, company_capabilities, naics_codes, prospect_recommendations } = data;
@@ -1229,91 +1337,91 @@ class AskArti {
     }
 
     renderNewsAdvice(data) {
-    const { 
-        quick_take, background, implications, suggested_opening_lines, immediate_actions, strategic_moves, mermaid_chart,
-        key_people_and_titles, suggested_discovery_questions, money_keywords, salient_quote 
-    } = data;
-    
-    return `
-        <div class="results-card">
-            <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
-                <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                <h2 class="font-bold text-lg text-brand-blue-text">GTM Intelligence Report</h2>
+        const { 
+            quick_take, background, implications, suggested_opening_lines, immediate_actions, strategic_moves, mermaid_chart,
+            key_people_and_titles, suggested_discovery_questions, money_keywords, salient_quote 
+        } = data;
+        
+        return `
+            <div class="results-card">
+                <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
+                    <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                    <h2 class="font-bold text-lg text-brand-blue-text">GTM Intelligence Report</h2>
+                </div>
+                <div class="results-card-body space-y-6">
+                    <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">${marked.parse(this.processRichResponse(quick_take))}</div>
+                    
+                    ${salient_quote ? `
+                    <div class="p-4 bg-gray-50 border-l-4 border-brand-blue-border rounded-r-lg">
+                        <p class="text-sm italic text-gray-700">"${this.processRichResponse(salient_quote)}"</p>
+                    </div>` : ''}
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="font-semibold mb-3">Key People & Titles</h3>
+                            <div class="space-y-2 text-sm">
+                                ${key_people_and_titles && key_people_and_titles.length > 0 ? this.renderStructuredList(key_people_and_titles.map(person => this.processRichResponse(person))) : '<p class="text-gray-500">None mentioned.</p>'}
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold mb-3">Money Keywords</h3>
+                            <div class="flex flex-wrap gap-2">
+                                ${money_keywords && money_keywords.length > 0 ? money_keywords.map(keyword => `
+                                    <span class="text-xs font-medium bg-green-100 text-green-800 px-2.5 py-1 rounded-full">${this.processRichResponse(keyword)}</span>`
+                                ).join('') : '<p class="text-gray-500">No funding keywords found.</p>'}
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-3">Suggested Discovery Questions</h3>
+                        <div class="space-y-2">
+                            ${suggested_discovery_questions && suggested_discovery_questions.length > 0 ? suggested_discovery_questions.map(q => `
+                                <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-800 flex gap-2">
+                                    <span class="font-bold text-brand-purple">Q.</span>
+                                    <span>${this.processRichResponse(q)}</span>
+                                </div>`).join('') : '<p class="text-gray-500">No questions suggested.</p>'}
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-3">Email Openers</h3>
+                        <div class="space-y-2">${suggested_opening_lines && suggested_opening_lines.map ? suggested_opening_lines.map((line, i) => `
+                            <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-700"><strong>Option ${i + 1}:</strong> ${this.processRichResponse(line)}</div>`).join('') : '<p class="text-gray-500">No email openers available.</p>'}
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-3">⚡ Immediate Actions</h4>
+                            <div class="space-y-3">${immediate_actions && immediate_actions.map ? immediate_actions.map((action, i) => `
+                                <div class="flex gap-3 items-start">
+                                    <span class="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
+                                    <div>
+                                        <p class="font-medium text-sm text-gray-900">${this.processRichResponse(action.action)}</p>
+                                        <p class="text-xs text-gray-600">${this.processRichResponse(action.why)}</p>
+                                    </div>
+                                </div>`).join('') : '<p class="text-gray-500">No immediate actions suggested.</p>'}
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-3">🎯 Strategic Moves</h4>
+                            <div class="space-y-3">${strategic_moves && strategic_moves.map ? strategic_moves.map((move, i) => `
+                                <div class="flex gap-3 items-start">
+                                    <span class="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
+                                    <div>
+                                        <p class="font-medium text-sm text-gray-900">${this.processRichResponse(move.action)}</p>
+                                        <p class="text-xs text-gray-600">${this.processRichResponse(move.why)}</p>
+                                    </div>
+                                </div>`).join('') : '<p class="text-gray-500">No strategic moves suggested.</p>'}
+                            </div>
+                        </div>
+                    </div>
+                    ${mermaid_chart ? `
+                    <div>
+                        <h3 class="font-semibold mb-2">GTM Flow</h3>
+                        <div class="mermaid-container p-4 bg-white border rounded-lg"><div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div></div>
+                    </div>` : ''}
+                </div>
             </div>
-            <div class="results-card-body space-y-6">
-                <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">${marked.parse(this.processRichResponse(quick_take))}</div>
-                
-                ${salient_quote ? `
-                <div class="p-4 bg-gray-50 border-l-4 border-brand-blue-border rounded-r-lg">
-                    <p class="text-sm italic text-gray-700">"${this.processRichResponse(salient_quote)}"</p>
-                </div>` : ''}
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <h3 class="font-semibold mb-3">Key People & Titles</h3>
-                        <div class="space-y-2 text-sm">
-                            ${key_people_and_titles && key_people_and_titles.length > 0 ? this.renderStructuredList(key_people_and_titles.map(person => this.processRichResponse(person))) : '<p class="text-gray-500">None mentioned.</p>'}
-                        </div>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold mb-3">Money Keywords</h3>
-                        <div class="flex flex-wrap gap-2">
-                            ${money_keywords && money_keywords.length > 0 ? money_keywords.map(keyword => `
-                                <span class="text-xs font-medium bg-green-100 text-green-800 px-2.5 py-1 rounded-full">${this.processRichResponse(keyword)}</span>`
-                            ).join('') : '<p class="text-gray-500">No funding keywords found.</p>'}
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="font-semibold mb-3">Suggested Discovery Questions</h3>
-                    <div class="space-y-2">
-                        ${suggested_discovery_questions && suggested_discovery_questions.length > 0 ? suggested_discovery_questions.map(q => `
-                            <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-800 flex gap-2">
-                                <span class="font-bold text-brand-purple">Q.</span>
-                                <span>${this.processRichResponse(q)}</span>
-                            </div>`).join('') : '<p class="text-gray-500">No questions suggested.</p>'}
-                    </div>
-                </div>
-                <div>
-                    <h3 class="font-semibold mb-3">Email Openers</h3>
-                    <div class="space-y-2">${suggested_opening_lines && suggested_opening_lines.map ? suggested_opening_lines.map((line, i) => `
-                        <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-700"><strong>Option ${i + 1}:</strong> ${this.processRichResponse(line)}</div>`).join('') : '<p class="text-gray-500">No email openers available.</p>'}
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <h4 class="font-semibold text-gray-800 mb-3">⚡ Immediate Actions</h4>
-                        <div class="space-y-3">${immediate_actions && immediate_actions.map ? immediate_actions.map((action, i) => `
-                            <div class="flex gap-3 items-start">
-                                <span class="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
-                                <div>
-                                    <p class="font-medium text-sm text-gray-900">${this.processRichResponse(action.action)}</p>
-                                    <p class="text-xs text-gray-600">${this.processRichResponse(action.why)}</p>
-                                </div>
-                            </div>`).join('') : '<p class="text-gray-500">No immediate actions suggested.</p>'}
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-gray-800 mb-3">🎯 Strategic Moves</h4>
-                        <div class="space-y-3">${strategic_moves && strategic_moves.map ? strategic_moves.map((move, i) => `
-                            <div class="flex gap-3 items-start">
-                                <span class="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
-                                <div>
-                                    <p class="font-medium text-sm text-gray-900">${this.processRichResponse(move.action)}</p>
-                                    <p class="text-xs text-gray-600">${this.processRichResponse(move.why)}</p>
-                                </div>
-                            </div>`).join('') : '<p class="text-gray-500">No strategic moves suggested.</p>'}
-                        </div>
-                    </div>
-                </div>
-                ${mermaid_chart ? `
-                <div>
-                    <h3 class="font-semibold mb-2">GTM Flow</h3>
-                    <div class="mermaid-container p-4 bg-white border rounded-lg"><div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div></div>
-                </div>` : ''}
-            </div>
-        </div>
-    `;
+        `;
     }
 
     async renderMermaidChart() {
@@ -1341,6 +1449,6 @@ class AskArti {
 
 const app = new AskArti();
 </script>
+
 </body>
 </html>
-</artifact>
