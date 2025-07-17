@@ -110,22 +110,31 @@
        to { opacity: 1; transform: translateY(0); }
    }
    
-   /* --- Enhanced Card Styles --- */
-   .io-card {
-       background-color: white;
+   /* --- Glassmorphism Card Effects & Micro-animations --- */
+   .io-card, .results-card {
+       background-color: rgba(255, 255, 255, 0.65);
+       backdrop-filter: blur(12px);
+       -webkit-backdrop-filter: blur(12px);
        border-radius: 1rem;
-       border: 1px solid #E5E7EB;
+       border: 1px solid rgba(229, 231, 235, 0.7);
        padding: 1.5rem;
        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-       transition: box-shadow 0.2s ease;
+       transition: box-shadow 0.3s ease, transform 0.3s ease;
    }
+   .io-card:hover, .results-card:hover {
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -4px rgba(0,0,0,0.07);
+        transform: translateY(-2px);
+   }
+   /* Graceful degradation for unsupported browsers */
+    @supports not (backdrop-filter: blur(12px)) {
+      .io-card, .results-card {
+        background-color: white;
+      }
+    }
    .io-card:focus-within {
        box-shadow: 0 0 0 2px var(--brand-purple);
    }
    .results-card {
-       background-color: white;
-       border-radius: 1rem;
-       border: 1px solid #E5E7EB;
        overflow: hidden;
        margin-top: 1.5rem;
    }
@@ -150,49 +159,49 @@
        margin-bottom: 1.5rem;
    }
    
-   /* --- Form Elements --- */
-   textarea, input[type="text"] {
-       font-size: 16px !important; /* Prevent iOS zoom */
-       transition: all 0.2s ease;
+   /* --- Auto-expanding Textarea --- */
+   textarea#situation-input {
+       min-height: calc(1.5em * 3 + 1.5rem); /* Corresponds to rows=3 */
+       max-height: calc(1.5em * 8 + 1.5rem); /* Corresponds to rows=8 */
+       transition: height 0.2s ease-in-out;
+       resize: none;
    }
-   .textarea-container {
-    position: relative;
-}
-.clear-btn {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    background-color: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(229, 231, 235, 0.7);
-    border-radius: 0.375rem;
-    padding: 0.25rem;
-    min-width: 28px;
-    min-height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #6B7280;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    opacity: 0;
-    visibility: hidden;
-    backdrop-filter: blur(8px);
-}
-.clear-btn:hover {
-    background-color: rgba(255, 255, 255, 0.95);
-    border-color: rgba(156, 163, 175, 0.8);
-    color: #374151;
-    transform: scale(1.05);
-}
-.clear-btn:active {
-    transform: scale(0.95);
-}
-.clear-btn.show {
-    opacity: 1;
-    visibility: visible;
-}
    
-   /* --- Enhanced Quick Prompts --- */
+   .textarea-container {
+       position: relative;
+   }
+   .clear-btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background-color: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(229, 231, 235, 0.7);
+        border-radius: 0.375rem;
+        padding: 0.25rem;
+        min-width: 28px;
+        min-height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6B7280;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        opacity: 0;
+        visibility: hidden;
+        backdrop-filter: blur(8px);
+    }
+    .clear-btn:hover {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-color: rgba(156, 163, 175, 0.8);
+        color: #374151;
+        transform: scale(1.05);
+    }
+    .clear-btn.show {
+        opacity: 1;
+        visibility: visible;
+    }
+   
+   /* --- Micro-animations on Hover (Quick Prompts) --- */
    .quick-prompt {
        transition: all 0.2s ease-in-out;
        border: 1px solid var(--brand-gray-100);
@@ -204,15 +213,16 @@
        text-align: center;
    }
    .quick-prompt:hover {
-       transform: translateY(-2px);
-       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+       transform: translateY(-3px);
+       box-shadow: 0 6px 12px rgba(0,0,0,0.1);
        border-color: #E5E7EB;
+       background-color: white;
    }
    .quick-prompt:active {
        transform: scale(0.95);
    }
    
-   /* --- Enhanced Button Styles --- */
+   /* --- Micro-animations on Hover (Buttons) --- */
    .btn {
        display: inline-flex;
        align-items: center;
@@ -237,12 +247,8 @@
    }
    .btn-primary:hover {
        background-color: #6959a7;
-       transform: translateY(-1px);
-       box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-   }
-   .btn-primary:active {
-       transform: scale(0.95);
-       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+       transform: translateY(-2px);
+       box-shadow: 0 4px 8px rgba(124, 107, 190, 0.3);
    }
    .btn-secondary {
        background-color: white;
@@ -253,98 +259,53 @@
    .btn-secondary:hover {
        background-color: #F9FAFB;
        border-color: #9CA3AF;
-       transform: translateY(-1px);
+       transform: translateY(-2px);
        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
    }
-   .btn-secondary:active {
-       transform: scale(0.95);
-       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-   }
    
-   /* --- Enhanced Copy Button --- */
-   .copy-btn {
-       position: absolute;
-       top: 0.5rem;
-       right: 0.5rem;
-       background-color: rgba(255, 255, 255, 0.7);
-       border: 1px solid #E5E7EB;
-       border-radius: 0.5rem;
-       padding: 0.5rem;
-       min-width: 44px;
-       min-height: 44px;
-       display: flex;
-       align-items: center;
-       justify-content: center;
-       font-size: 0.75rem;
-       color: #4B5563;
-       cursor: pointer;
-       transition: all 0.2s ease;
-       user-select: none;
-       -webkit-tap-highlight-color: transparent;
-   }
-   .copy-btn:hover {
-       background-color: white;
-       border-color: #9CA3AF;
-       transform: translateY(-1px);
-       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-   }
-   .copy-btn:active {
-       transform: scale(0.95);
-   }
-   .copy-btn.copied {
-       background-color: #10B981;
-       color: white;
-       border-color: #10B981;
-   }
-   .copy-btn.copied:hover {
-       background-color: #059669;
-       border-color: #059669;
-   }
+   /* --- Smart Field Detection Pulse Animation --- */
+    @keyframes pulse {
+        0%, 100% {
+            box-shadow: 0 0 0 0 rgba(124, 107, 190, 0.7), 0 4px 12px rgba(124, 107, 190, 0.2);
+        }
+        50% {
+            box-shadow: 0 0 0 8px rgba(124, 107, 190, 0), 0 4px 12px rgba(124, 107, 190, 0.2);
+        }
+    }
+    .btn-pulse {
+        border-width: 2px;
+        border-color: var(--brand-purple);
+        animation: pulse 2s infinite;
+    }
    
-   /* --- Copy Flash Animation --- */
-   @keyframes copyFlash {
-       0% { background-color: rgba(16, 185, 129, 0.1); }
-       50% { background-color: rgba(16, 185, 129, 0.3); }
-       100% { background-color: rgba(16, 185, 129, 0.1); }
-   }
-   .copy-flash {
-       animation: copyFlash 0.6s ease-in-out;
-   }
+   /* --- Smooth Mode Transitions --- */
+    .mode-content {
+        transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        will-change: opacity, transform;
+    }
+    .mode-content.is-switching {
+        opacity: 0;
+        transform: translateY(15px);
+        position: absolute; /* Prevent layout shift */
+        width: 100%;
+    }
    
-   /* --- Mode Button Enhancements --- */
-   .mode-btn {
-       min-height: 44px;
-       transition: all 0.2s ease;
-       -webkit-tap-highlight-color: transparent;
-   }
-   .mode-btn:active {
-       transform: scale(0.95);
-   }
-   
-   /* --- Recommended Button Style --- */
-   .btn-recommended {
-       border-width: 2px;
-       border-color: var(--brand-purple);
-       box-shadow: 0 4px 12px rgba(124, 107, 190, 0.2);
-   }
-   
-   /* --- Loader --- */
-   .loader {
-       border: 2px solid rgba(255, 255, 255, 0.3);
-       border-top: 2px solid white;
-       border-radius: 50%;
-       width: 1.25rem;
-       height: 1.25rem;
-       animation: spin 1s linear infinite;
-   }
-   .btn-secondary .loader {
-       border-color: rgba(0, 0, 0, 0.1);
-       border-top-color: var(--brand-purple);
-   }
-   @keyframes spin {
-       0% { transform: rotate(0deg); }
-       100% { transform: rotate(360deg); }
-   }
+   /* --- Typing Animation in Chat --- */
+    .typing-indicator span {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #9CA3AF;
+        margin: 0 2px;
+        animation: typing-bounce 1.4s infinite ease-in-out both;
+    }
+    .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+    .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes typing-bounce {
+        0%, 80%, 100% { transform: scale(0); }
+        40% { transform: scale(1.0); }
+    }
    
    /* --- Chat specific styles --- */
    .chat-container {
@@ -368,78 +329,40 @@
        border-radius: 1rem 1rem 1rem 0.25rem;
    }
    
-   /* --- Enhanced Checkmark Icon --- */
-   .checkmark {
-       width: 16px;
-       height: 16px;
-       stroke: currentColor;
-       stroke-width: 2;
-       stroke-linecap: round;
-       stroke-linejoin: round;
-       fill: none;
+   /* Other styles from original file... */
+   .copy-btn {
+       position: absolute; top: 0.5rem; right: 0.5rem; background-color: rgba(255, 255, 255, 0.7);
+       border: 1px solid #E5E7EB; border-radius: 0.5rem; padding: 0.5rem; min-width: 44px;
+       min-height: 44px; display: flex; align-items: center; justify-content: center;
+       font-size: 0.75rem; color: #4B5563; cursor: pointer; transition: all 0.2s ease;
    }
-   
-   /* --- Responsive & Mobile --- */
-@media (max-width: 640px) {
-    .main-container { 
-        padding: 0.5rem; 
-        padding-bottom: 0.5rem;
-    }
-    .io-card, .results-card-body { 
-        padding: 0.75rem; 
-    }
-    .results-card-header {
-        padding: 0.75rem 1rem;
-    }
-    .results-card-body > div {
-        margin-bottom: 1rem;
-    }
-    .btn { 
-        padding: 0.75rem 1rem; 
-        font-size: 0.9rem; 
-    }
-    .copy-btn { 
-        padding: 0.625rem;
-        min-width: 48px;
-        min-height: 48px;
-    }
-    .clear-btn {
-        padding: 0.25rem; 
-        min-width: 32px; 
-        min-height: 32px; 
-    }
-    .quick-prompt {
-        padding: 0.5rem 0.625rem;
-        min-height: 36px;
-        font-size: 0.8rem;
-    }
-    .mt-4 { margin-top: 0.5rem; }
-    .mt-6 { margin-top: 0.75rem; }
-    .chat-container {
-        height: 45dvh;
-        max-height: 350px;
-        padding: 0.75rem;
-    }
-    .mode-btn {
-        padding: 0.5rem 0.75rem;
-        font-size: 0.8rem;
-        min-height: 40px;
-    }
-    header {
-        margin-bottom: 0.5rem;
-    }
-    header img {
-        height: 4rem;
-    }
-    footer {
-        margin-top: 2rem;
-    }
-    /* Reduce spacing on mobile */
-    .space-y-3 > * + * { margin-top: 0.5rem; }
-    .space-y-4 > * + * { margin-top: 0.75rem; }
-    .space-y-6 > * + * { margin-top: 1rem; }
-    .space-y-8 > * + * { margin-top: 1.25rem; }
-}
+   .copy-btn:hover {
+       background-color: white; border-color: #9CA3AF; transform: translateY(-1px);
+       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+   }
+   .copy-btn.copied { background-color: #10B981; color: white; border-color: #10B981; }
+   @keyframes copyFlash {
+       0% { background-color: rgba(16, 185, 129, 0.1); }
+       100% { background-color: transparent; }
+   }
+   .copy-flash { animation: copyFlash 0.6s ease-in-out; }
+   .loader {
+       border: 2px solid rgba(255, 255, 255, 0.3); border-top: 2px solid white;
+       border-radius: 50%; width: 1.25rem; height: 1.25rem; animation: spin 1s linear infinite;
+   }
+   .btn-secondary .loader {
+       border-color: rgba(0, 0, 0, 0.1); border-top-color: var(--brand-purple);
+   }
+   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+   .checkmark {
+       width: 16px; height: 16px; stroke: currentColor; stroke-width: 2;
+       stroke-linecap: round; stroke-linejoin: round; fill: none;
+   }
+   @media (max-width: 640px) {
+       .main-container { padding: 0.5rem; padding-bottom: 0.5rem; }
+       .io-card, .results-card-body { padding: 0.75rem; }
+       .results-card-header { padding: 0.75rem 1rem; }
+   }
 </style>
 
 </head>
@@ -451,9 +374,9 @@
     <a href="/" aria-label="AskArti Home" class="inline-block">
         <img src="/images/asklite.png" alt="AskArti Logo" class="h-20 w-auto mx-auto sm:h-24">
     </a>
-</header>
+	</header>
 
-       <main id="main-content">
+       <main id="main-content" class="relative">
              <div id="quick-mode" class="mode-content fade-in">
                 <div class="io-card">
                     <label for="situation-input" class="block text-sm font-bold text-brand-gray-700 mb-3" id="greeting-label">
@@ -461,16 +384,16 @@
                     </label>
                     <div class="textarea-container">
                         <textarea 
-    id="situation-input" 
-    rows="3"
-    class="w-full p-3 pr-12 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-brand-purple resize-none placeholder-gray-500"
-    placeholder='e.g., Prospect for cyber opps at DHS. Or you can start with the sample prompts below and modify them.'
-    maxlength="2500"></textarea>
-<button id="clear-btn" class="clear-btn" title="Clear input" aria-label="Clear input">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-    </svg>
-</button>
+                            id="situation-input" 
+                            rows="3"
+                            class="w-full p-3 pr-12 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-brand-purple placeholder-gray-500"
+                            placeholder='e.g., Prospect for cyber opps at DHS. Or you can start with the sample prompts below and modify them.'
+                            maxlength="2500"></textarea>
+                        <button id="clear-btn" class="clear-btn" title="Clear input" aria-label="Clear input">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
                     </div>
                     <div class="text-xs text-gray-500 mt-1.5 flex justify-between">
                         <span class="hint-text">For deeper insights, paste a full article or snippet, then click the News or Market Analysis button.</span>
@@ -523,30 +446,25 @@ meaningful ways to make customers' lives easier and better every day."" data-typ
                             <span id="btn-text">⚡️ Game Plan</span>
                             <div id="loader" class="loader hidden"></div>
                         </button>
-                        <button id="news-btn" class="btn btn-secondary w-full sm:w-auto" title="For best results, paste the full text of a press release or news article.">
+                        <button id="news-btn" class="btn btn-secondary w-full sm:w-auto" title="Paste a news article for a GTM plan.">
                             <div class="loader hidden"></div>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg><span id="news-btn-text">News Analysis</span>
+                            <span>News Analysis</span>
                         </button>
-                        <button id="investment-btn" class="btn btn-secondary w-full sm:w-auto" title="For best results, paste the full text of a press release or market news. This feature does not work with stock symbols alone.">
+                        <button id="investment-btn" class="btn btn-secondary w-full sm:w-auto" title="Paste an earnings report for market analysis.">
                             <div class="loader hidden"></div>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
-    <span>Market Analysis</span>
-</button>
-                        </div>
+                            <span>Market Analysis</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 		
-            <div id="chat-mode" class="mode-content hidden fade-in">
+            <div id="chat-mode" class="mode-content hidden">
                 <div class="io-card">
                     <div class="chat-container mb-4" id="chat-container">
                         <div id="chat-messages" class="space-y-4">
                             <div class="flex justify-start">
                                 <div class="chat-message-arti p-3 text-sm max-w-[85%]">
-                                    <p id="chat-greeting">Hey! I'm Arti. I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.</p>
+                                    <p id="chat-greeting">Hey! I'm Arti. I can help with stuck deals, boss problems, or whatever's on your mind.</p>
                                 </div>
                             </div>
                         </div>
@@ -585,21 +503,21 @@ meaningful ways to make customers' lives easier and better every day."" data-typ
            </div>
        </div>
        <footer class="text-center mt-12 text-xs text-gray-500">
-    <div class="flex justify-center gap-4 mb-4">
-        <a href="#" id="about-btn" class="font-medium text-brand-purple hover:underline">About AskArti</a>
-        <a href="mailto:mark@subhoo.com" class="font-medium text-brand-purple hover:underline">Contact</a>
-    </div>
-    <p class="mb-3 text-gray-600">
-    You’re interacting with an AI assistant trained through June 2024. AskArti offers general guidance for informational purposes only and isn’t a substitute for professional advice. Always evaluate recommendations carefully before making decisions.
-</p>
-    <p>
-        For Federal Sellers by Federal Sellers.
-        <br>
-        Powered by AWS.
-        <br>
-        © 2025 AskArti.com.
-    </p>
-</footer>
+            <div class="flex justify-center gap-4 mb-4">
+                <a href="#" id="about-btn" class="font-medium text-brand-purple hover:underline">About AskArti</a>
+                <a href="mailto:mark@subhoo.com" class="font-medium text-brand-purple hover:underline">Contact</a>
+            </div>
+            <p class="mb-3 text-gray-600">
+            You’re interacting with an AI assistant trained through June 2024. AskArti offers general guidance for informational purposes only and isn’t a substitute for professional advice. Always evaluate recommendations carefully before making decisions.
+        </p>
+            <p>
+                For Federal Sellers by Federal Sellers.
+                <br>
+                Powered by AWS.
+                <br>
+                © 2025 AskArti.com.
+            </p>
+        </footer>
 
   </div>
   
@@ -626,15 +544,10 @@ function getTimeBasedGreeting() {
    const hour = new Date().getHours();
    const name = "I'm Arti!";
    
-   if (hour >= 5 && hour < 12) {
-       return `Good morning! ${name} Ready to tackle the day?`;
-   } else if (hour >= 12 && hour < 17) {
-       return `Good afternoon! ${name} How can I help?`;
-   } else if (hour >= 17 && hour < 21) {
-       return `Good evening! ${name} What's on your mind?`;
-   } else {
-       return `Burning the midnight oil? ${name} I'm here to help.`;
-   }
+   if (hour >= 5 && hour < 12) return `Good morning! ${name} Ready to tackle the day?`;
+   if (hour >= 12 && hour < 17) return `Good afternoon! ${name} How can I help?`;
+   if (hour >= 17 && hour < 21) return `Good evening! ${name} What's on your mind?`;
+   return `Burning the midnight oil? ${name} I'm here to help.`;
 }
 
 function updateGreetings() {
@@ -642,13 +555,9 @@ function updateGreetings() {
    const greetingLabel = document.getElementById('greeting-label');
    const chatGreeting = document.getElementById('chat-greeting');
    
-   if (greetingLabel) {
-       greetingLabel.textContent = greeting;
-   }
-   
+   if (greetingLabel) greetingLabel.textContent = greeting;
    if (chatGreeting) {
-       // Extract just the greeting part for chat
-       const chatText = greeting.replace('Hey, I\'m Arti!', 'I\'m Arti.');
+       const chatText = greeting.replace("Hey, I'm Arti!", "I'm Arti.");
        chatGreeting.textContent = `${chatText} I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.`;
    }
 }
@@ -671,19 +580,8 @@ document.querySelector('.mode-btn[data-mode="chat"]').classList.add('text-gray-6
 
 const CONFIG = {
  API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
- REQUEST_TIMEOUT: 30000,
- MAX_RETRIES: 2,
- RETRY_DELAY: 2000,
  MAX_INPUT_LENGTH: 2500,
- MIN_REQUEST_INTERVAL: 2000,
- LOADING_MESSAGES: [
-     "Hang on. I'm...Working Backwards", 
-     "...Diving Deep", 
-     "...Unpacking This", 
-     "...Putting a Pin in it", 
-     "...Circling Back", 
-     "...Thinking Big"
- ]
+ LOADING_MESSAGES: ["Working Backwards...", "Diving Deep...", "Thinking Big...", "Unpacking This..."]
 };
 
 class AskArti {
@@ -691,12 +589,10 @@ class AskArti {
   this.elements = this.getElements();
   this.state = {
       pendingRequest: false,
-      lastRequestTime: 0,
       loadingInterval: null,
-      abortController: null,
-      lastQuery: '',
       currentMode: 'quick',
       chatHistory: [],
+      typingTimeout: null,
   };
   this.init();
 }
@@ -708,8 +604,6 @@ class AskArti {
          askBtn: document.getElementById('ask-btn'),
          newsBtn: document.getElementById('news-btn'),
          investmentBtn: document.getElementById('investment-btn'),
-         btnText: document.getElementById('btn-text'),
-         loader: document.getElementById('loader'),
          charCount: document.getElementById('char-count'),
          loadingMessageContainer: document.getElementById('loading-message-container'),
          loadingMessage: document.getElementById('loading-message'),
@@ -730,106 +624,98 @@ class AskArti {
  }
 
  init() {
-     // Initialize time-based greetings
      updateGreetings();
-     
-     mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'base', themeVariables: {
-           primaryColor: '#F3F4F6',
-           primaryTextColor: '#1F2937',
-           primaryBorderColor: '#D1D5DB',
-           lineColor: '#6B7280',
-           textColor: '#111827',
-           fontSize: '14px'
-     }});
+     mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'base' });
      this.setupEventListeners();
      this.elements.situationInput.focus();
      this.updateCharCount();
+     this.adjustTextareaHeight();
  }
+ 
+  adjustTextareaHeight() {
+    const textarea = this.elements.situationInput;
+    textarea.style.height = 'auto'; // Reset height to recalculate
+    const scrollHeight = textarea.scrollHeight;
+    textarea.style.height = `${scrollHeight}px`;
+  }
 
    updateCharCount() {
-       if (!this.elements.situationInput) return;
        const current = this.elements.situationInput.value.length;
-       const max = CONFIG.MAX_INPUT_LENGTH;
-       this.elements.charCount.textContent = `${current}/${max}`;
-       
-       // Show/hide clear button based on content
-       if (current > 0) {
-           this.elements.clearBtn.classList.add('show');
-       } else {
-           this.elements.clearBtn.classList.remove('show');
-       }
+       this.elements.charCount.textContent = `${current}/${CONFIG.MAX_INPUT_LENGTH}`;
+       this.elements.clearBtn.classList.toggle('show', current > 0);
    }
 
-   /* Function to check input and recommend a button */
-   updateRecommendedButton() {
-       const text = this.elements.situationInput.value.toLowerCase();
+   updateRecommendedButton(isPaste = false) {
+       const text = this.elements.situationInput.value;
        const investmentKeywords = /invest|sec filing|press release|earnings|10-k|10-q|financial/i;
        const newsKeywords = /news|announcement|acquisition|partnership|contract award/i;
 
-       // Reset all buttons first
-       this.elements.newsBtn.classList.remove('btn-recommended');
-       this.elements.investmentBtn.classList.remove('btn-recommended');
+       this.elements.newsBtn.classList.remove('btn-pulse');
+       this.elements.investmentBtn.classList.remove('btn-pulse');
 
-       if (text.length < 100) return; // Don't highlight for short text
+       if (text.length < 500 && !isPaste) return;
 
-       if (investmentKeywords.test(text)) {
-           this.elements.investmentBtn.classList.add('btn-recommended');
-       } else if (newsKeywords.test(text)) {
-           this.elements.newsBtn.classList.add('btn-recommended');
+       let recommendedBtn = null;
+       if (investmentKeywords.test(text)) recommendedBtn = this.elements.investmentBtn;
+       else if (newsKeywords.test(text)) recommendedBtn = this.elements.newsBtn;
+       
+       if (recommendedBtn) {
+           recommendedBtn.classList.add('btn-pulse');
        }
    }
 
    clearInput() {
        this.elements.situationInput.value = '';
        this.updateCharCount();
-       this.updateRecommendedButton();
+       this.adjustTextareaHeight();
        this.elements.situationInput.focus();
    }
 
    setupEventListeners() {
-       this.elements.situationInput.addEventListener('input', () => {
+        this.elements.situationInput.addEventListener('input', () => {
            this.updateCharCount();
+           this.adjustTextareaHeight();
            this.updateRecommendedButton();
        });
-   	this.elements.situationInput.addEventListener('focus', () => {
-       this.updateCharCount();
-   });
+       
+       this.elements.situationInput.addEventListener('paste', (e) => {
+            // Give the browser a moment to update the textarea value
+            setTimeout(() => {
+                this.updateCharCount();
+                this.adjustTextareaHeight();
+                this.updateRecommendedButton(true);
+            }, 10);
+       });
+       
+       this.elements.situationInput.addEventListener('focus', () => {
+            this.updateCharCount();
+       });
 
-   this.elements.situationInput.addEventListener('blur', () => {
-       this.elements.clearBtn.classList.remove('show');
-   });
+       this.elements.situationInput.addEventListener('blur', () => {
+            this.elements.clearBtn.classList.remove('show');
+       });
+
        this.elements.clearBtn.addEventListener('click', () => this.clearInput());
 
-this.elements.quickPromptBtns.forEach(btn => {
-   btn.addEventListener('click', (e) => {
-       const button = e.currentTarget;
-       const analysisType = button.dataset.type || null;
+       this.elements.quickPromptBtns.forEach(btn => {
+           btn.addEventListener('click', (e) => {
+               const button = e.currentTarget;
+               const analysisType = button.dataset.type || null;
+               this.elements.situationInput.value = button.dataset.text;
+               this.updateCharCount();
+               this.adjustTextareaHeight();
+               this.getAdvice(analysisType);
+           });
+       });
 
-       let buttonToLoad;
-       if (analysisType === 'news') {
-           buttonToLoad = this.elements.newsBtn;
-       } else if (analysisType === 'investment') {
-           buttonToLoad = this.elements.investmentBtn;
-       } else {
-           buttonToLoad = this.elements.askBtn;
-       }
-
-       this.elements.situationInput.value = button.dataset.text;
-       this.updateCharCount();
-       this.updateRecommendedButton();
-
-       this.getAdvice(analysisType, buttonToLoad);
-   });
-});
-
-       this.elements.askBtn.addEventListener('click', (e) => this.getAdvice(null, e.currentTarget));
-       this.elements.newsBtn.addEventListener('click', (e) => this.getAdvice('news', e.currentTarget));
-       this.elements.investmentBtn.addEventListener('click', (e) => this.getAdvice('investment', e.currentTarget));
+       this.elements.askBtn.addEventListener('click', () => this.getAdvice());
+       this.elements.newsBtn.addEventListener('click', () => this.getAdvice('news'));
+       this.elements.investmentBtn.addEventListener('click', () => this.getAdvice('investment'));
        
        this.elements.situationInput.addEventListener('keydown', (e) => {
            if (e.key === 'Enter' && !e.shiftKey) {
                e.preventDefault();
-               this.getAdvice(null, this.elements.askBtn);
+               this.getAdvice();
            }
        });
 
@@ -839,11 +725,11 @@ this.elements.quickPromptBtns.forEach(btn => {
            if (e.target === this.elements.aboutModal) this.hideModal();
        });
        document.addEventListener('keydown', (e) => {
-           if (e.key === 'Escape') this.hideModal();
+           if (e.key === 'Escape' && this.elements.aboutModal.classList.contains('hidden') === false) this.hideModal();
        });
 
        this.elements.modeButtons.forEach(btn => {
-           btn.addEventListener('click', (e) => this.switchMode(e.target.dataset.mode));
+           btn.addEventListener('click', (e) => this.switchMode(e.target.closest('.mode-btn').dataset.mode));
        });
 
        this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
@@ -856,40 +742,75 @@ this.elements.quickPromptBtns.forEach(btn => {
    }
 
    switchMode(mode) {
-       this.state.currentMode = mode;
-       this.elements.resultsContainer.innerHTML = '';
-       this.elements.errorMessage.classList.add('hidden');
-       this.hideLoadingMessages();
+        if (this.state.currentMode === mode || this.state.isSwitching) return;
+        this.state.isSwitching = true;
 
-       if (mode === 'quick') {
-           this.elements.quickMode.classList.remove('hidden');
-           this.elements.chatMode.classList.add('hidden');
-           this.elements.situationInput.focus();
-       } else {
-           this.elements.quickMode.classList.add('hidden');
-           this.elements.chatMode.classList.remove('hidden');
-           this.elements.chatInput.focus();
-       }
-   }
+        const currentContent = this.state.currentMode === 'quick' ? this.elements.quickMode : this.elements.chatMode;
+        const nextContent = mode === 'quick' ? this.elements.quickMode : this.elements.chatMode;
+
+        currentContent.classList.add('is-switching');
+        
+        const handleTransitionEnd = () => {
+            currentContent.classList.add('hidden');
+            currentContent.classList.remove('is-switching');
+            currentContent.style.position = ''; // Clean up
+
+            nextContent.style.position = 'relative'; // Prepare for transition
+            nextContent.classList.remove('hidden', 'is-switching');
+            
+            if (mode === 'quick') this.elements.situationInput.focus();
+            else this.elements.chatInput.focus();
+
+            this.state.isSwitching = false;
+        };
+
+        // Use a timeout as a fallback in case transitionend doesn't fire
+        const transitionTimeout = setTimeout(handleTransitionEnd, 300);
+        currentContent.addEventListener('transitionend', () => {
+            clearTimeout(transitionTimeout);
+            handleTransitionEnd();
+        }, { once: true });
+        
+        this.state.currentMode = mode;
+        this.elements.resultsContainer.innerHTML = '';
+        this.elements.errorMessage.classList.add('hidden');
+        this.hideLoadingMessages();
+    }
 
    addChatMessage(content, isUser = false) {
-       let processedContent = isUser ? content : marked.parse(content.replace(/<action>(.*?)<\/action>/g, '<span class="bg-yellow-50 px-1 py-0.5 rounded">$1</span>'));
-       const messageClass = isUser ? 'chat-message-user justify-end' : 'chat-message-arti justify-start';
-       const alignClass = isUser ? 'justify-end' : 'justify-start';
+       clearTimeout(this.state.typingTimeout);
+       this.hideTypingIndicator();
 
-       const messageHtml = `
-           <div class="flex ${alignClass} fade-in">
-               <div class="${messageClass} p-3 text-sm max-w-[85%]">
-                   ${processedContent}
-               </div>
-           </div>
-       `;
-       this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
+       const alignClass = isUser ? 'justify-end' : 'justify-start';
+       const messageClass = isUser ? 'chat-message-user' : 'chat-message-arti';
+       
+       const messageEl = document.createElement('div');
+       messageEl.className = `flex ${alignClass} fade-in`;
+       messageEl.innerHTML = `<div class="${messageClass} p-3 text-sm max-w-[85%]"></div>`;
+       const contentEl = messageEl.querySelector('div > div');
+       
+       this.elements.chatMessages.appendChild(messageEl);
+
+       if (isUser) {
+           contentEl.textContent = content;
+       } else {
+           let i = 0;
+           const speed = () => Math.random() * (70 - 20) + 20;
+           const type = () => {
+               if (i < content.length) {
+                   contentEl.innerHTML = marked.parse(content.substring(0, i + 1).replace(/<action>(.*?)<\/action>/g, '<span class="bg-yellow-50 px-1 py-0.5 rounded">$1</span>'));
+                   i++;
+                   this.scrollChatToBottom();
+                   this.state.typingTimeout = setTimeout(type, speed());
+               }
+           };
+           type();
+       }
        this.scrollChatToBottom();
    }
    
    showTypingIndicator() {
-       const typingHtml = `<div id="typing-indicator" class="flex justify-start"><div class="chat-message-arti p-3 text-sm">...</div></div>`;
+       const typingHtml = `<div id="typing-indicator" class="flex justify-start fade-in"><div class="chat-message-arti p-3 text-sm"><div class="typing-indicator"><span></span><span></span><span></span></div></div></div>`;
        this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
        this.scrollChatToBottom();
    }
@@ -901,9 +822,7 @@ this.elements.quickPromptBtns.forEach(btn => {
 
    scrollChatToBottom() {
        const chatContainer = document.getElementById('chat-container');
-       if (chatContainer) {
-           chatContainer.scrollTop = chatContainer.scrollHeight;
-       }
+       if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight;
    }
 
    async sendChatMessage() {
@@ -925,13 +844,11 @@ this.elements.quickPromptBtns.forEach(btn => {
            if (!response.ok) throw new Error(`Server error (${response.status})`);
            
            const data = await response.json();
-           this.hideTypingIndicator();
            this.addChatMessage(data.message);
            this.state.chatHistory.push({ role: 'assistant', content: data.message });
 
        } catch (error) {
-           this.hideTypingIndicator();
-           this.addChatMessage("Sorry, I'm having trouble connecting right now. Please try again in a moment.", false);
+           this.addChatMessage("Sorry, I'm having trouble connecting right now. Please try again.", false);
        } finally {
            this.state.pendingRequest = false;
        }
@@ -941,23 +858,23 @@ this.elements.quickPromptBtns.forEach(btn => {
        this.state.pendingRequest = loading;
        this.elements.errorMessage.classList.add('hidden');
 
-       this.elements.askBtn.disabled = loading;
-       this.elements.newsBtn.disabled = loading;
-       this.elements.investmentBtn.disabled = loading;
+       [this.elements.askBtn, this.elements.newsBtn, this.elements.investmentBtn].forEach(btn => {
+           btn.disabled = loading;
+           const loader = btn.querySelector('.loader');
+           const text = btn.querySelector('span');
+           const svg = btn.querySelector('svg');
 
-       if (loading && clickedButton) {
-           const childrenToHide = clickedButton.querySelectorAll('span, svg');
-           const loader = clickedButton.querySelector('.loader');
-           childrenToHide.forEach(el => el.classList.add('hidden'));
-           if (loader) loader.classList.remove('hidden');
-       } else {
-           [this.elements.askBtn, this.elements.newsBtn, this.elements.investmentBtn].forEach(btn => {
-                const childrenToShow = btn.querySelectorAll('span, svg');
-                const loader = btn.querySelector('.loader');
-                childrenToShow.forEach(el => el.classList.remove('hidden'));
-                if(loader) loader.classList.add('hidden');
-           });
-       }
+           const elementsToShow = [text, svg].filter(Boolean);
+           const elementsToHide = [text, svg].filter(Boolean);
+
+           if (loading && btn === clickedButton) {
+               elementsToHide.forEach(el => el.classList.add('hidden'));
+               if(loader) loader.classList.remove('hidden');
+           } else {
+               elementsToShow.forEach(el => el.classList.remove('hidden'));
+               if(loader) loader.classList.add('hidden');
+           }
+       });
    }
 
    showLoadingMessages() {
@@ -980,52 +897,44 @@ this.elements.quickPromptBtns.forEach(btn => {
        this.elements.errorDetails.textContent = message;
    }
    
-   async getAdvice(forceType = null, clickedButton = null) {
-    const situation = this.elements.situationInput.value.trim();
-    if (!situation) { this.showError("Please type or paste something into the box above."); return; }
-    if (this.state.pendingRequest) return;
-    
-    const buttonToLoad = clickedButton || this.elements.askBtn;
-
-    this.state.lastQuery = situation;
-    this.elements.resultsContainer.innerHTML = '';
-    this.setButtonLoading(true, buttonToLoad);
-    this.showLoadingMessages();
-
-    try {
-        const body = { situation };
-        if (forceType) body.forceType = forceType;
-
-        const response = await fetch(CONFIG.API_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
-        });
+   async getAdvice(forceType = null) {
+        const situation = this.elements.situationInput.value.trim();
+        if (!situation) { this.showError("Please type or paste something into the box above."); return; }
+        if (this.state.pendingRequest) return;
         
-        if (!response.ok) {
-            let errorMessage = `Server error: ${response.status}`;
-            try {
-                const errorData = await response.json();
-                errorMessage = errorData.error || errorData.message || errorMessage;
-            } catch (parseError) {
-                console.error('Error parsing error response:', parseError);
+        let clickedButton;
+        if (forceType === 'news') clickedButton = this.elements.newsBtn;
+        else if (forceType === 'investment') clickedButton = this.elements.investmentBtn;
+        else clickedButton = this.elements.askBtn;
+
+        this.setButtonLoading(true, clickedButton);
+        this.showLoadingMessages();
+        this.elements.resultsContainer.innerHTML = '';
+
+        try {
+            const response = await fetch(CONFIG.API_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ situation, forceType }),
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || `Server error: ${response.status}`);
             }
-            throw new Error(errorMessage);
-        }
-        
-        const data = await response.json();
-        if(data.error) throw new Error(data.message || data.error);
-        
-        this.displayAdvice(data);
+            
+            const data = await response.json();
+            if(data.error) throw new Error(data.message || data.error);
+            
+            this.displayAdvice(data);
 
-    } catch (error) {
-        console.error('Request failed:', error);
-        this.showError(error.message || "An unknown error occurred.");
-    } finally {
-        this.setButtonLoading(false, buttonToLoad);
-        this.hideLoadingMessages();
+        } catch (error) {
+            this.showError(error.message || "An unknown error occurred.");
+        } finally {
+            this.setButtonLoading(false, clickedButton);
+            this.hideLoadingMessages();
+        }
     }
-}
 
    displayAdvice(data) {
        const { response_type } = data;
@@ -1062,12 +971,12 @@ this.elements.quickPromptBtns.forEach(btn => {
        return `
            <div class="results-card">
                <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
-                   <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                   <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white" onerror="this.onerror=null; this.src='https://placehold.co/40x40/ffffff/7C6BBE?text=A';">
                    <h2 class="font-bold text-lg text-brand-blue-text">Market Analysis Summary</h2>
                </div>
                <div class="results-card-body space-y-8">
                    <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">
-                       ${marked.parse(investment_thesis)}
+                       ${marked.parse(investment_thesis || '')}
                    </div>
 
                    <div>
@@ -1101,17 +1010,17 @@ this.elements.quickPromptBtns.forEach(btn => {
                        <div class="space-y-4">
                             <div class="p-3 bg-green-50 border-l-4 border-green-400">
                                <p class="font-bold text-green-800">Bull Case</p>
-                               <p class="text-sm text-gray-700">${bull_case}</p>
+                               <p class="text-sm text-gray-700">${bull_case || ''}</p>
                             </div>
                             <div class="p-3 bg-red-50 border-l-4 border-red-400">
                                <p class="font-bold text-red-800">Bear Case</p>
-                               <p class="text-sm text-gray-700">${bear_case}</p>
+                               <p class="text-sm text-gray-700">${bear_case || ''}</p>
                             </div>
                        </div>
                    </div>
                    
                    <div class="pt-4 border-t">
-                       <p class="text-sm font-bold text-gray-800">${next_steps}</p>
+                       <p class="text-sm font-bold text-gray-800">${next_steps || ''}</p>
                    </div>
                    
                    <div class="p-3 mt-4 text-xs text-gray-500 bg-gray-50 rounded-lg border border-gray-200">
@@ -1130,14 +1039,14 @@ this.elements.quickPromptBtns.forEach(btn => {
        return `
            <div class="results-card">
                <div class="results-card-header flex items-center gap-4">
-                   <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                   <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white" onerror="this.onerror=null; this.src='https://placehold.co/40x40/ffffff/7C6BBE?text=A';">
                    <h2 class="font-bold text-lg text-brand-gray-900">${title}</h2>
                </div>
                <div class="results-card-body space-y-8">
-                   <div class="p-4 bg-brand-purple/10 rounded-lg text-brand-purple/90">${marked.parse(quick_take)}</div>
+                   <div class="p-4 bg-brand-purple/10 rounded-lg text-brand-purple/90">${marked.parse(quick_take || '')}</div>
                    <div>
                        <h3 class="font-bold mb-3">Your Next 3 Moves</h3>
-                       <div class="space-y-3">${key_moves.map((m, i) => `
+                       <div class="space-y-3">${(key_moves || []).map((m, i) => `
                            <div class="flex gap-3 items-start">
                                <span class="flex-shrink-0 w-6 h-6 bg-brand-purple text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
                                <div>
@@ -1194,11 +1103,11 @@ this.elements.quickPromptBtns.forEach(btn => {
        return `
             <div class="results-card">
                <div class="results-card-header flex items-center gap-4 bg-brand-green-bg">
-                   <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                   <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white" onerror="this.onerror=null; this.src='https://placehold.co/40x40/ffffff/7C6BBE?text=A';">
                    <h2 class="font-bold text-lg text-brand-green-text">Prospecting Intelligence</h2>
                </div>
                <div class="results-card-body space-y-8">
-                   <div class="p-4 bg-brand-green-bg/50 rounded-lg text-brand-green-text">${marked.parse(summary)}</div>
+                   <div class="p-4 bg-brand-green-bg/50 rounded-lg text-brand-green-text">${marked.parse(summary || '')}</div>
                    <div>
                        <h3 class="font-bold mb-3">Top Contractors (SIs)</h3>
                        ${renderList(top_s_is)}
@@ -1210,16 +1119,16 @@ this.elements.quickPromptBtns.forEach(btn => {
                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                        <div>
                           <h4 class="font-bold text-gray-800 mb-3">Relevant Capabilities</h4>
-                          <ul class="space-y-2 text-sm">${company_capabilities.map(c => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
+                          <ul class="space-y-2 text-sm">${(company_capabilities || []).map(c => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
                        </div>
                        <div>
                           <h4 class="font-bold text-gray-800 mb-3">NAICS Codes</h4>
-                          <ul class="space-y-2 text-sm">${naics_codes.map(n => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${n.code ? `${n.code} - ${n.description}`: n}</li>`).join('')}</ul>
+                          <ul class="space-y-2 text-sm">${(naics_codes || []).map(n => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${n.code ? `${n.code} - ${n.description}`: n}</li>`).join('')}</ul>
                        </div>
                    </div>
                    <div>
                        <h3 class="font-bold mb-3">Recommendations</h3>
-                       <div class="p-4 bg-gray-50 border rounded-lg text-sm space-y-2">${prospect_recommendations.map(r => `<p>${r}</p>`).join('')}</div>
+                       <div class="p-4 bg-gray-50 border rounded-lg text-sm space-y-2">${(prospect_recommendations || []).map(r => `<p>${r}</p>`).join('')}</div>
                    </div>
                </div>
            </div>
@@ -1235,11 +1144,11 @@ this.elements.quickPromptBtns.forEach(btn => {
        return `
            <div class="results-card">
                <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
-                   <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                   <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white" onerror="this.onerror=null; this.src='https://placehold.co/40x40/ffffff/7C6BBE?text=A';">
                    <h2 class="font-bold text-lg text-brand-blue-text">News Analysis Summary</h2>
                </div>
                <div class="results-card-body space-y-8">
-                   <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">${marked.parse(quick_take)}</div>
+                   <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">${marked.parse(quick_take || '')}</div>
                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                        <div>
                            <h3 class="font-bold mb-3">Key People & Titles</h3>
@@ -1272,7 +1181,7 @@ this.elements.quickPromptBtns.forEach(btn => {
                    </div>
                    <div>
                        <h3 class="font-bold mb-3">Email Openers</h3>
-                       <div class="space-y-2">${suggested_opening_lines.map((line, i) => `
+                       <div class="space-y-2">${(suggested_opening_lines || []).map((line, i) => `
                            <div class="relative p-3 bg-gray-50 border rounded-md text-sm text-gray-700">
                                 <span class="copy-target"><strong>Option ${i + 1}:</strong> ${line}</span>
                                 <button class="copy-btn" title="Copy to clipboard">
@@ -1284,7 +1193,7 @@ this.elements.quickPromptBtns.forEach(btn => {
                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                        <div>
                            <h4 class="font-bold text-gray-800 mb-3">Immediate Actions</h4>
-                           <div class="space-y-3">${immediate_actions.map((action, i) => `
+                           <div class="space-y-3">${(immediate_actions || []).map((action, i) => `
                                <div class="flex gap-3 items-start">
                                    <span class="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
                                    <div>
@@ -1296,7 +1205,7 @@ this.elements.quickPromptBtns.forEach(btn => {
                        </div>
                        <div>
                            <h4 class="font-bold text-gray-800 mb-3">Strategic Moves</h4>
-                           <div class="space-y-3">${strategic_moves.map((move, i) => `
+                           <div class="space-y-3">${(strategic_moves || []).map((move, i) => `
                                <div class="flex gap-3 items-start">
                                    <span class="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
                                    <div>
@@ -1333,25 +1242,14 @@ this.elements.quickPromptBtns.forEach(btn => {
                const target = e.currentTarget.parentElement.querySelector('.copy-target');
                if (target) {
                    navigator.clipboard.writeText(target.innerText).then(() => {
-                       // Add copied state
                        const originalContent = e.currentTarget.innerHTML;
                        e.currentTarget.classList.add('copied');
-                       e.currentTarget.innerHTML = `
-                           <svg class="checkmark" viewBox="0 0 24 24">
-                               <path d="M9 12l2 2 4-4"></path>
-                           </svg>
-                           <span>Copied!</span>
-                       `;
-                       
-                       // Add flash animation to parent
-                       const parent = e.currentTarget.parentElement;
-                       parent.classList.add('copy-flash');
-                       
-                       // Reset after 2 seconds
+                       e.currentTarget.innerHTML = `<svg class="checkmark" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"></path></svg>`;
+                       e.currentTarget.parentElement.classList.add('copy-flash');
                        setTimeout(() => {
                            e.currentTarget.classList.remove('copied');
                            e.currentTarget.innerHTML = originalContent;
-                           parent.classList.remove('copy-flash');
+                           e.currentTarget.parentElement.classList.remove('copy-flash');
                        }, 2000);
                    }).catch(err => {
                        console.error('Failed to copy text: ', err);
@@ -1363,7 +1261,6 @@ this.elements.quickPromptBtns.forEach(btn => {
 
    setupMermaidDownloadButton() {
        const downloadPngBtn = document.getElementById('download-png-btn');
-
        if (downloadPngBtn) {
            downloadPngBtn.addEventListener('click', () => this.downloadMermaidAsPNG());
        }
