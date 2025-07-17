@@ -981,53 +981,51 @@ this.elements.quickPromptBtns.forEach(btn => {
    }
    
    async getAdvice(forceType = null, clickedButton = null) {
-       const situation = this.elements.situationInput.value.trim();
-       if (!situation) { this.showError("Please enter your situation first."); return; }
-       if (this.state.pendingRequest) return;
-       
-       const buttonToLoad = clickedButton || this.elements.askBtn;
+    const situation = this.elements.situationInput.value.trim();
+    if (!situation) { this.showError("Please enter your situation first."); return; }
+    if (this.state.pendingRequest) return;
+    
+    const buttonToLoad = clickedButton || this.elements.askBtn;
 
-       this.state.lastQuery = situation;
-       this.elements.resultsContainer.innerHTML = '';
-       this.setButtonLoading(true, buttonToLoad);
-       this.showLoadingMessages();
+    this.state.lastQuery = situation;
+    this.elements.resultsContainer.innerHTML = '';
+    this.setButtonLoading(true, buttonToLoad);
+    this.showLoadingMessages();
 
-       try {
-           const body = { situation };
-           if (forceType) body.forceType = forceType;
+    try {
+        const body = { situation };
+        if (forceType) body.forceType = forceType;
 
-           const response = await fetch(CONFIG.API_ENDPOINT, {
-               method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify(body),
-           });
-           if (!response.ok) {
-                const error = new Error(`Server error: ${response.statusText}`);
-                error.response = response;
-                throw error;
-           }
-           
-           const data = await response.json();
-           if(data.error) throw new Error(data.message || data.error);
-           
-           this.displayAdvice(data);
+        const response = await fetch(CONFIG.API_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        });
+        
+        if (!response.ok) {
+            let errorMessage = `Server error: ${response.status}`;
+            try {
+                const errorData = await response.json();
+                errorMessage = errorData.error || errorData.message || errorMessage;
+            } catch (parseError) {
+                console.error('Error parsing error response:', parseError);
+            }
+            throw new Error(errorMessage);
+        }
+        
+        const data = await response.json();
+        if(data.error) throw new Error(data.message || data.error);
+        
+        this.displayAdvice(data);
 
-       } catch (error) {
-            console.error('Request failed:', error);
-           if (error.response && typeof error.response.json === 'function') {
-               error.response.json().then(errorData => {
-                   this.showError(errorData.error || "An unknown error occurred.");
-               }).catch(() => {
-                   this.showError(error.message || "An unknown error occurred.");
-               });
-           } else {
-               this.showError(error.message || "An unknown error occurred.");
-           }
-       } finally {
-           this.setButtonLoading(false, buttonToLoad);
-           this.hideLoadingMessages();
-       }
-   }
+    } catch (error) {
+        console.error('Request failed:', error);
+        this.showError(error.message || "An unknown error occurred.");
+    } finally {
+        this.setButtonLoading(false, buttonToLoad);
+        this.hideLoadingMessages();
+    }
+}
 
    displayAdvice(data) {
        const { response_type } = data;
