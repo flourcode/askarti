@@ -81,324 +81,357 @@
     </script>
 
 <style>
-    :root {
-        --brand-purple: #7C6BBE;
-        --brand-gray-50: #F9FAFB;
-        --brand-gray-100: #F3F4F6;
-        --brand-gray-800: #1F2937;
-    }
-    html {
-        scroll-behavior: smooth;
-    }
-    body {
-        background-color: var(--brand-gray-50);
-        font-family: 'Inter', sans-serif;
-        color: var(--brand-gray-800);
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-    .main-container {
-        max-width: 768px;
-        margin: 0 auto;
-        padding: 1rem;
-    }
-    .fade-in {
-        animation: fadeIn 0.5s ease-in-out;
-    }
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    /* --- Enhanced Card Styles --- */
-    .io-card {
-        background-color: white;
-        border-radius: 1rem;
-        border: 1px solid #E5E7EB;
-        padding: 1.5rem;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-        transition: box-shadow 0.2s ease;
-    }
-    .io-card:focus-within {
-        box-shadow: 0 0 0 2px var(--brand-purple);
-    }
-    .results-card {
-        background-color: white;
-        border-radius: 1rem;
-        border: 1px solid #E5E7EB;
-        overflow: hidden;
-        margin-top: 1.5rem;
-    }
-    .results-card-header {
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid #E5E7EB;
-    }
-    .results-card-body {
-        padding: 1.5rem;
-    }
-    
-    /* --- Enhanced Typography --- */
-    h1, h2, h3, h4, h5, h6 {
-        font-weight: 700;
-        margin-bottom: 1rem;
-    }
-    p, li, span {
-        font-weight: 400;
-        line-height: 1.6;
-    }
-    .results-card-body > div {
-        margin-bottom: 2rem; /* Increased from mb-6 to mb-8 equivalent */
-    }
-    
-    /* --- Form Elements --- */
-    textarea, input[type="text"] {
-        font-size: 16px !important; /* Prevent iOS zoom */
-        transition: all 0.2s ease;
-    }
-    .textarea-container {
-        position: relative;
-    }
-    .clear-btn {
-        position: absolute;
-        top: 0.75rem;
-        right: 0.75rem;
-        background-color: rgba(255, 255, 255, 0.9);
-        border: 1px solid #E5E7EB;
-        border-radius: 0.5rem;
-        padding: 0.5rem; /* Increased for better touch targets */
-        min-width: 44px;
-        min-height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #6B7280;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        opacity: 0;
-        visibility: hidden;
-        backdrop-filter: blur(4px);
-    }
-    .clear-btn:hover {
-        background-color: white;
-        border-color: #9CA3AF;
-        color: #374151;
-        transform: scale(1.05);
-    }
-    .clear-btn:active {
-        transform: scale(0.95);
-    }
-    .clear-btn.show {
-        opacity: 1;
-        visibility: visible;
-    }
-    
-    /* --- Enhanced Quick Prompts --- */
-    .quick-prompt {
-        transition: all 0.2s ease-in-out;
-        border: 1px solid var(--brand-gray-100);
-        padding: 0.75rem 1rem; /* Increased for better touch targets */
-        min-height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-    }
-    .quick-prompt:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        border-color: #E5E7EB;
-    }
-    .quick-prompt:active {
-        transform: scale(0.95);
-    }
-    
-    /* --- Enhanced Button Styles --- */
-    .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        border-radius: 0.75rem;
-        padding: 0.75rem 1.5rem;
-        min-height: 44px;
-        min-width: 44px;
-        transition: all 0.2s ease;
-        cursor: pointer;
-        user-select: none;
-        -webkit-tap-highlight-color: transparent;
-    }
-    .btn:active {
-        transform: scale(0.95);
-    }
-    .btn-primary {
-        background-color: var(--brand-purple);
-        color: white;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .btn-primary:hover {
-        background-color: #6959a7;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    }
-    .btn-primary:active {
-        transform: scale(0.95);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .btn-secondary {
-        background-color: white;
-        color: #374151;
-        border: 1px solid #D1D5DB;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    .btn-secondary:hover {
-        background-color: #F9FAFB;
-        border-color: #9CA3AF;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    .btn-secondary:active {
-        transform: scale(0.95);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    
-    /* --- Enhanced Copy Button --- */
-    .copy-btn {
-        position: absolute;
-        top: 0.5rem;
-        right: 0.5rem;
-        background-color: rgba(255, 255, 255, 0.7);
-        border: 1px solid #E5E7EB;
-        border-radius: 0.5rem;
-        padding: 0.5rem;
-        min-width: 44px;
-        min-height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.75rem;
-        color: #4B5563;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        user-select: none;
-        -webkit-tap-highlight-color: transparent;
-    }
-    .copy-btn:hover {
-        background-color: white;
-        border-color: #9CA3AF;
-        transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .copy-btn:active {
-        transform: scale(0.95);
-    }
-    .copy-btn.copied {
-        background-color: #10B981;
-        color: white;
-        border-color: #10B981;
-    }
-    .copy-btn.copied:hover {
-        background-color: #059669;
-        border-color: #059669;
-    }
-    
-    /* --- Copy Flash Animation --- */
-    @keyframes copyFlash {
-        0% { background-color: rgba(16, 185, 129, 0.1); }
-        50% { background-color: rgba(16, 185, 129, 0.3); }
-        100% { background-color: rgba(16, 185, 129, 0.1); }
-    }
-    .copy-flash {
-        animation: copyFlash 0.6s ease-in-out;
-    }
-    
-    /* --- Mode Button Enhancements --- */
-    .mode-btn {
-        min-height: 44px;
-        transition: all 0.2s ease;
-        -webkit-tap-highlight-color: transparent;
-    }
-    .mode-btn:active {
-        transform: scale(0.95);
-    }
-    
-    /* --- Recommended Button Style --- */
-    .btn-recommended {
-        border-width: 2px;
-        border-color: var(--brand-purple);
-        box-shadow: 0 4px 12px rgba(124, 107, 190, 0.2);
-    }
-    
-    /* --- Loader --- */
-    .loader {
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-top: 2px solid white;
-        border-radius: 50%;
-        width: 1.25rem;
-        height: 1.25rem;
-        animation: spin 1s linear infinite;
-    }
-    .btn-secondary .loader {
-        border-color: rgba(0, 0, 0, 0.1);
-        border-top-color: var(--brand-purple);
-    }
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-    
-    /* --- Chat specific styles --- */
-    .chat-container {
-        height: 60dvh;
-        max-height: 500px;
-        overflow-y: auto;
-        padding: 1rem;
-        background-color: #F9FAFB;
-        border-radius: 1rem;
-        border: 1px solid #E5E7EB;
-    }
-    .chat-message-user {
-        background-color: var(--brand-purple);
-        color: white;
-        border-radius: 1rem 1rem 0.25rem 1rem;
-    }
-    .chat-message-arti {
-        background-color: white;
-        color: #1f2937;
-        border: 1px solid #e5e7eb;
-        border-radius: 1rem 1rem 1rem 0.25rem;
-    }
-    
-    /* --- Enhanced Checkmark Icon --- */
-    .checkmark {
-        width: 16px;
-        height: 16px;
-        stroke: currentColor;
-        stroke-width: 2;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        fill: none;
-    }
-    
-    /* --- Responsive & Mobile --- */
-    @media (max-width: 640px) {
-        .main-container { padding: 0.75rem; }
-        .io-card, .results-card-body { padding: 1rem; }
-        .btn { padding: 0.75rem 1rem; font-size: 0.9rem; }
-        .copy-btn { 
-            padding: 0.625rem;
-            min-width: 48px;
-            min-height: 48px;
-        }
-        .clear-btn {
-            padding: 0.625rem;
-            min-width: 48px;
-            min-height: 48px;
-        }
-        .quick-prompt {
-            padding: 0.875rem 1rem;
-            min-height: 48px;
-        }
-    }
+   :root {
+       --brand-purple: #7C6BBE;
+       --brand-gray-50: #F9FAFB;
+       --brand-gray-100: #F3F4F6;
+       --brand-gray-800: #1F2937;
+   }
+   html {
+       scroll-behavior: smooth;
+   }
+   body {
+       background-color: var(--brand-gray-50);
+       font-family: 'Inter', sans-serif;
+       color: var(--brand-gray-800);
+       -webkit-font-smoothing: antialiased;
+       -moz-osx-font-smoothing: grayscale;
+   }
+   .main-container {
+       max-width: 768px;
+       margin: 0 auto;
+       padding: 1rem;
+   }
+   .fade-in {
+       animation: fadeIn 0.5s ease-in-out;
+   }
+   @keyframes fadeIn {
+       from { opacity: 0; transform: translateY(10px); }
+       to { opacity: 1; transform: translateY(0); }
+   }
+   
+   /* --- Enhanced Card Styles --- */
+   .io-card {
+       background-color: white;
+       border-radius: 1rem;
+       border: 1px solid #E5E7EB;
+       padding: 1.5rem;
+       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+       transition: box-shadow 0.2s ease;
+   }
+   .io-card:focus-within {
+       box-shadow: 0 0 0 2px var(--brand-purple);
+   }
+   .results-card {
+       background-color: white;
+       border-radius: 1rem;
+       border: 1px solid #E5E7EB;
+       overflow: hidden;
+       margin-top: 1.5rem;
+   }
+   .results-card-header {
+       padding: 1rem 1.5rem;
+       border-bottom: 1px solid #E5E7EB;
+   }
+   .results-card-body {
+       padding: 1.5rem;
+   }
+   
+   /* --- Enhanced Typography --- */
+   h1, h2, h3, h4, h5, h6 {
+       font-weight: 700;
+       margin-bottom: 1rem;
+   }
+   p, li, span {
+       font-weight: 400;
+       line-height: 1.6;
+   }
+   .results-card-body > div {
+       margin-bottom: 1.5rem;
+   }
+   
+   /* --- Form Elements --- */
+   textarea, input[type="text"] {
+       font-size: 16px !important; /* Prevent iOS zoom */
+       transition: all 0.2s ease;
+   }
+   .textarea-container {
+    position: relative;
+}
+.clear-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(229, 231, 235, 0.7);
+    border-radius: 0.375rem;
+    padding: 0.25rem;
+    min-width: 28px;
+    min-height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6B7280;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 0;
+    visibility: hidden;
+    backdrop-filter: blur(8px);
+}
+.clear-btn:hover {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-color: rgba(156, 163, 175, 0.8);
+    color: #374151;
+    transform: scale(1.05);
+}
+.clear-btn:active {
+    transform: scale(0.95);
+}
+.clear-btn.show {
+    opacity: 1;
+    visibility: visible;
+}
+   
+   /* --- Enhanced Quick Prompts --- */
+   .quick-prompt {
+       transition: all 0.2s ease-in-out;
+       border: 1px solid var(--brand-gray-100);
+       padding: 0.75rem 1rem;
+       min-height: 44px;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       text-align: center;
+   }
+   .quick-prompt:hover {
+       transform: translateY(-2px);
+       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+       border-color: #E5E7EB;
+   }
+   .quick-prompt:active {
+       transform: scale(0.95);
+   }
+   
+   /* --- Enhanced Button Styles --- */
+   .btn {
+       display: inline-flex;
+       align-items: center;
+       justify-content: center;
+       font-weight: 600;
+       border-radius: 0.75rem;
+       padding: 0.75rem 1.5rem;
+       min-height: 44px;
+       min-width: 44px;
+       transition: all 0.2s ease;
+       cursor: pointer;
+       user-select: none;
+       -webkit-tap-highlight-color: transparent;
+   }
+   .btn:active {
+       transform: scale(0.95);
+   }
+   .btn-primary {
+       background-color: var(--brand-purple);
+       color: white;
+       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+   }
+   .btn-primary:hover {
+       background-color: #6959a7;
+       transform: translateY(-1px);
+       box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+   }
+   .btn-primary:active {
+       transform: scale(0.95);
+       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+   }
+   .btn-secondary {
+       background-color: white;
+       color: #374151;
+       border: 1px solid #D1D5DB;
+       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+   }
+   .btn-secondary:hover {
+       background-color: #F9FAFB;
+       border-color: #9CA3AF;
+       transform: translateY(-1px);
+       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+   }
+   .btn-secondary:active {
+       transform: scale(0.95);
+       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+   }
+   
+   /* --- Enhanced Copy Button --- */
+   .copy-btn {
+       position: absolute;
+       top: 0.5rem;
+       right: 0.5rem;
+       background-color: rgba(255, 255, 255, 0.7);
+       border: 1px solid #E5E7EB;
+       border-radius: 0.5rem;
+       padding: 0.5rem;
+       min-width: 44px;
+       min-height: 44px;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       font-size: 0.75rem;
+       color: #4B5563;
+       cursor: pointer;
+       transition: all 0.2s ease;
+       user-select: none;
+       -webkit-tap-highlight-color: transparent;
+   }
+   .copy-btn:hover {
+       background-color: white;
+       border-color: #9CA3AF;
+       transform: translateY(-1px);
+       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+   }
+   .copy-btn:active {
+       transform: scale(0.95);
+   }
+   .copy-btn.copied {
+       background-color: #10B981;
+       color: white;
+       border-color: #10B981;
+   }
+   .copy-btn.copied:hover {
+       background-color: #059669;
+       border-color: #059669;
+   }
+   
+   /* --- Copy Flash Animation --- */
+   @keyframes copyFlash {
+       0% { background-color: rgba(16, 185, 129, 0.1); }
+       50% { background-color: rgba(16, 185, 129, 0.3); }
+       100% { background-color: rgba(16, 185, 129, 0.1); }
+   }
+   .copy-flash {
+       animation: copyFlash 0.6s ease-in-out;
+   }
+   
+   /* --- Mode Button Enhancements --- */
+   .mode-btn {
+       min-height: 44px;
+       transition: all 0.2s ease;
+       -webkit-tap-highlight-color: transparent;
+   }
+   .mode-btn:active {
+       transform: scale(0.95);
+   }
+   
+   /* --- Recommended Button Style --- */
+   .btn-recommended {
+       border-width: 2px;
+       border-color: var(--brand-purple);
+       box-shadow: 0 4px 12px rgba(124, 107, 190, 0.2);
+   }
+   
+   /* --- Loader --- */
+   .loader {
+       border: 2px solid rgba(255, 255, 255, 0.3);
+       border-top: 2px solid white;
+       border-radius: 50%;
+       width: 1.25rem;
+       height: 1.25rem;
+       animation: spin 1s linear infinite;
+   }
+   .btn-secondary .loader {
+       border-color: rgba(0, 0, 0, 0.1);
+       border-top-color: var(--brand-purple);
+   }
+   @keyframes spin {
+       0% { transform: rotate(0deg); }
+       100% { transform: rotate(360deg); }
+   }
+   
+   /* --- Chat specific styles --- */
+   .chat-container {
+       height: 60dvh;
+       max-height: 500px;
+       overflow-y: auto;
+       padding: 1rem;
+       background-color: #F9FAFB;
+       border-radius: 1rem;
+       border: 1px solid #E5E7EB;
+   }
+   .chat-message-user {
+       background-color: var(--brand-purple);
+       color: white;
+       border-radius: 1rem 1rem 0.25rem 1rem;
+   }
+   .chat-message-arti {
+       background-color: white;
+       color: #1f2937;
+       border: 1px solid #e5e7eb;
+       border-radius: 1rem 1rem 1rem 0.25rem;
+   }
+   
+   /* --- Enhanced Checkmark Icon --- */
+   .checkmark {
+       width: 16px;
+       height: 16px;
+       stroke: currentColor;
+       stroke-width: 2;
+       stroke-linecap: round;
+       stroke-linejoin: round;
+       fill: none;
+   }
+   
+   /* --- Responsive & Mobile --- */
+   @media (max-width: 640px) {
+       .main-container { 
+           padding: 0.5rem; 
+           padding-bottom: 1rem;
+       }
+       .io-card, .results-card-body { 
+           padding: 0.75rem; 
+       }
+       .results-card-header {
+           padding: 0.75rem 1rem;
+       }
+       .results-card-body > div {
+           margin-bottom: 1rem;
+       }
+       .btn { 
+           padding: 0.75rem 1rem; 
+           font-size: 0.9rem; 
+       }
+       .copy-btn { 
+           padding: 0.625rem;
+           min-width: 48px;
+           min-height: 48px;
+       }
+       .clear-btn {
+           padding: 0.625rem;
+           min-width: 48px;
+           min-height: 48px;
+       }
+       .quick-prompt {
+           padding: 0.625rem 0.75rem;
+           min-height: 40px;
+       }
+       .chat-container {
+           height: 45dvh;
+           max-height: 350px;
+           padding: 0.75rem;
+       }
+       header {
+           margin-bottom: 0.5rem;
+       }
+       header img {
+           height: 4rem;
+       }
+       footer {
+           margin-top: 2rem;
+       }
+       /* Reduce spacing on mobile */
+       .space-y-3 > * + * { margin-top: 0.5rem; }
+       .space-y-4 > * + * { margin-top: 0.75rem; }
+       .space-y-6 > * + * { margin-top: 1rem; }
+       .space-y-8 > * + * { margin-top: 1.25rem; }
+   }
 </style>
 
 </head>
@@ -422,7 +455,7 @@
                         <textarea 
     id="situation-input" 
     rows="4" 
-    class="w-full p-3 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-brand-purple resize-none placeholder-gray-500"
+    class="w-full p-3 pr-12 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-brand-purple resize-none placeholder-gray-500"
     placeholder='e.g., Prospect for cyber opps at DHS. Or you can start with the sample prompts below and modify them.'
     maxlength="2500"></textarea>
                         <button id="clear-btn" class="clear-btn" title="Clear input" aria-label="Clear input">
