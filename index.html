@@ -109,7 +109,8 @@
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
     }
-    /* --- Card Styles --- */
+    
+    /* --- Enhanced Card Styles --- */
     .io-card {
         background-color: white;
         border-radius: 1rem;
@@ -135,6 +136,20 @@
     .results-card-body {
         padding: 1.5rem;
     }
+    
+    /* --- Enhanced Typography --- */
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    p, li, span {
+        font-weight: 400;
+        line-height: 1.6;
+    }
+    .results-card-body > div {
+        margin-bottom: 2rem; /* Increased from mb-6 to mb-8 equivalent */
+    }
+    
     /* --- Form Elements --- */
     textarea, input[type="text"] {
         font-size: 16px !important; /* Prevent iOS zoom */
@@ -150,7 +165,12 @@
         background-color: rgba(255, 255, 255, 0.9);
         border: 1px solid #E5E7EB;
         border-radius: 0.5rem;
-        padding: 0.375rem;
+        padding: 0.5rem; /* Increased for better touch targets */
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         color: #6B7280;
         cursor: pointer;
         transition: all 0.2s ease;
@@ -164,20 +184,35 @@
         color: #374151;
         transform: scale(1.05);
     }
+    .clear-btn:active {
+        transform: scale(0.95);
+    }
     .clear-btn.show {
         opacity: 1;
         visibility: visible;
     }
+    
+    /* --- Enhanced Quick Prompts --- */
     .quick-prompt {
         transition: all 0.2s ease-in-out;
         border: 1px solid var(--brand-gray-100);
+        padding: 0.75rem 1rem; /* Increased for better touch targets */
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
     }
     .quick-prompt:hover {
         transform: translateY(-2px);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         border-color: #E5E7EB;
     }
-    /* --- Buttons --- */
+    .quick-prompt:active {
+        transform: scale(0.95);
+    }
+    
+    /* --- Enhanced Button Styles --- */
     .btn {
         display: inline-flex;
         align-items: center;
@@ -185,8 +220,15 @@
         font-weight: 600;
         border-radius: 0.75rem;
         padding: 0.75rem 1.5rem;
+        min-height: 44px;
+        min-width: 44px;
         transition: all 0.2s ease;
         cursor: pointer;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active {
+        transform: scale(0.95);
     }
     .btn-primary {
         background-color: var(--brand-purple);
@@ -196,22 +238,30 @@
     .btn-primary:hover {
         background-color: #6959a7;
         transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    .btn-primary:active {
+        transform: scale(0.95);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .btn-secondary {
         background-color: white;
         color: #374151;
         border: 1px solid #D1D5DB;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
     .btn-secondary:hover {
         background-color: #F9FAFB;
         border-color: #9CA3AF;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-    /* NEW: Style for recommended button */
-    .btn-recommended {
-        border-width: 2px;
-        border-color: var(--brand-purple);
-        box-shadow: 0 4px 12px rgba(124, 107, 190, 0.2);
+    .btn-secondary:active {
+        transform: scale(0.95);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
+    
+    /* --- Enhanced Copy Button --- */
     .copy-btn {
         position: absolute;
         top: 0.5rem;
@@ -219,16 +269,65 @@
         background-color: rgba(255, 255, 255, 0.7);
         border: 1px solid #E5E7EB;
         border-radius: 0.5rem;
-        padding: 0.25rem 0.5rem;
+        padding: 0.5rem;
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-size: 0.75rem;
         color: #4B5563;
         cursor: pointer;
         transition: all 0.2s ease;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
     }
     .copy-btn:hover {
         background-color: white;
         border-color: #9CA3AF;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
+    .copy-btn:active {
+        transform: scale(0.95);
+    }
+    .copy-btn.copied {
+        background-color: #10B981;
+        color: white;
+        border-color: #10B981;
+    }
+    .copy-btn.copied:hover {
+        background-color: #059669;
+        border-color: #059669;
+    }
+    
+    /* --- Copy Flash Animation --- */
+    @keyframes copyFlash {
+        0% { background-color: rgba(16, 185, 129, 0.1); }
+        50% { background-color: rgba(16, 185, 129, 0.3); }
+        100% { background-color: rgba(16, 185, 129, 0.1); }
+    }
+    .copy-flash {
+        animation: copyFlash 0.6s ease-in-out;
+    }
+    
+    /* --- Mode Button Enhancements --- */
+    .mode-btn {
+        min-height: 44px;
+        transition: all 0.2s ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .mode-btn:active {
+        transform: scale(0.95);
+    }
+    
+    /* --- Recommended Button Style --- */
+    .btn-recommended {
+        border-width: 2px;
+        border-color: var(--brand-purple);
+        box-shadow: 0 4px 12px rgba(124, 107, 190, 0.2);
+    }
+    
     /* --- Loader --- */
     .loader {
         border: 2px solid rgba(255, 255, 255, 0.3);
@@ -246,6 +345,7 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
     }
+    
     /* --- Chat specific styles --- */
     .chat-container {
         height: 60dvh;
@@ -267,11 +367,37 @@
         border: 1px solid #e5e7eb;
         border-radius: 1rem 1rem 1rem 0.25rem;
     }
+    
+    /* --- Enhanced Checkmark Icon --- */
+    .checkmark {
+        width: 16px;
+        height: 16px;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+    }
+    
     /* --- Responsive & Mobile --- */
     @media (max-width: 640px) {
         .main-container { padding: 0.75rem; }
         .io-card, .results-card-body { padding: 1rem; }
-        .btn { padding: 0.625rem 1rem; font-size: 0.9rem; }
+        .btn { padding: 0.75rem 1rem; font-size: 0.9rem; }
+        .copy-btn { 
+            padding: 0.625rem;
+            min-width: 48px;
+            min-height: 48px;
+        }
+        .clear-btn {
+            padding: 0.625rem;
+            min-width: 48px;
+            min-height: 48px;
+        }
+        .quick-prompt {
+            padding: 0.875rem 1rem;
+            min-height: 48px;
+        }
     }
 </style>
 
@@ -289,8 +415,8 @@
        <main id="main-content">
              <div id="quick-mode" class="mode-content fade-in">
                 <div class="io-card">
-                    <label for="situation-input" class="block text-sm font-semibold text-brand-gray-700 mb-3">
-                        Hey, I'm Arti! You can ask me anyting.
+                    <label for="situation-input" class="block text-sm font-bold text-brand-gray-700 mb-3" id="greeting-label">
+                        Hey, I'm Arti! You can ask me anything.
                     </label>
                     <div class="textarea-container">
                         <textarea 
@@ -305,9 +431,10 @@
                             </svg>
                         </button>
                     </div>
-                    <div class="text-xs text-gray-500 mt-1.5 flex justify-between"><span class="hint-text">For deeper insights, paste a full article or snippet, then click the News or Market Analysis button.</span>
-    <span id="char-count">0/2500</span>
-</div>
+                    <div class="text-xs text-gray-500 mt-1.5 flex justify-between">
+                        <span class="hint-text">For deeper insights, paste a full article or snippet, then click the News or Market Analysis button.</span>
+                        <span id="char-count">0/2500</span>
+                    </div>
 
                     <div class="mt-4">
                         <div class="flex flex-wrap gap-2">
@@ -318,35 +445,35 @@
 
 The awards to Anthropic, Google, OpenAI, and xAI – each with a $200M ceiling – will enable the Department to leverage the technology and talent of U.S. frontier AI companies to develop agentic AI workflows across a variety of mission areas.  Establishing these partnerships will broaden DoD use of and experience in frontier AI capabilities and increase the ability of these companies to understand and address critical national security needs with the most advanced AI capabilities U.S. industry has to offer. 
 
-“The adoption of AI is transforming the Department’s ability to support our warfighters and maintain strategic advantage over our adversaries,” said Chief Digital and AI Officer Dr. Doug Matty. “Leveraging commercially available solutions into an integrated capabilities approach will accelerate the use of advanced AI as part of our Joint mission essential tasks in our warfighting domain as well as intelligence, business, and enterprise information systems.” 
+"The adoption of AI is transforming the Department's ability to support our warfighters and maintain strategic advantage over our adversaries," said Chief Digital and AI Officer Dr. Doug Matty. "Leveraging commercially available solutions into an integrated capabilities approach will accelerate the use of advanced AI as part of our Joint mission essential tasks in our warfighting domain as well as intelligence, business, and enterprise information systems." 
 
-DoD is implementing a commercial-first approach to accelerating DoD adoption of AI. Today’s awards bring in the best U.S.-based frontier AI talent to help apply cutting-edge AI to solve DoD use cases.  CDAO is also providing access to many of the latest generative AI (GenAI) models for general purpose use to Combatant Commands, the Office of the Secretary of Defense, and the Joint Staff via Army’s Enterprise Large Language Model Workspace powered by Ask Sage, and to the broader enterprise via embedded AI models within DoD enterprise data and AI platforms, including the Advancing Analytics (Advana) platform, Maven Smart System, and Edge Data Mesh nodes, which enable AI integration into workflows that occur within these data environments themselves. Finally, DoD is partnering with the General Services Administration (GSA) to bring the best AI technologies to the federal government while leveraging whole-of-government buying power for AI production and compute resources." data-type="news">Sample News Analysis</button>
+DoD is implementing a commercial-first approach to accelerating DoD adoption of AI. Today's awards bring in the best U.S.-based frontier AI talent to help apply cutting-edge AI to solve DoD use cases.  CDAO is also providing access to many of the latest generative AI (GenAI) models for general purpose use to Combatant Commands, the Office of the Secretary of Defense, and the Joint Staff via Army's Enterprise Large Language Model Workspace powered by Ask Sage, and to the broader enterprise via embedded AI models within DoD enterprise data and AI platforms, including the Advancing Analytics (Advana) platform, Maven Smart System, and Edge Data Mesh nodes, which enable AI integration into workflows that occur within these data environments themselves. Finally, DoD is partnering with the General Services Administration (GSA) to bring the best AI technologies to the federal government while leveraging whole-of-government buying power for AI production and compute resources." data-type="news">Sample News Analysis</button>
     <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="SEATTLE—(BUSINESS WIRE) May 1, 2025—Amazon.com, Inc. (NASDAQ: AMZN) today announced financial results for
 its first quarter ended March 31, 2025.
-• Net sales increased 9% to $155.7 billion in the first quarter, compared with $143.3 billion in first quarter 2024.
+- Net sales increased 9% to $155.7 billion in the first quarter, compared with $143.3 billion in first quarter 2024.
 Excluding the $1.4 billion unfavorable impact from year-over-year changes in foreign exchange rates throughout the
 quarter, net sales increased 10% compared with first quarter 2024.
-• North America segment sales increased 8% year-over-year to $92.9 billion.
-• International segment sales increased 5% year-over-year to $33.5 billion, or increased 8% excluding changes
+- North America segment sales increased 8% year-over-year to $92.9 billion.
+- International segment sales increased 5% year-over-year to $33.5 billion, or increased 8% excluding changes
 in foreign exchange rates.
-• AWS segment sales increased 17% year-over-year to $29.3 billion.
-• Operating income increased to $18.4 billion in the first quarter, compared with $15.3 billion in first quarter 2024.
-• North America segment operating income was $5.8 billion, compared with $5.0 billion in first quarter 2024.
-• International segment operating income was $1.0 billion, compared with $0.9 billion in first quarter 2024.
-• AWS segment operating income was $11.5 billion, compared with $9.4 billion in first quarter 2024.
-• Net income increased to $17.1 billion in the first quarter, or $1.59 per diluted share, compared with $10.4 billion, or
+- AWS segment sales increased 17% year-over-year to $29.3 billion.
+- Operating income increased to $18.4 billion in the first quarter, compared with $15.3 billion in first quarter 2024.
+- North America segment operating income was $5.8 billion, compared with $5.0 billion in first quarter 2024.
+- International segment operating income was $1.0 billion, compared with $0.9 billion in first quarter 2024.
+- AWS segment operating income was $11.5 billion, compared with $9.4 billion in first quarter 2024.
+- Net income increased to $17.1 billion in the first quarter, or $1.59 per diluted share, compared with $10.4 billion, or
 $0.98 per diluted share, in first quarter 2024.
-• Operating cash flow increased 15% to $113.9 billion for the trailing twelve months, compared with $99.1 billion for
+- Operating cash flow increased 15% to $113.9 billion for the trailing twelve months, compared with $99.1 billion for
 the trailing twelve months ended March 31, 2024.
-• Free cash flow decreased to $25.9 billion for the trailing twelve months, compared with $50.1 billion for the trailing
+- Free cash flow decreased to $25.9 billion for the trailing twelve months, compared with $50.1 billion for the trailing
 twelve months ended March 31, 2024.
-“We’re pleased with the start to 2025, especially our pace of innovation and progress in continuing to improve customer
-experiences,” said Andy Jassy, President and CEO, Amazon. “From Alexa+ (our next generation of Alexa that’s meaningfully
+"We're pleased with the start to 2025, especially our pace of innovation and progress in continuing to improve customer
+experiences," said Andy Jassy, President and CEO, Amazon. "From Alexa+ (our next generation of Alexa that's meaningfully
 smarter, more capable, and takes actions for customers), to another delivery speed record for our Prime members, to our new
 Trainium2 chips and Bedrock model expansion that make it easier for AWS customers to train models and run inference more
 flexibly and cost-effectively, to our first Project Kuiper satellites successfully launching into low earth orbit in our quest to
-provide broadband access to hundreds of millions of households in rural areas without it today—we’re continuing to find
-meaningful ways to make customers’ lives easier and better every day.”" data-type="investment">Sample Market Analysis</button>
+provide broadband access to hundreds of millions of households in rural areas without it today—we're continuing to find
+meaningful ways to make customers' lives easier and better every day."" data-type="investment">Sample Market Analysis</button>
 </div>
                     </div>
 
@@ -378,7 +505,7 @@ meaningful ways to make customers’ lives easier and better every day.”" data
                         <div id="chat-messages" class="space-y-4">
                             <div class="flex justify-start">
                                 <div class="chat-message-arti p-3 text-sm max-w-[85%]">
-                                    <p>Hey! I'm Arti. I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.</p>
+                                    <p id="chat-greeting">Hey! I'm Arti. I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.</p>
                                 </div>
                             </div>
                         </div>
@@ -423,780 +550,824 @@ meaningful ways to make customers’ lives easier and better every day.”" data
             </div>
             <p>
     For Federal Sellers by Federal Sellers.
-    <br>
-    Powered by AWS.
-    <br>
-    © 2025 AskArti.com.
-  </p>
-        </footer>
+	<br>
+   Powered by AWS.
+   <br>
+   © 2025 AskArti.com.
+ </p>
+       </footer>
 
-   </div>
-   
-   <div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-       <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
-           <div class="flex justify-between items-start mb-4">
-               <h2 class="text-xl font-bold text-gray-900">About AskArti</h2>
-               <button id="close-about" class="text-gray-400 hover:text-gray-600">
-                   <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-               </button>
-           </div>
-           <div class="space-y-4 text-gray-700 text-sm">
-               <p>AskArti is your 24/7 AI sales coach, designed for federal sales professionals. Get instant advice on stuck deals, meeting preparation, and sales strategy.</p>
-               <div class="mt-4 pt-4 border-t">
-                   <h3 class="font-semibold text-gray-800 mb-2">Privacy & Technology</h3>
-                   <p class="text-gray-600">AskArti uses advanced AI models. We do not store, log, or persist any conversation data. All processing occurs in-memory and is discarded.</p>
-               </div>
-           </div>
-       </div>
-   </div>
+  </div>
+  
+  <div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+      <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+          <div class="flex justify-between items-start mb-4">
+              <h2 class="text-xl font-bold text-gray-900">About AskArti</h2>
+              <button id="close-about" class="text-gray-400 hover:text-gray-600">
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+          </div>
+          <div class="space-y-4 text-gray-700 text-sm">
+              <p>AskArti is your 24/7 AI sales coach, designed for federal sales professionals. Get instant advice on stuck deals, meeting preparation, and sales strategy.</p>
+              <div class="mt-4 pt-4 border-t">
+                  <h3 class="font-semibold text-gray-800 mb-2">Privacy & Technology</h3>
+                  <p class="text-gray-600">AskArti uses advanced AI models. We do not store, log, or persist any conversation data. All processing occurs in-memory and is discarded.</p>
+              </div>
+          </div>
+      </div>
+  </div>
 <script>
+// --- Time-based greeting functionality ---
+function getTimeBasedGreeting() {
+   const hour = new Date().getHours();
+   const name = "Hey, I'm Arti!";
+   
+   if (hour >= 5 && hour < 12) {
+       return `Good morning! ${name} Ready to tackle the day?`;
+   } else if (hour >= 12 && hour < 17) {
+       return `Good afternoon! ${name} How can I help?`;
+   } else if (hour >= 17 && hour < 21) {
+       return `Good evening! ${name} What's on your mind?`;
+   } else {
+       return `Burning the midnight oil? ${name} I'm here to help.`;
+   }
+}
+
+function updateGreetings() {
+   const greeting = getTimeBasedGreeting();
+   const greetingLabel = document.getElementById('greeting-label');
+   const chatGreeting = document.getElementById('chat-greeting');
+   
+   if (greetingLabel) {
+       greetingLabel.textContent = greeting;
+   }
+   
+   if (chatGreeting) {
+       // Extract just the greeting part for chat
+       const chatText = greeting.replace('Hey, I\'m Arti!', 'I\'m Arti.');
+       chatGreeting.textContent = `${chatText} I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.`;
+   }
+}
+
 // --- Mode Toggle Active State ---
 const modeButtons = document.querySelectorAll('.mode-btn');
 modeButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-        modeButtons.forEach(b => b.classList.remove('active', 'bg-white', 'text-brand-purple'));
-        btn.classList.add('active', 'bg-white', 'text-brand-purple');
-        const inactiveBtn = [...modeButtons].find(b => !b.classList.contains('active'));
-        if(inactiveBtn) {
-            inactiveBtn.classList.add('text-gray-600');
-            inactiveBtn.classList.remove('bg-white', 'text-brand-purple');
-        }
-    });
+   btn.addEventListener('click', () => {
+       modeButtons.forEach(b => b.classList.remove('active', 'bg-white', 'text-brand-purple'));
+       btn.classList.add('active', 'bg-white', 'text-brand-purple');
+       const inactiveBtn = [...modeButtons].find(b => !b.classList.contains('active'));
+       if(inactiveBtn) {
+           inactiveBtn.classList.add('text-gray-600');
+           inactiveBtn.classList.remove('bg-white', 'text-brand-purple');
+       }
+   });
 });
 document.querySelector('.mode-btn[data-mode="quick"]').classList.add('bg-white', 'text-brand-purple');
 document.querySelector('.mode-btn[data-mode="chat"]').classList.add('text-gray-600');
 
-
 const CONFIG = {
-  API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
-  REQUEST_TIMEOUT: 30000,
-  MAX_RETRIES: 2,
-  RETRY_DELAY: 2000,
-  MAX_INPUT_LENGTH: 2500,
-  MIN_REQUEST_INTERVAL: 2000,
-  LOADING_MESSAGES: [
-      "Hang on. I'm...Working Backwards", 
-      "...Diving Deep", 
-      "...Unpacking This", 
-      "...Putting a Pin in it", 
-      "...Circling Back", 
-      "...Thinking Big"
-  ]
+ API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
+ REQUEST_TIMEOUT: 30000,
+ MAX_RETRIES: 2,
+ RETRY_DELAY: 2000,
+ MAX_INPUT_LENGTH: 2500,
+ MIN_REQUEST_INTERVAL: 2000,
+ LOADING_MESSAGES: [
+     "Hang on. I'm...Working Backwards", 
+     "...Diving Deep", 
+     "...Unpacking This", 
+     "...Putting a Pin in it", 
+     "...Circling Back", 
+     "...Thinking Big"
+ ]
 };
 
 class AskArti {
-  constructor() {
-   this.elements = this.getElements();
-   this.state = {
-       pendingRequest: false,
-       lastRequestTime: 0,
-       loadingInterval: null,
-       abortController: null,
-       lastQuery: '',
-       currentMode: 'quick',
-       chatHistory: [],
-   };
-   this.init();
+ constructor() {
+  this.elements = this.getElements();
+  this.state = {
+      pendingRequest: false,
+      lastRequestTime: 0,
+      loadingInterval: null,
+      abortController: null,
+      lastQuery: '',
+      currentMode: 'quick',
+      chatHistory: [],
+  };
+  this.init();
 }
 
-  getElements() {
-      return {
-          situationInput: document.getElementById('situation-input'),
-          clearBtn: document.getElementById('clear-btn'),
-          askBtn: document.getElementById('ask-btn'),
-          newsBtn: document.getElementById('news-btn'),
-          investmentBtn: document.getElementById('investment-btn'),
-          btnText: document.getElementById('btn-text'),
-          loader: document.getElementById('loader'),
-          charCount: document.getElementById('char-count'),
-          loadingMessageContainer: document.getElementById('loading-message-container'),
-          loadingMessage: document.getElementById('loading-message'),
-          errorMessage: document.getElementById('error-message'),
-          errorDetails: document.getElementById('error-details'),
-          resultsContainer: document.getElementById('results-container'),
-          aboutBtn: document.getElementById('about-btn'),
-          aboutModal: document.getElementById('about-modal'),
-          closeAbout: document.getElementById('close-about'),
-          quickPromptBtns: document.querySelectorAll('.quick-prompt'),
-          modeButtons: document.querySelectorAll('.mode-btn'),
-          quickMode: document.getElementById('quick-mode'),
-          chatMode: document.getElementById('chat-mode'),
-          chatMessages: document.getElementById('chat-messages'),
-          chatInput: document.getElementById('chat-input'),
-          chatSendBtn: document.getElementById('chat-send-btn'),
-      };
-  }
+ getElements() {
+     return {
+         situationInput: document.getElementById('situation-input'),
+         clearBtn: document.getElementById('clear-btn'),
+         askBtn: document.getElementById('ask-btn'),
+         newsBtn: document.getElementById('news-btn'),
+         investmentBtn: document.getElementById('investment-btn'),
+         btnText: document.getElementById('btn-text'),
+         loader: document.getElementById('loader'),
+         charCount: document.getElementById('char-count'),
+         loadingMessageContainer: document.getElementById('loading-message-container'),
+         loadingMessage: document.getElementById('loading-message'),
+         errorMessage: document.getElementById('error-message'),
+         errorDetails: document.getElementById('error-details'),
+         resultsContainer: document.getElementById('results-container'),
+         aboutBtn: document.getElementById('about-btn'),
+         aboutModal: document.getElementById('about-modal'),
+         closeAbout: document.getElementById('close-about'),
+         quickPromptBtns: document.querySelectorAll('.quick-prompt'),
+         modeButtons: document.querySelectorAll('.mode-btn'),
+         quickMode: document.getElementById('quick-mode'),
+         chatMode: document.getElementById('chat-mode'),
+         chatMessages: document.getElementById('chat-messages'),
+         chatInput: document.getElementById('chat-input'),
+         chatSendBtn: document.getElementById('chat-send-btn'),
+     };
+ }
 
-  init() {
-      mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'base', themeVariables: {
-            primaryColor: '#F3F4F6',
-            primaryTextColor: '#1F2937',
-            primaryBorderColor: '#D1D5DB',
-            lineColor: '#6B7280',
-            textColor: '#111827',
-            fontSize: '14px'
-      }});
-      this.setupEventListeners();
-      this.elements.situationInput.focus();
-      this.updateCharCount();
-  }
+ init() {
+     // Initialize time-based greetings
+     updateGreetings();
+     
+     mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'base', themeVariables: {
+           primaryColor: '#F3F4F6',
+           primaryTextColor: '#1F2937',
+           primaryBorderColor: '#D1D5DB',
+           lineColor: '#6B7280',
+           textColor: '#111827',
+           fontSize: '14px'
+     }});
+     this.setupEventListeners();
+     this.elements.situationInput.focus();
+     this.updateCharCount();
+ }
 
-    updateCharCount() {
-        if (!this.elements.situationInput) return;
-        const current = this.elements.situationInput.value.length;
-        const max = CONFIG.MAX_INPUT_LENGTH;
-        this.elements.charCount.textContent = `${current}/${max}`;
-        
-        // Show/hide clear button based on content
-        if (current > 0) {
-            this.elements.clearBtn.classList.add('show');
-        } else {
-            this.elements.clearBtn.classList.remove('show');
-        }
-    }
+   updateCharCount() {
+       if (!this.elements.situationInput) return;
+       const current = this.elements.situationInput.value.length;
+       const max = CONFIG.MAX_INPUT_LENGTH;
+       this.elements.charCount.textContent = `${current}/${max}`;
+       
+       // Show/hide clear button based on content
+       if (current > 0) {
+           this.elements.clearBtn.classList.add('show');
+       } else {
+           this.elements.clearBtn.classList.remove('show');
+       }
+   }
 
-    /* NEW: Function to check input and recommend a button */
-    updateRecommendedButton() {
-        const text = this.elements.situationInput.value.toLowerCase();
-        const investmentKeywords = /invest|sec filing|press release|earnings|10-k|10-q|financial/i;
-        const newsKeywords = /news|announcement|acquisition|partnership|contract award/i;
+   /* Function to check input and recommend a button */
+   updateRecommendedButton() {
+       const text = this.elements.situationInput.value.toLowerCase();
+       const investmentKeywords = /invest|sec filing|press release|earnings|10-k|10-q|financial/i;
+       const newsKeywords = /news|announcement|acquisition|partnership|contract award/i;
 
-        // Reset all buttons first
-        this.elements.newsBtn.classList.remove('btn-recommended');
-        this.elements.investmentBtn.classList.remove('btn-recommended');
+       // Reset all buttons first
+       this.elements.newsBtn.classList.remove('btn-recommended');
+       this.elements.investmentBtn.classList.remove('btn-recommended');
 
-        if (text.length < 100) return; // Don't highlight for short text
+       if (text.length < 100) return; // Don't highlight for short text
 
-        if (investmentKeywords.test(text)) {
-            this.elements.investmentBtn.classList.add('btn-recommended');
-        } else if (newsKeywords.test(text)) {
-            this.elements.newsBtn.classList.add('btn-recommended');
-        }
-    }
+       if (investmentKeywords.test(text)) {
+           this.elements.investmentBtn.classList.add('btn-recommended');
+       } else if (newsKeywords.test(text)) {
+           this.elements.newsBtn.classList.add('btn-recommended');
+       }
+   }
 
-    clearInput() {
-        this.elements.situationInput.value = '';
-        this.updateCharCount();
-        this.updateRecommendedButton(); // Also reset recommendation
-        this.elements.situationInput.focus();
-    }
+   clearInput() {
+       this.elements.situationInput.value = '';
+       this.updateCharCount();
+       this.updateRecommendedButton();
+       this.elements.situationInput.focus();
+   }
 
-    setupEventListeners() {
-        this.elements.situationInput.addEventListener('input', () => {
-            this.updateCharCount();
-            this.updateRecommendedButton(); // Call recommendation logic on input
-        });
-		this.elements.situationInput.addEventListener('focus', () => {
-        // When the user taps in, check if the button should be shown.
-        this.updateCharCount();
-    });
+   setupEventListeners() {
+       this.elements.situationInput.addEventListener('input', () => {
+           this.updateCharCount();
+           this.updateRecommendedButton();
+       });
+   	this.elements.situationInput.addEventListener('focus', () => {
+       this.updateCharCount();
+   });
 
-    this.elements.situationInput.addEventListener('blur', () => {
-        // When the user taps away, always hide the button.
-        this.elements.clearBtn.classList.remove('show');
-    });
-        this.elements.clearBtn.addEventListener('click', () => this.clearInput());
+   this.elements.situationInput.addEventListener('blur', () => {
+       this.elements.clearBtn.classList.remove('show');
+   });
+       this.elements.clearBtn.addEventListener('click', () => this.clearInput());
 
 this.elements.quickPromptBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        const button = e.currentTarget;
-        const analysisType = button.dataset.type || null; // Will be 'news', 'investment', or null
+   btn.addEventListener('click', (e) => {
+       const button = e.currentTarget;
+       const analysisType = button.dataset.type || null;
 
-        // Determine which button should show the loader
-        let buttonToLoad;
-        if (analysisType === 'news') {
-            buttonToLoad = this.elements.newsBtn;
-        } else if (analysisType === 'investment') {
-            buttonToLoad = this.elements.investmentBtn;
-        } else {
-            buttonToLoad = this.elements.askBtn; // Default to 'Game Plan' button
-        }
+       let buttonToLoad;
+       if (analysisType === 'news') {
+           buttonToLoad = this.elements.newsBtn;
+       } else if (analysisType === 'investment') {
+           buttonToLoad = this.elements.investmentBtn;
+       } else {
+           buttonToLoad = this.elements.askBtn;
+       }
 
-        // Paste the text from the data-text attribute
-        this.elements.situationInput.value = button.dataset.text;
-        this.updateCharCount();
-        this.updateRecommendedButton();
+       this.elements.situationInput.value = button.dataset.text;
+       this.updateCharCount();
+       this.updateRecommendedButton();
 
-        // Call the advice function with the correct type and target button
-        this.getAdvice(analysisType, buttonToLoad);
-    });
+       this.getAdvice(analysisType, buttonToLoad);
+   });
 });
 
-        this.elements.askBtn.addEventListener('click', (e) => this.getAdvice(null, e.currentTarget));
-        this.elements.newsBtn.addEventListener('click', (e) => this.getAdvice('news', e.currentTarget));
-        this.elements.investmentBtn.addEventListener('click', (e) => this.getAdvice('investment', e.currentTarget));
-        
-        this.elements.situationInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                this.getAdvice(null, this.elements.askBtn);
-            }
-        });
+       this.elements.askBtn.addEventListener('click', (e) => this.getAdvice(null, e.currentTarget));
+       this.elements.newsBtn.addEventListener('click', (e) => this.getAdvice('news', e.currentTarget));
+       this.elements.investmentBtn.addEventListener('click', (e) => this.getAdvice('investment', e.currentTarget));
+       
+       this.elements.situationInput.addEventListener('keydown', (e) => {
+           if (e.key === 'Enter' && !e.shiftKey) {
+               e.preventDefault();
+               this.getAdvice(null, this.elements.askBtn);
+           }
+       });
 
-        this.elements.aboutBtn.addEventListener('click', () => this.showModal());
-        this.elements.closeAbout.addEventListener('click', () => this.hideModal());
-        this.elements.aboutModal.addEventListener('click', (e) => {
-            if (e.target === this.elements.aboutModal) this.hideModal();
-        });
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') this.hideModal();
-        });
+       this.elements.aboutBtn.addEventListener('click', () => this.showModal());
+       this.elements.closeAbout.addEventListener('click', () => this.hideModal());
+       this.elements.aboutModal.addEventListener('click', (e) => {
+           if (e.target === this.elements.aboutModal) this.hideModal();
+       });
+       document.addEventListener('keydown', (e) => {
+           if (e.key === 'Escape') this.hideModal();
+       });
 
-        this.elements.modeButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => this.switchMode(e.target.dataset.mode));
-        });
+       this.elements.modeButtons.forEach(btn => {
+           btn.addEventListener('click', (e) => this.switchMode(e.target.dataset.mode));
+       });
 
-        this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
-        this.elements.chatInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                this.sendChatMessage();
-            }
-        });
-    }
+       this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
+       this.elements.chatInput.addEventListener('keydown', (e) => {
+           if (e.key === 'Enter' && !e.shiftKey) {
+               e.preventDefault();
+               this.sendChatMessage();
+           }
+       });
+   }
 
-    switchMode(mode) {
-        this.state.currentMode = mode;
-        this.elements.resultsContainer.innerHTML = '';
-        this.elements.errorMessage.classList.add('hidden');
-        this.hideLoadingMessages();
+   switchMode(mode) {
+       this.state.currentMode = mode;
+       this.elements.resultsContainer.innerHTML = '';
+       this.elements.errorMessage.classList.add('hidden');
+       this.hideLoadingMessages();
 
-        if (mode === 'quick') {
-            this.elements.quickMode.classList.remove('hidden');
-            this.elements.chatMode.classList.add('hidden');
-            this.elements.situationInput.focus();
-        } else {
-            this.elements.quickMode.classList.add('hidden');
-            this.elements.chatMode.classList.remove('hidden');
-            this.elements.chatInput.focus();
-        }
-    }
+       if (mode === 'quick') {
+           this.elements.quickMode.classList.remove('hidden');
+           this.elements.chatMode.classList.add('hidden');
+           this.elements.situationInput.focus();
+       } else {
+           this.elements.quickMode.classList.add('hidden');
+           this.elements.chatMode.classList.remove('hidden');
+           this.elements.chatInput.focus();
+       }
+   }
 
-    addChatMessage(content, isUser = false) {
-        let processedContent = isUser ? content : marked.parse(content.replace(/<action>(.*?)<\/action>/g, '<span class="bg-yellow-50 px-1 py-0.5 rounded">$1</span>'));
-        const messageClass = isUser ? 'chat-message-user justify-end' : 'chat-message-arti justify-start';
-        const alignClass = isUser ? 'justify-end' : 'justify-start';
+   addChatMessage(content, isUser = false) {
+       let processedContent = isUser ? content : marked.parse(content.replace(/<action>(.*?)<\/action>/g, '<span class="bg-yellow-50 px-1 py-0.5 rounded">$1</span>'));
+       const messageClass = isUser ? 'chat-message-user justify-end' : 'chat-message-arti justify-start';
+       const alignClass = isUser ? 'justify-end' : 'justify-start';
 
-        const messageHtml = `
-            <div class="flex ${alignClass} fade-in">
-                <div class="${messageClass} p-3 text-sm max-w-[85%]">
-                    ${processedContent}
-                </div>
-            </div>
-        `;
-        this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
-        this.scrollChatToBottom();
-    }
-    
-    showTypingIndicator() {
-        const typingHtml = `<div id="typing-indicator" class="flex justify-start"><div class="chat-message-arti p-3 text-sm">...</div></div>`;
-        this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
-        this.scrollChatToBottom();
-    }
+       const messageHtml = `
+           <div class="flex ${alignClass} fade-in">
+               <div class="${messageClass} p-3 text-sm max-w-[85%]">
+                   ${processedContent}
+               </div>
+           </div>
+       `;
+       this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
+       this.scrollChatToBottom();
+   }
+   
+   showTypingIndicator() {
+       const typingHtml = `<div id="typing-indicator" class="flex justify-start"><div class="chat-message-arti p-3 text-sm">...</div></div>`;
+       this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
+       this.scrollChatToBottom();
+   }
 
-    hideTypingIndicator() {
-        const indicator = document.getElementById('typing-indicator');
-        if (indicator) indicator.remove();
-    }
+   hideTypingIndicator() {
+       const indicator = document.getElementById('typing-indicator');
+       if (indicator) indicator.remove();
+   }
 
-    scrollChatToBottom() {
-        const chatContainer = document.getElementById('chat-container');
-        if (chatContainer) {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-    }
+   scrollChatToBottom() {
+       const chatContainer = document.getElementById('chat-container');
+       if (chatContainer) {
+           chatContainer.scrollTop = chatContainer.scrollHeight;
+       }
+   }
 
-    async sendChatMessage() {
-        const message = this.elements.chatInput.value.trim();
-        if (!message || this.state.pendingRequest) return;
+   async sendChatMessage() {
+       const message = this.elements.chatInput.value.trim();
+       if (!message || this.state.pendingRequest) return;
 
-        this.state.pendingRequest = true;
-        this.addChatMessage(message, true);
-        this.state.chatHistory.push({ role: 'user', content: message });
-        this.elements.chatInput.value = '';
-        this.showTypingIndicator();
+       this.state.pendingRequest = true;
+       this.addChatMessage(message, true);
+       this.state.chatHistory.push({ role: 'user', content: message });
+       this.elements.chatInput.value = '';
+       this.showTypingIndicator();
 
-        try {
-            const response = await fetch(CONFIG.API_ENDPOINT, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ situation: message, mode: 'chat', conversationHistory: this.state.chatHistory }),
-            });
-            if (!response.ok) throw new Error(`Server error (${response.status})`);
-            
-            const data = await response.json();
-            this.hideTypingIndicator();
-            this.addChatMessage(data.message);
-            this.state.chatHistory.push({ role: 'assistant', content: data.message });
+       try {
+           const response = await fetch(CONFIG.API_ENDPOINT, {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({ situation: message, mode: 'chat', conversationHistory: this.state.chatHistory }),
+           });
+           if (!response.ok) throw new Error(`Server error (${response.status})`);
+           
+           const data = await response.json();
+           this.hideTypingIndicator();
+           this.addChatMessage(data.message);
+           this.state.chatHistory.push({ role: 'assistant', content: data.message });
 
-        } catch (error) {
-            this.hideTypingIndicator();
-            this.addChatMessage("Sorry, I'm having trouble connecting right now. Please try again in a moment.", false);
-        } finally {
-            this.state.pendingRequest = false;
-        }
-    }
+       } catch (error) {
+           this.hideTypingIndicator();
+           this.addChatMessage("Sorry, I'm having trouble connecting right now. Please try again in a moment.", false);
+       } finally {
+           this.state.pendingRequest = false;
+       }
+   }
 
-    setButtonLoading(loading, clickedButton) {
-        this.state.pendingRequest = loading;
-        this.elements.errorMessage.classList.add('hidden');
+   setButtonLoading(loading, clickedButton) {
+       this.state.pendingRequest = loading;
+       this.elements.errorMessage.classList.add('hidden');
 
-        // Always disable all buttons to prevent multiple clicks
-        this.elements.askBtn.disabled = loading;
-        this.elements.newsBtn.disabled = loading;
-        this.elements.investmentBtn.disabled = loading;
+       this.elements.askBtn.disabled = loading;
+       this.elements.newsBtn.disabled = loading;
+       this.elements.investmentBtn.disabled = loading;
 
-        if (loading && clickedButton) {
-            // Hide text/svg and show loader ONLY on the clicked button
-            const childrenToHide = clickedButton.querySelectorAll('span, svg');
-            const loader = clickedButton.querySelector('.loader');
-            childrenToHide.forEach(el => el.classList.add('hidden'));
-            if (loader) loader.classList.remove('hidden');
-        } else {
-            // Restore all buttons to their original state
-            [this.elements.askBtn, this.elements.newsBtn, this.elements.investmentBtn].forEach(btn => {
-                 const childrenToShow = btn.querySelectorAll('span, svg');
-                 const loader = btn.querySelector('.loader');
-                 childrenToShow.forEach(el => el.classList.remove('hidden'));
-                 if(loader) loader.classList.add('hidden');
-            });
-        }
-    }
+       if (loading && clickedButton) {
+           const childrenToHide = clickedButton.querySelectorAll('span, svg');
+           const loader = clickedButton.querySelector('.loader');
+           childrenToHide.forEach(el => el.classList.add('hidden'));
+           if (loader) loader.classList.remove('hidden');
+       } else {
+           [this.elements.askBtn, this.elements.newsBtn, this.elements.investmentBtn].forEach(btn => {
+                const childrenToShow = btn.querySelectorAll('span, svg');
+                const loader = btn.querySelector('.loader');
+                childrenToShow.forEach(el => el.classList.remove('hidden'));
+                if(loader) loader.classList.add('hidden');
+           });
+       }
+   }
 
-    showLoadingMessages() {
-        this.elements.loadingMessageContainer.classList.remove('hidden');
-        let i = 0;
-        this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[i];
-        this.state.loadingInterval = setInterval(() => {
-            i = (i + 1) % CONFIG.LOADING_MESSAGES.length;
-            this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[i];
-        }, 2000);
-    }
+   showLoadingMessages() {
+       this.elements.loadingMessageContainer.classList.remove('hidden');
+       let i = 0;
+       this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[i];
+       this.state.loadingInterval = setInterval(() => {
+           i = (i + 1) % CONFIG.LOADING_MESSAGES.length;
+           this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[i];
+       }, 2000);
+   }
 
-    hideLoadingMessages() {
-        clearInterval(this.state.loadingInterval);
-        this.elements.loadingMessageContainer.classList.add('hidden');
-    }
+   hideLoadingMessages() {
+       clearInterval(this.state.loadingInterval);
+       this.elements.loadingMessageContainer.classList.add('hidden');
+   }
 
-    showError(message) {
-        this.elements.errorMessage.classList.remove('hidden');
-        this.elements.errorDetails.textContent = message;
-    }
-    
-    async getAdvice(forceType = null, clickedButton = null) {
-        const situation = this.elements.situationInput.value.trim();
-        if (!situation) { this.showError("Please enter your situation first."); return; }
-        if (this.state.pendingRequest) return;
-        
-        const buttonToLoad = clickedButton || this.elements.askBtn;
+   showError(message) {
+       this.elements.errorMessage.classList.remove('hidden');
+       this.elements.errorDetails.textContent = message;
+   }
+   
+   async getAdvice(forceType = null, clickedButton = null) {
+       const situation = this.elements.situationInput.value.trim();
+       if (!situation) { this.showError("Please enter your situation first."); return; }
+       if (this.state.pendingRequest) return;
+       
+       const buttonToLoad = clickedButton || this.elements.askBtn;
 
-        this.state.lastQuery = situation;
-        this.elements.resultsContainer.innerHTML = '';
-        this.setButtonLoading(true, buttonToLoad);
-        this.showLoadingMessages();
+       this.state.lastQuery = situation;
+       this.elements.resultsContainer.innerHTML = '';
+       this.setButtonLoading(true, buttonToLoad);
+       this.showLoadingMessages();
 
-        try {
-            const body = { situation };
-            if (forceType) body.forceType = forceType;
+       try {
+           const body = { situation };
+           if (forceType) body.forceType = forceType;
 
-            const response = await fetch(CONFIG.API_ENDPOINT, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body),
-            });
-            if (!response.ok) {
-                 const error = new Error(`Server error: ${response.statusText}`);
-                 error.response = response;
-                 throw error;
-            }
-            
-            const data = await response.json();
-            if(data.error) throw new Error(data.message || data.error);
-            
-            this.displayAdvice(data);
+           const response = await fetch(CONFIG.API_ENDPOINT, {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify(body),
+           });
+           if (!response.ok) {
+                const error = new Error(`Server error: ${response.statusText}`);
+                error.response = response;
+                throw error;
+           }
+           
+           const data = await response.json();
+           if(data.error) throw new Error(data.message || data.error);
+           
+           this.displayAdvice(data);
 
-        } catch (error) {
-             console.error('Request failed:', error);
-            if (error.response && typeof error.response.json === 'function') {
-                error.response.json().then(errorData => {
-                    this.showError(errorData.error || "An unknown error occurred.");
-                }).catch(() => {
-                    this.showError(error.message || "An unknown error occurred.");
-                });
-            } else {
-                this.showError(error.message || "An unknown error occurred.");
-            }
-        } finally {
-            this.setButtonLoading(false, buttonToLoad);
-            this.hideLoadingMessages();
-        }
-    }
+       } catch (error) {
+            console.error('Request failed:', error);
+           if (error.response && typeof error.response.json === 'function') {
+               error.response.json().then(errorData => {
+                   this.showError(errorData.error || "An unknown error occurred.");
+               }).catch(() => {
+                   this.showError(error.message || "An unknown error occurred.");
+               });
+           } else {
+               this.showError(error.message || "An unknown error occurred.");
+           }
+       } finally {
+           this.setButtonLoading(false, buttonToLoad);
+           this.hideLoadingMessages();
+       }
+   }
 
-    displayAdvice(data) {
-        const { response_type } = data;
-        let html = '';
+   displayAdvice(data) {
+       const { response_type } = data;
+       let html = '';
 
-        if (response_type === 'news') {
-            html = this.renderNewsAdvice(data);
-        } else if (response_type === 'investment') {
-            html = this.renderMarketAnalysis(data);
-        } else if (response_type === 'prospect') {
-            html = this.renderProspectAdvice(data);
-        } else {
-            html = this.renderGeneralAdvice(data);
-        }
-        
-        this.elements.resultsContainer.innerHTML = html;
-        
-        this.setupInteractiveElements();
+       if (response_type === 'news') {
+           html = this.renderNewsAdvice(data);
+       } else if (response_type === 'investment') {
+           html = this.renderMarketAnalysis(data);
+       } else if (response_type === 'prospect') {
+           html = this.renderProspectAdvice(data);
+       } else {
+           html = this.renderGeneralAdvice(data);
+       }
+       
+       this.elements.resultsContainer.innerHTML = html;
+       
+       this.setupInteractiveElements();
 
-        if (data.mermaid_chart) {
-            this.renderMermaidChart().then(() => {
-                this.setupMermaidDownloadButton();
-            });
-        }
-        this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+       if (data.mermaid_chart) {
+           this.renderMermaidChart().then(() => {
+               this.setupMermaidDownloadButton();
+           });
+       }
+       this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+   }
 
-    renderMarketAnalysis(data) {
-        const {
-            investment_thesis, financial_health, market_position, growth_catalysts,
-            identified_risks, management_outlook, key_financial_metrics, bull_case, bear_case, next_steps
-        } = data;
+   renderMarketAnalysis(data) {
+       const {
+           investment_thesis, financial_health, market_position, growth_catalysts,
+           identified_risks, management_outlook, key_financial_metrics, bull_case, bear_case, next_steps
+       } = data;
 
-        return `
+       return `
+           <div class="results-card">
+               <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
+                   <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                   <h2 class="font-bold text-lg text-brand-blue-text">Market Analysis Summary</h2>
+               </div>
+               <div class="results-card-body space-y-8">
+                   <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">
+                       ${marked.parse(investment_thesis)}
+                   </div>
+
+                   <div>
+                       <h3 class="font-bold mb-3">Key Financial Metrics</h3>
+                       <div class="flex flex-wrap gap-2">
+                           ${key_financial_metrics && key_financial_metrics.length > 0 ? key_financial_metrics.map(metric => `
+                               <span class="text-sm font-medium bg-gray-100 text-gray-800 px-3 py-1.5 rounded-lg">${metric}</span>`
+                           ).join('') : '<p class="text-gray-500 text-sm">None mentioned.</p>'}
+                       </div>
+                   </div>
+
+                   <div class="space-y-3 text-sm">
+                       <p><strong>Financial Health:</strong> ${financial_health || 'Not detailed.'}</p>
+                       <p><strong>Market Position:</strong> ${market_position || 'Not detailed.'}</p>
+                       <p><strong>Management Outlook:</strong> ${management_outlook || 'Not detailed.'}</p>
+                   </div>
+
+                   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                       <div>
+                          <h4 class="font-bold text-green-700 mb-3">Growth Catalysts</h4>
+                          <ul class="space-y-2 text-sm">${growth_catalysts && growth_catalysts.length > 0 ? growth_catalysts.map(c => `<li class="flex gap-2 items-start"><span class="text-green-500 mt-1">▲</span><span>${c}</span></li>`).join('') : '<li>None identified.</li>'}</ul>
+                       </div>
+                       <div>
+                          <h4 class="font-bold text-red-700 mb-3">Identified Risks</h4>
+                          <ul class="space-y-2 text-sm">${identified_risks && identified_risks.length > 0 ? identified_risks.map(r => `<li class="flex gap-2 items-start"><span class="text-red-500 mt-1">▼</span><span>${r}</span></li>`).join('') : '<li>None identified.</li>'}</ul>
+                       </div>
+                   </div>
+
+                   <div>
+                       <h3 class="font-bold mb-3">Bull vs. Bear Case</h3>
+                       <div class="space-y-4">
+                            <div class="p-3 bg-green-50 border-l-4 border-green-400">
+                               <p class="font-bold text-green-800">Bull Case</p>
+                               <p class="text-sm text-gray-700">${bull_case}</p>
+                            </div>
+                            <div class="p-3 bg-red-50 border-l-4 border-red-400">
+                               <p class="font-bold text-red-800">Bear Case</p>
+                               <p class="text-sm text-gray-700">${bear_case}</p>
+                            </div>
+                       </div>
+                   </div>
+                   
+                   <div class="pt-4 border-t">
+                       <p class="text-sm font-bold text-gray-800">${next_steps}</p>
+                   </div>
+                   
+                   <div class="p-3 mt-4 text-xs text-gray-500 bg-gray-50 rounded-lg border border-gray-200">
+                       <strong>Disclaimer:</strong> This content is for informational purposes only and does not constitute financial or investment advice. It is not a recommendation to buy or sell any security. You should always conduct your own research and consult a qualified financial professional before making any investment decisions.
+                   </div>
+               </div>
+           </div>
+       `;
+   }
+   
+   renderGeneralAdvice(data) {
+       const { quick_take, key_moves, mermaid_chart, talking_points, email_template, next_steps, response_type } = data;
+       const title = response_type === 'interview' ? 'Your Interview Plan' : 'Your Game Plan';
+       const talkingPointsTitle = response_type === 'interview' ? 'What They May Ask' : 'Key Questions to Ask';
+
+       return `
+           <div class="results-card">
+               <div class="results-card-header flex items-center gap-4">
+                   <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                   <h2 class="font-bold text-lg text-brand-gray-900">${title}</h2>
+               </div>
+               <div class="results-card-body space-y-8">
+                   <div class="p-4 bg-brand-purple/10 rounded-lg text-brand-purple/90">${marked.parse(quick_take)}</div>
+                   <div>
+                       <h3 class="font-bold mb-3">Your Next 3 Moves</h3>
+                       <div class="space-y-3">${key_moves.map((m, i) => `
+                           <div class="flex gap-3 items-start">
+                               <span class="flex-shrink-0 w-6 h-6 bg-brand-purple text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
+                               <div>
+                                   <p class="font-medium text-gray-900">${m.action}</p>
+                                   <p class="text-sm text-gray-600">${m.why}</p>
+                               </div>
+                           </div>`).join('')}
+                       </div>
+                   </div>
+                   ${mermaid_chart ? `
+                   <div>
+                       <h3 class="font-bold mb-2">Visual Strategy</h3>
+                       <div class="mermaid-container p-4 bg-white border rounded-lg">
+                          <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
+                       </div>
+                       <div class="flex justify-end gap-2 mt-2">
+                          <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
+                       </div>
+                   </div>` : ''}
+                   ${talking_points?.length > 0 ? `
+                   <div>
+                       <h3 class="font-bold mb-2">${talkingPointsTitle}</h3>
+                       <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${talking_points.map(t => `<li>${t}</li>`).join('')}</ul>
+                   </div>
+                   ` : ''}
+                   ${email_template ? `
+                   <div>
+                       <h3 class="font-bold mb-2">Email Template</h3>
+                       <div class="relative">
+                           <div class="copy-target bg-gray-50 rounded-lg p-3 font-mono text-xs text-gray-700 whitespace-pre-wrap border">${email_template}</div>
+                            <button class="copy-btn" title="Copy to clipboard">
+                               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            </button>
+                       </div>
+                   </div>
+                   ` : ''}
+               </div>
+           </div>
+       `;
+   }
+   
+   renderProspectAdvice(data) {
+       const { summary, top_s_is, top_software_and_cloud, company_capabilities, naics_codes, prospect_recommendations } = data;
+       const renderList = (items) => {
+            if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
+            return `<div class="space-y-3">${items.map(item => `
+               <div class="p-3 bg-gray-50 border rounded-md">
+                   <p class="font-bold text-sm text-gray-800">${item.company || 'N/A'}</p>
+                   <p class="text-xs text-gray-600">${item.value || ''}</p>
+               </div>
+            `).join('')}</div>`;
+       };
+
+       return `
             <div class="results-card">
-                <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
-                    <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                    <h2 class="font-bold text-lg text-brand-blue-text">Market Analysis Summary</h2>
-                </div>
-                <div class="results-card-body space-y-6">
-                    <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">
-                        ${marked.parse(investment_thesis)}
-                    </div>
+               <div class="results-card-header flex items-center gap-4 bg-brand-green-bg">
+                   <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                   <h2 class="font-bold text-lg text-brand-green-text">Prospecting Intelligence</h2>
+               </div>
+               <div class="results-card-body space-y-8">
+                   <div class="p-4 bg-brand-green-bg/50 rounded-lg text-brand-green-text">${marked.parse(summary)}</div>
+                   <div>
+                       <h3 class="font-bold mb-3">Top Contractors (SIs)</h3>
+                       ${renderList(top_s_is)}
+                   </div>
+                   <div>
+                       <h3 class="font-bold mb-3">Top Software & Cloud Partners</h3>
+                       ${renderList(top_software_and_cloud)}
+                   </div>
+                   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                       <div>
+                          <h4 class="font-bold text-gray-800 mb-3">Relevant Capabilities</h4>
+                          <ul class="space-y-2 text-sm">${company_capabilities.map(c => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
+                       </div>
+                       <div>
+                          <h4 class="font-bold text-gray-800 mb-3">NAICS Codes</h4>
+                          <ul class="space-y-2 text-sm">${naics_codes.map(n => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${n.code ? `${n.code} - ${n.description}`: n}</li>`).join('')}</ul>
+                       </div>
+                   </div>
+                   <div>
+                       <h3 class="font-bold mb-3">Recommendations</h3>
+                       <div class="p-4 bg-gray-50 border rounded-lg text-sm space-y-2">${prospect_recommendations.map(r => `<p>${r}</p>`).join('')}</div>
+                   </div>
+               </div>
+           </div>
+       `;
+   }
 
-                    <div>
-                        <h3 class="font-semibold mb-2">Key Financial Metrics</h3>
-                        <div class="flex flex-wrap gap-2">
-                            ${key_financial_metrics && key_financial_metrics.length > 0 ? key_financial_metrics.map(metric => `
-                                <span class="text-sm font-medium bg-gray-100 text-gray-800 px-3 py-1.5 rounded-lg">${metric}</span>`
-                            ).join('') : '<p class="text-gray-500 text-sm">None mentioned.</p>'}
-                        </div>
-                    </div>
-
-                    <div class="space-y-3 text-sm">
-                        <p><strong>Financial Health:</strong> ${financial_health || 'Not detailed.'}</p>
-                        <p><strong>Market Position:</strong> ${market_position || 'Not detailed.'}</p>
-                        <p><strong>Management Outlook:</strong> ${management_outlook || 'Not detailed.'}</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                           <h4 class="font-semibold text-green-700 mb-3">Growth Catalysts</h4>
-                           <ul class="space-y-2 text-sm">${growth_catalysts && growth_catalysts.length > 0 ? growth_catalysts.map(c => `<li class="flex gap-2 items-start"><span class="text-green-500 mt-1">▲</span><span>${c}</span></li>`).join('') : '<li>None identified.</li>'}</ul>
-                        </div>
-                        <div>
-                           <h4 class="font-semibold text-red-700 mb-3">Identified Risks</h4>
-                           <ul class="space-y-2 text-sm">${identified_risks && identified_risks.length > 0 ? identified_risks.map(r => `<li class="flex gap-2 items-start"><span class="text-red-500 mt-1">▼</span><span>${r}</span></li>`).join('') : '<li>None identified.</li>'}</ul>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h3 class="font-semibold mb-3">Bull vs. Bear Case</h3>
-                        <div class="space-y-4">
-                             <div class="p-3 bg-green-50 border-l-4 border-green-400">
-                                <p class="font-bold text-green-800">Bull Case</p>
-                                <p class="text-sm text-gray-700">${bull_case}</p>
-                             </div>
-                             <div class="p-3 bg-red-50 border-l-4 border-red-400">
-                                <p class="font-bold text-red-800">Bear Case</p>
-                                <p class="text-sm text-gray-700">${bear_case}</p>
-                             </div>
-                        </div>
-                    </div>
-                    
-                    <div class="pt-4 border-t">
-                        <p class="text-sm font-semibold text-gray-800">${next_steps}</p>
-                    </div>
-                    
-                    <div class="p-3 mt-4 text-xs text-gray-500 bg-gray-50 rounded-lg border border-gray-200">
-                        <strong>Disclaimer:</strong> This content is for informational purposes only and does not constitute financial or investment advice. It is not a recommendation to buy or sell any security. You should always conduct your own research and consult a qualified financial professional before making any investment decisions.
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-    
-    renderGeneralAdvice(data) {
-        const { quick_take, key_moves, mermaid_chart, talking_points, email_template, next_steps, response_type } = data;
-        const title = response_type === 'interview' ? 'Your Interview Plan' : 'Your Game Plan';
-        const talkingPointsTitle = response_type === 'interview' ? 'What They May Ask' : 'Key Questions to Ask';
-
-        return `
-            <div class="results-card">
-                <div class="results-card-header flex items-center gap-4">
-                    <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                    <h2 class="font-bold text-lg text-brand-gray-900">${title}</h2>
-                </div>
-                <div class="results-card-body space-y-6">
-                    <div class="p-4 bg-brand-purple/10 rounded-lg text-brand-purple/90">${marked.parse(quick_take)}</div>
-                    <div>
-                        <h3 class="font-semibold mb-3">Your Next 3 Moves</h3>
-                        <div class="space-y-3">${key_moves.map((m, i) => `
-                            <div class="flex gap-3 items-start">
-                                <span class="flex-shrink-0 w-6 h-6 bg-brand-purple text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
-                                <div>
-                                    <p class="font-medium text-gray-900">${m.action}</p>
-                                    <p class="text-sm text-gray-600">${m.why}</p>
-                                </div>
-                            </div>`).join('')}
-                        </div>
-                    </div>
-                    ${mermaid_chart ? `
-                    <div>
-                        <h3 class="font-semibold mb-2">Visual Strategy</h3>
-                        <div class="mermaid-container p-4 bg-white border rounded-lg">
+   renderNewsAdvice(data) {
+       const { 
+           quick_take, background, implications, suggested_opening_lines, immediate_actions, strategic_moves, mermaid_chart,
+           key_people_and_titles, suggested_discovery_questions, money_keywords 
+       } = data;
+       
+       return `
+           <div class="results-card">
+               <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
+                   <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                   <h2 class="font-bold text-lg text-brand-blue-text">News Analysis Summary</h2>
+               </div>
+               <div class="results-card-body space-y-8">
+                   <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">${marked.parse(quick_take)}</div>
+                   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                       <div>
+                           <h3 class="font-bold mb-3">Key People & Titles</h3>
+                           <div class="space-y-2 text-sm">
+                               ${key_people_and_titles && key_people_and_titles.length > 0 ? key_people_and_titles.map(person => `
+                                   <div class="flex items-center gap-2">
+                                       <svg class="h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
+                                       <span>${person}</span>
+                                   </div>`).join('') : '<p class="text-gray-500">None mentioned.</p>'}
+                           </div>
+                       </div>
+                       <div>
+                           <h3 class="font-bold mb-3">Money Keywords</h3>
+                           <div class="flex flex-wrap gap-2">
+                               ${money_keywords && money_keywords.length > 0 ? money_keywords.map(keyword => `
+                                   <span class="text-xs font-medium bg-green-100 text-green-800 px-2.5 py-1 rounded-full">${keyword}</span>`
+                               ).join('') : '<p class="text-gray-500">No funding keywords found.</p>'}
+                           </div>
+                       </div>
+                   </div>
+                   <div>
+                       <h3 class="font-bold mb-3">Suggested Discovery Questions</h3>
+                       <div class="space-y-2">
+                           ${suggested_discovery_questions && suggested_discovery_questions.length > 0 ? suggested_discovery_questions.map(q => `
+                               <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-800 flex gap-2">
+                                   <span class="font-bold text-brand-purple">Q.</span>
+                                   <span>${q}</span>
+                               </div>`).join('') : '<p class="text-gray-500">No questions suggested.</p>'}
+                       </div>
+                   </div>
+                   <div>
+                       <h3 class="font-bold mb-3">Email Openers</h3>
+                       <div class="space-y-2">${suggested_opening_lines.map((line, i) => `
+                           <div class="relative p-3 bg-gray-50 border rounded-md text-sm text-gray-700">
+                                <span class="copy-target"><strong>Option ${i + 1}:</strong> ${line}</span>
+                                <button class="copy-btn" title="Copy to clipboard">
+                                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                </button>
+                           </div>`).join('')}
+                       </div>
+                   </div>
+                   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                       <div>
+                           <h4 class="font-bold text-gray-800 mb-3">Immediate Actions</h4>
+                           <div class="space-y-3">${immediate_actions.map((action, i) => `
+                               <div class="flex gap-3 items-start">
+                                   <span class="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
+                                   <div>
+                                       <p class="font-medium text-sm text-gray-900">${action.action}</p>
+                                       <p class="text-xs text-gray-600">${action.why}</p>
+                                   </div>
+                               </div>`).join('')}
+                           </div>
+                       </div>
+                       <div>
+                           <h4 class="font-bold text-gray-800 mb-3">Strategic Moves</h4>
+                           <div class="space-y-3">${strategic_moves.map((move, i) => `
+                               <div class="flex gap-3 items-start">
+                                   <span class="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
+                                   <div>
+                                       <p class="font-medium text-sm text-gray-900">${move.action}</p>
+                                       <p class="text-xs text-gray-600">${move.why}</p>
+                                   </div>
+                               </div>`).join('')}
+                           </div>
+                       </div>
+                   </div>
+                   ${mermaid_chart ? `
+                   <div>
+                       <h3 class="font-bold mb-2">GTM Flow</h3>
+                       <div class="mermaid-container p-4 bg-white border rounded-lg">
                            <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                        </div>
-                        <div class="flex justify-end gap-2 mt-2">
-                           <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
-                        </div>
-                    </div>` : ''}
-                    ${talking_points?.length > 0 ? `
-                    <div>
-                        <h3 class="font-semibold mb-2">${talkingPointsTitle}</h3>
-                        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${talking_points.map(t => `<li>${t}</li>`).join('')}</ul>
-                    </div>
-                    ` : ''}
-                    ${email_template ? `
-                    <div>
-                        <h3 class="font-semibold mb-2">Email Template</h3>
-                        <div class="relative">
-                            <div class="copy-target bg-gray-50 rounded-lg p-3 font-mono text-xs text-gray-700 whitespace-pre-wrap border">${email_template}</div>
-                             <button class="copy-btn" title="Copy to clipboard">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                             </button>
-                        </div>
-                    </div>
-                    ` : ''}
-                </div>
-            </div>
-        `;
-    }
-    
-    renderProspectAdvice(data) {
-        const { summary, top_s_is, top_software_and_cloud, company_capabilities, naics_codes, prospect_recommendations } = data;
-        const renderList = (items) => {
-             if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
-             return `<div class="space-y-3">${items.map(item => `
-                <div class="p-3 bg-gray-50 border rounded-md">
-                    <p class="font-semibold text-sm text-gray-800">${item.company || 'N/A'}</p>
-                    <p class="text-xs text-gray-600">${item.value || ''}</p>
-                </div>
-             `).join('')}</div>`;
-        };
+                       </div>
+                       <div class="flex justify-end gap-2 mt-2">
+                          <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
+                       </div>
+                   </div>` : ''}
+               </div>
+           </div>
+       `;
+   }
 
-        return `
-             <div class="results-card">
-                <div class="results-card-header flex items-center gap-4 bg-brand-green-bg">
-                    <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                    <h2 class="font-bold text-lg text-brand-green-text">Prospecting Intelligence</h2>
-                </div>
-                <div class="results-card-body space-y-6">
-                    <div class="p-4 bg-brand-green-bg/50 rounded-lg text-brand-green-text">${marked.parse(summary)}</div>
-                    <div>
-                        <h3 class="font-semibold mb-3">Top Contractors (SIs)</h3>
-                        ${renderList(top_s_is)}
-                    </div>
-                    <div>
-                        <h3 class="font-semibold mb-3">Top Software & Cloud Partners</h3>
-                        ${renderList(top_software_and_cloud)}
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                           <h4 class="font-semibold text-gray-800 mb-3">Relevant Capabilities</h4>
-                           <ul class="space-y-2 text-sm">${company_capabilities.map(c => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
-                        </div>
-                        <div>
-                           <h4 class="font-semibold text-gray-800 mb-3">NAICS Codes</h4>
-                           <ul class="space-y-2 text-sm">${naics_codes.map(n => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${n.code ? `${n.code} - ${n.description}`: n}</li>`).join('')}</ul>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold mb-3">Recommendations</h3>
-                        <div class="p-4 bg-gray-50 border rounded-lg text-sm space-y-2">${prospect_recommendations.map(r => `<p>${r}</p>`).join('')}</div>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
+   setupInteractiveElements() {
+       this.setupCopyButtons();
+   }
 
-    renderNewsAdvice(data) {
-        const { 
-            quick_take, background, implications, suggested_opening_lines, immediate_actions, strategic_moves, mermaid_chart,
-            key_people_and_titles, suggested_discovery_questions, money_keywords 
-        } = data;
-        
-        return `
-            <div class="results-card">
-                <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
-                    <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                    <h2 class="font-bold text-lg text-brand-blue-text">News Analysis Summary</h2>
-                </div>
-                <div class="results-card-body space-y-6">
-                    <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">${marked.parse(quick_take)}</div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <h3 class="font-semibold mb-3">Key People & Titles</h3>
-                            <div class="space-y-2 text-sm">
-                                ${key_people_and_titles && key_people_and_titles.length > 0 ? key_people_and_titles.map(person => `
-                                    <div class="flex items-center gap-2">
-                                        <svg class="h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
-                                        <span>${person}</span>
-                                    </div>`).join('') : '<p class="text-gray-500">None mentioned.</p>'}
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold mb-3">Money Keywords</h3>
-                            <div class="flex flex-wrap gap-2">
-                                ${money_keywords && money_keywords.length > 0 ? money_keywords.map(keyword => `
-                                    <span class="text-xs font-medium bg-green-100 text-green-800 px-2.5 py-1 rounded-full">${keyword}</span>`
-                                ).join('') : '<p class="text-gray-500">No funding keywords found.</p>'}
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold mb-3">Suggested Discovery Questions</h3>
-                        <div class="space-y-2">
-                            ${suggested_discovery_questions && suggested_discovery_questions.length > 0 ? suggested_discovery_questions.map(q => `
-                                <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-800 flex gap-2">
-                                    <span class="font-bold text-brand-purple">Q.</span>
-                                    <span>${q}</span>
-                                </div>`).join('') : '<p class="text-gray-500">No questions suggested.</p>'}
-                        </div>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold mb-3">Email Openers</h3>
-                        <div class="space-y-2">${suggested_opening_lines.map((line, i) => `
-                            <div class="relative p-3 bg-gray-50 border rounded-md text-sm text-gray-700">
-                                 <span class="copy-target"><strong>Option ${i + 1}:</strong> ${line}</span>
-                                 <button class="copy-btn" title="Copy to clipboard">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                                 </button>
-                            </div>`).join('')}
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <h4 class="font-semibold text-gray-800 mb-3">Immediate Actions</h4>
-                            <div class="space-y-3">${immediate_actions.map((action, i) => `
-                                <div class="flex gap-3 items-start">
-                                    <span class="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
-                                    <div>
-                                        <p class="font-medium text-sm text-gray-900">${action.action}</p>
-                                        <p class="text-xs text-gray-600">${action.why}</p>
-                                    </div>
-                                </div>`).join('')}
-                            </div>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-gray-800 mb-3">Strategic Moves</h4>
-                            <div class="space-y-3">${strategic_moves.map((move, i) => `
-                                <div class="flex gap-3 items-start">
-                                    <span class="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
-                                    <div>
-                                        <p class="font-medium text-sm text-gray-900">${move.action}</p>
-                                        <p class="text-xs text-gray-600">${move.why}</p>
-                                    </div>
-                                </div>`).join('')}
-                            </div>
-                        </div>
-                    </div>
-                    ${mermaid_chart ? `
-                    <div>
-                        <h3 class="font-semibold mb-2">GTM Flow</h3>
-                        <div class="mermaid-container p-4 bg-white border rounded-lg">
-                            <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                        </div>
-                        <div class="flex justify-end gap-2 mt-2">
-                           <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
-                        </div>
-                    </div>` : ''}
-                </div>
-            </div>
-        `;
-    }
+   setupCopyButtons() {
+       const copyButtons = this.elements.resultsContainer.querySelectorAll('.copy-btn');
+       copyButtons.forEach(btn => {
+           btn.addEventListener('click', (e) => {
+               const target = e.currentTarget.parentElement.querySelector('.copy-target');
+               if (target) {
+                   navigator.clipboard.writeText(target.innerText).then(() => {
+                       // Add copied state
+                       const originalContent = e.currentTarget.innerHTML;
+                       e.currentTarget.classList.add('copied');
+                       e.currentTarget.innerHTML = `
+                           <svg class="checkmark" viewBox="0 0 24 24">
+                               <path d="M9 12l2 2 4-4"></path>
+                           </svg>
+                           <span>Copied!</span>
+                       `;
+                       
+                       // Add flash animation to parent
+                       const parent = e.currentTarget.parentElement;
+                       parent.classList.add('copy-flash');
+                       
+                       // Reset after 2 seconds
+                       setTimeout(() => {
+                           e.currentTarget.classList.remove('copied');
+                           e.currentTarget.innerHTML = originalContent;
+                           parent.classList.remove('copy-flash');
+                       }, 2000);
+                   }).catch(err => {
+                       console.error('Failed to copy text: ', err);
+                   });
+               }
+           });
+       });
+   }
 
-    setupInteractiveElements() {
-        this.setupCopyButtons();
-    }
+   setupMermaidDownloadButton() {
+       const downloadPngBtn = document.getElementById('download-png-btn');
 
-    setupCopyButtons() {
-        const copyButtons = this.elements.resultsContainer.querySelectorAll('.copy-btn');
-        copyButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const target = e.currentTarget.parentElement.querySelector('.copy-target');
-                if (target) {
-                    navigator.clipboard.writeText(target.innerText).then(() => {
-                        const originalText = e.currentTarget.innerHTML;
-                        e.currentTarget.innerHTML = 'Copied!';
-                        setTimeout(() => {
-                            e.currentTarget.innerHTML = originalText;
-                        }, 2000);
-                    }).catch(err => {
-                        console.error('Failed to copy text: ', err);
-                    });
-                }
-            });
-        });
-    }
+       if (downloadPngBtn) {
+           downloadPngBtn.addEventListener('click', () => this.downloadMermaidAsPNG());
+       }
+   }
 
-    setupMermaidDownloadButton() {
-        const downloadPngBtn = document.getElementById('download-png-btn');
+   downloadMermaidAsPNG() {
+       const mermaidContainer = document.querySelector('.mermaid-container');
+       if (!mermaidContainer || typeof html2canvas === 'undefined') {
+           console.error("Mermaid container or html2canvas library not found.");
+           return;
+       }
+       html2canvas(mermaidContainer, { backgroundColor: '#ffffff' }).then(canvas => {
+           const a = document.createElement("a");
+           a.href = canvas.toDataURL("image/png");
+           a.download = "askarti-diagram.png";
+           document.body.appendChild(a);
+           a.click();
+           document.body.removeChild(a);
+       });
+   }
 
-        if (downloadPngBtn) {
-            downloadPngBtn.addEventListener('click', () => this.downloadMermaidAsPNG());
-        }
-    }
+   async renderMermaidChart() {
+       try {
+           await mermaid.run({
+               nodes: document.querySelectorAll('.mermaid'),
+           });
+       } catch (error) {
+           console.error('Mermaid rendering error:', error);
+           const container = document.querySelector('.mermaid-container');
+           if (container) container.innerHTML = '<p class="text-red-500 text-sm">Could not render visual plan.</p>';
+       }
+   }
 
-    downloadMermaidAsPNG() {
-        const mermaidContainer = document.querySelector('.mermaid-container');
-        if (!mermaidContainer || typeof html2canvas === 'undefined') {
-            console.error("Mermaid container or html2canvas library not found.");
-            return;
-        }
-        html2canvas(mermaidContainer, { backgroundColor: '#ffffff' }).then(canvas => {
-            const a = document.createElement("a");
-            a.href = canvas.toDataURL("image/png");
-            a.download = "askarti-diagram.png";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        });
-    }
-
-    async renderMermaidChart() {
-        try {
-            await mermaid.run({
-                nodes: document.querySelectorAll('.mermaid'),
-            });
-        } catch (error) {
-            console.error('Mermaid rendering error:', error);
-            const container = document.querySelector('.mermaid-container');
-            if (container) container.innerHTML = '<p class="text-red-500 text-sm">Could not render visual plan.</p>';
-        }
-    }
-
-    showModal() { 
-        this.elements.aboutModal.classList.remove('hidden'); 
-    }
-    
-    hideModal() { 
-        this.elements.aboutModal.classList.add('hidden'); 
-    }
+   showModal() { 
+       this.elements.aboutModal.classList.remove('hidden'); 
+   }
+   
+   hideModal() { 
+       this.elements.aboutModal.classList.add('hidden'); 
+   }
 }
 
-const app = new AskArti();
+// Initialize the app when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+   const app = new AskArti();
+});
 </script>
 </body>
 </html>
