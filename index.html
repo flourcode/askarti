@@ -206,6 +206,12 @@
         background-color: #F9FAFB;
         border-color: #9CA3AF;
     }
+    /* NEW: Style for recommended button */
+    .btn-recommended {
+        border-width: 2px;
+        border-color: var(--brand-purple);
+        box-shadow: 0 4px 12px rgba(124, 107, 190, 0.2);
+    }
     .copy-btn {
         position: absolute;
         top: 0.5rem;
@@ -231,6 +237,10 @@
         width: 1.25rem;
         height: 1.25rem;
         animation: spin 1s linear infinite;
+    }
+    .btn-secondary .loader {
+        border-color: rgba(0, 0, 0, 0.1);
+        border-top-color: var(--brand-purple);
     }
     @keyframes spin {
         0% { transform: rotate(0deg); }
@@ -296,7 +306,7 @@
                         </button>
                     </div>
                     <div class="text-xs text-gray-500 mt-1.5 flex justify-between"><span class="hint-text">For deeper insights, paste a full article or snippet, then click the News or Market Analysis button.</span>
-    <span id="char-count">0/2000</span>
+    <span id="char-count">0/2500</span>
 </div>
 
                     <div class="mt-4">
@@ -346,11 +356,14 @@ meaningful ways to make customers’ lives easier and better every day.”" data
                             <div id="loader" class="loader hidden"></div>
                         </button>
                         <button id="news-btn" class="btn btn-secondary w-full sm:w-auto" title="For best results, paste the full text of a press release or news article.">
+                            <div class="loader hidden"></div>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg><span id="news-btn-text">News Analysis</span>
                         </button>
-                        <button id="investment-btn" class="btn btn-secondary w-full sm:w-auto" title="For best results, paste the full text of a press release or market news. This feature does not work with stock symbols alone."><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <button id="investment-btn" class="btn btn-secondary w-full sm:w-auto" title="For best results, paste the full text of a press release or market news. This feature does not work with stock symbols alone.">
+                            <div class="loader hidden"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
     <span>Market Analysis</span>
@@ -542,34 +555,81 @@ class AskArti {
         }
     }
 
+    /* NEW: Function to check input and recommend a button */
+    updateRecommendedButton() {
+        const text = this.elements.situationInput.value.toLowerCase();
+        const investmentKeywords = /invest|sec filing|press release|earnings|10-k|10-q|financial/i;
+        const newsKeywords = /news|announcement|acquisition|partnership|contract award/i;
+
+        // Reset all buttons first
+        this.elements.newsBtn.classList.remove('btn-recommended');
+        this.elements.investmentBtn.classList.remove('btn-recommended');
+
+        if (text.length < 100) return; // Don't highlight for short text
+
+        if (investmentKeywords.test(text)) {
+            this.elements.investmentBtn.classList.add('btn-recommended');
+        } else if (newsKeywords.test(text)) {
+            this.elements.newsBtn.classList.add('btn-recommended');
+        }
+    }
+
     clearInput() {
         this.elements.situationInput.value = '';
         this.updateCharCount();
+        this.updateRecommendedButton(); // Also reset recommendation
         this.elements.situationInput.focus();
     }
 
     setupEventListeners() {
-        this.elements.situationInput.addEventListener('input', () => this.updateCharCount());
+        this.elements.situationInput.addEventListener('input', () => {
+            this.updateCharCount();
+            this.updateRecommendedButton(); // Call recommendation logic on input
+        });
+		this.elements.situationInput.addEventListener('focus', () => {
+        // When the user taps in, check if the button should be shown.
+        this.updateCharCount();
+    });
+
+    this.elements.situationInput.addEventListener('blur', () => {
+        // When the user taps away, always hide the button.
+        this.elements.clearBtn.classList.remove('show');
+    });
         this.elements.clearBtn.addEventListener('click', () => this.clearInput());
 
-        this.elements.quickPromptBtns.forEach(btn => {
+this.elements.quickPromptBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
-        const target = e.currentTarget;
-        this.elements.situationInput.value = target.dataset.text;
+        const button = e.currentTarget;
+        const analysisType = button.dataset.type || null; // Will be 'news', 'investment', or null
+
+        // Determine which button should show the loader
+        let buttonToLoad;
+        if (analysisType === 'news') {
+            buttonToLoad = this.elements.newsBtn;
+        } else if (analysisType === 'investment') {
+            buttonToLoad = this.elements.investmentBtn;
+        } else {
+            buttonToLoad = this.elements.askBtn; // Default to 'Game Plan' button
+        }
+
+        // Paste the text from the data-text attribute
+        this.elements.situationInput.value = button.dataset.text;
         this.updateCharCount();
-        const analysisType = target.dataset.type || null;
-        this.getAdvice(analysisType);
+        this.updateRecommendedButton();
+
+        // Call the advice function with the correct type and target button
+        this.getAdvice(analysisType, buttonToLoad);
     });
 });
 
-        this.elements.askBtn.addEventListener('click', () => this.getAdvice());
-        this.elements.newsBtn.addEventListener('click', () => this.getAdvice('news'));
-        this.elements.investmentBtn.addEventListener('click', () => this.getAdvice('investment'));
+        this.elements.askBtn.addEventListener('click', (e) => this.getAdvice(null, e.currentTarget));
+        this.elements.newsBtn.addEventListener('click', (e) => this.getAdvice('news', e.currentTarget));
+        this.elements.investmentBtn.addEventListener('click', (e) => this.getAdvice('investment', e.currentTarget));
         
         this.elements.situationInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                this.getAdvice();
+                this.getAdvice(null, this.elements.askBtn);
             }
         });
 
@@ -677,22 +737,29 @@ class AskArti {
         }
     }
 
-    setLoading(loading) {
+    setButtonLoading(loading, clickedButton) {
         this.state.pendingRequest = loading;
         this.elements.errorMessage.classList.add('hidden');
 
-        if (loading) {
-            this.elements.btnText.classList.add('hidden');
-            this.elements.loader.classList.remove('hidden');
-            this.elements.askBtn.disabled = true;
-            this.elements.newsBtn.disabled = true;
-            this.elements.investmentBtn.disabled = true;
+        // Always disable all buttons to prevent multiple clicks
+        this.elements.askBtn.disabled = loading;
+        this.elements.newsBtn.disabled = loading;
+        this.elements.investmentBtn.disabled = loading;
+
+        if (loading && clickedButton) {
+            // Hide text/svg and show loader ONLY on the clicked button
+            const childrenToHide = clickedButton.querySelectorAll('span, svg');
+            const loader = clickedButton.querySelector('.loader');
+            childrenToHide.forEach(el => el.classList.add('hidden'));
+            if (loader) loader.classList.remove('hidden');
         } else {
-            this.elements.btnText.classList.remove('hidden');
-            this.elements.loader.classList.add('hidden');
-            this.elements.askBtn.disabled = false;
-            this.elements.newsBtn.disabled = false;
-            this.elements.investmentBtn.disabled = false;
+            // Restore all buttons to their original state
+            [this.elements.askBtn, this.elements.newsBtn, this.elements.investmentBtn].forEach(btn => {
+                 const childrenToShow = btn.querySelectorAll('span, svg');
+                 const loader = btn.querySelector('.loader');
+                 childrenToShow.forEach(el => el.classList.remove('hidden'));
+                 if(loader) loader.classList.add('hidden');
+            });
         }
     }
 
@@ -714,18 +781,18 @@ class AskArti {
     showError(message) {
         this.elements.errorMessage.classList.remove('hidden');
         this.elements.errorDetails.textContent = message;
-        this.setLoading(false);
     }
     
-    async getAdvice(forceType = null) {
+    async getAdvice(forceType = null, clickedButton = null) {
         const situation = this.elements.situationInput.value.trim();
         if (!situation) { this.showError("Please enter your situation first."); return; }
         if (this.state.pendingRequest) return;
         
-        this.state.pendingRequest = true;
+        const buttonToLoad = clickedButton || this.elements.askBtn;
+
         this.state.lastQuery = situation;
         this.elements.resultsContainer.innerHTML = '';
-        this.setLoading(true);
+        this.setButtonLoading(true, buttonToLoad);
         this.showLoadingMessages();
 
         try {
@@ -760,7 +827,7 @@ class AskArti {
                 this.showError(error.message || "An unknown error occurred.");
             }
         } finally {
-            this.setLoading(false);
+            this.setButtonLoading(false, buttonToLoad);
             this.hideLoadingMessages();
         }
     }
