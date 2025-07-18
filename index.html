@@ -1062,12 +1062,22 @@ setupAutoExpand() {
     };
 
     return `
-        <div class="results-card">
-            <div class="results-card-header">
-                <h2 class="font-bold text-xl text-gray-900">${sales_play_title}</h2>
-                <p class="text-gray-600 text-sm mt-1">Sales Playbook</p>
+    <div class="results-card">
+        <div class="results-card-header">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="font-bold text-xl text-gray-900">${sales_play_title}</h2>
+                    <p class="text-gray-600 text-sm mt-1">Sales Playbook</p>
+                </div>
+                <button class="copy-playbook-btn btn btn-secondary text-xs py-2 px-3" title="Copy entire playbook">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                    Copy Playbook
+                </button>
             </div>
-            <div class="results-card-body space-y-6">
+        </div>
+        <div class="results-card-body space-y-6" id="playbook-content">
                 
                 <!-- Executive Summary -->
                 <div class="border-l-4 border-brand-purple pl-4 py-2">
@@ -1144,6 +1154,67 @@ setupAutoExpand() {
     `;
 }
 
+setupCopyPlaybookButton() {
+    const copyBtn = document.querySelector('.copy-playbook-btn');
+    if (!copyBtn) return;
+
+    copyBtn.addEventListener('click', () => {
+        const playbookContent = document.getElementById('playbook-content');
+        if (!playbookContent) return;
+
+        // Create clean text version
+        const cleanText = this.convertPlaybookToText(playbookContent);
+        
+        navigator.clipboard.writeText(cleanText).then(() => {
+            const originalContent = copyBtn.innerHTML;
+            copyBtn.classList.add('copied');
+            copyBtn.innerHTML = `
+                <svg class="checkmark w-4 h-4 mr-1" viewBox="0 0 24 24">
+                    <path d="M9 12l2 2 4-4"></path>
+                </svg>
+                Copied!
+            `;
+            
+            setTimeout(() => {
+                copyBtn.classList.remove('copied');
+                copyBtn.innerHTML = originalContent;
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy playbook: ', err);
+        });
+    });
+}
+
+convertPlaybookToText(element) {
+    const title = document.querySelector('.results-card-header h2')?.textContent || 'Sales Playbook';
+    let text = `${title}\n${'='.repeat(title.length)}\n\n`;
+    
+    // Process each section
+    const sections = element.querySelectorAll('h3, h4, h5');
+    sections.forEach(section => {
+        const sectionTitle = section.textContent.trim();
+        text += `${sectionTitle}\n${'-'.repeat(sectionTitle.length)}\n`;
+        
+        // Get content after this heading until next heading
+        let nextElement = section.nextElementSibling;
+        while (nextElement && !['H3', 'H4', 'H5'].includes(nextElement.tagName)) {
+            if (nextElement.tagName === 'UL') {
+                const items = nextElement.querySelectorAll('li');
+                items.forEach(item => {
+                    text += `• ${item.textContent.trim()}\n`;
+                });
+            } else if (nextElement.tagName === 'P' || nextElement.classList.contains('border-l-4')) {
+                text += `${nextElement.textContent.trim()}\n`;
+            } else if (nextElement.classList.contains('border-l-3')) {
+                text += `  ${nextElement.textContent.trim()}\n`;
+            }
+            nextElement = nextElement.nextElementSibling;
+        }
+        text += '\n';
+    });
+    
+    return text;
+}
    renderMarketAnalysis(data) {
        const {
            investment_thesis, financial_health, market_position, growth_catalysts,
@@ -1415,6 +1486,7 @@ setupAutoExpand() {
 
   setupInteractiveElements() {
       this.setupCopyButtons();
+	  this.setupCopyPlaybookButton();
   }
 
   setupCopyButtons() {
