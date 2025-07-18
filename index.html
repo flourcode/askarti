@@ -440,6 +440,19 @@
     .space-y-6 > * + * { margin-top: 1rem; }
     .space-y-8 > * + * { margin-top: 1.25rem; }
 }
+/* Auto-expanding textarea */
+.auto-expand {
+    min-height: calc(2 * 1.5em + 1.5rem); /* 2 rows + padding */
+    max-height: calc(6 * 1.5em + 1.5rem); /* 6 rows + padding */
+    transition: height 0.2s ease;
+    overflow-y: hidden;
+    resize: none;
+}
+
+.auto-expand.scrollable {
+    overflow-y: auto;
+    transition: none; /* Remove transition when scrolling is needed */
+}
 </style>
 
 </head>
@@ -462,8 +475,8 @@
                     <div class="textarea-container">
                         <textarea 
     id="situation-input" 
-    rows="3"
-    class="w-full p-3 pr-12 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-brand-purple resize-none placeholder-gray-500"
+    rows="2"
+    class="w-full p-3 pr-12 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-brand-purple resize-none placeholder-gray-500 auto-expand"
     placeholder='e.g., "Create a sales playbook for selling AI services to HHS." Or start with a sample prompt.'
     maxlength="2500"></textarea>
 <button id="clear-btn" class="clear-btn" title="Clear input" aria-label="Clear input">
@@ -684,20 +697,21 @@ class AskArti {
 }
 
  init() {
-     updateGreetings();
-     
-     mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'base', themeVariables: {
-           primaryColor: '#F3F4F6',
-           primaryTextColor: '#1F2937',
-           primaryBorderColor: '#D1D5DB',
-           lineColor: '#6B7280',
-           textColor: '#111827',
-           fontSize: '14px'
-     }});
-     this.setupEventListeners();
-     this.elements.situationInput.focus();
-     this.updateCharCount();
- }
+    updateGreetings();
+    
+    mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'base', themeVariables: {
+          primaryColor: '#F3F4F6',
+          primaryTextColor: '#1F2937',
+          primaryBorderColor: '#D1D5DB',
+          lineColor: '#6B7280',
+          textColor: '#111827',
+          fontSize: '14px'
+    }});
+    this.setupEventListeners();
+    this.setupAutoExpand(); // Add this line
+    this.elements.situationInput.focus();
+    this.updateCharCount();
+}
 
    updateCharCount() {
        if (!this.elements.situationInput) return;
@@ -715,10 +729,12 @@ class AskArti {
    
 
    clearInput() {
-       this.elements.situationInput.value = '';
-       this.updateCharCount();
-       this.elements.situationInput.focus();
-   }
+    this.elements.situationInput.value = '';
+    this.elements.situationInput.style.height = 'auto'; // Reset height
+    this.elements.situationInput.classList.remove('scrollable');
+    this.updateCharCount();
+    this.elements.situationInput.focus();
+}
 
    setupEventListeners() {
     this.elements.situationInput.addEventListener('input', () => {
@@ -774,6 +790,39 @@ class AskArti {
     });
 }
 
+setupAutoExpand() {
+    const textarea = this.elements.situationInput;
+    
+    const adjustHeight = () => {
+        // Reset height to auto to get the correct scrollHeight
+        textarea.style.height = 'auto';
+        
+        const minHeight = parseFloat(getComputedStyle(textarea).lineHeight) * 2 + 24; // 2 rows + padding
+        const maxHeight = parseFloat(getComputedStyle(textarea).lineHeight) * 6 + 24; // 6 rows + padding
+        
+        let newHeight = Math.max(minHeight, textarea.scrollHeight);
+        
+        if (newHeight > maxHeight) {
+            newHeight = maxHeight;
+            textarea.classList.add('scrollable');
+        } else {
+            textarea.classList.remove('scrollable');
+        }
+        
+        textarea.style.height = newHeight + 'px';
+    };
+    
+    // Adjust on input
+    textarea.addEventListener('input', adjustHeight);
+    
+    // Adjust on paste (with slight delay to ensure content is pasted)
+    textarea.addEventListener('paste', () => {
+        setTimeout(adjustHeight, 10);
+    });
+    
+    // Initial adjustment
+    adjustHeight();
+}
    switchMode(mode) {
        this.state.currentMode = mode;
        this.elements.resultsContainer.innerHTML = '';
