@@ -33,7 +33,6 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script> 
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WLGEPY5H4G"></script>
     <script>
@@ -453,34 +452,6 @@
 .auto-expand.scrollable {
     overflow-y: auto;
     transition: none; /* Remove transition when scrolling is needed */
-}
-/* Mobile playbook improvements */
-@media (max-width: 768px) {
-    .copy-playbook-btn {
-        padding: 0.5rem 0.75rem;
-        font-size: 0.75rem;
-    }
-    
-    .copy-playbook-btn svg {
-        width: 1rem;
-        height: 1rem;
-        margin-right: 0.25rem;
-    }
-    
-    .results-card-header .flex {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
-    }
-    
-    .results-card-header .flex > div:first-child {
-        flex: 1;
-    }
-    
-    .copy-playbook-btn {
-        align-self: stretch;
-        justify-content: center;
-    }
 }
 </style>
 
@@ -1052,160 +1023,134 @@ setupAutoExpand() {
         risk_mitigation, next_actions 
     } = data;
 
-    const renderList = (items, icon = '') => {
-        if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available.</p>';
-        return items.map(item => `
-            <li class="flex items-start">
-                ${icon ? `<div class="flex-shrink-0 w-5 h-5 mr-3 mt-1">${icon}</div>` : ''}
-                <span class="text-sm text-gray-700 leading-relaxed">${item}</span>
-            </li>
-        `).join('');
-    };
+    const renderList = (items) => items.map(item => `<li class="text-sm text-gray-700 leading-relaxed">${item}</li>`).join('');
     
     const renderPersonas = (personas) => {
-    if (!personas || personas.length === 0) return '<p class="text-sm text-gray-500">No persona data available.</p>';
-    
-    // Use accordion on mobile, tabs on desktop
-    return `
-        <div x-data="{ activeTab: 0, isMobile: window.innerWidth < 768 }" x-init="isMobile = window.innerWidth < 768; window.addEventListener('resize', () => isMobile = window.innerWidth < 768)">
-            <!-- Desktop Tabs -->
-            <div x-show="!isMobile" class="hidden md:block">
-                <div class="flex border-b border-gray-200 overflow-x-auto">
-                    ${personas.map((p, index) => `
-                        <button @click="activeTab = ${index}" :class="{ 'border-brand-purple text-brand-purple': activeTab === ${index}, 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== ${index} }" class="py-4 px-4 text-center border-b-2 font-medium text-sm whitespace-nowrap flex-shrink-0">${p.persona_title}</button>
-                    `).join('')}
+        if (!personas || personas.length === 0) return '<p class="text-sm text-gray-500">No persona data available.</p>';
+        return personas.map((p, index) => `
+            <div class="bg-white border border-gray-200 rounded-lg p-4 mb-4">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-8 h-8 bg-brand-purple text-white rounded-full flex items-center justify-center text-sm font-bold">${index + 1}</div>
+                    <h4 class="font-bold text-lg text-gray-900">${p.persona_title}</h4>
                 </div>
-                ${personas.map((p, index) => `
-                    <div x-show="activeTab === ${index}" class="pt-4 space-y-4">
-                        ${renderPersonaContent(p)}
+                
+                <div class="space-y-4">
+                    <div>
+                        <h5 class="font-semibold text-gray-800 mb-2">Business Priorities</h5>
+                        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 ml-2">${renderList(p.business_priorities)}</ul>
                     </div>
-                `).join('')}
-            </div>
-            
-            <!-- Mobile Accordion -->
-            <div x-show="isMobile" class="md:hidden space-y-4">
-                ${personas.map((p, index) => `
-                    <div class="border border-gray-200 rounded-lg">
-                        <button @click="activeTab = activeTab === ${index} ? -1 : ${index}" class="w-full px-4 py-3 text-left font-medium text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-t-lg flex items-center justify-between">
-                            <span>${p.persona_title}</span>
-                            <svg :class="{ 'rotate-180': activeTab === ${index} }" class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        <div x-show="activeTab === ${index}" x-collapse class="px-4 py-4 space-y-4">
-                            ${renderPersonaContent(p)}
+                    
+                    <div>
+                        <h5 class="font-semibold text-gray-800 mb-2">Conversation Starters</h5>
+                        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 ml-2">${renderList(p.conversation_starters)}</ul>
+                    </div>
+                    
+                    <div>
+                        <h5 class="font-semibold text-gray-800 mb-2">Objections & Responses</h5>
+                        <div class="space-y-3">
+                            ${p.objections_responses.map(o => `
+                                <div class="border-l-3 border-gray-300 pl-4 py-2">
+                                    <p class="font-medium text-gray-800 text-sm mb-1"><strong>Objection:</strong> "${o.objection}"</p>
+                                    <p class="text-gray-600 text-sm"><strong>Response:</strong> ${o.response}</p>
+                                </div>
+                            `).join('')}
                         </div>
                     </div>
-                `).join('')}
-            </div>
-        </div>
-    `;
-};
-
-const renderPersonaContent = (p) => `
-    <div>
-        <h5 class="font-semibold text-gray-800 mb-2">Business Priorities</h5>
-        <ul class="space-y-1">${renderList(p.business_priorities, '<svg class="w-5 h-5 text-brand-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002-2h2a2 2 0 002 2h-4M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>')}</ul>
-    </div>
-    <div>
-        <h5 class="font-semibold text-gray-800 mb-2">Conversation Starters</h5>
-        <ul class="space-y-1">${renderList(p.conversation_starters, '<svg class="w-5 h-5 text-brand-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>')}</ul>
-    </div>
-    <div>
-        <h5 class="font-semibold text-gray-800 mb-2">Objections & Responses</h5>
-        <div class="space-y-3">
-            ${p.objections_responses.map(o => `
-                <div class="border-l-4 border-gray-300 pl-4 py-2">
-                    <p class="font-medium text-gray-800 text-sm mb-1"><strong>Objection:</strong> "${o.objection}"</p>
-                    <p class="text-gray-600 text-sm"><strong>Response:</strong> ${o.response}</p>
                 </div>
-            `).join('')}
-        </div>
-    </div>
-`;
+            </div>
+        `).join('');
+    };
 
     return `
-<div class="results-card">
-    <div class="results-card-header bg-gray-50">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-sm font-semibold text-brand-purple">Sales Playbook</p>
-                <h2 class="font-bold text-xl text-gray-900 mt-1">${sales_play_title}</h2>
+    <div class="results-card">
+        <div class="results-card-header">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="font-bold text-xl text-gray-900">${sales_play_title}</h2>
+                    <p class="text-gray-600 text-sm mt-1">Sales Playbook</p>
+                </div>
+                <button class="copy-playbook-btn btn btn-secondary text-xs py-2 px-3" title="Copy entire playbook">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                    Copy Playbook
+                </button>
             </div>
-            <button class="copy-playbook-btn btn btn-secondary text-xs py-2 px-3" title="Copy entire playbook">
-                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                </svg>
-                Copy Playbook
-            </button>
         </div>
-    </div>
-    <div class="results-card-body space-y-8" id="playbook-content">
+        <div class="results-card-body space-y-6" id="playbook-content">
                 
+                <!-- Executive Summary -->
                 <div class="border-l-4 border-brand-purple pl-4 py-2">
                     <h3 class="font-bold text-gray-900 mb-2">Executive Summary</h3>
                     <p class="text-gray-700 leading-relaxed">${sales_play_summary}</p>
                 </div>
 
+                <!-- Key Metrics -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-gray-50 rounded-lg p-4">
+                    <div class="border border-gray-200 rounded-lg p-4">
                         <h3 class="font-bold text-gray-900 mb-3">Success Metrics</h3>
-                        <ul class="space-y-2">${renderList(success_metrics || ['Define success metrics'], '<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>')}</ul>
+                        <ul class="list-disc list-inside space-y-2">${renderList(success_metrics || ['Define success metrics'])}</ul>
                     </div>
-                    <div class="bg-gray-50 rounded-lg p-4">
+                    <div class="border border-gray-200 rounded-lg p-4">
                         <h3 class="font-bold text-gray-900 mb-3">Timeline Milestones</h3>
-                        <ul class="space-y-2">${renderList(timeline_milestones || ['Define timeline'], '<svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>')}</ul>
+                        <ul class="list-disc list-inside space-y-2">${renderList(timeline_milestones || ['Define timeline'])}</ul>
                     </div>
                 </div>
 
+                <!-- Competitive Positioning -->
                 ${competitive_positioning ? `
-                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
-                    <h3 class="font-bold text-yellow-800 mb-2">Competitive Positioning</h3>
-                    <p class="text-yellow-700 leading-relaxed">${competitive_positioning}</p>
+                <div class="border-l-4 border-yellow-400 pl-4 py-2">
+                    <h3 class="font-bold text-gray-900 mb-2">Competitive Positioning</h3>
+                    <p class="text-gray-700 leading-relaxed">${competitive_positioning}</p>
                 </div>
                 ` : ''}
 
+                <!-- Solution Components -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <h3 class="font-bold text-gray-900 mb-3">Key Services</h3>
-                        <ul class="space-y-2">${renderList(key_services)}</ul>
+                        <ul class="list-disc list-inside space-y-2">${renderList(key_services)}</ul>
                     </div>
                     <div>
                         <h3 class="font-bold text-gray-900 mb-3">Strategic Partners</h3>
-                        <ul class="space-y-2">${renderList(key_partners)}</ul>
+                        <ul class="list-disc list-inside space-y-2">${renderList(key_partners)}</ul>
                     </div>
                 </div>
 
-                <div class="bg-white border border-gray-200 rounded-lg p-4">
+                <!-- Stakeholder Guide -->
+                <div>
                     <h3 class="font-bold text-lg text-gray-900 mb-4">Stakeholder Guide</h3>
-                    ${renderPersonas(target_personas)}
+                    <div class="space-y-4">
+                        ${renderPersonas(target_personas)}
+                    </div>
                 </div>
 
+                <!-- Additional Insights -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     ${insider_tips ? `
-                    <div class="bg-gray-50 rounded-lg p-4">
+                    <div class="border border-gray-200 rounded-lg p-4">
                         <h3 class="font-bold text-gray-900 mb-3">Insider Tips</h3>
-                        <ul class="space-y-2">${renderList(insider_tips, '<svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>')}</ul>
+                        <ul class="list-disc list-inside space-y-2">${renderList(insider_tips)}</ul>
                     </div>
                     ` : ''}
                     
                     ${risk_mitigation ? `
-                    <div class="bg-red-50 rounded-lg p-4">
-                        <h3 class="font-bold text-red-800 mb-3">Risk Mitigation</h3>
-                        <ul class="space-y-2">${renderList(risk_mitigation, '<svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>')}</ul>
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h3 class="font-bold text-gray-900 mb-3">Risk Mitigation</h3>
+                        <ul class="list-disc list-inside space-y-2">${renderList(risk_mitigation)}</ul>
                     </div>
                     ` : ''}
                 </div>
 
+                <!-- Next Actions -->
                 ${next_actions ? `
-                <div class="border-2 border-brand-purple rounded-lg p-4 bg-brand-purple/5">
+                <div class="border-2 border-brand-purple rounded-lg p-4">
                     <h3 class="font-bold text-gray-900 mb-3">Next 7 Days</h3>
-                    <ul class="space-y-2">${renderList(next_actions, '<svg class="w-5 h-5 text-brand-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>')}</ul>
+                    <ul class="list-decimal list-inside space-y-2">${renderList(next_actions)}</ul>
                 </div>
                 ` : ''}
             </div>
         </div>
-    </div>
     `;
 }
 
@@ -1241,71 +1186,34 @@ setupCopyPlaybookButton() {
 }
 
 convertPlaybookToText(element) {
-    let text = '';
     const title = document.querySelector('.results-card-header h2')?.textContent || 'Sales Playbook';
-    text += `${title}\n${'='.repeat(title.length)}\n\n`;
-
-    // Get all direct children of playbook-content
-    const sections = element.children;
-
-    for (const section of sections) {
-        // Skip Alpine.js hidden elements
-        if (section.style.display === 'none' || section.hasAttribute('x-show')) {
-            continue;
-        }
-
-        const heading = section.querySelector('h3');
-        if (!heading) continue;
-
-        const sectionTitle = heading.textContent.trim();
-        text += `## ${sectionTitle}\n\n`;
-
-        // Handle different section types
-        if (sectionTitle === 'Stakeholder Guide') {
-            // Extract persona data directly from the data structure if available
-            // Or get visible content
-            const visiblePersonaContent = section.querySelectorAll('[x-show]:not([style*="display: none"])');
-            if (visiblePersonaContent.length === 0) {
-                // Fallback: get all persona data
-                const allPersonaContent = section.querySelectorAll('h5');
-                allPersonaContent.forEach(h5 => {
-                    const subTitle = h5.textContent.trim();
-                    text += `**${subTitle}:**\n`;
-                    const nextEl = h5.nextElementSibling;
-                    if (nextEl) {
-                        const items = nextEl.querySelectorAll('li');
-                        items.forEach(item => {
-                            const itemText = item.textContent.replace(/^\s*[\u2022\u25CF]\s*/, '').trim();
-                            text += `- ${itemText}\n`;
-                        });
-                    }
-                    text += '\n';
-                });
-            }
-        } else {
-            // Handle regular sections
-            const paragraphs = section.querySelectorAll('p');
-            paragraphs.forEach(p => {
-                if (p.textContent.trim() && !p.textContent.includes('text-sm')) {
-                    text += `${p.textContent.trim()}\n\n`;
-                }
-            });
-
-            const lists = section.querySelectorAll('ul');
-            lists.forEach(list => {
-                const items = list.querySelectorAll('li');
-                items.forEach(item => {
-                    const itemText = item.textContent.replace(/^\s*[\u2022\u25CF]\s*/, '').trim();
-                    if (itemText) {
-                        text += `- ${itemText}\n`;
-                    }
-                });
-                text += '\n';
-            });
-        }
-    }
+    let text = `${title}\n${'='.repeat(title.length)}\n\n`;
     
-    return text.trim();
+    // Process each section
+    const sections = element.querySelectorAll('h3, h4, h5');
+    sections.forEach(section => {
+        const sectionTitle = section.textContent.trim();
+        text += `${sectionTitle}\n${'-'.repeat(sectionTitle.length)}\n`;
+        
+        // Get content after this heading until next heading
+        let nextElement = section.nextElementSibling;
+        while (nextElement && !['H3', 'H4', 'H5'].includes(nextElement.tagName)) {
+            if (nextElement.tagName === 'UL') {
+                const items = nextElement.querySelectorAll('li');
+                items.forEach(item => {
+                    text += `• ${item.textContent.trim()}\n`;
+                });
+            } else if (nextElement.tagName === 'P' || nextElement.classList.contains('border-l-4')) {
+                text += `${nextElement.textContent.trim()}\n`;
+            } else if (nextElement.classList.contains('border-l-3')) {
+                text += `  ${nextElement.textContent.trim()}\n`;
+            }
+            nextElement = nextElement.nextElementSibling;
+        }
+        text += '\n';
+    });
+    
+    return text;
 }
    renderMarketAnalysis(data) {
        const {
