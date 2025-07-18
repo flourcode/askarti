@@ -464,7 +464,7 @@
     id="situation-input" 
     rows="3"
     class="w-full p-3 pr-12 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-brand-purple resize-none placeholder-gray-500"
-    placeholder='e.g., Prospect for cyber opps at DHS. Or you can start with the sample prompts below and modify them.'
+    placeholder='e.g., "Create a sales playbook for selling AI services to HHS." Or start with a sample prompt.'
     maxlength="2500"></textarea>
 <button id="clear-btn" class="clear-btn" title="Clear input" aria-label="Clear input">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -519,7 +519,11 @@ meaningful ways to make customers' lives easier and better every day."" data-typ
                     </div>
 
                     <div class="mt-4 border-t border-gray-200 pt-4 flex flex-col sm:flex-row gap-3">
-                        <button id="ask-btn" class="btn btn-primary w-full sm:w-auto flex-1">
+                        <button id="playbook-btn" class="btn btn-primary w-full sm:w-auto flex-1">
+                            <span id="playbook-btn-text">📖 Create Playbook</span>
+                            <div class="loader hidden"></div>
+                        </button>
+                        <button id="ask-btn" class="btn btn-secondary w-full sm:w-auto">
                             <span id="btn-text">⚡️ Game Plan</span>
                             <div id="loader" class="loader hidden"></div>
                         </button>
@@ -558,14 +562,14 @@ meaningful ways to make customers' lives easier and better every day."" data-typ
                         </button>
                     </div>
                 </div>
-            </div>
+				</div>
        </main>
 
         <div id="loading-message-container" class="text-center py-6 hidden">
             <p id="loading-message" class="text-gray-600 font-medium"></p>
         </div>
         <div id="error-message" class="bg-red-100 border border-red-300 rounded-lg p-4 text-center my-6 hidden">
-            <p class="text-red-800 font-semibold mb-1">¯\_(ツ)_/¯ Oops, that didn’t work.</p>
+            <p class="text-red-800 font-semibold mb-1">¯\_(ツ)_/¯ Oops, that didn't work.</p>
             <p class="text-red-700 text-sm" id="error-details">We're having trouble connecting to Arti.</p>
         </div>
 
@@ -590,7 +594,7 @@ meaningful ways to make customers' lives easier and better every day."" data-typ
         <a href="mailto:mark@subhoo.com" class="font-medium text-brand-purple hover:underline">Contact</a>
     </div>
     <p class="mb-3 text-gray-600">
-    You’re interacting with an AI assistant trained through June 2024. AskArti offers general guidance for informational purposes only and isn’t a substitute for professional advice. Always evaluate recommendations carefully before making decisions.
+    You're interacting with an AI assistant trained through June 2024. AskArti offers general guidance for informational purposes only and isn't a substitute for professional advice. Always evaluate recommendations carefully before making decisions.
 </p>
     <p>
         For Federal Sellers by Federal Sellers.
@@ -647,7 +651,6 @@ function updateGreetings() {
    }
    
    if (chatGreeting) {
-       // Extract just the greeting part for chat
        const chatText = greeting.replace('Hey, I\'m Arti!', 'I\'m Arti.');
        chatGreeting.textContent = `${chatText} I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.`;
    }
@@ -705,6 +708,7 @@ class AskArti {
      return {
          situationInput: document.getElementById('situation-input'),
          clearBtn: document.getElementById('clear-btn'),
+         playbookBtn: document.getElementById('playbook-btn'),
          askBtn: document.getElementById('ask-btn'),
          newsBtn: document.getElementById('news-btn'),
          investmentBtn: document.getElementById('investment-btn'),
@@ -730,7 +734,6 @@ class AskArti {
  }
 
  init() {
-     // Initialize time-based greetings
      updateGreetings();
      
      mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'base', themeVariables: {
@@ -752,7 +755,6 @@ class AskArti {
        const max = CONFIG.MAX_INPUT_LENGTH;
        this.elements.charCount.textContent = `${current}/${max}`;
        
-       // Show/hide clear button based on content
        if (current > 0) {
            this.elements.clearBtn.classList.add('show');
        } else {
@@ -760,17 +762,15 @@ class AskArti {
        }
    }
 
-   /* Function to check input and recommend a button */
    updateRecommendedButton() {
        const text = this.elements.situationInput.value.toLowerCase();
        const investmentKeywords = /invest|sec filing|press release|earnings|10-k|10-q|financial/i;
        const newsKeywords = /news|announcement|acquisition|partnership|contract award/i;
 
-       // Reset all buttons first
        this.elements.newsBtn.classList.remove('btn-recommended');
        this.elements.investmentBtn.classList.remove('btn-recommended');
 
-       if (text.length < 100) return; // Don't highlight for short text
+       if (text.length < 100) return;
 
        if (investmentKeywords.test(text)) {
            this.elements.investmentBtn.classList.add('btn-recommended');
@@ -811,7 +811,7 @@ this.elements.quickPromptBtns.forEach(btn => {
        } else if (analysisType === 'investment') {
            buttonToLoad = this.elements.investmentBtn;
        } else {
-           buttonToLoad = this.elements.askBtn;
+           buttonToLoad = this.elements.playbookBtn;
        }
 
        this.elements.situationInput.value = button.dataset.text;
@@ -822,6 +822,7 @@ this.elements.quickPromptBtns.forEach(btn => {
    });
 });
 
+       this.elements.playbookBtn.addEventListener('click', (e) => this.getAdvice('playbook', e.currentTarget));
        this.elements.askBtn.addEventListener('click', (e) => this.getAdvice(null, e.currentTarget));
        this.elements.newsBtn.addEventListener('click', (e) => this.getAdvice('news', e.currentTarget));
        this.elements.investmentBtn.addEventListener('click', (e) => this.getAdvice('investment', e.currentTarget));
@@ -829,7 +830,7 @@ this.elements.quickPromptBtns.forEach(btn => {
        this.elements.situationInput.addEventListener('keydown', (e) => {
            if (e.key === 'Enter' && !e.shiftKey) {
                e.preventDefault();
-               this.getAdvice(null, this.elements.askBtn);
+               this.getAdvice('playbook', this.elements.playbookBtn);
            }
        });
 
@@ -941,23 +942,20 @@ this.elements.quickPromptBtns.forEach(btn => {
        this.state.pendingRequest = loading;
        this.elements.errorMessage.classList.add('hidden');
 
-       this.elements.askBtn.disabled = loading;
-       this.elements.newsBtn.disabled = loading;
-       this.elements.investmentBtn.disabled = loading;
+       const allButtons = [this.elements.playbookBtn, this.elements.askBtn, this.elements.newsBtn, this.elements.investmentBtn];
+       allButtons.forEach(btn => {
+           btn.disabled = loading;
+           const childrenToHide = btn.querySelectorAll('span, svg');
+           const loader = btn.querySelector('.loader');
 
-       if (loading && clickedButton) {
-           const childrenToHide = clickedButton.querySelectorAll('span, svg');
-           const loader = clickedButton.querySelector('.loader');
-           childrenToHide.forEach(el => el.classList.add('hidden'));
-           if (loader) loader.classList.remove('hidden');
-       } else {
-           [this.elements.askBtn, this.elements.newsBtn, this.elements.investmentBtn].forEach(btn => {
-                const childrenToShow = btn.querySelectorAll('span, svg');
-                const loader = btn.querySelector('.loader');
-                childrenToShow.forEach(el => el.classList.remove('hidden'));
-                if(loader) loader.classList.add('hidden');
-           });
-       }
+           if (loading && btn === clickedButton) {
+               childrenToHide.forEach(el => el.classList.add('hidden'));
+               if (loader) loader.classList.remove('hidden');
+           } else {
+               childrenToHide.forEach(el => el.classList.remove('hidden'));
+               if (loader) loader.classList.add('hidden');
+           }
+       });
    }
 
    showLoadingMessages() {
@@ -985,7 +983,7 @@ this.elements.quickPromptBtns.forEach(btn => {
     if (!situation) { this.showError("Please type or paste something into the box above."); return; }
     if (this.state.pendingRequest) return;
     
-    const buttonToLoad = clickedButton || this.elements.askBtn;
+    const buttonToLoad = clickedButton || this.elements.playbookBtn;
 
     this.state.lastQuery = situation;
     this.elements.resultsContainer.innerHTML = '';
@@ -1031,7 +1029,9 @@ this.elements.quickPromptBtns.forEach(btn => {
        const { response_type } = data;
        let html = '';
 
-       if (response_type === 'news') {
+       if (response_type === 'playbook') {
+           html = this.renderSalesPlaybook(data);
+       } else if (response_type === 'news') {
            html = this.renderNewsAdvice(data);
        } else if (response_type === 'investment') {
            html = this.renderMarketAnalysis(data);
@@ -1052,6 +1052,71 @@ this.elements.quickPromptBtns.forEach(btn => {
        }
        this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
    }
+
+   renderSalesPlaybook(data) {
+    const { sales_play_title, sales_play_summary, key_services, key_partners, target_personas } = data;
+
+    const renderList = (items) => items.map(item => `<li class="text-sm text-gray-700">${item}</li>`).join('');
+
+    const renderPersonas = (personas) => {
+        if (!personas || personas.length === 0) return '<p class="text-sm text-gray-500">No persona data available.</p>';
+        return personas.map(p => `
+            <div class="bg-white border border-gray-200 rounded-lg p-4">
+                <h4 class="font-bold text-md text-brand-purple mb-3">${p.persona_title}</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                    <div>
+                        <h5 class="font-semibold text-gray-700 mb-2">Business Priorities</h5>
+                        <ul class="list-disc list-inside space-y-1">${renderList(p.business_priorities)}</ul>
+                    </div>
+                    <div>
+                        <h5 class="font-semibold text-gray-700 mb-2">Conversation Starters</h5>
+                        <ul class="list-disc list-inside space-y-1">${renderList(p.conversation_starters)}</ul>
+                    </div>
+                    <div>
+                        <h5 class="font-semibold text-gray-700 mb-2">Objections & Responses</h5>
+                        <div class="space-y-3">
+                        ${p.objections_responses.map(o => `
+                            <div>
+                                <p class="font-medium text-gray-800"><strong>Objection:</strong> ${o.objection}</p>
+                                <p class="text-gray-600"><strong>Response:</strong> ${o.response}</p>
+                            </div>
+                        `).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    };
+
+    return `
+        <div class="results-card">
+            <div class="results-card-header bg-brand-purple/10">
+                <h2 class="font-bold text-xl text-brand-purple">${sales_play_title}</h2>
+            </div>
+            <div class="results-card-body space-y-6">
+                <div>
+                    <p class="text-gray-800">${sales_play_summary}</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-bold mb-2">Key Services</h3>
+                        <ul class="space-y-1 list-disc list-inside">${renderList(key_services)}</ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold mb-2">Key Partners</h3>
+                        <ul class="space-y-1 list-disc list-inside">${renderList(key_partners)}</ul>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-3 text-lg">Target Personas & Conversation Starters</h3>
+                    <div class="space-y-4">
+                        ${renderPersonas(target_personas)}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
 
    renderMarketAnalysis(data) {
        const {
@@ -1140,275 +1205,272 @@ this.elements.quickPromptBtns.forEach(btn => {
                        <div class="space-y-3">${key_moves.map((m, i) => `
                            <div class="flex gap-3 items-start">
                                <span class="flex-shrink-0 w-6 h-6 bg-brand-purple text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
-                               <div>
-                                   <p class="font-medium text-gray-900">${m.action}</p>
-                                   <p class="text-sm text-gray-600">${m.why}</p>
-                               </div>
-                           </div>`).join('')}
-                       </div>
-                   </div>
-                   ${mermaid_chart ? `
-                   <div>
-                       <h3 class="font-bold mb-2">Visual Strategy</h3>
-                       <div class="mermaid-container p-4 bg-white border rounded-lg">
-                          <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                       </div>
-                       <div class="flex justify-end gap-2 mt-2">
-                          <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
-                       </div>
-                   </div>` : ''}
-                   ${talking_points?.length > 0 ? `
-                   <div>
-                       <h3 class="font-bold mb-2">${talkingPointsTitle}</h3>
-                       <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${talking_points.map(t => `<li>${t}</li>`).join('')}</ul>
-                   </div>
-                   ` : ''}
-                   ${email_template ? `
-                   <div>
-                       <h3 class="font-bold mb-2">Email Template</h3>
-                       <div class="relative">
-                           <div class="copy-target bg-gray-50 rounded-lg p-3 font-mono text-xs text-gray-700 whitespace-pre-wrap border">${email_template}</div>
-                            <button class="copy-btn" title="Copy to clipboard">
-                               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                            </button>
-                       </div>
-                   </div>
-                   ` : ''}
-               </div>
-           </div>
-       `;
-   }
-   
-   renderProspectAdvice(data) {
-       const { summary, top_s_is, top_software_and_cloud, company_capabilities, naics_codes, prospect_recommendations } = data;
-       const renderList = (items) => {
-            if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
-            return `<div class="space-y-3">${items.map(item => `
-               <div class="p-3 bg-gray-50 border rounded-md">
-                   <p class="font-bold text-sm text-gray-800">${item.company || 'N/A'}</p>
-                   <p class="text-xs text-gray-600">${item.value || ''}</p>
-               </div>
-            `).join('')}</div>`;
-       };
+                              <div>
+                                  <p class="font-medium text-gray-900">${m.action}</p>
+                                  <p class="text-sm text-gray-600">${m.why}</p>
+                              </div>
+                          </div>`).join('')}
+                      </div>
+                  </div>
+                  ${mermaid_chart ? `
+                  <div>
+                      <h3 class="font-bold mb-2">Visual Strategy</h3>
+                      <div class="mermaid-container p-4 bg-white border rounded-lg">
+                         <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
+                      </div>
+                      <div class="flex justify-end gap-2 mt-2">
+                         <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
+                      </div>
+                  </div>` : ''}
+                  ${talking_points?.length > 0 ? `
+                  <div>
+                      <h3 class="font-bold mb-2">${talkingPointsTitle}</h3>
+                      <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${talking_points.map(t => `<li>${t}</li>`).join('')}</ul>
+                  </div>
+                  ` : ''}
+                  ${email_template ? `
+                  <div>
+                      <h3 class="font-bold mb-2">Email Template</h3>
+                      <div class="relative">
+                          <div class="copy-target bg-gray-50 rounded-lg p-3 font-mono text-xs text-gray-700 whitespace-pre-wrap border">${email_template}</div>
+                           <button class="copy-btn" title="Copy to clipboard">
+                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                           </button>
+                      </div>
+                  </div>
+                  ` : ''}
+              </div>
+          </div>
+      `;
+  }
+  
+  renderProspectAdvice(data) {
+      const { summary, top_s_is, top_software_and_cloud, company_capabilities, naics_codes, prospect_recommendations } = data;
+      const renderList = (items) => {
+           if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
+           return `<div class="space-y-3">${items.map(item => `
+              <div class="p-3 bg-gray-50 border rounded-md">
+                  <p class="font-bold text-sm text-gray-800">${item.company || 'N/A'}</p>
+                  <p class="text-xs text-gray-600">${item.value || ''}</p>
+              </div>
+           `).join('')}</div>`;
+      };
 
-       return `
-            <div class="results-card">
-               <div class="results-card-header flex items-center gap-4 bg-brand-green-bg">
-                   <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                   <h2 class="font-bold text-lg text-brand-green-text">Prospecting Intelligence</h2>
-               </div>
-               <div class="results-card-body space-y-8">
-                   <div class="p-4 bg-brand-green-bg/50 rounded-lg text-brand-green-text">${marked.parse(summary)}</div>
-                   <div>
-                       <h3 class="font-bold mb-3">Top Contractors (SIs)</h3>
-                       ${renderList(top_s_is)}
-                   </div>
-                   <div>
-                       <h3 class="font-bold mb-3">Top Software & Cloud Partners</h3>
-                       ${renderList(top_software_and_cloud)}
-                   </div>
-                   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                       <div>
-                          <h4 class="font-bold text-gray-800 mb-3">Relevant Capabilities</h4>
-                          <ul class="space-y-2 text-sm">${company_capabilities.map(c => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
-                       </div>
-                       <div>
-                          <h4 class="font-bold text-gray-800 mb-3">NAICS Codes</h4>
-                          <ul class="space-y-2 text-sm">${naics_codes.map(n => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${n.code ? `${n.code} - ${n.description}`: n}</li>`).join('')}</ul>
-                       </div>
-                   </div>
-                   <div>
-                       <h3 class="font-bold mb-3">Recommendations</h3>
-                       <div class="p-4 bg-gray-50 border rounded-lg text-sm space-y-2">${prospect_recommendations.map(r => `<p>${r}</p>`).join('')}</div>
-                   </div>
-               </div>
-           </div>
-       `;
-   }
-
-   renderNewsAdvice(data) {
-       const { 
-           quick_take, background, implications, suggested_opening_lines, immediate_actions, strategic_moves, mermaid_chart,
-           key_people_and_titles, suggested_discovery_questions, money_keywords 
-       } = data;
-       
-       return `
+      return `
            <div class="results-card">
-               <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
-                   <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                   <h2 class="font-bold text-lg text-brand-blue-text">News Analysis Summary</h2>
-               </div>
-               <div class="results-card-body space-y-8">
-                   <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">${marked.parse(quick_take)}</div>
-                   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                       <div>
-                           <h3 class="font-bold mb-3">Key People & Titles</h3>
-                           <div class="space-y-2 text-sm">
-                               ${key_people_and_titles && key_people_and_titles.length > 0 ? key_people_and_titles.map(person => `
-                                   <div class="flex items-center gap-2">
-                                       <svg class="h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
-                                       <span>${person}</span>
-                                   </div>`).join('') : '<p class="text-gray-500">None mentioned.</p>'}
-                           </div>
-                       </div>
-                       <div>
-                           <h3 class="font-bold mb-3">Money Keywords</h3>
-                           <div class="flex flex-wrap gap-2">
-                               ${money_keywords && money_keywords.length > 0 ? money_keywords.map(keyword => `
-                                   <span class="text-xs font-medium bg-green-100 text-green-800 px-2.5 py-1 rounded-full">${keyword}</span>`
-                               ).join('') : '<p class="text-gray-500">No funding keywords found.</p>'}
-                           </div>
-                       </div>
-                   </div>
-                   <div>
-                       <h3 class="font-bold mb-3">Suggested Discovery Questions</h3>
-                       <div class="space-y-2">
-                           ${suggested_discovery_questions && suggested_discovery_questions.length > 0 ? suggested_discovery_questions.map(q => `
-                               <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-800 flex gap-2">
-                                   <span class="font-bold text-brand-purple">Q.</span>
-                                   <span>${q}</span>
-                               </div>`).join('') : '<p class="text-gray-500">No questions suggested.</p>'}
-                       </div>
-                   </div>
-                   <div>
-                       <h3 class="font-bold mb-3">Email Openers</h3>
-                       <div class="space-y-2">${suggested_opening_lines.map((line, i) => `
-                           <div class="relative p-3 bg-gray-50 border rounded-md text-sm text-gray-700">
-                                <span class="copy-target"><strong>Option ${i + 1}:</strong> ${line}</span>
-                                <button class="copy-btn" title="Copy to clipboard">
-                                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                                </button>
-                           </div>`).join('')}
-                       </div>
-                   </div>
-                   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                       <div>
-                           <h4 class="font-bold text-gray-800 mb-3">Immediate Actions</h4>
-                           <div class="space-y-3">${immediate_actions.map((action, i) => `
-                               <div class="flex gap-3 items-start">
-                                   <span class="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
-                                   <div>
-                                       <p class="font-medium text-sm text-gray-900">${action.action}</p>
-                                       <p class="text-xs text-gray-600">${action.why}</p>
-                                   </div>
-                               </div>`).join('')}
-                           </div>
-                       </div>
-                       <div>
-                           <h4 class="font-bold text-gray-800 mb-3">Strategic Moves</h4>
-                           <div class="space-y-3">${strategic_moves.map((move, i) => `
-                               <div class="flex gap-3 items-start">
-                                   <span class="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
-                                   <div>
-                                       <p class="font-medium text-sm text-gray-900">${move.action}</p>
-                                       <p class="text-xs text-gray-600">${move.why}</p>
-                                   </div>
-                               </div>`).join('')}
-                           </div>
-                       </div>
-                   </div>
-                   ${mermaid_chart ? `
-                   <div>
-                       <h3 class="font-bold mb-2">GTM Flow</h3>
-                       <div class="mermaid-container p-4 bg-white border rounded-lg">
-                           <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                       </div>
-                       <div class="flex justify-end gap-2 mt-2">
-                          <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
-                       </div>
-                   </div>` : ''}
-               </div>
-           </div>
-       `;
-   }
+              <div class="results-card-header flex items-center gap-4 bg-brand-green-bg">
+                  <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                  <h2 class="font-bold text-lg text-brand-green-text">Prospecting Intelligence</h2>
+              </div>
+              <div class="results-card-body space-y-8">
+                  <div class="p-4 bg-brand-green-bg/50 rounded-lg text-brand-green-text">${marked.parse(summary)}</div>
+                  <div>
+                      <h3 class="font-bold mb-3">Top Contractors (SIs)</h3>
+                      ${renderList(top_s_is)}
+                  </div>
+                  <div>
+                      <h3 class="font-bold mb-3">Top Software & Cloud Partners</h3>
+                      ${renderList(top_software_and_cloud)}
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                         <h4 class="font-bold text-gray-800 mb-3">Relevant Capabilities</h4>
+                         <ul class="space-y-2 text-sm">${company_capabilities.map(c => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
+                      </div>
+                      <div>
+                         <h4 class="font-bold text-gray-800 mb-3">NAICS Codes</h4>
+                         <ul class="space-y-2 text-sm">${naics_codes.map(n => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${n.code ? `${n.code} - ${n.description}`: n}</li>`).join('')}</ul>
+                      </div>
+                  </div>
+                  <div>
+                      <h3 class="font-bold mb-3">Recommendations</h3>
+                      <div class="p-4 bg-gray-50 border rounded-lg text-sm space-y-2">${prospect_recommendations.map(r => `<p>${r}</p>`).join('')}</div>
+                  </div>
+              </div>
+          </div>
+      `;
+  }
 
-   setupInteractiveElements() {
-       this.setupCopyButtons();
-   }
+  renderNewsAdvice(data) {
+      const { 
+          quick_take, background, implications, suggested_opening_lines, immediate_actions, strategic_moves, mermaid_chart,
+          key_people_and_titles, suggested_discovery_questions, money_keywords 
+      } = data;
+      
+      return `
+          <div class="results-card">
+              <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
+                  <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                  <h2 class="font-bold text-lg text-brand-blue-text">News Analysis Summary</h2>
+              </div>
+              <div class="results-card-body space-y-8">
+                  <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">${marked.parse(quick_take)}</div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                          <h3 class="font-bold mb-3">Key People & Titles</h3>
+                          <div class="space-y-2 text-sm">
+                              ${key_people_and_titles && key_people_and_titles.length > 0 ? key_people_and_titles.map(person => `
+                                  <div class="flex items-center gap-2">
+                                      <svg class="h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
+                                      <span>${person}</span>
+                                  </div>`).join('') : '<p class="text-gray-500">None mentioned.</p>'}
+                          </div>
+                      </div>
+                      <div>
+                          <h3 class="font-bold mb-3">Money Keywords</h3>
+                          <div class="flex flex-wrap gap-2">
+                              ${money_keywords && money_keywords.length > 0 ? money_keywords.map(keyword => `
+                                  <span class="text-xs font-medium bg-green-100 text-green-800 px-2.5 py-1 rounded-full">${keyword}</span>`
+                              ).join('') : '<p class="text-gray-500">No funding keywords found.</p>'}
+                          </div>
+                      </div>
+                  </div>
+                  <div>
+                      <h3 class="font-bold mb-3">Suggested Discovery Questions</h3>
+                      <div class="space-y-2">
+                          ${suggested_discovery_questions && suggested_discovery_questions.length > 0 ? suggested_discovery_questions.map(q => `
+                              <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-800 flex gap-2">
+                                  <span class="font-bold text-brand-purple">Q.</span>
+                                  <span>${q}</span>
+                              </div>`).join('') : '<p class="text-gray-500">No questions suggested.</p>'}
+                      </div>
+                  </div>
+                  <div>
+                      <h3 class="font-bold mb-3">Email Openers</h3>
+                      <div class="space-y-2">${suggested_opening_lines.map((line, i) => `
+                          <div class="relative p-3 bg-gray-50 border rounded-md text-sm text-gray-700">
+                               <span class="copy-target"><strong>Option ${i + 1}:</strong> ${line}</span>
+                               <button class="copy-btn" title="Copy to clipboard">
+                                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                               </button>
+                          </div>`).join('')}
+                      </div>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                          <h4 class="font-bold text-gray-800 mb-3">Immediate Actions</h4>
+                          <div class="space-y-3">${immediate_actions.map((action, i) => `
+                              <div class="flex gap-3 items-start">
+                                  <span class="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
+                                  <div>
+                                      <p class="font-medium text-sm text-gray-900">${action.action}</p>
+                                      <p class="text-xs text-gray-600">${action.why}</p>
+                                  </div>
+                              </div>`).join('')}
+                          </div>
+                      </div>
+                      <div>
+                          <h4 class="font-bold text-gray-800 mb-3">Strategic Moves</h4>
+                          <div class="space-y-3">${strategic_moves.map((move, i) => `
+                              <div class="flex gap-3 items-start">
+                                  <span class="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
+                                  <div>
+                                      <p class="font-medium text-sm text-gray-900">${move.action}</p>
+                                      <p class="text-xs text-gray-600">${move.why}</p>
+                                  </div>
+                              </div>`).join('')}
+                          </div>
+                      </div>
+                  </div>
+                  ${mermaid_chart ? `
+                  <div>
+                      <h3 class="font-bold mb-2">GTM Flow</h3>
+                      <div class="mermaid-container p-4 bg-white border rounded-lg">
+                          <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
+                      </div>
+                      <div class="flex justify-end gap-2 mt-2">
+                         <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
+                      </div>
+                  </div>` : ''}
+              </div>
+          </div>
+      `;
+  }
 
-   setupCopyButtons() {
-       const copyButtons = this.elements.resultsContainer.querySelectorAll('.copy-btn');
-       copyButtons.forEach(btn => {
-           btn.addEventListener('click', (e) => {
-               const target = e.currentTarget.parentElement.querySelector('.copy-target');
-               if (target) {
-                   navigator.clipboard.writeText(target.innerText).then(() => {
-                       // Add copied state
-                       const originalContent = e.currentTarget.innerHTML;
-                       e.currentTarget.classList.add('copied');
-                       e.currentTarget.innerHTML = `
-                           <svg class="checkmark" viewBox="0 0 24 24">
-                               <path d="M9 12l2 2 4-4"></path>
-                           </svg>
-                           <span>Copied!</span>
-                       `;
-                       
-                       // Add flash animation to parent
-                       const parent = e.currentTarget.parentElement;
-                       parent.classList.add('copy-flash');
-                       
-                       // Reset after 2 seconds
-                       setTimeout(() => {
-                           e.currentTarget.classList.remove('copied');
-                           e.currentTarget.innerHTML = originalContent;
-                           parent.classList.remove('copy-flash');
-                       }, 2000);
-                   }).catch(err => {
-                       console.error('Failed to copy text: ', err);
-                   });
-               }
-           });
-       });
-   }
+  setupInteractiveElements() {
+      this.setupCopyButtons();
+  }
 
-   setupMermaidDownloadButton() {
-       const downloadPngBtn = document.getElementById('download-png-btn');
+  setupCopyButtons() {
+      const copyButtons = this.elements.resultsContainer.querySelectorAll('.copy-btn');
+      copyButtons.forEach(btn => {
+          btn.addEventListener('click', (e) => {
+              const target = e.currentTarget.parentElement.querySelector('.copy-target');
+              if (target) {
+                  navigator.clipboard.writeText(target.innerText).then(() => {
+                      const originalContent = e.currentTarget.innerHTML;
+                      e.currentTarget.classList.add('copied');
+                      e.currentTarget.innerHTML = `
+                          <svg class="checkmark" viewBox="0 0 24 24">
+                              <path d="M9 12l2 2 4-4"></path>
+                          </svg>
+                          <span>Copied!</span>
+                      `;
+                      
+                      const parent = e.currentTarget.parentElement;
+                      parent.classList.add('copy-flash');
+                      
+                      setTimeout(() => {
+                          e.currentTarget.classList.remove('copied');
+                          e.currentTarget.innerHTML = originalContent;
+                          parent.classList.remove('copy-flash');
+                      }, 2000);
+                  }).catch(err => {
+                      console.error('Failed to copy text: ', err);
+                  });
+              }
+          });
+      });
+  }
 
-       if (downloadPngBtn) {
-           downloadPngBtn.addEventListener('click', () => this.downloadMermaidAsPNG());
-       }
-   }
+  setupMermaidDownloadButton() {
+      const downloadPngBtn = document.getElementById('download-png-btn');
 
-   downloadMermaidAsPNG() {
-       const mermaidContainer = document.querySelector('.mermaid-container');
-       if (!mermaidContainer || typeof html2canvas === 'undefined') {
-           console.error("Mermaid container or html2canvas library not found.");
-           return;
-       }
-       html2canvas(mermaidContainer, { backgroundColor: '#ffffff' }).then(canvas => {
-           const a = document.createElement("a");
-           a.href = canvas.toDataURL("image/png");
-           a.download = "askarti-diagram.png";
-           document.body.appendChild(a);
-           a.click();
-           document.body.removeChild(a);
-       });
-   }
+      if (downloadPngBtn) {
+          downloadPngBtn.addEventListener('click', () => this.downloadMermaidAsPNG());
+      }
+  }
 
-   async renderMermaidChart() {
-       try {
-           await mermaid.run({
-               nodes: document.querySelectorAll('.mermaid'),
-           });
-       } catch (error) {
-           console.error('Mermaid rendering error:', error);
-           const container = document.querySelector('.mermaid-container');
-           if (container) container.innerHTML = '<p class="text-red-500 text-sm">Could not render visual plan.</p>';
-       }
-   }
+  downloadMermaidAsPNG() {
+      const mermaidContainer = document.querySelector('.mermaid-container');
+      if (!mermaidContainer || typeof html2canvas === 'undefined') {
+          console.error("Mermaid container or html2canvas library not found.");
+          return;
+      }
+      html2canvas(mermaidContainer, { backgroundColor: '#ffffff' }).then(canvas => {
+          const a = document.createElement("a");
+          a.href = canvas.toDataURL("image/png");
+          a.download = "askarti-diagram.png";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+      });
+  }
 
-   showModal() { 
-       this.elements.aboutModal.classList.remove('hidden'); 
-   }
-   
-   hideModal() { 
-       this.elements.aboutModal.classList.add('hidden'); 
-   }
+  async renderMermaidChart() {
+      try {
+          await mermaid.run({
+              nodes: document.querySelectorAll('.mermaid'),
+          });
+      } catch (error) {
+          console.error('Mermaid rendering error:', error);
+          const container = document.querySelector('.mermaid-container');
+          if (container) container.innerHTML = '<p class="text-red-500 text-sm">Could not render visual plan.</p>';
+      }
+  }
+
+  showModal() { 
+      this.elements.aboutModal.classList.remove('hidden'); 
+  }
+  
+  hideModal() { 
+      this.elements.aboutModal.classList.add('hidden'); 
+  }
 }
 
 // Initialize the app when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-   const app = new AskArti();
+  const app = new AskArti();
 });
 </script>
 </body>
