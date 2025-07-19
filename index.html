@@ -453,6 +453,45 @@
     overflow-y: auto;
     transition: none; /* Remove transition when scrolling is needed */
 }
+/* Fix for mobile playbook circles */
+@media (max-width: 768px) {
+    .copy-playbook-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.75rem;
+    }
+    
+    .copy-playbook-btn svg {
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0.25rem;
+    }
+    
+    .results-card-header .flex {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    .results-card-header .flex > div:first-child {
+        flex: 1;
+        width: 100%;
+    }
+    
+    .copy-playbook-btn {
+        align-self: stretch;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    /* Fix numbered circles on mobile */
+    .playbook-persona-circle {
+        min-width: 2rem !important;
+        width: 2rem !important;
+        height: 2rem !important;
+        flex-shrink: 0 !important;
+        font-size: 0.75rem !important;
+    }
+}
 </style>
 
 </head>
@@ -1026,40 +1065,40 @@ setupAutoExpand() {
     const renderList = (items) => items.map(item => `<li class="text-sm text-gray-700 leading-relaxed">${item}</li>`).join('');
     
     const renderPersonas = (personas) => {
-        if (!personas || personas.length === 0) return '<p class="text-sm text-gray-500">No persona data available.</p>';
-        return personas.map((p, index) => `
-            <div class="bg-white border border-gray-200 rounded-lg p-4 mb-4">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-8 h-8 bg-brand-purple text-white rounded-full flex items-center justify-center text-sm font-bold">${index + 1}</div>
-                    <h4 class="font-bold text-lg text-gray-900">${p.persona_title}</h4>
+    if (!personas || personas.length === 0) return '<p class="text-sm text-gray-500">No persona data available.</p>';
+    return personas.map((p, index) => `
+        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-4">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="playbook-persona-circle w-8 h-8 bg-brand-purple text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">${index + 1}</div>
+                <h4 class="font-bold text-lg text-gray-900">${p.persona_title}</h4>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <h5 class="font-semibold text-gray-800 mb-2">Business Priorities</h5>
+                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 ml-2">${renderList(p.business_priorities)}</ul>
                 </div>
                 
-                <div class="space-y-4">
-                    <div>
-                        <h5 class="font-semibold text-gray-800 mb-2">Business Priorities</h5>
-                        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 ml-2">${renderList(p.business_priorities)}</ul>
-                    </div>
-                    
-                    <div>
-                        <h5 class="font-semibold text-gray-800 mb-2">Conversation Starters</h5>
-                        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 ml-2">${renderList(p.conversation_starters)}</ul>
-                    </div>
-                    
-                    <div>
-                        <h5 class="font-semibold text-gray-800 mb-2">Objections & Responses</h5>
-                        <div class="space-y-3">
-                            ${p.objections_responses.map(o => `
-                                <div class="border-l-3 border-gray-300 pl-4 py-2">
-                                    <p class="font-medium text-gray-800 text-sm mb-1"><strong>Objection:</strong> "${o.objection}"</p>
-                                    <p class="text-gray-600 text-sm"><strong>Response:</strong> ${o.response}</p>
-                                </div>
-                            `).join('')}
-                        </div>
+                <div>
+                    <h5 class="font-semibold text-gray-800 mb-2">Conversation Starters</h5>
+                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 ml-2">${renderList(p.conversation_starters)}</ul>
+                </div>
+                
+                <div>
+                    <h5 class="font-semibold text-gray-800 mb-2">Objections & Responses</h5>
+                    <div class="space-y-3">
+                        ${p.objections_responses.map(o => `
+                            <div class="border-l-3 border-gray-300 pl-4 py-2">
+                                <p class="font-medium text-gray-800 text-sm mb-1"><strong>Objection:</strong> "${o.objection}"</p>
+                                <p class="text-gray-600 text-sm"><strong>Response:</strong> ${o.response}</p>
+                            </div>
+                        `).join('')}
                     </div>
                 </div>
             </div>
-        `).join('');
-    };
+        </div>
+    `).join('');
+};
 
     return `
     <div class="results-card">
