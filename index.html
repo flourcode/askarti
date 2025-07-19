@@ -553,11 +553,6 @@
             <label for="situation-input" class="block text-sm font-bold text-brand-gray-700 mb-3" id="greeting-label">
                 Hey, I'm Arti! You can ask me anything.
             </label>
-			<!-- Add this right after your greeting label -->
-<div id="news-freshness-indicator" class="hidden news-indicator">
-    <div class="pulse-dot"></div>
-    <span id="news-status-text">Fresh federal news loaded • Updated 2 hours ago</span>
-</div>
             <div class="textarea-container">
                 <textarea 
                     id="situation-input" 
@@ -579,14 +574,7 @@
                     <div class="mt-4">
     <div class="flex flex-wrap gap-2">
         <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Playbook: Create a comprehensive sales playbook for selling cloud migration services to the Department of Veterans Affairs. Focus on healthcare modernization, data analytics, and patient experience improvements. Include key stakeholders like CIOs, CTOs, and healthcare administrators.">Sales Playbook</button>
-        
-        <!-- NEW: Daily briefing button -->
         <button class="quick-prompt px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-full text-sm text-blue-700 border border-blue-200" data-text="Give me today's federal sales briefing with the top headlines and opportunities I should know about.">📰 Daily Brief</button>
-        
-        <!-- Enhanced news-aware buttons -->
-        <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="What federal cybersecurity news should I know about for my sales strategy?">🔐 Cyber News</button>
-        
-        <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Any recent DoD announcements I can leverage for AI sales?">🤖 DoD AI News</button>
 		<button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Buyer at VA ghosted me after I sent pricing. CISO loves our competitor.">Stuck Deal</button>
         <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Internal partner and account reps are fighting over customer access, pipeline, and revenue. Sales are hurting.">Partner Drama</button>
         <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="News: Today, the Chief Digital and Artificial Intelligence Office (CDAO) announced contract awards to leading U.S. frontier AI companies to accelerate Department of Defense (DoD) adoption of advanced AI capabilities to address critical national security challenges. Frontier AI companies lead development of the most advanced AI models and technologies, conduct insightful research into the use of frontier AI, and pioneer efforts to address both the potential benefits and risks of frontier AI technologies. 
@@ -674,6 +662,17 @@ experiences, said Andy Jassy, President and CEO, Amazon.">Bull or Bear</button>
                 </div>
            </div>
        </div>
+	   <!-- Add this at the very bottom, before your existing footer -->
+<details class="mt-8 mb-4">
+    <summary class="cursor-pointer text-sm text-gray-600 hover:text-gray-800 font-medium">
+        📰 Recent Federal Headlines (click to expand)
+    </summary>
+    <div class="mt-3 max-h-96 overflow-y-auto bg-gray-50 rounded-lg p-4">
+        <div id="footer-headlines" class="space-y-2 text-xs">
+            <!-- Headlines load here -->
+        </div>
+    </div>
+</details>
        <footer class="text-center mt-12 text-xs text-gray-500">
     <div class="flex justify-center gap-4 mb-4">
         <a href="#" id="about-btn" class="font-medium text-brand-purple hover:underline">About AskArti</a>
