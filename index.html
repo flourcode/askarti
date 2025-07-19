@@ -1109,20 +1109,22 @@ setupAutoExpand() {
 }
 
    displayAdvice(data) {
-       const { response_type } = data;
-       let html = '';
+    const { response_type } = data;
+    let html = '';
 
-       if (response_type === 'playbook') {
-           html = this.renderSalesPlaybook(data);
-       } else if (response_type === 'news') {
-           html = this.renderNewsAdvice(data);
-       } else if (response_type === 'investment') {
-           html = this.renderMarketAnalysis(data);
-       } else if (response_type === 'prospect') {
-           html = this.renderProspectAdvice(data);
-       } else {
-           html = this.renderGeneralAdvice(data);
-       }
+    if (response_type === 'playbook') {
+        html = this.renderSalesPlaybook(data);
+    } else if (response_type === 'news') {
+        html = this.renderNewsAdvice(data);
+    } else if (response_type === 'investment') {
+        html = this.renderMarketAnalysis(data);
+    } else if (response_type === 'prospect') {
+        html = this.renderProspectAdvice(data);
+    } else if (response_type === 'briefing') {
+        html = this.renderDailyBriefing(data);
+    } else {
+        html = this.renderGeneralAdvice(data);
+    }
        
        this.elements.resultsContainer.innerHTML = html;
        
@@ -1396,7 +1398,95 @@ convertPlaybookToText(element) {
            </div>
        `;
    }
-   
+   renderDailyBriefing(data) {
+    const { 
+        quick_take, agency_headlines, industry_headlines, 
+        last_updated, summary, opportunities_spotted 
+    } = data;
+
+    return `
+        <div class="results-card">
+            <div class="results-card-header flex items-center gap-4 bg-blue-50">
+                <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                <div>
+                    <h2 class="font-bold text-lg text-blue-800">📰 Daily Federal Sales Briefing</h2>
+                    <p class="text-sm text-blue-600">${last_updated ? new Date(last_updated).toLocaleDateString() : 'Today'}</p>
+                </div>
+            </div>
+            <div class="results-card-body space-y-6">
+                <div class="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+                    <p class="text-blue-800 font-medium">${quick_take}</p>
+                </div>
+
+                ${opportunities_spotted > 0 ? `
+                <div class="p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <p class="text-green-800 font-semibold">🎯 ${opportunities_spotted} potential opportunities spotted in today's news</p>
+                </div>
+                ` : ''}
+
+                ${agency_headlines && agency_headlines.length > 0 ? `
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-3">🏛️ Agency Headlines</h3>
+                    <div class="space-y-3">
+                        ${agency_headlines.map(item => `
+                            <div class="border-l-3 border-blue-400 pl-4 py-2 bg-gray-50 rounded-r">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">${item.source}</span>
+                                    <span class="text-xs text-gray-500">${item.date}</span>
+                                </div>
+                                <h4 class="font-semibold text-gray-900 mb-1">${item.headline}</h4>
+                                <p class="text-sm text-gray-600">${item.summary}</p>
+                                ${item.keywords && item.keywords.length > 0 ? `
+                                <div class="flex flex-wrap gap-1 mt-2">
+                                    ${item.keywords.map(keyword => 
+                                        `<span class="text-xs bg-gray-200 text-gray-700 px-1.5 py-0.5 rounded">${keyword}</span>`
+                                    ).join('')}
+                                </div>
+                                ` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
+
+                ${industry_headlines && industry_headlines.length > 0 ? `
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-3">📡 Industry Headlines</h3>
+                    <div class="space-y-3">
+                        ${industry_headlines.map(item => `
+                            <div class="border-l-3 border-green-400 pl-4 py-2 bg-gray-50 rounded-r">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">${item.source}</span>
+                                    <span class="text-xs text-gray-500">${item.date}</span>
+                                </div>
+                                <h4 class="font-semibold text-gray-900 mb-1">${item.headline}</h4>
+                                <p class="text-sm text-gray-600">${item.summary}</p>
+                                ${item.keywords && item.keywords.length > 0 ? `
+                                <div class="flex flex-wrap gap-1 mt-2">
+                                    ${item.keywords.map(keyword => 
+                                        `<span class="text-xs bg-gray-200 text-gray-700 px-1.5 py-0.5 rounded">${keyword}</span>`
+                                    ).join('')}
+                                </div>
+                                ` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
+
+                ${(!agency_headlines || agency_headlines.length === 0) && (!industry_headlines || industry_headlines.length === 0) ? `
+                <div class="text-center py-8">
+                    <p class="text-gray-500">No recent federal news available. The RSS system may need to collect fresh data.</p>
+                </div>
+                ` : ''}
+
+                <div class="pt-4 border-t text-center">
+                    <p class="text-sm text-gray-600">${summary}</p>
+                </div>
+            </div>
+        </div>
+    `;
+}
    renderGeneralAdvice(data) {
        const { quick_take, key_moves, mermaid_chart, talking_points, email_template, next_steps, response_type } = data;
        const title = response_type === 'interview' ? 'Your Interview Plan' : 'Your Game Plan';
