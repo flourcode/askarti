@@ -50,6 +50,7 @@
                     },
                     colors: {
                         'brand-purple': '#7C6BBE',
+                        'brand-purple-faint': '#C4B5FD',
                         'brand-gray': {
                             50: '#F9FAFB',
                             100: '#F3F4F6',
@@ -120,7 +121,7 @@
        transition: box-shadow 0.2s ease;
    }
    .io-card:focus-within {
-       box-shadow: 0 0 0 2px var(--brand-purple);
+       box-shadow: 0 0 0 2px #D1D5DB;
    }
    .results-card {
        background-color: white;
@@ -515,7 +516,7 @@
                         <textarea 
     id="situation-input" 
     rows="3"
-    class="w-full p-3 pr-12 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-brand-purple resize-none placeholder-gray-500 auto-expand"
+    class="w-full p-3 pr-12 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-purple-faint focus:border-brand-purple-faint resize-none placeholder-gray-500 auto-expand"
     placeholder='e.g., "Create a sales playbook for selling AI services to HHS." Or start with a sample prompt.'
     maxlength="2500"></textarea>
 <button id="clear-btn" class="clear-btn" title="Clear input" aria-label="Clear input">
@@ -587,7 +588,7 @@ experiences, said Andy Jassy, President and CEO, Amazon.">Market Analysis</butto
                         </div>
                     </div>
                     <div class="flex gap-2">
-                        <input type="text" id="chat-input" class="flex-1 p-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-purple focus:border-brand-purple" placeholder="Type your message..." maxlength="2000">
+                        <input type="text" id="chat-input" class="flex-1 p-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-purple-faint focus:border-brand-purple-faint" placeholder="Type your message..." maxlength="2000">
                         <button id="chat-send-btn" class="btn btn-primary px-4">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" /></svg>
                         </button>
@@ -1144,13 +1145,11 @@ setupAutoExpand() {
         </div>
         <div class="results-card-body space-y-6" id="playbook-content">
                 
-                <!-- Executive Summary -->
                 <div class="border-l-4 border-brand-purple pl-4 py-2">
                     <h3 class="font-bold text-gray-900 mb-2">Executive Summary</h3>
                     <p class="text-gray-700 leading-relaxed">${sales_play_summary}</p>
                 </div>
 
-                <!-- Key Metrics -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="border border-gray-200 rounded-lg p-4">
                         <h3 class="font-bold text-gray-900 mb-3">Success Metrics</h3>
@@ -1162,7 +1161,6 @@ setupAutoExpand() {
                     </div>
                 </div>
 
-                <!-- Competitive Positioning -->
                 ${competitive_positioning ? `
                 <div class="border-l-4 border-yellow-400 pl-4 py-2">
                     <h3 class="font-bold text-gray-900 mb-2">Competitive Positioning</h3>
@@ -1170,7 +1168,6 @@ setupAutoExpand() {
                 </div>
                 ` : ''}
 
-                <!-- Solution Components -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <h3 class="font-bold text-gray-900 mb-3">Key Services</h3>
@@ -1182,7 +1179,6 @@ setupAutoExpand() {
                     </div>
                 </div>
 
-                <!-- Stakeholder Guide -->
                 <div>
                     <h3 class="font-bold text-lg text-gray-900 mb-4">Stakeholder Guide</h3>
                     <div class="space-y-4">
@@ -1190,7 +1186,6 @@ setupAutoExpand() {
                     </div>
                 </div>
 
-                <!-- Additional Insights -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     ${insider_tips ? `
                     <div class="border border-gray-200 rounded-lg p-4">
@@ -1207,7 +1202,6 @@ setupAutoExpand() {
                     ` : ''}
                 </div>
 
-                <!-- Next Actions -->
                 ${next_actions ? `
                 <div class="border-2 border-brand-purple rounded-lg p-4">
                     <h3 class="font-bold text-gray-900 mb-3">Next 7 Days</h3>
