@@ -34,6 +34,7 @@
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script> 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WLGEPY5H4G"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -45,7 +46,10 @@
 tailwind.config = {
     theme: {
         extend: {
-            fontFamily: { sans: ['Inter', 'sans-serif'] },
+            fontFamily: {
+                sans: ['Inter', 'sans-serif'],
+                serif: ['Merriweather', 'serif'] // Add the serif font
+            },
             colors: {
                 'brand-purple': '#8E88A7',
                 'brand-purple-faint': '#E1DDEE',
@@ -450,22 +454,21 @@ textarea, input[type="text"] {
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 0 1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .digest-item-number {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #D1D5DB;
+    color: #374151;
     line-height: 1.2;
-    grid-row: 1 / span 3;
 }
 
 .digest-item-headline {
     font-weight: 700;
     font-size: 1.125rem;
     color: #1F2937;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
 }
 
 .digest-item-headline a {
@@ -479,13 +482,13 @@ textarea, input[type="text"] {
 }
 
 .digest-item-summary, .digest-item-insight {
-    font-size: 0.95rem;
-    line-height: 1.5;
+    font-family: 'Merriweather', serif; /* Use the new serif font */
+    font-size: 1rem; /* Slightly larger for better readability */
+    line-height: 1.7; /* Increase line spacing */
     color: #374151;
-    word-wrap: break-word;
+	word-wrap: break-word;
     overflow-wrap: break-word;
 }
-
 .digest-item-insight {
     font-style: italic;
     color: var(--brand-purple);
