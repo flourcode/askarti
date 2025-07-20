@@ -1389,6 +1389,7 @@ convertPlaybookToText(element) {
    renderDailyBriefing(data) {
     const { 
         quick_take, agency_headlines, industry_headlines, 
+        contractor_headlines, vendor_headlines,  // FIXED: Added these
         last_updated, summary, opportunities_spotted 
     } = data;
 
@@ -1423,10 +1424,10 @@ convertPlaybookToText(element) {
                                     <span class="text-xs text-gray-500">${item.date}</span>
                                 </div>
                                 <h4 class="font-semibold text-gray-900 mb-1">
-    <a href="${item.link}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 hover:underline">
-        ${item.headline}
-    </a>
-</h4>
+                                    <a href="${item.link}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 hover:underline">
+                                        ${item.headline}
+                                    </a>
+                                </h4>
                                 <p class="text-sm text-gray-600">${item.summary}</p>
                                 ${item.keywords && item.keywords.length > 0 ? `
                                 <div class="flex flex-wrap gap-1 mt-2">
@@ -1452,10 +1453,10 @@ convertPlaybookToText(element) {
                                     <span class="text-xs text-gray-500">${item.date}</span>
                                 </div>
                                 <h4 class="font-semibold text-gray-900 mb-1">
-    <a href="${item.link}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 hover:underline">
-        ${item.headline}
-    </a>
-</h4>
+                                    <a href="${item.link}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 hover:underline">
+                                        ${item.headline}
+                                    </a>
+                                </h4>
                                 <p class="text-sm text-gray-600">${item.summary}</p>
                                 ${item.keywords && item.keywords.length > 0 ? `
                                 <div class="flex flex-wrap gap-1 mt-2">
@@ -1469,51 +1470,50 @@ convertPlaybookToText(element) {
                     </div>
                 </div>
                 ` : ''}
-				// Add after your existing industry headlines section:
 
-${contractor_headlines && contractor_headlines.length > 0 ? `
-<div>
-    <h3 class="font-bold text-gray-900 mb-3">🏢 Prime Contractor Updates</h3>
-    <div class="space-y-3">
-        ${contractor_headlines.map(item => `
-            <div class="border-l-3 border-purple-400 pl-4 py-2 bg-gray-50 rounded-r">
-                <div class="flex items-center gap-2 mb-1">
-                    <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">${item.source}</span>
-                    <span class="text-xs text-gray-500">${item.date}</span>
+                ${contractor_headlines && contractor_headlines.length > 0 ? `
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-3">🏢 Prime Contractor Updates</h3>
+                    <div class="space-y-3">
+                        ${contractor_headlines.map(item => `
+                            <div class="border-l-3 border-purple-400 pl-4 py-2 bg-gray-50 rounded-r">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">${item.source}</span>
+                                    <span class="text-xs text-gray-500">${item.date}</span>
+                                </div>
+                                <h4 class="font-semibold text-gray-900 mb-1">
+                                    <a href="${item.link}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 hover:underline">
+                                        ${item.headline}
+                                    </a>
+                                </h4>
+                                <p class="text-sm text-gray-600">${item.summary}</p>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
-                <h4 class="font-semibold text-gray-900 mb-1">
-                    <a href="${item.link}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 hover:underline">
-                        ${item.headline}
-                    </a>
-                </h4>
-                <p class="text-sm text-gray-600">${item.summary}</p>
-            </div>
-        `).join('')}
-    </div>
-</div>
-` : ''}
+                ` : ''}
 
-${vendor_headlines && vendor_headlines.length > 0 ? `
-<div>
-    <h3 class="font-bold text-gray-900 mb-3">☁️ Technology Vendor News</h3>
-    <div class="space-y-3">
-        ${vendor_headlines.map(item => `
-            <div class="border-l-3 border-orange-400 pl-4 py-2 bg-gray-50 rounded-r">
-                <div class="flex items-center gap-2 mb-1">
-                    <span class="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">${item.source}</span>
-                    <span class="text-xs text-gray-500">${item.date}</span>
+                ${vendor_headlines && vendor_headlines.length > 0 ? `
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-3">☁️ Technology Vendor News</h3>
+                    <div class="space-y-3">
+                        ${vendor_headlines.map(item => `
+                            <div class="border-l-3 border-orange-400 pl-4 py-2 bg-gray-50 rounded-r">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">${item.source}</span>
+                                    <span class="text-xs text-gray-500">${item.date}</span>
+                                </div>
+                                <h4 class="font-semibold text-gray-900 mb-1">
+                                    <a href="${item.link}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 hover:underline">
+                                        ${item.headline}
+                                    </a>
+                                </h4>
+                                <p class="text-sm text-gray-600">${item.summary}</p>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
-                <h4 class="font-semibold text-gray-900 mb-1">
-                    <a href="${item.link}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 hover:underline">
-                        ${item.headline}
-                    </a>
-                </h4>
-                <p class="text-sm text-gray-600">${item.summary}</p>
-            </div>
-        `).join('')}
-    </div>
-</div>
-` : ''}
+                ` : ''}
 
                 ${(!agency_headlines || agency_headlines.length === 0) && (!industry_headlines || industry_headlines.length === 0) ? `
                 <div class="text-center py-8">
@@ -1529,11 +1529,7 @@ ${vendor_headlines && vendor_headlines.length > 0 ? `
     `;
 }
    renderGeneralAdvice(data) {
-       const { 
-    quick_take, agency_headlines, industry_headlines, 
-    contractor_headlines, vendor_headlines,  // ADD THESE
-    last_updated, summary, opportunities_spotted 
-} = data;
+       const { quick_take, key_moves, mermaid_chart, talking_points, email_template, next_steps, response_type } = data;
        const title = response_type === 'interview' ? 'Your Interview Plan' : 'Your Game Plan';
        const talkingPointsTitle = response_type === 'interview' ? 'What They May Ask' : 'Key Questions to Ask';
 
