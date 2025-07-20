@@ -534,6 +534,98 @@
     border-radius: 50%;
     animation: pulse 2s infinite;
 }
+/* --- New Monocle-Inspired Digest Styles --- */
+.digest-card .results-card-body {
+    padding: 2rem; /* More generous padding */
+}
+
+.digest-header h2 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #111827; /* Near-black for authority */
+    letter-spacing: -0.025em;
+    margin-bottom: 0.25rem;
+}
+
+.digest-header-meta {
+    font-size: 0.875rem;
+    color: #6B7280; /* Gray for secondary info */
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.digest-section {
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+    border-top: 1px solid #E5E7EB; /* Subtle separator */
+}
+
+.digest-section-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--brand-purple); /* Use brand color for section titles */
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+.digest-item {
+    display: grid;
+    grid-template-columns: auto 1fr; /* Number column and content column */
+    gap: 0 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.digest-item-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #D1D5DB; /* Light gray for a subtle but present number */
+    line-height: 1.2;
+    grid-row: 1 / span 3; /* Allow number to span multiple rows if needed */
+}
+
+.digest-item-headline {
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: #1F2937;
+    margin-bottom: 0.5rem;
+}
+
+.digest-item-headline a {
+    color: inherit;
+    text-decoration: none;
+}
+.digest-item-headline a:hover {
+    background-color: var(--brand-purple-faint);
+}
+
+.digest-item-summary, .digest-item-insight {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #374151;
+}
+
+.digest-item-insight {
+    font-style: italic;
+    color: var(--brand-purple);
+    margin-top: 0.75rem;
+}
+
+.digest-item-meta {
+    margin-top: 0.75rem;
+}
+
+@media (max-width: 640px) {
+    .digest-card .results-card-body {
+        padding: 1rem;
+    }
+    .digest-header h2 {
+        font-size: 1.5rem;
+    }
+    .digest-item-headline {
+        font-size: 1rem;
+    }
+}
 </style>
 
 </head>
@@ -1121,203 +1213,118 @@ setupAutoExpand() {
        this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
    }
 
-// NEW: Daily Digest Renderer
-   renderDailyDigest(data) {
+// NEW: Daily Digest Renderer (Monocle-Inspired Design - Complete Version)
+renderDailyDigest(data) {
     const { 
         digest_date, key_intelligence, deal_drivers, quick_intel, 
         action_items, market_temperature, opportunity_count, status 
     } = data;
 
-    // Define the sources array from the deal_drivers
-    const sources = deal_drivers && deal_drivers.length > 0 ? [...new Set(deal_drivers.map(d => d.source))] : [];
+    // --- Helper data ---
+    const sources = deal_drivers && deal_drivers.length > 0 
+        ? [...new Set(deal_drivers.map(d => d.source))].join(' &bull; ') 
+        : 'Internal Analysis';
+    const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
-    // Market temperature indicator
-    const tempColors = {
-        'hot': { bg: 'bg-red-50', text: 'text-red-800', border: 'border-red-200', icon: '🔥' },
-        'warm': { bg: 'bg-orange-50', text: 'text-orange-800', border: 'border-orange-200', icon: '📈' },
-        'cool': { bg: 'bg-blue-50', text: 'text-blue-800', border: 'border-blue-200', icon: '❄️' }
-    };
-    const tempStyle = tempColors[market_temperature] || tempColors['cool'];
+    // --- Helper Functions (Re-implemented for the new design) ---
 
-    // Helper function to render deal drivers with links, quotes, and keywords
+    // 1. Render Deal Drivers
     const renderDealDrivers = (drivers) => {
-        if (!drivers || drivers.length === 0) {
-            return '<p class="text-sm text-gray-500">No major developments today.</p>';
-        }
-        const driverTypes = {
-            'contract_opportunity': { icon: '💰', label: 'CONTRACT OPPORTUNITY', color: 'green' },
-            'leadership_move': { icon: '👥', label: 'LEADERSHIP MOVE', color: 'blue' },
-            'policy_update': { icon: '📋', label: 'POLICY UPDATE', color: 'orange' },
-            'budget_news': { icon: '💸', label: 'BUDGET NEWS', color: 'purple' }
-        };
-        return drivers.map(driver => {
-            const typeInfo = driverTypes[driver.type] || driverTypes['contract_opportunity'];
-            return `
-                <div class="border-l-4 border-${typeInfo.color}-400 pl-4 py-3 mb-4 bg-gray-50 rounded-r-lg">
-                    <div class="text-xs text-${typeInfo.color}-700 font-semibold mb-2 flex items-center">
-                        <span class="mr-1">${typeInfo.icon}</span>
-                        ${typeInfo.label}
-                    </div>
-                    <h4 class="font-bold text-sm text-gray-900 mb-2">
-                        <a href="${driver.link}" target="_blank" rel="noopener noreferrer" class="hover:underline text-blue-700">
-                            ${driver.headline}
-                        </a>
-                    </h4>
-                    <p class="text-sm text-gray-700 mb-2 leading-relaxed">${driver.summary}</p>
-                    <div class="text-sm text-brand-purple font-medium">
-                        → ${driver.action_insight}
-                    </div>
-                    ${driver.quote ? `
-                        <div class="mt-2 p-2 bg-gray-100 border-l-4 border-gray-300 text-xs italic">
-                            "${driver.quote}"
-                        </div>
-                    ` : ''}
-                    <div class="flex flex-wrap items-center justify-between mt-2">
-                        ${driver.source ? `<div class="text-xs text-gray-500 mt-1">Source: ${driver.source}</div>` : ''}
-                        ${driver.keywords && driver.keywords.length > 0 ? `
-                            <div class="mt-1">
-                                ${driver.keywords.map(keyword => `
-                                    <span class="inline-block bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">
-                                        ${keyword}
-                                    </span>
-                                `).join('')}
+        if (!drivers || drivers.length === 0) return '';
+        return `
+            <section class="digest-section">
+                <h3 class="digest-section-title">Today's Deal Drivers</h3>
+                ${drivers.map((driver, index) => `
+                    <div class="digest-item">
+                        <div class="digest-item-number">${index + 1}</div>
+                        <div>
+                            <h4 class="digest-item-headline">
+                                <a href="${driver.link}" target="_blank" rel="noopener noreferrer">${driver.headline}</a>
+                            </h4>
+                            <p class="digest-item-summary">${driver.summary}</p>
+                            <p class="digest-item-insight">&rarr; ${driver.action_insight}</p>
+                            <div class="digest-item-meta">
+                                <span class="text-xs text-gray-500 font-semibold">${driver.source ? driver.source.toUpperCase() : ''}</span>
                             </div>
-                        ` : ''}
+                        </div>
                     </div>
-                </div>
-            `;
-        }).join('');
+                `).join('')}
+            </section>
+        `;
     };
 
-    // Helper function to render quick intel
+    // 2. Render Quick Intel
     const renderQuickIntel = (intel) => {
-        if (!intel || intel.length === 0) {
-            return '<p class="text-sm text-gray-500">No quick intel available.</p>';
-        }
-        return intel.map(item => `
-            <div class="flex items-start gap-2 mb-2">
-                <div class="w-2 h-2 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
-                <div class="text-sm">
-                    <span class="font-semibold text-gray-800">${item.category}:</span>
-                    <span class="text-gray-700 ml-1">${item.insight}</span>
+        if (!intel || intel.length === 0) return '';
+        return `
+            <section class="digest-section">
+                <h3 class="digest-section-title">Quick Intel</h3>
+                <div class="space-y-2">
+                ${intel.map(item => `
+                    <p class="digest-item-summary">
+                        <strong class="font-semibold text-gray-900">${item.category}:</strong> ${item.insight}
+                    </p>
+                `).join('')}
                 </div>
-            </div>
-        `).join('');
+            </section>
+        `;
     };
 
-    // Helper function to render action items
+    // 3. Render Action Items
     const renderActionItems = (actions) => {
-        if (!actions || actions.length === 0) {
-            return '<p class="text-sm text-gray-500">No specific actions for today.</p>';
-        }
-        return actions.map((action, index) => `
-            <div class="flex items-start gap-3 mb-3">
-                <div class="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">
-                    ${index + 1}
-                </div>
-                <div class="flex-1">
-                    <div class="font-semibold text-sm text-gray-900">${action.action}</div>
-                    <div class="text-xs text-gray-600 mt-1">${action.why}</div>
-                </div>
-            </div>
-        `).join('');
+        if (!actions || actions.length === 0) return '';
+        return `
+            <section class="digest-section">
+                <h3 class="digest-section-title">Your Moves Today</h3>
+                ${actions.map((action, index) => `
+                    <div class="digest-item">
+                        <div class="digest-item-number">${index + 1}</div>
+                        <div>
+                            <h4 class="digest-item-headline">${action.action}</h4>
+                            <p class="digest-item-summary">${action.why}</p>
+                        </div>
+                    </div>
+                `).join('')}
+            </section>
+        `;
     };
 
-    // The main return statement that builds the HTML
+    // --- Main return statement that builds the complete layout ---
     return `
-        <div class="results-card">
-            <div class="results-card-header" style="background: linear-gradient(135deg, #8E88A7 0%, #9333ea 100%);">
-                <div class="flex items-center justify-between text-white">
-                    <div>
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                            <div>
-                                <h2 class="font-bold text-lg">Federal Sales Intelligence</h2>
-                                <p class="text-sm opacity-90">${digest_date || 'Today'}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-xs opacity-75">6:00 AM ET</div>
-                        <div class="${tempStyle.bg} ${tempStyle.text} px-2 py-1 rounded-full text-xs font-semibold mt-1 border ${tempStyle.border}">
-                            ${tempStyle.icon} ${market_temperature?.toUpperCase() || 'COOL'} MARKET
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="results-card-body space-y-6">
+        <div class="results-card digest-card">
+            <div class="results-card-body">
+
+                <header class="digest-header">
+                    <h2>Federal Sales Intelligence</h2>
+                    <p class="digest-header-meta">
+                        ${date} &bull; MARKET TEMP: ${market_temperature || 'COOL'}
+                    </p>
+                </header>
+
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Key Intelligence</h3>
+                    <p class="digest-item-summary text-base">${key_intelligence}</p>
+                </section>
+
+                ${renderDealDrivers(deal_drivers)}
+                ${renderQuickIntel(quick_intel)}
+                ${renderActionItems(action_items)}
                 
-                ${status === 'success' && opportunity_count > 0 ? `
-                <div class="p-3 bg-green-50 border border-green-200 rounded-lg">
-                    <p class="text-green-800 font-semibold flex items-center gap-2">
-                        <span class="text-xl">🎯</span>
-                        ${opportunity_count} sales opportunities spotted today
-                    </p>
-                </div>
-                ` : ''}
+                <footer class="digest-section">
+                     <h3 class="digest-section-title">Sources</h3>
+                     <p class="text-sm text-gray-600">${sources}</p>
+                </footer>
 
-                <div>
-                    <h3 class="font-bold text-gray-900 mb-3 flex items-center">
-                        <div class="w-3 h-3 bg-brand-purple rounded-full mr-2"></div>
-                        Key Intelligence
-                    </h3>
-                    <div class="p-4 bg-brand-purple/10 rounded-lg border-l-4 border-brand-purple">
-                        <p class="text-gray-800 leading-relaxed">${key_intelligence}</p>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="font-bold text-gray-900 mb-3 flex items-center">
-                        <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                        Deal Drivers
-                    </h3>
-                    <div class="space-y-4">
-                        ${renderDealDrivers(deal_drivers)}
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="font-bold text-gray-900 mb-3 flex items-center">
-                        <div class="w-3 h-3 bg-orange-500 rounded-full mr-2"></div>
-                        Quick Intel
-                    </h3>
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        ${renderQuickIntel(quick_intel)}
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="font-bold text-gray-900 mb-3 flex items-center">
-                        <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
-                        Your Moves Today
-                    </h3>
-                    <div class="bg-red-50 rounded-lg p-4 border border-red-200">
-                        ${renderActionItems(action_items)}
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="font-bold text-gray-900 mb-3 flex items-center">
-                        <div class="w-3 h-3 bg-gray-400 rounded-full mr-2"></div>
-                        Today's Sources
-                    </h3>
-                    <p class="text-xs text-gray-600">
-                        ${sources.join(' • ')}
-                    </p>
-                </div>
-
-                ${status !== 'success' ? `
-                <div class="text-center py-4">
-                    <p class="text-gray-500 text-sm">Digest temporarily unavailable. Check back soon!</p>
-                </div>
+                 ${status !== 'success' ? `
+                <section class="digest-section">
+                    <p class="text-center text-gray-500 text-sm">Digest temporarily unavailable. Check back soon!</p>
+                </section>
                 ` : ''}
 
             </div>
         </div>
     `;
 }
-
    renderSalesPlaybook(data) {
     const { 
         sales_play_title, sales_play_summary, key_services, key_partners, target_personas,
