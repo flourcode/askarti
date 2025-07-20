@@ -557,8 +557,8 @@
                 <textarea 
                     id="situation-input" 
                     rows="3"
-                    class="w-full p-3 pr-12 text-xs font-light border border-gray-300 rounded-lg resize-none placeholder-gray-500 auto-expand focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300"
-                    placeholder='Type "Create a sales playbook for selling AI services to HHS." or "Prospect for cyber opps at DHS". Or start with a sample prompt below and modify it.'
+                    class="w-full p-3 pr-12 text-xs font-light border border-gray-300 rounded-lg resize-none placeholder-gray-500 auto-expand focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300 placeholder-gray-500"
+                    placeholder='"Create a sales playbook for selling AI services to HHS." or "Prospect for cyber opps at DHS". Or start with a sample prompt below and modify it.'
                     maxlength="2500"></textarea>
                 <button id="clear-btn" class="clear-btn" title="Clear input" aria-label="Clear input">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -580,9 +580,9 @@
 
 The awards to Anthropic, Google, OpenAI, and xAI – each with a $200M ceiling – will enable the Department to leverage the technology and talent of U.S. frontier AI companies to develop agentic AI workflows across a variety of mission areas.  Establishing these partnerships will broaden DoD use of and experience in frontier AI capabilities and increase the ability of these companies to understand and address critical national security needs with the most advanced AI capabilities U.S. industry has to offer. 
 
-“The adoption of AI is transforming the Department’s ability to support our warfighters and maintain strategic advantage over our adversaries,” said Chief Digital and AI Officer Dr. Doug Matty. “Leveraging commercially available solutions into an integrated capabilities approach will accelerate the use of advanced AI as part of our Joint mission essential tasks in our warfighting domain as well as intelligence, business, and enterprise information systems.” 
+"The adoption of AI is transforming the Department's ability to support our warfighters and maintain strategic advantage over our adversaries," said Chief Digital and AI Officer Dr. Doug Matty. "Leveraging commercially available solutions into an integrated capabilities approach will accelerate the use of advanced AI as part of our Joint mission essential tasks in our warfighting domain as well as intelligence, business, and enterprise information systems." 
 
-DoD is implementing a commercial-first approach to accelerating DoD adoption of AI. Today’s awards bring in the best U.S.-based frontier AI talent to help apply cutting-edge AI to solve DoD use cases.  CDAO is also providing access to many of the latest generative AI (GenAI) models for general purpose use to Combatant Commands, the Office of the Secretary of Defense, and the Joint Staff via Army’s Enterprise Large Language Model Workspace powered by Ask Sage, and to the broader enterprise via embedded AI models within DoD enterprise data and AI platforms, including the Advancing Analytics (Advana) platform, Maven Smart System, and Edge Data Mesh nodes, which enable AI integration into workflows that occur within these data environments themselves. Finally, DoD is partnering with the General Services Administration (GSA) to bring the best AI technologies to the federal government while leveraging whole-of-government buying power for AI production and compute resources.  ">News or Text</button>
+DoD is implementing a commercial-first approach to accelerating DoD adoption of AI. Today's awards bring in the best U.S.-based frontier AI talent to help apply cutting-edge AI to solve DoD use cases.  CDAO is also providing access to many of the latest generative AI (GenAI) models for general purpose use to Combatant Commands, the Office of the Secretary of Defense, and the Joint Staff via Army's Enterprise Large Language Model Workspace powered by Ask Sage, and to the broader enterprise via embedded AI models within DoD enterprise data and AI platforms, including the Advancing Analytics (Advana) platform, Maven Smart System, and Edge Data Mesh nodes, which enable AI integration into workflows that occur within these data environments themselves. Finally, DoD is partnering with the General Services Administration (GSA) to bring the best AI technologies to the federal government while leveraging whole-of-government buying power for AI production and compute resources.  ">News or Text</button>
         <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Earnings: (NASDAQ: AMZN) today announced financial results for
 its first quarter ended March 31, 2025.
 - Net sales increased 9% to $155.7 billion in the first quarter, compared with $143.3 billion in first quarter 2024.
@@ -816,7 +816,7 @@ class AskArti {
           fontSize: '14px'
     }});
     this.setupEventListeners();
-    this.setupAutoExpand(); // Add this line
+    this.setupAutoExpand();
     this.elements.situationInput.focus();
     this.updateCharCount();
 }
@@ -834,11 +834,9 @@ class AskArti {
        }
    }
 
-   
-
    clearInput() {
     this.elements.situationInput.value = '';
-    this.elements.situationInput.style.height = 'auto'; // Reset height
+    this.elements.situationInput.style.height = 'auto';
     this.elements.situationInput.classList.remove('scrollable');
     this.updateCharCount();
     this.elements.situationInput.focus();
@@ -875,7 +873,6 @@ class AskArti {
         }
     });
 
-    // Rest of your event listeners remain the same...
     this.elements.aboutBtn.addEventListener('click', () => this.showModal());
     this.elements.closeAbout.addEventListener('click', () => this.hideModal());
     this.elements.aboutModal.addEventListener('click', (e) => {
@@ -902,7 +899,6 @@ setupAutoExpand() {
     const textarea = this.elements.situationInput;
     
     const adjustHeight = () => {
-        // Reset height to auto to get the correct scrollHeight
         textarea.style.height = 'auto';
         
         const minHeight = parseFloat(getComputedStyle(textarea).lineHeight) * 3 + 24; 
@@ -920,17 +916,14 @@ setupAutoExpand() {
         textarea.style.height = newHeight + 'px';
     };
     
-    // Adjust on input
     textarea.addEventListener('input', adjustHeight);
-    
-    // Adjust on paste (with slight delay to ensure content is pasted)
     textarea.addEventListener('paste', () => {
         setTimeout(adjustHeight, 10);
     });
     
-    // Initial adjustment
     adjustHeight();
 }
+
    switchMode(mode) {
        this.state.currentMode = mode;
        this.elements.resultsContainer.innerHTML = '';
@@ -1054,7 +1047,7 @@ setupAutoExpand() {
     if (!situation) { this.showError("Please type or paste something into the box above."); return; }
     if (this.state.pendingRequest) return;
     
-    const buttonToLoad = clickedButton || this.elements.gamePlanBtn; // Fixed this line
+    const buttonToLoad = clickedButton || this.elements.gamePlanBtn;
 
     this.state.lastQuery = situation;
     this.elements.resultsContainer.innerHTML = '';
@@ -1100,7 +1093,9 @@ setupAutoExpand() {
     const { response_type } = data;
     let html = '';
 
-    if (response_type === 'playbook') {
+    if (response_type === 'digest') {
+        html = this.renderDailyDigest(data);
+    } else if (response_type === 'playbook') {
         html = this.renderSalesPlaybook(data);
     } else if (response_type === 'news') {
         html = this.renderNewsAdvice(data);
@@ -1126,6 +1121,178 @@ setupAutoExpand() {
        this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
    }
 
+   // NEW: Daily Digest Renderer
+   renderDailyDigest(data) {
+    const { 
+        digest_date, key_intelligence, deal_drivers, quick_intel, 
+        action_items, market_temperature, opportunity_count, status 
+    } = data;
+
+    // Market temperature indicator
+    const tempColors = {
+        'hot': { bg: 'bg-red-50', text: 'text-red-800', border: 'border-red-200', icon: '🔥' },
+        'warm': { bg: 'bg-orange-50', text: 'text-orange-800', border: 'border-orange-200', icon: '📈' },
+        'cool': { bg: 'bg-blue-50', text: 'text-blue-800', border: 'border-blue-200', icon: '❄️' }
+    };
+    const tempStyle = tempColors[market_temperature] || tempColors['cool'];
+
+    // Deal driver type configurations
+    const driverTypes = {
+        'contract_opportunity': { icon: '💰', label: 'CONTRACT OPPORTUNITY', color: 'green' },
+        'leadership_move': { icon: '👥', label: 'LEADERSHIP MOVE', color: 'blue' },
+        'policy_update': { icon: '📋', label: 'POLICY UPDATE', color: 'orange' },
+        'budget_news': { icon: '💸', label: 'BUDGET NEWS', color: 'purple' }
+    };
+
+    // Render deal drivers
+    const renderDealDrivers = (drivers) => {
+        if (!drivers || drivers.length === 0) {
+            return '<p class="text-sm text-gray-500">No major developments today.</p>';
+        }
+        
+        return drivers.map(driver => {
+            const typeInfo = driverTypes[driver.type] || driverTypes['contract_opportunity'];
+            return `
+                <div class="border-l-4 border-${typeInfo.color}-400 pl-4 py-3 mb-4 bg-gray-50 rounded-r-lg">
+                    <div class="text-xs text-${typeInfo.color}-700 font-semibold mb-2 flex items-center">
+                        <span class="mr-1">${typeInfo.icon}</span>
+                        ${typeInfo.label}
+                    </div>
+                    <h4 class="font-bold text-sm text-gray-900 mb-2">${driver.headline}</h4>
+                    <p class="text-sm text-gray-700 mb-2 leading-relaxed">${driver.summary}</p>
+                    <div class="text-sm text-brand-purple font-medium">
+                        → ${driver.action_insight}
+                    </div>
+                    ${driver.source ? `<div class="text-xs text-gray-500 mt-1">Source: ${driver.source}</div>` : ''}
+                </div>
+            `;
+        }).join('');
+    };
+
+    // Render quick intel
+    const renderQuickIntel = (intel) => {
+        if (!intel || intel.length === 0) {
+            return '<p class="text-sm text-gray-500">No quick intel available.</p>';
+        }
+        
+        return intel.map(item => `
+            <div class="flex items-start gap-2 mb-2">
+                <div class="w-2 h-2 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
+                <div class="text-sm">
+                    <span class="font-semibold text-gray-800">${item.category}:</span>
+                    <span class="text-gray-700 ml-1">${item.insight}</span>
+                </div>
+            </div>
+        `).join('');
+    };
+
+    // Render action items
+    const renderActionItems = (actions) => {
+        if (!actions || actions.length === 0) {
+            return '<p class="text-sm text-gray-500">No specific actions for today.</p>';
+        }
+        
+        return actions.map((action, index) => `
+            <div class="flex items-start gap-3 mb-3">
+                <div class="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">
+                    ${index + 1}
+                </div>
+                <div class="flex-1">
+                    <div class="font-semibold text-sm text-gray-900">${action.action}</div>
+                    <div class="text-xs text-gray-600 mt-1">${action.why}</div>
+                </div>
+            </div>
+        `).join('');
+    };
+
+    return `
+        <div class="results-card">
+            <div class="results-card-header" style="background: linear-gradient(135deg, #8E88A7 0%, #9333ea 100%);">
+                <div class="flex items-center justify-between text-white">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                            <div>
+                                <h2 class="font-bold text-lg">Federal Sales Intelligence</h2>
+                                <p class="text-sm opacity-90">${digest_date || 'Today'}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs opacity-75">6:00 AM ET</div>
+                        <div class="${tempStyle.bg} ${tempStyle.text} px-2 py-1 rounded-full text-xs font-semibold mt-1 border ${tempStyle.border}">
+                            ${tempStyle.icon} ${market_temperature?.toUpperCase() || 'COOL'} MARKET
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="results-card-body space-y-6">
+                
+                ${status === 'success' && opportunity_count > 0 ? `
+                <div class="p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <p class="text-green-800 font-semibold flex items-center gap-2">
+                        <span class="text-xl">🎯</span>
+                        ${opportunity_count} sales opportunities spotted today
+                    </p>
+                </div>
+                ` : ''}
+
+                <!-- Key Intelligence -->
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-3 flex items-center">
+                        <div class="w-3 h-3 bg-brand-purple rounded-full mr-2"></div>
+                        Key Intelligence
+                    </h3>
+                    <div class="p-4 bg-brand-purple/10 rounded-lg border-l-4 border-brand-purple">
+                        <p class="text-gray-800 leading-relaxed">${key_intelligence}</p>
+                    </div>
+                </div>
+
+                <!-- Deal Drivers -->
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-3 flex items-center">
+                        <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                        Deal Drivers
+                    </h3>
+                    <div class="space-y-4">
+                        ${renderDealDrivers(deal_drivers)}
+                    </div>
+                </div>
+
+                <!-- Quick Intel -->
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-3 flex items-center">
+                        <div class="w-3 h-3 bg-orange-500 rounded-full mr-2"></div>
+                        Quick Intel
+                    </h3>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        ${renderQuickIntel(quick_intel)}
+                    </div>
+                </div>
+
+                <!-- Action Items -->
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-3 flex items-center">
+                        <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                        Your Moves Today
+                    </h3>
+                    <div class="bg-red-50 rounded-lg p-4 border border-red-200">
+                        ${renderActionItems(action_items)}
+                    </div>
+                </div>
+
+                ${status !== 'success' ? `
+                <div class="text-center py-4">
+                    <p class="text-gray-500 text-sm">Digest temporarily unavailable. Check back soon!</p>
+                </div>
+                ` : ''}
+
+            </div>
+        </div>
+    `;
+}
+
    renderSalesPlaybook(data) {
     const { 
         sales_play_title, sales_play_summary, key_services, key_partners, target_personas,
@@ -1134,781 +1301,697 @@ setupAutoExpand() {
     } = data;
 
     const renderList = (items) => items.map(item => `<li class="text-sm text-gray-700 leading-relaxed">${item}</li>`).join('');
-    
-    const renderPersonas = (personas) => {
-    if (!personas || personas.length === 0) return '<p class="text-sm text-gray-500">No persona data available.</p>';
-    return personas.map((p, index) => `
-        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-4">
-            <div class="flex items-center gap-3 mb-4">
-                <div class="playbook-persona-circle w-8 h-8 bg-brand-purple text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">${index + 1}</div>
-                <h4 class="font-bold text-lg text-gray-900">${p.persona_title}</h4>
-            </div>
-            
-            <div class="space-y-4">
-                <div>
-                    <h5 class="font-semibold text-gray-800 mb-2">Business Priorities</h5>
-                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 ml-2">${renderList(p.business_priorities)}</ul>
-                </div>
-                
-                <div>
-                    <h5 class="font-semibold text-gray-800 mb-2">Conversation Starters</h5>
-                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 ml-2">${renderList(p.conversation_starters)}</ul>
-                </div>
-                
-                <div>
-                    <h5 class="font-semibold text-gray-800 mb-2">Objections & Responses</h5>
-                    <div class="space-y-3">
-                        ${p.objections_responses.map(o => `
-                            <div class="border-l-3 border-gray-300 pl-4 py-2">
-                                <p class="font-medium text-gray-800 text-sm mb-1"><strong>Objection:</strong> "${o.objection}"</p>
-                                <p class="text-gray-600 text-sm"><strong>Response:</strong> ${o.response}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            </div>
-        </div>
-    `).join('');
-};
-
-    return `
-    <div class="results-card">
-        <div class="results-card-header">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h2 class="font-bold text-xl text-gray-900">${sales_play_title}</h2>
-                    <p class="text-gray-600 text-sm mt-1">Sales Playbook</p>
-                </div>
-                <button class="copy-playbook-btn btn btn-secondary text-xs py-2 px-3" title="Copy entire playbook">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                    </svg>
-                    Copy
-                </button>
-            </div>
-        </div>
-        <div class="results-card-body space-y-6" id="playbook-content">
-                
-                <div class="border-l-4 border-brand-purple pl-4 py-2">
-                    <h3 class="font-bold text-gray-900 mb-2">Executive Summary</h3>
-                    <p class="text-gray-700 leading-relaxed">${sales_play_summary}</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="border border-gray-200 rounded-lg p-4">
-                        <h3 class="font-bold text-gray-900 mb-3">Success Metrics</h3>
-                        <ul class="list-disc list-inside space-y-2">${renderList(success_metrics || ['Define success metrics'])}</ul>
-                    </div>
-                    <div class="border border-gray-200 rounded-lg p-4">
-                        <h3 class="font-bold text-gray-900 mb-3">Timeline Milestones</h3>
-                        <ul class="list-disc list-inside space-y-2">${renderList(timeline_milestones || ['Define timeline'])}</ul>
-                    </div>
-                </div>
-
-                ${competitive_positioning ? `
-                <div class="border-l-4 border-yellow-400 pl-4 py-2">
-                    <h3 class="font-bold text-gray-900 mb-2">Competitive Positioning</h3>
-                    <p class="text-gray-700 leading-relaxed">${competitive_positioning}</p>
-                </div>
-                ` : ''}
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <h3 class="font-bold text-gray-900 mb-3">Key Services</h3>
-                        <ul class="list-disc list-inside space-y-2">${renderList(key_services)}</ul>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-gray-900 mb-3">Strategic Partners</h3>
-                        <ul class="list-disc list-inside space-y-2">${renderList(key_partners)}</ul>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="font-bold text-lg text-gray-900 mb-4">Stakeholder Guide</h3>
-                    <div class="space-y-4">
-                        ${renderPersonas(target_personas)}
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    ${insider_tips ? `
-                    <div class="border border-gray-200 rounded-lg p-4">
-                        <h3 class="font-bold text-gray-900 mb-3">Insider Tips</h3>
-                        <ul class="list-disc list-inside space-y-2">${renderList(insider_tips)}</ul>
-                    </div>
-                    ` : ''}
-                    
-                    ${risk_mitigation ? `
-                    <div class="border border-gray-200 rounded-lg p-4">
-                        <h3 class="font-bold text-gray-900 mb-3">Risk Mitigation</h3>
-                        <ul class="list-disc list-inside space-y-2">${renderList(risk_mitigation)}</ul>
-                    </div>
-                    ` : ''}
-                </div>
-
-                ${next_actions ? `
-                <div class="border-2 border-brand-purple rounded-lg p-4">
-                    <h3 class="font-bold text-gray-900 mb-3">Next 7 Days</h3>
-                    <ul class="list-decimal list-inside space-y-2">${renderList(next_actions)}</ul>
-                </div>
-                ` : ''}
-            </div>
-        </div>
-    `;
-}
-
-setupCopyPlaybookButton() {
-    const copyBtn = document.querySelector('.copy-playbook-btn');
-    if (!copyBtn) return;
-
-    copyBtn.addEventListener('click', () => {
-        const playbookContent = document.getElementById('playbook-content');
-        if (!playbookContent) return;
-
-        // Create clean text version
-        const cleanText = this.convertPlaybookToText(playbookContent);
-        
-        navigator.clipboard.writeText(cleanText).then(() => {
-            const originalContent = copyBtn.innerHTML;
-            copyBtn.classList.add('copied');
-            copyBtn.innerHTML = `
-                <svg class="checkmark w-4 h-4 mr-1" viewBox="0 0 24 24">
-                    <path d="M9 12l2 2 4-4"></path>
-                </svg>
-                Copied!
-            `;
-            
-            setTimeout(() => {
-                copyBtn.classList.remove('copied');
-                copyBtn.innerHTML = originalContent;
-            }, 2000);
-        }).catch(err => {
-            console.error('Failed to copy playbook: ', err);
-        });
-    });
-}
-
-convertPlaybookToText(element) {
-    const title = document.querySelector('.results-card-header h2')?.textContent || 'Sales Playbook';
-    let text = `${title}\n${'='.repeat(title.length)}\n\n`;
-    
-    // Process each section
-    const sections = element.querySelectorAll('h3, h4, h5');
-    sections.forEach(section => {
-        const sectionTitle = section.textContent.trim();
-        text += `${sectionTitle}\n${'-'.repeat(sectionTitle.length)}\n`;
-        
-        // Get content after this heading until next heading
-        let nextElement = section.nextElementSibling;
-        while (nextElement && !['H3', 'H4', 'H5'].includes(nextElement.tagName)) {
-            if (nextElement.tagName === 'UL') {
-                const items = nextElement.querySelectorAll('li');
-                items.forEach(item => {
-                    text += `• ${item.textContent.trim()}\n`;
-                });
-            } else if (nextElement.tagName === 'P' || nextElement.classList.contains('border-l-4')) {
-                text += `${nextElement.textContent.trim()}\n`;
-            } else if (nextElement.classList.contains('border-l-3')) {
-                text += `  ${nextElement.textContent.trim()}\n`;
-            }
-            nextElement = nextElement.nextElementSibling;
-        }
-        text += '\n';
-    });
-    
-    return text;
-}
-   renderMarketAnalysis(data) {
-       const {
-           investment_thesis, financial_health, market_position, growth_catalysts,
-           identified_risks, management_outlook, key_financial_metrics, bull_case, bear_case, next_steps
-       } = data;
-
-       return `
-           <div class="results-card">
-               <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
-                   <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                   <h2 class="font-bold text-lg text-brand-blue-text">Market Analysis Summary</h2>
+   
+   const renderPersonas = (personas) => {
+   if (!personas || personas.length === 0) return '<p class="text-sm text-gray-500">No persona data available.</p>';
+   return personas.map((p, index) => `
+       <div class="bg-white border border-gray-200 rounded-lg p-4 mb-4">
+           <div class="flex items-center gap-3 mb-4">
+               <div class="playbook-persona-circle w-8 h-8 bg-brand-purple text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">${index + 1}</div>
+               <h4 class="font-bold text-lg text-gray-900">${p.persona_title}</h4>
+           </div>
+           
+           <div class="space-y-4">
+               <div>
+                   <h5 class="font-semibold text-gray-800 mb-2">Business Priorities</h5>
+                   <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 ml-2">${renderList(p.business_priorities)}</ul>
                </div>
-               <div class="results-card-body space-y-8">
-                   <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">
-                       ${marked.parse(investment_thesis)}
-                   </div>
-
-                   <div>
-                       <h3 class="font-bold mb-3">Key Financial Metrics</h3>
-                       <div class="flex flex-wrap gap-2">
-                           ${key_financial_metrics && key_financial_metrics.length > 0 ? key_financial_metrics.map(metric => `
-                               <span class="text-sm font-medium bg-gray-100 text-gray-800 px-3 py-1.5 rounded-lg">${metric}</span>`
-                           ).join('') : '<p class="text-gray-500 text-sm">None mentioned.</p>'}
-                       </div>
-                   </div>
-
-                   <div class="space-y-3 text-sm">
-                       <p><strong>Financial Health:</strong> ${financial_health || 'Not detailed.'}</p>
-                       <p><strong>Market Position:</strong> ${market_position || 'Not detailed.'}</p>
-                       <p><strong>Management Outlook:</strong> ${management_outlook || 'Not detailed.'}</p>
-                   </div>
-
-                   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                       <div>
-                          <h4 class="font-bold text-green-700 mb-3">Growth Catalysts</h4>
-                          <ul class="space-y-2 text-sm">${growth_catalysts && growth_catalysts.length > 0 ? growth_catalysts.map(c => `<li class="flex gap-2 items-start"><span class="text-green-500 mt-1">▲</span><span>${c}</span></li>`).join('') : '<li>None identified.</li>'}</ul>
-                       </div>
-                       <div>
-                          <h4 class="font-bold text-red-700 mb-3">Identified Risks</h4>
-                          <ul class="space-y-2 text-sm">${identified_risks && identified_risks.length > 0 ? identified_risks.map(r => `<li class="flex gap-2 items-start"><span class="text-red-500 mt-1">▼</span><span>${r}</span></li>`).join('') : '<li>None identified.</li>'}</ul>
-                       </div>
-                   </div>
-
-                   <div>
-                       <h3 class="font-bold mb-3">Bull vs. Bear Case</h3>
-                       <div class="space-y-4">
-                            <div class="p-3 bg-green-50 border-l-4 border-green-400">
-                               <p class="font-bold text-green-800">Bull Case</p>
-                               <p class="text-sm text-gray-700">${bull_case}</p>
-                            </div>
-                            <div class="p-3 bg-red-50 border-l-4 border-red-400">
-                               <p class="font-bold text-red-800">Bear Case</p>
-                               <p class="text-sm text-gray-700">${bear_case}</p>
-                            </div>
-                       </div>
-                   </div>
-                   
-                   <div class="pt-4 border-t">
-                       <p class="text-sm font-bold text-gray-800">${next_steps}</p>
-                   </div>
-                   
-                   <div class="p-3 mt-4 text-xs text-gray-500 bg-gray-50 rounded-lg border border-gray-200">
-                       <strong>Disclaimer:</strong> This content is for informational purposes only and does not constitute financial or investment advice. It is not a recommendation to buy or sell any security. You should always conduct your own research and consult a qualified financial professional before making any investment decisions.
+               
+               <div>
+                   <h5 class="font-semibold text-gray-800 mb-2">Conversation Starters</h5>
+                   <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 ml-2">${renderList(p.conversation_starters)}</ul>
+               </div>
+               
+               <div>
+                   <h5 class="font-semibold text-gray-800 mb-2">Objections & Responses</h5>
+                   <div class="space-y-3">
+                       ${p.objections_responses.map(o => `
+                           <div class="border-l-3 border-gray-300 pl-4 py-2">
+                               <p class="font-medium text-gray-800 text-sm mb-1"><strong>Objection:</strong> "${o.objection}"</p>
+                               <p class="text-gray-600 text-sm"><strong>Response:</strong> ${o.response}</p>
+                           </div>
+                       `).join('')}
                    </div>
                </div>
            </div>
-       `;
-   }
-   renderDailyBriefing(data) {
-    const { 
-        quick_take, agency_headlines, industry_headlines, 
-        contractor_headlines, vendor_headlines,  // FIXED: Added these
-        last_updated, summary, opportunities_spotted 
-    } = data;
+       </div>
+   `).join('');
+};
 
-    return `
-        <div class="results-card">
-            <div class="results-card-header flex items-center gap-4 bg-blue-50">
-                <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                <div>
-                    <h2 class="font-bold text-lg text-blue-800">📰 Daily Federal Sales Briefing</h2>
-                    <p class="text-sm text-blue-600">${last_updated ? new Date(last_updated).toLocaleDateString() : 'Today'}</p>
-                </div>
-            </div>
-            <div class="results-card-body space-y-6">
-                <div class="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-400">
-                    <p class="text-blue-800 font-medium">${quick_take}</p>
-                </div>
-
-                ${opportunities_spotted > 0 ? `
-                <div class="p-3 bg-green-50 border border-green-200 rounded-lg">
-                    <p class="text-green-800 font-semibold">🎯 ${opportunities_spotted} potential opportunities spotted in today's news</p>
-                </div>
-                ` : ''}
-
-                ${agency_headlines && agency_headlines.length > 0 ? `
-                <div>
-                    <h3 class="font-bold text-gray-900 mb-3">🏛️ Agency Headlines</h3>
-                    <div class="space-y-3">
-                        ${agency_headlines.map(item => `
-                            <div class="border-l-3 border-blue-400 pl-4 py-2 bg-gray-50 rounded-r">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">${item.source}</span>
-                                    <span class="text-xs text-gray-500">${item.date}</span>
-                                </div>
-                                <h4 class="font-semibold text-gray-900 mb-1">
-                                    <a href="${item.link}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 hover:underline">
-                                        ${item.headline}
-                                    </a>
-                                </h4>
-                                <p class="text-sm text-gray-600">${item.summary}</p>
-                                ${item.keywords && item.keywords.length > 0 ? `
-                                <div class="flex flex-wrap gap-1 mt-2">
-                                    ${item.keywords.map(keyword => 
-                                        `<span class="text-xs bg-gray-200 text-gray-700 px-1.5 py-0.5 rounded">${keyword}</span>`
-                                    ).join('')}
-                                </div>
-                                ` : ''}
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                ` : ''}
-
-                ${industry_headlines && industry_headlines.length > 0 ? `
-                <div>
-                    <h3 class="font-bold text-gray-900 mb-3">📡 Industry Headlines</h3>
-                    <div class="space-y-3">
-                        ${industry_headlines.map(item => `
-                            <div class="border-l-3 border-green-400 pl-4 py-2 bg-gray-50 rounded-r">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">${item.source}</span>
-                                    <span class="text-xs text-gray-500">${item.date}</span>
-                                </div>
-                                <h4 class="font-semibold text-gray-900 mb-1">
-                                    <a href="${item.link}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 hover:underline">
-                                        ${item.headline}
-                                    </a>
-                                </h4>
-                                <p class="text-sm text-gray-600">${item.summary}</p>
-                                ${item.keywords && item.keywords.length > 0 ? `
-                                <div class="flex flex-wrap gap-1 mt-2">
-                                    ${item.keywords.map(keyword => 
-                                        `<span class="text-xs bg-gray-200 text-gray-700 px-1.5 py-0.5 rounded">${keyword}</span>`
-                                    ).join('')}
-                                </div>
-                                ` : ''}
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                ` : ''}
-
-                ${contractor_headlines && contractor_headlines.length > 0 ? `
-                <div>
-                    <h3 class="font-bold text-gray-900 mb-3">🏢 Prime Contractor Updates</h3>
-                    <div class="space-y-3">
-                        ${contractor_headlines.map(item => `
-                            <div class="border-l-3 border-purple-400 pl-4 py-2 bg-gray-50 rounded-r">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">${item.source}</span>
-                                    <span class="text-xs text-gray-500">${item.date}</span>
-                                </div>
-                                <h4 class="font-semibold text-gray-900 mb-1">
-                                    <a href="${item.link}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 hover:underline">
-                                        ${item.headline}
-                                    </a>
-                                </h4>
-                                <p class="text-sm text-gray-600">${item.summary}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                ` : ''}
-
-                ${vendor_headlines && vendor_headlines.length > 0 ? `
-                <div>
-                    <h3 class="font-bold text-gray-900 mb-3">☁️ Technology Vendor News</h3>
-                    <div class="space-y-3">
-                        ${vendor_headlines.map(item => `
-                            <div class="border-l-3 border-orange-400 pl-4 py-2 bg-gray-50 rounded-r">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <span class="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">${item.source}</span>
-                                    <span class="text-xs text-gray-500">${item.date}</span>
-                                </div>
-                                <h4 class="font-semibold text-gray-900 mb-1">
-                                    <a href="${item.link}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 hover:underline">
-                                        ${item.headline}
-                                    </a>
-                                </h4>
-                                <p class="text-sm text-gray-600">${item.summary}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                ` : ''}
-
-                ${(!agency_headlines || agency_headlines.length === 0) && (!industry_headlines || industry_headlines.length === 0) ? `
-                <div class="text-center py-8">
-                    <p class="text-gray-500">No recent federal news available. The RSS system may need to collect fresh data.</p>
-                </div>
-                ` : ''}
-
-                <div class="pt-4 border-t text-center">
-                    <p class="text-sm text-gray-600">${summary}</p>
-                </div>
-            </div>
-        </div>
-    `;
-}
-   renderGeneralAdvice(data) {
-       const { quick_take, key_moves, mermaid_chart, talking_points, email_template, next_steps, response_type } = data;
-       const title = response_type === 'interview' ? 'Your Interview Plan' : 'Your Game Plan';
-       const talkingPointsTitle = response_type === 'interview' ? 'What They May Ask' : 'Key Questions to Ask';
-
-       return `
-           <div class="results-card">
-               <div class="results-card-header flex items-center gap-4">
-                   <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                   <h2 class="font-bold text-lg text-brand-gray-900">${title}</h2>
+   return `
+   <div class="results-card">
+       <div class="results-card-header">
+           <div class="flex items-center justify-between">
+               <div>
+                   <h2 class="font-bold text-xl text-gray-900">${sales_play_title}</h2>
+                   <p class="text-gray-600 text-sm mt-1">Sales Playbook</p>
                </div>
-               <div class="results-card-body space-y-8">
-                   <div class="p-4 bg-brand-purple/10 rounded-lg">${marked.parse(quick_take)}</div>
+               <button class="copy-playbook-btn btn btn-secondary text-xs py-2 px-3" title="Copy entire playbook">
+                   <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                   </svg>
+                   Copy
+               </button>
+           </div>
+       </div>
+       <div class="results-card-body space-y-6" id="playbook-content">
+               
+               <div class="border-l-4 border-brand-purple pl-4 py-2">
+                   <h3 class="font-bold text-gray-900 mb-2">Executive Summary</h3>
+                   <p class="text-gray-700 leading-relaxed">${sales_play_summary}</p>
+               </div>
+
+               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                   <div class="border border-gray-200 rounded-lg p-4">
+                       <h3 class="font-bold text-gray-900 mb-3">Success Metrics</h3>
+                       <ul class="list-disc list-inside space-y-2">${renderList(success_metrics || ['Define success metrics'])}</ul>
+                   </div>
+                   <div class="border border-gray-200 rounded-lg p-4">
+                       <h3 class="font-bold text-gray-900 mb-3">Timeline Milestones</h3>
+                       <ul class="list-disc list-inside space-y-2">${renderList(timeline_milestones || ['Define timeline'])}</ul>
+                   </div>
+               </div>
+
+               ${competitive_positioning ? `
+               <div class="border-l-4 border-yellow-400 pl-4 py-2">
+                   <h3 class="font-bold text-gray-900 mb-2">Competitive Positioning</h3>
+                   <p class="text-gray-700 leading-relaxed">${competitive_positioning}</p>
+               </div>
+               ` : ''}
+
+               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                    <div>
-                       <h3 class="font-bold mb-3">Your Next 3 Moves</h3>
-                       <div class="space-y-3">${key_moves.map((m, i) => `
-                           <div class="flex gap-3 items-start">
-                               <span class="flex-shrink-0 w-6 h-6 bg-brand-purple text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
-                              <div>
-                                  <p class="font-medium text-gray-900">${m.action}</p>
-                                  <p class="text-sm text-gray-600">${m.why}</p>
-                              </div>
-                          </div>`).join('')}
-                      </div>
-                  </div>
-                  ${mermaid_chart ? `
-                  <div>
-                      <h3 class="font-bold mb-2">Visual Strategy</h3>
-                      <div class="mermaid-container p-4 bg-white border rounded-lg">
-                         <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                      </div>
-                      <div class="flex justify-end gap-2 mt-2">
-                         <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
-                      </div>
-                  </div>` : ''}
-                  ${talking_points?.length > 0 ? `
-                  <div>
-                      <h3 class="font-bold mb-2">${talkingPointsTitle}</h3>
-                      <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${talking_points.map(t => `<li>${t}</li>`).join('')}</ul>
-                  </div>
-                  ` : ''}
-                  ${email_template ? `
-                  <div>
-                      <h3 class="font-bold mb-2">Email Template</h3>
-                      <div class="relative">
-                          <div class="copy-target bg-gray-50 rounded-lg p-3 font-mono text-xs text-gray-700 whitespace-pre-wrap border">${email_template}</div>
-                           <button class="copy-btn" title="Copy to clipboard">
-                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                           </button>
-                      </div>
-                  </div>
-                  ` : ''}
-              </div>
-          </div>
-      `;
-  }
-  
-  renderProspectAdvice(data) {
-      const { summary, top_s_is, top_software_and_cloud, company_capabilities, naics_codes, prospect_recommendations } = data;
-      const renderList = (items) => {
-           if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
-           return `<div class="space-y-3">${items.map(item => `
-              <div class="p-3 bg-gray-50 border rounded-md">
-                  <p class="font-bold text-sm text-gray-800">${item.company || 'N/A'}</p>
-                  <p class="text-xs text-gray-600">${item.value || ''}</p>
-              </div>
-           `).join('')}</div>`;
-      };
+                       <h3 class="font-bold text-gray-900 mb-3">Key Services</h3>
+                       <ul class="list-disc list-inside space-y-2">${renderList(key_services)}</ul>
+                   </div>
+                   <div>
+                       <h3 class="font-bold text-gray-900 mb-3">Strategic Partners</h3>
+                       <ul class="list-disc list-inside space-y-2">${renderList(key_partners)}</ul>
+                   </div>
+               </div>
 
-      return `
-           <div class="results-card">
-              <div class="results-card-header flex items-center gap-4 bg-brand-green-bg">
-                  <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                  <h2 class="font-bold text-lg text-brand-green-text">Prospecting Intelligence</h2>
-              </div>
-              <div class="results-card-body space-y-8">
-                  <div class="p-4 bg-brand-green-bg/50 rounded-lg text-brand-green-text">${marked.parse(summary)}</div>
-                  <div>
-                      <h3 class="font-bold mb-3">Top Contractors (SIs)</h3>
-                      ${renderList(top_s_is)}
-                  </div>
-                  <div>
-                      <h3 class="font-bold mb-3">Top Software & Cloud Partners</h3>
-                      ${renderList(top_software_and_cloud)}
-                  </div>
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                         <h4 class="font-bold text-gray-800 mb-3">Relevant Capabilities</h4>
-                         <ul class="space-y-2 text-sm">${company_capabilities.map(c => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
-                      </div>
-                      <div>
-                         <h4 class="font-bold text-gray-800 mb-3">NAICS Codes</h4>
-                         <ul class="space-y-2 text-sm">${naics_codes.map(n => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${n.code ? `${n.code} - ${n.description}`: n}</li>`).join('')}</ul>
-                      </div>
-                  </div>
-                  <div>
-                      <h3 class="font-bold mb-3">Recommendations</h3>
-                      <div class="p-4 bg-gray-50 border rounded-lg text-sm space-y-2">${prospect_recommendations.map(r => `<p>${r}</p>`).join('')}</div>
-                  </div>
-              </div>
-          </div>
-      `;
-  }
+               <div>
+                   <h3 class="font-bold text-lg text-gray-900 mb-4">Stakeholder Guide</h3>
+                   <div class="space-y-4">
+                       ${renderPersonas(target_personas)}
+                   </div>
+               </div>
 
-  renderNewsAdvice(data) {
-      const { 
-          quick_take, background, implications, suggested_opening_lines, immediate_actions, strategic_moves, mermaid_chart,
-          key_people_and_titles, suggested_discovery_questions, money_keywords 
+               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                   ${insider_tips ? `
+                   <div class="border border-gray-200 rounded-lg p-4">
+                       <h3 class="font-bold text-gray-900 mb-3">Insider Tips</h3>
+                       <ul class="list-disc list-inside space-y-2">${renderList(insider_tips)}</ul>
+                   </div>
+                   ` : ''}
+                   
+                   ${risk_mitigation ? `
+                   <div class="border border-gray-200 rounded-lg p-4">
+                       <h3 class="font-bold text-gray-900 mb-3">Risk Mitigation</h3>
+                       <ul class="list-disc list-inside space-y-2">${renderList(risk_mitigation)}</ul>
+                   </div>
+                   ` : ''}
+               </div>
+
+               ${next_actions ? `
+               <div class="border-2 border-brand-purple rounded-lg p-4">
+                   <h3 class="font-bold text-gray-900 mb-3">Next 7 Days</h3>
+                   <ul class="list-decimal list-inside space-y-2">${renderList(next_actions)}</ul>
+               </div>
+               ` : ''}
+           </div>
+       </div>
+   `;
+}
+
+setupCopyPlaybookButton() {
+   const copyBtn = document.querySelector('.copy-playbook-btn');
+   if (!copyBtn) return;
+
+   copyBtn.addEventListener('click', () => {
+       const playbookContent = document.getElementById('playbook-content');
+       if (!playbookContent) return;
+
+       const cleanText = this.convertPlaybookToText(playbookContent);
+       
+       navigator.clipboard.writeText(cleanText).then(() => {
+           const originalContent = copyBtn.innerHTML;
+           copyBtn.classList.add('copied');
+           copyBtn.innerHTML = `
+               <svg class="checkmark w-4 h-4 mr-1" viewBox="0 0 24 24">
+                   <path d="M9 12l2 2 4-4"></path>
+               </svg>
+               Copied!
+           `;
+           
+           setTimeout(() => {
+               copyBtn.classList.remove('copied');
+               copyBtn.innerHTML = originalContent;
+           }, 2000);
+       }).catch(err => {
+           console.error('Failed to copy playbook: ', err);
+       });
+   });
+}
+
+convertPlaybookToText(element) {
+   const title = document.querySelector('.results-card-header h2')?.textContent || 'Sales Playbook';
+   let text = `${title}\n${'='.repeat(title.length)}\n\n`;
+   
+   const sections = element.querySelectorAll('h3, h4, h5');
+   sections.forEach(section => {
+       const sectionTitle = section.textContent.trim();
+       text += `${sectionTitle}\n${'-'.repeat(sectionTitle.length)}\n`;
+       
+       let nextElement = section.nextElementSibling;
+       while (nextElement && !['H3', 'H4', 'H5'].includes(nextElement.tagName)) {
+           if (nextElement.tagName === 'UL') {
+               const items = nextElement.querySelectorAll('li');
+               items.forEach(item => {
+                   text += `• ${item.textContent.trim()}\n`;
+               });
+           } else if (nextElement.tagName === 'P' || nextElement.classList.contains('border-l-4')) {
+               text += `${nextElement.textContent.trim()}\n`;
+           } else if (nextElement.classList.contains('border-l-3')) {
+               text += `  ${nextElement.textContent.trim()}\n`;
+           }
+           nextElement = nextElement.nextElementSibling;
+       }
+       text += '\n';
+   });
+   
+   return text;
+}
+
+  renderMarketAnalysis(data) {
+      const {
+          investment_thesis, financial_health, market_position, growth_catalysts,
+          identified_risks, management_outlook, key_financial_metrics, bull_case, bear_case, next_steps
       } = data;
-      
+
       return `
           <div class="results-card">
               <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
                   <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
-                  <h2 class="font-bold text-lg text-brand-blue-text">News Analysis Summary</h2>
+                  <h2 class="font-bold text-lg text-brand-blue-text">Market Analysis Summary</h2>
               </div>
               <div class="results-card-body space-y-8">
-                  <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">${marked.parse(quick_take)}</div>
+                  <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">
+                      ${marked.parse(investment_thesis)}
+                  </div>
+
+                  <div>
+                      <h3 class="font-bold mb-3">Key Financial Metrics</h3>
+                      <div class="flex flex-wrap gap-2">
+                          ${key_financial_metrics && key_financial_metrics.length > 0 ? key_financial_metrics.map(metric => `
+                              <span class="text-sm font-medium bg-gray-100 text-gray-800 px-3 py-1.5 rounded-lg">${metric}</span>`
+                          ).join('') : '<p class="text-gray-500 text-sm">None mentioned.</p>'}
+                      </div>
+                  </div>
+
+                  <div class="space-y-3 text-sm">
+                      <p><strong>Financial Health:</strong> ${financial_health || 'Not detailed.'}</p>
+                      <p><strong>Market Position:</strong> ${market_position || 'Not detailed.'}</p>
+                      <p><strong>Management Outlook:</strong> ${management_outlook || 'Not detailed.'}</p>
+                  </div>
+
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                          <h3 class="font-bold mb-3">Key People & Titles</h3>
-                          <div class="space-y-2 text-sm">
-                              ${key_people_and_titles && key_people_and_titles.length > 0 ? key_people_and_titles.map(person => `
-                                  <div class="flex items-center gap-2">
-                                      <svg class="h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
-                                      <span>${person}</span>
-                                  </div>`).join('') : '<p class="text-gray-500">None mentioned.</p>'}
-                          </div>
+                         <h4 class="font-bold text-green-700 mb-3">Growth Catalysts</h4>
+                         <ul class="space-y-2 text-sm">${growth_catalysts && growth_catalysts.length > 0 ? growth_catalysts.map(c => `<li class="flex gap-2 items-start"><span class="text-green-500 mt-1">▲</span><span>${c}</span></li>`).join('') : '<li>None identified.</li>'}</ul>
                       </div>
                       <div>
-                          <h3 class="font-bold mb-3">Money Keywords</h3>
-                          <div class="flex flex-wrap gap-2">
-                              ${money_keywords && money_keywords.length > 0 ? money_keywords.map(keyword => `
-                                  <span class="text-xs font-medium bg-green-100 text-green-800 px-2.5 py-1 rounded-full">${keyword}</span>`
-                              ).join('') : '<p class="text-gray-500">No funding keywords found.</p>'}
-                          </div>
+                         <h4 class="font-bold text-red-700 mb-3">Identified Risks</h4>
+                         <ul class="space-y-2 text-sm">${identified_risks && identified_risks.length > 0 ? identified_risks.map(r => `<li class="flex gap-2 items-start"><span class="text-red-500 mt-1">▼</span><span>${r}</span></li>`).join('') : '<li>None identified.</li>'}</ul>
                       </div>
                   </div>
+
                   <div>
-                      <h3 class="font-bold mb-3">Suggested Discovery Questions</h3>
-                      <div class="space-y-2">
-                          ${suggested_discovery_questions && suggested_discovery_questions.length > 0 ? suggested_discovery_questions.map(q => `
-                              <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-800 flex gap-2">
-                                  <span class="font-bold text-brand-purple">Q.</span>
-                                  <span>${q}</span>
-                              </div>`).join('') : '<p class="text-gray-500">No questions suggested.</p>'}
+                      <h3 class="font-bold mb-3">Bull vs. Bear Case</h3>
+                      <div class="space-y-4">
+                           <div class="p-3 bg-green-50 border-l-4 border-green-400">
+                              <p class="font-bold text-green-800">Bull Case</p>
+                              <p class="text-sm text-gray-700">${bull_case}</p>
+                           </div>
+                           <div class="p-3 bg-red-50 border-l-4 border-red-400">
+                              <p class="font-bold text-red-800">Bear Case</p>
+                              <p class="text-sm text-gray-700">${bear_case}</p>
+                           </div>
                       </div>
                   </div>
-                  <div>
-                      <h3 class="font-bold mb-3">Email Openers</h3>
-                      <div class="space-y-2">${suggested_opening_lines.map((line, i) => `
-                          <div class="relative p-3 bg-gray-50 border rounded-md text-sm text-gray-700">
-                               <span class="copy-target"><strong>Option ${i + 1}:</strong> ${line}</span>
-                               <button class="copy-btn" title="Copy to clipboard">
-                                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                               </button>
-                          </div>`).join('')}
-                      </div>
+                  
+                  <div class="pt-4 border-t">
+                      <p class="text-sm font-bold text-gray-800">${next_steps}</p>
                   </div>
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                          <h4 class="font-bold text-gray-800 mb-3">Immediate Actions</h4>
-                          <div class="space-y-3">${immediate_actions.map((action, i) => `
-                              <div class="flex gap-3 items-start">
-                                  <span class="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
-                                  <div>
-                                      <p class="font-medium text-sm text-gray-900">${action.action}</p>
-                                      <p class="text-xs text-gray-600">${action.why}</p>
-                                  </div>
-                              </div>`).join('')}
-                          </div>
-                      </div>
-                      <div>
-                          <h4 class="font-bold text-gray-800 mb-3">Strategic Moves</h4>
-                          <div class="space-y-3">${strategic_moves.map((move, i) => `
-                              <div class="flex gap-3 items-start">
-                                  <span class="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
-                                  <div>
-                                      <p class="font-medium text-sm text-gray-900">${move.action}</p>
-                                      <p class="text-xs text-gray-600">${move.why}</p>
-                                  </div>
-                              </div>`).join('')}
-                          </div>
-                      </div>
+                  
+                  <div class="p-3 mt-4 text-xs text-gray-500 bg-gray-50 rounded-lg border border-gray-200">
+                      <strong>Disclaimer:</strong> This content is for informational purposes only and does not constitute financial or investment advice. It is not a recommendation to buy or sell any security. You should always conduct your own research and consult a qualified financial professional before making any investment decisions.
                   </div>
-                  ${mermaid_chart ? `
-                  <div>
-                      <h3 class="font-bold mb-2">GTM Flow</h3>
-                      <div class="mermaid-container p-4 bg-white border rounded-lg">
-                          <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                      </div>
-                      <div class="flex justify-end gap-2 mt-2">
-                         <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
-                      </div>
-                  </div>` : ''}
               </div>
           </div>
       `;
   }
 
-  setupInteractiveElements() {
-      this.setupCopyButtons();
-	  this.setupCopyPlaybookButton();
-  }
+  renderDailyBriefing(data) {
+   const { 
+       quick_take, agency_headlines, industry_headlines, 
+       contractor_headlines, vendor_headlines,
+       last_updated, summary, opportunities_spotted 
+   } = data;
 
-  setupCopyButtons() {
-      const copyButtons = this.elements.resultsContainer.querySelectorAll('.copy-btn');
-      copyButtons.forEach(btn => {
-          btn.addEventListener('click', (e) => {
-              const target = e.currentTarget.parentElement.querySelector('.copy-target');
-              if (target) {
-                  navigator.clipboard.writeText(target.innerText).then(() => {
-                      const originalContent = e.currentTarget.innerHTML;
-                      e.currentTarget.classList.add('copied');
-                      e.currentTarget.innerHTML = `
-                          <svg class="checkmark" viewBox="0 0 24 24">
-                              <path d="M9 12l2 2 4-4"></path>
-                          </svg>
-                          <span>Copied!</span>
-                      `;
-                      
-                      const parent = e.currentTarget.parentElement;
-                      parent.classList.add('copy-flash');
-                      
-                      setTimeout(() => {
-                          e.currentTarget.classList.remove('copied');
-                          e.currentTarget.innerHTML = originalContent;
-                          parent.classList.remove('copy-flash');
-                      }, 2000);
-                  }).catch(err => {
-                      console.error('Failed to copy text: ', err);
-                  });
-              }
-          });
-      });
-  }
+   return `
+       <div class="results-card">
+           <div class="results-card-header flex items-center gap-4 bg-blue-50">
+               <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+               <div>
+                   <h2 class="font-bold text-lg text-blue-800">📰 Daily Federal Sales Briefing</h2>
+                   <p class="text-sm text-blue-600">${last_updated ? new Date(last_updated).toLocaleDateString() : 'Today'}</p>
+               </div>
+           </div>
+           <div class="results-card-body space-y-6">
+               <div class="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+                   <p class="text-blue-800 font-medium">${quick_take}</p>
+               </div>
 
-  setupMermaidDownloadButton() {
-      const downloadPngBtn = document.getElementById('download-png-btn');
+               ${opportunities_spotted > 0 ? `
+               <div class="p-3 bg-green-50 border border-green-200 rounded-lg">
+                   <p class="text-green-800 font-semibold">🎯 ${opportunities_spotted} potential opportunities spotted in today's news</p>
+               </div>
+               ` : ''}
 
-      if (downloadPngBtn) {
-          downloadPngBtn.addEventListener('click', () => this.downloadMermaidAsPNG());
-      }
-  }
+               ${agency_headlines && agency_headlines.length > 0 ? `
+               <div>
+                   <h3 class="font-bold text-gray-900 mb-3">🏛️ Agency Headlines</h3>
+                   <div class="space-y-3">
+                       ${agency_headlines.map(item => `
+                           <div class="border-l-3 border-blue-400 pl-4 py-2 bg-gray-50 rounded-r">
+                               <div class="flex items-center gap-2 mb-1">
+                                   <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">${item.source}</span>
+                                   <span class="text-xs text-gray-500">${item.date}</span>
+                               </div>
+                               <h4 class="font-semibold text-gray-900 mb-1">
+                                   <a href="${item.link}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 hover:underline">
+                                       ${item.headline}
+                                   </a>
+                               </h4>
+                               <p class="text-sm text-gray-600">${item.summary}</p>
+                               ${item.keywords && item.keywords.length > 0 ? `
+                               <div class="flex flex-wrap gap-1 mt-2">
+                                   ${item.keywords.map(keyword => 
+                                       `<span class="text-xs bg-gray-200 text-gray-700 px-1.5 py-0.5 rounded">${keyword}</span>`
+                                   ).join('')}
+                               </div>
+                               ` : ''}
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>
+               ` : ''}
 
-  downloadMermaidAsPNG() {
-      const mermaidContainer = document.querySelector('.mermaid-container');
-      if (!mermaidContainer || typeof html2canvas === 'undefined') {
-          console.error("Mermaid container or html2canvas library not found.");
-          return;
-      }
-      html2canvas(mermaidContainer, { backgroundColor: '#ffffff' }).then(canvas => {
-          const a = document.createElement("a");
-          a.href = canvas.toDataURL("image/png");
-          a.download = "askarti-diagram.png";
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-      });
-  }
+               ${(!agency_headlines || agency_headlines.length === 0) && (!industry_headlines || industry_headlines.length === 0) ? `
+               <div class="text-center py-8">
+                   <p class="text-gray-500">No recent federal news available. The RSS system may need to collect fresh data.</p>
+               </div>
+               ` : ''}
 
-  async renderMermaidChart() {
-      try {
-          await mermaid.run({
-              nodes: document.querySelectorAll('.mermaid'),
-          });
-      } catch (error) {
-          console.error('Mermaid rendering error:', error);
-          const container = document.querySelector('.mermaid-container');
-          if (container) container.innerHTML = '<p class="text-red-500 text-sm">Could not render visual plan.</p>';
-      }
-  }
+               <div class="pt-4 border-t text-center">
+                   <p class="text-sm text-gray-600">${summary}</p>
+               </div>
+           </div>
+       </div>
+   `;
+}
 
-  showModal() { 
-      this.elements.aboutModal.classList.remove('hidden'); 
-  }
-  
-  hideModal() { 
-      this.elements.aboutModal.classList.add('hidden'); 
-  }
+  renderGeneralAdvice(data) {
+      const { quick_take, key_moves, mermaid_chart, talking_points, email_template, next_steps, response_type } = data;
+      const title = response_type === 'interview' ? 'Your Interview Plan' : 'Your Game Plan';
+      const talkingPointsTitle = response_type === 'interview' ? 'What They May Ask' : 'Key Questions to Ask';
+
+      return `
+          <div class="results-card">
+              <div class="results-card-header flex items-center gap-4">
+                  <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                  <h2 class="font-bold text-lg text-brand-gray-900">${title}</h2>
+              </div>
+              <div class="results-card-body space-y-8">
+                  <div class="p-4 bg-brand-purple/10 rounded-lg">${marked.parse(quick_take)}</div>
+                  <div>
+                      <h3 class="font-bold mb-3">Your Next 3 Moves</h3>
+                      <div class="space-y-3">${key_moves.map((m, i) => `
+                          <div class="flex gap-3 items-start">
+                              <span class="flex-shrink-0 w-6 h-6 bg-brand-purple text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
+                             <div>
+                                 <p class="font-medium text-gray-900">${m.action}</p>
+                                 <p class="text-sm text-gray-600">${m.why}</p>
+                             </div>
+                         </div>`).join('')}
+                     </div>
+                 </div>
+                 ${mermaid_chart ? `
+                 <div>
+                     <h3 class="font-bold mb-2">Visual Strategy</h3>
+                     <div class="mermaid-container p-4 bg-white border rounded-lg">
+                        <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
+                     </div>
+                     <div class="flex justify-end gap-2 mt-2">
+                        <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
+                     </div>
+                 </div>` : ''}
+                 ${talking_points?.length > 0 ? `
+                 <div>
+                     <h3 class="font-bold mb-2">${talkingPointsTitle}</h3>
+                     <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${talking_points.map(t => `<li>${t}</li>`).join('')}</ul>
+                 </div>
+                 ` : ''}
+                 ${email_template ? `
+                 <div>
+                     <h3 class="font-bold mb-2">Email Template</h3>
+                     <div class="relative">
+                         <div class="copy-target bg-gray-50 rounded-lg p-3 font-mono text-xs text-gray-700 whitespace-pre-wrap border">${email_template}</div>
+                          <button class="copy-btn" title="Copy to clipboard">
+                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                          </button>
+                     </div>
+                 </div>
+                 ` : ''}
+             </div>
+         </div>
+     `;
+ }
+ 
+ renderProspectAdvice(data) {
+     const { summary, top_s_is, top_software_and_cloud, company_capabilities, naics_codes, prospect_recommendations } = data;
+     const renderList = (items) => {
+          if (!items || items.length === 0) return '<p class="text-sm text-gray-500">No data available</p>';
+          return `<div class="space-y-3">${items.map(item => `
+             <div class="p-3 bg-gray-50 border rounded-md">
+                 <p class="font-bold text-sm text-gray-800">${item.company || 'N/A'}</p>
+                 <p class="text-xs text-gray-600">${item.value || ''}</p>
+             </div>
+          `).join('')}</div>`;
+     };
+
+     return `
+          <div class="results-card">
+             <div class="results-card-header flex items-center gap-4 bg-brand-green-bg">
+                 <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                 <h2 class="font-bold text-lg text-brand-green-text">Prospecting Intelligence</h2>
+             </div>
+             <div class="results-card-body space-y-8">
+                 <div class="p-4 bg-brand-green-bg/50 rounded-lg text-brand-green-text">${marked.parse(summary)}</div>
+                 <div>
+                     <h3 class="font-bold mb-3">Top Contractors (SIs)</h3>
+                     ${renderList(top_s_is)}
+                 </div>
+                 <div>
+                     <h3 class="font-bold mb-3">Top Software & Cloud Partners</h3>
+                     ${renderList(top_software_and_cloud)}
+                 </div>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div>
+                        <h4 class="font-bold text-gray-800 mb-3">Relevant Capabilities</h4>
+                        <ul class="space-y-2 text-sm">${company_capabilities.map(c => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${c}</li>`).join('')}</ul>
+                     </div>
+                     <div>
+                        <h4 class="font-bold text-gray-800 mb-3">NAICS Codes</h4>
+                        <ul class="space-y-2 text-sm">${naics_codes.map(n => `<li class="flex gap-2 items-center"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${n.code ? `${n.code} - ${n.description}`: n}</li>`).join('')}</ul>
+                     </div>
+                 </div>
+                 <div>
+                     <h3 class="font-bold mb-3">Recommendations</h3>
+                     <div class="p-4 bg-gray-50 border rounded-lg text-sm space-y-2">${prospect_recommendations.map(r => `<p>${r}</p>`).join('')}</div>
+                 </div>
+             </div>
+         </div>
+     `;
+ }
+
+ renderNewsAdvice(data) {
+     const { 
+         quick_take, background, implications, suggested_opening_lines, immediate_actions, strategic_moves, mermaid_chart,
+         key_people_and_titles, suggested_discovery_questions, money_keywords 
+     } = data;
+     
+     return `
+         <div class="results-card">
+             <div class="results-card-header flex items-center gap-4 bg-brand-blue-bg">
+                 <img src="/images/arti_right.png" alt="Arti" class="h-10 w-10 rounded-full border-2 border-white">
+                 <h2 class="font-bold text-lg text-brand-blue-text">News Analysis Summary</h2>
+             </div>
+             <div class="results-card-body space-y-8">
+                 <div class="p-4 bg-brand-blue-bg/50 rounded-lg text-brand-blue-text">${marked.parse(quick_take)}</div>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div>
+                         <h3 class="font-bold mb-3">Key People & Titles</h3>
+                         <div class="space-y-2 text-sm">
+                             ${key_people_and_titles && key_people_and_titles.length > 0 ? key_people_and_titles.map(person => `
+                                 <div class="flex items-center gap-2">
+                                     <svg class="h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
+                                     <span>${person}</span>
+                                 </div>`).join('') : '<p class="text-gray-500">None mentioned.</p>'}
+                         </div>
+                     </div>
+                     <div>
+                         <h3 class="font-bold mb-3">Money Keywords</h3>
+                         <div class="flex flex-wrap gap-2">
+                             ${money_keywords && money_keywords.length > 0 ? money_keywords.map(keyword => `
+                                 <span class="text-xs font-medium bg-green-100 text-green-800 px-2.5 py-1 rounded-full">${keyword}</span>`
+                             ).join('') : '<p class="text-gray-500">No funding keywords found.</p>'}
+                         </div>
+                     </div>
+                 </div>
+                 <div>
+                     <h3 class="font-bold mb-3">Suggested Discovery Questions</h3>
+                     <div class="space-y-2">
+                         ${suggested_discovery_questions && suggested_discovery_questions.length > 0 ? suggested_discovery_questions.map(q => `
+                             <div class="p-3 bg-gray-50 border rounded-md text-sm text-gray-800 flex gap-2">
+                                 <span class="font-bold text-brand-purple">Q.</span>
+                                 <span>${q}</span>
+                             </div>`).join('') : '<p class="text-gray-500">No questions suggested.</p>'}
+                     </div>
+                 </div>
+                 <div>
+                     <h3 class="font-bold mb-3">Email Openers</h3>
+                     <div class="space-y-2">${suggested_opening_lines.map((line, i) => `
+                         <div class="relative p-3 bg-gray-50 border rounded-md text-sm text-gray-700">
+                              <span class="copy-target"><strong>Option ${i + 1}:</strong> ${line}</span>
+                              <button class="copy-btn" title="Copy to clipboard">
+                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                              </button>
+                         </div>`).join('')}
+                     </div>
+                 </div>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div>
+                         <h4 class="font-bold text-gray-800 mb-3">Immediate Actions</h4>
+                         <div class="space-y-3">${immediate_actions.map((action, i) => `
+                             <div class="flex gap-3 items-start">
+                                 <span class="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
+                                 <div>
+                                     <p class="font-medium text-sm text-gray-900">${action.action}</p>
+                                     <p class="text-xs text-gray-600">${action.why}</p>
+                                 </div>
+                             </div>`).join('')}
+                         </div>
+                     </div>
+                     <div>
+                         <h4 class="font-bold text-gray-800 mb-3">Strategic Moves</h4>
+                         <div class="space-y-3">${strategic_moves.map((move, i) => `
+                             <div class="flex gap-3 items-start">
+                                 <span class="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">${i + 1}</span>
+                                 <div>
+                                     <p class="font-medium text-sm text-gray-900">${move.action}</p>
+                                     <p class="text-xs text-gray-600">${move.why}</p>
+                                 </div>
+                             </div>`).join('')}
+                         </div>
+                     </div>
+                 </div>
+                 ${mermaid_chart ? `
+                 <div>
+                     <h3 class="font-bold mb-2">GTM Flow</h3>
+                     <div class="mermaid-container p-4 bg-white border rounded-lg">
+                         <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
+                     </div>
+                     <div class="flex justify-end gap-2 mt-2">
+                        <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
+                     </div>
+                 </div>` : ''}
+             </div>
+         </div>
+     `;
+ }
+
+ setupInteractiveElements() {
+     this.setupCopyButtons();
+     this.setupCopyPlaybookButton();
+ }
+
+ setupCopyButtons() {
+     const copyButtons = this.elements.resultsContainer.querySelectorAll('.copy-btn');
+     copyButtons.forEach(btn => {
+         btn.addEventListener('click', (e) => {
+             const target = e.currentTarget.parentElement.querySelector('.copy-target');
+             if (target) {
+                 navigator.clipboard.writeText(target.innerText).then(() => {
+                     const originalContent = e.currentTarget.innerHTML;
+                     e.currentTarget.classList.add('copied');
+                     e.currentTarget.innerHTML = `
+                         <svg class="checkmark" viewBox="0 0 24 24">
+                             <path d="M9 12l2 2 4-4"></path>
+                         </svg>
+                         <span>Copied!</span>
+                     `;
+                     
+                     const parent = e.currentTarget.parentElement;
+                     parent.classList.add('copy-flash');
+                     
+                     setTimeout(() => {
+                         e.currentTarget.classList.remove('copied');
+                         e.currentTarget.innerHTML = originalContent;
+                         parent.classList.remove('copy-flash');
+                     }, 2000);
+                 }).catch(err => {
+                     console.error('Failed to copy text: ', err);
+                 });
+             }
+         });
+     });
+ }
+
+ setupMermaidDownloadButton() {
+     const downloadPngBtn = document.getElementById('download-png-btn');
+
+     if (downloadPngBtn) {
+         downloadPngBtn.addEventListener('click', () => this.downloadMermaidAsPNG());
+     }
+ }
+
+ downloadMermaidAsPNG() {
+     const mermaidContainer = document.querySelector('.mermaid-container');
+     if (!mermaidContainer || typeof html2canvas === 'undefined') {
+         console.error("Mermaid container or html2canvas library not found.");
+         return;
+     }
+     html2canvas(mermaidContainer, { backgroundColor: '#ffffff' }).then(canvas => {
+         const a = document.createElement("a");
+         a.href = canvas.toDataURL("image/png");
+         a.download = "askarti-diagram.png";
+         document.body.appendChild(a);
+         a.click();
+         document.body.removeChild(a);
+     });
+ }
+
+ async renderMermaidChart() {
+     try {
+         await mermaid.run({
+             nodes: document.querySelectorAll('.mermaid'),
+         });
+     } catch (error) {
+         console.error('Mermaid rendering error:', error);
+         const container = document.querySelector('.mermaid-container');
+         if (container) container.innerHTML = '<p class="text-red-500 text-sm">Could not render visual plan.</p>';
+     }
+ }
+
+ showModal() { 
+     this.elements.aboutModal.classList.remove('hidden'); 
+ }
+ 
+ hideModal() { 
+     this.elements.aboutModal.classList.add('hidden'); 
+ }
 }
 
 // Initialize the app when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  const app = new AskArti();
+ const app = new AskArti();
 });
-// Add this to your existing JavaScript, right after your AskArti class definition
 
 // Enhanced AskArti class methods for news integration
 AskArti.prototype.checkNewsStatus = async function() {
-    try {
-        // Check if we have recent news data by making a quick test call
-        const testResponse = await fetch(CONFIG.API_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                situation: "test news availability",
-                mode: "news-check"
-            }),
-        });
-        
-        // For now, just show the indicator since we know RSS is working
-        const indicator = document.getElementById('news-freshness-indicator');
-        const statusText = document.getElementById('news-status-text');
-        
-        if (indicator && statusText) {
-            indicator.classList.remove('hidden');
-            
-            // Simulate fresh data timestamp
-            const now = new Date();
-            const updateTime = new Date(now.getTime() - (2 * 60 * 60 * 1000)); // 2 hours ago
-            statusText.textContent = `Fresh federal news loaded • Updated ${this.getTimeAgo(updateTime)}`;
-        }
-    } catch (error) {
-        console.log('News status check skipped:', error);
-    }
+   try {
+       const testResponse = await fetch(CONFIG.API_ENDPOINT, {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify({ 
+               situation: "test news availability",
+               mode: "news-check"
+           }),
+       });
+       
+       const indicator = document.getElementById('news-freshness-indicator');
+       const statusText = document.getElementById('news-status-text');
+       
+       if (indicator && statusText) {
+           indicator.classList.remove('hidden');
+           
+           const now = new Date();
+           const updateTime = new Date(now.getTime() - (2 * 60 * 60 * 1000));
+           statusText.textContent = `Fresh federal news loaded • Updated ${this.getTimeAgo(updateTime)}`;
+       }
+   } catch (error) {
+       console.log('News status check skipped:', error);
+   }
 };
 
 AskArti.prototype.getTimeAgo = function(date) {
-    const now = new Date();
-    const diffMs = now - date;
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    const diffMins = Math.floor(diffMs / (1000 * 60));
+   const now = new Date();
+   const diffMs = now - date;
+   const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+   const diffMins = Math.floor(diffMs / (1000 * 60));
 
-    if (diffHours > 0) {
-        return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-    } else if (diffMins > 0) {
-        return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
-    } else {
-        return 'just now';
-    }
+   if (diffHours > 0) {
+       return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+   } else if (diffMins > 0) {
+       return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+   } else {
+       return 'just now';
+   }
 };
 
-// Enhanced displayAdvice to show news enhancement badge
 const originalDisplayAdvice = AskArti.prototype.displayAdvice;
 AskArti.prototype.displayAdvice = function(data) {
-    // Call original function
-    originalDisplayAdvice.call(this, data);
-    
-    // Add news enhancement badge if response likely used news context
-    if (this.responseIncludesNewsContext(data)) {
-        this.addNewsEnhancedBadge();
-    }
+   originalDisplayAdvice.call(this, data);
+   
+   if (this.responseIncludesNewsContext(data)) {
+       this.addNewsEnhancedBadge();
+   }
 };
 
 AskArti.prototype.responseIncludesNewsContext = function(data) {
-    // Check if response likely used news context
-    const responseText = JSON.stringify(data).toLowerCase();
-    const newsIndicators = [
-        'recent news', 'announced', 'press release', 
-        'this week', 'yesterday', 'today', 'latest',
-        'recent', 'current', 'breaking', 'just reported'
-    ];
-    
-    return newsIndicators.some(indicator => responseText.includes(indicator));
+   const responseText = JSON.stringify(data).toLowerCase();
+   const newsIndicators = [
+       'recent news', 'announced', 'press release', 
+       'this week', 'yesterday', 'today', 'latest',
+       'recent', 'current', 'breaking', 'just reported'
+   ];
+   
+   return newsIndicators.some(indicator => responseText.includes(indicator));
 };
 
 AskArti.prototype.addNewsEnhancedBadge = function() {
-    const header = document.querySelector('.results-card-header h2');
-    if (header && !header.querySelector('.news-enhanced-badge')) {
-        const badge = document.createElement('span');
-        badge.className = 'news-enhanced-badge ml-2';
-        badge.innerHTML = `
-            <div class="pulse-dot"></div>
-            Enhanced with latest news
-        `;
-        header.appendChild(badge);
-    }
+   const header = document.querySelector('.results-card-header h2');
+   if (header && !header.querySelector('.news-enhanced-badge')) {
+       const badge = document.createElement('span');
+       badge.className = 'news-enhanced-badge ml-2';
+       badge.innerHTML = `
+           <div class="pulse-dot"></div>
+           Enhanced with latest news
+       `;
+       header.appendChild(badge);
+   }
 };
 
-// Update your initialization to check news status
 document.addEventListener('DOMContentLoaded', () => {
-    const app = new AskArti();
-    
-    // Check news status after a short delay
-    setTimeout(() => {
-        app.checkNewsStatus();
-    }, 1000);
-    
-    // Store app globally for other functions
-    window.askArti = app;
+   const app = new AskArti();
+   
+   setTimeout(() => {
+       app.checkNewsStatus();
+   }, 1000);
+   
+   window.askArti = app;
 });
 </script>
 </body>
