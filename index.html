@@ -1178,48 +1178,67 @@ setupAutoExpand() {
    }
 }
 
-   displayAdvice(data) {
-       const { response_type } = data;
-       let html = '';
+   // In your AskArti class, replace the displayAdvice method with this:
 
-       // Main router for different response types
-       switch (response_type) {
-           case 'digest':
-               html = this.renderDailyDigest(data);
-               break;
-           case 'playbook':
-               html = this.renderSalesPlaybook(data);
-               break;
-           case 'news':
-               html = this.renderNewsAdvice(data);
-               break;
-           case 'investment':
-               html = this.renderMarketAnalysis(data);
-               break;
-           case 'prospect':
-               html = this.renderProspectAdvice(data);
-               break;
-           case 'deal':
-           case 'interview':
-           case 'meeting':
-               html = this.renderGeneralAdvice(data);
-               break;
-           default:
-               // Fallback to general advice for any unknown type
-               html = this.renderGeneralAdvice(data);
-               break;
-       }
-       
-       this.elements.resultsContainer.innerHTML = html;
-       this.setupInteractiveElements(); // For copy buttons, etc.
+displayAdvice(data) {
+    const { response_type } = data;
+    let html = '';
 
-       if (data.mermaid_chart) {
-           this.renderMermaidChart().then(() => {
-               this.setupMermaidDownloadButton();
-           });
-       }
-       this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-   }
+    // Main router for different response types
+    switch (response_type) {
+        case 'digest':
+            html = this.renderDailyDigest(data);
+            break;
+        case 'playbook':
+            html = this.renderSalesPlaybook(data);
+            break;
+        case 'news':
+            html = this.renderNewsAdvice(data);
+            break;
+        case 'investment':
+            html = this.renderMarketAnalysis(data);
+            break;
+        case 'prospect':
+            html = this.renderProspectAdvice(data);
+            break;
+        case 'deal':
+        case 'interview':
+        case 'meeting':
+            html = this.renderGeneralAdvice(data);
+            break;
+        default:
+            // Fallback to general advice for any unknown type
+            html = this.renderGeneralAdvice(data);
+            break;
+    }
+    
+    this.elements.resultsContainer.innerHTML = html;
+    this.setupInteractiveElements(); // For copy buttons, etc.
+
+    if (data.mermaid_chart) {
+        this.renderMermaidChart().then(() => {
+            this.setupMermaidDownloadButton();
+        });
+    }
+    
+    // 🔧 FIXED SCROLLING - Scroll to the results card header, not the first section
+    setTimeout(() => {
+        const resultsCard = this.elements.resultsContainer.querySelector('.results-card');
+        if (resultsCard) {
+            resultsCard.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start',
+                inline: 'nearest'
+            });
+        } else {
+            // Fallback to container if no card found
+            this.elements.resultsContainer.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }
+    }, 100); // Small delay to ensure DOM is updated
+}
 
    // RENDERER 1: DAILY DIGEST
    renderDailyDigest(data) {
