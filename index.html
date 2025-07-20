@@ -1363,32 +1363,172 @@ displayAdvice(data) {
        ];
    }
 
-   /**
-    * Add quick actions to any response
-    */
-   addQuickActions(responseType) {
-       const suggestions = this.getFollowUpSuggestions(responseType);
-       const federalContext = this.getFederalContext();
-       
-       return `
-           <div class="mt-6 p-4 bg-gray-50 border rounded-lg">
-               <h4 class="font-semibold text-gray-800 mb-3">Quick Actions</h4>
-               <div class="flex flex-wrap gap-2 mb-3">
-                   ${suggestions.map(suggestion => `
-                       <button class="quick-action-btn px-3 py-1.5 bg-white border border-gray-300 rounded-full text-sm hover:bg-gray-100 transition-colors cursor-pointer" 
-                               data-text="${suggestion}">
-                           ${suggestion}
-                       </button>
-                   `).join('')}
-               </div>
-               ${federalContext ? `
-                   <div class="p-2 bg-blue-50 border border-blue-200 rounded text-sm text-blue-800">
-                       <strong>Federal Calendar:</strong> ${federalContext}
-                   </div>
-               ` : ''}
-           </div>
-       `;
-   }
+   // UPDATE the addQuickActions method in your AskArti class:
+
+/**
+ * Add contextually-aware quick actions
+ */
+addQuickActions(responseType, data) {
+    const suggestions = this.getContextualSuggestions(responseType, data);
+    const federalContext = this.getFederalContext();
+    
+    return `
+        <div class="mt-6 p-4 bg-gray-50 border rounded-lg">
+            <h4 class="font-semibold text-gray-800 mb-3">Quick Actions</h4>
+            <div class="flex flex-wrap gap-2 mb-3">
+                ${suggestions.map(suggestion => `
+                    <button class="quick-action-btn px-3 py-1.5 bg-white border border-gray-300 rounded-full text-sm hover:bg-gray-100 transition-colors cursor-pointer" 
+                            data-text="${suggestion}">
+                        ${this.truncateText(suggestion, 50)}
+                    </button>
+                `).join('')}
+            </div>
+            ${federalContext ? `
+                <div class="p-2 bg-blue-50 border border-blue-200 rounded text-sm text-blue-800">
+                    <strong>Federal Calendar:</strong> ${federalContext}
+                </div>
+            ` : ''}
+        </div>
+    `;
+}
+
+/**
+ * Get contextually-aware follow-up suggestions
+ */
+getContextualSuggestions(responseType, data) {
+    // Extract key context from the response
+    const context = this.extractContext(data);
+    
+    const basePrompts = {
+        'playbook': [
+            `Draft email for ${context.firstPersona} at ${context.agency} about ${context.solution}`,
+            `Create competitive battle card against ${context.competitors} for ${context.agency}`,
+            `Find recent contract awards at ${context.agency} for ${context.solution}`
+        ],
+        'deal': [
+            `Research ${context.keyPeople} and stakeholders at ${context.agency}`,
+            `Create meeting agenda for ${context.agency} ${context.decision_maker || 'leadership'} call`,
+            `Find similar successful deals at ${context.agency} or comparable agencies`
+        ],
+        'prospect': [
+            `Create outreach email template for ${context.agency} ${context.solution} opportunities`,
+            `Research decision makers at ${context.agency} for ${context.solution}`,
+            `Build competitive landscape for ${context.solution} at ${context.agency}`
+        ],
+        'investment': [
+            `Analyze ${context.company} federal contracts and government customer base`,
+            `Research ${context.company} competitive position in government market`,
+            `Create federal sales strategy for ${context.company} based on latest earnings`
+        ],
+        'news': [
+            `Create playbook for ${context.opportunity} opportunity at ${context.agency}`,
+            `Research competitors for ${context.opportunity} at ${context.agency}`,
+            `Draft outreach email using ${context.newsEvent} for ${context.agency} prospects`
+        ],
+        'digest': [
+            `Create playbook for ${context.topOpportunity}`,
+            `Prospect for ${context.solution} opportunities at ${context.agencies}`,
+            `Research competitors for ${context.topDeal}`
+        ]
+    };
+
+    return basePrompts[responseType] || [
+        `Explore ${context.topic} further`,
+        `Create action plan for ${context.agency}`,
+        `Research competitors in ${context.market}`
+    ];
+}
+
+/**
+ * Extract context from response data
+ */
+extractContext(data) {
+    const context = {
+        agency: 'federal agencies',
+        solution: 'your solution',
+        company: 'the company',
+        opportunity: 'this opportunity',
+        topic: 'this topic',
+        market: 'this market'
+    };
+
+    // Extract agency mentions
+    const agencyPatterns = [
+        /\b(VA|Veterans Affairs)\b/gi,
+        /\b(DOD|Defense|Department of Defense)\b/gi,
+        /\b(DHS|Homeland Security)\b/gi,
+        /\b(HHS|Health and Human Services)\b/gi,
+        /\b(GSA|General Services Administration)\b/gi,
+        /\b(Treasury|Department of Treasury)\b/gi,
+        /\b(Commerce|Department of Commerce)\b/gi,
+        /\b(Education|Department of Education)\b/gi
+    ];
+
+    const responseText = JSON.stringify(data).toLowerCase();
+    
+    for (const pattern of agencyPatterns) {
+        const match = responseText.match(pattern);
+        if (match) {
+            context.agency = match[0];
+            break;
+        }
+    }
+
+    // Extract solution/technology mentions
+    const solutionPatterns = [
+        /\b(AI|artificial intelligence)\b/gi,
+        /\b(cybersecurity|cyber)\b/gi,
+        /\b(cloud|cloud migration)\b/gi,
+        /\b(modernization|digital transformation)\b/gi,
+        /\b(data analytics|analytics)\b/gi
+    ];
+
+    for (const pattern of solutionPatterns) {
+        const match = responseText.match(pattern);
+        if (match) {
+            context.solution = match[0];
+            break;
+        }
+    }
+
+    // Extract specific context based on response type
+    if (data.response_type === 'playbook') {
+        context.firstPersona = data.target_personas?.[0]?.persona_title || 'key stakeholders';
+        context.competitors = 'key competitors';
+    }
+
+    if (data.response_type === 'deal') {
+        context.keyPeople = data.key_people_and_titles?.[0] || 'key stakeholders';
+        context.decision_maker = 'decision makers';
+    }
+
+    if (data.response_type === 'investment') {
+        // Extract company name from investment thesis or title
+        const companyMatch = JSON.stringify(data).match(/\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\b/);
+        if (companyMatch) context.company = companyMatch[0];
+    }
+
+    if (data.response_type === 'news') {
+        context.newsEvent = data.quick_take?.substring(0, 50) + '...' || 'recent news';
+        context.opportunity = 'this opportunity';
+    }
+
+    if (data.response_type === 'digest') {
+        context.topOpportunity = data.deal_drivers?.[0]?.headline || 'top opportunity';
+        context.topDeal = data.deal_drivers?.[0]?.action_insight || 'key deals';
+        context.agencies = 'mentioned agencies';
+    }
+
+    return context;
+}
+
+/**
+ * Truncate text for button display
+ */
+truncateText(text, maxLength) {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength - 3) + '...';
+}
 
    /**
     * Setup quick action button handlers
@@ -1482,7 +1622,7 @@ displayAdvice(data) {
                        <h3 class="digest-section-title">Sources</h3>
                        <p class="text-sm text-gray-600">${sources}</p>
                   </footer>
-                  ${this.addQuickActions('digest')}
+                  ${this.addQuickActions('digest', data)}
               </div>
           </div>`;
   }
@@ -1565,7 +1705,7 @@ displayAdvice(data) {
                               </div>
                           </div>`).join('')}
                   </section>` : ''}
-                  ${this.addQuickActions('playbook')}
+                  ${this.addQuickActions('playbook', data)}
               </div>
           </div>`;
   }
@@ -1647,7 +1787,7 @@ displayAdvice(data) {
                               </div>
                           </div>`).join('')}
                   </section>` : ''}
-                  ${this.addQuickActions('news')}
+                  ${this.addQuickActions('news', data)}
               </div>
           </div>`;
   }
@@ -1693,7 +1833,7 @@ displayAdvice(data) {
                       <h3 class="digest-section-title">Next Steps</h3>
                       <p class="digest-item-summary">${next_steps}</p>
                   </footer>` : ''}
-                  ${this.addQuickActions('investment')}
+                  ${this.addQuickActions('investment', data)}
               </div>
           </div>`;
   }
@@ -1741,7 +1881,7 @@ displayAdvice(data) {
                       <h3 class="digest-section-title">Recommendations</h3>
                       <ul class="list-disc list-inside space-y-2">${prospect_recommendations.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
                   </section>` : ''}
-                  ${this.addQuickActions('prospect')}
+                  ${this.addQuickActions('prospect', data)}
               </div>
           </div>`;
   }
