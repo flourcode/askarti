@@ -150,11 +150,59 @@
        margin-bottom: 1.5rem;
    }
    
-   /* --- Form Elements --- */
-   textarea, input[type="text"] {
-       font-size: 16px !important; /* Prevent iOS zoom */
-       transition: all 0.2s ease;
-   }
+   /* Update your existing textarea styles - find this section in your CSS and replace it: */
+
+textarea, input[type="text"] {
+    font-size: 16px !important; /* Prevent iOS zoom */
+    transition: all 0.2s ease;
+    font-weight: 400; /* Normal weight instead of heavy */
+    color: #374151; /* Softer gray instead of black */
+    line-height: 1.5;
+}
+
+/* Make the actual input text lighter and more refined */
+#situation-input {
+    font-weight: 400 !important; /* Override the font-light class */
+    color: #4B5563 !important; /* Medium gray for readability */
+    letter-spacing: 0.01em; /* Slight letter spacing for readability */
+}
+
+/* Style the placeholder text */
+#situation-input::placeholder {
+    color: #9CA3AF; /* Light gray for placeholder */
+    font-weight: 300; /* Lighter weight for placeholder */
+    font-style: italic; /* Subtle italic for distinction */
+}
+
+/* Focus state for better UX */
+#situation-input:focus {
+    color: #1F2937; /* Darker when focused for better readability */
+    outline: none;
+    ring: 1px;
+    ring-color: #8E88A7; /* Your brand purple */
+    border-color: #8E88A7;
+}
+
+/* Chat input styling to match */
+#chat-input {
+    font-weight: 400 !important;
+    color: #4B5563 !important;
+    letter-spacing: 0.01em;
+}
+
+#chat-input::placeholder {
+    color: #9CA3AF;
+    font-weight: 300;
+    font-style: italic;
+}
+
+#chat-input:focus {
+    color: #1F2937;
+    outline: none;
+    ring: 1px;
+    ring-color: #8E88A7;
+    border-color: #8E88A7;
+}
    .textarea-container {
     position: relative;
 }
@@ -644,11 +692,11 @@
             </label>
             <div class="textarea-container">
                 <textarea 
-                    id="situation-input" 
-                    rows="3"
-                    class="w-full p-3 pr-12 text-xs font-light border border-gray-300 rounded-lg resize-none placeholder-gray-500 auto-expand focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300 placeholder-gray-500"
-                    placeholder='"Create a sales playbook for selling AI services to HHS." or "Prospect for cyber opps at DHS". Or start with a sample prompt below and modify it.'
-                    maxlength="2500"></textarea>
+    id="situation-input" 
+    rows="3"
+    class="w-full p-3 pr-12 text-base border border-gray-300 rounded-lg resize-none auto-expand focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300"
+    placeholder='"Create a sales playbook for selling AI services to HHS." or "Prospect for cyber opps at DHS". Or start with a sample prompt below and modify it.'
+    maxlength="2500"></textarea>
                 <button id="clear-btn" class="clear-btn" title="Clear input" aria-label="Clear input">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
