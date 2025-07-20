@@ -1319,51 +1319,6 @@ displayAdvice(data) {
        return '';
    }
 
-   /**
-    * Get smart follow-up suggestions based on response type
-    */
-   getFollowUpSuggestions(responseType) {
-       const suggestions = {
-           'playbook': [
-               'Draft email for first persona',
-               'Create competitive battle card', 
-               'Find recent contract awards in this space'
-           ],
-           'deal': [
-               'Research key stakeholders at this agency',
-               'Create meeting agenda for next call',
-               'Find similar successful deals'
-           ],
-           'prospect': [
-               'Create outreach email template',
-               'Research decision makers',
-               'Build competitive landscape'
-           ],
-           'investment': [
-               'Analyze federal contracts for this company',
-               'Research government customer base',
-               'Create federal sales strategy'
-           ],
-           'news': [
-               'Create playbook for this opportunity',
-               'Research competitors in this space',
-               'Draft outreach email using this news'
-           ],
-           'digest': [
-               'Create playbook for top opportunity',
-               'Prospect for agencies mentioned',
-               'Research competitors for key deals'
-           ]
-       };
-       
-       return suggestions[responseType] || [
-           'Explore this further',
-           'Create action plan',
-           'Research competitors'
-       ];
-   }
-
-   // UPDATE the addQuickActions method in your AskArti class:
 
 /**
  * Add contextually-aware quick actions
@@ -1570,9 +1525,9 @@ truncateText(text, maxLength) {
    // RENDERER 1: DAILY DIGEST
    renderDailyDigest(data) {
        const { 
-           digest_date, key_intelligence, deal_drivers, action_items, 
-           market_temperature
-		   } = data;
+    digest_date, key_intelligence, deal_drivers, action_items, 
+    market_temperature, status 
+} = data;
       const sources = deal_drivers && deal_drivers.length > 0 ? [...new Set(deal_drivers.map(d => d.source))].join(' &bull; ') : 'Internal Analysis';
       const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
