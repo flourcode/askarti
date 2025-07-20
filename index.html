@@ -1327,6 +1327,18 @@ displayAdvice(data) {
                                </div>
                            </div>`).join('')}
                    </section>` : ''}
+				   ${data.quick_intel && data.quick_intel.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Quick Intel</h3>
+                    <div class="space-y-2">
+                    ${data.quick_intel.map(item => `
+                        <p class="digest-item-summary">
+                            <strong class="font-semibold text-gray-900">${item.category}:</strong> ${item.insight}
+                        </p>
+                    `).join('')}
+                    </div>
+                </section>
+                ` : ''}
                    ${action_items && action_items.length > 0 ? `
                    <section class="digest-section">
                        <h3 class="digest-section-title">Your Moves Today</h3>
