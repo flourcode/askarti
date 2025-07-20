@@ -150,59 +150,6 @@
        margin-bottom: 1.5rem;
    }
    
-   /* Update your existing textarea styles - find this section in your CSS and replace it: */
-
-textarea, input[type="text"] {
-    font-size: 16px !important; /* Prevent iOS zoom */
-    transition: all 0.2s ease;
-    font-weight: 400; /* Normal weight instead of heavy */
-    color: #374151; /* Softer gray instead of black */
-    line-height: 1.1;
-}
-
-/* Make the actual input text lighter and more refined */
-#situation-input {
-    font-weight: 400 !important; /* Override the font-light class */
-    color: #4B5563 !important; /* Medium gray for readability */
-    letter-spacing: 0.01em; /* Slight letter spacing for readability */
-}
-
-/* Style the placeholder text */
-#situation-input::placeholder {
-    color: #9CA3AF; /* Light gray for placeholder */
-    font-weight: 300; /* Lighter weight for placeholder */
-    font-style: italic; /* Subtle italic for distinction */
-}
-
-/* Focus state for better UX */
-#situation-input:focus {
-    color: #1F2937; /* Darker when focused for better readability */
-    outline: none;
-    ring: 1px;
-    ring-color: #8E88A7; /* Your brand purple */
-    border-color: #8E88A7;
-}
-
-/* Chat input styling to match */
-#chat-input {
-    font-weight: 400 !important;
-    color: #4B5563 !important;
-    letter-spacing: 0.01em;
-}
-
-#chat-input::placeholder {
-    color: #9CA3AF;
-    font-weight: 300;
-    font-style: italic;
-}
-
-#chat-input:focus {
-    color: #1F2937;
-    outline: none;
-    ring: 1px;
-    ring-color: #8E88A7;
-    border-color: #8E88A7;
-}
    .textarea-container {
     position: relative;
 }
@@ -628,17 +575,7 @@ textarea, input[type="text"] {
    .digest-item-meta {
        margin-top: 0.75rem;
    }
-   .digest-code-block {
-       background-color: #F9FAFB;
-       border: 1px solid #E5E7EB;
-       border-radius: 0.5rem;
-       padding: 1rem;
-       font-family: monospace;
-       font-size: 0.875rem;
-       white-space: pre-wrap;
-       word-break: break-all;
-       position: relative;
-   }
+   
    .digest-tag {
        display: inline-block;
        background-color: #F3F4F6;
@@ -671,6 +608,104 @@ textarea, input[type="text"] {
            font-size: 1rem;
        }
    }
+   /* Replace your existing textarea and input styling with this: */
+
+textarea, input[type="text"] {
+    font-size: 16px !important; /* Prevent iOS zoom */
+    transition: all 0.2s ease;
+    font-weight: 400;
+    color: #374151;
+    line-height: 1.4; /* Tighter line height */
+}
+
+/* Make the actual input text more refined */
+#situation-input {
+    font-weight: 400 !important;
+    color: #4B5563 !important;
+    letter-spacing: 0.005em; /* Less letter spacing */
+    line-height: 1.4 !important; /* Tighter line height */
+    font-size: 15px !important; /* Slightly smaller */
+}
+
+/* Style the placeholder text */
+#situation-input::placeholder {
+    color: #9CA3AF;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+/* Focus state for better UX */
+#situation-input:focus {
+    color: #1F2937;
+    outline: none;
+    ring: 1px;
+    ring-color: #8E88A7;
+    border-color: #8E88A7;
+}
+
+/* Chat input styling to match */
+#chat-input {
+    font-weight: 400 !important;
+    color: #4B5563 !important;
+    letter-spacing: 0.005em;
+    line-height: 1.4 !important;
+    font-size: 15px !important;
+}
+
+#chat-input::placeholder {
+    color: #9CA3AF;
+    font-weight: 300;
+    font-style: italic;
+}
+
+#chat-input:focus {
+    color: #1F2937;
+    outline: none;
+    ring: 1px;
+    ring-color: #8E88A7;
+    border-color: #8E88A7;
+}
+
+/* Fix word breaking in email templates and code blocks */
+.digest-code-block {
+    background-color: #F9FAFB;
+    border: 1px solid #E5E7EB;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    font-family: monospace;
+    font-size: 0.875rem;
+    white-space: pre-wrap; /* Preserve line breaks */
+    word-wrap: break-word; /* Break long words */
+    word-break: normal; /* Don't break normal words */
+    overflow-wrap: break-word; /* Modern browsers */
+    position: relative;
+    line-height: 1.5;
+}
+
+/* Better word wrapping for all text content */
+.digest-item-summary, .digest-item-insight {
+    font-size: 0.95rem;
+    line-height: 1.5; /* Better readability */
+    color: #374151;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Auto-expanding textarea with tighter calculations */
+.auto-expand {
+    min-height: calc(3 * 1.4em + 1.5rem); /* 3 rows with tighter line height */
+    max-height: calc(6 * 1.4em + 1.5rem); /* 6 rows with tighter line height */
+    transition: height 0.2s ease;
+    overflow-y: hidden;
+    resize: none;
+    line-height: 1.4 !important;
+}
+
+.auto-expand.scrollable {
+    overflow-y: auto;
+    transition: none;
+}
 </style>
 
 </head>
