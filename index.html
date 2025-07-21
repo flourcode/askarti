@@ -685,6 +685,26 @@ textarea, input[type="text"] {
     word-wrap: break-word !important;
     overflow-wrap: break-word !important;
 }
+@media (max-width: 640px) {
+    .auto-expand {
+        min-height: calc(4 * 1.4em + 1.5rem); /* Changed from 3 to 4 rows */
+        max-height: calc(8 * 1.4em + 1.5rem); /* Changed from 6 to 8 rows */
+    }
+}
+@media (max-width: 640px) {
+    #situation-input:focus {
+        /* Prevent zoom on iOS */
+        font-size: 16px !important;
+        /* Better mobile interaction */
+        transform: none;
+    }
+    
+    .auto-expand.scrollable {
+        /* Smoother scrolling on mobile */
+        -webkit-overflow-scrolling: touch;
+        overflow-y: auto;
+    }
+}
 </style>
 
 </head>
@@ -1211,54 +1231,41 @@ setupAutoExpand() {
    const textarea = this.elements.situationInput;
    
    const adjustHeight = () => {
-       // Store current scroll position
+       // Store current scroll position and cursor position
        const scrollTop = textarea.scrollTop;
+       const cursorPosition = textarea.selectionStart;
        
        // Temporarily reset height to get the true scroll height of the content
        textarea.style.height = 'auto';
        const scrollHeight = textarea.scrollHeight;
-
-       // Read the max-height directly from the CSS computed style
        const maxHeight = parseInt(getComputedStyle(textarea).maxHeight, 10);
 
-       // Check if the content's height exceeds the CSS max-height
        if (scrollHeight > maxHeight) {
-           // If it does, set the height to the maximum allowed and add the 'scrollable' class
            textarea.style.height = maxHeight + 'px';
            textarea.classList.add('scrollable');
-           // Restore scroll position after height change
-           textarea.scrollTop = scrollTop;
+           
+           // Better scroll position management
+           requestAnimationFrame(() => {
+               // Restore cursor position first
+               textarea.selectionStart = textarea.selectionEnd = cursorPosition;
+               
+               // Only adjust scroll if user isn't actively scrolling
+               if (Math.abs(textarea.scrollTop - scrollTop) < 5) {
+                   textarea.scrollTop = scrollTop;
+               }
+           });
        } else {
-           // Otherwise, set the height to match the content and remove the 'scrollable' class
            textarea.style.height = scrollHeight + 'px';
            textarea.classList.remove('scrollable');
        }
    };
    
    textarea.addEventListener('input', adjustHeight);
-   textarea.addEventListener('paste', () => {
-       setTimeout(adjustHeight, 10);
-   });
+   textarea.addEventListener('paste', () => setTimeout(adjustHeight, 10));
    
-   // Handle cursor positioning and scrolling when user clicks or uses arrow keys
-   textarea.addEventListener('keydown', (e) => {
-       // Allow normal scrolling behavior when at max height
-       if (textarea.classList.contains('scrollable')) {
-           if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'Home' || e.key === 'End') {
-               // Let the browser handle cursor movement and scrolling naturally
-               setTimeout(adjustHeight, 0);
-           }
-       }
-   });
+   // Remove the problematic keydown and click handlers that were causing issues
+   // Let the browser handle scrolling naturally when in scrollable mode
    
-   textarea.addEventListener('click', () => {
-       // Ensure height is correct when user clicks to position cursor
-       if (textarea.classList.contains('scrollable')) {
-           setTimeout(adjustHeight, 0);
-       }
-   });
-   
-   // Run once on load to set the initial state correctly
    adjustHeight();
 }
 switchMode(mode) {
