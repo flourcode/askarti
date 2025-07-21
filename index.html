@@ -1207,11 +1207,13 @@ updateButtonState() {
         askBtn.classList.remove('btn-highlight', 'btn-pulse');
     }
 }
-
 setupAutoExpand() {
    const textarea = this.elements.situationInput;
    
    const adjustHeight = () => {
+       // Store current scroll position
+       const scrollTop = textarea.scrollTop;
+       
        // Temporarily reset height to get the true scroll height of the content
        textarea.style.height = 'auto';
        const scrollHeight = textarea.scrollHeight;
@@ -1224,6 +1226,8 @@ setupAutoExpand() {
            // If it does, set the height to the maximum allowed and add the 'scrollable' class
            textarea.style.height = maxHeight + 'px';
            textarea.classList.add('scrollable');
+           // Restore scroll position after height change
+           textarea.scrollTop = scrollTop;
        } else {
            // Otherwise, set the height to match the content and remove the 'scrollable' class
            textarea.style.height = scrollHeight + 'px';
@@ -1236,10 +1240,27 @@ setupAutoExpand() {
        setTimeout(adjustHeight, 10);
    });
    
+   // Handle cursor positioning and scrolling when user clicks or uses arrow keys
+   textarea.addEventListener('keydown', (e) => {
+       // Allow normal scrolling behavior when at max height
+       if (textarea.classList.contains('scrollable')) {
+           if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'Home' || e.key === 'End') {
+               // Let the browser handle cursor movement and scrolling naturally
+               setTimeout(adjustHeight, 0);
+           }
+       }
+   });
+   
+   textarea.addEventListener('click', () => {
+       // Ensure height is correct when user clicks to position cursor
+       if (textarea.classList.contains('scrollable')) {
+           setTimeout(adjustHeight, 0);
+       }
+   });
+   
    // Run once on load to set the initial state correctly
    adjustHeight();
 }
-
 switchMode(mode) {
     this.state.currentMode = mode;
     this.elements.resultsContainer.innerHTML = '';
