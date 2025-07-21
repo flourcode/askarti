@@ -1230,6 +1230,19 @@ updateButtonState() {
 setupAutoExpand() {
    const textarea = this.elements.situationInput;
    
+   // Debounce function to prevent rapid consecutive calls
+   const debounce = (func, wait) => {
+     let timeout;
+     return function executedFunction(...args) {
+       const later = () => {
+         clearTimeout(timeout);
+         func(...args);
+       };
+       clearTimeout(timeout);
+       timeout = setTimeout(later, wait);
+     };
+   };
+   
    const adjustHeight = () => {
        // Store current scroll position and cursor position
        const scrollTop = textarea.scrollTop;
@@ -1260,13 +1273,17 @@ setupAutoExpand() {
        }
    };
    
-   textarea.addEventListener('input', adjustHeight);
-   textarea.addEventListener('paste', () => setTimeout(adjustHeight, 10));
+   // Debounced version for input events
+   const debouncedAdjustHeight = debounce(adjustHeight, 50);
    
-   // Remove the problematic keydown and click handlers that were causing issues
-   // Let the browser handle scrolling naturally when in scrollable mode
+   textarea.addEventListener('input', debouncedAdjustHeight);
+   // For paste, still need immediate response but also debounced follow-up
+   textarea.addEventListener('paste', () => {
+       setTimeout(adjustHeight, 10); // Quick initial adjustment
+       setTimeout(debouncedAdjustHeight, 100); // Follow-up adjustment
+   });
    
-   adjustHeight();
+   adjustHeight(); // Initial adjustment
 }
 switchMode(mode) {
     this.state.currentMode = mode;
