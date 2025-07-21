@@ -636,68 +636,56 @@ textarea, input[type="text"] {
 .border-indigo-300 {
     border-left-color: #a5b4fc;
 }
-/* 2. FIX: Add this CSS to ensure proper width constraints */
 
-/* Update the results container to respect the main container width */
-#results-container {
-    max-width: 100%;
-    width: 100%;
+.results-card,
+.digest-card {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
-/* Ensure results cards respect the container width */
-.results-card {
-    max-width: 100%;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* Fix loading message positioning - move it closer to the Ask Arti button */
-#loading-message-container {
-    margin-top: 1rem; /* Reduce from default spacing */
-    margin-bottom: 1rem;
-}
-
-/* Ensure the main container width is consistent */
-.main-container {
-    max-width: 768px;
-    margin: 0 auto;
-    padding: 1rem;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* Mobile responsive updates */
-@media (max-width: 640px) {
-    .main-container { 
-        padding: 0.5rem; 
-        padding-bottom: 0.5rem; 
-        max-width: 100%;
-    }
-    
-    #loading-message-container {
-        margin-top: 0.5rem;
-        margin-bottom: 0.5rem;
-    }
-}
-
-#results-container {
-    max-width: 100%;
-    width: 100%;
-    overflow: hidden;
-}
-
+.results-card-body,
 .digest-card .results-card-body {
-    max-width: 100%;
-    box-sizing: border-box;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
 }
 
-.digest-item-summary, 
-.digest-item-insight {
-    max-width: 100%;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+.digest-header,
+.digest-section,
+.digest-item {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.digest-item > div:nth-child(2) {
+    min-width: 0 !important;
+    flex: 1 !important;
+}
+
+.digest-item-summary,
+.digest-item-insight,
+.digest-item-headline,
+.digest-code-block {
+    max-width: 100% !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    box-sizing: border-box !important;
+}
+
+/* Fix all text content in renderers */
+.results-card p,
+.results-card h1,
+.results-card h2,
+.results-card h3,
+.results-card h4,
+.results-card li,
+.results-card span,
+.results-card div {
+    max-width: 100% !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
 }
 </style>
 
