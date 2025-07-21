@@ -1192,21 +1192,23 @@ setupAutoExpand() {
    const textarea = this.elements.situationInput;
    
    const adjustHeight = () => {
+       // Temporarily reset height to get the true scroll height of the content
        textarea.style.height = 'auto';
-       
-       const minHeight = parseFloat(getComputedStyle(textarea).lineHeight) * 3 + 24; 
-       const maxHeight = parseFloat(getComputedStyle(textarea).lineHeight) * 6 + 24; 
-       
-       let newHeight = Math.max(minHeight, textarea.scrollHeight);
-       
-       if (newHeight > maxHeight) {
-           newHeight = maxHeight;
+       const scrollHeight = textarea.scrollHeight;
+
+       // Read the max-height directly from the CSS computed style
+       const maxHeight = parseInt(getComputedStyle(textarea).maxHeight, 10);
+
+       // Check if the content's height exceeds the CSS max-height
+       if (scrollHeight > maxHeight) {
+           // If it does, set the height to the maximum allowed and add the 'scrollable' class
+           textarea.style.height = maxHeight + 'px';
            textarea.classList.add('scrollable');
        } else {
+           // Otherwise, set the height to match the content and remove the 'scrollable' class
+           textarea.style.height = scrollHeight + 'px';
            textarea.classList.remove('scrollable');
        }
-       
-       textarea.style.height = newHeight + 'px';
    };
    
    textarea.addEventListener('input', adjustHeight);
@@ -1214,6 +1216,7 @@ setupAutoExpand() {
        setTimeout(adjustHeight, 10);
    });
    
+   // Run once on load to set the initial state correctly
    adjustHeight();
 }
 
