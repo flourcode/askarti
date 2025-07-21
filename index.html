@@ -636,6 +636,49 @@ textarea, input[type="text"] {
 .border-indigo-300 {
     border-left-color: #a5b4fc;
 }
+/* 2. FIX: Add this CSS to ensure proper width constraints */
+
+/* Update the results container to respect the main container width */
+#results-container {
+    max-width: 100%;
+    width: 100%;
+}
+
+/* Ensure results cards respect the container width */
+.results-card {
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Fix loading message positioning - move it closer to the Ask Arti button */
+#loading-message-container {
+    margin-top: 1rem; /* Reduce from default spacing */
+    margin-bottom: 1rem;
+}
+
+/* Ensure the main container width is consistent */
+.main-container {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Mobile responsive updates */
+@media (max-width: 640px) {
+    .main-container { 
+        padding: 0.5rem; 
+        padding-bottom: 0.5rem; 
+        max-width: 100%;
+    }
+    
+    #loading-message-container {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+}
 </style>
 
 </head>
@@ -1056,7 +1099,7 @@ setupEventListeners() {
     });
 }
 
-// ADD THIS METHOD TO YOUR AskArti CLASS (after the setupEventListeners method):
+
 async loadFederalIntelligenceFromLink(linkElement) {
     try {
         // Show loading state on the link
@@ -1065,9 +1108,10 @@ async loadFederalIntelligenceFromLink(linkElement) {
         linkElement.style.pointerEvents = 'none';
         linkElement.style.opacity = '0.6';
 
-        // Clear any existing results
+        // Clear any existing results and show loading messages
         this.elements.resultsContainer.innerHTML = '';
         this.elements.errorMessage.classList.add('hidden');
+        this.showLoadingMessages(); // ADD THIS LINE
 
         // Make direct digest request
         const response = await fetch(CONFIG.API_ENDPOINT, {
@@ -1093,6 +1137,7 @@ async loadFederalIntelligenceFromLink(linkElement) {
         linkElement.textContent = originalText;
         linkElement.style.pointerEvents = 'auto';
         linkElement.style.opacity = '1';
+        this.hideLoadingMessages(); // ADD THIS LINE
 
         console.log('Federal intelligence loaded successfully from link');
 
@@ -1103,12 +1148,12 @@ async loadFederalIntelligenceFromLink(linkElement) {
         linkElement.textContent = originalText;
         linkElement.style.pointerEvents = 'auto';
         linkElement.style.opacity = '1';
+        this.hideLoadingMessages(); // ADD THIS LINE
 
         // Show error
         this.showError(error.message || "Failed to load federal intelligence");
     }
 }
-
 // New function to handle button highlighting
 triggerButtonHighlight() {
     const askBtn = document.getElementById('ask-arti-btn');
