@@ -1462,8 +1462,338 @@ renderDailyDigest(data) {
          </div>`;
  }
 
-// [Include all other renderer methods here - renderSalesPlaybook, renderNewsAdvice, etc. - they remain the same]
+// Add these methods to your AskArti class right after the renderDailyDigest method:
 
+// RENDERER 2: SALES PLAYBOOK
+renderSalesPlaybook(data) {
+    const { 
+        sales_play_title, sales_play_summary, key_services, key_partners, 
+        competitive_positioning, success_metrics, timeline_milestones, 
+        target_personas, insider_tips, risk_mitigation, next_actions, mermaid_chart 
+    } = data;
+    
+    const renderSimpleList = (items) => items?.map(item => `<li class="digest-item-summary">${item}</li>`).join('') || '';
+
+    return `
+        <div class="results-card digest-card">
+            <div class="results-card-body">
+                <header class="digest-header">
+                    <img src="/images/arti_right.png" alt="Arti" />
+                    <div>
+                        <h2>${sales_play_title}</h2>
+                        <p class="digest-header-meta">Sales Playbook</p>
+                    </div>
+                </header>
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Executive Summary</h3>
+                    <p class="digest-item-summary text-base">${sales_play_summary}</p>
+                </section>
+                ${key_services && key_services.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Key Services & Products</h3>
+                    <ul class="list-disc list-inside space-y-2">${renderSimpleList(key_services)}</ul>
+                </section>` : ''}
+                ${key_partners && key_partners.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Strategic Partners</h3>
+                    <ul class="list-disc list-inside space-y-2">${renderSimpleList(key_partners)}</ul>
+                </section>` : ''}
+                ${competitive_positioning ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Competitive Positioning</h3>
+                    <p class="digest-item-summary">${competitive_positioning}</p>
+                </section>` : ''}
+                ${success_metrics && success_metrics.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Success Metrics & Timeline</h3>
+                    <ul class="list-disc list-inside space-y-2">${renderSimpleList(success_metrics)}</ul>
+                </section>` : ''}
+                ${mermaid_chart ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Visual Strategy</h3>
+                    <div class="mermaid-container">
+                        <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
+                    </div>
+                    <div class="flex justify-end gap-2 mt-2">
+                        <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
+                    </div>
+                </section>` : ''}
+                ${target_personas && target_personas.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Stakeholder Guide</h3>
+                    ${target_personas.map((persona, index) => `
+                        <div class="digest-item">
+                            <div class="digest-item-number">${index + 1}</div>
+                            <div>
+                                <h4 class="digest-item-headline">${persona.persona_title}</h4>
+                                <p class="digest-item-summary"><strong>Priorities:</strong> ${persona.business_priorities?.join(', ') || 'Not specified'}</p>
+                                <p class="digest-item-summary mt-2"><strong>Starters:</strong> ${persona.conversation_starters?.join(', ') || 'Not specified'}</p>
+                            </div>
+                        </div>`).join('')}
+                </section>` : ''}
+                 ${next_actions && next_actions.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Next Actions</h3>
+                    ${next_actions.map((action, index) => `
+                        <div class="digest-item">
+                            <div class="digest-item-number">${index + 1}</div>
+                            <div>
+                                <p class="digest-item-summary">${action}</p>
+                            </div>
+                        </div>`).join('')}
+                </section>` : ''}
+            </div>
+        </div>`;
+}
+
+// RENDERER 3: NEWS & GTM ANALYSIS
+renderNewsAdvice(data) {
+    const { 
+        quick_take, key_people_and_titles, money_keywords, 
+        suggested_discovery_questions, suggested_opening_lines, 
+        immediate_actions, strategic_moves, mermaid_chart 
+    } = data;
+
+    return `
+        <div class="results-card digest-card">
+            <div class="results-card-body">
+                <header class="digest-header">
+                    <img src="/images/arti_right.png" alt="Arti" />
+                    <div>
+                        <h2>News & GTM Analysis</h2>
+                        <p class="digest-header-meta">Actionable Intelligence</p>
+                    </div>
+                </header>
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Quick Take</h3>
+                    <p class="digest-item-summary text-base">${quick_take}</p>
+                </section>
+                ${money_keywords && money_keywords.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Money Keywords</h3>
+                    <div>${money_keywords.map(k => `<span class="digest-tag">${k}</span>`).join('')}</div>
+                </section>` : ''}
+                ${key_people_and_titles && key_people_and_titles.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Key People</h3>
+                    <ul class="list-disc list-inside space-y-2">${key_people_and_titles.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
+                </section>` : ''}
+                ${suggested_discovery_questions && suggested_discovery_questions.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Discovery Questions</h3>
+                    ${suggested_discovery_questions.map((q, index) => `
+                        <div class="digest-item">
+                            <div class="digest-item-number">${index + 1}</div>
+                            <div><p class="digest-item-summary">${q}</p></div>
+                        </div>`).join('')}
+                </section>` : ''}
+                ${suggested_opening_lines && suggested_opening_lines.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Email Openers</h3>
+                    ${suggested_opening_lines.map((line, index) => `
+                        <div class="digest-item">
+                            <div class="digest-item-number">${index + 1}</div>
+                            <div>
+                                <div class="digest-code-block copy-target">${line}</div>
+                                <button class="copy-btn" title="Copy to clipboard">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                </button>
+                            </div>
+                        </div>`).join('')}
+                </section>` : ''}
+                ${mermaid_chart ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">GTM Flow</h3>
+                    <div class="mermaid-container">
+                        <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
+                    </div>
+                    <div class="flex justify-end gap-2 mt-2">
+                        <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
+                    </div>
+                </section>` : ''}
+                ${immediate_actions && immediate_actions.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Immediate Actions (0-30 Days)</h3>
+                    ${immediate_actions.map((action, index) => `
+                        <div class="digest-item">
+                            <div class="digest-item-number">${index + 1}</div>
+                            <div>
+                                <h4 class="digest-item-headline">${action.action}</h4>
+                                <p class="digest-item-summary">${action.why}</p>
+                            </div>
+                        </div>`).join('')}
+                </section>` : ''}
+            </div>
+        </div>`;
+}
+
+// RENDERER 4: INVESTMENT / MARKET ANALYSIS
+renderMarketAnalysis(data) {
+    const { 
+        investment_thesis, financial_health, market_position, 
+        key_financial_metrics, bull_case, bear_case, next_steps 
+    } = data;
+
+    return `
+        <div class="results-card digest-card">
+            <div class="results-card-body">
+                <header class="digest-header">
+                    <img src="/images/arti_right.png" alt="Arti" />
+                    <div>
+                        <h2>Market Analysis</h2>
+                        <p class="digest-header-meta">Market & Financial Summary</p>
+                    </div>
+                </header>
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Summary</h3>
+                    <p class="digest-item-summary text-base">${investment_thesis}</p>
+                </section>
+                ${key_financial_metrics && key_financial_metrics.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Key Financial Metrics</h3>
+                    <div>${key_financial_metrics.map(k => `<span class="digest-tag">${k}</span>`).join('')}</div>
+                </section>` : ''}
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Analysis</h3>
+                    <p class="digest-item-summary"><strong>Financial Health:</strong> ${financial_health || 'Not specified'}</p>
+                    <p class="digest-item-summary mt-2"><strong>Market Position:</strong> ${market_position || 'Not specified'}</p>
+                </section>
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Bull vs. Bear Case</h3>
+                    <p class="digest-item-summary"><strong>Bull Case:</strong> ${bull_case || 'Not specified'}</p>
+                    <p class="digest-item-summary mt-2"><strong>Bear Case:</strong> ${bear_case || 'Not specified'}</p>
+                </section>
+                ${next_steps ? `
+                <footer class="digest-section">
+                    <h3 class="digest-section-title">Next Steps</h3>
+                    <p class="digest-item-summary">${next_steps}</p>
+                </footer>` : ''}
+			   <div class="p-3 mt-4 text-xs text-gray-500 bg-gray-50 rounded-lg border border-gray-200">
+                <strong>Disclaimer:</strong> This content is for informational purposes only and does not constitute financial or investment advice. It is not a recommendation to buy or sell any security. You should always conduct your own research and consult a qualified financial professional before making any investment decisions.
+            </div>
+            </div>
+        </div>`;
+}
+
+// RENDERER 5: PROSPECTING INTELLIGENCE
+renderProspectAdvice(data) {
+    const { 
+        summary, top_s_is, top_software_and_cloud, 
+        naics_codes, prospect_recommendations 
+    } = data;
+    
+    const renderPartnerList = (items) => items?.map(item => `<div class="mb-2"><h4 class="font-semibold text-gray-800">${item.company || 'N/A'}</h4><p class="text-sm text-gray-600">${item.value || ''}</p></div>`).join('') || '';
+
+    return `
+        <div class="results-card digest-card">
+            <div class="results-card-body">
+                <header class="digest-header">
+                    <img src="/images/arti_right.png" alt="Arti" />
+                    <div>
+                        <h2>Prospecting Intelligence</h2>
+                        <p class="digest-header-meta">Market Analysis</p>
+                    </div>
+                </header>
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Summary</h3>
+                    <p class="digest-item-summary text-base">${summary}</p>
+                </section>
+                ${top_s_is && top_s_is.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Top Service Providers / SIs</h3>
+                    <div>${renderPartnerList(top_s_is)}</div>
+                </section>` : ''}
+                ${top_software_and_cloud && top_software_and_cloud.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Top Software & Cloud Partners</h3>
+                    <div>${renderPartnerList(top_software_and_cloud)}</div>
+                </section>` : ''}
+                ${naics_codes && naics_codes.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">NAICS Codes</h3>
+                    <div>${naics_codes.map(k => `<span class="digest-tag">${k.code || k}</span>`).join('')}</div>
+                </section>` : ''}
+                ${prospect_recommendations && prospect_recommendations.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Recommendations</h3>
+                    <ul class="list-disc list-inside space-y-2">${prospect_recommendations.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
+                </section>` : ''}
+            </div>
+        </div>`;
+}
+
+// RENDERER 6: GENERAL ADVICE (Deal, Interview, Meeting)
+renderGeneralAdvice(data) {
+    const { 
+        response_type, quick_take, key_moves, talking_points, 
+        email_template, next_steps, mermaid_chart 
+    } = data;
+
+    const titles = {
+        deal: 'Deal Game Plan',
+        interview: 'Interview Prep Plan',
+        meeting: 'Meeting Strategy',
+        default: 'Your Game Plan'
+    };
+    const title = titles[response_type] || titles.default;
+
+    return `
+        <div class="results-card digest-card">
+            <div class="results-card-body">
+                <header class="digest-header">
+                    <img src="/images/arti_right.png" alt="Arti" />
+                    <div>
+                        <h2>${title}</h2>
+                        <p class="digest-header-meta">Actionable Advice</p>
+                    </div>
+                </header>
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Quick Take</h3>
+                    <p class="digest-item-summary text-base">${quick_take}</p>
+                </section>
+                ${key_moves && key_moves.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Your Next Moves</h3>
+                    ${key_moves.map((move, index) => `
+                        <div class="digest-item">
+                            <div class="digest-item-number">${index + 1}</div>
+                            <div>
+                                <h4 class="digest-item-headline">${move.action}</h4>
+                                <p class="digest-item-summary">${move.why}</p>
+                            </div>
+                        </div>`).join('')}
+                </section>` : ''}
+                ${mermaid_chart ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Visual Strategy</h3>
+                    <div class="mermaid-container">
+                        <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
+                    </div>
+                    <div class="flex justify-end gap-2 mt-2">
+                        <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
+                    </div>
+                </section>` : ''}
+                ${talking_points && talking_points.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Key Talking Points</h3>
+                    <ul class="list-disc list-inside space-y-2">${talking_points.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
+                </section>` : ''}
+                ${email_template ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Email Template</h3>
+                    <div class="digest-code-block copy-target">${email_template}</div>
+                    <button class="copy-btn" title="Copy to clipboard">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                    </button>
+                </section>` : ''}
+                ${next_steps ? `
+                <footer class="digest-section">
+                    <h3 class="digest-section-title">Closing Thought</h3>
+                    <p class="digest-item-summary">${next_steps}</p>
+                </footer>` : ''}
+            </div>
+        </div>`;
+}
 setupInteractiveElements() {
     this.setupCopyButtons();
 }
