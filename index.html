@@ -1036,11 +1036,13 @@ updateCharCount() {
         this.elements.clearBtn.classList.remove('show');
     }
 }
-
 clearInput() {
   this.elements.situationInput.value = '';
   this.elements.situationInput.style.height = 'auto';
   this.elements.situationInput.classList.remove('scrollable');
+  
+  // Reset scroll position to top
+  this.elements.situationInput.scrollTop = 0;
   
   // Clear any stored force type
   delete this.elements.situationInput.dataset.forceType;
@@ -1052,7 +1054,6 @@ clearInput() {
   this.updateCharCount();
   this.elements.situationInput.focus();
 }
-
 setupEventListeners() {
     // Main text area and clear button
     this.elements.situationInput.addEventListener('input', () => {
@@ -1061,6 +1062,8 @@ setupEventListeners() {
     });
     this.elements.situationInput.addEventListener('focus', () => {
         this.updateCharCount();
+        // Ensure textarea is scrolled to top on focus
+        setTimeout(() => this.elements.situationInput.scrollTop = 0, 10);
     });
     this.elements.situationInput.addEventListener('blur', () => {
         this.elements.clearBtn.classList.remove('show');
@@ -1097,8 +1100,11 @@ setupEventListeners() {
             // Focus the textarea so user can edit
             this.elements.situationInput.focus();
             
-            // Scroll to show the button
+            // Ensure textarea is scrolled to top
             setTimeout(() => {
+                this.elements.situationInput.scrollTop = 0;
+                
+                // Scroll to show the button
                 document.getElementById('ask-arti-btn').scrollIntoView({ 
                     behavior: 'smooth', 
                     block: 'nearest' 
@@ -1205,7 +1211,6 @@ async loadFederalIntelligenceFromLink(linkElement) {
         this.showError(error.message || "Failed to load federal intelligence");
     }
 }
-// New function to handle button highlighting
 triggerButtonHighlight() {
     const askBtn = document.getElementById('ask-arti-btn');
     askBtn.classList.add('btn-pulse', 'btn-highlight');
@@ -1214,8 +1219,14 @@ triggerButtonHighlight() {
     setTimeout(() => {
         askBtn.classList.remove('btn-pulse');
     }, 4500);
+    
+    // Ensure the textarea is scrolled to top
+    setTimeout(() => {
+        if (this.elements.situationInput) {
+            this.elements.situationInput.scrollTop = 0;
+        }
+    }, 50);
 }
-
 // New function to update button state based on content
 updateButtonState() {
     const askBtn = document.getElementById('ask-arti-btn');
@@ -1256,17 +1267,6 @@ setupAutoExpand() {
        if (scrollHeight > maxHeight) {
            textarea.style.height = maxHeight + 'px';
            textarea.classList.add('scrollable');
-           
-           // Better scroll position management
-           requestAnimationFrame(() => {
-               // Restore cursor position first
-               textarea.selectionStart = textarea.selectionEnd = cursorPosition;
-               
-               // Only adjust scroll if user isn't actively scrolling
-               if (Math.abs(textarea.scrollTop - scrollTop) < 5) {
-                   textarea.scrollTop = scrollTop;
-               }
-           });
        } else {
            textarea.style.height = scrollHeight + 'px';
            textarea.classList.remove('scrollable');
@@ -1277,10 +1277,17 @@ setupAutoExpand() {
    const debouncedAdjustHeight = debounce(adjustHeight, 50);
    
    textarea.addEventListener('input', debouncedAdjustHeight);
+   
    // For paste, still need immediate response but also debounced follow-up
    textarea.addEventListener('paste', () => {
        setTimeout(adjustHeight, 10); // Quick initial adjustment
        setTimeout(debouncedAdjustHeight, 100); // Follow-up adjustment
+   });
+   
+   // Handle focus events to ensure proper scrolling behavior
+   textarea.addEventListener('focus', () => {
+       // Scroll to the top of the textarea when it's focused
+       setTimeout(() => textarea.scrollTop = 0, 10);
    });
    
    adjustHeight(); // Initial adjustment
