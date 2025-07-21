@@ -567,6 +567,7 @@ textarea, input[type="text"] {
     .digest-card .results-card-body { padding: 1.25rem; }
     .digest-header h2 { font-size: 1.5rem; }
     .digest-item-headline { font-size: 1rem; }
+    .intent-btn { font-size: 0.7rem; padding: 0.5rem 0.375rem; }
 }
 
 @media (max-width: 768px) {
@@ -576,6 +577,53 @@ textarea, input[type="text"] {
     .results-card-header .flex > div:first-child { flex: 1; width: 100%; }
     .copy-playbook-btn { align-self: stretch; justify-content: center; width: 100%; }
     .playbook-persona-circle { min-width: 2rem !important; width: 2rem !important; height: 2rem !important; flex-shrink: 0 !important; font-size: 0.75rem !important; }
+}
+
+/* --- Intent Button Styles --- */
+.intent-btn {
+    flex-grow: 1;
+    background-color: #F9FAFB;
+    color: #4B5563;
+    border: 1px solid #E5E7EB;
+    padding: 0.625rem 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    cursor: pointer;
+}
+
+.intent-btn:hover:not(:disabled) {
+    background-color: #F3F4F6;
+    border-color: #D1D5DB;
+    color: #1F2937;
+    transform: translateY(-1px);
+}
+
+.intent-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.intent-btn .loader {
+    border-color: rgba(0,0,0,0.1);
+    border-top-color: var(--brand-purple);
+    width: 1rem;
+    height: 1rem;
+}
+
+.sample-prompt-link {
+    color: var(--brand-purple);
+    font-weight: 500;
+    text-decoration: none;
+    border-bottom: 1px dotted var(--brand-purple);
+}
+.sample-prompt-link:hover {
+    background-color: var(--brand-purple-faint);
 }
 </style>
 
@@ -593,72 +641,60 @@ textarea, input[type="text"] {
        <main id="main-content">
     <div id="quick-mode" class="mode-content fade-in">
         <div class="io-card">
-            <label for="situation-input" class="block text-sm font-bold text-brand-gray-700 mb-3" id="greeting-label">
-                Hey, I'm Arti! You can ask me anything.
-            </label>
-            <div class="textarea-container">
-                <textarea 
-    id="situation-input" 
-    rows="3"
-    class="w-full p-3 pr-12 text-base border border-gray-300 rounded-lg resize-none auto-expand focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300"
-    placeholder='"Create a sales playbook for selling AI services to HHS." or "Prospect for cyber opps at DHS". Or start with a sample prompt below and modify it.'
-    maxlength="2500"></textarea>
-                <button id="clear-btn" class="clear-btn" title="Clear input" aria-label="Clear input">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-</button>
-                    </div>
-                    <div class="text-xs text-gray-500 mt-1.5">
-    <span class="hint-text">Click a sample below and swap in your agency, company, or goals. Add the word "playbook", "earnings", "prospect" or "news" to your prompt for specific plans.</span>
-    <span id="char-count" class="hidden">0/2500</span>
+    <label for="situation-input" class="block text-sm font-bold text-brand-gray-700 mb-3" id="greeting-label">
+        Good morning! I'm Arti! Ready to tackle the day?
+    </label>
+    
+    <div class="textarea-container">
+        <textarea 
+            id="situation-input" 
+            rows="3"
+            class="w-full p-3 pr-12 text-base border border-gray-300 rounded-lg resize-none auto-expand focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300"
+            placeholder="Paste a news article, describe a deal, or outline a sales challenge..."
+            maxlength="2500"></textarea>
+        <button id="clear-btn" class="clear-btn" title="Clear input" aria-label="Clear input">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="mt-2 text-xs text-gray-500">
+        <span>Try a sample:</span>
+        <a href="#" class="sample-prompt-link" data-text="Playbook: Create a comprehensive sales playbook for selling cloud migration services to the Department of Veterans Affairs.">Playbook</a> |
+        <a href="#" class="sample-prompt-link" data-text="Buyer at VA ghosted me after I sent pricing. CISO loves our competitor.">Stuck Deal</a> |
+        <a href="#" class="sample-prompt-link" data-text="Prospect: Just took over Fed Sales at Staples. Prospect for office supplies at the VA.">Prospect</a>
+    </div>
+
+    <div class="mt-4 pt-4 border-t border-gray-200">
+        <div class="flex flex-wrap items-center gap-2">
+            <button class="intent-btn font-bold text-brand-purple" data-analysis-type="digest">
+                <span class="btn-text">⚡️ Daily Brief</span>
+                <div class="loader hidden"></div>
+            </button>
+            <button class="intent-btn" data-analysis-type="news">
+                <span class="btn-text">Analyze News</span>
+                <div class="loader hidden"></div>
+            </button>
+            <button class="intent-btn" data-analysis-type="investment">
+                <span class="btn-text">Bull/Bear</span>
+                <div class="loader hidden"></div>
+            </button>
+            <button class="intent-btn" data-analysis-type="playbook">
+                <span class="btn-text">Playbook</span>
+                <div class="loader hidden"></div>
+            </button>
+            <button class="intent-btn" data-analysis-type="prospect">
+                <span class="btn-text">Prospects</span>
+                <div class="loader hidden"></div>
+            </button>
+            <button class="intent-btn" data-analysis-type="deal">
+                <span class="btn-text">Deal Help</span>
+                <div class="loader hidden"></div>
+            </button>
+        </div>
+    </div>
 </div>
-
-                    <div class="mt-4">
-    <div class="flex flex-wrap gap-2">
-        <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Playbook: Create a comprehensive sales playbook for selling cloud migration services to the Department of Veterans Affairs. Focus on healthcare modernization, data analytics, and patient experience improvements. Include key stakeholders like CIOs, CTOs, and healthcare administrators.">Sales Playbook</button>
-		<button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Buyer at VA ghosted me after I sent pricing. CISO loves our competitor.">Stuck Deal</button>
-        <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Internal partner and account reps are fighting over customer access, pipeline, and revenue. Sales are hurting.">Partner Drama</button>
-        <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="News: Today, the Chief Digital and Artificial Intelligence Office (CDAO) announced contract awards to leading U.S. frontier AI companies to accelerate Department of Defense (DoD) adoption of advanced AI capabilities to address critical national security challenges. Frontier AI companies lead development of the most advanced AI models and technologies, conduct insightful research into the use of frontier AI, and pioneer efforts to address both the potential benefits and risks of frontier AI technologies. 
-
-The awards to Anthropic, Google, OpenAI, and xAI – each with a $200M ceiling – will enable the Department to leverage the technology and talent of U.S. frontier AI companies to develop agentic AI workflows across a variety of mission areas.  Establishing these partnerships will broaden DoD use of and experience in frontier AI capabilities and increase the ability of these companies to understand and address critical national security needs with the most advanced AI capabilities U.S. industry has to offer. 
-
-"The adoption of AI is transforming the Department's ability to support our warfighters and maintain strategic advantage over our adversaries," said Chief Digital and AI Officer Dr. Doug Matty. "Leveraging commercially available solutions into an integrated capabilities approach will accelerate the use of advanced AI as part of our Joint mission essential tasks in our warfighting domain as well as intelligence, business, enterprise information systems." 
-
-DoD is implementing a commercial-first approach to accelerating DoD adoption of AI. Today's awards bring in the best U.S.-based frontier AI talent to help apply cutting-edge AI to solve DoD use cases.  CDAO is also providing access to many of the latest generative AI (GenAI) models for general purpose use to Combatant Commands, the Office of the Secretary of Defense, and the Joint Staff via Army's Enterprise Large Language Model Workspace powered by Ask Sage, and to the broader enterprise via embedded AI models within DoD enterprise data and AI platforms, including the Advancing Analytics (Advana) platform, Maven Smart System, and Edge Data Mesh nodes, which enable AI integration into workflows that occur within these data environments themselves. Finally, DoD is partnering with the General Services Administration (GSA) to bring the best AI technologies to the federal government while leveraging whole-of-government buying power for AI production and compute resources.  ">News or Text</button>
-        <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Earnings: (NASDAQ: AMZN) today announced financial results for
-its first quarter ended March 31, 2025.
-- Net sales increased 9% to $155.7 billion in the first quarter, compared with $143.3 billion in first quarter 2024.
-Excluding the $1.4 billion unfavorable impact from year-over-year changes in foreign exchange rates throughout the
-quarter, net sales increased 10% compared with first quarter 2024.
-- North America segment sales increased 8% year-over-year to $92.9 billion.
-- International segment sales increased 5% year-over-year to $33.5 billion, or increased 8% excluding changes
-in foreign exchange rates.
-- AWS segment sales increased 17% year-over-year to $29.3 billion.
-- Operating income increased to $18.4 billion in the first quarter, compared with $15.3 billion in first quarter 2024.
-- North America segment operating income was $5.8 billion, compared with $5.0 billion in first quarter 2024.
-- International segment operating income was $1.0 billion, compared with $0.9 billion in first quarter 2024.
-- AWS segment operating income was $11.5 billion, compared with $9.4 billion in first quarter 2024.
-- Net income increased to $17.1 billion in the first quarter, or $1.59 per diluted share, compared with $10.4 billion, or
-$0.98 per diluted share, in first quarter 2024.
-- Operating cash flow increased 15% to $113.9 billion for the trailing twelve months, compared with $99.1 billion for
-the trailing twelve months ended March 31, 2024.
-- Free cash flow decreased to $25.9 billion for the trailing twelve months, compared with $50.1 billion for the trailing
-twelve months ended March 31, 2024.
-We're pleased with the start to 2025, especially our pace of innovation and progress in continuing to improve customer
-experiences, said Andy Jassy, President and CEO, Amazon.">Bull or Bear</button>
-       <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Prospect: Just took over Fed Sales at Staples. Prospect for office supplies at the VA.">Prospect</button>
-   	<button class="quick-prompt px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-full text-sm text-blue-700 border border-blue-200" data-text="Give me today's federal sales briefing with the top headlines and opportunities I should know about.">Daily Brief</button>
-   </div>
-</div>
-
-                   <div class="mt-4 border-t border-gray-200 pt-4">
-   <button id="game-plan-btn" class="btn btn-primary w-full">
-       <span id="game-plan-text">Ask Arti</span>
-       <div id="game-plan-loader" class="loader hidden"></div>
-   </button>
-</div>
-               </div>
            </div>
    	
            <div id="chat-mode" class="mode-content hidden fade-in">
@@ -688,103 +724,103 @@ experiences, said Andy Jassy, President and CEO, Amazon.">Bull or Bear</button>
        <div id="error-message" class="bg-red-100 border border-red-300 rounded-lg p-4 text-center my-6 hidden">
            <p class="text-red-800 font-semibold mb-1">¯\_(ツ)_/¯ Oops, that didn't work.</p>
            <p class="text-red-700 text-sm" id="error-details">We're having trouble connecting to Arti.</p>
-       </div>
-
-      <div id="results-container" class="fade-in"></div>
-
-      <div class="mt-8 text-center">
-          <p class="text-sm text-gray-500 mb-2">Need something different? Switch modes.</p>
-          <div class="io-card max-w-sm mx-auto p-2">
-               <div class="flex bg-brand-gray-100 p-1 rounded-xl">
-                   <button class="mode-btn flex-1 px-3 py-2 rounded-lg font-semibold text-sm transition-all active" data-mode="quick">
-                       ⚡️ Game Plans
-                   </button>
-                   <button class="mode-btn flex-1 px-3 py-2 rounded-lg font-semibold text-sm transition-all" data-mode="chat">
-                       💬 Chat with Arti
-                   </button>
-               </div>
-          </div>
       </div>
-      <footer class="text-center mt-12 text-xs text-gray-500">
-   <div class="flex justify-center gap-4 mb-4">
-       <a href="#" id="about-btn" class="font-medium text-brand-purple hover:underline">About AskArti</a>
-       <a href="mailto:mark@subhoo.com" class="font-medium text-brand-purple hover:underline">Contact</a>
-   </div>
-   <p class="mb-3 text-gray-600">
-   You're interacting with an AI assistant trained through June 2024. AskArti offers general guidance for informational purposes only and isn't a substitute for professional advice. Always evaluate recommendations carefully before making decisions.
-</p>
-   <p>
-       For Federal Sellers by Federal Sellers.
-       <br>
-       Powered by AWS.
-       <br>
-       © 2025 AskArti.com.
-   </p>
-</footer>
 
- </div>
- 
- <div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-     <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
-         <div class="flex justify-between items-start mb-4">
-             <h2 class="text-xl font-bold text-gray-900">About AskArti</h2>
-             <button id="close-about" class="text-gray-400 hover:text-gray-600">
-                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-             </button>
-         </div>
-         <div class="space-y-4 text-gray-700 text-sm">
-             <p>AskArti is your 24/7 AI sales coach, designed for federal sales professionals. Get instant advice on stuck deals, meeting preparation, and sales strategy.</p>
-             <div class="mt-4 pt-4 border-t">
-                 <h3 class="font-semibold text-gray-800 mb-2">Privacy & Technology</h3>
-                 <p class="text-gray-600">AskArti uses advanced AI models. We do not store, log, or persist any conversation data. All processing occurs in-memory and is discarded.</p>
-             </div>
+     <div id="results-container" class="fade-in"></div>
+
+     <div class="mt-8 text-center">
+         <p class="text-sm text-gray-500 mb-2">Need something different? Switch modes.</p>
+         <div class="io-card max-w-sm mx-auto p-2">
+              <div class="flex bg-brand-gray-100 p-1 rounded-xl">
+                  <button class="mode-btn flex-1 px-3 py-2 rounded-lg font-semibold text-sm transition-all active" data-mode="quick">
+                      ⚡️ Game Plans
+                  </button>
+                  <button class="mode-btn flex-1 px-3 py-2 rounded-lg font-semibold text-sm transition-all" data-mode="chat">
+                      💬 Chat with Arti
+                  </button>
+              </div>
          </div>
      </div>
- </div>
+     <footer class="text-center mt-12 text-xs text-gray-500">
+  <div class="flex justify-center gap-4 mb-4">
+      <a href="#" id="about-btn" class="font-medium text-brand-purple hover:underline">About AskArti</a>
+      <a href="mailto:mark@subhoo.com" class="font-medium text-brand-purple hover:underline">Contact</a>
+  </div>
+  <p class="mb-3 text-gray-600">
+  You're interacting with an AI assistant trained through June 2024. AskArti offers general guidance for informational purposes only and isn't a substitute for professional advice. Always evaluate recommendations carefully before making decisions.
+</p>
+  <p>
+      For Federal Sellers by Federal Sellers.
+      <br>
+      Powered by AWS.
+      <br>
+      © 2025 AskArti.com.
+  </p>
+</footer>
+
+</div>
+
+<div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+        <div class="flex justify-between items-start mb-4">
+            <h2 class="text-xl font-bold text-gray-900">About AskArti</h2>
+            <button id="close-about" class="text-gray-400 hover:text-gray-600">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+        </div>
+        <div class="space-y-4 text-gray-700 text-sm">
+            <p>AskArti is your 24/7 AI sales coach, designed for federal sales professionals. Get instant advice on stuck deals, meeting preparation, and sales strategy.</p>
+            <div class="mt-4 pt-4 border-t">
+                <h3 class="font-semibold text-gray-800 mb-2">Privacy & Technology</h3>
+                <p class="text-gray-600">AskArti uses advanced AI models. We do not store, log, or persist any conversation data. All processing occurs in-memory and is discarded.</p>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
 // --- Time-based greeting functionality ---
 function getTimeBasedGreeting() {
-  const hour = new Date().getHours();
-  const name = "I'm Arti!";
-  
-  if (hour >= 5 && hour < 12) {
-      return `Good morning! ${name} Ready to tackle the day?`;
-  } else if (hour >= 12 && hour < 17) {
-      return `Good afternoon! ${name} How can I help?`;
-  } else if (hour >= 17 && hour < 21) {
-      return `Good evening! ${name} What's on your mind?`;
-  } else {
-      return `Burning the midnight oil? ${name} I'm here to help.`;
-  }
+ const hour = new Date().getHours();
+ const name = "I'm Arti!";
+ 
+ if (hour >= 5 && hour < 12) {
+     return `Good morning! ${name} Ready to tackle the day?`;
+ } else if (hour >= 12 && hour < 17) {
+     return `Good afternoon! ${name} How can I help?`;
+ } else if (hour >= 17 && hour < 21) {
+     return `Good evening! ${name} What's on your mind?`;
+ } else {
+     return `Burning the midnight oil? ${name} I'm here to help.`;
+ }
 }
 
 function updateGreetings() {
-  const greeting = getTimeBasedGreeting();
-  const greetingLabel = document.getElementById('greeting-label');
-  const chatGreeting = document.getElementById('chat-greeting');
-  
-  if (greetingLabel) {
-      greetingLabel.textContent = greeting;
-  }
-  
-  if (chatGreeting) {
-      const chatText = greeting.replace('Hey, I\'m Arti!', 'I\'m Arti.');
-      chatGreeting.textContent = `${chatText} I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.`;
-  }
+ const greeting = getTimeBasedGreeting();
+ const greetingLabel = document.getElementById('greeting-label');
+ const chatGreeting = document.getElementById('chat-greeting');
+ 
+ if (greetingLabel) {
+     greetingLabel.textContent = greeting;
+ }
+ 
+ if (chatGreeting) {
+     const chatText = greeting.replace('Hey, I\'m Arti!', 'I\'m Arti.');
+     chatGreeting.textContent = `${chatText} I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.`;
+ }
 }
 
 // --- Mode Toggle Active State ---
 const modeButtons = document.querySelectorAll('.mode-btn');
 modeButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-      modeButtons.forEach(b => b.classList.remove('active', 'bg-white', 'text-brand-purple'));
-      btn.classList.add('active', 'bg-white', 'text-brand-purple');
-      const inactiveBtn = [...modeButtons].find(b => !b.classList.contains('active'));
-      if(inactiveBtn) {
-          inactiveBtn.classList.add('text-gray-600');
-          inactiveBtn.classList.remove('bg-white', 'text-brand-purple');
-      }
-  });
+ btn.addEventListener('click', () => {
+     modeButtons.forEach(b => b.classList.remove('active', 'bg-white', 'text-brand-purple'));
+     btn.classList.add('active', 'bg-white', 'text-brand-purple');
+     const inactiveBtn = [...modeButtons].find(b => !b.classList.contains('active'));
+     if(inactiveBtn) {
+         inactiveBtn.classList.add('text-gray-600');
+         inactiveBtn.classList.remove('bg-white', 'text-brand-purple');
+     }
+ });
 });
 document.querySelector('.mode-btn[data-mode="quick"]').classList.add('bg-white', 'text-brand-purple');
 document.querySelector('.mode-btn[data-mode="chat"]').classList.add('text-gray-600');
@@ -797,125 +833,130 @@ RETRY_DELAY: 2000,
 MAX_INPUT_LENGTH: 2500,
 MIN_REQUEST_INTERVAL: 2000,
 LOADING_MESSAGES: [
-    "Hang on. I'm...Working Backwards", 
-    "...Diving Deep", 
-    "...Unpacking This", 
-    "...Putting a Pin in it", 
-    "...Circling Back", 
-    "...Thinking Big"
+   "Hang on. I'm...Working Backwards", 
+   "...Diving Deep", 
+   "...Unpacking This", 
+   "...Putting a Pin in it", 
+   "...Circling Back", 
+   "...Thinking Big"
 ]
 };
 
 class AskArti {
 constructor() {
- this.elements = this.getElements();
- this.state = {
-     pendingRequest: false,
-     lastRequestTime: 0,
-     loadingInterval: null,
-     abortController: null,
-     lastQuery: '',
-     currentMode: 'quick',
-     chatHistory: [],
- };
- this.init();
+this.elements = this.getElements();
+this.state = {
+    pendingRequest: false,
+    lastRequestTime: 0,
+    loadingInterval: null,
+    abortController: null,
+    lastQuery: '',
+    currentMode: 'quick',
+    chatHistory: [],
+};
+this.init();
 }
 
 getElements() {
-   return {
-       situationInput: document.getElementById('situation-input'),
-       clearBtn: document.getElementById('clear-btn'),
-       gamePlanBtn: document.getElementById('game-plan-btn'),
-       gamePlanText: document.getElementById('game-plan-text'),
-       gamePlanLoader: document.getElementById('game-plan-loader'),
-       charCount: document.getElementById('char-count'),
-       loadingMessageContainer: document.getElementById('loading-message-container'),
-       loadingMessage: document.getElementById('loading-message'),
-       errorMessage: document.getElementById('error-message'),
-       errorDetails: document.getElementById('error-details'),
-       resultsContainer: document.getElementById('results-container'),
-       aboutBtn: document.getElementById('about-btn'),
-       aboutModal: document.getElementById('about-modal'),
-       closeAbout: document.getElementById('close-about'),
-       quickPromptBtns: document.querySelectorAll('.quick-prompt'),
-       modeButtons: document.querySelectorAll('.mode-btn'),
-       quickMode: document.getElementById('quick-mode'),
-       chatMode: document.getElementById('chat-mode'),
-       chatMessages: document.getElementById('chat-messages'),
-       chatInput: document.getElementById('chat-input'),
-       chatSendBtn: document.getElementById('chat-send-btn'),
-   };
+  return {
+      situationInput: document.getElementById('situation-input'),
+      clearBtn: document.getElementById('clear-btn'),
+      charCount: document.getElementById('char-count'),
+      loadingMessageContainer: document.getElementById('loading-message-container'),
+      loadingMessage: document.getElementById('loading-message'),
+      errorMessage: document.getElementById('error-message'),
+      errorDetails: document.getElementById('error-details'),
+      resultsContainer: document.getElementById('results-container'),
+      aboutBtn: document.getElementById('about-btn'),
+      aboutModal: document.getElementById('about-modal'),
+      closeAbout: document.getElementById('close-about'),
+      modeButtons: document.querySelectorAll('.mode-btn'),
+      quickMode: document.getElementById('quick-mode'),
+      chatMode: document.getElementById('chat-mode'),
+      chatMessages: document.getElementById('chat-messages'),
+      chatInput: document.getElementById('chat-input'),
+      chatSendBtn: document.getElementById('chat-send-btn'),
+      intentButtons: document.querySelectorAll('.intent-btn'),
+      samplePromptLinks: document.querySelectorAll('.sample-prompt-link'),
+  };
 }
 
 init() {
-   updateGreetings();
-   
-   mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'base', themeVariables: {
-         primaryColor: '#F3F4F6',
-         primaryTextColor: '#1F2937',
-         primaryBorderColor: '#D1D5DB',
-         lineColor: '#6B7280',
-         textColor: '#111827',
-         fontSize: '14px'
-   }});
-   this.setupEventListeners();
-   this.setupAutoExpand();
-   this.elements.situationInput.focus();
-   this.updateCharCount();
+  updateGreetings();
+  
+  mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'base', themeVariables: {
+        primaryColor: '#F3F4F6',
+        primaryTextColor: '#1F2937',
+        primaryBorderColor: '#D1D5DB',
+        lineColor: '#6B7280',
+        textColor: '#111827',
+        fontSize: '14px'
+  }});
+  this.setupEventListeners();
+  this.setupAutoExpand();
+  this.elements.situationInput.focus();
+  this.updateCharCount();
 }
 
-  updateCharCount() {
-      if (!this.elements.situationInput) return;
-      const current = this.elements.situationInput.value.length;
-      const max = CONFIG.MAX_INPUT_LENGTH;
-      this.elements.charCount.textContent = `${current}/${max}`;
-      
-      if (current > 0) {
-          this.elements.clearBtn.classList.add('show');
-      } else {
-          this.elements.clearBtn.classList.remove('show');
-      }
-  }
+ updateCharCount() {
+     if (!this.elements.situationInput) return;
+     const current = this.elements.situationInput.value.length;
+     const max = CONFIG.MAX_INPUT_LENGTH;
+     
+     if (current > 0) {
+         this.elements.clearBtn.classList.add('show');
+     } else {
+         this.elements.clearBtn.classList.remove('show');
+     }
+ }
 
-  clearInput() {
-   this.elements.situationInput.value = '';
-   this.elements.situationInput.style.height = 'auto';
-   this.elements.situationInput.classList.remove('scrollable');
-   this.updateCharCount();
-   this.elements.situationInput.focus();
+ clearInput() {
+  this.elements.situationInput.value = '';
+  this.elements.situationInput.style.height = 'auto';
+  this.elements.situationInput.classList.remove('scrollable');
+  this.updateCharCount();
+  this.elements.situationInput.focus();
 }
 
-  setupEventListeners() {
+setupEventListeners() {
+   // Main text area and clear button
    this.elements.situationInput.addEventListener('input', () => {
        this.updateCharCount();
    });
    this.elements.situationInput.addEventListener('focus', () => {
        this.updateCharCount();
    });
-
    this.elements.situationInput.addEventListener('blur', () => {
        this.elements.clearBtn.classList.remove('show');
    });
    this.elements.clearBtn.addEventListener('click', () => this.clearInput());
 
-   this.elements.quickPromptBtns.forEach(btn => {
+   // Intent buttons - the main action buttons
+   this.elements.intentButtons.forEach(btn => {
        btn.addEventListener('click', (e) => {
            const button = e.currentTarget;
-           this.elements.situationInput.value = button.dataset.text;
-           this.updateCharCount();
-           this.getAdvice(null, this.elements.gamePlanBtn);
+           const type = button.dataset.analysisType;
+           
+           // For digest, we don't need input text
+           if (type === 'digest') {
+               this.elements.situationInput.value = 'Get daily digest';
+           }
+           
+           this.getAdvice(type, button);
        });
    });
 
-   this.elements.gamePlanBtn.addEventListener('click', (e) => this.getAdvice(null, e.currentTarget));
-
-   this.elements.situationInput.addEventListener('keydown', (e) => {
-       if (e.key === 'Enter' && !e.shiftKey) {
+   // Sample prompt links - only populate text area
+   this.elements.samplePromptLinks.forEach(link => {
+       link.addEventListener('click', (e) => {
            e.preventDefault();
-           this.getAdvice(null, this.elements.gamePlanBtn);
-       }
+           this.elements.situationInput.value = e.currentTarget.dataset.text;
+           this.updateCharCount();
+           this.elements.situationInput.focus();
+       });
    });
 
+   // Modal and mode toggling
    this.elements.aboutBtn.addEventListener('click', () => this.showModal());
    this.elements.closeAbout.addEventListener('click', () => this.hideModal());
    this.elements.aboutModal.addEventListener('click', (e) => {
@@ -929,6 +970,7 @@ init() {
        btn.addEventListener('click', (e) => this.switchMode(e.target.dataset.mode));
    });
 
+   // Chat mode
    this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
    this.elements.chatInput.addEventListener('keydown', (e) => {
        if (e.key === 'Enter' && !e.shiftKey) {
@@ -939,745 +981,754 @@ init() {
 }
 
 setupAutoExpand() {
-   const textarea = this.elements.situationInput;
-   
-   const adjustHeight = () => {
-       textarea.style.height = 'auto';
-       
-       const minHeight = parseFloat(getComputedStyle(textarea).lineHeight) * 3 + 24; 
-       const maxHeight = parseFloat(getComputedStyle(textarea).lineHeight) * 6 + 24; 
-       
-       let newHeight = Math.max(minHeight, textarea.scrollHeight);
-       
-       if (newHeight > maxHeight) {
-           newHeight = maxHeight;
-           textarea.classList.add('scrollable');
-       } else {
-           textarea.classList.remove('scrollable');
-       }
-       
-       textarea.style.height = newHeight + 'px';
-   };
-   
-   textarea.addEventListener('input', adjustHeight);
-   textarea.addEventListener('paste', () => {
-       setTimeout(adjustHeight, 10);
-   });
-   
-   adjustHeight();
-}
-
-  switchMode(mode) {
-      this.state.currentMode = mode;
-      this.elements.resultsContainer.innerHTML = '';
-      this.elements.errorMessage.classList.add('hidden');
-      this.hideLoadingMessages();
-
-      if (mode === 'quick') {
-          this.elements.quickMode.classList.remove('hidden');
-          this.elements.chatMode.classList.add('hidden');
-          this.elements.situationInput.focus();
+  const textarea = this.elements.situationInput;
+  
+  const adjustHeight = () => {
+      textarea.style.height = 'auto';
+      
+      const minHeight = parseFloat(getComputedStyle(textarea).lineHeight) * 3 + 24; 
+      const maxHeight = parseFloat(getComputedStyle(textarea).lineHeight) * 6 + 24; 
+      
+      let newHeight = Math.max(minHeight, textarea.scrollHeight);
+      
+      if (newHeight > maxHeight) {
+          newHeight = maxHeight;
+          textarea.classList.add('scrollable');
       } else {
-          this.elements.quickMode.classList.add('hidden');
-          this.elements.chatMode.classList.remove('hidden');
-          this.elements.chatInput.focus();
+          textarea.classList.remove('scrollable');
       }
-  }
-
-  addChatMessage(content, isUser = false) {
-      let processedContent = isUser ? content : marked.parse(content.replace(/<action>(.*?)<\/action>/g, '<span class="bg-yellow-50 px-1 py-0.5 rounded">$1</span>'));
-      const messageClass = isUser ? 'chat-message-user justify-end' : 'chat-message-arti justify-start';
-      const alignClass = isUser ? 'justify-end' : 'justify-start';
-
-      const messageHtml = `
-          <div class="flex ${alignClass} fade-in">
-              <div class="${messageClass} p-3 text-sm max-w-[85%]">
-                  ${processedContent}
-              </div>
-          </div>
-      `;
-      this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
-      this.scrollChatToBottom();
-  }
+      
+      textarea.style.height = newHeight + 'px';
+  };
   
-  showTypingIndicator() {
-      const typingHtml = `<div id="typing-indicator" class="flex justify-start"><div class="chat-message-arti p-3 text-sm">...</div></div>`;
-      this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
-      this.scrollChatToBottom();
-  }
-
-  hideTypingIndicator() {
-      const indicator = document.getElementById('typing-indicator');
-      if (indicator) indicator.remove();
-  }
-
-  scrollChatToBottom() {
-      const chatContainer = document.getElementById('chat-container');
-      if (chatContainer) {
-          chatContainer.scrollTop = chatContainer.scrollHeight;
-      }
-  }
-
-  async sendChatMessage() {
-      const message = this.elements.chatInput.value.trim();
-      if (!message || this.state.pendingRequest) return;
-
-      this.state.pendingRequest = true;
-      this.addChatMessage(message, true);
-      this.state.chatHistory.push({ role: 'user', content: message });
-      this.elements.chatInput.value = '';
-      this.showTypingIndicator();
-
-      try {
-          const response = await fetch(CONFIG.API_ENDPOINT, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ situation: message, mode: 'chat', conversationHistory: this.state.chatHistory }),
-          });
-          if (!response.ok) throw new Error(`Server error (${response.status})`);
-          
-          const data = await response.json();
-          this.hideTypingIndicator();
-          this.addChatMessage(data.message);
-          this.state.chatHistory.push({ role: 'assistant', content: data.message });
-
-      } catch (error) {
-          this.hideTypingIndicator();
-          this.addChatMessage("Sorry, I'm having trouble connecting right now. Please try again in a moment.", false);
-      } finally {
-          this.state.pendingRequest = false;
-      }
-  }
-
-  setButtonLoading(loading, clickedButton) {
-   this.state.pendingRequest = loading;
-   this.elements.errorMessage.classList.add('hidden');
-
-   this.elements.gamePlanBtn.disabled = loading;
-
-   if (loading) {
-       this.elements.gamePlanText.classList.add('hidden');
-       this.elements.gamePlanLoader.classList.remove('hidden');
-   } else {
-       this.elements.gamePlanText.classList.remove('hidden');
-       this.elements.gamePlanLoader.classList.add('hidden');
-   }
+  textarea.addEventListener('input', adjustHeight);
+  textarea.addEventListener('paste', () => {
+      setTimeout(adjustHeight, 10);
+  });
+  
+  adjustHeight();
 }
 
-  showLoadingMessages() {
-      this.elements.loadingMessageContainer.classList.remove('hidden');
-      let i = 0;
-      this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[i];
-      this.state.loadingInterval = setInterval(() => {
-          i = (i + 1) % CONFIG.LOADING_MESSAGES.length;
-          this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[i];
-      }, 2000);
-  }
+ switchMode(mode) {
+     this.state.currentMode = mode;
+     this.elements.resultsContainer.innerHTML = '';
+     this.elements.errorMessage.classList.add('hidden');
+     this.hideLoadingMessages();
 
-  hideLoadingMessages() {
-      clearInterval(this.state.loadingInterval);
-      this.elements.loadingMessageContainer.classList.add('hidden');
-  }
+     if (mode === 'quick') {
+         this.elements.quickMode.classList.remove('hidden');
+         this.elements.chatMode.classList.add('hidden');
+         this.elements.situationInput.focus();
+     } else {
+         this.elements.quickMode.classList.add('hidden');
+         this.elements.chatMode.classList.remove('hidden');
+         this.elements.chatInput.focus();
+     }
+ }
 
-  showError(message) {
-      this.elements.errorMessage.classList.remove('hidden');
-      this.elements.errorDetails.textContent = message;
-  }
-  
-  async getAdvice(forceType = null, clickedButton = null) {
-   let situation = this.elements.situationInput.value.trim();
-   situation = situation.replace(/[""]/g, '"').replace(/['']/g, "'");
-   if (!situation) { this.showError("Please type or paste something into the box above."); return; }
-   if (this.state.pendingRequest) return;
-   
-   const buttonToLoad = clickedButton || this.elements.gamePlanBtn;
+ addChatMessage(content, isUser = false) {
+     let processedContent = isUser ? content : marked.parse(content.replace(/<action>(.*?)<\/action>/g, '<span class="bg-yellow-50 px-1 py-0.5 rounded">$1</span>'));
+     const messageClass = isUser ? 'chat-message-user justify-end' : 'chat-message-arti justify-start';
+     const alignClass = isUser ? 'justify-end' : 'justify-start';
 
-   this.state.lastQuery = situation;
-   this.elements.resultsContainer.innerHTML = '';
-   this.setButtonLoading(true, buttonToLoad);
-   this.showLoadingMessages();
+     const messageHtml = `
+         <div class="flex ${alignClass} fade-in">
+             <div class="${messageClass} p-3 text-sm max-w-[85%]">
+                 ${processedContent}
+             </div>
+         </div>
+     `;
+     this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
+     this.scrollChatToBottom();
+ }
+ 
+ showTypingIndicator() {
+     const typingHtml = `<div id="typing-indicator" class="flex justify-start"><div class="chat-message-arti p-3 text-sm">...</div></div>`;
+     this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
+     this.scrollChatToBottom();
+ }
 
-   try {
-       const body = { situation };
-       if (forceType) body.forceType = forceType;
+ hideTypingIndicator() {
+     const indicator = document.getElementById('typing-indicator');
+     if (indicator) indicator.remove();
+ }
 
-       const response = await fetch(CONFIG.API_ENDPOINT, {
-           method: 'POST',
-           headers: { 'Content-Type': 'application/json' },
-           body: JSON.stringify(body),
-       });
-       
-       if (!response.ok) {
-           let errorMessage = `Server error: ${response.status}`;
-           try {
-               const errorData = await response.json();
-               errorMessage = errorData.error || errorData.message || errorMessage;
-           } catch (parseError) {
-               console.error('Error parsing error response:', parseError);
-           }
-           throw new Error(errorMessage);
-       }
-       
-       const data = await response.json();
-       if(data.error) throw new Error(data.message || data.error);
-       
-       this.displayAdvice(data);
+ scrollChatToBottom() {
+     const chatContainer = document.getElementById('chat-container');
+     if (chatContainer) {
+         chatContainer.scrollTop = chatContainer.scrollHeight;
+     }
+ }
 
-   } catch (error) {
-       console.error('Request failed:', error);
-       this.showError(error.message || "An unknown error occurred.");
-   } finally {
-       this.setButtonLoading(false, buttonToLoad);
-       this.hideLoadingMessages();
-   }
+ async sendChatMessage() {
+     const message = this.elements.chatInput.value.trim();
+     if (!message || this.state.pendingRequest) return;
+
+     this.state.pendingRequest = true;
+     this.addChatMessage(message, true);
+     this.state.chatHistory.push({ role: 'user', content: message });
+     this.elements.chatInput.value = '';
+     this.showTypingIndicator();
+
+     try {
+         const response = await fetch(CONFIG.API_ENDPOINT, {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify({ situation: message, mode: 'chat', conversationHistory: this.state.chatHistory }),
+         });
+         if (!response.ok) throw new Error(`Server error (${response.status})`);
+         
+         const data = await response.json();
+         this.hideTypingIndicator();
+         this.addChatMessage(data.message);
+         this.state.chatHistory.push({ role: 'assistant', content: data.message });
+
+     } catch (error) {
+         this.hideTypingIndicator();
+         this.addChatMessage("Sorry, I'm having trouble connecting right now. Please try again in a moment.", false);
+     } finally {
+         this.state.pendingRequest = false;
+     }
+ }
+
+ setButtonLoading(loading, clickedButton) {
+  this.state.pendingRequest = loading;
+  this.elements.errorMessage.classList.add('hidden');
+
+  // Disable all intent buttons during loading
+  this.elements.intentButtons.forEach(btn => {
+      btn.disabled = loading;
+      const btnText = btn.querySelector('.btn-text');
+      const loader = btn.querySelector('.loader');
+      
+      if (btn === clickedButton) {
+          // Show loading state on clicked button
+          if (loading) {
+              btnText.classList.add('hidden');
+              loader.classList.remove('hidden');
+          } else {
+              btnText.classList.remove('hidden');
+              loader.classList.add('hidden');
+          }
+      }
+  });
 }
 
-   // In your AskArti class, replace the displayAdvice method with this:
+ showLoadingMessages() {
+     this.elements.loadingMessageContainer.classList.remove('hidden');
+     let i = 0;
+     this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[i];
+     this.state.loadingInterval = setInterval(() => {
+         i = (i + 1) % CONFIG.LOADING_MESSAGES.length;
+         this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[i];
+     }, 2000);
+ }
+
+ hideLoadingMessages() {
+     clearInterval(this.state.loadingInterval);
+     this.elements.loadingMessageContainer.classList.add('hidden');
+ }
+
+ showError(message) {
+     this.elements.errorMessage.classList.remove('hidden');
+     this.elements.errorDetails.textContent = message;
+ }
+ 
+ async getAdvice(forceType = null, clickedButton = null) {
+  let situation = this.elements.situationInput.value.trim();
+  situation = situation.replace(/[""]/g, '"').replace(/['']/g, "'");
+  
+  // Allow digest requests without input text
+  if (forceType !== 'digest' && !situation) { 
+      this.showError("Please type or paste something into the box above."); 
+      return; 
+  }
+  if (this.state.pendingRequest) return;
+
+  this.state.lastQuery = situation;
+  this.elements.resultsContainer.innerHTML = '';
+  this.setButtonLoading(true, clickedButton);
+  this.showLoadingMessages();
+
+  try {
+      const body = { situation };
+      if (forceType) body.forceType = forceType;
+
+      const response = await fetch(CONFIG.API_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+      });
+      
+      if (!response.ok) {
+          let errorMessage = `Server error: ${response.status}`;
+          try {
+              const errorData = await response.json();
+              errorMessage = errorData.error || errorData.message || errorMessage;
+          } catch (parseError) {
+              console.error('Error parsing error response:', parseError);
+          }
+          throw new Error(errorMessage);
+      }
+      
+      const data = await response.json();
+      if(data.error) throw new Error(data.message || data.error);
+      
+      this.displayAdvice(data);
+
+  } catch (error) {
+      console.error('Request failed:', error);
+      this.showError(error.message || "An unknown error occurred.");
+  } finally {
+      this.setButtonLoading(false, clickedButton);
+      this.hideLoadingMessages();
+  }
+}
 
 displayAdvice(data) {
-    const { response_type } = data;
-    let html = '';
+   const { response_type } = data;
+   let html = '';
 
-    // Main router for different response types
-    switch (response_type) {
-        case 'digest':
-            html = this.renderDailyDigest(data);
-            break;
-        case 'playbook':
-            html = this.renderSalesPlaybook(data);
-            break;
-        case 'news':
-            html = this.renderNewsAdvice(data);
-            break;
-        case 'investment':
-            html = this.renderMarketAnalysis(data);
-            break;
-        case 'prospect':
-            html = this.renderProspectAdvice(data);
-            break;
-        case 'deal':
-        case 'interview':
-        case 'meeting':
-            html = this.renderGeneralAdvice(data);
-            break;
-        default:
-            // Fallback to general advice for any unknown type
-            html = this.renderGeneralAdvice(data);
-            break;
-    }
-    
-    this.elements.resultsContainer.innerHTML = html;
-    this.setupInteractiveElements(); // For copy buttons, etc.
+   // Main router for different response types
+   switch (response_type) {
+       case 'digest':
+           html = this.renderDailyDigest(data);
+           break;
+       case 'playbook':
+           html = this.renderSalesPlaybook(data);
+           break;
+       case 'news':
+           html = this.renderNewsAdvice(data);
+           break;
+       case 'investment':
+           html = this.renderMarketAnalysis(data);
+           break;
+       case 'prospect':
+           html = this.renderProspectAdvice(data);
+           break;
+       case 'deal':
+       case 'interview':
+       case 'meeting':
+           html = this.renderGeneralAdvice(data);
+           break;
+       default:
+           // Fallback to general advice for any unknown type
+           html = this.renderGeneralAdvice(data);
+           break;
+   }
+   
+   this.elements.resultsContainer.innerHTML = html;
+   this.setupInteractiveElements(); // For copy buttons, etc.
 
-    if (data.mermaid_chart) {
-        this.renderMermaidChart().then(() => {
-            this.setupMermaidDownloadButton();
-        });
-    }
-    
-    // 🔧 FIXED SCROLLING - Scroll to the results card header, not the first section
-    setTimeout(() => {
-        const resultsCard = this.elements.resultsContainer.querySelector('.results-card');
-        if (resultsCard) {
-            resultsCard.scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'start',
-                inline: 'nearest'
-            });
-        } else {
-            // Fallback to container if no card found
-            this.elements.resultsContainer.scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'start' 
-            });
-        }
-    }, 100); // Small delay to ensure DOM is updated
+   if (data.mermaid_chart) {
+       this.renderMermaidChart().then(() => {
+           this.setupMermaidDownloadButton();
+       });
+   }
+   
+   // Scroll to the results card header
+   setTimeout(() => {
+       const resultsCard = this.elements.resultsContainer.querySelector('.results-card');
+       if (resultsCard) {
+           resultsCard.scrollIntoView({ 
+               behavior: 'smooth', 
+               block: 'start',
+               inline: 'nearest'
+           });
+       } else {
+           // Fallback to container if no card found
+           this.elements.resultsContainer.scrollIntoView({ 
+               behavior: 'smooth', 
+               block: 'start' 
+           });
+       }
+   }, 100); // Small delay to ensure DOM is updated
 }
 
-   // RENDERER 1: DAILY DIGEST
-   renderDailyDigest(data) {
-       const { 
-           digest_date, key_intelligence, deal_drivers, action_items, 
-           market_temperature, status 
-       } = data;
-       const sources = deal_drivers && deal_drivers.length > 0 ? [...new Set(deal_drivers.map(d => d.source))].join(' &bull; ') : 'Internal Analysis';
-       const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  // RENDERER 1: DAILY DIGEST
+  renderDailyDigest(data) {
+      const { 
+          digest_date, key_intelligence, deal_drivers, action_items, 
+          market_temperature, status 
+      } = data;
+      const sources = deal_drivers && deal_drivers.length > 0 ? [...new Set(deal_drivers.map(d => d.source))].join(' &bull; ') : 'Internal Analysis';
+      const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
-       return `
-           <div class="results-card digest-card">
-               <div class="results-card-body">
-                   <header class="digest-header">
-                       <img src="/images/arti_right.png" alt="Arti" />
-                       <div>
-                           <h2>Federal Sales Intelligence</h2>
-                           <p class="digest-header-meta">${date} &bull; MARKET TEMP: ${market_temperature || 'COOL'}</p>
-                       </div>
-                   </header>
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Key Intelligence</h3>
-                       <p class="digest-item-summary text-base">${key_intelligence}</p>
-                   </section>
-                   ${deal_drivers && deal_drivers.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Today's Deal Drivers</h3>
-                       ${deal_drivers.map((driver, index) => `
-                           <div class="digest-item">
-                               <div class="digest-item-number">${index + 1}</div>
-                               <div>
-                                   <h4 class="digest-item-headline">
-                                       ${driver.link ? `<a href="${driver.link}" target="_blank" rel="noopener noreferrer">${driver.headline}</a>` : driver.headline}
-                                   </h4>
-                                   <p class="digest-item-summary">${driver.summary}</p>
-                                   <p class="digest-item-insight">&rarr; ${driver.action_insight}</p>
-                                   <div class="digest-item-meta"><span class="text-xs text-gray-500 font-semibold">${driver.source ? driver.source.toUpperCase() : ''}</span></div>
-                               </div>
-                           </div>`).join('')}
-                   </section>` : ''}
-				   ${data.quick_intel && data.quick_intel.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Quick Intel</h3>
-                    <div class="space-y-2">
-                    ${data.quick_intel.map(item => `
-                        <p class="digest-item-summary">
-                            <strong class="font-semibold text-gray-900">${item.category}:</strong> ${item.insight}
-                        </p>
-                    `).join('')}
-                    </div>
-                </section>
-                ` : ''}
-                   ${action_items && action_items.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Your Moves Today</h3>
-                        ${action_items.map((action, index) => `
-                           <div class="digest-item">
-                               <div class="digest-item-number">${index + 1}</div>
-                               <div>
-                                   <h4 class="digest-item-headline">${action.action}</h4>
-                                   <p class="digest-item-summary">${action.why}</p>
-                               </div>
-                           </div>`).join('')}
-                   </section>` : ''}
-                   <footer class="digest-section">
-                        <h3 class="digest-section-title">Sources</h3>
-                        <p class="text-sm text-gray-600">${sources}</p>
-                   </footer>
-               </div>
-           </div>`;
-   }
-
-   // RENDERER 2: SALES PLAYBOOK
-   renderSalesPlaybook(data) {
-       const { 
-           sales_play_title, sales_play_summary, key_services, key_partners, 
-           competitive_positioning, success_metrics, timeline_milestones, 
-           target_personas, insider_tips, risk_mitigation, next_actions, mermaid_chart 
-       } = data;
-       
-       const renderSimpleList = (items) => items?.map(item => `<li class="digest-item-summary">${item}</li>`).join('') || '';
-
-       return `
-           <div class="results-card digest-card">
-               <div class="results-card-body">
-                   <header class="digest-header">
-                       <img src="/images/arti_right.png" alt="Arti" />
-                       <div>
-                           <h2>${sales_play_title}</h2>
-                           <p class="digest-header-meta">Sales Playbook</p>
-                       </div>
-                   </header>
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Executive Summary</h3>
-                       <p class="digest-item-summary text-base">${sales_play_summary}</p>
-                   </section>
-                   ${key_services && key_services.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Key Services & Products</h3>
-                       <ul class="list-disc list-inside space-y-2">${renderSimpleList(key_services)}</ul>
-                   </section>` : ''}
-                   ${key_partners && key_partners.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Strategic Partners</h3>
-                       <ul class="list-disc list-inside space-y-2">${renderSimpleList(key_partners)}</ul>
-                   </section>` : ''}
-                   ${competitive_positioning ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Competitive Positioning</h3>
-                       <p class="digest-item-summary">${competitive_positioning}</p>
-                   </section>` : ''}
-                   ${success_metrics && success_metrics.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Success Metrics & Timeline</h3>
-                       <ul class="list-disc list-inside space-y-2">${renderSimpleList(success_metrics)}</ul>
-                   </section>` : ''}
-                   ${mermaid_chart ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Visual Strategy</h3>
-                       <div class="mermaid-container">
-                           <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                       </div>
-                       <div class="flex justify-end gap-2 mt-2">
-                           <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
-                       </div>
-                   </section>` : ''}
-                   ${target_personas && target_personas.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Stakeholder Guide</h3>
-                       ${target_personas.map((persona, index) => `
-                           <div class="digest-item">
-                               <div class="digest-item-number">${index + 1}</div>
-                               <div>
-                                   <h4 class="digest-item-headline">${persona.persona_title}</h4>
-                                   <p class="digest-item-summary"><strong>Priorities:</strong> ${persona.business_priorities?.join(', ') || 'Not specified'}</p>
-                                   <p class="digest-item-summary mt-2"><strong>Starters:</strong> ${persona.conversation_starters?.join(', ') || 'Not specified'}</p>
-                               </div>
-                           </div>`).join('')}
-                   </section>` : ''}
-                    ${next_actions && next_actions.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Next Actions</h3>
-                       ${next_actions.map((action, index) => `
-                           <div class="digest-item">
-                               <div class="digest-item-number">${index + 1}</div>
-                               <div>
-                                   <p class="digest-item-summary">${action}</p>
-                               </div>
-                           </div>`).join('')}
-                   </section>` : ''}
-               </div>
-           </div>`;
-   }
-
-   // RENDERER 3: NEWS & GTM ANALYSIS
-   renderNewsAdvice(data) {
-       const { 
-           quick_take, key_people_and_titles, money_keywords, 
-           suggested_discovery_questions, suggested_opening_lines, 
-           immediate_actions, strategic_moves, mermaid_chart 
-       } = data;
-
-       return `
-           <div class="results-card digest-card">
-               <div class="results-card-body">
-                   <header class="digest-header">
-                       <img src="/images/arti_right.png" alt="Arti" />
-                       <div>
-                           <h2>News & GTM Analysis</h2>
-                           <p class="digest-header-meta">Actionable Intelligence</p>
-                       </div>
-                   </header>
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Quick Take</h3>
-                       <p class="digest-item-summary text-base">${quick_take}</p>
-                   </section>
-                   ${money_keywords && money_keywords.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Money Keywords</h3>
-                       <div>${money_keywords.map(k => `<span class="digest-tag">${k}</span>`).join('')}</div>
-                   </section>` : ''}
-                   ${key_people_and_titles && key_people_and_titles.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Key People</h3>
-                       <ul class="list-disc list-inside space-y-2">${key_people_and_titles.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
-                   </section>` : ''}
-                   ${suggested_discovery_questions && suggested_discovery_questions.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Discovery Questions</h3>
-                       ${suggested_discovery_questions.map((q, index) => `
-                           <div class="digest-item">
-                               <div class="digest-item-number">${index + 1}</div>
-                               <div><p class="digest-item-summary">${q}</p></div>
-                           </div>`).join('')}
-                   </section>` : ''}
-                   ${suggested_opening_lines && suggested_opening_lines.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Email Openers</h3>
-                       ${suggested_opening_lines.map((line, index) => `
-                           <div class="digest-item">
-                               <div class="digest-item-number">${index + 1}</div>
-                               <div>
-                                   <div class="digest-code-block copy-target">${line}</div>
-                                   <button class="copy-btn" title="Copy to clipboard">
-                                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                                   </button>
-                               </div>
-                           </div>`).join('')}
-                   </section>` : ''}
-                   ${mermaid_chart ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">GTM Flow</h3>
-                       <div class="mermaid-container">
-                           <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                       </div>
-                       <div class="flex justify-end gap-2 mt-2">
-                           <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
-                       </div>
-                   </section>` : ''}
-                   ${immediate_actions && immediate_actions.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Immediate Actions (0-30 Days)</h3>
-                       ${immediate_actions.map((action, index) => `
-                           <div class="digest-item">
-                               <div class="digest-item-number">${index + 1}</div>
-                               <div>
-                                   <h4 class="digest-item-headline">${action.action}</h4>
-                                   <p class="digest-item-summary">${action.why}</p>
-                               </div>
-                           </div>`).join('')}
-                   </section>` : ''}
-               </div>
-           </div>`;
-   }
-
-   // RENDERER 4: INVESTMENT / MARKET ANALYSIS
-   renderMarketAnalysis(data) {
-       const { 
-           investment_thesis, financial_health, market_position, 
-           key_financial_metrics, bull_case, bear_case, next_steps 
-       } = data;
-
-       return `
-           <div class="results-card digest-card">
-               <div class="results-card-body">
-                   <header class="digest-header">
-                       <img src="/images/arti_right.png" alt="Arti" />
-                       <div>
-                           <h2>Investment Analysis</h2>
-                           <p class="digest-header-meta">Market & Financial Summary</p>
-                       </div>
-                   </header>
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Investment Thesis</h3>
-                       <p class="digest-item-summary text-base">${investment_thesis}</p>
-                   </section>
-                   ${key_financial_metrics && key_financial_metrics.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Key Financial Metrics</h3>
-                       <div>${key_financial_metrics.map(k => `<span class="digest-tag">${k}</span>`).join('')}</div>
-                   </section>` : ''}
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Analysis</h3>
-                       <p class="digest-item-summary"><strong>Financial Health:</strong> ${financial_health || 'Not specified'}</p>
-                       <p class="digest-item-summary mt-2"><strong>Market Position:</strong> ${market_position || 'Not specified'}</p>
-                   </section>
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Bull vs. Bear Case</h3>
-                       <p class="digest-item-summary"><strong>Bull Case:</strong> ${bull_case || 'Not specified'}</p>
-                       <p class="digest-item-summary mt-2"><strong>Bear Case:</strong> ${bear_case || 'Not specified'}</p>
-                   </section>
-                   ${next_steps ? `
-                   <footer class="digest-section">
-                       <h3 class="digest-section-title">Next Steps</h3>
-                       <p class="digest-item-summary">${next_steps}</p>
-                   </footer>` : ''}
-               </div>
-           </div>`;
-   }
-
-   // RENDERER 5: PROSPECTING INTELLIGENCE
-   renderProspectAdvice(data) {
-       const { 
-           summary, top_s_is, top_software_and_cloud, 
-           naics_codes, prospect_recommendations 
-       } = data;
-       
-       const renderPartnerList = (items) => items?.map(item => `<div class="mb-2"><h4 class="font-semibold text-gray-800">${item.company || 'N/A'}</h4><p class="text-sm text-gray-600">${item.value || ''}</p></div>`).join('') || '';
-
-       return `
-           <div class="results-card digest-card">
-               <div class="results-card-body">
-                   <header class="digest-header">
-                       <img src="/images/arti_right.png" alt="Arti" />
-                       <div>
-                           <h2>Prospecting Intelligence</h2>
-                           <p class="digest-header-meta">Market Analysis</p>
-                       </div>
-                   </header>
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Summary</h3>
-                       <p class="digest-item-summary text-base">${summary}</p>
-                   </section>
-                   ${top_s_is && top_s_is.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Top Service Providers / SIs</h3>
-                       <div>${renderPartnerList(top_s_is)}</div>
-                   </section>` : ''}
-                   ${top_software_and_cloud && top_software_and_cloud.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Top Software & Cloud Partners</h3>
-                       <div>${renderPartnerList(top_software_and_cloud)}</div>
-                   </section>` : ''}
-                   ${naics_codes && naics_codes.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">NAICS Codes</h3>
-                       <div>${naics_codes.map(k => `<span class="digest-tag">${k.code || k}</span>`).join('')}</div>
-                   </section>` : ''}
-                   ${prospect_recommendations && prospect_recommendations.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Recommendations</h3>
-                       <ul class="list-disc list-inside space-y-2">${prospect_recommendations.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
-                   </section>` : ''}
-               </div>
-           </div>`;
-   }
-
-   // RENDERER 6: GENERAL ADVICE (Deal, Interview, Meeting)
-   renderGeneralAdvice(data) {
-       const { 
-           response_type, quick_take, key_moves, talking_points, 
-           email_template, next_steps, mermaid_chart 
-       } = data;
-
-       const titles = {
-           deal: 'Deal Game Plan',
-           interview: 'Interview Prep Plan',
-           meeting: 'Meeting Strategy',
-           default: 'Your Game Plan'
-       };
-       const title = titles[response_type] || titles.default;
-
-       return `
-           <div class="results-card digest-card">
-               <div class="results-card-body">
-                   <header class="digest-header">
-                       <img src="/images/arti_right.png" alt="Arti" />
-                       <div>
-                           <h2>${title}</h2>
-                           <p class="digest-header-meta">Actionable Advice</p>
-                       </div>
-                   </header>
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Quick Take</h3>
-                       <p class="digest-item-summary text-base">${quick_take}</p>
-                   </section>
-                   ${key_moves && key_moves.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Your Next Moves</h3>
-                       ${key_moves.map((move, index) => `
-                           <div class="digest-item">
-                               <div class="digest-item-number">${index + 1}</div>
-                               <div>
-                                   <h4 class="digest-item-headline">${move.action}</h4>
-                                   <p class="digest-item-summary">${move.why}</p>
-                               </div>
-                           </div>`).join('')}
-                   </section>` : ''}
-                   ${mermaid_chart ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Visual Strategy</h3>
-                       <div class="mermaid-container">
-                           <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                       </div>
-                       <div class="flex justify-end gap-2 mt-2">
-                           <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
-                       </div>
-                   </section>` : ''}
-                   ${talking_points && talking_points.length > 0 ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Key Talking Points</h3>
-                       <ul class="list-disc list-inside space-y-2">${talking_points.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
-                   </section>` : ''}
-                   ${email_template ? `
-                   <section class="digest-section">
-                       <h3 class="digest-section-title">Email Template</h3>
-                       <div class="digest-code-block copy-target">${email_template}</div>
-                       <button class="copy-btn" title="Copy to clipboard">
-                           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                       </button>
-                   </section>` : ''}
-                   ${next_steps ? `
-                   <footer class="digest-section">
-                       <h3 class="digest-section-title">Closing Thought</h3>
-                       <p class="digest-item-summary">${next_steps}</p>
-                   </footer>` : ''}
-               </div>
-           </div>`;
-   }
-
-  setupInteractiveElements() {
-      this.setupCopyButtons();
+      return `
+          <div class="results-card digest-card">
+              <div class="results-card-body">
+                  <header class="digest-header">
+                      <img src="/images/arti_right.png" alt="Arti" />
+                      <div>
+                          <h2>Federal Sales Intelligence</h2>
+                          <p class="digest-header-meta">${date} &bull; MARKET TEMP: ${market_temperature || 'COOL'}</p>
+                      </div>
+                  </header>
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Key Intelligence</h3>
+                      <p class="digest-item-summary text-base">${key_intelligence}</p>
+                  </section>
+                  ${deal_drivers && deal_drivers.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Today's Deal Drivers</h3>
+                      ${deal_drivers.map((driver, index) => `
+                          <div class="digest-item">
+                              <div class="digest-item-number">${index + 1}</div>
+                              <div>
+                                  <h4 class="digest-item-headline">
+                                      ${driver.link ? `<a href="${driver.link}" target="_blank" rel="noopener noreferrer">${driver.headline}</a>` : driver.headline}
+                                  </h4>
+                                  <p class="digest-item-summary">${driver.summary}</p>
+                                  <p class="digest-item-insight">&rarr; ${driver.action_insight}</p>
+                                  <div class="digest-item-meta"><span class="text-xs text-gray-500 font-semibold">${driver.source ? driver.source.toUpperCase() : ''}</span></div>
+                              </div>
+                          </div>`).join('')}
+                  </section>` : ''}
+   			   ${data.quick_intel && data.quick_intel.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Quick Intel</h3>
+                   <div class="space-y-2">
+                   ${data.quick_intel.map(item => `
+                       <p class="digest-item-summary">
+                           <strong class="font-semibold text-gray-900">${item.category}:</strong> ${item.insight}
+                       </p>
+                   `).join('')}
+                   </div>
+               </section>
+               ` : ''}
+                  ${action_items && action_items.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Your Moves Today</h3>
+                       ${action_items.map((action, index) => `
+                          <div class="digest-item">
+                              <div class="digest-item-number">${index + 1}</div>
+                              <div>
+                                  <h4 class="digest-item-headline">${action.action}</h4>
+                                  <p class="digest-item-summary">${action.why}</p>
+                              </div>
+                          </div>`).join('')}
+                  </section>` : ''}
+                  <footer class="digest-section">
+                       <h3 class="digest-section-title">Sources</h3>
+                       <p class="text-sm text-gray-600">${sources}</p>
+                  </footer>
+              </div>
+          </div>`;
   }
 
-  setupCopyButtons() {
-      const copyButtons = this.elements.resultsContainer.querySelectorAll('.copy-btn');
-      copyButtons.forEach(btn => {
-          btn.addEventListener('click', (e) => {
-              const target = e.currentTarget.parentElement.querySelector('.copy-target');
-              if (target) {
-                  navigator.clipboard.writeText(target.innerText).then(() => {
-                      const originalContent = e.currentTarget.innerHTML;
-                      e.currentTarget.classList.add('copied');
-                      e.currentTarget.innerHTML = `
-                          <svg class="checkmark" viewBox="0 0 24 24">
-                              <path d="M9 12l2 2 4-4"></path>
-                          </svg>
-                          <span>Copied!</span>
-                      `;
-                      
-                      const parent = e.currentTarget.parentElement;
-                      parent.classList.add('copy-flash');
-                      
-                      setTimeout(() => {
-                          e.currentTarget.classList.remove('copied');
-                          e.currentTarget.innerHTML = originalContent;
-                          parent.classList.remove('copy-flash');
-                      }, 2000);
-                  }).catch(err => {
-                      console.error('Failed to copy text: ', err);
-                  });
-              }
-          });
-      });
+  // RENDERER 2: SALES PLAYBOOK
+  renderSalesPlaybook(data) {
+      const { 
+          sales_play_title, sales_play_summary, key_services, key_partners, 
+          competitive_positioning, success_metrics, timeline_milestones, 
+          target_personas, insider_tips, risk_mitigation, next_actions, mermaid_chart 
+      } = data;
+      
+      const renderSimpleList = (items) => items?.map(item => `<li class="digest-item-summary">${item}</li>`).join('') || '';
+
+      return `
+          <div class="results-card digest-card">
+              <div class="results-card-body">
+                  <header class="digest-header">
+                      <img src="/images/arti_right.png" alt="Arti" />
+                      <div>
+                          <h2>${sales_play_title}</h2>
+                          <p class="digest-header-meta">Sales Playbook</p>
+                      </div>
+                  </header>
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Executive Summary</h3>
+                      <p class="digest-item-summary text-base">${sales_play_summary}</p>
+                  </section>
+                  ${key_services && key_services.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Key Services & Products</h3>
+                      <ul class="list-disc list-inside space-y-2">${renderSimpleList(key_services)}</ul>
+                  </section>` : ''}
+                  ${key_partners && key_partners.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Strategic Partners</h3>
+                      <ul class="list-disc list-inside space-y-2">${renderSimpleList(key_partners)}</ul>
+                  </section>` : ''}
+                  ${competitive_positioning ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Competitive Positioning</h3>
+                      <p class="digest-item-summary">${competitive_positioning}</p>
+                  </section>` : ''}
+                  ${success_metrics && success_metrics.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Success Metrics & Timeline</h3>
+                      <ul class="list-disc list-inside space-y-2">${renderSimpleList(success_metrics)}</ul>
+                  </section>` : ''}
+                  ${mermaid_chart ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Visual Strategy</h3>
+                      <div class="mermaid-container">
+                          <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
+                      </div>
+                      <div class="flex justify-end gap-2 mt-2">
+                          <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
+                      </div>
+                  </section>` : ''}
+                  ${target_personas && target_personas.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Stakeholder Guide</h3>
+                      ${target_personas.map((persona, index) => `
+                          <div class="digest-item">
+                              <div class="digest-item-number">${index + 1}</div>
+                              <div>
+                                  <h4 class="digest-item-headline">${persona.persona_title}</h4>
+                                  <p class="digest-item-summary"><strong>Priorities:</strong> ${persona.business_priorities?.join(', ') || 'Not specified'}</p>
+                                  <p class="digest-item-summary mt-2"><strong>Starters:</strong> ${persona.conversation_starters?.join(', ') || 'Not specified'}</p>
+                              </div>
+                          </div>`).join('')}
+                  </section>` : ''}
+                   ${next_actions && next_actions.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Next Actions</h3>
+                      ${next_actions.map((action, index) => `
+                          <div class="digest-item">
+                              <div class="digest-item-number">${index + 1}</div>
+                              <div>
+                                  <p class="digest-item-summary">${action}</p>
+                              </div>
+                          </div>`).join('')}
+                  </section>` : ''}
+              </div>
+          </div>`;
   }
 
-  setupMermaidDownloadButton() {
-      const downloadPngBtn = document.getElementById('download-png-btn');
+  // RENDERER 3: NEWS & GTM ANALYSIS
+  renderNewsAdvice(data) {
+      const { 
+          quick_take, key_people_and_titles, money_keywords, 
+          suggested_discovery_questions, suggested_opening_lines, 
+          immediate_actions, strategic_moves, mermaid_chart 
+      } = data;
 
-      if (downloadPngBtn) {
-          downloadPngBtn.addEventListener('click', () => this.downloadMermaidAsPNG());
-      }
+      return `
+          <div class="results-card digest-card">
+              <div class="results-card-body">
+                  <header class="digest-header">
+                      <img src="/images/arti_right.png" alt="Arti" />
+                      <div>
+                          <h2>News & GTM Analysis</h2>
+                          <p class="digest-header-meta">Actionable Intelligence</p>
+                      </div>
+                  </header>
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Quick Take</h3>
+                      <p class="digest-item-summary text-base">${quick_take}</p>
+                  </section>
+                  ${money_keywords && money_keywords.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Money Keywords</h3>
+                      <div>${money_keywords.map(k => `<span class="digest-tag">${k}</span>`).join('')}</div>
+					  </section>` : ''}
+                  ${key_people_and_titles && key_people_and_titles.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Key People</h3>
+                      <ul class="list-disc list-inside space-y-2">${key_people_and_titles.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
+                  </section>` : ''}
+                  ${suggested_discovery_questions && suggested_discovery_questions.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Discovery Questions</h3>
+                      ${suggested_discovery_questions.map((q, index) => `
+                          <div class="digest-item">
+                              <div class="digest-item-number">${index + 1}</div>
+                              <div><p class="digest-item-summary">${q}</p></div>
+                          </div>`).join('')}
+                  </section>` : ''}
+                  ${suggested_opening_lines && suggested_opening_lines.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Email Openers</h3>
+                      ${suggested_opening_lines.map((line, index) => `
+                          <div class="digest-item">
+                              <div class="digest-item-number">${index + 1}</div>
+                              <div>
+                                  <div class="digest-code-block copy-target">${line}</div>
+                                  <button class="copy-btn" title="Copy to clipboard">
+                                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                  </button>
+                              </div>
+                          </div>`).join('')}
+                  </section>` : ''}
+                  ${mermaid_chart ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">GTM Flow</h3>
+                      <div class="mermaid-container">
+                          <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
+                      </div>
+                      <div class="flex justify-end gap-2 mt-2">
+                          <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
+                      </div>
+                  </section>` : ''}
+                  ${immediate_actions && immediate_actions.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Immediate Actions (0-30 Days)</h3>
+                      ${immediate_actions.map((action, index) => `
+                          <div class="digest-item">
+                              <div class="digest-item-number">${index + 1}</div>
+                              <div>
+                                  <h4 class="digest-item-headline">${action.action}</h4>
+                                  <p class="digest-item-summary">${action.why}</p>
+                              </div>
+                          </div>`).join('')}
+                  </section>` : ''}
+              </div>
+          </div>`;
   }
 
-  downloadMermaidAsPNG() {
-      const mermaidContainer = document.querySelector('.mermaid-container');
-      if (!mermaidContainer || typeof html2canvas === 'undefined') {
-          console.error("Mermaid container or html2canvas library not found.");
-          return;
-      }
-      html2canvas(mermaidContainer, { backgroundColor: '#ffffff' }).then(canvas => {
-          const a = document.createElement("a");
-          a.href = canvas.toDataURL("image/png");
-          a.download = "askarti-diagram.png";
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-      });
+  // RENDERER 4: INVESTMENT / MARKET ANALYSIS
+  renderMarketAnalysis(data) {
+      const { 
+          investment_thesis, financial_health, market_position, 
+          key_financial_metrics, bull_case, bear_case, next_steps 
+      } = data;
+
+      return `
+          <div class="results-card digest-card">
+              <div class="results-card-body">
+                  <header class="digest-header">
+                      <img src="/images/arti_right.png" alt="Arti" />
+                      <div>
+                          <h2>Investment Analysis</h2>
+                          <p class="digest-header-meta">Market & Financial Summary</p>
+                      </div>
+                  </header>
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Investment Thesis</h3>
+                      <p class="digest-item-summary text-base">${investment_thesis}</p>
+                  </section>
+                  ${key_financial_metrics && key_financial_metrics.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Key Financial Metrics</h3>
+                      <div>${key_financial_metrics.map(k => `<span class="digest-tag">${k}</span>`).join('')}</div>
+                  </section>` : ''}
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Analysis</h3>
+                      <p class="digest-item-summary"><strong>Financial Health:</strong> ${financial_health || 'Not specified'}</p>
+                      <p class="digest-item-summary mt-2"><strong>Market Position:</strong> ${market_position || 'Not specified'}</p>
+                  </section>
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Bull vs. Bear Case</h3>
+                      <p class="digest-item-summary"><strong>Bull Case:</strong> ${bull_case || 'Not specified'}</p>
+                      <p class="digest-item-summary mt-2"><strong>Bear Case:</strong> ${bear_case || 'Not specified'}</p>
+                  </section>
+                  ${next_steps ? `
+                  <footer class="digest-section">
+                      <h3 class="digest-section-title">Next Steps</h3>
+                      <p class="digest-item-summary">${next_steps}</p>
+                  </footer>` : ''}
+              </div>
+          </div>`;
   }
 
-  async renderMermaidChart() {
-      try {
-          await mermaid.run({
-              nodes: document.querySelectorAll('.mermaid'),
-          });
-      } catch (error) {
-          console.error('Mermaid rendering error:', error);
-          const container = document.querySelector('.mermaid-container');
-          if (container) container.innerHTML = '<p class="text-red-500 text-sm">Could not render visual plan.</p>';
-      }
+  // RENDERER 5: PROSPECTING INTELLIGENCE
+  renderProspectAdvice(data) {
+      const { 
+          summary, top_s_is, top_software_and_cloud, 
+          naics_codes, prospect_recommendations 
+      } = data;
+      
+      const renderPartnerList = (items) => items?.map(item => `<div class="mb-2"><h4 class="font-semibold text-gray-800">${item.company || 'N/A'}</h4><p class="text-sm text-gray-600">${item.value || ''}</p></div>`).join('') || '';
+
+      return `
+          <div class="results-card digest-card">
+              <div class="results-card-body">
+                  <header class="digest-header">
+                      <img src="/images/arti_right.png" alt="Arti" />
+                      <div>
+                          <h2>Prospecting Intelligence</h2>
+                          <p class="digest-header-meta">Market Analysis</p>
+                      </div>
+                  </header>
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Summary</h3>
+                      <p class="digest-item-summary text-base">${summary}</p>
+                  </section>
+                  ${top_s_is && top_s_is.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Top Service Providers / SIs</h3>
+                      <div>${renderPartnerList(top_s_is)}</div>
+                  </section>` : ''}
+                  ${top_software_and_cloud && top_software_and_cloud.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Top Software & Cloud Partners</h3>
+                      <div>${renderPartnerList(top_software_and_cloud)}</div>
+                  </section>` : ''}
+                  ${naics_codes && naics_codes.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">NAICS Codes</h3>
+                      <div>${naics_codes.map(k => `<span class="digest-tag">${k.code || k}</span>`).join('')}</div>
+                  </section>` : ''}
+                  ${prospect_recommendations && prospect_recommendations.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Recommendations</h3>
+                      <ul class="list-disc list-inside space-y-2">${prospect_recommendations.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
+                  </section>` : ''}
+              </div>
+          </div>`;
   }
 
-  showModal() { 
-      this.elements.aboutModal.classList.remove('hidden'); 
+  // RENDERER 6: GENERAL ADVICE (Deal, Interview, Meeting)
+  renderGeneralAdvice(data) {
+      const { 
+          response_type, quick_take, key_moves, talking_points, 
+          email_template, next_steps, mermaid_chart 
+      } = data;
+
+      const titles = {
+          deal: 'Deal Game Plan',
+          interview: 'Interview Prep Plan',
+          meeting: 'Meeting Strategy',
+          default: 'Your Game Plan'
+      };
+      const title = titles[response_type] || titles.default;
+
+      return `
+          <div class="results-card digest-card">
+              <div class="results-card-body">
+                  <header class="digest-header">
+                      <img src="/images/arti_right.png" alt="Arti" />
+                      <div>
+                          <h2>${title}</h2>
+                          <p class="digest-header-meta">Actionable Advice</p>
+                      </div>
+                  </header>
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Quick Take</h3>
+                      <p class="digest-item-summary text-base">${quick_take}</p>
+                  </section>
+                  ${key_moves && key_moves.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Your Next Moves</h3>
+                      ${key_moves.map((move, index) => `
+                          <div class="digest-item">
+                              <div class="digest-item-number">${index + 1}</div>
+                              <div>
+                                  <h4 class="digest-item-headline">${move.action}</h4>
+                                  <p class="digest-item-summary">${move.why}</p>
+                              </div>
+                          </div>`).join('')}
+                  </section>` : ''}
+                  ${mermaid_chart ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Visual Strategy</h3>
+                      <div class="mermaid-container">
+                          <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
+                      </div>
+                      <div class="flex justify-end gap-2 mt-2">
+                          <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
+                      </div>
+                  </section>` : ''}
+                  ${talking_points && talking_points.length > 0 ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Key Talking Points</h3>
+                      <ul class="list-disc list-inside space-y-2">${talking_points.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
+                  </section>` : ''}
+                  ${email_template ? `
+                  <section class="digest-section">
+                      <h3 class="digest-section-title">Email Template</h3>
+                      <div class="digest-code-block copy-target">${email_template}</div>
+                      <button class="copy-btn" title="Copy to clipboard">
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                      </button>
+                  </section>` : ''}
+                  ${next_steps ? `
+                  <footer class="digest-section">
+                      <h3 class="digest-section-title">Closing Thought</h3>
+                      <p class="digest-item-summary">${next_steps}</p>
+                  </footer>` : ''}
+              </div>
+          </div>`;
   }
-  
-  hideModal() { 
-      this.elements.aboutModal.classList.add('hidden'); 
-  }
+
+ setupInteractiveElements() {
+     this.setupCopyButtons();
+ }
+
+ setupCopyButtons() {
+     const copyButtons = this.elements.resultsContainer.querySelectorAll('.copy-btn');
+     copyButtons.forEach(btn => {
+         btn.addEventListener('click', (e) => {
+             const target = e.currentTarget.parentElement.querySelector('.copy-target');
+             if (target) {
+                 navigator.clipboard.writeText(target.innerText).then(() => {
+                     const originalContent = e.currentTarget.innerHTML;
+                     e.currentTarget.classList.add('copied');
+                     e.currentTarget.innerHTML = `
+                         <svg class="checkmark" viewBox="0 0 24 24">
+                             <path d="M9 12l2 2 4-4"></path>
+                         </svg>
+                         <span>Copied!</span>
+                     `;
+                     
+                     const parent = e.currentTarget.parentElement;
+                     parent.classList.add('copy-flash');
+                     
+                     setTimeout(() => {
+                         e.currentTarget.classList.remove('copied');
+                         e.currentTarget.innerHTML = originalContent;
+                         parent.classList.remove('copy-flash');
+                     }, 2000);
+                 }).catch(err => {
+                     console.error('Failed to copy text: ', err);
+                 });
+             }
+         });
+     });
+ }
+
+ setupMermaidDownloadButton() {
+     const downloadPngBtn = document.getElementById('download-png-btn');
+
+     if (downloadPngBtn) {
+         downloadPngBtn.addEventListener('click', () => this.downloadMermaidAsPNG());
+     }
+ }
+
+ downloadMermaidAsPNG() {
+     const mermaidContainer = document.querySelector('.mermaid-container');
+     if (!mermaidContainer || typeof html2canvas === 'undefined') {
+         console.error("Mermaid container or html2canvas library not found.");
+         return;
+     }
+     html2canvas(mermaidContainer, { backgroundColor: '#ffffff' }).then(canvas => {
+         const a = document.createElement("a");
+         a.href = canvas.toDataURL("image/png");
+         a.download = "askarti-diagram.png";
+         document.body.appendChild(a);
+         a.click();
+         document.body.removeChild(a);
+     });
+ }
+
+ async renderMermaidChart() {
+     try {
+         await mermaid.run({
+             nodes: document.querySelectorAll('.mermaid'),
+         });
+     } catch (error) {
+         console.error('Mermaid rendering error:', error);
+         const container = document.querySelector('.mermaid-container');
+         if (container) container.innerHTML = '<p class="text-red-500 text-sm">Could not render visual plan.</p>';
+     }
+ }
+
+ showModal() { 
+     this.elements.aboutModal.classList.remove('hidden'); 
+ }
+ 
+ hideModal() { 
+     this.elements.aboutModal.classList.add('hidden'); 
+ }
 }
 
 // Initialize the app when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-   const app = new AskArti();
-   window.askArti = app;
+  const app = new AskArti();
+  window.askArti = app;
 });
 </script>
 </body>
