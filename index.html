@@ -577,6 +577,35 @@ textarea, input[type="text"] {
     .copy-playbook-btn { align-self: stretch; justify-content: center; width: 100%; }
     .playbook-persona-circle { min-width: 2rem !important; width: 2rem !important; height: 2rem !important; flex-shrink: 0 !important; font-size: 0.75rem !important; }
 }
+.sample-link {
+    color: var(--brand-purple);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px dotted var(--brand-purple);
+    transition: all 0.2s ease;
+}
+
+.sample-link:hover {
+    background-color: var(--brand-purple-faint);
+    border-bottom-style: solid;
+}
+
+/* Pulsing animation for the button when content is added */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(142, 136, 167, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(142, 136, 167, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(142, 136, 167, 0); }
+}
+
+.btn-pulse {
+    animation: pulse 1.5s ease-in-out 3;
+}
+
+.btn-highlight {
+    background: linear-gradient(135deg, var(--brand-purple) 0%, #7A7391 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(142, 136, 167, 0.3);
+}
 </style>
 
 </head>
@@ -593,71 +622,46 @@ textarea, input[type="text"] {
        <main id="main-content">
     <div id="quick-mode" class="mode-content fade-in">
         <div class="io-card">
-            <label for="situation-input" class="block text-sm font-bold text-brand-gray-700 mb-3" id="greeting-label">
-                Hey, I'm Arti! You can ask me anything.
-            </label>
-            <div class="textarea-container">
-                <textarea 
-    id="situation-input" 
-    rows="3"
-    class="w-full p-3 pr-12 text-base border border-gray-300 rounded-lg resize-none auto-expand focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300"
-    placeholder='"Create a sales playbook for selling AI services to HHS." or "Prospect for cyber opps at DHS". Or start with a sample prompt below and modify it.'
-    maxlength="2500"></textarea>
-                <button id="clear-btn" class="clear-btn" title="Clear input" aria-label="Clear input">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-</button>
-                    </div>
-                    <div class="text-xs text-gray-500 mt-1.5">
-    <span class="hint-text">Click a sample below and swap in your agency, company, or goals. Add the word "playbook", "earnings", "prospect" or "news" to your prompt for specific plans.</span>
-    <span id="char-count" class="hidden">0/2500</span>
+    <label for="situation-input" class="block text-sm font-bold text-brand-gray-700 mb-3" id="greeting-label">
+        Good morning! I'm Arti! Ready to tackle the day?
+    </label>
+    
+    <div class="textarea-container">
+        <textarea 
+            id="situation-input" 
+            rows="3"
+            class="w-full p-3 pr-12 text-base border border-gray-300 rounded-lg resize-none auto-expand focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300"
+            placeholder="Paste a news article, describe a deal, or outline a sales challenge..."
+            maxlength="2500"></textarea>
+        <button id="clear-btn" class="clear-btn" title="Clear input" aria-label="Clear input">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Natural sentence with example links -->
+    <div class="mt-3 text-sm text-gray-600 leading-relaxed">
+        Need help getting started? Try asking me to 
+        <a href="#" class="sample-link" data-text="Create a comprehensive sales playbook for selling cloud migration services to the Department of Veterans Affairs. Focus on healthcare modernization, data analytics, and patient experience improvements. Include key stakeholders like CIOs, CTOs, and healthcare administrators.">create a playbook</a>, 
+        help with a 
+        <a href="#" class="sample-link" data-text="Buyer at VA ghosted me after I sent pricing. CISO loves our competitor. Meeting scheduled for next week but I'm worried they've already made their decision.">stuck deal</a>, 
+        <a href="#" class="sample-link" data-text="Analyze this news: Today, the Chief Digital and Artificial Intelligence Office (CDAO) announced contract awards to leading U.S. frontier AI companies to accelerate Department of Defense (DoD) adoption of advanced AI capabilities to address critical national security challenges...">analyze news</a>, 
+        find 
+        <a href="#" class="sample-link" data-text="Prospect: Just took over Fed Sales at Staples. Need to prospect for office supplies and facility management services at the VA. What's my best approach?">new prospects</a>, 
+        or give a 
+        <a href="#" class="sample-link" data-text="Bull/Bear Analysis: Amazon (NASDAQ: AMZN) Q1 2025 earnings - Net sales increased 9% to $155.7 billion, AWS segment sales increased 17% year-over-year to $29.3 billion, operating income up to $18.4 billion...">bull/bear take</a> 
+        on earnings. You can also just 
+        <a href="#" class="sample-link" data-text="Get today's federal sales briefing" data-type="digest">get today's briefing</a>.
+    </div>
+
+    <div class="mt-4 border-t border-gray-200 pt-4">
+        <button id="ask-arti-btn" class="btn btn-primary w-full transition-all duration-300">
+            <span id="ask-arti-text">Ask Arti</span>
+            <div id="ask-arti-loader" class="loader hidden ml-2"></div>
+        </button>
+    </div>
 </div>
-                    <div class="mt-4">
-    <div class="flex flex-wrap gap-2">
-        <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Playbook: Create a comprehensive sales playbook for selling cloud migration services to the Department of Veterans Affairs. Focus on healthcare modernization, data analytics, and patient experience improvements. Include key stakeholders like CIOs, CTOs, and healthcare administrators.">Sales Playbook</button>
-		<button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Buyer at VA ghosted me after I sent pricing. CISO loves our competitor.">Stuck Deal</button>
-        <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Internal partner and account reps are fighting over customer access, pipeline, and revenue. Sales are hurting.">Partner Drama</button>
-        <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="News: Today, the Chief Digital and Artificial Intelligence Office (CDAO) announced contract awards to leading U.S. frontier AI companies to accelerate Department of Defense (DoD) adoption of advanced AI capabilities to address critical national security challenges. Frontier AI companies lead development of the most advanced AI models and technologies, conduct insightful research into the use of frontier AI, and pioneer efforts to address both the potential benefits and risks of frontier AI technologies. 
-
-The awards to Anthropic, Google, OpenAI, and xAI – each with a $200M ceiling – will enable the Department to leverage the technology and talent of U.S. frontier AI companies to develop agentic AI workflows across a variety of mission areas.  Establishing these partnerships will broaden DoD use of and experience in frontier AI capabilities and increase the ability of these companies to understand and address critical national security needs with the most advanced AI capabilities U.S. industry has to offer. 
-
-"The adoption of AI is transforming the Department's ability to support our warfighters and maintain strategic advantage over our adversaries," said Chief Digital and AI Officer Dr. Doug Matty. "Leveraging commercially available solutions into an integrated capabilities approach will accelerate the use of advanced AI as part of our Joint mission essential tasks in our warfighting domain as well as intelligence, business, enterprise information systems." 
-
-DoD is implementing a commercial-first approach to accelerating DoD adoption of AI. Today's awards bring in the best U.S.-based frontier AI talent to help apply cutting-edge AI to solve DoD use cases.  CDAO is also providing access to many of the latest generative AI (GenAI) models for general purpose use to Combatant Commands, the Office of the Secretary of Defense, and the Joint Staff via Army's Enterprise Large Language Model Workspace powered by Ask Sage, and to the broader enterprise via embedded AI models within DoD enterprise data and AI platforms, including the Advancing Analytics (Advana) platform, Maven Smart System, and Edge Data Mesh nodes, which enable AI integration into workflows that occur within these data environments themselves. Finally, DoD is partnering with the General Services Administration (GSA) to bring the best AI technologies to the federal government while leveraging whole-of-government buying power for AI production and compute resources.  ">News or Text</button>
-        <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Earnings: (NASDAQ: AMZN) today announced financial results for
-its first quarter ended March 31, 2025.
-- Net sales increased 9% to $155.7 billion in the first quarter, compared with $143.3 billion in first quarter 2024.
-Excluding the $1.4 billion unfavorable impact from year-over-year changes in foreign exchange rates throughout the
-quarter, net sales increased 10% compared with first quarter 2024.
-- North America segment sales increased 8% year-over-year to $92.9 billion.
-- International segment sales increased 5% year-over-year to $33.5 billion, or increased 8% excluding changes
-in foreign exchange rates.
-- AWS segment sales increased 17% year-over-year to $29.3 billion.
-- Operating income increased to $18.4 billion in the first quarter, compared with $15.3 billion in first quarter 2024.
-- North America segment operating income was $5.8 billion, compared with $5.0 billion in first quarter 2024.
-- International segment operating income was $1.0 billion, compared with $0.9 billion in first quarter 2024.
-- AWS segment operating income was $11.5 billion, compared with $9.4 billion in first quarter 2024.
-- Net income increased to $17.1 billion in the first quarter, or $1.59 per diluted share, compared with $10.4 billion, or
-$0.98 per diluted share, in first quarter 2024.
-- Operating cash flow increased 15% to $113.9 billion for the trailing twelve months, compared with $99.1 billion for
-the trailing twelve months ended March 31, 2024.
-- Free cash flow decreased to $25.9 billion for the trailing twelve months, compared with $50.1 billion for the trailing
-twelve months ended March 31, 2024.
-We're pleased with the start to 2025, especially our pace of innovation and progress in continuing to improve customer
-experiences, said Andy Jassy, President and CEO, Amazon.">Bull or Bear</button>
-       <button class="quick-prompt px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-full text-sm text-gray-700" data-text="Prospect: Just took over Fed Sales at Staples. Prospect for office supplies at the VA.">Prospect</button>
-   	<button class="quick-prompt px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-full text-sm text-blue-700 border border-blue-200" data-text="Give me today's federal sales briefing with the top headlines and opportunities I should know about.">Daily Brief</button>
-   </div>
-</div>
-
-                   <div class="mt-4 border-t border-gray-200 pt-4">
-   <button id="game-plan-btn" class="btn btn-primary w-full">
-       <span id="game-plan-text">Ask Arti</span>
-       <div id="game-plan-loader" class="loader hidden"></div>
-   </button>
-</div>
-               </div>
            </div>
    	
            <div id="chat-mode" class="mode-content hidden fade-in">
@@ -821,29 +825,25 @@ constructor() {
 }
 
 getElements() {
-   return {
-       situationInput: document.getElementById('situation-input'),
-       clearBtn: document.getElementById('clear-btn'),
-       gamePlanBtn: document.getElementById('game-plan-btn'),
-       gamePlanText: document.getElementById('game-plan-text'),
-       gamePlanLoader: document.getElementById('game-plan-loader'),
-       charCount: document.getElementById('char-count'),
-       loadingMessageContainer: document.getElementById('loading-message-container'),
-       loadingMessage: document.getElementById('loading-message'),
-       errorMessage: document.getElementById('error-message'),
-       errorDetails: document.getElementById('error-details'),
-       resultsContainer: document.getElementById('results-container'),
-       aboutBtn: document.getElementById('about-btn'),
-       aboutModal: document.getElementById('about-modal'),
-       closeAbout: document.getElementById('close-about'),
-       quickPromptBtns: document.querySelectorAll('.quick-prompt'),
-       modeButtons: document.querySelectorAll('.mode-btn'),
-       quickMode: document.getElementById('quick-mode'),
-       chatMode: document.getElementById('chat-mode'),
-       chatMessages: document.getElementById('chat-messages'),
-       chatInput: document.getElementById('chat-input'),
-       chatSendBtn: document.getElementById('chat-send-btn'),
-   };
+    return {
+        situationInput: document.getElementById('situation-input'),
+        clearBtn: document.getElementById('clear-btn'),
+        charCount: document.getElementById('char-count'),
+        loadingMessageContainer: document.getElementById('loading-message-container'),
+        loadingMessage: document.getElementById('loading-message'),
+        errorMessage: document.getElementById('error-message'),
+        errorDetails: document.getElementById('error-details'),
+        resultsContainer: document.getElementById('results-container'),
+        aboutBtn: document.getElementById('about-btn'),
+        aboutModal: document.getElementById('about-modal'),
+        closeAbout: document.getElementById('close-about'),
+        modeButtons: document.querySelectorAll('.mode-btn'),
+        quickMode: document.getElementById('quick-mode'),
+        chatMode: document.getElementById('chat-mode'),
+        chatMessages: document.getElementById('chat-messages'),
+        chatInput: document.getElementById('chat-input'),
+        chatSendBtn: document.getElementById('chat-send-btn'),
+    };
 }
 
 init() {
@@ -877,64 +877,132 @@ init() {
   }
 
   clearInput() {
-   this.elements.situationInput.value = '';
-   this.elements.situationInput.style.height = 'auto';
-   this.elements.situationInput.classList.remove('scrollable');
-   this.updateCharCount();
-   this.elements.situationInput.focus();
+    this.elements.situationInput.value = '';
+    this.elements.situationInput.style.height = 'auto';
+    this.elements.situationInput.classList.remove('scrollable');
+    
+    // Clear any stored force type
+    delete this.elements.situationInput.dataset.forceType;
+    
+    // Remove button highlighting
+    const askBtn = document.getElementById('ask-arti-btn');
+    askBtn.classList.remove('btn-highlight', 'btn-pulse');
+    
+    this.updateCharCount();
+    this.elements.situationInput.focus();
 }
 
   setupEventListeners() {
-   this.elements.situationInput.addEventListener('input', () => {
-       this.updateCharCount();
-   });
-   this.elements.situationInput.addEventListener('focus', () => {
-       this.updateCharCount();
-   });
+    // Main text area and clear button
+    this.elements.situationInput.addEventListener('input', () => {
+        this.updateCharCount();
+        this.updateButtonState();
+    });
+    this.elements.situationInput.addEventListener('focus', () => {
+        this.updateCharCount();
+    });
+    this.elements.situationInput.addEventListener('blur', () => {
+        this.elements.clearBtn.classList.remove('show');
+    });
+    this.elements.clearBtn.addEventListener('click', () => this.clearInput());
 
-   this.elements.situationInput.addEventListener('blur', () => {
-       this.elements.clearBtn.classList.remove('show');
-   });
-   this.elements.clearBtn.addEventListener('click', () => this.clearInput());
+    // Sample link handlers - populate text but don't submit
+    document.querySelectorAll('.sample-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const text = e.currentTarget.dataset.text;
+            const type = e.currentTarget.dataset.type;
+            
+            // Populate the textarea
+            this.elements.situationInput.value = text;
+            this.updateCharCount();
+            
+            // Store the type for later use
+            if (type) {
+                this.elements.situationInput.dataset.forceType = type;
+            } else {
+                delete this.elements.situationInput.dataset.forceType;
+            }
+            
+            // Make the button pulse and highlight
+            this.triggerButtonHighlight();
+            
+            // Focus the textarea so user can edit
+            this.elements.situationInput.focus();
+            
+            // Scroll to show the button
+            setTimeout(() => {
+                document.getElementById('ask-arti-btn').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'nearest' 
+                });
+            }, 100);
+        });
+    });
 
-   this.elements.quickPromptBtns.forEach(btn => {
-       btn.addEventListener('click', (e) => {
-           const button = e.currentTarget;
-           this.elements.situationInput.value = button.dataset.text;
-           this.updateCharCount();
-           this.getAdvice(null, this.elements.gamePlanBtn);
-       });
-   });
+    // Ask Arti button - main submission
+    document.getElementById('ask-arti-btn').addEventListener('click', () => {
+        const forceType = this.elements.situationInput.dataset.forceType;
+        this.getAdvice(forceType, document.getElementById('ask-arti-btn'));
+        
+        // Remove highlight after clicking
+        document.getElementById('ask-arti-btn').classList.remove('btn-highlight');
+    });
 
-   this.elements.gamePlanBtn.addEventListener('click', (e) => this.getAdvice(null, e.currentTarget));
+    // Enter key submission
+    this.elements.situationInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            const forceType = this.elements.situationInput.dataset.forceType;
+            this.getAdvice(forceType, document.getElementById('ask-arti-btn'));
+        }
+    });
 
-   this.elements.situationInput.addEventListener('keydown', (e) => {
-       if (e.key === 'Enter' && !e.shiftKey) {
-           e.preventDefault();
-           this.getAdvice(null, this.elements.gamePlanBtn);
-       }
-   });
+    // Modal handlers
+    this.elements.aboutBtn.addEventListener('click', () => this.showModal());
+    this.elements.closeAbout.addEventListener('click', () => this.hideModal());
+    this.elements.aboutModal.addEventListener('click', (e) => {
+        if (e.target === this.elements.aboutModal) this.hideModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') this.hideModal();
+    });
 
-   this.elements.aboutBtn.addEventListener('click', () => this.showModal());
-   this.elements.closeAbout.addEventListener('click', () => this.hideModal());
-   this.elements.aboutModal.addEventListener('click', (e) => {
-       if (e.target === this.elements.aboutModal) this.hideModal();
-   });
-   document.addEventListener('keydown', (e) => {
-       if (e.key === 'Escape') this.hideModal();
-   });
+    // Mode switching
+    this.elements.modeButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => this.switchMode(e.target.dataset.mode));
+    });
 
-   this.elements.modeButtons.forEach(btn => {
-       btn.addEventListener('click', (e) => this.switchMode(e.target.dataset.mode));
-   });
+    // Chat mode
+    this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
+    this.elements.chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            this.sendChatMessage();
+        }
+    });
+}
+// New function to handle button highlighting
+triggerButtonHighlight() {
+    const askBtn = document.getElementById('ask-arti-btn');
+    askBtn.classList.add('btn-pulse', 'btn-highlight');
+    
+    // Remove the pulse animation after it completes (3 pulses × 1.5s each)
+    setTimeout(() => {
+        askBtn.classList.remove('btn-pulse');
+    }, 4500);
+}
 
-   this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
-   this.elements.chatInput.addEventListener('keydown', (e) => {
-       if (e.key === 'Enter' && !e.shiftKey) {
-           e.preventDefault();
-           this.sendChatMessage();
-       }
-   });
+// New function to update button state based on content
+updateButtonState() {
+    const askBtn = document.getElementById('ask-arti-btn');
+    const hasContent = this.elements.situationInput.value.trim().length > 0;
+    
+    if (hasContent && !askBtn.classList.contains('btn-highlight')) {
+        askBtn.classList.add('btn-highlight');
+    } else if (!hasContent) {
+        askBtn.classList.remove('btn-highlight', 'btn-pulse');
+    }
 }
 
 setupAutoExpand() {
@@ -1049,18 +1117,23 @@ setupAutoExpand() {
   }
 
   setButtonLoading(loading, clickedButton) {
-   this.state.pendingRequest = loading;
-   this.elements.errorMessage.classList.add('hidden');
+    this.state.pendingRequest = loading;
+    this.elements.errorMessage.classList.add('hidden');
 
-   this.elements.gamePlanBtn.disabled = loading;
+    const askBtn = document.getElementById('ask-arti-btn');
+    const askText = document.getElementById('ask-arti-text');
+    const askLoader = document.getElementById('ask-arti-loader');
 
-   if (loading) {
-       this.elements.gamePlanText.classList.add('hidden');
-       this.elements.gamePlanLoader.classList.remove('hidden');
-   } else {
-       this.elements.gamePlanText.classList.remove('hidden');
-       this.elements.gamePlanLoader.classList.add('hidden');
-   }
+    askBtn.disabled = loading;
+
+    if (loading) {
+        askText.classList.add('hidden');
+        askLoader.classList.remove('hidden');
+        askBtn.classList.remove('btn-highlight', 'btn-pulse');
+    } else {
+        askText.classList.remove('hidden');
+        askLoader.classList.add('hidden');
+    }
 }
 
   showLoadingMessages() {
