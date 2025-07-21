@@ -957,7 +957,9 @@ init() {
     this.elements.situationInput.focus();
 }
 
-  setupEventListeners() {
+  // Replace your setupEventListeners method with this corrected version:
+
+setupEventListeners() {
     // Main text area and clear button
     this.elements.situationInput.addEventListener('input', () => {
         this.updateCharCount();
@@ -971,49 +973,90 @@ init() {
     });
     this.elements.clearBtn.addEventListener('click', () => this.clearInput());
 
-    // Update your existing sample link event handler in the setupEventListeners function
-
-// Replace the existing sample link handler with this enhanced version:
-document.querySelectorAll('.sample-link').forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const text = e.currentTarget.dataset.text;
-        const type = e.currentTarget.dataset.type;
-        
-        // Special handling for digest/federal news - auto-load instead of populating text
-        if (type === 'digest' || text.toLowerCase().includes('federal sales briefing') || text.toLowerCase().includes('federal news')) {
-            this.loadFederalIntelligenceFromLink(e.currentTarget);
-            return;
-        }
-        
-        // Regular behavior for other examples - populate text field
-        this.elements.situationInput.value = text;
-        this.updateCharCount();
-        
-        // Store the type for later use
-        if (type) {
-            this.elements.situationInput.dataset.forceType = type;
-        } else {
-            delete this.elements.situationInput.dataset.forceType;
-        }
-        
-        // Make the button pulse and highlight
-        this.triggerButtonHighlight();
-        
-        // Focus the textarea so user can edit
-        this.elements.situationInput.focus();
-        
-        // Scroll to show the button
-        setTimeout(() => {
-            document.getElementById('ask-arti-btn').scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'nearest' 
-            });
-        }, 100);
+    // Sample link handlers - FIXED VERSION
+    document.querySelectorAll('.sample-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const text = e.currentTarget.dataset.text;
+            const type = e.currentTarget.dataset.type;
+            
+            // Special handling for digest/federal news - auto-load instead of populating text
+            if (type === 'digest' || text.toLowerCase().includes('federal sales briefing') || text.toLowerCase().includes('federal news')) {
+                this.loadFederalIntelligenceFromLink(e.currentTarget);
+                return;
+            }
+            
+            // Regular behavior for other examples - populate text field
+            this.elements.situationInput.value = text;
+            this.updateCharCount();
+            
+            // Store the type for later use
+            if (type) {
+                this.elements.situationInput.dataset.forceType = type;
+            } else {
+                delete this.elements.situationInput.dataset.forceType;
+            }
+            
+            // Make the button pulse and highlight
+            this.triggerButtonHighlight();
+            
+            // Focus the textarea so user can edit
+            this.elements.situationInput.focus();
+            
+            // Scroll to show the button
+            setTimeout(() => {
+                document.getElementById('ask-arti-btn').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'nearest' 
+                });
+            }, 100);
+        });
     });
-});
 
-// Add this new method to your AskArti class:
+    // Ask Arti button - main submission
+    document.getElementById('ask-arti-btn').addEventListener('click', () => {
+        const forceType = this.elements.situationInput.dataset.forceType;
+        this.getAdvice(forceType, document.getElementById('ask-arti-btn'));
+        
+        // Remove highlight after clicking
+        document.getElementById('ask-arti-btn').classList.remove('btn-highlight');
+    });
+
+    // Enter key submission
+    this.elements.situationInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            const forceType = this.elements.situationInput.dataset.forceType;
+            this.getAdvice(forceType, document.getElementById('ask-arti-btn'));
+        }
+    });
+
+    // Modal handlers
+    this.elements.aboutBtn.addEventListener('click', () => this.showModal());
+    this.elements.closeAbout.addEventListener('click', () => this.hideModal());
+    this.elements.aboutModal.addEventListener('click', (e) => {
+        if (e.target === this.elements.aboutModal) this.hideModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') this.hideModal();
+    });
+
+    // Mode switching
+    this.elements.modeButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => this.switchMode(e.target.dataset.mode));
+    });
+
+    // Chat mode
+    this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
+    this.elements.chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            this.sendChatMessage();
+        }
+    });
+}
+
+// ADD THIS METHOD TO YOUR AskArti CLASS (after the setupEventListeners method):
 async loadFederalIntelligenceFromLink(linkElement) {
     try {
         // Show loading state on the link
