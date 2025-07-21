@@ -1724,11 +1724,13 @@ renderNewsAdvice(data) {
         </div>`;
 }
 
-// RENDERER 4: INVESTMENT / MARKET ANALYSIS
+// RENDERER 4: INVESTMENT / MARKET ANALYSIS - ENHANCED VERSION
 renderMarketAnalysis(data) {
     const { 
-        investment_thesis, financial_health, market_position, 
-        key_financial_metrics, bull_case, bear_case, next_steps 
+        investment_thesis, executive_summary, key_people_mentioned, leadership_quotes,
+        financial_health, market_position, bull_signals, bear_signals, 
+        key_financial_metrics, segment_analysis, guidance_and_outlook,
+        bull_case, bear_case, missing_information, analyst_price_targets, next_catalyst
     } = data;
 
     return `
@@ -1737,37 +1739,135 @@ renderMarketAnalysis(data) {
                 <header class="digest-header">
                     <img src="/images/arti_right.png" alt="Arti" />
                     <div>
-                        <h2>Market Analysis</h2>
-                        <p class="digest-header-meta">Market & Financial Summary</p>
+                        <h2>Investment Analysis</h2>
+                        <p class="digest-header-meta">Bull vs Bear Assessment</p>
                     </div>
                 </header>
+                
                 <section class="digest-section">
-                    <h3 class="digest-section-title">Summary</h3>
-                    <p class="digest-item-summary text-base">${investment_thesis}</p>
+                    <h3 class="digest-section-title">Investment Thesis</h3>
+                    <p class="digest-item-summary text-base font-semibold">${investment_thesis}</p>
                 </section>
+
+                ${executive_summary ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Executive Summary</h3>
+                    <p class="digest-item-summary">${executive_summary}</p>
+                </section>` : ''}
+                
                 ${key_financial_metrics && key_financial_metrics.length > 0 ? `
                 <section class="digest-section">
                     <h3 class="digest-section-title">Key Financial Metrics</h3>
-                    <div>${key_financial_metrics.map(k => `<span class="digest-tag">${k}</span>`).join('')}</div>
+                    <div class="grid grid-cols-1 gap-2">
+                        ${key_financial_metrics.map(metric => `<span class="digest-tag">${metric}</span>`).join('')}
+                    </div>
                 </section>` : ''}
+
+                ${leadership_quotes && leadership_quotes.length > 0 ? `
                 <section class="digest-section">
-                    <h3 class="digest-section-title">Analysis</h3>
+                    <h3 class="digest-section-title">Leadership Quotes</h3>
+                    ${leadership_quotes.map((item, index) => `
+                        <div class="digest-item">
+                            <div class="digest-item-number">${index + 1}</div>
+                            <div>
+                                <h4 class="digest-item-headline">${item.person}</h4>
+                                <div class="digest-code-block mb-2">"${item.quote}"</div>
+                                <div class="text-xs font-semibold ${
+                                    item.bull_or_bear_signal === 'bull' ? 'text-green-600' : 
+                                    item.bull_or_bear_signal === 'bear' ? 'text-red-600' : 'text-gray-600'
+                                }">
+                                    ${item.bull_or_bear_signal?.toUpperCase()} SIGNAL
+                                </div>
+                            </div>
+                        </div>`).join('')}
+                </section>` : ''}
+
+                ${key_people_mentioned && key_people_mentioned.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Key People Mentioned</h3>
+                    <div class="space-y-1">
+                        ${key_people_mentioned.map(person => `<p class="digest-item-summary text-sm">${person}</p>`).join('')}
+                    </div>
+                </section>` : ''}
+
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Financial Health & Market Position</h3>
                     <p class="digest-item-summary"><strong>Financial Health:</strong> ${financial_health || 'Not specified'}</p>
                     <p class="digest-item-summary mt-2"><strong>Market Position:</strong> ${market_position || 'Not specified'}</p>
                 </section>
+
+                ${segment_analysis ? `
                 <section class="digest-section">
-                    <h3 class="digest-section-title">Bull vs. Bear Case</h3>
-                    <p class="digest-item-summary"><strong>Bull Case:</strong> ${bull_case || 'Not specified'}</p>
-                    <p class="digest-item-summary mt-2"><strong>Bear Case:</strong> ${bear_case || 'Not specified'}</p>
+                    <h3 class="digest-section-title">Segment Analysis</h3>
+                    <p class="digest-item-summary">${segment_analysis}</p>
+                </section>` : ''}
+
+                ${guidance_and_outlook ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Guidance & Outlook</h3>
+                    <p class="digest-item-summary">${guidance_and_outlook}</p>
+                </section>` : ''}
+
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Bull vs Bear Signals</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        ${bull_signals && bull_signals.length > 0 ? `
+                        <div>
+                            <h4 class="font-semibold text-green-600 mb-2">🐂 Bull Signals</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm">
+                                ${bull_signals.map(signal => `<li class="text-green-700">${signal}</li>`).join('')}
+                            </ul>
+                        </div>` : ''}
+                        
+                        ${bear_signals && bear_signals.length > 0 ? `
+                        <div>
+                            <h4 class="font-semibold text-red-600 mb-2">🐻 Bear Signals</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm">
+                                ${bear_signals.map(signal => `<li class="text-red-700">${signal}</li>`).join('')}
+                            </ul>
+                        </div>` : ''}
+                    </div>
                 </section>
-                ${next_steps ? `
+
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Investment Cases</h3>
+                    <div class="space-y-4">
+                        <div class="p-3 bg-green-50 border-l-4 border-green-400 rounded">
+                            <h4 class="font-semibold text-green-800 mb-2">Bull Case</h4>
+                            <p class="text-green-700 digest-item-summary">${bull_case || 'Not specified'}</p>
+                        </div>
+                        <div class="p-3 bg-red-50 border-l-4 border-red-400 rounded">
+                            <h4 class="font-semibold text-red-800 mb-2">Bear Case</h4>
+                            <p class="text-red-700 digest-item-summary">${bear_case || 'Not specified'}</p>
+                        </div>
+                    </div>
+                </section>
+
+                ${missing_information && missing_information.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Red Flags: Missing Information</h3>
+                    <ul class="list-disc list-inside space-y-1">
+                        ${missing_information.map(item => `<li class="digest-item-summary text-orange-600">${item}</li>`).join('')}
+                    </ul>
+                </section>` : ''}
+
+                ${analyst_price_targets && analyst_price_targets.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Analyst Activity</h3>
+                    <ul class="list-disc list-inside space-y-1">
+                        ${analyst_price_targets.map(target => `<li class="digest-item-summary">${target}</li>`).join('')}
+                    </ul>
+                </section>` : ''}
+
+                ${next_catalyst ? `
                 <footer class="digest-section">
-                    <h3 class="digest-section-title">Next Steps</h3>
-                    <p class="digest-item-summary">${next_steps}</p>
+                    <h3 class="digest-section-title">Next Catalyst</h3>
+                    <p class="digest-item-summary font-semibold">${next_catalyst}</p>
                 </footer>` : ''}
-			   <div class="p-3 mt-4 text-xs text-gray-500 bg-gray-50 rounded-lg border border-gray-200">
-                <strong>Disclaimer:</strong> This content is for informational purposes only and does not constitute financial or investment advice. It is not a recommendation to buy or sell any security. You should always conduct your own research and consult a qualified financial professional before making any investment decisions.
-            </div>
+
+                <div class="p-3 mt-4 text-xs text-gray-500 bg-gray-50 rounded-lg border border-gray-200">
+                    <strong>Disclaimer:</strong> This content is for informational purposes only and does not constitute financial or investment advice. It is not a recommendation to buy or sell any security. You should always conduct your own research and consult a qualified financial professional before making any investment decisions.
+                </div>
             </div>
         </div>`;
 }
