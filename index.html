@@ -1459,79 +1459,76 @@ displayAdvice(data) {
   }, 100); // Small delay to ensure DOM is updated
 }
 
-// RENDERER 1: DAILY DIGEST
+// RENDERER 1: DAILY DIGEST - FIXED VERSION
 renderDailyDigest(data) {
-     const { 
-         digest_date, key_intelligence, deal_drivers, action_items, 
-         market_temperature, status 
-     } = data;
-     const sources = deal_drivers && deal_drivers.length > 0 ? [...new Set(deal_drivers.map(d => d.source))].join(' &bull; ') : 'Internal Analysis';
-     const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const { 
+        digest_date, key_intelligence, deal_drivers, action_items, 
+        market_temperature, status 
+    } = data;
+    const sources = deal_drivers && deal_drivers.length > 0 ? [...new Set(deal_drivers.map(d => d.source))].join(' • ') : 'Internal Analysis';
+    const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
-     return `
-         <div class="results-card digest-card">
-             <div class="results-card-body">
-                 <header class="digest-header">
-                     <img src="/images/arti_right.png" alt="Arti" />
-                     <div>
-                         <h2>Federal Sales Intelligence</h2>
-                         <p class="digest-header-meta">${date} &bull; MARKET TEMP: ${market_temperature || 'COOL'}</p>
-                     </div>
-                 </header>
-                 <section class="digest-section">
-                     <h3 class="digest-section-title">Key Intelligence</h3>
-                     <p class="digest-item-summary text-base">${key_intelligence}</p>
-                 </section>
-                 ${deal_drivers && deal_drivers.length > 0 ? `
-                 <section class="digest-section">
-                     <h3 class="digest-section-title">Today's Deal Drivers</h3>
-                     ${deal_drivers.map((driver, index) => `
-                         <div class="digest-item">
-                             <div class="digest-item-number">${index + 1}</div>
-                             <div>
-                                 <h4 class="digest-item-headline">
-                                     ${driver.link ? `<a href="${driver.link}" target="_blank" rel="noopener noreferrer">${driver.headline}</a>` : driver.headline}
-                                 </h4>
-                                 <p class="digest-item-summary">${driver.summary}</p>
-                                 <p class="digest-item-insight">&rarr; ${driver.action_insight}</p>
-                                 <div class="digest-item-meta"><span class="text-xs text-gray-500 font-semibold">${driver.source ? driver.source.toUpperCase() : ''}</span></div>
-                             </div>
-                         </div>`).join('')}
-                 </section>` : ''}
-			   ${data.quick_intel && data.quick_intel.length > 0 ? `
-              <section class="digest-section">
-                  <h3 class="digest-section-title">Quick Intel</h3>
-                  <div class="space-y-2">
-                  ${data.quick_intel.map(item => `
-                      <p class="digest-item-summary">
-                          <strong class="font-semibold text-gray-900">${item.category}:</strong> ${item.insight}
-                      </p>
-                  `).join('')}
-                  </div>
-              </section>
-              ` : ''}
-                 ${action_items && action_items.length > 0 ? `
-                 <section class="digest-section">
-                     <h3 class="digest-section-title">Your Moves Today</h3>
-                      ${action_items.map((action, index) => `
-                         <div class="digest-item">
-                             <div class="digest-item-number">${index + 1}</div>
-                             <div>
-                                 <h4 class="digest-item-headline">${action.action}</h4>
-                                 <p class="digest-item-summary">${action.why}</p>
-                             </div>
-                         </div>`).join('')}
-                 </section>` : ''}
-                 <footer class="digest-section">
-                      <h3 class="digest-section-title">Sources</h3>
-                      <p class="text-sm text-gray-600">${sources}</p>
-                 </footer>
-             </div>
-         </div>`;
- }
-
-// Add these methods to your AskArti class right after the renderDailyDigest method:
-
+    return `
+        <div class="results-card digest-card" style="max-width: 100%; width: 100%; box-sizing: border-box;">
+            <div class="results-card-body" style="max-width: 100%; box-sizing: border-box;">
+                <header class="digest-header" style="max-width: 100%;">
+                    <img src="/images/arti_right.png" alt="Arti" />
+                    <div style="flex: 1; min-width: 0;">
+                        <h2 style="word-wrap: break-word;">Federal Sales Intelligence</h2>
+                        <p class="digest-header-meta">${date} • MARKET TEMP: ${market_temperature || 'COOL'}</p>
+                    </div>
+                </header>
+                <section class="digest-section" style="max-width: 100%;">
+                    <h3 class="digest-section-title">Key Intelligence</h3>
+                    <p class="digest-item-summary text-base" style="max-width: 100%; word-wrap: break-word; overflow-wrap: break-word;">${key_intelligence}</p>
+                </section>
+                ${deal_drivers && deal_drivers.length > 0 ? `
+                <section class="digest-section" style="max-width: 100%;">
+                    <h3 class="digest-section-title">Today's Deal Drivers</h3>
+                    ${deal_drivers.map((driver, index) => `
+                        <div class="digest-item" style="max-width: 100%;">
+                            <div class="digest-item-number">${index + 1}</div>
+                            <div style="min-width: 0; flex: 1;">
+                                <h4 class="digest-item-headline" style="word-wrap: break-word;">
+                                    ${driver.link ? `<a href="${driver.link}" target="_blank" rel="noopener noreferrer">${driver.headline}</a>` : driver.headline}
+                                </h4>
+                                <p class="digest-item-summary" style="word-wrap: break-word; overflow-wrap: break-word;">${driver.summary}</p>
+                                <p class="digest-item-insight" style="word-wrap: break-word; overflow-wrap: break-word;">→ ${driver.action_insight}</p>
+                                <div class="digest-item-meta"><span class="text-xs text-gray-500 font-semibold">${driver.source ? driver.source.toUpperCase() : ''}</span></div>
+                            </div>
+                        </div>`).join('')}
+                </section>` : ''}
+                ${data.quick_intel && data.quick_intel.length > 0 ? `
+                <section class="digest-section" style="max-width: 100%;">
+                    <h3 class="digest-section-title">Quick Intel</h3>
+                    <div class="space-y-2">
+                    ${data.quick_intel.map(item => `
+                        <p class="digest-item-summary" style="word-wrap: break-word; overflow-wrap: break-word;">
+                            <strong class="font-semibold text-gray-900">${item.category}:</strong> ${item.insight}
+                        </p>
+                    `).join('')}
+                    </div>
+                </section>
+                ` : ''}
+                ${action_items && action_items.length > 0 ? `
+                <section class="digest-section" style="max-width: 100%;">
+                    <h3 class="digest-section-title">Your Moves Today</h3>
+                    ${action_items.map((action, index) => `
+                        <div class="digest-item" style="max-width: 100%;">
+                            <div class="digest-item-number">${index + 1}</div>
+                            <div style="min-width: 0; flex: 1;">
+                                <h4 class="digest-item-headline" style="word-wrap: break-word;">${action.action}</h4>
+                                <p class="digest-item-summary" style="word-wrap: break-word; overflow-wrap: break-word;">${action.why}</p>
+                            </div>
+                        </div>`).join('')}
+                </section>` : ''}
+                <footer class="digest-section" style="max-width: 100%;">
+                    <h3 class="digest-section-title">Sources</h3>
+                    <p class="text-sm text-gray-600" style="word-wrap: break-word;">${sources}</p>
+                </footer>
+            </div>
+        </div>`;
+}
 // RENDERER 2: SALES PLAYBOOK
 renderSalesPlaybook(data) {
     const { 
