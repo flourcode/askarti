@@ -679,6 +679,30 @@ textarea, input[type="text"] {
         margin-bottom: 0.5rem;
     }
 }
+/* Force results container to respect main container width */
+#results-container {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Ensure results cards don't exceed container */
+.results-card {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Make sure digest cards stay constrained */
+.digest-card {
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+.digest-card .results-card-body {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
 </style>
 
 </head>
@@ -756,62 +780,67 @@ textarea, input[type="text"] {
 </div>
     </div>
 
+    <!-- REPLACE THIS SECTION in your HTML: -->
+
     <div class="mt-4 border-t border-gray-200 pt-4">
         <button id="ask-arti-btn" class="btn btn-primary w-full transition-all duration-300">
             <span id="ask-arti-text">Ask Arti</span>
             <div id="ask-arti-loader" class="loader hidden ml-2"></div>
         </button>
+        
+        <!-- MOVE LOADING MESSAGE HERE - right after button -->
+        <div id="loading-message-container" class="text-center py-2 hidden">
+            <p id="loading-message" class="text-gray-600 font-medium"></p>
+        </div>
     </div>
 </div>
 </div>
    	
-           <div id="chat-mode" class="mode-content hidden fade-in">
-               <div class="io-card">
-                   <div class="chat-container mb-4" id="chat-container">
-                       <div id="chat-messages" class="space-y-4">
-                           <div class="flex justify-start">
-                               <div class="chat-message-arti p-3 text-sm max-w-[85%]">
-                                   <p id="chat-greeting">Hey! I'm Arti. I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.</p>
-                               </div>
-                           </div>
-                       </div>
-                   </div>
-                   <div class="flex gap-2">
-   <input type="text" id="chat-input" class="flex-1 p-3 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300" placeholder="Type your message..." maxlength="2000">
-   <button id="chat-send-btn" class="btn btn-primary px-4">
-       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" /></svg>
-   </button>
+<div id="chat-mode" class="mode-content hidden fade-in">
+    <div class="io-card">
+        <div class="chat-container mb-4" id="chat-container">
+            <div id="chat-messages" class="space-y-4">
+                <div class="flex justify-start">
+                    <div class="chat-message-arti p-3 text-sm max-w-[85%]">
+                        <p id="chat-greeting">Hey! I'm Arti. I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <input type="text" id="chat-input" class="flex-1 p-3 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300" placeholder="Type your message..." maxlength="2000">
+            <button id="chat-send-btn" class="btn btn-primary px-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+        </div>
+    </div>
 </div>
-               </div>
-   			</div>
-      </main>
+</main>
 
-      <div id="loading-message-container" class="text-center py-2 hidden">
-          <p id="loading-message" class="text-gray-600 font-medium"></p>
-      </div>
-      <div id="error-message" class="bg-red-100 border border-red-300 rounded-lg p-4 text-center my-4 hidden">
-          <p class="text-red-800 font-semibold mb-1">¯\_(ツ)_/¯ Oops, that didn't work.</p>
-          <p class="text-red-700 text-sm" id="error-details">We're having trouble connecting to Arti.</p>
-      </div>
+<!-- Error message -->
+<div id="error-message" class="bg-red-100 border border-red-300 rounded-lg p-4 text-center my-4 hidden">
+    <p class="text-red-800 font-semibold mb-1">¯\_(ツ)_/¯ Oops, that didn't work.</p>
+    <p class="text-red-700 text-sm" id="error-details">We're having trouble connecting to Arti.</p>
+</div>
 
-      <!-- MOVE THIS INSIDE THE MAIN CONTAINER -->
-      <div id="results-container" class="fade-in"></div>
+<!-- Results container -->
+<div id="results-container" class="fade-in"></div>
 
-      <div class="mt-8 text-center">
-          <p class="text-sm text-gray-500 mb-2">Need something different? Switch modes.</p>
-          <div class="io-card max-w-sm mx-auto p-2">
-               <div class="flex bg-brand-gray-100 p-1 rounded-xl">
-                   <button class="mode-btn flex-1 px-3 py-2 rounded-lg font-semibold text-sm transition-all active" data-mode="quick">
-                       ⚡️ Game Plans
-                   </button>
-                   <button class="mode-btn flex-1 px-3 py-2 rounded-lg font-semibold text-sm transition-all" data-mode="chat">
-                       💬 Chat with Arti
-                   </button>
-               </div>
-          </div>
-      </div>
-      
-   </div> <!-- This closes main-container -->
+<div class="mt-8 text-center">
+    <p class="text-sm text-gray-500 mb-2">Need something different? Switch modes.</p>
+    <div class="io-card max-w-sm mx-auto p-2">
+        <div class="flex bg-brand-gray-100 p-1 rounded-xl">
+            <button class="mode-btn flex-1 px-3 py-2 rounded-lg font-semibold text-sm transition-all active" data-mode="quick">
+                ⚡️ Game Plans
+            </button>
+            <button class="mode-btn flex-1 px-3 py-2 rounded-lg font-semibold text-sm transition-all" data-mode="chat">
+                💬 Chat with Arti
+            </button>
+        </div>
+    </div>
+</div>
+
+</div> <!-- This closes main-container -->
    
    <!-- Footer and modal stay outside -->
    <footer class="text-center mt-12 text-xs text-gray-500">
