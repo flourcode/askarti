@@ -810,1109 +810,1118 @@
         }
     };
 
-    class AskArti {
-        constructor() {
-            this.elements = this.getElements();
-            this.state = {
-                pendingRequest: false,
-                lastRequestTime: 0,
-                loadingInterval: null,
-                abortController: null,
-                chatHistory: [],
-                lastResponseType: null
-            };
-            this.init();
-        }
+   class AskArti {
+    constructor() {
+        this.elements = this.getElements();
+        this.state = {
+            pendingRequest: false,
+            lastRequestTime: 0,
+            loadingInterval: null,
+            abortController: null,
+            chatHistory: [],
+            lastResponseType: null
+        };
+        this.init();
+    }
 
-        getElements() {
-            return {
-                chatContainer: document.getElementById('chat-container'),
-                chatMessages: document.getElementById('chat-messages'),
-                chatInput: document.getElementById('chat-input'),
-                chatSendBtn: document.getElementById('chat-send-btn'),
-                suggestionChipsContainer: document.getElementById('suggestion-chips-container'),
-                errorMessage: document.getElementById('error-message'),
-                errorDetails: document.getElementById('error-details'),
-                aboutBtn: document.getElementById('about-btn'),
-                aboutModal: document.getElementById('about-modal'),
-                closeAbout: document.getElementById('close-about')
-            };
-        }
+    getElements() {
+        return {
+            chatContainer: document.getElementById('chat-container'),
+            chatMessages: document.getElementById('chat-messages'),
+            chatInput: document.getElementById('chat-input'),
+            chatSendBtn: document.getElementById('chat-send-btn'),
+            suggestionChipsContainer: document.getElementById('suggestion-chips-container'),
+            errorMessage: document.getElementById('error-message'),
+            errorDetails: document.getElementById('error-details'),
+            aboutBtn: document.getElementById('about-btn'),
+            aboutModal: document.getElementById('about-modal'),
+            closeAbout: document.getElementById('close-about')
+        };
+    }
 
-        init() {
-            this.updateGreeting();
-            this.setupEventListeners();
-            this.setupMermaid();
-            
-            // Focus the input field
-            this.elements.chatInput.focus();
-            
-            // Update your existing sample-prompt event handlers in the init method
-		document.querySelectorAll('.sample-prompt').forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const promptText = e.currentTarget.dataset.prompt;
+    init() {
+        this.updateGreeting();
+        this.setupEventListeners();
+        this.setupMermaid();
         
-        // Special handling for daily news request
-        if (promptText.toLowerCase().includes('news') || 
-            promptText.toLowerCase().includes('brief') || 
-            promptText.toLowerCase().includes('digest')) {
-            this.fetchDailyNews();
-            return;
-        }
-        
-        // Standard behavior for other prompts
-        this.elements.chatInput.value = promptText;
+        // Focus the input field
         this.elements.chatInput.focus();
-    });
-});
-// Add this to the AskArti class's init method, after your existing sample-prompt event listeners
-document.querySelectorAll('.sample-link').forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const promptText = e.currentTarget.dataset.prompt;
         
-        // Special handling for daily news request
-        if (promptText.toLowerCase().includes('news') || 
-            promptText.toLowerCase().includes('brief') || 
-            promptText.toLowerCase().includes('digest')) {
-            this.fetchDailyNews();
-            return;
-        }
-        
-        // Standard behavior for other prompts
-        this.elements.chatInput.value = promptText;
-        this.elements.chatInput.focus();
-    });
-});
-// Add this method to the AskArti class
-async fetchDailyNews() {
-    // Show that we're working on it
-    this.addMessage("Get today's federal news briefing", true);
-    this.showTypingIndicator();
-    
-    try {
-        // Make direct API call for digest
-        const response = await fetch(CONFIG.API_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                situation: "Get today's federal news briefing", 
-                forceType: "digest"  // Force digest type regardless of content
-            }),
+        // Set up sample prompt event listeners
+        document.querySelectorAll('.sample-prompt').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const promptText = e.currentTarget.dataset.prompt;
+                
+                // Special handling for daily news request
+                if (promptText.toLowerCase().includes('news') || 
+                    promptText.toLowerCase().includes('brief') || 
+                    promptText.toLowerCase().includes('digest')) {
+                    this.fetchDailyNews();
+                    return;
+                }
+                
+                // Standard behavior for other prompts
+                this.elements.chatInput.value = promptText;
+                this.elements.chatInput.focus();
+            });
         });
         
-        if (!response.ok) throw new Error(`Server error: ${response.status}`);
-        
-        const data = await response.json();
-        this.hideTypingIndicator();
-        
-        // Handle the response appropriately
-        if (data.response_type === "digest") {
-            // Add a brief intro message
-            this.addMessage("Here's today's federal sales intelligence briefing:");
-            // Then add the structured digest card
-            this.addStructuredCard(data);
-            // Add to chat history
-            this.state.chatHistory.push({ 
-                role: 'user', 
-                content: "Get today's federal news briefing" 
-            });
-            this.state.chatHistory.push({ 
-                role: 'assistant', 
-                content: "Here's today's federal sales intelligence briefing:",
-                structuredData: data
-            });
-        } else if (data.message) {
-            // If we got a regular chat message back
-            this.addMessage(data.message);
-            // Add to chat history
-            this.state.chatHistory.push({ 
-                role: 'user', 
-                content: "Get today's federal news briefing" 
-            });
-            this.state.chatHistory.push({ 
-                role: 'assistant', 
-                content: data.message 
-            });
-        } else {
-            this.addMessage("I'm having trouble retrieving today's news briefing. Please try again in a few minutes.");
-        }
-        
-    } catch (error) {
-        this.hideTypingIndicator();
-        this.addMessage("I'm having trouble retrieving today's news briefing. Please try again in a few minutes.");
-        console.error("News briefing error:", error);
-    }
-}
-        updateGreeting() {
-            const hour = new Date().getHours();
-            let greeting = '';
-            
-            if (hour >= 5 && hour < 12) {
-                greeting = "Good morning!";
-            } else if (hour >= 12 && hour < 17) {
-                greeting = "Good afternoon!";
-            } else if (hour >= 17 && hour < 21) {
-                greeting = "Good evening!";
-            } else {
-                greeting = "Hello there!";
-            }
-            
-            const chatGreeting = document.getElementById('chat-greeting');
-            if (chatGreeting) {
-                chatGreeting.textContent = `${greeting} I'm Arti, your federal sales coach. I can help with your sales challenges, analyze deals, or create structured plans. What's on your mind today?`;
-            }
-        }
-
-        setupMermaid() {
-            mermaid.initialize({ 
-                startOnLoad: false, 
-                securityLevel: 'strict', 
-                theme: 'base', 
-                themeVariables: {
-                    primaryColor: '#F3F4F6',
-                    primaryTextColor: '#1F2937',
-                    primaryBorderColor: '#D1D5DB',
-                    lineColor: '#6B7280',
-                    textColor: '#111827',
-                    fontSize: '14px'
+        // Set up sample link event listeners
+        document.querySelectorAll('.sample-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const promptText = e.currentTarget.dataset.prompt;
+                
+                // Special handling for daily news request
+                if (promptText.toLowerCase().includes('news') || 
+                    promptText.toLowerCase().includes('brief') || 
+                    promptText.toLowerCase().includes('digest')) {
+                    this.fetchDailyNews();
+                    return;
                 }
+                
+                // Standard behavior for other prompts
+                this.elements.chatInput.value = promptText;
+                this.elements.chatInput.focus();
+            });
+        });
+    }
+
+    async fetchDailyNews() {
+        // Show that we're working on it
+        this.addMessage("Get today's federal news briefing", true);
+        this.showTypingIndicator();
+        
+        try {
+            // Make direct API call for digest
+            const response = await fetch(CONFIG.API_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    situation: "Get today's federal news briefing", 
+                    forceType: "digest"  // Force digest type regardless of content
+                }),
+            });
+            
+            if (!response.ok) throw new Error(`Server error: ${response.status}`);
+            
+            const data = await response.json();
+            this.hideTypingIndicator();
+            
+            // Handle the response appropriately
+            if (data.response_type === "digest") {
+                // Add a brief intro message
+                this.addMessage("Here's today's federal sales intelligence briefing:");
+                // Then add the structured digest card
+                this.addStructuredCard(data);
+                // Add to chat history
+                this.state.chatHistory.push({ 
+                    role: 'user', 
+                    content: "Get today's federal news briefing" 
+                });
+                this.state.chatHistory.push({ 
+                    role: 'assistant', 
+                    content: "Here's today's federal sales intelligence briefing:",
+                    structuredData: data
+                });
+            } else if (data.message) {
+                // If we got a regular chat message back
+                this.addMessage(data.message);
+                // Add to chat history
+                this.state.chatHistory.push({ 
+                    role: 'user', 
+                    content: "Get today's federal news briefing" 
+                });
+                this.state.chatHistory.push({ 
+                    role: 'assistant', 
+                    content: data.message 
+                });
+            } else {
+                this.addMessage("I'm having trouble retrieving today's news briefing. Please try again in a few minutes.");
+            }
+            
+        } catch (error) {
+            this.hideTypingIndicator();
+            this.addMessage("I'm having trouble retrieving today's news briefing. Please try again in a few minutes.");
+            console.error("News briefing error:", error);
+        }
+    }
+
+    updateGreeting() {
+        const hour = new Date().getHours();
+        let greeting = '';
+        
+        if (hour >= 5 && hour < 12) {
+            greeting = "Good morning!";
+        } else if (hour >= 12 && hour < 17) {
+            greeting = "Good afternoon!";
+        } else if (hour >= 17 && hour < 21) {
+            greeting = "Good evening!";
+        } else {
+            greeting = "Hello there!";
+        }
+        
+        const chatGreeting = document.getElementById('chat-greeting');
+        if (chatGreeting) {
+            chatGreeting.textContent = `${greeting} I'm Arti, your federal sales coach. I can help with your sales challenges, analyze deals, or create structured plans. What's on your mind today?`;
+        }
+    }
+
+    setupMermaid() {
+        mermaid.initialize({ 
+            startOnLoad: false, 
+            securityLevel: 'strict', 
+            theme: 'base', 
+            themeVariables: {
+                primaryColor: '#F3F4F6',
+                primaryTextColor: '#1F2937',
+                primaryBorderColor: '#D1D5DB',
+                lineColor: '#6B7280',
+                textColor: '#111827',
+                fontSize: '14px'
+            }
+        });
+    }
+
+    setupEventListeners() {
+        // Chat send button
+        this.elements.chatSendBtn.addEventListener('click', () => {
+            this.sendMessage();
+        });
+        
+        // Enter key to send
+        this.elements.chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                this.sendMessage();
+            }
+        });
+        
+        // About modal
+        this.elements.aboutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.showModal();
+        });
+        
+        this.elements.closeAbout.addEventListener('click', () => {
+            this.hideModal();
+        });
+        
+        this.elements.aboutModal.addEventListener('click', (e) => {
+            if (e.target === this.elements.aboutModal) {
+                this.hideModal();
+            }
+        });
+        
+        // ESC key for modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.hideModal();
+            }
+        });
+    }
+
+    showModal() {
+        this.elements.aboutModal.classList.remove('hidden');
+    }
+
+    hideModal() {
+        this.elements.aboutModal.classList.add('hidden');
+    }
+
+    addMessage(content, isUser = false) {
+        let processedContent = '';
+        
+        if (isUser) {
+            processedContent = content;
+        } else {
+            // Process <action></action> tags
+            processedContent = content.replace(/<action>(.*?)<\/action>/g, '<div class="action-highlight">$1</div>');
+            
+            // Convert markdown
+            processedContent = marked.parse(processedContent);
+        }
+        
+        const messageClass = isUser ? 'chat-message-user justify-end' : 'chat-message-arti justify-start';
+        const alignClass = isUser ? 'justify-end' : 'justify-start';
+        
+        const messageHtml = `
+            <div class="flex ${alignClass} fade-in">
+                <div class="${messageClass} p-3 text-sm max-w-[85%]">
+                    ${processedContent}
+                </div>
+            </div>
+        `;
+        
+        this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
+        this.scrollChatToBottom();
+    }
+
+    // Method to add structured card into chat
+    addStructuredCard(data) {
+        if (!data || !data.response_type) return;
+        
+        const alignClass = 'justify-start';
+        const cardType = data.response_type;
+        
+        let cardHtml = '';
+        
+        // Create appropriate card based on response type
+        switch (cardType) {
+            case 'digest':
+                cardHtml = this.renderDailyDigest(data);
+                break;
+            case 'playbook':
+                cardHtml = this.renderSalesPlaybook(data);
+                break;
+            case 'news':
+                cardHtml = this.renderNewsAdvice(data);
+                break;
+            case 'investment':
+                cardHtml = this.renderMarketAnalysis(data);
+                break;
+            case 'prospect':
+                cardHtml = this.renderProspectAdvice(data);
+                break;
+            case 'deal':
+            case 'interview':
+            case 'meeting':
+                cardHtml = this.renderGeneralAdvice(data);
+                break;
+            default:
+                return; // Don't render anything if type is unknown
+        }
+        
+        // Add the structured card to chat
+        const structuredCardHtml = `
+            <div class="flex ${alignClass} fade-in chat-structured-content">
+                <div class="structured-card">${cardHtml}</div>
+            </div>
+        `;
+        
+        this.elements.chatMessages.insertAdjacentHTML('beforeend', structuredCardHtml);
+        this.scrollChatToBottom();
+        
+        // Setup interactive elements in the card
+        this.setupInteractiveElements();
+        
+        // Render mermaid charts if present
+        if (data.mermaid_chart) {
+            this.renderMermaidChart().then(() => {
+                this.setupMermaidDownloadButton();
             });
         }
+        
+        // Show relevant suggestion chips based on response type
+        this.showSuggestionChips(cardType);
+    }
 
-        setupEventListeners() {
-            // Chat send button
-            this.elements.chatSendBtn.addEventListener('click', () => {
+    showTypingIndicator() {
+        const typingHtml = `
+            <div id="typing-indicator" class="flex justify-start">
+                <div class="chat-message-arti p-3 text-sm">
+                    <span class="inline-flex">
+                        <span class="dot-typing"></span>
+                        <span class="dot-typing" style="animation-delay: 0.2s"></span>
+                        <span class="dot-typing" style="animation-delay: 0.4s"></span>
+                    </span>
+                </div>
+            </div>
+        `;
+        this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
+        this.scrollChatToBottom();
+    }
+
+    hideTypingIndicator() {
+        const indicator = document.getElementById('typing-indicator');
+        if (indicator) indicator.remove();
+    }
+
+    scrollChatToBottom() {
+        this.elements.chatContainer.scrollTop = this.elements.chatContainer.scrollHeight;
+    }
+
+    async sendMessage() {
+        const message = this.elements.chatInput.value.trim();
+        if (!message || this.state.pendingRequest) return;
+        
+        this.state.pendingRequest = true;
+        this.addMessage(message, true);
+        this.state.chatHistory.push({ role: 'user', content: message });
+        this.elements.chatInput.value = '';
+        this.showTypingIndicator();
+        
+        try {
+            // Determine if this is a special command that needs structured output
+            const isStructuredRequest = this.detectStructuredRequest(message);
+            
+            // Prepare request body
+            const requestBody = {
+                situation: message,
+                mode: 'chat',
+                conversationHistory: this.state.chatHistory
+            };
+            
+            // If it's a structured request, set appropriate type
+            if (isStructuredRequest) {
+                requestBody.forceType = isStructuredRequest;
+            }
+            
+            // Send request to API
+            const response = await fetch(CONFIG.API_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestBody)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Server error (${response.status})`);
+            }
+            
+            const data = await response.json();
+            this.hideTypingIndicator();
+            
+            // Case 1: Direct structured response (old style)
+            if (data.response_type && !data.message) {
+                // Save last response type
+                this.state.lastResponseType = data.response_type;
+                
+                // First add a brief introduction message
+                const introMessage = this.getIntroForStructuredResponse(data);
+                this.addMessage(introMessage);
+                
+                // Then add the structured card
+                this.addStructuredCard(data);
+                
+                // Add to chat history as assistant response
+                this.state.chatHistory.push({ 
+                    role: 'assistant', 
+                    content: introMessage,
+                    structuredData: data
+                });
+            } 
+            // Case 2: Chat response with structured data (new unified style)
+            else if (data.message && data.structuredData) {
+                // First add the conversational message
+                this.addMessage(data.message);
+                
+                // Then add the structured card
+                this.addStructuredCard(data.structuredData);
+                
+                // Add to chat history
+                this.state.chatHistory.push({ 
+                    role: 'assistant', 
+                    content: data.message,
+                    structuredData: data.structuredData
+                });
+                
+                // Show suggestion chips if included
+                if (data.suggestions && data.suggestions.length > 0) {
+                    this.showCustomSuggestionChips(data.suggestions);
+                }
+            }
+            // Case 3: Simple chat response (no structured data)
+            else if (data.message) {
+                // Standard chat response
+                this.addMessage(data.message);
+                this.state.chatHistory.push({ 
+                    role: 'assistant', 
+                    content: data.message 
+                });
+                
+                // Show suggestion chips if included in response
+                if (data.suggestions && data.suggestions.length > 0) {
+                    this.showCustomSuggestionChips(data.suggestions);
+                }
+            }
+            // Case 4: Unknown response format
+            else {
+                throw new Error("Invalid response format from server");
+            }
+        } catch (error) {
+            console.error('Request failed:', error);
+            this.hideTypingIndicator();
+            this.addMessage("Sorry, I'm having trouble connecting right now. Please try again in a moment.");
+            this.showError(error.message || "Connection error");
+        } finally {
+            this.state.pendingRequest = false;
+        }
+    }
+
+    // Get intro text for structured responses
+    getIntroForStructuredResponse(data) {
+        const type = data.response_type;
+        
+        switch (type) {
+            case 'digest':
+                return "Here's today's federal sales intelligence briefing:";
+            case 'playbook':
+                return `I've created a comprehensive sales playbook for ${data.sales_play_title}:`;
+            case 'news':
+                return "Here's my analysis of the news article with actionable insights:";
+            case 'investment':
+                return "I've analyzed the financial information. Here's my investment breakdown:";
+            case 'prospect':
+                return "Here's my prospecting intelligence for your target:";
+            case 'deal':
+                return "I've created a deal strategy to help you move forward:";
+            case 'interview':
+                return "Here's your interview preparation plan:";
+            case 'meeting':
+                return "I've prepared a meeting strategy for you:";
+            default:
+                return "Here's the structured information you requested:";
+        }
+    }
+
+    // Detect if message should trigger structured output
+    detectStructuredRequest(message) {
+        const lowerMessage = message.toLowerCase();
+        
+        // Key phrases that indicate structured output requests
+        const patterns = {
+            digest: /daily digest|sales digest|federal digest|intelligence digest|daily brief|briefing|federal news|today's news/i,
+            playbook: /playbook|sales plan|go-to-market|gtm strategy|create a sales plan|create a playbook/i,
+            investment: /analyze (this|these) (earnings|financials)|financial analysis|earnings analysis/i,
+            interview: /interview prep|prepare for interview|interview preparation/i,
+            prospect: /prospecting strategy|prospect for|lead gen|market to|sell into|find clients/i,
+            meeting: /meeting prep|prepare for meeting|meeting strategy/i,
+            news: /analyze this (article|news|press release)|article analysis/i,
+        };
+        
+        // Check if message contains long text (likely an article)
+        const isLongText = message.length > 300 && !message.startsWith('analyze');
+        
+        // If it's a long text without explicit request, default to news analysis
+        if (isLongText) {
+            return 'news';
+        }
+        
+        // Check for specific patterns
+        for (const [type, pattern] of Object.entries(patterns)) {
+            if (pattern.test(lowerMessage)) {
+                return type;
+            }
+        }
+        
+        return null; // No structured type detected
+    }
+
+    showError(message) {
+        this.elements.errorMessage.classList.remove('hidden');
+        this.elements.errorDetails.textContent = message;
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            this.elements.errorMessage.classList.add('hidden');
+        }, 5000);
+    }
+
+    // Show suggestion chips based on response type
+    showSuggestionChips(responseType) {
+        let suggestions = [];
+        
+        // Get relevant suggestions based on response type
+        if (CONFIG.SUGGESTION_TYPES[responseType.toUpperCase()]) {
+            suggestions = CONFIG.SUGGESTION_TYPES[responseType.toUpperCase()];
+        } else {
+            suggestions = CONFIG.SUGGESTION_TYPES.DEFAULT;
+        }
+        
+        this.renderSuggestionChips(suggestions);
+    }
+
+    // Show custom suggestion chips from API response
+    showCustomSuggestionChips(suggestions) {
+        if (!suggestions || suggestions.length === 0) {
+            this.elements.suggestionChipsContainer.classList.add('hidden');
+            return;
+        }
+        
+        this.renderSuggestionChips(suggestions);
+    }
+
+    // Render suggestion chips in the container
+    renderSuggestionChips(suggestions) {
+        if (!suggestions || suggestions.length === 0) {
+            this.elements.suggestionChipsContainer.classList.add('hidden');
+            return;
+        }
+        
+        // Clear existing chips
+        this.elements.suggestionChipsContainer.innerHTML = '';
+        
+        // Add new chips
+        suggestions.forEach(suggestion => {
+            const chip = document.createElement('button');
+            chip.className = 'suggestion-chip';
+            chip.textContent = suggestion;
+            chip.addEventListener('click', () => {
+                this.elements.chatInput.value = suggestion;
+                this.elements.chatInput.focus();
                 this.sendMessage();
             });
             
-            // Enter key to send
-            this.elements.chatInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    this.sendMessage();
-                }
-            });
-            
-            // About modal
-            this.elements.aboutBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.showModal();
-            });
-            
-            this.elements.closeAbout.addEventListener('click', () => {
-                this.hideModal();
-            });
-            
-            this.elements.aboutModal.addEventListener('click', (e) => {
-                if (e.target === this.elements.aboutModal) {
-                    this.hideModal();
-                }
-            });
-            
-            // ESC key for modal
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    this.hideModal();
-                }
-            });
-        }
-
-        showModal() {
-            this.elements.aboutModal.classList.remove('hidden');
-        }
-
-        hideModal() {
-            this.elements.aboutModal.classList.add('hidden');
-        }
-
-        addMessage(content, isUser = false) {
-            let processedContent = '';
-            
-            if (isUser) {
-                processedContent = content;
-            } else {
-                // Process <action></action> tags
-                processedContent = content.replace(/<action>(.*?)<\/action>/g, '<div class="action-highlight">$1</div>');
-                
-                // Convert markdown
-                processedContent = marked.parse(processedContent);
-            }
-            
-            const messageClass = isUser ? 'chat-message-user justify-end' : 'chat-message-arti justify-start';
-            const alignClass = isUser ? 'justify-end' : 'justify-start';
-            
-            const messageHtml = `
-                <div class="flex ${alignClass} fade-in">
-                    <div class="${messageClass} p-3 text-sm max-w-[85%]">
-                        ${processedContent}
-                    </div>
-                </div>
-            `;
-            
-            this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
-            this.scrollChatToBottom();
-        }
-
-        // Method to add structured card into chat
-        addStructuredCard(data) {
-            if (!data || !data.response_type) return;
-            
-            const alignClass = 'justify-start';
-            const cardType = data.response_type;
-            
-            let cardHtml = '';
-            
-            // Create appropriate card based on response type
-            switch (cardType) {
-                case 'digest':
-                    cardHtml = this.renderDailyDigest(data);
-                    break;
-                case 'playbook':
-                    cardHtml = this.renderSalesPlaybook(data);
-                    break;
-                case 'news':
-                    cardHtml = this.renderNewsAdvice(data);
-                    break;
-                case 'investment':
-                    cardHtml = this.renderMarketAnalysis(data);
-                    break;
-                case 'prospect':
-                    cardHtml = this.renderProspectAdvice(data);
-                    break;
-                case 'deal':
-                case 'interview':
-                case 'meeting':
-                    cardHtml = this.renderGeneralAdvice(data);
-                    break;
-                default:
-                    return; // Don't render anything if type is unknown
-            }
-            
-            // Add the structured card to chat
-            const structuredCardHtml = `
-                <div class="flex ${alignClass} fade-in chat-structured-content">
-                    <div class="structured-card">${cardHtml}</div>
-                </div>
-            `;
-            
-            this.elements.chatMessages.insertAdjacentHTML('beforeend', structuredCardHtml);
-            this.scrollChatToBottom();
-            
-            // Setup interactive elements in the card
-            this.setupInteractiveElements();
-            
-            // Render mermaid charts if present
-            if (data.mermaid_chart) {
-                this.renderMermaidChart().then(() => {
-                    this.setupMermaidDownloadButton();
-                });
-            }
-            
-            // Show relevant suggestion chips based on response type
-            this.showSuggestionChips(cardType);
-        }
-
-        showTypingIndicator() {
-            const typingHtml = `
-                <div id="typing-indicator" class="flex justify-start">
-                    <div class="chat-message-arti p-3 text-sm">
-                        <span class="inline-flex">
-                            <span class="dot-typing"></span>
-                            <span class="dot-typing" style="animation-delay: 0.2s"></span>
-                            <span class="dot-typing" style="animation-delay: 0.4s"></span>
-                        </span>
-                    </div>
-                </div>
-            `;
-            this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
-            this.scrollChatToBottom();
-        }
-
-        hideTypingIndicator() {
-            const indicator = document.getElementById('typing-indicator');
-            if (indicator) indicator.remove();
-        }
-
-        scrollChatToBottom() {
-            this.elements.chatContainer.scrollTop = this.elements.chatContainer.scrollHeight;
-        }
-
-        // In the sendMessage method of AskArti class
-async sendMessage() {
-    const message = this.elements.chatInput.value.trim();
-    if (!message || this.state.pendingRequest) return;
-    
-    this.state.pendingRequest = true;
-    this.addMessage(message, true);
-    this.state.chatHistory.push({ role: 'user', content: message });
-    this.elements.chatInput.value = '';
-    this.showTypingIndicator();
-    
-    try {
-        // Request body preparation (your existing code)
-        const requestBody = {
-            situation: message,
-            mode: 'chat',
-            conversationHistory: this.state.chatHistory
-        };
-        
-        // If detected as structured request
-        const isStructuredRequest = this.detectStructuredRequest(message);
-        if (isStructuredRequest) {
-            requestBody.forceType = isStructuredRequest;
-        }
-        
-        // API call (your existing code)
-        const response = await fetch(CONFIG.API_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(requestBody)
+            this.elements.suggestionChipsContainer.appendChild(chip);
         });
         
-        if (!response.ok) {
-            throw new Error(`Server error (${response.status})`);
-        }
-        
-        const data = await response.json();
-        this.hideTypingIndicator();
-        
-        // Handle the response - THIS IS THE KEY PART:
-        
-        // Case 1: Direct structured response (old style)
-        if (data.response_type && !data.message) {
-            this.state.lastResponseType = data.response_type;
-            const introMessage = this.getIntroForStructuredResponse(data);
-            this.addMessage(introMessage);
-            this.addStructuredCard(data);
-            this.state.chatHistory.push({ 
-                role: 'assistant', 
-                content: introMessage,
-                structuredData: data
-            });
-        } 
-        // Case 2: Chat response with structured data (new unified style)
-        else if (data.message && data.structuredData) {
-            // First add the conversational message
-            this.addMessage(data.message);
-            
-            // Then add the structured card
-            this.addStructuredCard(data.structuredData);
-            
-            // Add to chat history
-            this.state.chatHistory.push({ 
-                role: 'assistant', 
-                content: data.message,
-                structuredData: data.structuredData
-            });
-            
-            // Show suggestion chips if included
-            if (data.suggestions && data.suggestions.length > 0) {
-                this.showCustomSuggestionChips(data.suggestions);
-            }
-        }
-        // Case 3: Simple chat response (no structured data)
-        else if (data.message) {
-            // Your existing code for handling chat messages
-            this.addMessage(data.message);
-            this.state.chatHistory.push({ 
-                role: 'assistant', 
-                content: data.message 
-            });
-            
-            if (data.suggestions && data.suggestions.length > 0) {
-                this.showCustomSuggestionChips(data.suggestions);
-            }
-        }
-        // Case 4: Unknown response format
-        else {
-            throw new Error("Invalid response format from server");
-        }
-    } catch (error) {
-        // Error handling (your existing code)
-        console.error('Request failed:', error);
-        this.hideTypingIndicator();
-        this.addMessage("Sorry, I'm having trouble connecting right now. Please try again in a moment.");
-        this.showError(error.message || "Connection error");
-    } finally {
-        this.state.pendingRequest = false;
+        // Show the container
+        this.elements.suggestionChipsContainer.classList.remove('hidden');
     }
+
+    // Render Mermaid charts
+    async renderMermaidChart() {
+        try {
+            await mermaid.run({
+                nodes: document.querySelectorAll('.mermaid')
+            });
+        } catch (error) {
+            console.error('Mermaid rendering error:', error);
+            const containers = document.querySelectorAll('.mermaid-container');
+            containers.forEach(container => {
+                container.innerHTML = '<p class="text-red-500 text-sm">Could not render visual plan.</p>';
+            });
+        }
+    }
+
+    // Setup Mermaid download button
+    setupMermaidDownloadButton() {
+        const downloadButtons = document.querySelectorAll('#download-png-btn');
+        downloadButtons.forEach(btn => {
+            btn.addEventListener('click', () => this.downloadMermaidAsPNG(btn));
+        });
+    }
+
+    // Download Mermaid chart as PNG
+    downloadMermaidAsPNG(buttonElement) {
+        const mermaidContainer = buttonElement.closest('.digest-section').querySelector('.mermaid-container');
+        
+        if (!mermaidContainer || typeof html2canvas === 'undefined') {
+            console.error("Mermaid container or html2canvas library not found.");
+            return;
+        }
+        
+        html2canvas(mermaidContainer, { backgroundColor: '#ffffff' }).then(canvas => {
+            const a = document.createElement("a");
+            a.href = canvas.toDataURL("image/png");
+            a.download = "askarti-diagram.png";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+    }
+
+    // Setup interactive elements like copy buttons
+    setupInteractiveElements() {
+        const copyButtons = document.querySelectorAll('.copy-btn');
+        copyButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const target = e.currentTarget.parentElement.querySelector('.copy-target');
+                if (target) {
+                    navigator.clipboard.writeText(target.innerText).then(() => {
+                        const originalContent = e.currentTarget.innerHTML;
+                        e.currentTarget.classList.add('copied');
+                        e.currentTarget.innerHTML = `
+                            <svg class="checkmark" viewBox="0 0 24 24">
+                                <path d="M9 12l2 2 4-4"></path>
+                            </svg>
+                            <span>Copied!</span>
+                        `;
+                        
+                        const parent = e.currentTarget.parentElement;
+                        parent.classList.add('copy-flash');
+                        
+                        setTimeout(() => {
+                            e.currentTarget.classList.remove('copied');
+                            e.currentTarget.innerHTML = originalContent;
+                            parent.classList.remove('copy-flash');
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Failed to copy text: ', err);
+                    });
+                }
+            });
+        });
+    }
+
+    // STRUCTURED OUTPUT RENDERERS
+    // These are the same rendering functions from the original code but adapted for in-chat display
+
+    // RENDERER 1: DAILY DIGEST
+    renderDailyDigest(data) {
+        const { 
+            digest_date, key_intelligence, deal_drivers, action_items, 
+            market_temperature, status 
+        } = data;
+        const sources = deal_drivers && deal_drivers.length > 0 ? [...new Set(deal_drivers.map(d => d.source))].join(' • ') : 'Internal Analysis';
+        const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        return `
+            <div class="results-card-body" style="max-width: 100%; box-sizing: border-box;">
+                <header class="digest-header" style="max-width: 100%;">
+                    <img src="/images/arti_right.png" alt="Arti" />
+                    <div style="flex: 1; min-width: 0;">
+                        <h2 style="word-wrap: break-word;">Daily News</h2>
+                        <p class="digest-header-meta">${date}<br>MARKET TEMP: ${market_temperature || 'COOL'}</p>
+                    </div>
+                </header>
+                <section class="digest-section" style="max-width: 100%;">
+                    <h3 class="digest-section-title">Key Intelligence</h3>
+                    <p class="digest-item-summary text-base" style="max-width: 100%; word-wrap: break-word; overflow-wrap: break-word;">${key_intelligence}</p>
+                </section>
+                ${deal_drivers && deal_drivers.length > 0 ? `
+                <section class="digest-section" style="max-width: 100%;">
+                    <h3 class="digest-section-title">Today's Deal Drivers</h3>
+                    ${deal_drivers.map((driver, index) => `
+                        <div class="digest-item" style="max-width: 100%;">
+                            <div class="digest-item-number">${index + 1}</div>
+                            <div style="min-width: 0; flex: 1;">
+                                <h4 class="digest-item-headline" style="word-wrap: break-word;">
+                                    ${driver.link ? `<a href="${driver.link}" target="_blank" rel="noopener noreferrer">${driver.headline}</a>` : driver.headline}
+                                </h4>
+                                <p class="digest-item-summary" style="word-wrap: break-word; overflow-wrap: break-word;">${driver.summary}</p>
+                                <p class="digest-item-insight" style="word-wrap: break-word; overflow-wrap: break-word;">→ ${driver.action_insight}</p>
+                                <div class="digest-item-meta"><span class="text-xs text-gray-500 font-semibold">${driver.source ? driver.source.toUpperCase() : ''}</span></div>
+                            </div>
+                        </div>`).join('')}
+                </section>` : ''}
+                ${data.quick_intel && data.quick_intel.length > 0 ? `
+                <section class="digest-section" style="max-width: 100%;">
+                    <h3 class="digest-section-title">Quick Intel</h3>
+                    <div class="space-y-2">
+                    ${data.quick_intel.map(item => `
+                        <p class="digest-item-summary" style="word-wrap: break-word; overflow-wrap: break-word;">
+                            <strong class="font-semibold text-gray-900">${item.category}:</strong> ${item.insight}
+                        </p>
+                    `).join('')}
+                    </div>
+                </section>
+                ` : ''}
+                ${action_items && action_items.length > 0 ? `
+                <section class="digest-section" style="max-width: 100%;">
+                    <h3 class="digest-section-title">Your Moves Today</h3>
+                    ${action_items.map((action, index) => `
+                        <div class="digest-item" style="max-width: 100%;">
+                            <div class="digest-item-number">${index + 1}</div>
+                            <div style="min-width: 0; flex: 1;">
+                                <h4 class="digest-item-headline" style="word-wrap: break-word;">${action.action}</h4>
+                                <p class="digest-item-summary" style="word-wrap: break-word; overflow-wrap: break-word;">${action.why}</p>
+                            </div>
+                        </div>`).join('')}
+                </section>` : ''}
+                <footer class="digest-section" style="max-width: 100%;">
+                    <h3 class="digest-section-title">Sources</h3>
+                    <p class="text-sm text-gray-600" style="word-wrap: break-word;">${sources}</p>
+                </footer>
+            </div>`;
+    }
+
+    // RENDERER 2: SALES PLAYBOOK
+    renderSalesPlaybook(data) {
+        const { 
+            sales_play_title, sales_play_summary, key_services, key_partners, 
+            competitive_positioning, success_metrics, timeline_milestones, 
+            target_personas, insider_tips, risk_mitigation, next_actions, mermaid_chart 
+        } = data;
+        
+        const renderSimpleList = (items) => items?.map(item => `<li class="digest-item-summary">${item}</li>`).join('') || '';
+
+        return `
+            <div class="results-card-body">
+                <header class="digest-header">
+                    <img src="/images/arti_right.png" alt="Arti" />
+                    <div>
+                        <h2>${sales_play_title}</h2>
+                        <p class="digest-header-meta">Sales Playbook</p>
+                    </div>
+                </header>
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Executive Summary</h3>
+                    <p class="digest-item-summary text-base">${sales_play_summary}</p>
+                </section>
+                ${key_services && key_services.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Key Services & Products</h3>
+                    <ul class="list-disc list-inside space-y-2">${renderSimpleList(key_services)}</ul>
+                </section>` : ''}
+                ${key_partners && key_partners.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Strategic Partners</h3>
+                    <ul class="list-disc list-inside space-y-2">${renderSimpleList(key_partners)}</ul>
+                </section>` : ''}
+                ${competitive_positioning ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Competitive Positioning</h3>
+                    <p class="digest-item-summary">${competitive_positioning}</p>
+                </section>` : ''}
+                ${success_metrics && success_metrics.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Success Metrics & Timeline</h3>
+                    <ul class="list-disc list-inside space-y-2">${renderSimpleList(success_metrics)}</ul>
+                </section>` : ''}
+                ${mermaid_chart ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Visual Strategy</h3>
+                    <div class="mermaid-container">
+                        <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
+                    </div>
+                    <div class="flex justify-end gap-2 mt-2">
+                        <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
+                    </div>
+                </section>` : ''}
+                ${target_personas && target_personas.length > 0 ? `
+                <section class="digest-section">
+                    <h3 class="digest-section-title">Stakeholder Guide</h3>
+                    ${target_personas.map((persona, index) => `
+                        <div class="digest-item">
+                            <div class="digest-item-number">${index + 1}</div>
+                            <div>
+                                <h4 class="digest-item-headline">${persona.persona_title}</h4>
+                                <p class="digest-item-summary"><strong>Priorities:</strong> ${persona.business_priorities?.join(', ') || 'Not specified'}</p>
+                                <p class="digest-item-summary mt-2"><strong>Starters:</strong> ${persona.conversation_starters?.join(', ') || 'Not specified'}</p>
+                            </div>
+                        </div>`).join('')}
+                </section>` : ''}
+                 ${next_actions && next_actions.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Next Actions</h3>
+                   ${next_actions.map((action, index) => `
+                       <div class="digest-item">
+                           <div class="digest-item-number">${index + 1}</div>
+                           <div>
+                               <p class="digest-item-summary">${action}</p>
+                           </div>
+                       </div>`).join('')}
+               </section>` : ''}
+           </div>`;
+   }
+
+   // RENDERER 3: NEWS & GTM ANALYSIS
+   renderNewsAdvice(data) {
+       const { 
+           quick_take, key_people_and_titles, money_keywords, 
+           suggested_discovery_questions, suggested_opening_lines, 
+           immediate_actions, strategic_moves, mermaid_chart 
+       } = data;
+
+       return `
+           <div class="results-card-body">
+               <header class="digest-header">
+                   <img src="/images/arti_right.png" alt="Arti" />
+                   <div>
+                       <h2>News & GTM Analysis</h2>
+                       <p class="digest-header-meta">Actionable Intelligence</p>
+                   </div>
+               </header>
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Quick Take</h3>
+                   <p class="digest-item-summary text-base">${quick_take}</p>
+               </section>
+               ${money_keywords && money_keywords.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Money Keywords</h3>
+                   <div>${money_keywords.map(k => `<span class="digest-tag">${k}</span>`).join('')}</div>
+               </section>` : ''}
+               ${key_people_and_titles && key_people_and_titles.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Key People</h3>
+                   <ul class="list-disc list-inside space-y-2">${key_people_and_titles.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
+               </section>` : ''}
+               ${suggested_discovery_questions && suggested_discovery_questions.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Discovery Questions</h3>
+                   ${suggested_discovery_questions.map((q, index) => `
+                       <div class="digest-item">
+                           <div class="digest-item-number">${index + 1}</div>
+                           <div><p class="digest-item-summary">${q}</p></div>
+                       </div>`).join('')}
+               </section>` : ''}
+               ${suggested_opening_lines && suggested_opening_lines.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Email Openers</h3>
+                   ${suggested_opening_lines.map((line, index) => `
+                       <div class="digest-item">
+                           <div class="digest-item-number">${index + 1}</div>
+                           <div>
+                               <div class="digest-code-block copy-target">${line}</div>
+                               <button class="copy-btn" title="Copy to clipboard">
+                                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                               </button>
+                           </div>
+                       </div>`).join('')}
+               </section>` : ''}
+               ${mermaid_chart ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">GTM Flow</h3>
+                   <div class="mermaid-container">
+                       <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
+                   </div>
+                   <div class="flex justify-end gap-2 mt-2">
+                       <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
+                   </div>
+               </section>` : ''}
+               ${immediate_actions && immediate_actions.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Immediate Actions (0-30 Days)</h3>
+                   ${immediate_actions.map((action, index) => `
+                       <div class="digest-item">
+                           <div class="digest-item-number">${index + 1}</div>
+                           <div>
+                               <h4 class="digest-item-headline">${action.action}</h4>
+                               <p class="digest-item-summary">${action.why}</p>
+                           </div>
+                       </div>`).join('')}
+               </section>` : ''}
+           </div>`;
+   }
+
+   // RENDERER 4: INVESTMENT / MARKET ANALYSIS
+   renderMarketAnalysis(data) {
+       const { 
+           investment_thesis, executive_summary, key_people_mentioned, leadership_quotes,
+           financial_health, market_position, bull_signals, bear_signals, 
+           key_financial_metrics, segment_analysis, guidance_and_outlook,
+           bull_case, bear_case, missing_information, analyst_price_targets, next_catalyst
+       } = data;
+
+       return `
+           <div class="results-card-body">
+               <header class="digest-header">
+                   <img src="/images/arti_right.png" alt="Arti" />
+                   <div>
+                       <h2>Market Analysis</h2>
+                       <p class="digest-header-meta">Bull vs Bear</p>
+                   </div>
+               </header>
+               
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Summary</h3>
+                   <p class="digest-item-summary text-base font-semibold">${investment_thesis}</p>
+               </section>
+
+               ${executive_summary ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Executive Summary</h3>
+                   <p class="digest-item-summary">${executive_summary}</p>
+               </section>` : ''}
+               
+               ${key_financial_metrics && key_financial_metrics.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Key Financial Metrics</h3>
+                   <div class="grid grid-cols-1 gap-2">
+                       ${key_financial_metrics.map(metric => `<span class="digest-tag">${metric}</span>`).join('')}
+                   </div>
+               </section>` : ''}
+
+               ${leadership_quotes && leadership_quotes.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Leadership Quotes</h3>
+                   ${leadership_quotes.map((item, index) => `
+                       <div class="digest-item">
+                           <div class="digest-item-number">${index + 1}</div>
+                           <div>
+                               <h4 class="digest-item-headline">${item.person}</h4>
+                               <div class="digest-code-block mb-2">"${item.quote}"</div>
+                               <div class="text-xs font-semibold ${
+                                   item.bull_or_bear_signal === 'bull' ? 'text-green-600' : 
+                                   item.bull_or_bear_signal === 'bear' ? 'text-red-600' : 'text-gray-600'
+                               }">
+                                   ${item.bull_or_bear_signal?.toUpperCase()} SIGNAL
+                               </div>
+                           </div>
+                       </div>`).join('')}
+               </section>` : ''}
+
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Bull vs Bear Signals</h3>
+                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       ${bull_signals && bull_signals.length > 0 ? `
+                       <div>
+                           <h4 class="font-semibold text-green-600 mb-2">🐂 Bull Signals</h4>
+                           <ul class="list-disc list-inside space-y-1 text-sm">
+                               ${bull_signals.map(signal => `<li class="text-green-700">${signal}</li>`).join('')}
+                           </ul>
+                       </div>` : ''}
+                       
+                       ${bear_signals && bear_signals.length > 0 ? `
+                       <div>
+                           <h4 class="font-semibold text-red-600 mb-2">🐻 Bear Signals</h4>
+                           <ul class="list-disc list-inside space-y-1 text-sm">
+                               ${bear_signals.map(signal => `<li class="text-red-700">${signal}</li>`).join('')}
+                           </ul>
+                       </div>` : ''}
+                   </div>
+               </section>
+
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Investment Cases</h3>
+                   <div class="space-y-4">
+                       <div class="p-3 bg-green-50 border-l-4 border-green-400 rounded">
+                           <h4 class="font-semibold text-green-800 mb-2">Bull Case</h4>
+                           <p class="text-green-700 digest-item-summary">${bull_case || 'Not specified'}</p>
+                       </div>
+                       <div class="p-3 bg-red-50 border-l-4 border-red-400 rounded">
+                           <h4 class="font-semibold text-red-800 mb-2">Bear Case</h4>
+                           <p class="text-red-700 digest-item-summary">${bear_case || 'Not specified'}</p>
+                       </div>
+                   </div>
+               </section>
+
+               ${next_catalyst ? `
+               <footer class="digest-section">
+                   <h3 class="digest-section-title">Next Catalyst</h3>
+                   <p class="digest-item-summary font-semibold">${next_catalyst}</p>
+               </footer>` : ''}
+           </div>`;
+   }
+
+   // RENDERER 5: PROSPECTING INTELLIGENCE
+   renderProspectAdvice(data) {
+       const { 
+           summary, top_s_is, top_software_and_cloud, 
+           naics_codes, prospect_recommendations 
+       } = data;
+       
+       const renderPartnerList = (items) => items?.map(item => `<div class="mb-2"><h4 class="font-semibold text-gray-800">${item.company || 'N/A'}</h4><p class="text-sm text-gray-600">${item.value || ''}</p></div>`).join('') || '';
+
+       return `
+           <div class="results-card-body">
+               <header class="digest-header">
+                   <img src="/images/arti_right.png" alt="Arti" />
+                   <div>
+                       <h2>Prospecting Intelligence</h2>
+                       <p class="digest-header-meta">Market Analysis</p>
+                   </div>
+               </header>
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Summary</h3>
+                   <p class="digest-item-summary text-base">${summary}</p>
+               </section>
+               ${top_s_is && top_s_is.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Top Service Providers / SIs</h3>
+                   <div>${renderPartnerList(top_s_is)}</div>
+               </section>` : ''}
+               ${top_software_and_cloud && top_software_and_cloud.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Top Software & Cloud Partners</h3>
+                   <div>${renderPartnerList(top_software_and_cloud)}</div>
+               </section>` : ''}
+               ${naics_codes && naics_codes.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">NAICS Codes</h3>
+                   <div>${naics_codes.map(k => `<span class="digest-tag">${k.code || k}</span>`).join('')}</div>
+               </section>` : ''}
+               ${prospect_recommendations && prospect_recommendations.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Recommendations</h3>
+                   <ul class="list-disc list-inside space-y-2">${prospect_recommendations.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
+               </section>` : ''}
+           </div>`;
+   }
+
+   // RENDERER 6: GENERAL ADVICE (Deal, Interview, Meeting)
+   renderGeneralAdvice(data) {
+       const { 
+           response_type, quick_take, key_moves, talking_points, 
+           email_template, next_steps, mermaid_chart 
+       } = data;
+
+       const titles = {
+           deal: 'Deal Game Plan',
+           interview: 'Interview Prep Plan',
+           meeting: 'Meeting Strategy',
+           default: 'Your Game Plan'
+       };
+       const title = titles[response_type] || titles.default;
+
+       return `
+           <div class="results-card-body">
+               <header class="digest-header">
+                   <img src="/images/arti_right.png" alt="Arti" />
+                   <div>
+                       <h2>${title}</h2>
+                       <p class="digest-header-meta">Actionable Advice</p>
+                   </div>
+               </header>
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Quick Take</h3>
+                   <p class="digest-item-summary text-base">${quick_take}</p>
+               </section>
+               ${key_moves && key_moves.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Your Next Moves</h3>
+                   ${key_moves.map((move, index) => `
+                       <div class="digest-item">
+                           <div class="digest-item-number">${index + 1}</div>
+                           <div>
+                               <h4 class="digest-item-headline">${move.action}</h4>
+                               <p class="digest-item-summary">${move.why}</p>
+                           </div>
+                       </div>`).join('')}
+               </section>` : ''}
+               ${mermaid_chart ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Visual Strategy</h3>
+                   <div class="mermaid-container">
+                       <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
+                   </div>
+                   <div class="flex justify-end gap-2 mt-2">
+                       <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
+                   </div>
+               </section>` : ''}
+               ${talking_points && talking_points.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Key Talking Points</h3>
+                   <ul class="list-disc list-inside space-y-2">${talking_points.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
+               </section>` : ''}
+               ${email_template ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Email Template</h3>
+                   <div class="digest-code-block copy-target">${email_template}</div>
+                   <button class="copy-btn" title="Copy to clipboard">
+                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                   </button>
+               </section>` : ''}
+               ${next_steps ? `
+               <footer class="digest-section">
+                   <h3 class="digest-section-title">Closing Thought</h3>
+                   <p class="digest-item-summary">${next_steps}</p>
+               </footer>` : ''}
+           </div>`;
+   }
 }
 
-        // Get intro text for structured responses
-        getIntroForStructuredResponse(data) {
-            const type = data.response_type;
-            
-            switch (type) {
-                case 'digest':
-                    return "Here's today's federal sales intelligence briefing:";
-                case 'playbook':
-                    return `I've created a comprehensive sales playbook for ${data.sales_play_title}:`;
-                case 'news':
-                    return "Here's my analysis of the news article with actionable insights:";
-                case 'investment':
-                    return "I've analyzed the financial information. Here's my investment breakdown:";
-                case 'prospect':
-                    return "Here's my prospecting intelligence for your target:";
-                case 'deal':
-                    return "I've created a deal strategy to help you move forward:";
-                case 'interview':
-                    return "Here's your interview preparation plan:";
-                case 'meeting':
-                    return "I've prepared a meeting strategy for you:";
-                default:
-                    return "Here's the structured information you requested:";
-            }
-        }
-
-        // Detect if message should trigger structured output
-        detectStructuredRequest(message) {
-            const lowerMessage = message.toLowerCase();
-            
-            // Key phrases that indicate structured output requests
-            const patterns = {
-                digest: /daily digest|sales digest|federal digest|intelligence digest|daily brief|briefing|federal news|today's news/i,
-                playbook: /playbook|sales plan|go-to-market|gtm strategy|create a sales plan|create a playbook/i,
-                investment: /analyze (this|these) (earnings|financials)|financial analysis|earnings analysis/i,
-                interview: /interview prep|prepare for interview|interview preparation/i,
-                prospect: /prospecting strategy|prospect for|lead gen|market to|sell into|find clients/i,
-                meeting: /meeting prep|prepare for meeting|meeting strategy/i,
-                news: /analyze this (article|news|press release)|article analysis/i,
-            };
-            
-            // Check if message contains long text (likely an article)
-            const isLongText = message.length > 300 && !message.startsWith('analyze');
-            
-            // If it's a long text without explicit request, default to news analysis
-            if (isLongText) {
-                return 'news';
-            }
-            
-            // Check for specific patterns
-            for (const [type, pattern] of Object.entries(patterns)) {
-                if (pattern.test(lowerMessage)) {
-                    return type;
-                }
-            }
-            
-            return null; // No structured type detected
-        }
-
-        showError(message) {
-            this.elements.errorMessage.classList.remove('hidden');
-            this.elements.errorDetails.textContent = message;
-            
-            // Auto-hide after 5 seconds
-            setTimeout(() => {
-                this.elements.errorMessage.classList.add('hidden');
-            }, 5000);
-        }
-
-        // Show suggestion chips based on response type
-        showSuggestionChips(responseType) {
-            let suggestions = [];
-            
-            // Get relevant suggestions based on response type
-            if (CONFIG.SUGGESTION_TYPES[responseType.toUpperCase()]) {
-                suggestions = CONFIG.SUGGESTION_TYPES[responseType.toUpperCase()];
-            } else {
-                suggestions = CONFIG.SUGGESTION_TYPES.DEFAULT;
-            }
-            
-            this.renderSuggestionChips(suggestions);
-        }
-
-        // Show custom suggestion chips from API response
-        showCustomSuggestionChips(suggestions) {
-            if (!suggestions || suggestions.length === 0) {
-                this.elements.suggestionChipsContainer.classList.add('hidden');
-                return;
-            }
-            
-            this.renderSuggestionChips(suggestions);
-        }
-
-        // Render suggestion chips in the container
-        renderSuggestionChips(suggestions) {
-            if (!suggestions || suggestions.length === 0) {
-                this.elements.suggestionChipsContainer.classList.add('hidden');
-                return;
-            }
-            
-            // Clear existing chips
-            this.elements.suggestionChipsContainer.innerHTML = '';
-            
-            // Add new chips
-            suggestions.forEach(suggestion => {
-                const chip = document.createElement('button');
-                chip.className = 'suggestion-chip';
-                chip.textContent = suggestion;
-                chip.addEventListener('click', () => {
-                    this.elements.chatInput.value = suggestion;
-                    this.elements.chatInput.focus();
-                    this.sendMessage();
-                });
-                
-                this.elements.suggestionChipsContainer.appendChild(chip);
-            });
-            
-            // Show the container
-            this.elements.suggestionChipsContainer.classList.remove('hidden');
-        }
-
-        // Render Mermaid charts
-        async renderMermaidChart() {
-            try {
-                await mermaid.run({
-                    nodes: document.querySelectorAll('.mermaid')
-                });
-            } catch (error) {
-                console.error('Mermaid rendering error:', error);
-                const containers = document.querySelectorAll('.mermaid-container');
-                containers.forEach(container => {
-                    container.innerHTML = '<p class="text-red-500 text-sm">Could not render visual plan.</p>';
-                });
-            }
-        }
-
-        // Setup Mermaid download button
-        setupMermaidDownloadButton() {
-            const downloadButtons = document.querySelectorAll('#download-png-btn');
-            downloadButtons.forEach(btn => {
-                btn.addEventListener('click', () => this.downloadMermaidAsPNG(btn));
-            });
-        }
-
-        // Download Mermaid chart as PNG
-        downloadMermaidAsPNG(buttonElement) {
-            const mermaidContainer = buttonElement.closest('.digest-section').querySelector('.mermaid-container');
-            
-            if (!mermaidContainer || typeof html2canvas === 'undefined') {
-                console.error("Mermaid container or html2canvas library not found.");
-                return;
-            }
-            
-            html2canvas(mermaidContainer, { backgroundColor: '#ffffff' }).then(canvas => {
-                const a = document.createElement("a");
-                a.href = canvas.toDataURL("image/png");
-                a.download = "askarti-diagram.png";
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            });
-        }
-
-        // Setup interactive elements like copy buttons
-        setupInteractiveElements() {
-            const copyButtons = document.querySelectorAll('.copy-btn');
-            copyButtons.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const target = e.currentTarget.parentElement.querySelector('.copy-target');
-                    if (target) {
-                        navigator.clipboard.writeText(target.innerText).then(() => {
-                            const originalContent = e.currentTarget.innerHTML;
-                            e.currentTarget.classList.add('copied');
-                            e.currentTarget.innerHTML = `
-                                <svg class="checkmark" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4"></path>
-                                </svg>
-                                <span>Copied!</span>
-                            `;
-                            
-                            const parent = e.currentTarget.parentElement;
-                            parent.classList.add('copy-flash');
-                            
-                            setTimeout(() => {
-                                e.currentTarget.classList.remove('copied');
-                                e.currentTarget.innerHTML = originalContent;
-                                parent.classList.remove('copy-flash');
-                            }, 2000);
-                        }).catch(err => {
-                            console.error('Failed to copy text: ', err);
-                        });
-                    }
-                });
-            });
-        }
-
-        // STRUCTURED OUTPUT RENDERERS
-        // These are the same rendering functions from the original code but adapted for in-chat display
-
-        // RENDERER 1: DAILY DIGEST
-        renderDailyDigest(data) {
-            const { 
-                digest_date, key_intelligence, deal_drivers, action_items, 
-                market_temperature, status 
-            } = data;
-            const sources = deal_drivers && deal_drivers.length > 0 ? [...new Set(deal_drivers.map(d => d.source))].join(' • ') : 'Internal Analysis';
-            const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-
-            return `
-                <div class="results-card-body" style="max-width: 100%; box-sizing: border-box;">
-                    <header class="digest-header" style="max-width: 100%;">
-                        <img src="/images/arti_right.png" alt="Arti" />
-                        <div style="flex: 1; min-width: 0;">
-                            <h2 style="word-wrap: break-word;">Daily News</h2>
-                            <p class="digest-header-meta">${date}<br>MARKET TEMP: ${market_temperature || 'COOL'}</p>
-                        </div>
-                    </header>
-                    <section class="digest-section" style="max-width: 100%;">
-                        <h3 class="digest-section-title">Key Intelligence</h3>
-                        <p class="digest-item-summary text-base" style="max-width: 100%; word-wrap: break-word; overflow-wrap: break-word;">${key_intelligence}</p>
-                    </section>
-                    ${deal_drivers && deal_drivers.length > 0 ? `
-                    <section class="digest-section" style="max-width: 100%;">
-                        <h3 class="digest-section-title">Today's Deal Drivers</h3>
-                        ${deal_drivers.map((driver, index) => `
-                            <div class="digest-item" style="max-width: 100%;">
-                                <div class="digest-item-number">${index + 1}</div>
-                                <div style="min-width: 0; flex: 1;">
-                                    <h4 class="digest-item-headline" style="word-wrap: break-word;">
-                                        ${driver.link ? `<a href="${driver.link}" target="_blank" rel="noopener noreferrer">${driver.headline}</a>` : driver.headline}
-                                    </h4>
-                                    <p class="digest-item-summary" style="word-wrap: break-word; overflow-wrap: break-word;">${driver.summary}</p>
-                                    <p class="digest-item-insight" style="word-wrap: break-word; overflow-wrap: break-word;">→ ${driver.action_insight}</p>
-                                    <div class="digest-item-meta"><span class="text-xs text-gray-500 font-semibold">${driver.source ? driver.source.toUpperCase() : ''}</span></div>
-                                </div>
-                            </div>`).join('')}
-                    </section>` : ''}
-                    ${data.quick_intel && data.quick_intel.length > 0 ? `
-                    <section class="digest-section" style="max-width: 100%;">
-                        <h3 class="digest-section-title">Quick Intel</h3>
-                        <div class="space-y-2">
-                        ${data.quick_intel.map(item => `
-                            <p class="digest-item-summary" style="word-wrap: break-word; overflow-wrap: break-word;">
-                                <strong class="font-semibold text-gray-900">${item.category}:</strong> ${item.insight}
-                            </p>
-                        `).join('')}
-                        </div>
-                    </section>
-                    ` : ''}
-                    ${action_items && action_items.length > 0 ? `
-                    <section class="digest-section" style="max-width: 100%;">
-                        <h3 class="digest-section-title">Your Moves Today</h3>
-                        ${action_items.map((action, index) => `
-                            <div class="digest-item" style="max-width: 100%;">
-                                <div class="digest-item-number">${index + 1}</div>
-                                <div style="min-width: 0; flex: 1;">
-                                    <h4 class="digest-item-headline" style="word-wrap: break-word;">${action.action}</h4>
-                                    <p class="digest-item-summary" style="word-wrap: break-word; overflow-wrap: break-word;">${action.why}</p>
-                                </div>
-                            </div>`).join('')}
-                    </section>` : ''}
-                    <footer class="digest-section" style="max-width: 100%;">
-                        <h3 class="digest-section-title">Sources</h3>
-                        <p class="text-sm text-gray-600" style="word-wrap: break-word;">${sources}</p>
-                    </footer>
-                </div>`;
-        }
-
-        // RENDERER 2: SALES PLAYBOOK
-        renderSalesPlaybook(data) {
-            const { 
-                sales_play_title, sales_play_summary, key_services, key_partners, 
-                competitive_positioning, success_metrics, timeline_milestones, 
-                target_personas, insider_tips, risk_mitigation, next_actions, mermaid_chart 
-            } = data;
-            
-            const renderSimpleList = (items) => items?.map(item => `<li class="digest-item-summary">${item}</li>`).join('') || '';
-
-            return `
-                <div class="results-card-body">
-                    <header class="digest-header">
-                        <img src="/images/arti_right.png" alt="Arti" />
-                        <div>
-                            <h2>${sales_play_title}</h2>
-                            <p class="digest-header-meta">Sales Playbook</p>
-                        </div>
-                    </header>
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Executive Summary</h3>
-                        <p class="digest-item-summary text-base">${sales_play_summary}</p>
-                    </section>
-                    ${key_services && key_services.length > 0 ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Key Services & Products</h3>
-                        <ul class="list-disc list-inside space-y-2">${renderSimpleList(key_services)}</ul>
-                    </section>` : ''}
-                    ${key_partners && key_partners.length > 0 ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Strategic Partners</h3>
-                        <ul class="list-disc list-inside space-y-2">${renderSimpleList(key_partners)}</ul>
-                    </section>` : ''}
-                    ${competitive_positioning ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Competitive Positioning</h3>
-                        <p class="digest-item-summary">${competitive_positioning}</p>
-                    </section>` : ''}
-                    ${success_metrics && success_metrics.length > 0 ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Success Metrics & Timeline</h3>
-                        <ul class="list-disc list-inside space-y-2">${renderSimpleList(success_metrics)}</ul>
-                    </section>` : ''}
-                    ${mermaid_chart ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Visual Strategy</h3>
-                        <div class="mermaid-container">
-                            <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                        </div>
-                        <div class="flex justify-end gap-2 mt-2">
-                            <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
-                        </div>
-                    </section>` : ''}
-                    ${target_personas && target_personas.length > 0 ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Stakeholder Guide</h3>
-                        ${target_personas.map((persona, index) => `
-                            <div class="digest-item">
-                                <div class="digest-item-number">${index + 1}</div>
-                                <div>
-                                    <h4 class="digest-item-headline">${persona.persona_title}</h4>
-                                    <p class="digest-item-summary"><strong>Priorities:</strong> ${persona.business_priorities?.join(', ') || 'Not specified'}</p>
-                                    <p class="digest-item-summary mt-2"><strong>Starters:</strong> ${persona.conversation_starters?.join(', ') || 'Not specified'}</p>
-                                </div>
-                            </div>`).join('')}
-                    </section>` : ''}
-                     ${next_actions && next_actions.length > 0 ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Next Actions</h3>
-                        ${next_actions.map((action, index) => `
-                            <div class="digest-item">
-                                <div class="digest-item-number">${index + 1}</div>
-                                <div>
-                                    <p class="digest-item-summary">${action}</p>
-                                </div>
-                            </div>`).join('')}
-                    </section>` : ''}
-                </div>`;
-        }
-
-        // RENDERER 3: NEWS & GTM ANALYSIS
-        renderNewsAdvice(data) {
-            const { 
-                quick_take, key_people_and_titles, money_keywords, 
-                suggested_discovery_questions, suggested_opening_lines, 
-                immediate_actions, strategic_moves, mermaid_chart 
-            } = data;
-
-            return `
-                <div class="results-card-body">
-                    <header class="digest-header">
-                        <img src="/images/arti_right.png" alt="Arti" />
-                        <div>
-                            <h2>News & GTM Analysis</h2>
-                            <p class="digest-header-meta">Actionable Intelligence</p>
-                        </div>
-                    </header>
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Quick Take</h3>
-                        <p class="digest-item-summary text-base">${quick_take}</p>
-                    </section>
-                    ${money_keywords && money_keywords.length > 0 ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Money Keywords</h3>
-                        <div>${money_keywords.map(k => `<span class="digest-tag">${k}</span>`).join('')}</div>
-                    </section>` : ''}
-                    ${key_people_and_titles && key_people_and_titles.length > 0 ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Key People</h3>
-                        <ul class="list-disc list-inside space-y-2">${key_people_and_titles.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
-                    </section>` : ''}
-                    ${suggested_discovery_questions && suggested_discovery_questions.length > 0 ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Discovery Questions</h3>
-                        ${suggested_discovery_questions.map((q, index) => `
-                            <div class="digest-item">
-                                <div class="digest-item-number">${index + 1}</div>
-                                <div><p class="digest-item-summary">${q}</p></div>
-                            </div>`).join('')}
-                    </section>` : ''}
-                    ${suggested_opening_lines && suggested_opening_lines.length > 0 ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Email Openers</h3>
-                        ${suggested_opening_lines.map((line, index) => `
-                            <div class="digest-item">
-                                <div class="digest-item-number">${index + 1}</div>
-                                <div>
-                                    <div class="digest-code-block copy-target">${line}</div>
-                                    <button class="copy-btn" title="Copy to clipboard">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                                    </button>
-                                </div>
-                            </div>`).join('')}
-                    </section>` : ''}
-                    ${mermaid_chart ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">GTM Flow</h3>
-                        <div class="mermaid-container">
-                            <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                        </div>
-                        <div class="flex justify-end gap-2 mt-2">
-                            <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
-                        </div>
-                    </section>` : ''}
-                    ${immediate_actions && immediate_actions.length > 0 ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Immediate Actions (0-30 Days)</h3>
-                        ${immediate_actions.map((action, index) => `
-                            <div class="digest-item">
-                                <div class="digest-item-number">${index + 1}</div>
-                                <div>
-                                    <h4 class="digest-item-headline">${action.action}</h4>
-                                    <p class="digest-item-summary">${action.why}</p>
-                                </div>
-                            </div>`).join('')}
-                    </section>` : ''}
-                </div>`;
-        }
-
-        // RENDERER 4: INVESTMENT / MARKET ANALYSIS
-        renderMarketAnalysis(data) {
-            const { 
-                investment_thesis, executive_summary, key_people_mentioned, leadership_quotes,
-                financial_health, market_position, bull_signals, bear_signals, 
-                key_financial_metrics, segment_analysis, guidance_and_outlook,
-                bull_case, bear_case, missing_information, analyst_price_targets, next_catalyst
-            } = data;
-
-            return `
-                <div class="results-card-body">
-                    <header class="digest-header">
-                        <img src="/images/arti_right.png" alt="Arti" />
-                        <div>
-                            <h2>Market Analysis</h2>
-                            <p class="digest-header-meta">Bull vs Bear</p>
-                        </div>
-                    </header>
-                    
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Summary</h3>
-                        <p class="digest-item-summary text-base font-semibold">${investment_thesis}</p>
-                    </section>
-
-                    ${executive_summary ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Executive Summary</h3>
-                        <p class="digest-item-summary">${executive_summary}</p>
-                    </section>` : ''}
-                    
-                    ${key_financial_metrics && key_financial_metrics.length > 0 ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Key Financial Metrics</h3>
-                        <div class="grid grid-cols-1 gap-2">
-                            ${key_financial_metrics.map(metric => `<span class="digest-tag">${metric}</span>`).join('')}
-                        </div>
-                    </section>` : ''}
-
-                    ${leadership_quotes && leadership_quotes.length > 0 ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Leadership Quotes</h3>
-                        ${leadership_quotes.map((item, index) => `
-                            <div class="digest-item">
-                                <div class="digest-item-number">${index + 1}</div>
-                                <div>
-                                    <h4 class="digest-item-headline">${item.person}</h4>
-                                    <div class="digest-code-block mb-2">"${item.quote}"</div>
-                                    <div class="text-xs font-semibold ${
-                                        item.bull_or_bear_signal === 'bull' ? 'text-green-600' : 
-                                        item.bull_or_bear_signal === 'bear' ? 'text-red-600' : 'text-gray-600'
-                                    }">
-                                        ${item.bull_or_bear_signal?.toUpperCase()} SIGNAL
-                                    </div>
-                                </div>
-                            </div>`).join('')}
-                    </section>` : ''}
-
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Bull vs Bear Signals</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            ${bull_signals && bull_signals.length > 0 ? `
-                            <div>
-                                <h4 class="font-semibold text-green-600 mb-2">🐂 Bull Signals</h4>
-                                <ul class="list-disc list-inside space-y-1 text-sm">
-                                    ${bull_signals.map(signal => `<li class="text-green-700">${signal}</li>`).join('')}
-                                </ul>
-                            </div>` : ''}
-                            
-                            ${bear_signals && bear_signals.length > 0 ? `
-                            <div>
-                                <h4 class="font-semibold text-red-600 mb-2">🐻 Bear Signals</h4>
-                                <ul class="list-disc list-inside space-y-1 text-sm">
-                                    ${bear_signals.map(signal => `<li class="text-red-700">${signal}</li>`).join('')}
-                                </ul>
-                            </div>` : ''}
-                        </div>
-                    </section>
-
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Investment Cases</h3>
-                        <div class="space-y-4">
-                            <div class="p-3 bg-green-50 border-l-4 border-green-400 rounded">
-                                <h4 class="font-semibold text-green-800 mb-2">Bull Case</h4>
-                                <p class="text-green-700 digest-item-summary">${bull_case || 'Not specified'}</p>
-                            </div>
-                            <div class="p-3 bg-red-50 border-l-4 border-red-400 rounded">
-                                <h4 class="font-semibold text-red-800 mb-2">Bear Case</h4>
-                                <p class="text-red-700 digest-item-summary">${bear_case || 'Not specified'}</p>
-                            </div>
-                        </div>
-                    </section>
-
-                    ${next_catalyst ? `
-                    <footer class="digest-section">
-                        <h3 class="digest-section-title">Next Catalyst</h3>
-                        <p class="digest-item-summary font-semibold">${next_catalyst}</p>
-                    </footer>` : ''}
-                </div>`;
-        }
-
-        // RENDERER 5: PROSPECTING INTELLIGENCE
-        renderProspectAdvice(data) {
-            const { 
-                summary, top_s_is, top_software_and_cloud, 
-                naics_codes, prospect_recommendations 
-            } = data;
-            
-            const renderPartnerList = (items) => items?.map(item => `<div class="mb-2"><h4 class="font-semibold text-gray-800">${item.company || 'N/A'}</h4><p class="text-sm text-gray-600">${item.value || ''}</p></div>`).join('') || '';
-
-            return `
-                <div class="results-card-body">
-                    <header class="digest-header">
-                        <img src="/images/arti_right.png" alt="Arti" />
-                        <div>
-                            <h2>Prospecting Intelligence</h2>
-                            <p class="digest-header-meta">Market Analysis</p>
-                        </div>
-                    </header>
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Summary</h3>
-                        <p class="digest-item-summary text-base">${summary}</p>
-                    </section>
-                    ${top_s_is && top_s_is.length > 0 ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Top Service Providers / SIs</h3>
-                        <div>${renderPartnerList(top_s_is)}</div>
-                    </section>` : ''}
-                    ${top_software_and_cloud && top_software_and_cloud.length > 0 ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Top Software & Cloud Partners</h3>
-                        <div>${renderPartnerList(top_software_and_cloud)}</div>
-                    </section>` : ''}
-                    ${naics_codes && naics_codes.length > 0 ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">NAICS Codes</h3>
-                        <div>${naics_codes.map(k => `<span class="digest-tag">${k.code || k}</span>`).join('')}</div>
-                    </section>` : ''}
-                    ${prospect_recommendations && prospect_recommendations.length > 0 ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Recommendations</h3>
-                        <ul class="list-disc list-inside space-y-2">${prospect_recommendations.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
-                    </section>` : ''}
-                </div>`;
-        }
-
-        // RENDERER 6: GENERAL ADVICE (Deal, Interview, Meeting)
-        renderGeneralAdvice(data) {
-            const { 
-                response_type, quick_take, key_moves, talking_points, 
-                email_template, next_steps, mermaid_chart 
-            } = data;
-
-            const titles = {
-                deal: 'Deal Game Plan',
-                interview: 'Interview Prep Plan',
-                meeting: 'Meeting Strategy',
-                default: 'Your Game Plan'
-            };
-            const title = titles[response_type] || titles.default;
-
-            return `
-                <div class="results-card-body">
-                    <header class="digest-header">
-                        <img src="/images/arti_right.png" alt="Arti" />
-                        <div>
-                            <h2>${title}</h2>
-                            <p class="digest-header-meta">Actionable Advice</p>
-                        </div>
-                    </header>
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Quick Take</h3>
-                        <p class="digest-item-summary text-base">${quick_take}</p>
-                    </section>
-                    ${key_moves && key_moves.length > 0 ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Your Next Moves</h3>
-                        ${key_moves.map((move, index) => `
-                            <div class="digest-item">
-                                <div class="digest-item-number">${index + 1}</div>
-                                <div>
-                                    <h4 class="digest-item-headline">${move.action}</h4>
-                                    <p class="digest-item-summary">${move.why}</p>
-                                </div>
-                            </div>`).join('')}
-                    </section>` : ''}
-                    ${mermaid_chart ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Visual Strategy</h3>
-                        <div class="mermaid-container">
-                            <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                        </div>
-                        <div class="flex justify-end gap-2 mt-2">
-                            <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
-                        </div>
-                    </section>` : ''}
-                    ${talking_points && talking_points.length > 0 ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Key Talking Points</h3>
-                        <ul class="list-disc list-inside space-y-2">${talking_points.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
-                    </section>` : ''}
-                    ${email_template ? `
-                    <section class="digest-section">
-                        <h3 class="digest-section-title">Email Template</h3>
-                        <div class="digest-code-block copy-target">${email_template}</div>
-                        <button class="copy-btn" title="Copy to clipboard">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                        </button>
-                    </section>` : ''}
-                    ${next_steps ? `
-                    <footer class="digest-section">
-                        <h3 class="digest-section-title">Closing Thought</h3>
-                        <p class="digest-item-summary">${next_steps}</p>
-                    </footer>` : ''}
-                </div>`;
-        }
-    }
-
-    // Initialize the app when DOM is ready
-    document.addEventListener('DOMContentLoaded', () => {
-        const app = new AskArti();
-        window.askArti = app;
-        
-        // Add dot-typing animation style dynamically to avoid it being in the main CSS block
-        const style = document.createElement('style');
-        style.textContent = `
-            .dot-typing {
-                position: relative;
-                display: inline-block;
-                width: 6px;
-                height: 6px;
-                margin-right: 3px;
-                background-color: currentColor;
-                border-radius: 50%;
-                opacity: 0.7;
-                animation: dotTyping 1.5s infinite linear;
-            }
-            
-            @keyframes dotTyping {
-                0% { opacity: 0.2; transform: scale(0.8); }
-                20% { opacity: 1; transform: scale(1); }
-                50% { opacity: 0.2; transform: scale(0.8); }
-                100% { opacity: 0.2; transform: scale(0.8); }
-            }
-        `;
-        document.head.appendChild(style);
-    });
+// Initialize the app when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+   const app = new AskArti();
+   window.askArti = app;
+   
+   // Add dot-typing animation style dynamically to avoid it being in the main CSS block
+   const style = document.createElement('style');
+   style.textContent = `
+       .dot-typing {
+           position: relative;
+           display: inline-block;
+           width: 6px;
+           height: 6px;
+           margin-right: 3px;
+           background-color: currentColor;
+           border-radius: 50%;
+           opacity: 0.7;
+           animation: dotTyping 1.5s infinite linear;
+       }
+       
+       @keyframes dotTyping {
+           0% { opacity: 0.2; transform: scale(0.8); }
+           20% { opacity: 1; transform: scale(1); }
+           50% { opacity: 0.2; transform: scale(0.8); }
+           100% { opacity: 0.2; transform: scale(0.8); }
+       }
+   `;
+   document.head.appendChild(style);
+}); 
     </script>
 </body>
 </html>
