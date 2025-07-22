@@ -847,17 +847,104 @@
             // Focus the input field
             this.elements.chatInput.focus();
             
-            // Add sample prompt event listeners
-            document.querySelectorAll('.sample-prompt').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const promptText = e.currentTarget.dataset.prompt;
-                    this.elements.chatInput.value = promptText;
-                    this.elements.chatInput.focus();
-                });
-            });
+            // Update your existing sample-prompt event handlers in the init method
+		document.querySelectorAll('.sample-prompt').forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const promptText = e.currentTarget.dataset.prompt;
+        
+        // Special handling for daily news request
+        if (promptText.toLowerCase().includes('news') || 
+            promptText.toLowerCase().includes('brief') || 
+            promptText.toLowerCase().includes('digest')) {
+            this.fetchDailyNews();
+            return;
         }
-
+        
+        // Standard behavior for other prompts
+        this.elements.chatInput.value = promptText;
+        this.elements.chatInput.focus();
+    });
+});
+// Add this to the AskArti class's init method, after your existing sample-prompt event listeners
+document.querySelectorAll('.sample-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const promptText = e.currentTarget.dataset.prompt;
+        
+        // Special handling for daily news request
+        if (promptText.toLowerCase().includes('news') || 
+            promptText.toLowerCase().includes('brief') || 
+            promptText.toLowerCase().includes('digest')) {
+            this.fetchDailyNews();
+            return;
+        }
+        
+        // Standard behavior for other prompts
+        this.elements.chatInput.value = promptText;
+        this.elements.chatInput.focus();
+    });
+});
+// Add this method to the AskArti class
+async fetchDailyNews() {
+    // Show that we're working on it
+    this.addMessage("Get today's federal news briefing", true);
+    this.showTypingIndicator();
+    
+    try {
+        // Make direct API call for digest
+        const response = await fetch(CONFIG.API_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                situation: "Get today's federal news briefing", 
+                forceType: "digest"  // Force digest type regardless of content
+            }),
+        });
+        
+        if (!response.ok) throw new Error(`Server error: ${response.status}`);
+        
+        const data = await response.json();
+        this.hideTypingIndicator();
+        
+        // Handle the response appropriately
+        if (data.response_type === "digest") {
+            // Add a brief intro message
+            this.addMessage("Here's today's federal sales intelligence briefing:");
+            // Then add the structured digest card
+            this.addStructuredCard(data);
+            // Add to chat history
+            this.state.chatHistory.push({ 
+                role: 'user', 
+                content: "Get today's federal news briefing" 
+            });
+            this.state.chatHistory.push({ 
+                role: 'assistant', 
+                content: "Here's today's federal sales intelligence briefing:",
+                structuredData: data
+            });
+        } else if (data.message) {
+            // If we got a regular chat message back
+            this.addMessage(data.message);
+            // Add to chat history
+            this.state.chatHistory.push({ 
+                role: 'user', 
+                content: "Get today's federal news briefing" 
+            });
+            this.state.chatHistory.push({ 
+                role: 'assistant', 
+                content: data.message 
+            });
+        } else {
+            this.addMessage("I'm having trouble retrieving today's news briefing. Please try again in a few minutes.");
+        }
+        
+    } catch (error) {
+        this.hideTypingIndicator();
+        this.addMessage("I'm having trouble retrieving today's news briefing. Please try again in a few minutes.");
+        console.error("News briefing error:", error);
+    }
+}
         updateGreeting() {
             const hour = new Date().getHours();
             let greeting = '';
@@ -1052,86 +1139,106 @@
             this.elements.chatContainer.scrollTop = this.elements.chatContainer.scrollHeight;
         }
 
-        async sendMessage() {
-            const message = this.elements.chatInput.value.trim();
-            if (!message || this.state.pendingRequest) return;
+        // In the sendMessage method of AskArti class
+async sendMessage() {
+    const message = this.elements.chatInput.value.trim();
+    if (!message || this.state.pendingRequest) return;
+    
+    this.state.pendingRequest = true;
+    this.addMessage(message, true);
+    this.state.chatHistory.push({ role: 'user', content: message });
+    this.elements.chatInput.value = '';
+    this.showTypingIndicator();
+    
+    try {
+        // Request body preparation (your existing code)
+        const requestBody = {
+            situation: message,
+            mode: 'chat',
+            conversationHistory: this.state.chatHistory
+        };
+        
+        // If detected as structured request
+        const isStructuredRequest = this.detectStructuredRequest(message);
+        if (isStructuredRequest) {
+            requestBody.forceType = isStructuredRequest;
+        }
+        
+        // API call (your existing code)
+        const response = await fetch(CONFIG.API_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Server error (${response.status})`);
+        }
+        
+        const data = await response.json();
+        this.hideTypingIndicator();
+        
+        // Handle the response - THIS IS THE KEY PART:
+        
+        // Case 1: Direct structured response (old style)
+        if (data.response_type && !data.message) {
+            this.state.lastResponseType = data.response_type;
+            const introMessage = this.getIntroForStructuredResponse(data);
+            this.addMessage(introMessage);
+            this.addStructuredCard(data);
+            this.state.chatHistory.push({ 
+                role: 'assistant', 
+                content: introMessage,
+                structuredData: data
+            });
+        } 
+        // Case 2: Chat response with structured data (new unified style)
+        else if (data.message && data.structuredData) {
+            // First add the conversational message
+            this.addMessage(data.message);
             
-            this.state.pendingRequest = true;
-            this.addMessage(message, true);
-            this.state.chatHistory.push({ role: 'user', content: message });
-            this.elements.chatInput.value = '';
-            this.showTypingIndicator();
+            // Then add the structured card
+            this.addStructuredCard(data.structuredData);
             
-            try {
-                // Determine if this is a special command that needs structured output
-                const isStructuredRequest = this.detectStructuredRequest(message);
-                
-                // Prepare request body
-                const requestBody = {
-                    situation: message,
-                    mode: 'chat',
-                    conversationHistory: this.state.chatHistory
-                };
-                
-                // If it's a structured request, set appropriate type
-                if (isStructuredRequest) {
-                    requestBody.forceType = isStructuredRequest;
-                }
-                
-                // Send request to API
-                const response = await fetch(CONFIG.API_ENDPOINT, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(requestBody)
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`Server error (${response.status})`);
-                }
-                
-                const data = await response.json();
-                this.hideTypingIndicator();
-                
-                // Check if response has structured format
-                if (data.response_type && !data.message) {
-                    // Save last response type
-                    this.state.lastResponseType = data.response_type;
-                    
-                    // First add a brief introduction message
-                    const introMessage = this.getIntroForStructuredResponse(data);
-                    this.addMessage(introMessage);
-                    
-                    // Then add the structured card
-                    this.addStructuredCard(data);
-                    
-                    // Add to chat history as assistant response
-                    this.state.chatHistory.push({ 
-                        role: 'assistant', 
-                        content: introMessage,
-                        structuredData: data
-                    });
-                } else {
-                    // Standard chat response
-                    this.addMessage(data.message);
-                    this.state.chatHistory.push({ 
-                        role: 'assistant', 
-                        content: data.message 
-                    });
-                    
-                    // Show suggestion chips if included in response
-                    if (data.suggestions && data.suggestions.length > 0) {
-                        this.showCustomSuggestionChips(data.suggestions);
-                    }
-                }
-            } catch (error) {
-                console.error('Request failed:', error);
-                this.hideTypingIndicator();
-                this.addMessage("Sorry, I'm having trouble connecting right now. Please try again in a moment.");
-                this.showError(error.message || "Connection error");
-            } finally {
-                this.state.pendingRequest = false;
+            // Add to chat history
+            this.state.chatHistory.push({ 
+                role: 'assistant', 
+                content: data.message,
+                structuredData: data.structuredData
+            });
+            
+            // Show suggestion chips if included
+            if (data.suggestions && data.suggestions.length > 0) {
+                this.showCustomSuggestionChips(data.suggestions);
             }
         }
+        // Case 3: Simple chat response (no structured data)
+        else if (data.message) {
+            // Your existing code for handling chat messages
+            this.addMessage(data.message);
+            this.state.chatHistory.push({ 
+                role: 'assistant', 
+                content: data.message 
+            });
+            
+            if (data.suggestions && data.suggestions.length > 0) {
+                this.showCustomSuggestionChips(data.suggestions);
+            }
+        }
+        // Case 4: Unknown response format
+        else {
+            throw new Error("Invalid response format from server");
+        }
+    } catch (error) {
+        // Error handling (your existing code)
+        console.error('Request failed:', error);
+        this.hideTypingIndicator();
+        this.addMessage("Sorry, I'm having trouble connecting right now. Please try again in a moment.");
+        this.showError(error.message || "Connection error");
+    } finally {
+        this.state.pendingRequest = false;
+    }
+}
 
         // Get intro text for structured responses
         getIntroForStructuredResponse(data) {
