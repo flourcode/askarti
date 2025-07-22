@@ -847,25 +847,32 @@
         // Focus the input field
         this.elements.chatInput.focus();
         
-        // Set up sample prompt event listeners
-        document.querySelectorAll('.sample-prompt').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const promptText = e.currentTarget.dataset.prompt;
-                
-                // Special handling for daily news request
-                if (promptText.toLowerCase().includes('news') || 
-                    promptText.toLowerCase().includes('brief') || 
-                    promptText.toLowerCase().includes('digest')) {
-                    this.fetchDailyNews();
-                    return;
-                }
-                
-                // Standard behavior for other prompts
-                this.elements.chatInput.value = promptText;
-                this.elements.chatInput.focus();
-            });
-        });
+        // Update the click event handlers in the init() method
+document.querySelectorAll('.sample-prompt, .sample-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const promptText = e.currentTarget.dataset.prompt;
+        
+        // Special handling for daily news request
+        if (promptText.toLowerCase().includes('news') || 
+            promptText.toLowerCase().includes('brief') || 
+            promptText.toLowerCase().includes('digest')) {
+            this.fetchDailyNews();
+            return;
+        }
+        
+        // Special handling for playbook requests
+        if (promptText.toLowerCase().includes('playbook') ||
+            promptText.toLowerCase().includes('sales plan')) {
+            this.fetchSalesPlaybook(promptText);
+            return;
+        }
+        
+        // Standard behavior for other prompts
+        this.elements.chatInput.value = promptText;
+        this.elements.chatInput.focus();
+    });
+});
         
         // Set up sample link event listeners
         document.querySelectorAll('.sample-link').forEach(link => {
@@ -947,7 +954,69 @@
             console.error("News briefing error:", error);
         }
     }
-
+// Add this new method to handle playbook requests
+async fetchSalesPlaybook(prompt) {
+    // Show that we're working on it
+    this.addMessage(prompt, true);
+    this.showTypingIndicator();
+    
+    try {
+        // Make direct API call for playbook
+        const response = await fetch(CONFIG.API_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                situation: prompt, 
+                forceType: "playbook"  // Force playbook type regardless of content
+            }),
+        });
+        
+        if (!response.ok) throw new Error(`Server error: ${response.status}`);
+        
+        const data = await response.json();
+        this.hideTypingIndicator();
+        
+        // Handle the response appropriately
+        if (data.response_type === "playbook") {
+            // Add a brief intro message
+            const introMessage = `I've created a comprehensive sales playbook for ${data.sales_play_title}:`;
+            this.addMessage(introMessage);
+            
+            // Then add the structured playbook card
+            this.addStructuredCard(data);
+            
+            // Add to chat history
+            this.state.chatHistory.push({ 
+                role: 'user', 
+                content: prompt 
+            });
+            this.state.chatHistory.push({ 
+                role: 'assistant', 
+                content: introMessage,
+                structuredData: data
+            });
+        } else if (data.message) {
+            // If we got a regular chat message back
+            this.addMessage(data.message);
+            // Add to chat history
+            this.state.chatHistory.push({ 
+                role: 'user', 
+                content: prompt 
+            });
+            this.state.chatHistory.push({ 
+                role: 'assistant', 
+                content: data.message 
+            });
+        } else {
+            this.addMessage("I'm having trouble creating a sales playbook. Please try again with more specific details about your target customers and products.");
+        }
+        
+    } catch (error) {
+        this.hideTypingIndicator();
+        this.addMessage("I'm having trouble generating a sales playbook. Please try again with more details.");
+        console.error("Sales playbook error:", error);
+    }
+}
     updateGreeting() {
         const hour = new Date().getHours();
         let greeting = '';
