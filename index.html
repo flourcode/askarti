@@ -876,17 +876,11 @@ textarea, input[type="text"], select {
     100% { transform: translateX(100%); }
 }
 
-/* Fixed confidence color ranges - Red to Amber to Green */
-.confidence-0-25 { background: linear-gradient(90deg, #dc2626 0%, #ef4444 100%); } /* Red */
-.confidence-25-50 { background: linear-gradient(90deg, #ef4444 0%, #f59e0b 100%); } /* Red to Amber */
-.confidence-50-75 { background: linear-gradient(90deg, #f59e0b 0%, #10b981 100%); } /* Amber to Green */
-.confidence-75-100 { background: linear-gradient(90deg, #10b981 0%, #059669 100%); } /* Green */
-
-/* Opportunity card border colors */
-.opportunity-card.confidence-low::before { background: #ef4444; } /* Red */
-.opportunity-card.confidence-medium::before { background: #f59e0b; } /* Amber */
-.opportunity-card.confidence-high::before { background: #10b981; } /* Green */
-.opportunity-card.confidence-prime::before { background: #059669; } /* Dark Green */
+/* Fixed confidence meter bar colors - Red to Amber to Green based on width percentage */
+.confidence-fill.confidence-low { background: #ef4444; } /* Red for 0-39% */
+.confidence-fill.confidence-medium { background: #f59e0b; } /* Amber for 40-69% */
+.confidence-fill.confidence-high { background: #10b981; } /* Green for 70-84% */
+.confidence-fill.confidence-prime { background: #059669; } /* Dark Green for 85%+ */
 </style>
 
 </head>
@@ -1747,8 +1741,8 @@ renderOpportunityCard(opportunity, index) {
                <div class="text-right ml-4">
                    <div class="text-sm font-semibold text-gray-800 mb-1">${(confidence * 100).toFixed(0)}%</div>
                    <div class="confidence-meter w-16">
-                       <div class="confidence-fill ${confidenceClass}" style="width: ${confidence * 100}%"></div>
-                   </div>
+    <div class="confidence-fill ${confidenceClass}" style="width: ${confidence * 100}%"></div>
+</div>
                    <div class="text-xs text-gray-500 mt-1">${confidenceLabel}</div>
                </div>
            </div>
