@@ -843,6 +843,50 @@ textarea, input[type="text"], select {
    word-wrap: break-word !important;
    overflow-wrap: break-word !important;
 }
+/* === CONFIDENCE METER === */
+.confidence-meter {
+    width: 100%;
+    height: 6px;
+    background: #E5E7EB;
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.confidence-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: all 0.5s ease;
+    position: relative;
+}
+
+.confidence-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Fixed confidence color ranges - Red to Amber to Green */
+.confidence-0-25 { background: linear-gradient(90deg, #dc2626 0%, #ef4444 100%); } /* Red */
+.confidence-25-50 { background: linear-gradient(90deg, #ef4444 0%, #f59e0b 100%); } /* Red to Amber */
+.confidence-50-75 { background: linear-gradient(90deg, #f59e0b 0%, #10b981 100%); } /* Amber to Green */
+.confidence-75-100 { background: linear-gradient(90deg, #10b981 0%, #059669 100%); } /* Green */
+
+/* Opportunity card border colors */
+.opportunity-card.confidence-low::before { background: #ef4444; } /* Red */
+.opportunity-card.confidence-medium::before { background: #f59e0b; } /* Amber */
+.opportunity-card.confidence-high::before { background: #10b981; } /* Green */
+.opportunity-card.confidence-prime::before { background: #059669; } /* Dark Green */
 </style>
 
 </head>
@@ -968,8 +1012,7 @@ textarea, input[type="text"], select {
                            <span class="text-white font-bold text-sm">SI</span>
                        </div>
                        <h4 class="font-semibold text-gray-800 text-sm mb-1">SI BD Lead</h4>
-                       <p class="text-gray-600 text-xs">Systems Integrator</p>
-                   </div>
+                    </div>
                </div>
 
                <div class="icp-profile-card" data-icp="csp-bd-lead">
@@ -978,8 +1021,7 @@ textarea, input[type="text"], select {
                            <span class="text-white font-bold text-sm">CSP</span>
                        </div>
                        <h4 class="font-semibold text-gray-800 text-sm mb-1">CSP BD Lead</h4>
-                       <p class="text-gray-600 text-xs">Cloud Provider</p>
-                   </div>
+                       </div>
                </div>
 
                <div class="icp-profile-card" data-icp="sales-vp">
@@ -988,8 +1030,7 @@ textarea, input[type="text"], select {
                            <span class="text-white font-bold text-sm">VP</span>
                        </div>
                        <h4 class="font-semibold text-gray-800 text-sm mb-1">Sales VP</h4>
-                       <p class="text-gray-600 text-xs">Executive</p>
-                   </div>
+                       </div>
                </div>
 
                <div class="icp-profile-card" data-icp="saas-cro">
@@ -998,8 +1039,7 @@ textarea, input[type="text"], select {
                            <span class="text-white font-bold text-sm">CRO</span>
                        </div>
                        <h4 class="font-semibold text-gray-800 text-sm mb-1">SaaS CRO</h4>
-                       <p class="text-gray-600 text-xs">Revenue Leader</p>
-                   </div>
+                       </div>
                </div>
 
                <div class="icp-profile-card" data-icp="smb-bd-lead">
@@ -1008,8 +1048,7 @@ textarea, input[type="text"], select {
                            <span class="text-white font-bold text-sm">SMB</span>
                        </div>
                        <h4 class="font-semibold text-gray-800 text-sm mb-1">SMB BD Lead</h4>
-                       <p class="text-gray-600 text-xs">Small Business</p>
-                   </div>
+                       </div>
                </div>
            </div>
 
@@ -1055,7 +1094,7 @@ textarea, input[type="text"], select {
            
            <div class="flex flex-col sm:flex-row gap-3">
                <button id="generate-pipeline" class="btn btn-primary flex-1">
-                   <span id="generate-text">Generate Fake Pipeline</span>
+                   <span id="generate-text">Generate Pipeline</span>
                    <div id="generate-loader" class="loader hidden ml-2"></div>
                </button>
                <button id="save-profile" class="btn btn-secondary">Save Profile</button>
@@ -1748,17 +1787,17 @@ renderOpportunityCard(opportunity, index) {
 }
 
 getConfidenceClass(score) {
-   if (score >= 0.85) return 'confidence-prime';
-   if (score >= 0.7) return 'confidence-high';
-   if (score >= 0.4) return 'confidence-medium';
-   return 'confidence-low';
+    if (score >= 0.85) return 'confidence-prime';   // Dark Green (85%+)
+    if (score >= 0.7) return 'confidence-high';     // Green (70-84%)
+    if (score >= 0.4) return 'confidence-medium';   // Amber (40-69%)
+    return 'confidence-low';                         // Red (0-39%)
 }
 
 getConfidenceLabel(score) {
-   if (score >= 0.85) return 'Prime';
-   if (score >= 0.7) return 'High';
-   if (score >= 0.4) return 'Medium';
-   return 'Low';
+    if (score >= 0.85) return 'Prime';
+    if (score >= 0.7) return 'High';
+    if (score >= 0.4) return 'Medium';
+    return 'Low';
 }
 
 async analyzeOpportunity(opportunityId) {
