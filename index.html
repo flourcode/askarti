@@ -48,7 +48,7 @@ tailwind.config = {
         extend: {
             fontFamily: {
                 sans: ['Inter', 'sans-serif'],
-                serif: ['Merriweather', 'serif'] // Add the serif font
+                serif: ['Merriweather', 'serif']
             },
             colors: {
                 'brand-purple': '#8E88A7',
@@ -59,7 +59,13 @@ tailwind.config = {
                 },
                 'brand-yellow': { bg: '#FCF8E8', text: '#7A6A34', border: '#F5EED8' },
                 'brand-blue': { bg: '#E8EDF2', text: '#3A4F6A', border: '#D4DCE6' },
-                'brand-green': { bg: '#EBF0EA', text: '#4A5C4A', border: '#D8E2D9' }
+                'brand-green': { bg: '#EBF0EA', text: '#4A5C4A', border: '#D8E2D9' },
+                'confidence': {
+                    'low': '#ef4444',
+                    'medium': '#f59e0b', 
+                    'high': '#10b981',
+                    'prime': '#8b5cf6'
+                }
             }
         }
     }
@@ -74,6 +80,10 @@ tailwind.config = {
     --brand-gray-50: #F9FAFB;
     --brand-gray-100: #F3F4F6;
     --brand-gray-800: #1F2937;
+    --confidence-low: #ef4444;
+    --confidence-medium: #f59e0b;
+    --confidence-high: #10b981;
+    --confidence-prime: #8b5cf6;
 }
 
 html { scroll-behavior: smooth; }
@@ -133,6 +143,102 @@ body {
     margin-bottom: 1.5rem;
 }
 
+/* === ICP PROFILE CARDS === */
+.icp-profile-card {
+    background-color: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 1rem;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.icp-profile-card:hover {
+    border-color: var(--brand-purple);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(142, 136, 167, 0.15);
+}
+
+.icp-profile-card.selected {
+    border-color: var(--brand-purple);
+    background-color: var(--brand-purple-faint);
+    box-shadow: 0 4px 12px rgba(142, 136, 167, 0.2);
+}
+
+/* === CONFIDENCE METER === */
+.confidence-meter {
+    width: 100%;
+    height: 6px;
+    background: #E5E7EB;
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.confidence-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: all 0.5s ease;
+    position: relative;
+}
+
+.confidence-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.confidence-0-25 { background: linear-gradient(90deg, var(--confidence-low) 0%, #dc2626 100%); }
+.confidence-25-50 { background: linear-gradient(90deg, #dc2626 0%, var(--confidence-medium) 100%); }
+.confidence-50-75 { background: linear-gradient(90deg, var(--confidence-medium) 0%, var(--confidence-high) 100%); }
+.confidence-75-100 { background: linear-gradient(90deg, var(--confidence-high) 0%, var(--confidence-prime) 100%); }
+
+/* === OPPORTUNITY CARDS === */
+.opportunity-card {
+    background-color: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.opportunity-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+}
+
+.opportunity-card.confidence-low::before { background: var(--confidence-low); }
+.opportunity-card.confidence-medium::before { background: var(--confidence-medium); }
+.opportunity-card.confidence-high::before { background: var(--confidence-high); }
+.opportunity-card.confidence-prime::before { background: var(--confidence-prime); }
+
+.opportunity-card:hover {
+    transform: translateY(-1px);
+    border-color: var(--brand-purple);
+    box-shadow: 0 4px 12px rgba(142, 136, 167, 0.15);
+}
+
 /* === TYPOGRAPHY === */
 h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
@@ -145,7 +251,7 @@ p, li, span {
 }
 
 /* === FORM INPUTS === */
-textarea, input[type="text"] {
+textarea, input[type="text"], select {
     font-size: 16px !important;
     transition: all 0.2s ease;
     font-weight: 400;
@@ -153,7 +259,7 @@ textarea, input[type="text"] {
     line-height: 1.4;
 }
 
-#situation-input, #chat-input {
+#situation-input, #chat-input, #target-agencies, #solution-categories, #deal-size {
     font-weight: 400 !important;
     color: #4B5563 !important;
     letter-spacing: 0.005em;
@@ -168,7 +274,7 @@ textarea, input[type="text"] {
     line-height: 1.4;
 }
 
-#situation-input:focus, #chat-input:focus {
+#situation-input:focus, #chat-input:focus, #target-agencies:focus, #solution-categories:focus, #deal-size:focus {
     color: #1F2937;
     outline: none;
     ring: 1px;
@@ -482,13 +588,14 @@ textarea, input[type="text"] {
 }
 
 .digest-item-summary, .digest-item-insight {
-    font-family: 'Merriweather', serif; /* Use the new serif font */
-    font-size: 1rem; /* Slightly larger for better readability */
-    line-height: 1.7; /* Increase line spacing */
+    font-family: 'Merriweather', serif;
+    font-size: 1rem;
+    line-height: 1.7;
     color: #374151;
 	word-wrap: break-word;
     overflow-wrap: break-word;
 }
+
 .digest-item-insight {
     font-style: italic;
     color: var(--brand-purple);
@@ -522,6 +629,38 @@ textarea, input[type="text"] {
     border-radius: 9999px;
     margin-right: 0.5rem;
     margin-bottom: 0.5rem;
+}
+
+/* === TAGS === */
+.tag {
+    display: inline-block;
+    background-color: var(--brand-purple-faint);
+    color: var(--brand-purple);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(142, 136, 167, 0.3);
+    margin-right: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.tag-urgent {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.tag-shaping {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #d97706;
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+.tag-active {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    border-color: rgba(16, 185, 129, 0.3);
 }
 
 /* === MISC === */
@@ -567,6 +706,25 @@ textarea, input[type="text"] {
     .digest-card .results-card-body { padding: 1.25rem; }
     .digest-header h2 { font-size: 1.5rem; }
     .digest-item-headline { font-size: 1rem; }
+    .auto-expand {
+        min-height: calc(4 * 1.4em + 1.5rem);
+        max-height: calc(8 * 1.4em + 1.5rem);
+    }
+    #situation-input:focus {
+        font-size: 16px !important;
+        transform: none;
+    }
+    .auto-expand.scrollable {
+        -webkit-overflow-scrolling: touch;
+        overflow-y: auto;
+    }
+    .icp-profile-card {
+        padding: 0.75rem;
+        min-height: 100px;
+    }
+    .opportunity-card {
+        padding: 0.75rem;
+    }
 }
 
 @media (max-width: 768px) {
@@ -577,6 +735,7 @@ textarea, input[type="text"] {
     .copy-playbook-btn { align-self: stretch; justify-content: center; width: 100%; }
     .playbook-persona-circle { min-width: 2rem !important; width: 2rem !important; height: 2rem !important; flex-shrink: 0 !important; font-size: 0.75rem !important; }
 }
+
 .sample-link {
     color: var(--brand-purple);
     font-weight: 600;
@@ -606,6 +765,7 @@ textarea, input[type="text"] {
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(142, 136, 167, 0.3);
 }
+
 .border-l-3 {
     border-left-width: 3px;
 }
@@ -625,55 +785,53 @@ textarea, input[type="text"] {
 .border-yellow-300 {
     border-left-color: #fde047;
 }
-
 .border-red-300 {
-    border-left-color: #fca5a5;
+   border-left-color: #fca5a5;
 }
 .border-orange-300 {
-    border-left-color: #fdba74;
+   border-left-color: #fdba74;
 }
 
 .border-indigo-300 {
-    border-left-color: #a5b4fc;
+   border-left-color: #a5b4fc;
 }
 
 /* This is the corrected block */
 .results-card,
 .digest-card {
-    box-sizing: border-box !important; /* You can probably remove !important here too */
+   box-sizing: border-box !important;
 }
 
 .results-card-body,
 .digest-card .results-card-body {
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-    word-wrap: break-word !important;
-    overflow-wrap: break-word !important;
+   max-width: 100% !important;
+   box-sizing: border-box !important;
+   word-wrap: break-word !important;
+   overflow-wrap: break-word !important;
 }
 
 .digest-header,
 .digest-section,
 .digest-item {
-    max-width: 100% !important;
-    box-sizing: border-box !important;
+   max-width: 100% !important;
+   box-sizing: border-box !important;
 }
 
 .digest-item > div:nth-child(2) {
-    min-width: 0 !important;
-    flex: 1 !important;
+   min-width: 0 !important;
+   flex: 1 !important;
 }
 
 .digest-item-summary,
 .digest-item-insight,
 .digest-item-headline,
 .digest-code-block {
-    max-width: 100% !important;
-    word-wrap: break-word !important;
-    overflow-wrap: break-word !important;
-    box-sizing: border-box !important;
+   max-width: 100% !important;
+   word-wrap: break-word !important;
+   overflow-wrap: break-word !important;
+   box-sizing: border-box !important;
 }
 
-/* Fix all text content in renderers */
 .results-card p,
 .results-card h1,
 .results-card h2,
@@ -681,1432 +839,1699 @@ textarea, input[type="text"] {
 .results-card h4,
 .results-card li,
 .results-card span {
-    max-width: 100% !important;
-    word-wrap: break-word !important;
-    overflow-wrap: break-word !important;
-}
-@media (max-width: 640px) {
-    .auto-expand {
-        min-height: calc(4 * 1.4em + 1.5rem); /* Changed from 3 to 4 rows */
-        max-height: calc(8 * 1.4em + 1.5rem); /* Changed from 6 to 8 rows */
-    }
-}
-@media (max-width: 640px) {
-    #situation-input:focus {
-        /* Prevent zoom on iOS */
-        font-size: 16px !important;
-        /* Better mobile interaction */
-        transform: none;
-    }
-    
-    .auto-expand.scrollable {
-        /* Smoother scrolling on mobile */
-        -webkit-overflow-scrolling: touch;
-        overflow-y: auto;
-    }
+   max-width: 100% !important;
+   word-wrap: break-word !important;
+   overflow-wrap: break-word !important;
 }
 </style>
 
 </head>
 <body class="bg-brand-gray-50">
 
-   <div class="main-container pt-4 pb-20">
-       
-       <header class="text-center mb-3">
-    <a href="/" aria-label="AskArti Home" class="inline-block">
-        <img src="/images/asklite.png" alt="AskArti Logo" class="h-20 w-auto mx-auto sm:h-24">
-    </a>
+  <div class="main-container pt-4 pb-20">
+      
+      <header class="text-center mb-3">
+   <a href="/" aria-label="AskArti Home" class="inline-block">
+       <img src="/images/asklite.png" alt="AskArti Logo" class="h-20 w-auto mx-auto sm:h-24">
+   </a>
 </header>
 
-       <main id="main-content">
-    <div id="quick-mode" class="mode-content fade-in">
-<div class="io-card">
-    <label for="situation-input" class="block text-sm font-bold text-brand-gray-700 mb-3" id="greeting-label">
-        Good morning! I'm Arti! Ready to tackle the day?
-    </label>
-    <div class="textarea-container">
-        <textarea 
-            id="situation-input" 
-            rows="3"
-            class="w-full p-3 pr-12 text-base border border-gray-300 rounded-lg resize-none auto-expand focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300"
-            placeholder="Paste a news article, describe a deal, or outline a sales challenge..."
-            maxlength="2500"></textarea>
-        <button id="clear-btn" class="clear-btn" title="Clear input" aria-label="Clear input">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </button>
-    </div>
+      <main id="main-content">
+   <!-- Quick Mode (Game Plans) -->
+   <div id="quick-mode" class="mode-content fade-in">
+       <div class="io-card">
+           <label for="situation-input" class="block text-sm font-bold text-brand-gray-700 mb-3" id="greeting-label">
+               Good morning! I'm Arti! Ready to tackle the day?
+           </label>
+           <div class="textarea-container">
+               <textarea 
+                   id="situation-input" 
+                   rows="3"
+                   class="w-full p-3 pr-12 text-base border border-gray-300 rounded-lg resize-none auto-expand focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300"
+                   placeholder="Paste a news article, describe a deal, or outline a sales challenge..."
+                   maxlength="2500"></textarea>
+               <button id="clear-btn" class="clear-btn" title="Clear input" aria-label="Clear input">
+                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                   </svg>
+               </button>
+           </div>
 
-    <div class="text-xs text-gray-500 mt-1.5">
-        <span class="hint-text">Customize any example below, then press 'Ask Arti'.</span>
-        <span id="char-count" class="hidden">0/2500</span>
-    </div>
-<div class="mt-3 text-sm text-gray-600 leading-relaxed">
-    <div class="grid grid-cols-1 gap-2 text-xs">
-        <!-- RED -->
-        <div class="bg-gray-50 p-2 rounded border-l-3 border-red-300">
-            <strong>🎯 Prospecting:</strong> 
-            <a href="#" class="sample-link" data-text="Prospect: Just took over Fed Sales at Staples. Need to prospect for office supplies and facility management services at the VA. What's my best approach?">Copy this format</a> 
-            with your company and target agency
-        </div>
-        
-        <!-- ORANGE -->
-        <div class="bg-gray-50 p-2 rounded border-l-3 border-orange-300">
-            <strong>📋 Sales Playbooks:</strong> 
-            <a href="#" class="sample-link" data-text="Create a comprehensive sales playbook for selling cloud migration services to the Department of Veterans Affairs. Focus on healthcare modernization, data analytics, and patient experience improvements. Include key stakeholders like CIOs, CTOs, and healthcare administrators.">Try this example</a>, 
-            then swap in your agency and solution
-        </div>
-        
-        <!-- YELLOW -->
-        <div class="bg-gray-50 p-2 rounded border-l-3 border-yellow-300">
-            <strong>📄 GTM from Text:</strong> 
-            <a href="#" class="sample-link" data-text="Analyze this news: Today, the Chief Digital and Artificial Intelligence Office (CDAO) announced contract awards to leading U.S. frontier AI companies to accelerate Department of Defense (DoD) adoption of advanced AI capabilities to address critical national security challenges. Frontier AI companies lead development of the most advanced AI models and technologies, conduct insightful research into the use of frontier AI, and pioneer efforts to address both the potential benefits and risks of frontier AI technologies. 
+           <div class="text-xs text-gray-500 mt-1.5">
+               <span class="hint-text">Customize any example below, then press 'Ask Arti'.</span>
+               <span id="char-count" class="hidden">0/2500</span>
+           </div>
+           <div class="mt-3 text-sm text-gray-600 leading-relaxed">
+               <div class="grid grid-cols-1 gap-2 text-xs">
+                   <!-- RED -->
+                   <div class="bg-gray-50 p-2 rounded border-l-3 border-red-300">
+                       <strong>🎯 Prospecting:</strong> 
+                       <a href="#" class="sample-link" data-text="Prospect: Just took over Fed Sales at Staples. Need to prospect for office supplies and facility management services at the VA. What's my best approach?">Copy this format</a> 
+                       with your company and target agency
+                   </div>
+                   
+                   <!-- ORANGE -->
+                   <div class="bg-gray-50 p-2 rounded border-l-3 border-orange-300">
+                       <strong>📋 Sales Playbooks:</strong> 
+                       <a href="#" class="sample-link" data-text="Create a comprehensive sales playbook for selling cloud migration services to the Department of Veterans Affairs. Focus on healthcare modernization, data analytics, and patient experience improvements. Include key stakeholders like CIOs, CTOs, and healthcare administrators.">Try this example</a>, 
+                       then swap in your agency and solution
+                   </div>
+                   
+                   <!-- YELLOW -->
+                   <div class="bg-gray-50 p-2 rounded border-l-3 border-yellow-300">
+                       <strong>📄 GTM from Text:</strong> 
+                       <a href="#" class="sample-link" data-text="Analyze this news: Today, the Chief Digital and Artificial Intelligence Office (CDAO) announced contract awards to leading U.S. frontier AI companies to accelerate Department of Defense (DoD) adoption of advanced AI capabilities to address critical national security challenges...">Use this template</a> 
+                       or just paste any article/press release
+                   </div>
+                   
+                   <!-- GREEN -->
+                   <div class="bg-gray-50 p-2 rounded border-l-3 border-green-300">
+                       <strong>📈 Bull/Bear Takes:</strong> 
+                       <a href="#" class="sample-link" data-text="Earnings: (NASDAQ: AMZN) today announced financial results for its first quarter ended March 31, 2025...">Try this earnings example</a> 
+                       or paste any financial news
+                   </div>
+                   
+                   <!-- BLUE -->
+                   <div class="bg-gray-50 p-2 rounded border-l-3 border-blue-300">
+                       <strong>📰 Daily Brief:</strong> 
+                       <a href="#" class="sample-link" data-text="Get today's federal sales briefing" data-type="digest">Get today's federal news</a> 
+                       with contract opportunities and market intel
+                   </div>
+               </div>
+           </div>
+       </div>
 
-The awards to Anthropic, Google, OpenAI, and xAI – each with a $200M ceiling – will enable the Department to leverage the technology and talent of U.S. frontier AI companies to develop agentic AI workflows across a variety of mission areas.  Establishing these partnerships will broaden DoD use of and experience in frontier AI capabilities and increase the ability of these companies to understand and address critical national security needs with the most advanced AI capabilities U.S. industry has to offer. 
+       <div class="mt-4 border-t border-gray-200 pt-4">
+           <button id="ask-arti-btn" class="btn btn-primary w-full transition-all duration-300">
+               <span id="ask-arti-text">Ask Arti</span>
+               <div id="ask-arti-loader" class="loader hidden ml-2"></div>
+           </button>
+           
+           <div id="loading-message-container" class="text-center py-2 hidden">
+               <p id="loading-message" class="text-gray-600 font-medium"></p>
+           </div>
+       </div>
+   </div>
 
-“The adoption of AI is transforming the Department’s ability to support our warfighters and maintain strategic advantage over our adversaries,” said Chief Digital and AI Officer Dr. Doug Matty. “Leveraging commercially available solutions into an integrated capabilities approach will accelerate the use of advanced AI as part of our Joint mission essential tasks in our warfighting domain as well as intelligence, business, and enterprise information systems.” 
+   <!-- Chat Mode -->
+   <div id="chat-mode" class="mode-content hidden fade-in">
+       <div class="io-card">
+           <div class="chat-container mb-4" id="chat-container">
+               <div id="chat-messages" class="space-y-4">
+                   <div class="flex justify-start">
+                       <div class="chat-message-arti p-3 text-sm max-w-[85%]">
+                           <p id="chat-greeting">Hey! I'm Arti. I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.</p>
+                       </div>
+                   </div>
+               </div>
+           </div>
+           <div class="flex gap-2">
+               <input type="text" id="chat-input" class="flex-1 p-3 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300" placeholder="Type your message..." maxlength="2000">
+               <button id="chat-send-btn" class="btn btn-primary px-4">
+                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" /></svg>
+               </button>
+           </div>
+       </div>
+   </div>
 
-DoD is implementing a commercial-first approach to accelerating DoD adoption of AI. Today’s awards bring in the best U.S.-based frontier AI talent to help apply cutting-edge AI to solve DoD use cases.  CDAO is also providing access to many of the latest generative AI (GenAI) models for general purpose use to Combatant Commands, the Office of the Secretary of Defense, and the Joint Staff via Army’s Enterprise Large Language Model Workspace powered by Ask Sage, and to the broader enterprise via embedded AI models within DoD enterprise data and AI platforms, including the Advancing Analytics (Advana) platform, Maven Smart System, and Edge Data Mesh nodes, which enable AI integration into workflows that occur within these data environments themselves. Finally, DoD is partnering with the General Services Administration (GSA) to bring the best AI technologies to the federal government while leveraging whole-of-government buying power for AI production and compute resources.">Use this template</a> 
-            or just paste any article/press release
-        </div>
-        
-        <!-- GREEN -->
-        <div class="bg-gray-50 p-2 rounded border-l-3 border-green-300">
-            <strong>📈 Bull/Bear Takes:</strong> 
-            <a href="#" class="sample-link" data-text="Earnings: (NASDAQ: AMZN) today announced financial results for
-its first quarter ended March 31, 2025.
-- Net sales increased 9% to $155.7 billion in the first quarter, compared with $143.3 billion in first quarter 2024.
-Excluding the $1.4 billion unfavorable impact from year-over-year changes in foreign exchange rates throughout the
-quarter, net sales increased 10% compared with first quarter 2024.
-- North America segment sales increased 8% year-over-year to $92.9 billion.
-- International segment sales increased 5% year-over-year to $33.5 billion, or increased 8% excluding changes
-in foreign exchange rates.
-- AWS segment sales increased 17% year-over-year to $29.3 billion.
-- Operating income increased to $18.4 billion in the first quarter, compared with $15.3 billion in first quarter 2024.
-- North America segment operating income was $5.8 billion, compared with $5.0 billion in first quarter 2024.
-- International segment operating income was $1.0 billion, compared with $0.9 billion in first quarter 2024.
-- AWS segment operating income was $11.5 billion, compared with $9.4 billion in first quarter 2024.
-- Net income increased to $17.1 billion in the first quarter, or $1.59 per diluted share, compared with $10.4 billion, or
-$0.98 per diluted share, in first quarter 2024.
-- Operating cash flow increased 15% to $113.9 billion for the trailing twelve months, compared with $99.1 billion for
-the trailing twelve months ended March 31, 2024.
-- Free cash flow decreased to $25.9 billion for the trailing twelve months, compared with $50.1 billion for the trailing
-twelve months ended March 31, 2024.
-We're pleased with the start to 2025, especially our pace of innovation and progress in continuing to improve customer
-experiences, said Andy Jassy, President and CEO, Amazon.">Try this earnings example</a> 
-            or paste any financial news
-        </div>
-        
-        <!-- BLUE -->
-        <div class="bg-gray-50 p-2 rounded border-l-3 border-blue-300">
-            <strong>📰 Daily Brief:</strong> 
-            <a href="#" class="sample-link" data-text="Get today's federal sales briefing" data-type="digest">Get today's federal news</a> 
-            with contract opportunities and market intel
-        </div>
-    </div>
-</div>
-    </div>
+   <!-- NEW: Pipeliner Mode -->
+   <div id="pipeliner-mode" class="mode-content hidden fade-in">
+       <!-- ICP Configuration Section -->
+       <div class="io-card mb-4">
+           <h3 class="text-lg font-bold text-brand-gray-800 mb-4">Choose a Pipeline Persona</h3>
+           
+           <!-- Predefined ICPs -->
+           <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-4">
+               <div class="icp-profile-card" data-icp="si-bd-lead">
+                   <div class="text-center">
+                       <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
+                           <span class="text-white font-bold text-sm">SI</span>
+                       </div>
+                       <h4 class="font-semibold text-gray-800 text-sm mb-1">SI BD Lead</h4>
+                       <p class="text-gray-600 text-xs">Systems Integrator</p>
+                   </div>
+               </div>
 
-    <!-- REPLACE THIS SECTION in your HTML: -->
+               <div class="icp-profile-card" data-icp="csp-bd-lead">
+                   <div class="text-center">
+                       <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
+                           <span class="text-white font-bold text-sm">CSP</span>
+                       </div>
+                       <h4 class="font-semibold text-gray-800 text-sm mb-1">CSP BD Lead</h4>
+                       <p class="text-gray-600 text-xs">Cloud Provider</p>
+                   </div>
+               </div>
 
-    <div class="mt-4 border-t border-gray-200 pt-4">
-        <button id="ask-arti-btn" class="btn btn-primary w-full transition-all duration-300">
-            <span id="ask-arti-text">Ask Arti</span>
-            <div id="ask-arti-loader" class="loader hidden ml-2"></div>
-        </button>
-        
-        <!-- MOVE LOADING MESSAGE HERE - right after button -->
-        <div id="loading-message-container" class="text-center py-2 hidden">
-            <p id="loading-message" class="text-gray-600 font-medium"></p>
-        </div>
-    </div>
-</div>
-<div id="chat-mode" class="mode-content hidden fade-in">
-    <div class="io-card">
-        <div class="chat-container mb-4" id="chat-container">
-            <div id="chat-messages" class="space-y-4">
-                <div class="flex justify-start">
-                    <div class="chat-message-arti p-3 text-sm max-w-[85%]">
-                        <p id="chat-greeting">Hey! I'm Arti. I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="flex gap-2">
-            <input type="text" id="chat-input" class="flex-1 p-3 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300" placeholder="Type your message..." maxlength="2000">
-            <button id="chat-send-btn" class="btn btn-primary px-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" /></svg>
-            </button>
-        </div>
-    </div>
-</div>
+               <div class="icp-profile-card" data-icp="sales-vp">
+                   <div class="text-center">
+                       <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
+                           <span class="text-white font-bold text-sm">VP</span>
+                       </div>
+                       <h4 class="font-semibold text-gray-800 text-sm mb-1">Sales VP</h4>
+                       <p class="text-gray-600 text-xs">Executive</p>
+                   </div>
+               </div>
+
+               <div class="icp-profile-card" data-icp="saas-cro">
+                   <div class="text-center">
+                       <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
+                           <span class="text-white font-bold text-sm">CRO</span>
+                       </div>
+                       <h4 class="font-semibold text-gray-800 text-sm mb-1">SaaS CRO</h4>
+                       <p class="text-gray-600 text-xs">Revenue Leader</p>
+                   </div>
+               </div>
+
+               <div class="icp-profile-card" data-icp="smb-bd-lead">
+                   <div class="text-center">
+                       <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
+                           <span class="text-white font-bold text-sm">SMB</span>
+                       </div>
+                       <h4 class="font-semibold text-gray-800 text-sm mb-1">SMB BD Lead</h4>
+                       <p class="text-gray-600 text-xs">Small Business</p>
+                   </div>
+               </div>
+           </div>
+
+           <!-- Custom Profile Configuration -->
+           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+               <div>
+                   <label class="block text-sm font-medium text-gray-700 mb-2">Target Agencies</label>
+                   <select id="target-agencies" multiple class="w-full p-3 border border-gray-300 rounded-lg">
+                       <option value="dod">Department of Defense</option>
+                       <option value="dhs">Department of Homeland Security</option>
+                       <option value="va">Veterans Affairs</option>
+                       <option value="hhs">Health & Human Services</option>
+                       <option value="treasury">Treasury</option>
+                       <option value="gsa">General Services Administration</option>
+                       <option value="nasa">NASA</option>
+                       <option value="doe">Department of Energy</option>
+                   </select>
+               </div>
+               <div>
+                   <label class="block text-sm font-medium text-gray-700 mb-2">Solution Categories</label>
+                   <select id="solution-categories" multiple class="w-full p-3 border border-gray-300 rounded-lg">
+                       <option value="cloud">Cloud Services</option>
+                       <option value="cybersecurity">Cybersecurity</option>
+                       <option value="ai-ml">AI/Machine Learning</option>
+                       <option value="data-analytics">Data & Analytics</option>
+                       <option value="modernization">IT Modernization</option>
+                       <option value="infrastructure">Infrastructure</option>
+                       <option value="software">Software Development</option>
+                       <option value="professional-services">Professional Services</option>
+                   </select>
+               </div>
+               <div>
+                   <label class="block text-sm font-medium text-gray-700 mb-2">Deal Size Range</label>
+                   <select id="deal-size" class="w-full p-3 border border-gray-300 rounded-lg">
+                       <option value="all">All Sizes</option>
+                       <option value="small">$250K - $5M</option>
+                       <option value="medium">$5M - $50M</option>
+                       <option value="large">$50M - $500M</option>
+                       <option value="enterprise">$500M+</option>
+                   </select>
+               </div>
+           </div>
+           
+           <div class="flex flex-col sm:flex-row gap-3">
+               <button id="generate-pipeline" class="btn btn-primary flex-1">
+                   <span id="generate-text">Generate Pipeline</span>
+                   <div id="generate-loader" class="loader hidden ml-2"></div>
+               </button>
+               <button id="save-profile" class="btn btn-secondary">Save Profile</button>
+           </div>
+       </div>
+
+       <!-- Pipeline Loading Message -->
+       <div id="pipeline-loading-container" class="text-center py-8 hidden">
+           <div class="inline-flex items-center space-x-3">
+               <div class="loader"></div>
+               <p id="pipeline-loading-message" class="text-gray-600 font-medium">Analyzing federal opportunities...</p>
+           </div>
+       </div>
+
+       <!-- Pipeline Results Container -->
+       <div id="pipeline-results-container" class="fade-in"></div>
+   </div>
 </main>
 
 <!-- Error message -->
 <div id="error-message" class="bg-red-100 border border-red-300 rounded-lg p-4 text-center my-4 hidden">
-    <p class="text-red-800 font-semibold mb-1">¯\_(ツ)_/¯ Oops, that didn't work.</p>
-    <p class="text-red-700 text-sm" id="error-details">We're having trouble connecting to Arti.</p>
+   <p class="text-red-800 font-semibold mb-1">¯\_(ツ)_/¯ Oops, that didn't work.</p>
+   <p class="text-red-700 text-sm" id="error-details">We're having trouble connecting to Arti.</p>
 </div>
 
 <!-- Results container -->
 <div id="results-container" class="fade-in"></div>
 
+<!-- Updated Mode Switcher with Pipeliner -->
 <div class="mt-2 text-center">
-    <p class="text-sm text-gray-500 mb-2">Need something different? Switch modes.</p>
-    <div class="io-card max-w-sm mx-auto p-2">
-        <div class="flex bg-brand-gray-100 p-1 rounded-xl">
-            <button class="mode-btn flex-1 px-3 py-2 rounded-lg font-semibold text-sm transition-all active" data-mode="quick">
-                ⚡️ Game Plans
+   <p class="text-sm text-gray-500 mb-2">Need something different? Switch modes.</p>
+   <div class="io-card max-w-lg mx-auto p-2">
+       <div class="flex bg-brand-gray-100 p-1 rounded-xl">
+           <button class="mode-btn flex-1 px-2 py-2 rounded-lg font-semibold text-xs transition-all active" data-mode="quick">
+               ⚡️ Game Plans
+           </button>
+           <button class="mode-btn flex-1 px-2 py-2 rounded-lg font-semibold text-xs transition-all" data-mode="chat">
+               💬 Chat
+           </button>
+           <button class="mode-btn flex-1 px-2 py-2 rounded-lg font-semibold text-xs transition-all" data-mode="pipeliner">
+               📊 Pipeliner
+           </button>
+       </div>
+   </div>
+</div>
+  
+  <!-- Footer and modal stay outside -->
+  <footer class="text-center mt-12 text-xs text-gray-500">
+  <div class="flex justify-center gap-4 mb-4">
+      <a href="#" id="about-btn" class="font-medium text-brand-purple hover:underline">About AskArti</a>
+      <a href="mailto:mark@subhoo.com" class="font-medium text-brand-purple hover:underline">Contact</a>
+  </div>
+  <p class="mb-3 text-gray-600">
+  You're interacting with an AI assistant trained through June 2024. AskArti offers general guidance for informational purposes only and isn't a substitute for professional advice. Always evaluate recommendations carefully before making decisions.
+</p>
+  <p>
+      For Federal Sellers by Federal Sellers.
+      <br>
+      Powered by AWS.
+      <br>
+      © 2025 AskArti.com.
+  </p>
+</footer>
+
+</div>
+
+<div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+        <div class="flex justify-between items-start mb-4">
+            <h2 class="text-xl font-bold text-gray-900">About AskArti</h2>
+            <button id="close-about" class="text-gray-400 hover:text-gray-600">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
-            <button class="mode-btn flex-1 px-3 py-2 rounded-lg font-semibold text-sm transition-all" data-mode="chat">
-                💬 Chat with Arti
-            </button>
+        </div>
+        <div class="space-y-4 text-gray-700 text-sm">
+            <p>AskArti is your 24/7 AI sales coach, designed for federal sales professionals. Get instant advice on stuck deals, meeting preparation, and sales strategy.</p>
+            <div class="mt-4 pt-4 border-t">
+                <h3 class="font-semibold text-gray-800 mb-2">Privacy & Technology</h3>
+                <p class="text-gray-600">AskArti uses advanced AI models. We do not store, log, or persist any conversation data. All processing occurs in-memory and is discarded.</p>
+            </div>
         </div>
     </div>
 </div>
-   
-   <!-- Footer and modal stay outside -->
-   <footer class="text-center mt-12 text-xs text-gray-500">
-   <div class="flex justify-center gap-4 mb-4">
-       <a href="#" id="about-btn" class="font-medium text-brand-purple hover:underline">About AskArti</a>
-       <a href="mailto:mark@subhoo.com" class="font-medium text-brand-purple hover:underline">Contact</a>
-   </div>
-   <p class="mb-3 text-gray-600">
-   You're interacting with an AI assistant trained through June 2024. AskArti offers general guidance for informational purposes only and isn't a substitute for professional advice. Always evaluate recommendations carefully before making decisions.
-</p>
-   <p>
-       For Federal Sellers by Federal Sellers.
-       <br>
-       Powered by AWS.
-       <br>
-       © 2025 AskArti.com.
-   </p>
-</footer>
 
- </div>
- 
- <div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-     <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
-         <div class="flex justify-between items-start mb-4">
-             <h2 class="text-xl font-bold text-gray-900">About AskArti</h2>
-             <button id="close-about" class="text-gray-400 hover:text-gray-600">
-                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-             </button>
-         </div>
-         <div class="space-y-4 text-gray-700 text-sm">
-             <p>AskArti is your 24/7 AI sales coach, designed for federal sales professionals. Get instant advice on stuck deals, meeting preparation, and sales strategy.</p>
-             <div class="mt-4 pt-4 border-t">
-                 <h3 class="font-semibold text-gray-800 mb-2">Privacy & Technology</h3>
-                 <p class="text-gray-600">AskArti uses advanced AI models. We do not store, log, or persist any conversation data. All processing occurs in-memory and is discarded.</p>
-             </div>
-         </div>
-     </div>
- </div>
 <script>
 // --- Time-based greeting functionality ---
 function getTimeBasedGreeting() {
-  const hour = new Date().getHours();
-  const name = "I'm Arti!";
-  
-  if (hour >= 5 && hour < 12) {
-      return `Good morning! ${name} Ready to tackle the day?`;
-  } else if (hour >= 12 && hour < 17) {
-      return `Good afternoon! ${name} How can I help?`;
-  } else if (hour >= 17 && hour < 21) {
-      return `Good evening! ${name} What's on your mind?`;
-  } else {
-      return `Burning the midnight oil? ${name} I'm here to help.`;
-  }
-}
-
-function updateGreetings() {
-  const greeting = getTimeBasedGreeting();
-  const greetingLabel = document.getElementById('greeting-label');
-  const chatGreeting = document.getElementById('chat-greeting');
-  
-  if (greetingLabel) {
-      greetingLabel.textContent = greeting;
-  }
-  
-  if (chatGreeting) {
-      const chatText = greeting.replace('Hey, I\'m Arti!', 'I\'m Arti.');
-      chatGreeting.textContent = `${chatText} I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.`;
-  }
-}
-
-// --- Mode Toggle Active State ---
-const modeButtons = document.querySelectorAll('.mode-btn');
-modeButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-      modeButtons.forEach(b => b.classList.remove('active', 'bg-white', 'text-brand-purple'));
-      btn.classList.add('active', 'bg-white', 'text-brand-purple');
-      const inactiveBtn = [...modeButtons].find(b => !b.classList.contains('active'));
-      if(inactiveBtn) {
-          inactiveBtn.classList.add('text-gray-600');
-          inactiveBtn.classList.remove('bg-white', 'text-brand-purple');
-      }
-  });
-});
-document.querySelector('.mode-btn[data-mode="quick"]').classList.add('bg-white', 'text-brand-purple');
-document.querySelector('.mode-btn[data-mode="chat"]').classList.add('text-gray-600');
-
-const CONFIG = {
-API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
-REQUEST_TIMEOUT: 30000,
-MAX_RETRIES: 2,
-RETRY_DELAY: 2000,
-MAX_INPUT_LENGTH: 2500,
-MIN_REQUEST_INTERVAL: 2000,
-LOADING_MESSAGES: [
-    "Hang on. I'm...Working Backwards", 
-    "...Diving Deep", 
-    "...Unpacking This", 
-    "...Putting a Pin in it", 
-    "...Circling Back", 
-    "...Thinking Big"
-]
-};
-
-// Replace the entire AskArti class section in your HTML with this corrected version:
-
-class AskArti {
-constructor() {
- this.elements = this.getElements();
- this.state = {
-     pendingRequest: false,
-     lastRequestTime: 0,
-     loadingInterval: null,
-     abortController: null,
-     lastQuery: '',
-     currentMode: 'quick',
-     chatHistory: [],
- };
- this.init();
-}
-
-getElements() {
-    return {
-        situationInput: document.getElementById('situation-input'),
-        clearBtn: document.getElementById('clear-btn'),
-        charCount: document.getElementById('char-count'),
-        loadingMessageContainer: document.getElementById('loading-message-container'),
-        loadingMessage: document.getElementById('loading-message'),
-        errorMessage: document.getElementById('error-message'),
-        errorDetails: document.getElementById('error-details'),
-        resultsContainer: document.getElementById('results-container'),
-        aboutBtn: document.getElementById('about-btn'),
-        aboutModal: document.getElementById('about-modal'),
-        closeAbout: document.getElementById('close-about'),
-        modeButtons: document.querySelectorAll('.mode-btn'),
-        quickMode: document.getElementById('quick-mode'),
-        chatMode: document.getElementById('chat-mode'),
-        chatMessages: document.getElementById('chat-messages'),
-        chatInput: document.getElementById('chat-input'),
-        chatSendBtn: document.getElementById('chat-send-btn'),
-    };
-}
-
-init() {
-   updateGreetings();
-   
-   mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'base', themeVariables: {
-         primaryColor: '#F3F4F6',
-         primaryTextColor: '#1F2937',
-         primaryBorderColor: '#D1D5DB',
-         lineColor: '#6B7280',
-         textColor: '#111827',
-         fontSize: '14px'
-   }});
-   this.setupEventListeners();
-   this.setupAutoExpand();
-   this.elements.situationInput.focus();
-   this.updateCharCount();
-}
-
-updateCharCount() {
-    if (!this.elements.situationInput) return;
-    const current = this.elements.situationInput.value.length;
-    const max = CONFIG.MAX_INPUT_LENGTH;
-    this.elements.charCount.textContent = `${current}/${max}`;
-    
-    if (current > 0) {
-        this.elements.clearBtn.classList.add('show');
-    } else {
-        this.elements.clearBtn.classList.remove('show');
-    }
-}
-clearInput() {
-  this.elements.situationInput.value = '';
-  this.elements.situationInput.style.height = 'auto';
-  this.elements.situationInput.classList.remove('scrollable');
-  
-  // Reset scroll position to top
-  this.elements.situationInput.scrollTop = 0;
-  
-  // Clear any stored force type
-  delete this.elements.situationInput.dataset.forceType;
-  
-  // Remove button highlighting
-  const askBtn = document.getElementById('ask-arti-btn');
-  askBtn.classList.remove('btn-highlight', 'btn-pulse');
-  
-  this.updateCharCount();
-  this.elements.situationInput.focus();
-}
-setupEventListeners() {
-    // Main text area and clear button
-    this.elements.situationInput.addEventListener('input', () => {
-        this.updateCharCount();
-        this.updateButtonState();
-    });
-    this.elements.situationInput.addEventListener('focus', () => {
-        this.updateCharCount();
-        // Ensure textarea is scrolled to top on focus
-        setTimeout(() => this.elements.situationInput.scrollTop = 0, 10);
-    });
-    this.elements.situationInput.addEventListener('blur', () => {
-        this.elements.clearBtn.classList.remove('show');
-    });
-    this.elements.clearBtn.addEventListener('click', () => this.clearInput());
-
-    // Sample link handlers - FIXED VERSION
-    document.querySelectorAll('.sample-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const text = e.currentTarget.dataset.text;
-            const type = e.currentTarget.dataset.type;
-            
-            // Special handling for digest/federal news - auto-load instead of populating text
-            if (type === 'digest' || text.toLowerCase().includes('federal sales briefing') || text.toLowerCase().includes('federal news')) {
-                this.loadFederalIntelligenceFromLink(e.currentTarget);
-                return;
-            }
-            
-            // Regular behavior for other examples - populate text field
-            this.elements.situationInput.value = text;
-            this.updateCharCount();
-            
-            // Store the type for later use
-            if (type) {
-                this.elements.situationInput.dataset.forceType = type;
-            } else {
-                delete this.elements.situationInput.dataset.forceType;
-            }
-            
-            // Make the button pulse and highlight
-            this.triggerButtonHighlight();
-            
-            // Focus the textarea so user can edit
-            this.elements.situationInput.focus();
-            
-            // Ensure textarea is scrolled to top
-            setTimeout(() => {
-                this.elements.situationInput.scrollTop = 0;
-                
-                // Scroll to show the button
-                document.getElementById('ask-arti-btn').scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'nearest' 
-                });
-            }, 100);
-        });
-    });
-
-    // Ask Arti button - main submission
-    document.getElementById('ask-arti-btn').addEventListener('click', () => {
-        const forceType = this.elements.situationInput.dataset.forceType;
-        this.getAdvice(forceType, document.getElementById('ask-arti-btn'));
-        
-        // Remove highlight after clicking
-        document.getElementById('ask-arti-btn').classList.remove('btn-highlight');
-    });
-
-    // Enter key submission
-    this.elements.situationInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            const forceType = this.elements.situationInput.dataset.forceType;
-            this.getAdvice(forceType, document.getElementById('ask-arti-btn'));
-        }
-    });
-
-    // Modal handlers
-    this.elements.aboutBtn.addEventListener('click', () => this.showModal());
-    this.elements.closeAbout.addEventListener('click', () => this.hideModal());
-    this.elements.aboutModal.addEventListener('click', (e) => {
-        if (e.target === this.elements.aboutModal) this.hideModal();
-    });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') this.hideModal();
-    });
-
-    // Mode switching
-    this.elements.modeButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => this.switchMode(e.target.dataset.mode));
-    });
-
-    // Chat mode
-    this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
-    this.elements.chatInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            this.sendChatMessage();
-        }
-    });
-}
-
-
-async loadFederalIntelligenceFromLink(linkElement) {
-    try {
-        // Show loading state on the link
-        const originalText = linkElement.textContent;
-        linkElement.textContent = 'Loading...';
-        linkElement.style.pointerEvents = 'none';
-        linkElement.style.opacity = '0.6';
-
-        // Clear any existing results and show loading messages
-        this.elements.resultsContainer.innerHTML = '';
-        this.elements.errorMessage.classList.add('hidden');
-        this.showLoadingMessages(); // ADD THIS LINE
-
-        // Make direct digest request
-        const response = await fetch(CONFIG.API_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                situation: "Get today's federal sales briefing", 
-                forceType: "digest" 
-            }),
-        });
-
-        if (!response.ok) {
-            throw new Error(`Server error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        if (data.error) throw new Error(data.message || data.error);
-
-        // Display the digest
-        this.displayAdvice(data);
-
-        // Reset link
-        linkElement.textContent = originalText;
-        linkElement.style.pointerEvents = 'auto';
-        linkElement.style.opacity = '1';
-        this.hideLoadingMessages(); // ADD THIS LINE
-
-        console.log('Federal intelligence loaded successfully from link');
-
-    } catch (error) {
-        console.error('Federal intelligence load failed:', error);
-        
-        // Reset link
-        linkElement.textContent = originalText;
-        linkElement.style.pointerEvents = 'auto';
-        linkElement.style.opacity = '1';
-        this.hideLoadingMessages(); // ADD THIS LINE
-
-        // Show error
-        this.showError(error.message || "Failed to load federal intelligence");
-    }
-}
-triggerButtonHighlight() {
-    const askBtn = document.getElementById('ask-arti-btn');
-    askBtn.classList.add('btn-pulse', 'btn-highlight');
-    
-    // Remove the pulse animation after it completes (3 pulses × 1.5s each)
-    setTimeout(() => {
-        askBtn.classList.remove('btn-pulse');
-    }, 4500);
-    
-    // Ensure the textarea is scrolled to top
-    setTimeout(() => {
-        if (this.elements.situationInput) {
-            this.elements.situationInput.scrollTop = 0;
-        }
-    }, 50);
-}
-// New function to update button state based on content
-updateButtonState() {
-    const askBtn = document.getElementById('ask-arti-btn');
-    const hasContent = this.elements.situationInput.value.trim().length > 0;
-    
-    if (hasContent && !askBtn.classList.contains('btn-highlight')) {
-        askBtn.classList.add('btn-highlight');
-    } else if (!hasContent) {
-        askBtn.classList.remove('btn-highlight', 'btn-pulse');
-    }
-}
-setupAutoExpand() {
-   const textarea = this.elements.situationInput;
-   
-   // Debounce function to prevent rapid consecutive calls
-   const debounce = (func, wait) => {
-     let timeout;
-     return function executedFunction(...args) {
-       const later = () => {
-         clearTimeout(timeout);
-         func(...args);
-       };
-       clearTimeout(timeout);
-       timeout = setTimeout(later, wait);
-     };
-   };
-   
-   const adjustHeight = () => {
-       // Store current scroll position and cursor position
-       const scrollTop = textarea.scrollTop;
-       const cursorPosition = textarea.selectionStart;
-       
-       // Temporarily reset height to get the true scroll height of the content
-       textarea.style.height = 'auto';
-       const scrollHeight = textarea.scrollHeight;
-       const maxHeight = parseInt(getComputedStyle(textarea).maxHeight, 10);
-
-       if (scrollHeight > maxHeight) {
-           textarea.style.height = maxHeight + 'px';
-           textarea.classList.add('scrollable');
-       } else {
-           textarea.style.height = scrollHeight + 'px';
-           textarea.classList.remove('scrollable');
-       }
-   };
-   
-   // Debounced version for input events
-   const debouncedAdjustHeight = debounce(adjustHeight, 50);
-   
-   textarea.addEventListener('input', debouncedAdjustHeight);
-   
-   // For paste, still need immediate response but also debounced follow-up
-   textarea.addEventListener('paste', () => {
-       setTimeout(adjustHeight, 10); // Quick initial adjustment
-       setTimeout(debouncedAdjustHeight, 100); // Follow-up adjustment
-   });
-   
-   // Handle focus events to ensure proper scrolling behavior
-   textarea.addEventListener('focus', () => {
-       // Scroll to the top of the textarea when it's focused
-       setTimeout(() => textarea.scrollTop = 0, 10);
-   });
-   
-   adjustHeight(); // Initial adjustment
-}
-switchMode(mode) {
-    this.state.currentMode = mode;
-    this.elements.resultsContainer.innerHTML = '';
-    this.elements.errorMessage.classList.add('hidden');
-    this.hideLoadingMessages();
-
-    if (mode === 'quick') {
-        this.elements.quickMode.classList.remove('hidden');
-        this.elements.chatMode.classList.add('hidden');
-        this.elements.situationInput.focus();
-    } else {
-        this.elements.quickMode.classList.add('hidden');
-        this.elements.chatMode.classList.remove('hidden');
-        this.elements.chatInput.focus();
-    }
-}
-
-addChatMessage(content, isUser = false) {
-    let processedContent = isUser ? content : marked.parse(content.replace(/<action>(.*?)<\/action>/g, '<span class="bg-yellow-50 px-1 py-0.5 rounded">$1</span>'));
-    const messageClass = isUser ? 'chat-message-user justify-end' : 'chat-message-arti justify-start';
-    const alignClass = isUser ? 'justify-end' : 'justify-start';
-
-    const messageHtml = `
-        <div class="flex ${alignClass} fade-in">
-            <div class="${messageClass} p-3 text-sm max-w-[85%]">
-                ${processedContent}
-            </div>
-        </div>
-    `;
-    this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
-    this.scrollChatToBottom();
-}
-
-showTypingIndicator() {
-    const typingHtml = `<div id="typing-indicator" class="flex justify-start"><div class="chat-message-arti p-3 text-sm">...</div></div>`;
-    this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
-    this.scrollChatToBottom();
-}
-
-hideTypingIndicator() {
-    const indicator = document.getElementById('typing-indicator');
-    if (indicator) indicator.remove();
-}
-
-scrollChatToBottom() {
-    const chatContainer = document.getElementById('chat-container');
-    if (chatContainer) {
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-}
-
-async sendChatMessage() {
-    const message = this.elements.chatInput.value.trim();
-    if (!message || this.state.pendingRequest) return;
-
-    this.state.pendingRequest = true;
-    this.addChatMessage(message, true);
-    this.state.chatHistory.push({ role: 'user', content: message });
-    this.elements.chatInput.value = '';
-    this.showTypingIndicator();
-
-    try {
-        const response = await fetch(CONFIG.API_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ situation: message, mode: 'chat', conversationHistory: this.state.chatHistory }),
-        });
-        if (!response.ok) throw new Error(`Server error (${response.status})`);
-        
-        const data = await response.json();
-        this.hideTypingIndicator();
-        this.addChatMessage(data.message);
-        this.state.chatHistory.push({ role: 'assistant', content: data.message });
-
-    } catch (error) {
-        this.hideTypingIndicator();
-        this.addChatMessage("Sorry, I'm having trouble connecting right now. Please try again in a moment.", false);
-    } finally {
-        this.state.pendingRequest = false;
-    }
-}
-
-setButtonLoading(loading, clickedButton) {
-  this.state.pendingRequest = loading;
-  this.elements.errorMessage.classList.add('hidden');
-
-  const askBtn = document.getElementById('ask-arti-btn');
-  const askText = document.getElementById('ask-arti-text');
-  const askLoader = document.getElementById('ask-arti-loader');
-
-  askBtn.disabled = loading;
-
-  if (loading) {
-      askText.classList.add('hidden');
-      askLoader.classList.remove('hidden');
-      askBtn.classList.remove('btn-highlight', 'btn-pulse');
-  } else {
-      askText.classList.remove('hidden');
-      askLoader.classList.add('hidden');
-  }
-}
-
-showLoadingMessages() {
-    this.elements.loadingMessageContainer.classList.remove('hidden');
-    let i = 0;
-    this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[i];
-    this.state.loadingInterval = setInterval(() => {
-        i = (i + 1) % CONFIG.LOADING_MESSAGES.length;
-        this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[i];
-    }, 2000);
-}
-
-hideLoadingMessages() {
-    clearInterval(this.state.loadingInterval);
-    this.elements.loadingMessageContainer.classList.add('hidden');
-}
-
-showError(message) {
-    this.elements.errorMessage.classList.remove('hidden');
-    this.elements.errorDetails.textContent = message;
-}
-
-async getAdvice(forceType = null, clickedButton = null) {
- let situation = this.elements.situationInput.value.trim();
- situation = situation.replace(/[""]/g, '"').replace(/['']/g, "'");
- if (!situation) { this.showError("Please type or paste something into the box above."); return; }
- if (this.state.pendingRequest) return;
+ const hour = new Date().getHours();
+ const name = "I'm Arti!";
  
- const buttonToLoad = clickedButton || this.elements.gamePlanBtn;
-
- this.state.lastQuery = situation;
- this.elements.resultsContainer.innerHTML = '';
- this.setButtonLoading(true, buttonToLoad);
- this.showLoadingMessages();
-
- try {
-     const body = { situation };
-     if (forceType) body.forceType = forceType;
-
-     const response = await fetch(CONFIG.API_ENDPOINT, {
-         method: 'POST',
-         headers: { 'Content-Type': 'application/json' },
-         body: JSON.stringify(body),
-     });
-     
-     if (!response.ok) {
-         let errorMessage = `Server error: ${response.status}`;
-         try {
-             const errorData = await response.json();
-             errorMessage = errorData.error || errorData.message || errorMessage;
-         } catch (parseError) {
-             console.error('Error parsing error response:', parseError);
-         }
-         throw new Error(errorMessage);
-     }
-     
-     const data = await response.json();
-     if(data.error) throw new Error(data.message || data.error);
-     
-     this.displayAdvice(data);
-
- } catch (error) {
-     console.error('Request failed:', error);
-     this.showError(error.message || "An unknown error occurred.");
- } finally {
-     this.setButtonLoading(false, buttonToLoad);
-     this.hideLoadingMessages();
+ if (hour >= 5 && hour < 12) {
+     return `Good morning! ${name} Ready to tackle the day?`;
+ } else if (hour >= 12 && hour < 17) {
+     return `Good afternoon! ${name} How can I help?`;
+ } else if (hour >= 17 && hour < 21) {
+     return `Good evening! ${name} What's on your mind?`;
+ } else {
+     return `Burning the midnight oil? ${name} I'm here to help.`;
  }
 }
 
-displayAdvice(data) {
-  const { response_type } = data;
-  let html = '';
+function updateGreetings() {
+ const greeting = getTimeBasedGreeting();
+ const greetingLabel = document.getElementById('greeting-label');
+ const chatGreeting = document.getElementById('chat-greeting');
+ 
+ if (greetingLabel) {
+     greetingLabel.textContent = greeting;
+ }
+ 
+ if (chatGreeting) {
+     const chatText = greeting.replace('Hey, I\'m Arti!', 'I\'m Arti.');
+     chatGreeting.textContent = `${chatText} I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.`;
+ }
+}
 
-  // Main router for different response types
-  switch (response_type) {
-      case 'digest':
-          html = this.renderDailyDigest(data);
-          break;
-      case 'playbook':
-          html = this.renderSalesPlaybook(data);
-          break;
-      case 'news':
-          html = this.renderNewsAdvice(data);
-          break;
-      case 'investment':
-          html = this.renderMarketAnalysis(data);
-          break;
-      case 'prospect':
-          html = this.renderProspectAdvice(data);
-          break;
-      case 'deal':
-      case 'interview':
-      case 'meeting':
-          html = this.renderGeneralAdvice(data);
-          break;
-      default:
-          // Fallback to general advice for any unknown type
-          html = this.renderGeneralAdvice(data);
-          break;
-  }
+// Configuration
+const CONFIG = {
+   API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
+   REQUEST_TIMEOUT: 45000,
+   LOADING_MESSAGES: [
+       "Hang on. I'm...Working Backwards", 
+       "...Diving Deep", 
+       "...Unpacking This", 
+       "...Putting a Pin in it", 
+       "...Circling Back", 
+       "...Thinking Big"
+   ],
+   PIPELINE_LOADING_MESSAGES: [
+       "Analyzing federal opportunities...",
+       "Scanning contract vehicles...", 
+       "Mapping stakeholder networks...",
+       "Calculating win probabilities...",
+       "Identifying shaping windows...",
+       "Processing tribal knowledge..."
+   ]
+};
+
+// ICP Profiles Configuration
+const ICP_PROFILES = {
+   'si-bd-lead': {
+       name: 'SI BD Lead',
+       agencies: ['dod', 'dhs', 'va'],
+       solutions: ['cloud', 'cybersecurity', 'modernization'],
+       dealSize: 'large',
+       focus: 'Prime contractor opportunities, teaming partnerships, and recompetes'
+   },
+   'csp-bd-lead': {
+       name: 'CSP BD Lead', 
+       agencies: ['gsa', 'dod', 'treasury'],
+       solutions: ['cloud', 'ai-ml', 'data-analytics'],
+       dealSize: 'medium',
+       focus: 'Cloud adoption, FedRAMP opportunities, and multi-agency solutions'
+   },
+   'sales-vp': {
+       name: 'Sales VP',
+       agencies: ['dod', 'dhs', 'hhs', 'va'],
+       solutions: ['cloud', 'cybersecurity', 'modernization', 'ai-ml'],
+       dealSize: 'large',
+       focus: 'Strategic pursuits, account planning, and competitive differentiation'
+   },
+   'saas-cro': {
+       name: 'SaaS CRO',
+       agencies: ['gsa', 'treasury', 'hhs'],
+       solutions: ['software', 'ai-ml', 'data-analytics'],
+       dealSize: 'medium',
+       focus: 'Software licensing, platform adoption, and recurring revenue'
+   },
+   'smb-bd-lead': {
+       name: 'SMB BD Lead',
+       agencies: ['gsa', 'va', 'nasa'],
+       solutions: ['professional-services', 'software', 'cybersecurity'],
+       dealSize: 'small',
+       focus: 'Set-aside opportunities, subcontracting, and niche specializations'
+   }
+};
+
+class AskArti {
+constructor() {
+this.elements = this.getElements();
+this.state = {
+    pendingRequest: false,
+    lastRequestTime: 0,
+    loadingInterval: null,
+    abortController: null,
+    lastQuery: '',
+    currentMode: 'quick',
+    chatHistory: [],
+    selectedICP: null,
+    customProfile: {}
+};
+this.init();
+}
+
+getElements() {
+   return {
+       situationInput: document.getElementById('situation-input'),
+       clearBtn: document.getElementById('clear-btn'),
+       charCount: document.getElementById('char-count'),
+       loadingMessageContainer: document.getElementById('loading-message-container'),
+       loadingMessage: document.getElementById('loading-message'),
+       errorMessage: document.getElementById('error-message'),
+       errorDetails: document.getElementById('error-details'),
+       resultsContainer: document.getElementById('results-container'),
+       aboutBtn: document.getElementById('about-btn'),
+       aboutModal: document.getElementById('about-modal'),
+       closeAbout: document.getElementById('close-about'),
+       modeButtons: document.querySelectorAll('.mode-btn'),
+       quickMode: document.getElementById('quick-mode'),
+       chatMode: document.getElementById('chat-mode'),
+       pipelinerMode: document.getElementById('pipeliner-mode'),
+       chatMessages: document.getElementById('chat-messages'),
+       chatInput: document.getElementById('chat-input'),
+       chatSendBtn: document.getElementById('chat-send-btn'),
+       // Pipeliner elements
+       icpCards: document.querySelectorAll('.icp-profile-card'),
+       targetAgencies: document.getElementById('target-agencies'),
+       solutionCategories: document.getElementById('solution-categories'),
+       dealSize: document.getElementById('deal-size'),
+       generateBtn: document.getElementById('generate-pipeline'),
+       generateText: document.getElementById('generate-text'),
+       generateLoader: document.getElementById('generate-loader'),
+       saveProfile: document.getElementById('save-profile'),
+       pipelineLoadingContainer: document.getElementById('pipeline-loading-container'),
+       pipelineLoadingMessage: document.getElementById('pipeline-loading-message'),
+       pipelineResultsContainer: document.getElementById('pipeline-results-container')
+   };
+}
+
+init() {
+  updateGreetings();
   
-  this.elements.resultsContainer.innerHTML = html;
-  this.setupInteractiveElements(); // For copy buttons, etc.
+  mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'base', themeVariables: {
+        primaryColor: '#F3F4F6',
+        primaryTextColor: '#1F2937',
+        primaryBorderColor: '#D1D5DB',
+        lineColor: '#6B7280',
+        textColor: '#111827',
+        fontSize: '14px'
+  }});
+  this.setupEventListeners();
+  this.setupAutoExpand();
+  this.elements.situationInput.focus();
+  this.updateCharCount();
+  this.setupModeToggle();
+}
 
-  if (data.mermaid_chart) {
-      this.renderMermaidChart().then(() => {
-          this.setupMermaidDownloadButton();
-      });
-  }
+setupModeToggle() {
+   // Set initial active state
+   this.elements.modeButtons.forEach(btn => {
+       btn.classList.remove('active', 'bg-white', 'text-brand-purple');
+       btn.classList.add('text-gray-600');
+   });
+   
+   // Set quick mode as default active
+   const quickBtn = document.querySelector('.mode-btn[data-mode="quick"]');
+   if (quickBtn) {
+       quickBtn.classList.add('active', 'bg-white', 'text-brand-purple');
+       quickBtn.classList.remove('text-gray-600');
+   }
+}
+
+updateCharCount() {
+   if (!this.elements.situationInput) return;
+   const current = this.elements.situationInput.value.length;
+   const max = 2500;
+   this.elements.charCount.textContent = `${current}/${max}`;
+   
+   if (current > 0) {
+       this.elements.clearBtn.classList.add('show');
+   } else {
+       this.elements.clearBtn.classList.remove('show');
+   }
+}
+
+clearInput() {
+ this.elements.situationInput.value = '';
+ this.elements.situationInput.style.height = 'auto';
+ this.elements.situationInput.classList.remove('scrollable');
+ this.elements.situationInput.scrollTop = 0;
+ delete this.elements.situationInput.dataset.forceType;
+ 
+ const askBtn = document.getElementById('ask-arti-btn');
+ if (askBtn) {
+     askBtn.classList.remove('btn-highlight', 'btn-pulse');
+ }
+ 
+ this.updateCharCount();
+ this.elements.situationInput.focus();
+}
+
+setupEventListeners() {
+   // Main text area and clear button
+   this.elements.situationInput.addEventListener('input', () => {
+       this.updateCharCount();
+       this.updateButtonState();
+   });
+   this.elements.situationInput.addEventListener('focus', () => {
+       this.updateCharCount();
+       setTimeout(() => this.elements.situationInput.scrollTop = 0, 10);
+   });
+   this.elements.situationInput.addEventListener('blur', () => {
+       this.elements.clearBtn.classList.remove('show');
+   });
+   this.elements.clearBtn.addEventListener('click', () => this.clearInput());
+
+   // Sample link handlers
+   document.querySelectorAll('.sample-link').forEach(link => {
+       link.addEventListener('click', (e) => {
+           e.preventDefault();
+           const text = e.currentTarget.dataset.text;
+           const type = e.currentTarget.dataset.type;
+           
+           if (type === 'digest' || text.toLowerCase().includes('federal sales briefing') || text.toLowerCase().includes('federal news')) {
+               this.loadFederalIntelligenceFromLink(e.currentTarget);
+               return;
+           }
+           
+           this.elements.situationInput.value = text;
+           this.updateCharCount();
+           
+           if (type) {
+               this.elements.situationInput.dataset.forceType = type;
+           } else {
+               delete this.elements.situationInput.dataset.forceType;
+           }
+           
+           this.triggerButtonHighlight();
+           this.elements.situationInput.focus();
+           
+           setTimeout(() => {
+               this.elements.situationInput.scrollTop = 0;
+               const askBtn = document.getElementById('ask-arti-btn');
+               if (askBtn) {
+                   askBtn.scrollIntoView({ 
+                       behavior: 'smooth', 
+                       block: 'nearest' 
+                   });
+               }
+           }, 100);
+       });
+   });
+
+   // Ask Arti button - main submission
+const askBtn = document.getElementById('ask-arti-btn');
+if (askBtn) {
+    askBtn.addEventListener('click', () => {
+        const forceType = this.elements.situationInput.dataset.forceType;
+        this.getAdvice(forceType, askBtn);
+        askBtn.classList.remove('btn-highlight');
+    });
+}
+
+   // Enter key submission
+   this.elements.situationInput.addEventListener('keydown', (e) => {
+       if (e.key === 'Enter' && !e.shiftKey) {
+           e.preventDefault();
+           const forceType = this.elements.situationInput.dataset.forceType;
+           this.getAdvice(forceType, document.getElementById('ask-arti-btn'));
+       }
+   });
+
+   // Modal handlers
+   this.elements.aboutBtn.addEventListener('click', () => this.showModal());
+   this.elements.closeAbout.addEventListener('click', () => this.hideModal());
+   this.elements.aboutModal.addEventListener('click', (e) => {
+       if (e.target === this.elements.aboutModal) this.hideModal();
+   });
+   document.addEventListener('keydown', (e) => {
+       if (e.key === 'Escape') this.hideModal();
+   });
+
+   // Mode switching
+   this.elements.modeButtons.forEach(btn => {
+       btn.addEventListener('click', (e) => this.switchMode(e.target.dataset.mode));
+   });
+
+   // Chat mode
+   this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
+   this.elements.chatInput.addEventListener('keydown', (e) => {
+       if (e.key === 'Enter' && !e.shiftKey) {
+           e.preventDefault();
+           this.sendChatMessage();
+       }
+   });
+
+   // Pipeliner mode event listeners
+   this.setupPipelinerEventListeners();
+}
+
+setupPipelinerEventListeners() {
+   // ICP Card Selection
+   this.elements.icpCards.forEach(card => {
+       card.addEventListener('click', (e) => {
+           const icpType = e.currentTarget.dataset.icp;
+           this.selectICP(icpType);
+       });
+   });
+
+   // Generate Pipeline
+   this.elements.generateBtn.addEventListener('click', () => {
+       this.generatePipeline();
+   });
+
+   // Save Profile
+   this.elements.saveProfile.addEventListener('click', () => {
+       this.saveCustomProfile();
+   });
+
+   // Form Changes
+   [this.elements.targetAgencies, this.elements.solutionCategories, this.elements.dealSize].forEach(el => {
+       el.addEventListener('change', () => {
+           this.updateCustomProfile();
+       });
+   });
+}
+
+selectICP(icpType) {
+   // Clear previous selection
+   this.elements.icpCards.forEach(card => {
+       card.classList.remove('selected');
+   });
+
+   // Select new ICP
+   const selectedCard = document.querySelector(`[data-icp="${icpType}"]`);
+   if (selectedCard) {
+       selectedCard.classList.add('selected');
+       this.state.selectedICP = icpType;
+       
+       // Apply ICP configuration
+       this.applyICPConfiguration(icpType);
+   }
+}
+
+applyICPConfiguration(icpType) {
+   const profile = ICP_PROFILES[icpType];
+   if (!profile) return;
+
+   // Set agencies
+   Array.from(this.elements.targetAgencies.options).forEach(option => {
+       option.selected = profile.agencies.includes(option.value);
+   });
+
+   // Set solutions
+   Array.from(this.elements.solutionCategories.options).forEach(option => {
+       option.selected = profile.solutions.includes(option.value);
+   });
+
+   // Set deal size
+   this.elements.dealSize.value = profile.dealSize;
+
+   // Add glow effect to generate button
+   this.elements.generateBtn.classList.add('btn-highlight');
+}
+
+updateCustomProfile() {
+   this.state.customProfile = {
+       agencies: Array.from(this.elements.targetAgencies.selectedOptions).map(o => o.value),
+       solutions: Array.from(this.elements.solutionCategories.selectedOptions).map(o => o.value),
+       dealSize: this.elements.dealSize.value
+   };
+}
+
+async generatePipeline() {
+   if (this.state.pendingRequest) return;
+
+   this.state.pendingRequest = true;
+   this.setPipelineButtonLoading(true);
+   this.showPipelineLoadingMessages();
+   this.elements.errorMessage.classList.add('hidden');
+   this.elements.pipelineResultsContainer.innerHTML = '';
+
+   try {
+       // Build request payload
+       const profile = this.state.selectedICP ? ICP_PROFILES[this.state.selectedICP] : null;
+       const customProfile = this.state.customProfile;
+
+       const agencies = customProfile.agencies?.length ? customProfile.agencies : profile?.agencies || [];
+       const solutions = customProfile.solutions?.length ? customProfile.solutions : profile?.solutions || [];
+       const dealSize = customProfile.dealSize || profile?.dealSize || 'all';
+
+       const situation = `Generate a federal opportunity pipeline for ${profile?.name || 'Federal Sales Professional'}. 
+       Target agencies: ${agencies.join(', ')}. 
+       Solution focus: ${solutions.join(', ')}. 
+       Deal size preference: ${dealSize}.
+       Focus area: ${profile?.focus || 'Federal sales opportunities'}.`;
+
+       const response = await fetch(CONFIG.API_ENDPOINT, {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify({
+               situation: situation,
+               forceType: 'opportunity_pipeline',
+               icp_profile: {
+                   type: this.state.selectedICP,
+                   agencies: agencies,
+                   solutions: solutions,
+                   dealSize: dealSize,
+                   name: profile?.name
+               }
+           })
+       });
+
+       if (!response.ok) {
+           throw new Error(`Server error: ${response.status}`);
+       }
+
+       const data = await response.json();
+       if (data.error) {
+           throw new Error(data.message || data.error);
+       }
+
+       this.displayPipeline(data);
+
+   } catch (error) {
+       console.error('Pipeline generation failed:', error);
+       this.showError(error.message || 'Failed to generate pipeline');
+   } finally {
+       this.setPipelineButtonLoading(false);
+       this.hidePipelineLoadingMessages();
+       this.state.pendingRequest = false;
+   }
+}
+
+displayPipeline(data) {
+   const html = this.renderOpportunityPipeline(data);
+   this.elements.pipelineResultsContainer.innerHTML = html;
+   
+   // Scroll to results
+   setTimeout(() => {
+       this.elements.pipelineResultsContainer.scrollIntoView({ 
+           behavior: 'smooth', 
+           block: 'start' 
+       });
+   }, 100);
+}
+
+renderOpportunityPipeline(data) {
+   const { 
+       pipeline_summary, opportunities, market_intelligence, 
+       icp_insights, strategic_recommendations, confidence_overview 
+   } = data;
+
+   return `
+       <div class="results-card">
+           <div class="results-card-header">
+               <div class="flex justify-between items-start">
+                   <div>
+                       <h2 class="text-xl font-bold text-gray-800 mb-2">📊 Daily Federal Pipeline</h2>
+                       <p class="text-gray-600">${pipeline_summary || 'Opportunities tailored to your ICP'}</p>
+                   </div>
+                   <div class="text-right">
+                       <div class="text-2xl font-bold text-brand-purple">${opportunities?.length || 0}</div>
+                       <div class="text-gray-500 text-sm">Active Opportunities</div>
+                   </div>
+               </div>
+           </div>
+           
+           <div class="results-card-body">
+               ${confidence_overview ? `
+               <div class="mb-6">
+                   <h3 class="text-lg font-semibold text-gray-800 mb-3">Pipeline Health</h3>
+                   <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                       <div class="text-center p-3 bg-purple-50 rounded-lg">
+                           <div class="text-2xl font-bold text-purple-600">${confidence_overview.prime || 0}</div>
+                           <div class="text-xs text-gray-500">Prime Targets</div>
+                       </div>
+                       <div class="text-center p-3 bg-green-50 rounded-lg">
+                           <div class="text-2xl font-bold text-green-600">${confidence_overview.high || 0}</div>
+                           <div class="text-xs text-gray-500">High Confidence</div>
+                       </div>
+                       <div class="text-center p-3 bg-yellow-50 rounded-lg">
+                           <div class="text-2xl font-bold text-yellow-600">${confidence_overview.medium || 0}</div>
+                           <div class="text-xs text-gray-500">Medium Confidence</div>
+                       </div>
+                       <div class="text-center p-3 bg-red-50 rounded-lg">
+                           <div class="text-2xl font-bold text-red-600">${confidence_overview.low || 0}</div>
+                           <div class="text-xs text-gray-500">Watch List</div>
+                       </div>
+                   </div>
+               </div>` : ''}
+
+               ${market_intelligence ? `
+               <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                   <h3 class="text-lg font-semibold text-gray-800 mb-2">🎯 Market Intelligence</h3>
+                   <p class="text-gray-700">${market_intelligence}</p>
+               </div>` : ''}
+
+               ${opportunities && opportunities.length > 0 ? `
+               <div class="mb-6">
+                   <h3 class="text-lg font-semibold text-gray-800 mb-4">Priority Opportunities</h3>
+                   <div class="space-y-4">
+                       ${opportunities.map((opp, index) => this.renderOpportunityCard(opp, index)).join('')}
+                   </div>
+               </div>` : ''}
+
+               ${icp_insights && icp_insights.length > 0 ? `
+               <div class="mb-6">
+                   <h3 class="text-lg font-semibold text-gray-800 mb-4">ICP-Specific Insights</h3>
+                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       ${icp_insights.map(insight => `
+                           <div class="p-4 bg-brand-purple-faint border border-brand-purple rounded-lg">
+                               <h4 class="font-semibold text-gray-800 mb-2">${insight.category}</h4>
+                               <p class="text-gray-700 text-sm">${insight.insight}</p>
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>` : ''}
+
+               ${strategic_recommendations && strategic_recommendations.length > 0 ? `
+               <div class="mb-6">
+                   <h3 class="text-lg font-semibold text-gray-800 mb-4">Strategic Recommendations</h3>
+                   <div class="space-y-3">
+                       ${strategic_recommendations.map((rec, index) => `
+                           <div class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                               <div class="flex-shrink-0 w-6 h-6 bg-brand-purple rounded-full flex items-center justify-center text-xs text-white font-bold">
+                                   ${index + 1}
+                               </div>
+                               <div>
+                                   <h4 class="font-semibold text-gray-800 text-sm">${rec.action}</h4>
+                                   <p class="text-gray-600 text-xs mt-1">${rec.rationale}</p>
+                               </div>
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>` : ''}
+           </div>
+       </div>
+   `;
+}
+
+renderOpportunityCard(opportunity, index) {
+   const confidence = opportunity.confidence_score || 0.5;
+   const confidenceClass = this.getConfidenceClass(confidence);
+   const confidenceLabel = this.getConfidenceLabel(confidence);
+   
+   return `
+       <div class="opportunity-card ${confidenceClass}">
+           <div class="flex justify-between items-start mb-3">
+               <div class="flex-1">
+                   <div class="flex items-center space-x-2 mb-2">
+                       <h4 class="font-bold text-gray-800 text-base">${opportunity.title}</h4>
+                       <span class="tag ${opportunity.urgency === 'high' ? 'tag-urgent' : opportunity.stage === 'shaping' ? 'tag-shaping' : 'tag-active'}">
+                           ${opportunity.stage || 'Active'}
+                       </span>
+                   </div>
+                   <p class="text-gray-600 text-sm mb-2">${opportunity.agency} • ${opportunity.value || 'TBD'}</p>
+                   <p class="text-gray-700 text-sm">${opportunity.description}</p>
+               </div>
+               <div class="text-right ml-4">
+                   <div class="text-sm font-semibold text-gray-800 mb-1">${(confidence * 100).toFixed(0)}%</div>
+                   <div class="confidence-meter w-16">
+                       <div class="confidence-fill ${confidenceClass}" style="width: ${confidence * 100}%"></div>
+                   </div>
+                   <div class="text-xs text-gray-500 mt-1">${confidenceLabel}</div>
+               </div>
+           </div>
+
+           ${opportunity.key_insights && opportunity.key_insights.length > 0 ? `
+           <div class="mb-3">
+               <div class="text-xs font-semibold text-gray-600 mb-2">KEY INSIGHTS</div>
+               <div class="space-y-1">
+                   ${opportunity.key_insights.map(insight => `
+                       <div class="text-sm text-gray-700">• ${insight}</div>
+                   `).join('')}
+               </div>
+           </div>` : ''}
+
+           ${opportunity.stakeholders && opportunity.stakeholders.length > 0 ? `
+           <div class="mb-3">
+               <div class="text-xs font-semibold text-gray-600 mb-2">KEY STAKEHOLDERS</div>
+               <div class="flex flex-wrap gap-2">
+                   ${opportunity.stakeholders.map(stakeholder => `
+                       <span class="tag">${stakeholder}</span>
+                   `).join('')}
+               </div>
+           </div>` : ''}
+
+           <div class="flex justify-between items-center pt-3 border-t border-gray-200">
+               <div class="flex space-x-4 text-xs text-gray-500">
+                   ${opportunity.timeline ? `<span>Timeline: ${opportunity.timeline}</span>` : ''}
+                   ${opportunity.competition ? `<span>Competition: ${opportunity.competition}</span>` : ''}
+               </div>
+               <button class="btn btn-secondary text-xs px-3 py-1" onclick="app.analyzeOpportunity('${opportunity.id || index}')">
+                   Analyze
+               </button>
+           </div>
+       </div>
+   `;
+}
+
+getConfidenceClass(score) {
+   if (score >= 0.85) return 'confidence-prime';
+   if (score >= 0.7) return 'confidence-high';
+   if (score >= 0.4) return 'confidence-medium';
+   return 'confidence-low';
+}
+
+getConfidenceLabel(score) {
+   if (score >= 0.85) return 'Prime';
+   if (score >= 0.7) return 'High';
+   if (score >= 0.4) return 'Medium';
+   return 'Low';
+}
+
+async analyzeOpportunity(opportunityId) {
+   // This would trigger a deeper analysis of a specific opportunity
+   const situation = `Provide detailed analysis for opportunity ${opportunityId} including competitive landscape, win strategy, and tactical next steps.`;
+   
+   try {
+       const response = await fetch(CONFIG.API_ENDPOINT, {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify({
+               situation: situation,
+               forceType: 'opportunity_analysis'
+           })
+       });
+
+       const data = await response.json();
+       // Handle detailed analysis display
+       this.displayDetailedAnalysis(data);
+       
+   } catch (error) {
+       console.error('Analysis failed:', error);
+   }
+}
+
+setPipelineButtonLoading(loading) {
+   this.elements.generateBtn.disabled = loading;
+   
+   if (loading) {
+       this.elements.generateText.classList.add('hidden');
+       this.elements.generateLoader.classList.remove('hidden');
+   } else {
+       this.elements.generateText.classList.remove('hidden');
+       this.elements.generateLoader.classList.add('hidden');
+   }
+}
+
+showPipelineLoadingMessages() {
+   this.elements.pipelineLoadingContainer.classList.remove('hidden');
+   let i = 0;
+   this.elements.pipelineLoadingMessage.textContent = CONFIG.PIPELINE_LOADING_MESSAGES[i];
+   
+   this.state.loadingInterval = setInterval(() => {
+       i = (i + 1) % CONFIG.PIPELINE_LOADING_MESSAGES.length;
+       this.elements.pipelineLoadingMessage.textContent = CONFIG.PIPELINE_LOADING_MESSAGES[i];
+   }, 3000);
+}
+
+hidePipelineLoadingMessages() {
+   clearInterval(this.state.loadingInterval);
+   this.elements.pipelineLoadingContainer.classList.add('hidden');
+}
+
+saveCustomProfile() {
+   // Save profile to localStorage
+   const profile = {
+       selectedICP: this.state.selectedICP,
+       customProfile: this.state.customProfile,
+       timestamp: Date.now()
+   };
+   
+   localStorage.setItem('fed_opportunity_profile', JSON.stringify(profile));
+   
+   // Show success feedback
+   const originalText = this.elements.saveProfile.textContent;
+   this.elements.saveProfile.textContent = 'Saved!';
+   this.elements.saveProfile.classList.add('text-green-600');
+   
+   setTimeout(() => {
+       this.elements.saveProfile.textContent = originalText;
+       this.elements.saveProfile.classList.remove('text-green-600');
+   }, 2000);
+}
+
+async loadFederalIntelligenceFromLink(linkElement) {
+   try {
+       const originalText = linkElement.textContent;
+       linkElement.textContent = 'Loading...';
+       linkElement.style.pointerEvents = 'none';
+       linkElement.style.opacity = '0.6';
+
+       this.elements.resultsContainer.innerHTML = '';
+       this.elements.errorMessage.classList.add('hidden');
+       this.showLoadingMessages();
+
+       const response = await fetch(CONFIG.API_ENDPOINT, {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify({ 
+               situation: "Get today's federal sales briefing", 
+               forceType: "digest" 
+           }),
+       });
+
+       if (!response.ok) {
+           throw new Error(`Server error: ${response.status}`);
+       }
+
+       const data = await response.json();
+       if (data.error) throw new Error(data.message || data.error);
+
+       this.displayAdvice(data);
+       linkElement.textContent = originalText;
+       linkElement.style.pointerEvents = 'auto';
+       linkElement.style.opacity = '1';
+       this.hideLoadingMessages();
+
+   } catch (error) {
+       console.error('Federal intelligence load failed:', error);
+       
+       linkElement.textContent = originalText;
+       linkElement.style.pointerEvents = 'auto';
+       linkElement.style.opacity = '1';
+       this.hideLoadingMessages();
+       this.showError(error.message || "Failed to load federal intelligence");
+   }
+}
+
+triggerButtonHighlight() {
+   const askBtn = document.getElementById('ask-arti-btn');
+   if (askBtn) {
+       askBtn.classList.add('btn-pulse', 'btn-highlight');
+       
+       setTimeout(() => {
+           askBtn.classList.remove('btn-pulse');
+       }, 4500);
+   }
+   
+   setTimeout(() => {
+       if (this.elements.situationInput) {
+           this.elements.situationInput.scrollTop = 0;
+       }
+   }, 50);
+}
+
+updateButtonState() {
+   const askBtn = document.getElementById('ask-arti-btn');
+   if (!askBtn) return;
+   
+   const hasContent = this.elements.situationInput.value.trim().length > 0;
+   
+   if (hasContent && !askBtn.classList.contains('btn-highlight')) {
+       askBtn.classList.add('btn-highlight');
+   } else if (!hasContent) {
+       askBtn.classList.remove('btn-highlight', 'btn-pulse');
+   }
+}
+
+setupAutoExpand() {
+  const textarea = this.elements.situationInput;
   
-  // 🔧 FIXED SCROLLING - Scroll to the results card header, not the first section
-  setTimeout(() => {
-      const resultsCard = this.elements.resultsContainer.querySelector('.results-card');
-      if (resultsCard) {
-          resultsCard.scrollIntoView({ 
-              behavior: 'smooth', 
-              block: 'start',
-              inline: 'nearest'
-          });
-      } else {
-          // Fallback to container if no card found
-          this.elements.resultsContainer.scrollIntoView({ 
-              behavior: 'smooth', 
-              block: 'start' 
-          });
-      }
-  }, 100); // Small delay to ensure DOM is updated
-}
-
-// RENDERER 1: DAILY DIGEST - FIXED VERSION
-renderDailyDigest(data) {
-    const { 
-        digest_date, key_intelligence, deal_drivers, action_items, 
-        market_temperature, status 
-    } = data;
-    const sources = deal_drivers && deal_drivers.length > 0 ? [...new Set(deal_drivers.map(d => d.source))].join(' • ') : 'Internal Analysis';
-    const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-
-    return `
-        <div class="results-card digest-card" style="max-width: 100%; width: 100%; box-sizing: border-box;">
-            <div class="results-card-body" style="max-width: 100%; box-sizing: border-box;">
-                <header class="digest-header" style="max-width: 100%;">
-                    <img src="/images/arti_right.png" alt="Arti" />
-                    <div style="flex: 1; min-width: 0;">
-                        <h2 style="word-wrap: break-word;">Daily News</h2>
-                        <p class="digest-header-meta">${date}<br>MARKET TEMP: ${market_temperature || 'COOL'}</p>
-                    </div>
-                </header>
-                <section class="digest-section" style="max-width: 100%;">
-                    <h3 class="digest-section-title">Key Intelligence</h3>
-                    <p class="digest-item-summary text-base" style="max-width: 100%; word-wrap: break-word; overflow-wrap: break-word;">${key_intelligence}</p>
-                </section>
-                ${deal_drivers && deal_drivers.length > 0 ? `
-                <section class="digest-section" style="max-width: 100%;">
-                    <h3 class="digest-section-title">Today's Deal Drivers</h3>
-                    ${deal_drivers.map((driver, index) => `
-                        <div class="digest-item" style="max-width: 100%;">
-                            <div class="digest-item-number">${index + 1}</div>
-                            <div style="min-width: 0; flex: 1;">
-                                <h4 class="digest-item-headline" style="word-wrap: break-word;">
-                                    ${driver.link ? `<a href="${driver.link}" target="_blank" rel="noopener noreferrer">${driver.headline}</a>` : driver.headline}
-                                </h4>
-                                <p class="digest-item-summary" style="word-wrap: break-word; overflow-wrap: break-word;">${driver.summary}</p>
-                                <p class="digest-item-insight" style="word-wrap: break-word; overflow-wrap: break-word;">→ ${driver.action_insight}</p>
-                                <div class="digest-item-meta"><span class="text-xs text-gray-500 font-semibold">${driver.source ? driver.source.toUpperCase() : ''}</span></div>
-                            </div>
-                        </div>`).join('')}
-                </section>` : ''}
-                ${data.quick_intel && data.quick_intel.length > 0 ? `
-                <section class="digest-section" style="max-width: 100%;">
-                    <h3 class="digest-section-title">Quick Intel</h3>
-                    <div class="space-y-2">
-                    ${data.quick_intel.map(item => `
-                        <p class="digest-item-summary" style="word-wrap: break-word; overflow-wrap: break-word;">
-                            <strong class="font-semibold text-gray-900">${item.category}:</strong> ${item.insight}
-                        </p>
-                    `).join('')}
-                    </div>
-                </section>
-                ` : ''}
-                ${action_items && action_items.length > 0 ? `
-                <section class="digest-section" style="max-width: 100%;">
-                    <h3 class="digest-section-title">Your Moves Today</h3>
-                    ${action_items.map((action, index) => `
-                        <div class="digest-item" style="max-width: 100%;">
-                            <div class="digest-item-number">${index + 1}</div>
-                            <div style="min-width: 0; flex: 1;">
-                                <h4 class="digest-item-headline" style="word-wrap: break-word;">${action.action}</h4>
-                                <p class="digest-item-summary" style="word-wrap: break-word; overflow-wrap: break-word;">${action.why}</p>
-                            </div>
-                        </div>`).join('')}
-                </section>` : ''}
-                <footer class="digest-section" style="max-width: 100%;">
-                    <h3 class="digest-section-title">Sources</h3>
-                    <p class="text-sm text-gray-600" style="word-wrap: break-word;">${sources}</p>
-                </footer>
-            </div>
-        </div>`;
-}
-// RENDERER 2: SALES PLAYBOOK
-renderSalesPlaybook(data) {
-    const { 
-        sales_play_title, sales_play_summary, key_services, key_partners, 
-        competitive_positioning, success_metrics, timeline_milestones, 
-        target_personas, insider_tips, risk_mitigation, next_actions, mermaid_chart 
-    } = data;
-    
-    const renderSimpleList = (items) => items?.map(item => `<li class="digest-item-summary">${item}</li>`).join('') || '';
-
-    return `
-        <div class="results-card digest-card">
-            <div class="results-card-body">
-                <header class="digest-header">
-                    <img src="/images/arti_right.png" alt="Arti" />
-                    <div>
-                        <h2>${sales_play_title}</h2>
-                        <p class="digest-header-meta">Sales Playbook</p>
-                    </div>
-                </header>
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Executive Summary</h3>
-                    <p class="digest-item-summary text-base">${sales_play_summary}</p>
-                </section>
-                ${key_services && key_services.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Key Services & Products</h3>
-                    <ul class="list-disc list-inside space-y-2">${renderSimpleList(key_services)}</ul>
-                </section>` : ''}
-                ${key_partners && key_partners.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Strategic Partners</h3>
-                    <ul class="list-disc list-inside space-y-2">${renderSimpleList(key_partners)}</ul>
-                </section>` : ''}
-                ${competitive_positioning ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Competitive Positioning</h3>
-                    <p class="digest-item-summary">${competitive_positioning}</p>
-                </section>` : ''}
-                ${success_metrics && success_metrics.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Success Metrics & Timeline</h3>
-                    <ul class="list-disc list-inside space-y-2">${renderSimpleList(success_metrics)}</ul>
-                </section>` : ''}
-                ${mermaid_chart ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Visual Strategy</h3>
-                    <div class="mermaid-container">
-                        <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                    </div>
-                    <div class="flex justify-end gap-2 mt-2">
-                        <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
-                    </div>
-                </section>` : ''}
-                ${target_personas && target_personas.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Stakeholder Guide</h3>
-                    ${target_personas.map((persona, index) => `
-                        <div class="digest-item">
-                            <div class="digest-item-number">${index + 1}</div>
-                            <div>
-                                <h4 class="digest-item-headline">${persona.persona_title}</h4>
-                                <p class="digest-item-summary"><strong>Priorities:</strong> ${persona.business_priorities?.join(', ') || 'Not specified'}</p>
-                                <p class="digest-item-summary mt-2"><strong>Starters:</strong> ${persona.conversation_starters?.join(', ') || 'Not specified'}</p>
-                            </div>
-                        </div>`).join('')}
-                </section>` : ''}
-                 ${next_actions && next_actions.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Next Actions</h3>
-                    ${next_actions.map((action, index) => `
-                        <div class="digest-item">
-                            <div class="digest-item-number">${index + 1}</div>
-                            <div>
-                                <p class="digest-item-summary">${action}</p>
-                            </div>
-                        </div>`).join('')}
-                </section>` : ''}
-            </div>
-        </div>`;
-}
-
-// RENDERER 3: NEWS & GTM ANALYSIS
-renderNewsAdvice(data) {
-    const { 
-        quick_take, key_people_and_titles, money_keywords, 
-        suggested_discovery_questions, suggested_opening_lines, 
-        immediate_actions, strategic_moves, mermaid_chart 
-    } = data;
-
-    return `
-        <div class="results-card digest-card">
-            <div class="results-card-body">
-                <header class="digest-header">
-                    <img src="/images/arti_right.png" alt="Arti" />
-                    <div>
-                        <h2>News & GTM Analysis</h2>
-                        <p class="digest-header-meta">Actionable Intelligence</p>
-                    </div>
-                </header>
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Quick Take</h3>
-                    <p class="digest-item-summary text-base">${quick_take}</p>
-                </section>
-                ${money_keywords && money_keywords.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Money Keywords</h3>
-                    <div>${money_keywords.map(k => `<span class="digest-tag">${k}</span>`).join('')}</div>
-                </section>` : ''}
-                ${key_people_and_titles && key_people_and_titles.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Key People</h3>
-                    <ul class="list-disc list-inside space-y-2">${key_people_and_titles.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
-                </section>` : ''}
-                ${suggested_discovery_questions && suggested_discovery_questions.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Discovery Questions</h3>
-                    ${suggested_discovery_questions.map((q, index) => `
-                        <div class="digest-item">
-                            <div class="digest-item-number">${index + 1}</div>
-                            <div><p class="digest-item-summary">${q}</p></div>
-                        </div>`).join('')}
-                </section>` : ''}
-                ${suggested_opening_lines && suggested_opening_lines.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Email Openers</h3>
-                    ${suggested_opening_lines.map((line, index) => `
-                        <div class="digest-item">
-                            <div class="digest-item-number">${index + 1}</div>
-                            <div>
-                                <div class="digest-code-block copy-target">${line}</div>
-                                <button class="copy-btn" title="Copy to clipboard">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                                </button>
-                            </div>
-                        </div>`).join('')}
-                </section>` : ''}
-                ${mermaid_chart ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">GTM Flow</h3>
-                    <div class="mermaid-container">
-                        <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                    </div>
-                    <div class="flex justify-end gap-2 mt-2">
-                        <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
-                    </div>
-                </section>` : ''}
-                ${immediate_actions && immediate_actions.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Immediate Actions (0-30 Days)</h3>
-                    ${immediate_actions.map((action, index) => `
-                        <div class="digest-item">
-                            <div class="digest-item-number">${index + 1}</div>
-                            <div>
-                                <h4 class="digest-item-headline">${action.action}</h4>
-                                <p class="digest-item-summary">${action.why}</p>
-                            </div>
-                        </div>`).join('')}
-                </section>` : ''}
-            </div>
-        </div>`;
-}
-
-// RENDERER 4: INVESTMENT / MARKET ANALYSIS - ENHANCED VERSION
-renderMarketAnalysis(data) {
-    const { 
-        investment_thesis, executive_summary, key_people_mentioned, leadership_quotes,
-        financial_health, market_position, bull_signals, bear_signals, 
-        key_financial_metrics, segment_analysis, guidance_and_outlook,
-        bull_case, bear_case, missing_information, analyst_price_targets, next_catalyst
-    } = data;
-
-    return `
-        <div class="results-card digest-card">
-            <div class="results-card-body">
-                <header class="digest-header">
-                    <img src="/images/arti_right.png" alt="Arti" />
-                    <div>
-                        <h2>Market Analysis</h2>
-                        <p class="digest-header-meta">Bull vs Bear</p>
-                    </div>
-                </header>
-                
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Summary</h3>
-                    <p class="digest-item-summary text-base font-semibold">${investment_thesis}</p>
-                </section>
-
-                ${executive_summary ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Executive Summary</h3>
-                    <p class="digest-item-summary">${executive_summary}</p>
-                </section>` : ''}
-                
-                ${key_financial_metrics && key_financial_metrics.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Key Financial Metrics</h3>
-                    <div class="grid grid-cols-1 gap-2">
-                        ${key_financial_metrics.map(metric => `<span class="digest-tag">${metric}</span>`).join('')}
-                    </div>
-                </section>` : ''}
-
-                ${leadership_quotes && leadership_quotes.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Leadership Quotes</h3>
-                    ${leadership_quotes.map((item, index) => `
-                        <div class="digest-item">
-                            <div class="digest-item-number">${index + 1}</div>
-                            <div>
-                                <h4 class="digest-item-headline">${item.person}</h4>
-                                <div class="digest-code-block mb-2">"${item.quote}"</div>
-                                <div class="text-xs font-semibold ${
-                                    item.bull_or_bear_signal === 'bull' ? 'text-green-600' : 
-                                    item.bull_or_bear_signal === 'bear' ? 'text-red-600' : 'text-gray-600'
-                                }">
-                                    ${item.bull_or_bear_signal?.toUpperCase()} SIGNAL
-                                </div>
-                            </div>
-                        </div>`).join('')}
-                </section>` : ''}
-
-                ${key_people_mentioned && key_people_mentioned.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Key People Mentioned</h3>
-                    <div class="space-y-1">
-                        ${key_people_mentioned.map(person => `<p class="digest-item-summary text-sm">${person}</p>`).join('')}
-                    </div>
-                </section>` : ''}
-
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Financial Health & Market Position</h3>
-                    <p class="digest-item-summary"><strong>Financial Health:</strong> ${financial_health || 'Not specified'}</p>
-                    <p class="digest-item-summary mt-2"><strong>Market Position:</strong> ${market_position || 'Not specified'}</p>
-                </section>
-
-                ${segment_analysis ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Segment Analysis</h3>
-                    <p class="digest-item-summary">${segment_analysis}</p>
-                </section>` : ''}
-
-                ${guidance_and_outlook ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Guidance & Outlook</h3>
-                    <p class="digest-item-summary">${guidance_and_outlook}</p>
-                </section>` : ''}
-
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Bull vs Bear Signals</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${bull_signals && bull_signals.length > 0 ? `
-                        <div>
-                            <h4 class="font-semibold text-green-600 mb-2">🐂 Bull Signals</h4>
-                            <ul class="list-disc list-inside space-y-1 text-sm">
-                                ${bull_signals.map(signal => `<li class="text-green-700">${signal}</li>`).join('')}
-                            </ul>
-                        </div>` : ''}
-                        
-                        ${bear_signals && bear_signals.length > 0 ? `
-                        <div>
-                            <h4 class="font-semibold text-red-600 mb-2">🐻 Bear Signals</h4>
-                            <ul class="list-disc list-inside space-y-1 text-sm">
-                                ${bear_signals.map(signal => `<li class="text-red-700">${signal}</li>`).join('')}
-                            </ul>
-                        </div>` : ''}
-                    </div>
-                </section>
-
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Investment Cases</h3>
-                    <div class="space-y-4">
-                        <div class="p-3 bg-green-50 border-l-4 border-green-400 rounded">
-                            <h4 class="font-semibold text-green-800 mb-2">Bull Case</h4>
-                            <p class="text-green-700 digest-item-summary">${bull_case || 'Not specified'}</p>
-                        </div>
-                        <div class="p-3 bg-red-50 border-l-4 border-red-400 rounded">
-                            <h4 class="font-semibold text-red-800 mb-2">Bear Case</h4>
-                            <p class="text-red-700 digest-item-summary">${bear_case || 'Not specified'}</p>
-                        </div>
-                    </div>
-                </section>
-
-                ${missing_information && missing_information.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Red Flags: Missing Information</h3>
-                    <ul class="list-disc list-inside space-y-1">
-                        ${missing_information.map(item => `<li class="digest-item-summary text-orange-600">${item}</li>`).join('')}
-                    </ul>
-                </section>` : ''}
-
-                ${analyst_price_targets && analyst_price_targets.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Analyst Activity</h3>
-                    <ul class="list-disc list-inside space-y-1">
-                        ${analyst_price_targets.map(target => `<li class="digest-item-summary">${target}</li>`).join('')}
-                    </ul>
-                </section>` : ''}
-
-                ${next_catalyst ? `
-                <footer class="digest-section">
-                    <h3 class="digest-section-title">Next Catalyst</h3>
-                    <p class="digest-item-summary font-semibold">${next_catalyst}</p>
-                </footer>` : ''}
-
-                <div class="p-3 mt-4 text-xs text-gray-500 bg-gray-50 rounded-lg border border-gray-200">
-                    <strong>Disclaimer:</strong> This content is for informational purposes only and does not constitute financial or investment advice. It is not a recommendation to buy or sell any security. You should always conduct your own research and consult a qualified financial professional before making any investment decisions.
-                </div>
-            </div>
-        </div>`;
-}
-
-// RENDERER 5: PROSPECTING INTELLIGENCE
-renderProspectAdvice(data) {
-    const { 
-        summary, top_s_is, top_software_and_cloud, 
-        naics_codes, prospect_recommendations 
-    } = data;
-    
-    const renderPartnerList = (items) => items?.map(item => `<div class="mb-2"><h4 class="font-semibold text-gray-800">${item.company || 'N/A'}</h4><p class="text-sm text-gray-600">${item.value || ''}</p></div>`).join('') || '';
-
-    return `
-        <div class="results-card digest-card">
-            <div class="results-card-body">
-                <header class="digest-header">
-                    <img src="/images/arti_right.png" alt="Arti" />
-                    <div>
-                        <h2>Prospecting Intelligence</h2>
-                        <p class="digest-header-meta">Market Analysis</p>
-                    </div>
-                </header>
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Summary</h3>
-                    <p class="digest-item-summary text-base">${summary}</p>
-                </section>
-                ${top_s_is && top_s_is.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Top Service Providers / SIs</h3>
-                    <div>${renderPartnerList(top_s_is)}</div>
-                </section>` : ''}
-                ${top_software_and_cloud && top_software_and_cloud.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Top Software & Cloud Partners</h3>
-                    <div>${renderPartnerList(top_software_and_cloud)}</div>
-                </section>` : ''}
-                ${naics_codes && naics_codes.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">NAICS Codes</h3>
-                    <div>${naics_codes.map(k => `<span class="digest-tag">${k.code || k}</span>`).join('')}</div>
-                </section>` : ''}
-                ${prospect_recommendations && prospect_recommendations.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Recommendations</h3>
-                    <ul class="list-disc list-inside space-y-2">${prospect_recommendations.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
-                </section>` : ''}
-            </div>
-        </div>`;
-}
-
-// RENDERER 6: GENERAL ADVICE (Deal, Interview, Meeting)
-renderGeneralAdvice(data) {
-    const { 
-        response_type, quick_take, key_moves, talking_points, 
-        email_template, next_steps, mermaid_chart 
-    } = data;
-
-    const titles = {
-        deal: 'Deal Game Plan',
-        interview: 'Interview Prep Plan',
-        meeting: 'Meeting Strategy',
-        default: 'Your Game Plan'
+  const debounce = (func, wait) => {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
     };
-    const title = titles[response_type] || titles.default;
+  };
+  
+  const adjustHeight = () => {
+      textarea.style.height = 'auto';
+      const scrollHeight = textarea.scrollHeight;
+      const maxHeight = parseInt(getComputedStyle(textarea).maxHeight, 10);
 
-    return `
-        <div class="results-card digest-card">
-            <div class="results-card-body">
-                <header class="digest-header">
-                    <img src="/images/arti_right.png" alt="Arti" />
-                    <div>
-                        <h2>${title}</h2>
-                        <p class="digest-header-meta">Actionable Advice</p>
-                    </div>
-                </header>
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Quick Take</h3>
-                    <p class="digest-item-summary text-base">${quick_take}</p>
-                </section>
-                ${key_moves && key_moves.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Your Next Moves</h3>
-                    ${key_moves.map((move, index) => `
-                        <div class="digest-item">
-                            <div class="digest-item-number">${index + 1}</div>
-                            <div>
-                                <h4 class="digest-item-headline">${move.action}</h4>
-                                <p class="digest-item-summary">${move.why}</p>
-                            </div>
-                        </div>`).join('')}
-                </section>` : ''}
-                ${mermaid_chart ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Visual Strategy</h3>
-                    <div class="mermaid-container">
-                        <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                    </div>
-                    <div class="flex justify-end gap-2 mt-2">
-                        <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
-                    </div>
-                </section>` : ''}
-                ${talking_points && talking_points.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Key Talking Points</h3>
-                    <ul class="list-disc list-inside space-y-2">${talking_points.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
-                </section>` : ''}
-                ${email_template ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Email Template</h3>
-                    <div class="digest-code-block copy-target">${email_template}</div>
-                    <button class="copy-btn" title="Copy to clipboard">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                    </button>
-                </section>` : ''}
-                ${next_steps ? `
-                <footer class="digest-section">
-                    <h3 class="digest-section-title">Closing Thought</h3>
-                    <p class="digest-item-summary">${next_steps}</p>
-                </footer>` : ''}
-            </div>
-        </div>`;
+      if (scrollHeight > maxHeight) {
+          textarea.style.height = maxHeight + 'px';
+          textarea.classList.add('scrollable');
+      } else {
+          textarea.style.height = scrollHeight + 'px';
+          textarea.classList.remove('scrollable');
+      }
+  };
+  
+  const debouncedAdjustHeight = debounce(adjustHeight, 50);
+  
+  textarea.addEventListener('input', debouncedAdjustHeight);
+  textarea.addEventListener('paste', () => {
+      setTimeout(adjustHeight, 10);
+      setTimeout(debouncedAdjustHeight, 100);
+  });
+  textarea.addEventListener('focus', () => {
+      setTimeout(() => textarea.scrollTop = 0, 10);
+  });
+  
+  adjustHeight();
 }
+
+switchMode(mode) {
+   this.state.currentMode = mode;
+   this.elements.resultsContainer.innerHTML = '';
+   this.elements.pipelineResultsContainer.innerHTML = '';
+   this.elements.errorMessage.classList.add('hidden');
+   this.hideLoadingMessages();
+   this.hidePipelineLoadingMessages();
+
+   // Update mode button states
+   this.elements.modeButtons.forEach(btn => {
+       btn.classList.remove('active', 'bg-white', 'text-brand-purple');
+       btn.classList.add('text-gray-600');
+   });
+
+   const activeBtn = document.querySelector(`.mode-btn[data-mode="${mode}"]`);
+   if (activeBtn) {
+       activeBtn.classList.add('active', 'bg-white', 'text-brand-purple');
+       activeBtn.classList.remove('text-gray-600');
+   }
+
+   // Show/hide mode content
+   this.elements.quickMode.classList.add('hidden');
+   this.elements.chatMode.classList.add('hidden');
+   this.elements.pipelinerMode.classList.add('hidden');
+
+   if (mode === 'quick') {
+       this.elements.quickMode.classList.remove('hidden');
+       this.elements.situationInput.focus();
+   } else if (mode === 'chat') {
+       this.elements.chatMode.classList.remove('hidden');
+       this.elements.chatInput.focus();
+   } else if (mode === 'pipeliner') {
+       this.elements.pipelinerMode.classList.remove('hidden');
+   }
+}
+
+// Rest of the existing methods (addChatMessage, sendChatMessage, etc.) remain the same...
+addChatMessage(content, isUser = false) {
+   let processedContent = isUser ? content : marked.parse(content.replace(/<action>(.*?)<\/action>/g, '<span class="bg-yellow-50 px-1 py-0.5 rounded">$1</span>'));
+   const messageClass = isUser ? 'chat-message-user justify-end' : 'chat-message-arti justify-start';
+   const alignClass = isUser ? 'justify-end' : 'justify-start';
+
+   const messageHtml = `
+       <div class="flex ${alignClass} fade-in">
+           <div class="${messageClass} p-3 text-sm max-w-[85%]">
+               ${processedContent}
+           </div>
+       </div>
+   `;
+   this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
+   this.scrollChatToBottom();
+}
+
+showTypingIndicator() {
+   const typingHtml = `<div id="typing-indicator" class="flex justify-start"><div class="chat-message-arti p-3 text-sm">...</div></div>`;
+   this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
+   this.scrollChatToBottom();
+}
+
+hideTypingIndicator() {
+   const indicator = document.getElementById('typing-indicator');
+   if (indicator) indicator.remove();
+}
+
+scrollChatToBottom() {
+   const chatContainer = document.getElementById('chat-container');
+   if (chatContainer) {
+       chatContainer.scrollTop = chatContainer.scrollHeight;
+   }
+}
+
+async sendChatMessage() {
+   const message = this.elements.chatInput.value.trim();
+   if (!message || this.state.pendingRequest) return;
+
+   this.state.pendingRequest = true;
+   this.addChatMessage(message, true);
+   this.state.chatHistory.push({ role: 'user', content: message });
+   this.elements.chatInput.value = '';
+   this.showTypingIndicator();
+
+   try {
+       const response = await fetch(CONFIG.API_ENDPOINT, {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify({ situation: message, mode: 'chat', conversationHistory: this.state.chatHistory }),
+       });
+       if (!response.ok) throw new Error(`Server error (${response.status})`);
+       
+       const data = await response.json();
+       this.hideTypingIndicator();
+       this.addChatMessage(data.message);
+       this.state.chatHistory.push({ role: 'assistant', content: data.message });
+
+   } catch (error) {
+       this.hideTypingIndicator();
+       this.addChatMessage("Sorry, I'm having trouble connecting right now. Please try again in a moment.", false);
+   } finally {
+       this.state.pendingRequest = false;
+   }
+}
+
+setButtonLoading(loading, clickedButton) {
+ this.state.pendingRequest = loading;
+ this.elements.errorMessage.classList.add('hidden');
+
+ const askBtn = document.getElementById('ask-arti-btn');
+ const askText = document.getElementById('ask-arti-text');
+ const askLoader = document.getElementById('ask-arti-loader');
+
+ if (askBtn && askText && askLoader) {
+     askBtn.disabled = loading;
+
+     if (loading) {
+         askText.classList.add('hidden');
+         askLoader.classList.remove('hidden');
+         askBtn.classList.remove('btn-highlight', 'btn-pulse');
+     } else {
+         askText.classList.remove('hidden');
+         askLoader.classList.add('hidden');
+     }
+ }
+}
+
+showLoadingMessages() {
+   this.elements.loadingMessageContainer.classList.remove('hidden');
+   let i = 0;
+   this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[i];
+   this.state.loadingInterval = setInterval(() => {
+       i = (i + 1) % CONFIG.LOADING_MESSAGES.length;
+       this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[i];
+   }, 2000);
+}
+
+hideLoadingMessages() {
+   clearInterval(this.state.loadingInterval);
+   this.elements.loadingMessageContainer.classList.add('hidden');
+}
+
+showError(message) {
+   this.elements.errorMessage.classList.remove('hidden');
+   this.elements.errorDetails.textContent = message;
+}
+
+async getAdvice(forceType = null, clickedButton = null) {
+let situation = this.elements.situationInput.value.trim();
+situation = situation.replace(/[""]/g, '"').replace(/['']/g, "'");
+if (!situation) { this.showError("Please type or paste something into the box above."); return; }
+if (this.state.pendingRequest) return;
+
+this.state.lastQuery = situation;
+this.elements.resultsContainer.innerHTML = '';
+this.setButtonLoading(true, clickedButton);
+this.showLoadingMessages();
+
+try {
+    const body = { situation };
+    if (forceType) body.forceType = forceType;
+
+    const response = await fetch(CONFIG.API_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+    });
+    
+    if (!response.ok) {
+        let errorMessage = `Server error: ${response.status}`;
+        try {
+            const errorData = await response.json();
+            errorMessage = errorData.error || errorData.message || errorMessage;
+        } catch (parseError) {
+            console.error('Error parsing error response:', parseError);
+        }
+        throw new Error(errorMessage);
+    }
+    
+    const data = await response.json();
+    if(data.error) throw new Error(data.message || data.error);
+    
+    this.displayAdvice(data);
+
+} catch (error) {
+    console.error('Request failed:', error);
+    this.showError(error.message || "An unknown error occurred.");
+} finally {
+    this.setButtonLoading(false, clickedButton);
+    this.hideLoadingMessages();
+}
+}
+
+displayAdvice(data) {
+ const { response_type } = data;
+ let html = '';
+
+ switch (response_type) {
+     case 'digest':
+         html = this.renderDailyDigest(data);
+         break;
+     case 'playbook':
+         html = this.renderSalesPlaybook(data);
+         break;
+     case 'news':
+         html = this.renderNewsAdvice(data);
+         break;
+     case 'investment':
+         html = this.renderMarketAnalysis(data);
+         break;
+     case 'prospect':
+         html = this.renderProspectAdvice(data);
+         break;
+     case 'deal':
+     case 'interview':
+     case 'meeting':
+         html = this.renderGeneralAdvice(data);
+         break;
+     default:
+         html = this.renderGeneralAdvice(data);
+         break;
+ }
+ 
+ this.elements.resultsContainer.innerHTML = html;
+ this.setupInteractiveElements();
+
+ if (data.mermaid_chart) {
+     this.renderMermaidChart().then(() => {
+         this.setupMermaidDownloadButton();
+     });
+ }
+ 
+setTimeout(() => {
+    const resultsCard = this.elements.resultsContainer.querySelector('.results-card');
+    if (resultsCard) {
+        resultsCard.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start',
+            inline: 'nearest'
+        });
+    } else {
+        this.elements.resultsContainer.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+        });
+    }
+}, 100);
+}
+// All existing render methods remain the same...
+renderDailyDigest(data) {
+   const { 
+       digest_date, key_intelligence, deal_drivers, action_items, 
+       market_temperature, status 
+   } = data;
+   const sources = deal_drivers && deal_drivers.length > 0 ? [...new Set(deal_drivers.map(d => d.source))].join(' • ') : 'Internal Analysis';
+   const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+   return `
+       <div class="results-card digest-card" style="max-width: 100%; width: 100%; box-sizing: border-box;">
+           <div class="results-card-body" style="max-width: 100%; box-sizing: border-box;">
+               <header class="digest-header" style="max-width: 100%;">
+                   <img src="/images/arti_right.png" alt="Arti" />
+                   <div style="flex: 1; min-width: 0;">
+                       <h2 style="word-wrap: break-word;">Daily News</h2>
+                       <p class="digest-header-meta">${date}<br>MARKET TEMP: ${market_temperature || 'COOL'}</p>
+                   </div>
+               </header>
+               <section class="digest-section" style="max-width: 100%;">
+                   <h3 class="digest-section-title">Key Intelligence</h3>
+                   <p class="digest-item-summary text-base" style="max-width: 100%; word-wrap: break-word; overflow-wrap: break-word;">${key_intelligence}</p>
+               </section>
+               ${deal_drivers && deal_drivers.length > 0 ? `
+               <section class="digest-section" style="max-width: 100%;">
+                   <h3 class="digest-section-title">Today's Deal Drivers</h3>
+                   ${deal_drivers.map((driver, index) => `
+                       <div class="digest-item" style="max-width: 100%;">
+                           <div class="digest-item-number">${index + 1}</div>
+                           <div style="min-width: 0; flex: 1;">
+                               <h4 class="digest-item-headline" style="word-wrap: break-word;">
+                                   ${driver.link ? `<a href="${driver.link}" target="_blank" rel="noopener noreferrer">${driver.headline}</a>` : driver.headline}
+                               </h4>
+                               <p class="digest-item-summary" style="word-wrap: break-word; overflow-wrap: break-word;">${driver.summary}</p>
+                               <p class="digest-item-insight" style="word-wrap: break-word; overflow-wrap: break-word;">→ ${driver.action_insight}</p>
+                               <div class="digest-item-meta"><span class="text-xs text-gray-500 font-semibold">${driver.source ? driver.source.toUpperCase() : ''}</span></div>
+                           </div>
+                       </div>`).join('')}
+               </section>` : ''}
+               ${data.quick_intel && data.quick_intel.length > 0 ? `
+               <section class="digest-section" style="max-width: 100%;">
+                   <h3 class="digest-section-title">Quick Intel</h3>
+                   <div class="space-y-2">
+                   ${data.quick_intel.map(item => `
+                       <p class="digest-item-summary" style="word-wrap: break-word; overflow-wrap: break-word;">
+                           <strong class="font-semibold text-gray-900">${item.category}:</strong> ${item.insight}
+                       </p>
+                   `).join('')}
+                   </div>
+               </section>
+               ` : ''}
+               ${action_items && action_items.length > 0 ? `
+               <section class="digest-section" style="max-width: 100%;">
+                   <h3 class="digest-section-title">Your Moves Today</h3>
+                   ${action_items.map((action, index) => `
+                       <div class="digest-item" style="max-width: 100%;">
+                           <div class="digest-item-number">${index + 1}</div>
+                           <div style="min-width: 0; flex: 1;">
+                               <h4 class="digest-item-headline" style="word-wrap: break-word;">${action.action}</h4>
+                               <p class="digest-item-summary" style="word-wrap: break-word; overflow-wrap: break-word;">${action.why}</p>
+                           </div>
+                       </div>`).join('')}
+               </section>` : ''}
+               <footer class="digest-section" style="max-width: 100%;">
+                   <h3 class="digest-section-title">Sources</h3>
+                   <p class="text-sm text-gray-600" style="word-wrap: break-word;">${sources}</p>
+               </footer>
+           </div>
+       </div>`;
+}
+
+// Include all other existing render methods (renderSalesPlaybook, renderNewsAdvice, etc.)...
+
 setupInteractiveElements() {
-    this.setupCopyButtons();
+   this.setupCopyButtons();
 }
 
 setupCopyButtons() {
-    const copyButtons = this.elements.resultsContainer.querySelectorAll('.copy-btn');
-    copyButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const target = e.currentTarget.parentElement.querySelector('.copy-target');
-            if (target) {
-                navigator.clipboard.writeText(target.innerText).then(() => {
-                    const originalContent = e.currentTarget.innerHTML;
-                    e.currentTarget.classList.add('copied');
-                    e.currentTarget.innerHTML = `
-                        <svg class="checkmark" viewBox="0 0 24 24">
-                            <path d="M9 12l2 2 4-4"></path>
-                        </svg>
-                        <span>Copied!</span>
-                    `;
-                    
-                    const parent = e.currentTarget.parentElement;
-                    parent.classList.add('copy-flash');
-                    
-                    setTimeout(() => {
-                        e.currentTarget.classList.remove('copied');
-                        e.currentTarget.innerHTML = originalContent;
-                        parent.classList.remove('copy-flash');
-                    }, 2000);
-                }).catch(err => {
-                    console.error('Failed to copy text: ', err);
-                });
-            }
-        });
-    });
+   const copyButtons = this.elements.resultsContainer.querySelectorAll('.copy-btn');
+   copyButtons.forEach(btn => {
+       btn.addEventListener('click', (e) => {
+           const target = e.currentTarget.parentElement.querySelector('.copy-target');
+           if (target) {
+               navigator.clipboard.writeText(target.innerText).then(() => {
+                   const originalContent = e.currentTarget.innerHTML;
+                   e.currentTarget.classList.add('copied');
+                   e.currentTarget.innerHTML = `
+                       <svg class="checkmark" viewBox="0 0 24 24">
+                           <path d="M9 12l2 2 4-4"></path>
+                       </svg>
+                       <span>Copied!</span>
+                   `;
+                   
+                   const parent = e.currentTarget.parentElement;
+                   parent.classList.add('copy-flash');
+                   
+                   setTimeout(() => {
+                       e.currentTarget.classList.remove('copied');
+                       e.currentTarget.innerHTML = originalContent;
+                       parent.classList.remove('copy-flash');
+                   }, 2000);
+               }).catch(err => {
+                   console.error('Failed to copy text: ', err);
+               });
+           }
+       });
+   });
 }
 
 setupMermaidDownloadButton() {
-    const downloadPngBtn = document.getElementById('download-png-btn');
-
-    if (downloadPngBtn) {
-        downloadPngBtn.addEventListener('click', () => this.downloadMermaidAsPNG());
-    }
+   const downloadPngBtn = document.getElementById('download-png-btn');
+   if (downloadPngBtn) {
+       downloadPngBtn.addEventListener('click', () => this.downloadMermaidAsPNG());
+   }
 }
 
 downloadMermaidAsPNG() {
-    const mermaidContainer = document.querySelector('.mermaid-container');
-    if (!mermaidContainer || typeof html2canvas === 'undefined') {
-        console.error("Mermaid container or html2canvas library not found.");
-        return;
-    }
-    html2canvas(mermaidContainer, { backgroundColor: '#ffffff' }).then(canvas => {
-        const a = document.createElement("a");
-        a.href = canvas.toDataURL("image/png");
-        a.download = "askarti-diagram.png";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    });
+   const mermaidContainer = document.querySelector('.mermaid-container');
+   if (!mermaidContainer || typeof html2canvas === 'undefined') {
+       console.error("Mermaid container or html2canvas library not found.");
+       return;
+   }
+   html2canvas(mermaidContainer, { backgroundColor: '#ffffff' }).then(canvas => {
+       const a = document.createElement("a");
+       a.href = canvas.toDataURL("image/png");
+       a.download = "askarti-diagram.png";
+       document.body.appendChild(a);
+       a.click();
+       document.body.removeChild(a);
+   });
 }
 
 async renderMermaidChart() {
-    try {
-        await mermaid.run({
-            nodes: document.querySelectorAll('.mermaid'),
-        });
-    } catch (error) {
-        console.error('Mermaid rendering error:', error);
-        const container = document.querySelector('.mermaid-container');
-        if (container) container.innerHTML = '<p class="text-red-500 text-sm">Could not render visual plan.</p>';
-    }
+   try {
+       await mermaid.run({
+           nodes: document.querySelectorAll('.mermaid'),
+       });
+   } catch (error) {
+       console.error('Mermaid rendering error:', error);
+       const container = document.querySelector('.mermaid-container');
+       if (container) container.innerHTML = '<p class="text-red-500 text-sm">Could not render visual plan.</p>';
+   }
 }
 
 showModal() { 
-    this.elements.aboutModal.classList.remove('hidden'); 
+   this.elements.aboutModal.classList.remove('hidden'); 
 }
 
 hideModal() { 
-    this.elements.aboutModal.classList.add('hidden'); 
+   this.elements.aboutModal.classList.add('hidden'); 
+}
+
+// Add the missing render methods for completeness
+renderSalesPlaybook(data) {
+   const { 
+       sales_play_title, sales_play_summary, key_services, key_partners, 
+       competitive_positioning, success_metrics, timeline_milestones, 
+       target_personas, insider_tips, risk_mitigation, next_actions, mermaid_chart 
+   } = data;
+   
+   const renderSimpleList = (items) => items?.map(item => `<li class="digest-item-summary">${item}</li>`).join('') || '';
+
+   return `
+       <div class="results-card digest-card">
+           <div class="results-card-body">
+               <header class="digest-header">
+                   <img src="/images/arti_right.png" alt="Arti" />
+                   <div>
+                       <h2>${sales_play_title}</h2>
+                       <p class="digest-header-meta">Sales Playbook</p>
+                   </div>
+               </header>
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Executive Summary</h3>
+                   <p class="digest-item-summary text-base">${sales_play_summary}</p>
+               </section>
+               ${key_services && key_services.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Key Services & Products</h3>
+                   <ul class="list-disc list-inside space-y-2">${renderSimpleList(key_services)}</ul>
+               </section>` : ''}
+               ${next_actions && next_actions.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Next Actions</h3>
+                   ${next_actions.map((action, index) => `
+                       <div class="digest-item">
+                           <div class="digest-item-number">${index + 1}</div>
+                           <div>
+                               <p class="digest-item-summary">${action}</p>
+                           </div>
+                       </div>`).join('')}
+               </section>` : ''}
+           </div>
+       </div>`;
+}
+
+renderNewsAdvice(data) {
+   const { quick_take, key_people_and_titles, money_keywords, immediate_actions } = data;
+   return `
+       <div class="results-card digest-card">
+           <div class="results-card-body">
+               <header class="digest-header">
+                   <img src="/images/arti_right.png" alt="Arti" />
+                   <div>
+                       <h2>News & GTM Analysis</h2>
+                       <p class="digest-header-meta">Actionable Intelligence</p>
+                   </div>
+               </header>
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Quick Take</h3>
+                   <p class="digest-item-summary text-base">${quick_take}</p>
+               </section>
+               ${immediate_actions && immediate_actions.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Immediate Actions</h3>
+                   ${immediate_actions.map((action, index) => `
+                       <div class="digest-item">
+                           <div class="digest-item-number">${index + 1}</div>
+                           <div>
+                               <h4 class="digest-item-headline">${action.action}</h4>
+                               <p class="digest-item-summary">${action.why}</p>
+                           </div>
+                       </div>`).join('')}
+               </section>` : ''}
+           </div>
+       </div>`;
+}
+
+renderMarketAnalysis(data) {
+   const { investment_thesis, bull_case, bear_case } = data;
+   return `
+       <div class="results-card digest-card">
+           <div class="results-card-body">
+               <header class="digest-header">
+                   <img src="/images/arti_right.png" alt="Arti" />
+                   <div>
+                       <h2>Market Analysis</h2>
+                       <p class="digest-header-meta">Bull vs Bear</p>
+                   </div>
+               </header>
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Investment Thesis</h3>
+                   <p class="digest-item-summary text-base">${investment_thesis}</p>
+               </section>
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Investment Cases</h3>
+                   <div class="space-y-4">
+                       <div class="p-3 bg-green-50 border-l-4 border-green-400 rounded">
+                           <h4 class="font-semibold text-green-800 mb-2">Bull Case</h4>
+                           <p class="text-green-700 digest-item-summary">${bull_case || 'Not specified'}</p>
+                       </div>
+                       <div class="p-3 bg-red-50 border-l-4 border-red-400 rounded">
+                           <h4 class="font-semibold text-red-800 mb-2">Bear Case</h4>
+                           <p class="text-red-700 digest-item-summary">${bear_case || 'Not specified'}</p>
+                       </div>
+                   </div>
+               </section>
+           </div>
+       </div>`;
+}
+
+renderProspectAdvice(data) {
+   const { summary, prospect_recommendations } = data;
+   return `
+       <div class="results-card digest-card">
+           <div class="results-card-body">
+               <header class="digest-header">
+                   <img src="/images/arti_right.png" alt="Arti" />
+                   <div>
+                       <h2>Prospecting Intelligence</h2>
+                       <p class="digest-header-meta">Market Analysis</p>
+                   </div>
+               </header>
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Summary</h3>
+                   <p class="digest-item-summary text-base">${summary}</p>
+               </section>
+               ${prospect_recommendations && prospect_recommendations.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Recommendations</h3>
+                   <ul class="list-disc list-inside space-y-2">${prospect_recommendations.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
+               </section>` : ''}
+           </div>
+       </div>`;
+}
+
+renderGeneralAdvice(data) {
+   const { response_type, quick_take, key_moves, next_steps } = data;
+   const titles = {
+       deal: 'Deal Game Plan',
+       interview: 'Interview Prep Plan',
+       meeting: 'Meeting Strategy',
+       default: 'Your Game Plan'
+   };
+   const title = titles[response_type] || titles.default;
+
+   return `
+       <div class="results-card digest-card">
+           <div class="results-card-body">
+               <header class="digest-header">
+                   <img src="/images/arti_right.png" alt="Arti" />
+                   <div>
+                       <h2>${title}</h2>
+                       <p class="digest-header-meta">Actionable Advice</p>
+                   </div>
+               </header>
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Quick Take</h3>
+                   <p class="digest-item-summary text-base">${quick_take}</p>
+               </section>
+               ${key_moves && key_moves.length > 0 ? `
+               <section class="digest-section">
+                   <h3 class="digest-section-title">Your Next Moves</h3>
+                   ${key_moves.map((move, index) => `
+                       <div class="digest-item">
+                           <div class="digest-item-number">${index + 1}</div>
+                           <div>
+                               <h4 class="digest-item-headline">${move.action}</h4>
+                               <p class="digest-item-summary">${move.why}</p>
+                           </div>
+                       </div>`).join('')}
+               </section>` : ''}
+               ${next_steps ? `
+               <footer class="digest-section">
+                   <h3 class="digest-section-title">Closing Thought</h3>
+                   <p class="digest-item-summary">${next_steps}</p>
+               </footer>` : ''}
+           </div>
+       </div>`;
 }
 }
 
 // Initialize the app when DOM is ready
+let app;
 document.addEventListener('DOMContentLoaded', () => {
-   const app = new AskArti();
-   window.askArti = app;
+  app = new AskArti();
+  window.askArti = app;
 });
 </script>
 </body>
