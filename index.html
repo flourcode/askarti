@@ -168,7 +168,6 @@ body {
     background-color: var(--brand-purple-faint);
     box-shadow: 0 4px 12px rgba(142, 136, 167, 0.2);
 }
-
 /* === CONFIDENCE METER === */
 .confidence-meter {
     width: 100%;
@@ -1025,8 +1024,7 @@ experiences, said Andy Jassy, President and CEO, Amazon.">Try this earnings exam
            <h3 class="text-lg font-bold text-brand-gray-800 mb-4">Choose a Persona (Beta Feature)</h3>
            
            <!-- Predefined ICPs -->
-           <!-- Predefined ICPs with Subdued AskArti Colors - 4 Columns -->
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+           <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
     <div class="icp-profile-card" data-icp="si-bd-lead">
         <div class="text-center">
             <div class="w-10 h-10 bg-gradient-to-br from-gray-500 to-gray-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
@@ -1642,329 +1640,157 @@ displayPipeline(data) {
 }
 
 renderOpportunityPipeline(data) {
-    const { 
-        pipeline_summary, opportunities, market_intelligence, 
-        icp_insights, strategic_recommendations, confidence_overview 
-    } = data;
+   const { 
+       pipeline_summary, opportunities, market_intelligence, 
+       icp_insights, strategic_recommendations, confidence_overview 
+   } = data;
 
-    // Store opportunities for filtering/sorting
-    this.currentOpportunities = opportunities || [];
+   return `
+       <div class="results-card">
+           <div class="results-card-header">
+               <div class="flex justify-between items-start">
+                   <div>
+                       <h2 class="text-xl font-bold text-gray-800 mb-2">📊 Daily Federal Pipeline</h2>
+                       <p class="text-gray-600">${pipeline_summary || 'Opportunities tailored to your ICP'}</p>
+                   </div>
+                   <div class="text-right">
+                       <div class="text-2xl font-bold text-brand-purple">${opportunities?.length || 0}</div>
+                       <div class="text-gray-500 text-sm">Active Opportunities</div>
+                   </div>
+               </div>
+           </div>
+           
+           <div class="results-card-body">
+               ${confidence_overview ? `
+               <div class="mb-6">
+                   <h3 class="text-lg font-semibold text-gray-800 mb-3">Pipeline Health</h3>
+                   <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                       <div class="text-center p-3 bg-purple-50 rounded-lg">
+                           <div class="text-2xl font-bold text-purple-600">${confidence_overview.prime || 0}</div>
+                           <div class="text-xs text-gray-500">Prime Targets</div>
+                       </div>
+                       <div class="text-center p-3 bg-green-50 rounded-lg">
+                           <div class="text-2xl font-bold text-green-600">${confidence_overview.high || 0}</div>
+                           <div class="text-xs text-gray-500">High Confidence</div>
+                       </div>
+                       <div class="text-center p-3 bg-yellow-50 rounded-lg">
+                           <div class="text-2xl font-bold text-yellow-600">${confidence_overview.medium || 0}</div>
+                           <div class="text-xs text-gray-500">Medium Confidence</div>
+                       </div>
+                       <div class="text-center p-3 bg-red-50 rounded-lg">
+                           <div class="text-2xl font-bold text-red-600">${confidence_overview.low || 0}</div>
+                           <div class="text-xs text-gray-500">Watch List</div>
+                       </div>
+                   </div>
+               </div>` : ''}
 
-    return `
-        <div class="results-card">
-            <div class="results-card-header">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h2 class="text-xl font-bold text-gray-800 mb-2">📊 Daily Federal Pipeline</h2>
-                        <p class="text-gray-600">${pipeline_summary || 'Opportunities tailored to your ICP'}</p>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-2xl font-bold text-brand-purple">${opportunities?.length || 0}</div>
-                        <div class="text-gray-500 text-sm">Active Opportunities</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="results-card-body">
-                <!-- Pipeline Controls -->
-                <div class="mb-6 p-4 bg-gray-50 rounded-lg">
-                    <div class="flex flex-wrap gap-4 items-center mb-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Filter by Agency:</label>
-                            <select id="pipeline-agency-filter" class="text-sm border border-gray-300 rounded px-3 py-1">
-                                <option value="">All Agencies</option>
-                                ${this.getUniqueAgencies(opportunities).map(agency => `<option value="${agency}">${agency}</option>`).join('')}
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Sort by:</label>
-                            <select id="pipeline-sort" class="text-sm border border-gray-300 rounded px-3 py-1">
-                                <option value="confidence">P-Win Score (High to Low)</option>
-                                <option value="due-date">Response Due Date</option>
-                                <option value="value">Contract Value</option>
-                                <option value="agency">Agency</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">View:</label>
-                            <select id="pipeline-view" class="text-sm border border-gray-300 rounded px-3 py-1">
-                                <option value="all">All Opportunities</option>
-                                <option value="tracked">Tracked Only</option>
-                                <option value="high-confidence">High Confidence Only</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="flex gap-2">
-                        <button id="apply-filters" class="btn btn-secondary text-sm px-3 py-1">Apply Filters</button>
-                        <button id="clear-filters" class="btn btn-secondary text-sm px-3 py-1">Clear All</button>
-                        <button id="view-tracked" class="btn btn-primary text-sm px-3 py-1">View Tracked (${this.getTrackedCount()})</button>
-                    </div>
-                </div>
+               ${market_intelligence ? `
+               <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                   <h3 class="text-lg font-semibold text-gray-800 mb-2">🎯 Market Intelligence</h3>
+                   <p class="text-gray-700">${market_intelligence}</p>
+               </div>` : ''}
 
-                ${confidence_overview ? `
-                <div class="mb-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Pipeline Health</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="text-center p-3 bg-purple-50 rounded-lg">
-                            <div class="text-2xl font-bold text-purple-600">${confidence_overview.prime || 0}</div>
-                            <div class="text-xs text-gray-500">Prime Targets</div>
-                        </div>
-                        <div class="text-center p-3 bg-green-50 rounded-lg">
-                            <div class="text-2xl font-bold text-green-600">${confidence_overview.high || 0}</div>
-                            <div class="text-xs text-gray-500">High Confidence</div>
-                        </div>
-                        <div class="text-center p-3 bg-yellow-50 rounded-lg">
-                            <div class="text-2xl font-bold text-yellow-600">${confidence_overview.medium || 0}</div>
-                            <div class="text-xs text-gray-500">Medium Confidence</div>
-                        </div>
-                        <div class="text-center p-3 bg-red-50 rounded-lg">
-                            <div class="text-2xl font-bold text-red-600">${confidence_overview.low || 0}</div>
-                            <div class="text-xs text-gray-500">Watch List</div>
-                        </div>
-                    </div>
-                </div>` : ''}
+               ${opportunities && opportunities.length > 0 ? `
+               <div class="mb-6">
+                   <h3 class="text-lg font-semibold text-gray-800 mb-4">Priority Opportunities</h3>
+                   <div class="space-y-4">
+                       ${opportunities.map((opp, index) => this.renderOpportunityCard(opp, index)).join('')}
+                   </div>
+               </div>` : ''}
 
-                ${market_intelligence ? `
-                <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2">🎯 Market Intelligence</h3>
-                    <p class="text-gray-700">${market_intelligence}</p>
-                </div>` : ''}
+               ${icp_insights && icp_insights.length > 0 ? `
+               <div class="mb-6">
+                   <h3 class="text-lg font-semibold text-gray-800 mb-4">ICP-Specific Insights</h3>
+                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       ${icp_insights.map(insight => `
+                           <div class="p-4 bg-brand-purple-faint border border-brand-purple rounded-lg">
+                               <h4 class="font-semibold text-gray-800 mb-2">${insight.category}</h4>
+                               <p class="text-gray-700 text-sm">${insight.insight}</p>
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>` : ''}
 
-                <div class="mb-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Priority Opportunities</h3>
-                    <div id="opportunities-container" class="space-y-4">
-                        ${opportunities && opportunities.length > 0 ? 
-                            opportunities.map((opp, index) => this.renderOpportunityCard(opp, index)).join('') :
-                            '<p class="text-gray-500 text-center py-8">No opportunities match your current filters.</p>'
-                        }
-                    </div>
-                </div>
-
-                ${icp_insights && icp_insights.length > 0 ? `
-                <div class="mb-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">ICP-Specific Insights</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${icp_insights.map(insight => `
-                            <div class="p-4 bg-brand-purple-faint border border-brand-purple rounded-lg">
-                                <h4 class="font-semibold text-gray-800 mb-2">${insight.category}</h4>
-                                <p class="text-gray-700 text-sm">${insight.insight}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>` : ''}
-            </div>
-        </div>
-
-        <!-- Deep Dive Analysis Modal -->
-        <div id="analysis-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-            <div class="bg-white rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-                <div class="flex justify-between items-start p-6 border-b">
-                    <h2 class="text-xl font-bold text-gray-900">🔍 Deep Dive Analysis</h2>
-                    <button id="close-analysis" class="text-gray-400 hover:text-gray-600">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-                <div id="analysis-content" class="p-6">
-                    <!-- Analysis content will be inserted here -->
-                </div>
-            </div>
-        </div>
-    `;
+               ${strategic_recommendations && strategic_recommendations.length > 0 ? `
+               <div class="mb-6">
+                   <h3 class="text-lg font-semibold text-gray-800 mb-4">Strategic Recommendations</h3>
+                   <div class="space-y-3">
+                       ${strategic_recommendations.map((rec, index) => `
+                           <div class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                               <div class="flex-shrink-0 w-6 h-6 bg-brand-purple rounded-full flex items-center justify-center text-xs text-white font-bold">
+                                   ${index + 1}
+                               </div>
+                               <div>
+                                   <h4 class="font-semibold text-gray-800 text-sm">${rec.action}</h4>
+                                   <p class="text-gray-600 text-xs mt-1">${rec.rationale}</p>
+                               </div>
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>` : ''}
+           </div>
+       </div>
+   `;
 }
 
-// New methods for tracking and filtering
-isOpportunityTracked(opportunityId) {
-    const tracked = JSON.parse(localStorage.getItem('tracked_opportunities') || '[]');
-    return tracked.includes(opportunityId);
-}
-
-toggleTrackOpportunity(opportunityId, buttonElement) {
-    let tracked = JSON.parse(localStorage.getItem('tracked_opportunities') || '[]');
-    
-    if (tracked.includes(opportunityId)) {
-        tracked = tracked.filter(id => id !== opportunityId);
-        buttonElement.textContent = '👁️ Track';
-        buttonElement.classList.remove('bg-green-100', 'text-green-700');
-    } else {
-        tracked.push(opportunityId);
-        buttonElement.textContent = '📌 Tracked';
-        buttonElement.classList.add('bg-green-100', 'text-green-700');
-    }
-    
-    localStorage.setItem('tracked_opportunities', JSON.stringify(tracked));
-    this.updateTrackedCount();
-}
-
-dismissOpportunity(opportunityId, buttonElement) {
-    const card = buttonElement.closest('.opportunity-card');
-    card.style.transition = 'all 0.3s ease';
-    card.style.opacity = '0.5';
-    card.style.transform = 'translateX(100%)';
-    
-    setTimeout(() => {
-        card.remove();
-    }, 300);
-    
-    // Store dismissed opportunities
-    let dismissed = JSON.parse(localStorage.getItem('dismissed_opportunities') || '[]');
-    dismissed.push(opportunityId);
-    localStorage.setItem('dismissed_opportunities', JSON.stringify(dismissed));
-}
-
-async analyzeOpportunity(opportunityId, opportunity) {
-    try {
-        this.showAnalysisModal();
-        document.getElementById('analysis-content').innerHTML = '<div class="text-center py-8"><div class="loader mx-auto mb-4"></div><p>Generating deep dive analysis...</p></div>';
-        
-        const response = await fetch(CONFIG.API_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                situation: `Provide detailed analysis for: ${opportunity.title} at ${opportunity.agency}. Value: ${opportunity.value}. Description: ${opportunity.description}`,
-                forceType: 'opportunity_analysis'
-            })
-        });
-
-        const data = await response.json();
-        this.displayDetailedAnalysis(data);
-        
-    } catch (error) {
-        console.error('Analysis failed:', error);
-        document.getElementById('analysis-content').innerHTML = '<p class="text-red-600">Analysis failed. Please try again.</p>';
-    }
-}
-
-showAnalysisModal() {
-    document.getElementById('analysis-modal').classList.remove('hidden');
-}
-
-hideAnalysisModal() {
-    document.getElementById('analysis-modal').classList.add('hidden');
-}
-
-getTrackedCount() {
-    const tracked = JSON.parse(localStorage.getItem('tracked_opportunities') || '[]');
-    return tracked.length;
-}
-
-updateTrackedCount() {
-    const button = document.getElementById('view-tracked');
-    if (button) {
-        button.textContent = `View Tracked (${this.getTrackedCount()})`;
-    }
-}
-
-getUniqueAgencies(opportunities) {
-    if (!opportunities) return [];
-    return [...new Set(opportunities.map(opp => opp.agency))].sort();
-}
-
-// Setup pipeline event listeners
-setupPipelineInteractivity() {
-    // Filter and sort controls
-    document.getElementById('apply-filters')?.addEventListener('click', () => {
-        this.applyPipelineFilters();
-    });
-    
-    document.getElementById('clear-filters')?.addEventListener('click', () => {
-        this.clearPipelineFilters();
-    });
-    
-    document.getElementById('view-tracked')?.addEventListener('click', () => {
-        this.showTrackedOpportunities();
-    });
-    
-    // Modal controls
-    document.getElementById('close-analysis')?.addEventListener('click', () => {
-        this.hideAnalysisModal();
-    });
-    
-    document.getElementById('analysis-modal')?.addEventListener('click', (e) => {
-        if (e.target.id === 'analysis-modal') {
-            this.hideAnalysisModal();
-        }
-    });
-}
 renderOpportunityCard(opportunity, index) {
-    const confidence = opportunity.confidence_score || 0.5;
-    const confidenceClass = this.getConfidenceClass(confidence);
-    const confidenceLabel = this.getConfidenceLabel(confidence);
-    const isTracked = this.isOpportunityTracked(opportunity.id || `opp-${index}`);
-    
-    return `
-        <div class="opportunity-card ${confidenceClass}" data-agency="${opportunity.agency}" data-deal-size="${opportunity.deal_size || 'unknown'}" data-confidence="${confidence}" data-due-date="${opportunity.response_due || ''}">
-            <div class="flex justify-between items-start mb-3">
-                <div class="flex-1">
-                    <div class="flex items-center space-x-2 mb-2">
-                        <h4 class="font-bold text-gray-800 text-base">${opportunity.title}</h4>
-                        <span class="tag ${opportunity.urgency === 'high' ? 'tag-urgent' : opportunity.stage === 'shaping' ? 'tag-shaping' : 'tag-active'}">
-                            ${opportunity.stage || 'Active'}
-                        </span>
-                        ${isTracked ? '<span class="tag" style="background-color: #10b981; color: white;">📌 Tracked</span>' : ''}
-                    </div>
-                    <p class="text-gray-600 text-sm mb-2">
-                        ${opportunity.agency} • ${opportunity.value || 'TBD'}
-                        ${opportunity.incumbent_contractor ? ` • Incumbent: ${opportunity.incumbent_contractor}` : ''}
-                    </p>
-                    <p class="text-gray-700 text-sm">${opportunity.description}</p>
-                    ${opportunity.response_due ? `
-                    <p class="text-orange-600 text-xs mt-1 font-semibold">📅 Response Due: ${opportunity.response_due}</p>
-                    ` : ''}
-                </div>
-                <div class="text-right ml-4">
-                    <div class="text-sm font-semibold text-gray-800 mb-1">${(confidence * 100).toFixed(0)}%</div>
-                    <div class="confidence-meter w-16">
-                        <div class="confidence-fill ${confidenceClass}" style="width: ${confidence * 100}%"></div>
-                    </div>
-                    <div class="text-xs text-gray-500 mt-1">${confidenceLabel}</div>
-                </div>
-            </div>
+   const confidence = opportunity.confidence_score || 0.5;
+   const confidenceClass = this.getConfidenceClass(confidence);
+   const confidenceLabel = this.getConfidenceLabel(confidence);
+   
+   return `
+       <div class="opportunity-card ${confidenceClass}">
+           <div class="flex justify-between items-start mb-3">
+               <div class="flex-1">
+                   <div class="flex items-center space-x-2 mb-2">
+                       <h4 class="font-bold text-gray-800 text-base">${opportunity.title}</h4>
+                       <span class="tag ${opportunity.urgency === 'high' ? 'tag-urgent' : opportunity.stage === 'shaping' ? 'tag-shaping' : 'tag-active'}">
+                           ${opportunity.stage || 'Active'}
+                       </span>
+                   </div>
+                   <p class="text-gray-600 text-sm mb-2">${opportunity.agency} • ${opportunity.value || 'TBD'}</p>
+                   <p class="text-gray-700 text-sm">${opportunity.description}</p>
+               </div>
+               <div class="text-right ml-4">
+                   <div class="text-sm font-semibold text-gray-800 mb-1">${(confidence * 100).toFixed(0)}%</div>
+                   <div class="confidence-meter w-16">
+    <div class="confidence-fill ${confidenceClass}" style="width: ${confidence * 100}%"></div>
+</div>
+                   <div class="text-xs text-gray-500 mt-1">${confidenceLabel}</div>
+               </div>
+           </div>
 
-            ${opportunity.key_insights && opportunity.key_insights.length > 0 ? `
-            <div class="mb-3">
-                <div class="text-xs font-semibold text-gray-600 mb-2">KEY INSIGHTS</div>
-                <div class="space-y-1">
-                    ${opportunity.key_insights.map(insight => `
-                        <div class="text-sm text-gray-700">• ${insight}</div>
-                    `).join('')}
-                </div>
-            </div>` : ''}
+           ${opportunity.key_insights && opportunity.key_insights.length > 0 ? `
+           <div class="mb-3">
+               <div class="text-xs font-semibold text-gray-600 mb-2">KEY INSIGHTS</div>
+               <div class="space-y-1">
+                   ${opportunity.key_insights.map(insight => `
+                       <div class="text-sm text-gray-700">• ${insight}</div>
+                   `).join('')}
+               </div>
+           </div>` : ''}
 
-            ${opportunity.stakeholders && opportunity.stakeholders.length > 0 ? `
-            <div class="mb-3">
-                <div class="text-xs font-semibold text-gray-600 mb-2">KEY STAKEHOLDERS</div>
-                <div class="flex flex-wrap gap-2">
-                    ${opportunity.stakeholders.map(stakeholder => `
-                        <span class="tag">${stakeholder}</span>
-                    `).join('')}
-                </div>
-            </div>` : ''}
+           ${opportunity.stakeholders && opportunity.stakeholders.length > 0 ? `
+           <div class="mb-3">
+               <div class="text-xs font-semibold text-gray-600 mb-2">KEY STAKEHOLDERS</div>
+               <div class="flex flex-wrap gap-2">
+                   ${opportunity.stakeholders.map(stakeholder => `
+                       <span class="tag">${stakeholder}</span>
+                   `).join('')}
+               </div>
+           </div>` : ''}
 
-            <div class="flex justify-between items-center pt-3 border-t border-gray-200">
-                <div class="flex space-x-2 text-xs text-gray-500">
-                    ${opportunity.timeline ? `<span>Timeline: ${opportunity.timeline}</span>` : ''}
-                    ${opportunity.competition ? `<span>Competition: ${opportunity.competition}</span>` : ''}
-                    ${opportunity.source_link ? `<a href="${opportunity.source_link}" target="_blank" class="text-brand-purple hover:underline">📄 Source</a>` : ''}
-                </div>
-                <div class="flex space-x-2">
-                    <button class="btn btn-secondary text-xs px-2 py-1 ${isTracked ? 'bg-green-100 text-green-700' : ''}" 
-                            onclick="app.toggleTrackOpportunity('${opportunity.id || `opp-${index}`}', this)">
-                        ${isTracked ? '📌 Tracked' : '👁️ Track'}
-                    </button>
-                    <button class="btn btn-secondary text-xs px-2 py-1" 
-                            onclick="app.dismissOpportunity('${opportunity.id || `opp-${index}`}', this)">
-                        ❌ Dismiss
-                    </button>
-                    <button class="btn btn-primary text-xs px-2 py-1" 
-                            onclick="app.analyzeOpportunity('${opportunity.id || `opp-${index}`}', ${JSON.stringify(opportunity).replace(/"/g, '&quot;')})">
-                        🔍 Analyze
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
+           <div class="flex justify-between items-center pt-3 border-t border-gray-200">
+               <div class="flex space-x-4 text-xs text-gray-500">
+                   ${opportunity.timeline ? `<span>Timeline: ${opportunity.timeline}</span>` : ''}
+                   ${opportunity.competition ? `<span>Competition: ${opportunity.competition}</span>` : ''}
+               </div>
+               <button class="btn btn-secondary text-xs px-3 py-1" onclick="app.analyzeOpportunity('${opportunity.id || index}')">
+                   Analyze
+               </button>
+           </div>
+       </div>
+   `;
 }
 
 getConfidenceClass(score) {
