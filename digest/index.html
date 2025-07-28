@@ -1,1 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Federal Sales Daily Digest Generator</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font for a clean look */
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #f0f2f5;
+        }
+        /* Custom scrollbar for output area */
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+        textarea::-webkit-scrollbar-track {
+            background: #e2e8f0; /* Light gray */
+            border-radius: 10px;
+        }
+        textarea::-webkit-scrollbar-thumb {
+            background: #94a3b8; /* Slate gray */
+            border-radius: 10px;
+        }
+        textarea::-webkit-scrollbar-thumb:hover {
+            background: #64748b; /* Darker slate gray */
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-3xl border border-gray-200">
+        <h1 class="text-3xl font-bold text-gray-900 mb-6 text-center">
+            Federal Sales Daily Digest Generator 📰
+        </h1>
 
+        <div class="mb-6">
+            <label for="nicheInput" class="block text-gray-700 text-sm font-semibold mb-2">
+                Niche/Target Audience & Core Focus:
+            </label>
+            <textarea id="nicheInput"
+                      class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 resize-y"
+                      rows="4"
+                      placeholder="e.g., Federal salespeople selling to DoD, focused on AI and Cloud contracts, or State and Local Government IT decision-makers in California, focused on cybersecurity and smart city initiatives.">Federal DoD and Civilian Sales Leaders, focused on cybersecurity, AI, and cloud modernization.</textarea>
+            <p class="text-xs text-gray-500 mt-1">
+                Be specific to get the best results.
+            </p>
+        </div>
+
+        <button id="generateButton"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 flex items-center justify-center">
+            <span id="buttonText">Generate Daily Digest</span>
+            <svg id="loadingSpinner" class="animate-spin h-5 w-5 text-white ml-3 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+        </button>
+
+        <div id="messageBox" class="mt-4 p-3 rounded-lg text-sm hidden" role="alert"></div>
+
+        <div class="mt-8">
+            <label for="digestOutput" class="block text-gray-700 text-sm font-semibold mb-2">
+                Generated Digest:
+            </label>
+            <textarea id="digestOutput"
+                      class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none resize-y"
+                      rows="15"
+                      readonly
+                      placeholder="Your tailored daily news digest will appear here..."></textarea>
+            <button id="copyButton"
+                    class="mt-3 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 hidden">
+                Copy to Clipboard 📋
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Configuration for your API Gateway endpoint
+        const API_GATEWAY_URL = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
+
+        // Get DOM elements
+        const nicheInput = document.getElementById('nicheInput');
+        const generateButton = document.getElementById('generateButton');
+        const buttonText = document.getElementById('buttonText');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const messageBox = document.getElementById('messageBox');
+        const digestOutput = document.getElementById('digestOutput');
+        const copyButton = document.getElementById('copyButton');
+
+        // Function to display messages (errors, success)
+        function showMessage(message, type = 'info') {
+            messageBox.textContent = message;
+            messageBox.classList.remove('hidden', 'bg-red-100', 'text-red-800', 'bg-green-100', 'text-green-800', 'bg-blue-100', 'text-blue-800');
+            if (type === 'error') {
+                messageBox.classList.add('bg-red-100', 'text-red-800');
+            } else if (type === 'success') {
+                messageBox.classList.add('bg-green-100', 'text-green-800');
+            } else {
+                messageBox.classList.add('bg-blue-100', 'text-blue-800');
+            }
+        }
+
+        // Function to hide messages
+        function hideMessage() {
+            messageBox.classList.add('hidden');
+        }
+
+        // Function to set loading state
+        function setLoading(isLoading) {
+            generateButton.disabled = isLoading;
+            if (isLoading) {
+                buttonText.textContent = 'Generating...';
+                loadingSpinner.classList.remove('hidden');
+                hideMessage();
+                digestOutput.value = ''; // Clear previous output
+                copyButton.classList.add('hidden'); // Hide copy button during generation
+            } else {
+                buttonText.textContent = 'Generate Daily Digest';
+                loadingSpinner.classList.add('hidden');
+            }
+        }
+
+        // Main function to generate the digest
+        generateButton.addEventListener('click', async () => {
+            const niche = nicheInput.value.trim();
+
+            if (!niche) {
+                showMessage('Please enter your Niche/Target Audience & Core Focus.', 'error');
+                return;
+            }
+
+            setLoading(true);
+
+            // Construct the prompt with the full "Intelligence Directives"
+            const prompt = `
+Generate a fresh daily news digest, under 2,350 characters total, for a LinkedIn post, tailored for the following niche/target audience and core focus area:
+
+${niche}
+
+Style: Extremely concise, micro text, urgent & factual tone. Minimal, functional emoji use. Optimized for LinkedIn's "See more" click (first 200-210 chars. must hook). No lengthy intros/outros. Less "sizzle," more "steak."
+
+Intelligence Directives (Prioritize these insights through real-time search):
+* Budget & Policy Shifts: Seek specific agency budget allocations, new Executive Orders, legislative changes impacting IT, or detailed policy guidance (e.g., OMB memos on specific tech adoption).
+* Targeted Tech & Modernization: Look for agency-specific IT strategies, digital transformation initiatives, legacy system modernization plans, or mandates for emerging tech (AI, Zero Trust, GenAI, Quantum) with cited challenges or specific use cases.
+* Key Personnel & Org Changes: Identify new CIOs, CTOs, CISOs, or senior IT/acquisition leadership. Look for public statements detailing their priorities or agency reorganizations impacting IT.
+* Early Solicitations & Forecasts: Search for summaries from public Industry Day events, agency forecasts (SAM.gov, GSA Forecast Tool), or news highlighting anticipated procurements or broad agency announcements (BAAs).
+* Competitive Landscape (Public): Summaries of significant federal contract awards to competitors in the specified tech areas, highlighting trends, solutions, or contract vehicles.
+
+Content Elements:
+* Top Bites: 3-4 ultra-condensed news items. For each: 1-2 punchy sentences max for "The Drill." Just the most critical phrase/quote, followed by source link (e.g., "[Key Phrase]" – [Source Name](link)).
+* Pipeline Playbook (SMART Goals): 3-4 bullet points, each a brutally short SMART goal for the audience, directly linked to a news item.
+* Key Players & Strategy: 3-5 ultra-condensed bullet points on key players/orgs/strategic shifts/unsolicited proposal ideas/GTM pivots, directly derived from the Intelligence Directives.
+* Bottom Line: 1-2 sentences summarizing urgency/action.
+* Final Tag: *(Info only. Verify with official sources.)*
+
+Formatting: Ensure it retains its structure (bolding, line breaks) when copied and pasted directly into a LinkedIn post draft.
+`;
+
+            // Construct the payload for your Lambda function
+            // The 'situation' field will now contain the full prompt, including directives
+            // 'forceType: "digest"' tells your Lambda to handle it as a digest request
+            const payload = {
+                situation: prompt, // Send the full prompt as the situation
+                forceType: "digest"
+            };
+
+            try {
+                // Call your API Gateway endpoint
+                const response = await fetch(API_GATEWAY_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API error: ${response.status} ${response.statusText} - ${errorData.message || 'Unknown error'}`);
+                }
+
+                const result = await response.json();
+
+                // Your Lambda is designed to return the digest data directly
+                // We now need to format it into the LinkedIn post string
+                const formattedDigest = formatDigestForLinkedIn(result);
+                
+                if (formattedDigest) {
+                    digestOutput.value = formattedDigest;
+                    showMessage('Digest generated successfully!', 'success');
+                    copyButton.classList.remove('hidden'); // Show copy button
+                } else {
+                    showMessage('Failed to format digest. No valid content received.', 'error');
+                    console.error('Invalid digest data received:', result);
+                }
+            } catch (error) {
+                showMessage(`Error: ${error.message}. Please ensure your Lambda and API Gateway are correctly configured and accessible.`, 'error');
+                console.error('Error generating digest:', error);
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        // Function to format the JSON digest data into the LinkedIn post string
+        function formatDigestForLinkedIn(data) {
+            if (!data || data.response_type !== 'digest') {
+                return "Error: Invalid digest data received.";
+            }
+
+            let linkedinPost = `**Federal Sales Leaders: DoD & Civilian Daily Briefing** 📈\n\n`;
+            linkedinPost += `---\n\n`;
+
+            // Key Updates (Top Bites)
+            linkedinPost += `**Key Updates**\n\n`;
+            if (data.deal_drivers && data.deal_drivers.length > 0) {
+                data.deal_drivers.slice(0, 4).forEach(item => { // Limit to top 4 as per prompt
+                    linkedinPost += `* **${item.headline}:** ${item.summary} [${item.source}](${item.link})\n`;
+                });
+            } else {
+                linkedinPost += `* No recent key updates found. Check back later.\n`;
+            }
+            linkedinPost += `\n---\n\n`;
+
+            // Pipeline Playbook (SMART Goals)
+            linkedinPost += `**Pipeline Playbook: SMART Goals**\n\n`;
+            if (data.action_items && data.action_items.length > 0) {
+                data.action_items.slice(0, 4).forEach(item => { // Limit to top 4 as per prompt
+                    linkedinPost += `* **${item.action}:** ${item.why}\n`;
+                });
+            } else {
+                linkedinPost += `* No specific action items generated today.\n`;
+            }
+            linkedinPost += `\n---\n\n`;
+
+            // Key Players & Strategy
+            linkedinPost += `**Key Players & Strategy**\n\n`;
+            // The quick_intel field from your Lambda output aligns well with "Key Players & Strategy"
+            if (data.quick_intel && data.quick_intel.length > 0) {
+                data.quick_intel.slice(0, 5).forEach(item => { // Limit to top 5 as per prompt
+                    linkedinPost += `* **${item.category}:** ${item.insight}\n`;
+                });
+            } else {
+                 linkedinPost += `* No specific strategic insights generated today.\n`;
+            }
+            linkedinPost += `\n---\n\n`;
+
+            // Bottom Line
+            linkedinPost += `**Bottom Line:** ${data.key_intelligence || 'Stay informed and agile in the evolving federal landscape.'}\n\n`;
+            linkedinPost += `*(Info only. Verify with official sources.)*`;
+
+            return linkedinPost;
+        }
+
+
+        // Copy to clipboard functionality
+        copyButton.addEventListener('click', () => {
+            digestOutput.select();
+            // Using document.execCommand('copy') for broader compatibility in iframe environments
+            try {
+                document.execCommand('copy');
+                showMessage('Copied to clipboard! 📋', 'success');
+            } catch (err) {
+                console.error('Failed to copy text using execCommand:', err);
+                showMessage('Failed to copy. Please copy manually.', 'error');
+            }
+            setTimeout(hideMessage, 3000); // Hide message after 3 seconds
+        });
+
+        // Set initial state (e.g., pre-fill input for demo)
+        window.onload = () => {
+            setLoading(false);
+            // The nicheInput is already pre-filled in the HTML for demonstration.
+            // If you want to clear it or set a different default, do it here.
+        };
+    </script>
+</body>
+</html>
