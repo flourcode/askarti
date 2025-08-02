@@ -569,6 +569,7 @@
         let currentNews = '';
         let currentPost = '';
         let suggestedHashtags = [];
+
         // DOM Elements
         const newsInput = document.getElementById('news-input');
         const charCount = document.getElementById('char-count');
@@ -576,64 +577,71 @@
         const btnText = document.getElementById('btn-text');
         const loading = document.getElementById('loading');
         const results = document.getElementById('results');
-        // Update character count
-        newsInput.addEventListener('input', (e) => {
-            const length = e.target.value.length;
+        const toneButtons = document.querySelectorAll('.tone-btn');
+        const themeToggleBtn = document.querySelector('.theme-toggle'); // Get theme toggle button
+
+        // Function to update character count
+        function updateCharCount() {
+            const length = newsInput.value.trim().length;
             charCount.textContent = `${length} / 3000`;
-            currentNews = e.target.value;
-        });
-        // Tone selection
-       document.querySelectorAll('.tone-btn').forEach(btn => {
-           btn.addEventListener('click', () => {
-               document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
-               btn.classList.add('active');
-               selectedTone = btn.dataset.tone;
-           });
-       });
-       // Generate post
-       generateBtn.addEventListener('click', () => generatePost());
-       async function generatePost() {
-           const newsText = newsInput.value.trim();
-           if (!newsText) {
-               showError('Please paste some news or text to transform');
-               return;
-           }
-           // Show loading state
-           generateBtn.disabled = true;
-           btnText.style.display = 'none';
-           loading.style.display = 'block';
-           try {
-               const prompt = createPrompt(newsText, selectedTone);
-               const response = await makeAPIRequest(prompt);
-               if (response.email_template) {
-                   currentPost = response.email_template;
-                   suggestedHashtags = response.suggested_hashtags || [];
-                   displayPost(response.email_template, suggestedHashtags);
-               } else if (response.quick_take) {
-                   currentPost = response.quick_take;
-                   displayPost(response.quick_take, []);
-               } else {
-                   throw new Error('Invalid response format');
-               }
-           } catch (error) {
-               console.error('Error:', error);
-               showError('Failed to generate post. Please try again.');
-           } finally {
-               generateBtn.disabled = false;
-               btnText.style.display = 'block';
-               loading.style.display = 'none';
-           }
-       }
-       function createPrompt(newsText, tone) {
-           const toneDescriptions = {
-               professional: 'professional and authoritative',
-               thought-leader: 'thought-provoking and insightful',
-               inspirational: 'inspirational and motivational',
-               analytical: 'data-driven and analytical',
-               b2b-bro: 'like a B2B sales bro who finds sales lessons in everything. Use phrases like "Here\'s what this taught me about the grind", "Sales lesson right here", "This is pure prospecting gold", "Another reminder that sales is about relationships", etc. Everything relates back to B2B sales, prospecting, closing deals, and the hustle',
-               controversial: 'bold and slightly controversial to spark debate'
-           };
-           return `Transform this news/text into a viral LinkedIn post. Make it ${toneDescriptions[tone]}:
+            currentNews = newsInput.value.trim();
+        }
+
+        // Function to set active tone button
+        function setActiveTone(clickedBtn) {
+            toneButtons.forEach(btn => btn.classList.remove('active'));
+            clickedBtn.classList.add('active');
+            selectedTone = clickedBtn.dataset.tone;
+        }
+
+        // Function to generate post
+        async function generatePost() {
+            const newsText = newsInput.value.trim();
+            if (!newsText) {
+                showError('Please paste some news or text to transform');
+                return;
+            }
+
+            // Show loading state
+            generateBtn.disabled = true;
+            btnText.style.display = 'none';
+            loading.style.display = 'block';
+
+            try {
+                const prompt = createPrompt(newsText, selectedTone);
+                const response = await makeAPIRequest(prompt);
+
+                if (response.email_template) {
+                    currentPost = response.email_template;
+                    suggestedHashtags = response.suggested_hashtags || [];
+                    displayPost(response.email_template, suggestedHashtags);
+                } else if (response.quick_take) {
+                    currentPost = response.quick_take;
+                    displayPost(response.quick_take, []);
+                } else {
+                    throw new Error('Invalid response format');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Failed to generate post. Please try again.');
+            } finally {
+                generateBtn.disabled = false;
+                btnText.style.display = 'block';
+                loading.style.display = 'none';
+            }
+        }
+
+        // Function to create prompt for API
+        function createPrompt(newsText, tone) {
+            const toneDescriptions = {
+                professional: 'professional and authoritative',
+                'thought-leader': 'thought-provoking and insightful',
+                inspirational: 'inspirational and motivational',
+                analytical: 'data-driven and analytical',
+                'b2b-bro': 'like a B2B sales bro who finds sales lessons in everything. Use phrases like "Here\'s what this taught me about the grind", "Sales lesson right here", "This is pure prospecting gold", "Another reminder that sales is about relationships", etc. Everything relates back to B2B sales, prospecting, closing deals, and the hustle',
+                controversial: 'bold and slightly controversial to spark debate'
+            };
+            return `Transform this news/text into a viral LinkedIn post. Make it ${toneDescriptions[tone]}:
 "${newsText}"
 Create a LinkedIn post that:
 - Starts with an irresistible hook (first line should grab attention)
@@ -652,174 +660,207 @@ INDUSTRY SPECIFIC: #healthcare #manufacturing #retail #finance #consulting #real
 TRENDS & INSIGHTS: #trends #future #insights #analysis #research #news #update #industry #market #economy #socialmedia #content #design #creativity #innovation
 Select the 5 most relevant hashtags from the above categories that best match your post content. Separate them with spaces.
 The post should feel native to LinkedIn and drive engagement (likes, comments, reposts).`;
-       }
-       async function makeAPIRequest(prompt) {
-           const response = await fetch(API_ENDPOINT, {
-               method: 'POST',
-               headers: {
-                   'Content-Type': 'application/json',
-               },
-               body: JSON.stringify({
-                   situation: prompt,
-                   forceType: 'outreach'
-               })
-           });
-           if (!response.ok) {
-               throw new Error(`API error: ${response.status}`);
-           }
-           return await response.json();
-       }
-       function displayPost(content, hashtags = []) {
-           // Parse hashtags from content if they exist
-           const lines = content.split('\n');
-           const lastLine = lines[lines.length - 1];
-           if (lastLine.includes('#')) {
-               hashtags = lastLine.split(' ').filter(word => word.startsWith('#'));
-               content = lines.slice(0, -1).join('\n').trim();
-           }
-           // Auto-append hashtags to content
-           const finalContent = hashtags.length > 0 ? 
-               `${content}\n\n${hashtags.join(' ')}` : content;
-           const html = `
-               <div class="results-section fade-in">
-                   <div class="linkedin-post-preview">
-                       <div class="linkedin-header">
-                           <div class="linkedin-avatar">N2P</div>
-                           <div class="linkedin-user-info">
-                               <h4>Your LinkedIn Post</h4>
-                               <p>Just now • 🌐</p>
-                           </div>
-                       </div>
-                       <div class="linkedin-content" id="post-content">${escapeHtml(finalContent)}</div>
-                   </div>
-                   <div class="action-buttons">
-                       <button class="copy-btn" onclick="copyPost()">
-                           <span>📋</span>
-                           <span id="copy-text">Copy Post</span>
-                       </button>
-                       <button class="linkedin-share-btn" onclick="shareToLinkedIn()">
-                           <span>📧</span>
-                           <span>Share to LinkedIn</span>
-                       </button>
-                   </div>
-               </div>
-           `;
-           results.innerHTML = html;
-           // Store content for copy function
-           window.generatedContent = finalContent;
-       }
-       // Removed generateVariations, generateSingleVariation, displayVariations, selectVariation functions
-       // as they are no longer needed.
-       function closeModal() {
-           if (window.currentModal) {
-               document.body.removeChild(window.currentModal);
-               window.currentModal = null;
-           }
-       }
-       function showSuccessMessage(message) {
-           const toast = document.createElement('div');
-           toast.style.cssText = `
-               position: fixed; top: 20px; right: 20px; z-index: 1000;
-               background: var(--notion-green); color: white; padding: 12px 16px;
-               border-radius: 8px; font-size: 14px; box-shadow: var(--shadow-lg);
-               animation: slideIn 0.3s ease-out;
-           `;
-           toast.textContent = message;
-           document.body.appendChild(toast);
-           setTimeout(() => {
-               toast.style.animation = 'slideOut 0.3s ease-in';
-               setTimeout(() => document.body.removeChild(toast), 300);
-           }, 2000);
-       }
-       function shareToLinkedIn() {
-           copyPost();
-           const modal = document.createElement('div');
-           modal.className = 'modal-overlay';
-           const text = encodeURIComponent(window.generatedContent);
-           const linkedInUrl = `https://www.linkedin.com/feed/?shareActive=true&text=${text}`;
-           modal.innerHTML = `
-               <div class="modal-content">
-                   <h3 style="margin-bottom: 16px;">🚀 Ready to Post!</h3>
-                   <p style="color: var(--notion-gray); margin-bottom: 20px; font-size: 14px;">
-                       Your post is copied to clipboard. LinkedIn will open with the composer ready.
-                   </p>
-                   <div style="display: flex; gap: 12px; justify-content: center;">
-                       <button onclick="openLinkedIn('${linkedInUrl}')" style="padding: 12px 20px; background: #0077B5; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
-                           Open LinkedIn
-                       </button>
-                       <button onclick="closeModal()" style="padding: 12px 20px; background: var(--bg-gray); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">
-                           Later
-                       </button>
-                   </div>
-               </div>
-           `;
-           document.body.appendChild(modal);
-           window.currentModal = modal;
-       }
-       function openLinkedIn(url) {
-           window.open(url, '_blank');
-           closeModal();
-           showSuccessMessage('LinkedIn opened! Paste your post and hit publish.');
-       }
-       async function copyPost() {
-           const copyBtn = document.querySelector('.copy-btn');
-           const copyText = document.getElementById('copy-text');
-           try {
-               await navigator.clipboard.writeText(window.generatedContent);
-               copyText.textContent = 'Copied!';
-               copyBtn.classList.add('copied');
-               setTimeout(() => {
-                   copyText.textContent = 'Copy Post';
-                   copyBtn.classList.remove('copied');
-               }, 2000);
-           } catch (err) {
-               // Fallback for older browsers
-               const textarea = document.createElement('textarea');
-               textarea.value = window.generatedContent;
-               document.body.appendChild(textarea);
-               textarea.select();
-               document.execCommand('copy');
-               document.body.removeChild(textarea);
-               copyText.textContent = 'Copied!';
-               setTimeout(() => {
-                   copyText.textContent = 'Copy Post';
-               }, 2000);
-           }
-       }
-       function showError(message) {
-           results.innerHTML = `
-               <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 16px; color: #991b1b;">
-                   <strong>Error:</strong> ${message}
-               </div>
-           `;
-       }
-       function escapeHtml(text) {
-           const div = document.createElement('div');
-           div.textContent = text;
-           return div.innerHTML;
-       }
-       function toggleTheme() {
-           document.body.classList.toggle('dark-mode');
-           const isDark = document.body.classList.contains('dark-mode');
-           localStorage.setItem('darkMode', isDark);
-       }
-       if (localStorage.getItem('darkMode') === 'true') {
-           document.body.classList.add('dark-mode');
-       }
-       document.addEventListener('DOMContentLoaded', function() {
-           if (API_ENDPOINT === 'ADD API') { // Check if default placeholder is still there
-               const disclaimer = document.querySelector('.disclaimer');
-               disclaimer.innerHTML = `
-                   <strong>⚠️ Configuration Required:</strong> 
-                   This demo requires an AI API endpoint to be configured. Please replace 'ADD API' with your actual API Gateway endpoint in the JavaScript code.
-               `;
-               disclaimer.style.background = '#fef2f2';
-               disclaimer.style.borderColor = '#fecaca';
-               disclaimer.style.color = '#991b1b';
-               generateBtn.disabled = true;
-               generateBtn.style.opacity = '0.5';
-           }
-       });
-   </script>
+        }
+
+        // Function to make API request
+        async function makeAPIRequest(prompt) {
+            const response = await fetch(API_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    situation: prompt,
+                    forceType: 'outreach'
+                })
+            });
+            if (!response.ok) {
+                throw new Error(`API error: ${response.status}`);
+            }
+            return await response.json();
+        }
+
+        // Function to display generated post
+        function displayPost(content, hashtags = []) {
+            // Parse hashtags from content if they exist
+            const lines = content.split('\n');
+            const lastLine = lines[lines.length - 1];
+            if (lastLine.includes('#')) {
+                hashtags = lastLine.split(' ').filter(word => word.startsWith('#'));
+                content = lines.slice(0, -1).join('\n').trim();
+            }
+
+            // Auto-append hashtags to content
+            const finalContent = hashtags.length > 0 ? 
+                `${content}\n\n${hashtags.join(' ')}` : content;
+            
+            const html = `
+                <div class="results-section fade-in">
+                    <div class="linkedin-post-preview">
+                        <div class="linkedin-header">
+                            <div class="linkedin-avatar">N2P</div>
+                            <div class="linkedin-user-info">
+                                <h4>Your LinkedIn Post</h4>
+                                <p>Just now • 🌐</p>
+                            </div>
+                        </div>
+                        <div class="linkedin-content" id="post-content">${escapeHtml(finalContent)}</div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="copy-btn" onclick="copyPost()">
+                            <span>📋</span>
+                            <span id="copy-text">Copy Post</span>
+                        </button>
+                        <button class="linkedin-share-btn" onclick="shareToLinkedIn()">
+                            <span>📧</span>
+                            <span>Share to LinkedIn</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            results.innerHTML = html;
+            // Store content for copy function
+            window.generatedContent = finalContent;
+        }
+
+        // Function to close modal
+        function closeModal() {
+            if (window.currentModal) {
+                document.body.removeChild(window.currentModal);
+                window.currentModal = null;
+            }
+        }
+
+        // Function to show success message (toast)
+        function showSuccessMessage(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed; top: 20px; right: 20px; z-index: 1000;
+                background: var(--notion-green); color: white; padding: 12px 16px;
+                border-radius: 8px; font-size: 14px; box-shadow: var(--shadow-lg);
+                animation: slideIn 0.3s ease-out;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 2000);
+        }
+
+        // Function to share to LinkedIn
+        function shareToLinkedIn() {
+            copyPost(); // Copy post to clipboard first
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            const text = encodeURIComponent(window.generatedContent);
+            const linkedInUrl = `https://www.linkedin.com/feed/?shareActive=true&text=${text}`;
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h3 style="margin-bottom: 16px;">🚀 Ready to Post!</h3>
+                    <p style="color: var(--notion-gray); margin-bottom: 20px; font-size: 14px;">
+                        Your post is copied to clipboard. LinkedIn will open with the composer ready.
+                    </p>
+                    <div style="display: flex; gap: 12px; justify-content: center;">
+                        <button onclick="openLinkedIn('${linkedInUrl}')" style="padding: 12px 20px; background: #0077B5; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
+                            Open LinkedIn
+                        </button>
+                        <button onclick="closeModal()" style="padding: 12px 20px; background: var(--bg-gray); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">
+                            Later
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            window.currentModal = modal;
+        }
+
+        // Function to open LinkedIn in new tab
+        function openLinkedIn(url) {
+            window.open(url, '_blank');
+            closeModal();
+            showSuccessMessage('LinkedIn opened! Paste your post and hit publish.');
+        }
+
+        // Function to copy post to clipboard
+        async function copyPost() {
+            const copyBtn = document.querySelector('.copy-btn');
+            const copyText = document.getElementById('copy-text');
+            try {
+                await navigator.clipboard.writeText(window.generatedContent);
+                copyText.textContent = 'Copied!';
+                copyBtn.classList.add('copied');
+                setTimeout(() => {
+                    copyText.textContent = 'Copy Post';
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                // Fallback for older browsers (less reliable and deprecated)
+                const textarea = document.createElement('textarea');
+                textarea.value = window.generatedContent;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                copyText.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyText.textContent = 'Copy Post';
+                }, 2000);
+            }
+        }
+
+        // Function to display error messages
+        function showError(message) {
+            results.innerHTML = `
+                <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 16px; color: #991b1b;">
+                    <strong>Error:</strong> ${message}
+                </div>
+            `;
+        }
+
+        // Function to escape HTML for safe display
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Function to toggle dark mode
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        // Initialize theme based on local storage
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Event Listeners on DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', function() {
+            newsInput.addEventListener('input', updateCharCount);
+            generateBtn.addEventListener('click', generatePost);
+            themeToggleBtn.addEventListener('click', toggleTheme); // Add listener for theme toggle
+
+            toneButtons.forEach(btn => {
+                btn.addEventListener('click', () => setActiveTone(btn));
+            });
+
+            // Check API endpoint configuration
+            if (API_ENDPOINT === 'ADD API') {
+                const disclaimer = document.querySelector('.disclaimer');
+                disclaimer.innerHTML = `
+                    <strong>⚠️ Configuration Required:</strong> 
+                    This demo requires an AI API endpoint to be configured. Please replace 'ADD API' with your actual API Gateway endpoint in the JavaScript code.
+                `;
+                disclaimer.style.background = '#fef2f2';
+                disclaimer.style.borderColor = '#fecaca';
+                disclaimer.style.color = '#991b1b';
+                generateBtn.disabled = true;
+                generateBtn.style.opacity = '0.5';
+            }
+        });
+    </script>
 </body>
 </html>
