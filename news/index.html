@@ -656,35 +656,30 @@
 
         // DOM Elements
         const newsInput = document.getElementById('news-input');
-        const charCount = document.querySelector('.char-count');
+        const charCount = document.getElementById('char-count');
         const generateBtn = document.getElementById('generate-btn');
         const btnText = document.getElementById('btn-text');
-        const loader = document.querySelector('.loading');
+        const loading = document.getElementById('loading');
         const results = document.getElementById('results');
-        const postContent = document.getElementById('post-content');
-        const copyBtn = document.getElementById('copy-btn');
-        const copyText = document.getElementById('copy-text');
-        const regenerateBtn = document.getElementById('regenerate-btn');
 
         // Update character count
         newsInput.addEventListener('input', (e) => {
             const length = e.target.value.length;
-            charCount.textContent = `${length}/3000`;
+            charCount.textContent = `${length} / 3000`;
             currentNews = e.target.value;
         });
 
         // Tone selection
         document.querySelectorAll('.tone-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('selected'));
-                btn.classList.add('selected');
+                document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
                 selectedTone = btn.dataset.tone;
             });
         });
 
         // Generate post
         generateBtn.addEventListener('click', generatePost);
-        regenerateBtn.addEventListener('click', generatePost);
 
         async function generatePost() {
             const newsText = newsInput.value.trim();
@@ -697,8 +692,7 @@
             // Show loading state
             generateBtn.disabled = true;
             btnText.style.display = 'none';
-            loader.style.display = 'block';
-            results.classList.remove('show');
+            loading.style.display = 'block';
 
             try {
                 const prompt = createPrompt(newsText, selectedTone);
@@ -718,7 +712,7 @@
             } finally {
                 generateBtn.disabled = false;
                 btnText.style.display = 'block';
-                loader.style.display = 'none';
+                loading.style.display = 'none';
             }
         }
 
@@ -770,40 +764,69 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
         }
 
         function displayPost(content) {
-            postContent.textContent = content;
-            results.classList.add('show');
+            const html = `
+                <div class="results-section fade-in">
+                    <div class="post-preview">
+                        <div class="post-content">${escapeHtml(content)}</div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="copy-btn" onclick="copyPost()">
+                            <span>📋</span>
+                            <span id="copy-text">Copy Post</span>
+                        </button>
+                        <button class="regenerate-btn" onclick="generatePost()">
+                            <span>🔄</span>
+                            <span>Try Different Style</span>
+                        </button>
+                    </div>
+                    
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-value" id="emoji-count">0</div>
+                            <div class="metric-label">Emojis Used</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="line-count">0</div>
+                            <div class="metric-label">Lines</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="char-length">0</div>
+                            <div class="metric-label">Characters</div>
+                        </div>
+                    </div>
+                </div>
+            `;
             
-            // Update stats
-            const emojiCount = (content.match(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu) || []).length;
-            const lineCount = content.split('\n').length;
-            const hookStrength = calculateHookStrength(content);
+            results.innerHTML = html;
             
+            // Update metrics
+            updateMetrics(content);
+            
+            // Store content for copy function
+            window.generatedContent = content;
+        }
+
+        function updateMetrics(content) {
+            // Count emojis
+            const emojiRegex = /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu;
+            const emojiCount = (content.match(emojiRegex) || []).length;
             document.getElementById('emoji-count').textContent = emojiCount;
+            
+            // Count lines
+            const lineCount = content.split('\n').length;
             document.getElementById('line-count').textContent = lineCount;
-            document.getElementById('hook-strength').textContent = `${hookStrength}/10`;
             
-            // Smooth scroll to results
-            results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            // Character count
+            document.getElementById('char-length').textContent = content.length;
         }
 
-        function calculateHookStrength(content) {
-            const firstLine = content.split('\n')[0];
-            let score = 5;
-            
-            if (firstLine.includes('?')) score += 2;
-            if (firstLine.match(/[\u{1F600}-\u{1F64F}]/gu)) score += 1;
-            if (firstLine.length < 100) score += 1;
-            if (firstLine.match(/\d+/)) score += 1;
-            
-            return Math.min(score, 10);
-        }
-
-        // Copy functionality
-        copyBtn.addEventListener('click', async () => {
-            const textToCopy = postContent.textContent;
+        async function copyPost() {
+            const copyBtn = document.querySelector('.copy-btn');
+            const copyText = document.getElementById('copy-text');
             
             try {
-                await navigator.clipboard.writeText(textToCopy);
+                await navigator.clipboard.writeText(window.generatedContent);
                 copyText.textContent = 'Copied!';
                 copyBtn.classList.add('copied');
                 
@@ -814,7 +837,7 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
             } catch (err) {
                 // Fallback
                 const textarea = document.createElement('textarea');
-                textarea.value = textToCopy;
+                textarea.value = window.generatedContent;
                 document.body.appendChild(textarea);
                 textarea.select();
                 document.execCommand('copy');
@@ -825,21 +848,50 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
                     copyText.textContent = 'Copy Post';
                 }, 2000);
             }
-        });
-
-        function showError(message) {
-            const error = document.createElement('div');
-            error.className = 'error';
-            error.textContent = message;
-            generateBtn.parentElement.appendChild(error);
-            
-            setTimeout(() => error.remove(), 5000);
         }
 
-        // Auto-resize textarea
-        newsInput.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = this.scrollHeight + 'px';
+        function showError(message) {
+            results.innerHTML = `
+                <div class="alert alert-error">
+                    <strong>Error:</strong> ${message}
+                </div>
+            `;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        // Load saved theme
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if API endpoint is configured
+            if (API_ENDPOINT === 'YOUR_API_GATEWAY_ENDPOINT_HERE') {
+                const disclaimer = document.querySelector('.disclaimer');
+                disclaimer.innerHTML = `
+                    <strong>⚠️ Configuration Required:</strong> 
+                    This demo requires an AI API endpoint to be configured. Please update the API_ENDPOINT in the code.
+                `;
+                disclaimer.style.background = '#fef2f2';
+                disclaimer.style.borderColor = '#fecaca';
+                disclaimer.style.color = '#991b1b';
+                
+                generateBtn.disabled = true;
+                generateBtn.style.opacity = '0.5';
+            }
         });
     </script>
 </body>
