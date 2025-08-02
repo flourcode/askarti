@@ -606,68 +606,6 @@
         }
 
         /* PRD Enhancement: Free Tier Modal */
-        .rate-limit-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: var(--bg-default);
-            padding: 32px;
-            border-radius: 12px;
-            max-width: 400px;
-            margin: 20px;
-            text-align: center;
-            box-shadow: var(--shadow-xl);
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: var(--notion-default);
-        }
-
-        .modal-text {
-            color: var(--notion-gray);
-            margin-bottom: 24px;
-            line-height: 1.6;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-        }
-
-        .modal-btn {
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-        }
-
-        .modal-btn.primary {
-            background: var(--notion-blue);
-            color: white;
-        }
-
-        .modal-btn.secondary {
-            background: var(--bg-gray);
-            color: var(--notion-default);
-            border: 1px solid var(--border-color);
-        }
 
         .results-section {
             background: var(--bg-default);
@@ -778,8 +716,8 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                  
-                    <span>NewsToPost</span>
+                    <div class="logo-icon">📰</div>
+                    <span>News2Post</span>
                 </div>
                 <div class="header-actions">
                     <button class="theme-toggle" onclick="toggleTheme()" style="width: 40px; height: 40px; border-radius: 8px; border: none; background: var(--bg-gray); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 18px;">🌓</button>
@@ -791,15 +729,37 @@
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <h1 class="fade-in">News To Post</h1>
-                <p class="hero-subtitle fade-in">Transform any article, news, or text into engaging LinkedIn posts that drive likes, shares, and meaningful conversations</p> 
+                <h1 class="fade-in">News to LinkedIn Gold</h1>
+                <p class="hero-subtitle fade-in">Transform any article, news, or text into engaging LinkedIn posts that drive likes, shares, and meaningful conversations</p>
+                
+                <div class="stats-grid fade-in">
+                    <div class="stat-card">
+                        <div class="stat-number">✨</div>
+                        <div class="stat-label">AI-Powered Writing</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">🎯</div>
+                        <div class="stat-label">6 Tone Options</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">📈</div>
+                        <div class="stat-label">Engagement Optimized</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">⚡</div>
+                        <div class="stat-label">Instant Results</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <div class="container">
         <div class="tool-section">
-            
+            <div class="section-header">
+                <h2 class="section-title">Transform Your Content</h2>
+                <p class="section-subtitle">Paste any news article, blog post, or text below and watch AI turn it into a LinkedIn post that gets noticed</p>
+            </div>
 
             <div class="tool-grid">
                 <div class="input-panel">
@@ -832,11 +792,6 @@
                         <span id="btn-text">🚀 Generate LinkedIn Post</span>
                         <div class="loading" id="loading" style="display: none;"></div>
                     </button>
-
-                    <!-- PRD Enhancement: Usage Counter Display -->
-                    <div style="margin-top: 12px; text-align: center; font-size: 12px; color: var(--notion-gray);" id="usage-counter">
-                        Daily posts remaining: <span id="posts-remaining">5</span>/5
-                    </div>
                 </div>
 
                 <div class="output-panel">
@@ -850,27 +805,8 @@
             </div>
         </div>
 
-        <!-- PRD Enhancement: Rate Limit Modal -->
-        <div class="rate-limit-modal" id="rate-limit-modal" style="display: none;">
-            <div class="modal-content">
-                <h3 class="modal-title">🚀 Ready for More Posts?</h3>
-                <p class="modal-text">
-                    You've reached your daily limit of 5 free LinkedIn posts. Upgrade to create unlimited posts and unlock premium features!
-                </p>
-                <div class="modal-buttons">
-                    <button class="modal-btn primary" onclick="showUpgradeInfo()">Upgrade Now</button>
-                    <button class="modal-btn secondary" onclick="closeModal()">Maybe Later</button>
-                </div>
-                <div style="margin-top: 16px;">
-                    <button class="modal-btn secondary" onclick="resetDailyLimit()">Reset Limit (Demo)</button>
-                </div>
-            </div>
-        </div>
-
         <div class="disclaimer">
             <strong>💡 Pro Tips:</strong> The best LinkedIn posts start with a hook, use strategic line breaks for readability, include relevant emojis, and end with a question or call-to-action. Our AI handles all of this automatically!
-            <br><br>
-            <small>📊 Anonymous usage tracking via local storage helps provide daily limits and improved user experience. No personal data is stored.</small>
         </div>
     </div>
 
@@ -878,10 +814,7 @@
         // Configuration
         const API_ENDPOINT = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
         
-        // PRD Enhancement: Free tier rate limiting configuration
-        const DAILY_FREE_LIMIT = 5;
-        const RATE_LIMIT_KEY = 'news2post_daily_usage';
-        const RATE_LIMIT_DATE_KEY = 'news2post_last_reset_date';
+
         
         // State
         let selectedTone = 'professional';
@@ -898,65 +831,6 @@
         const results = document.getElementById('results');
         const usageCounter = document.getElementById('usage-counter');
         const postsRemaining = document.getElementById('posts-remaining');
-        const rateLimitModal = document.getElementById('rate-limit-modal');
-
-        // PRD Enhancement: Initialize usage tracking
-        function initializeUsageTracking() {
-            const today = new Date().toDateString();
-            const lastResetDate = localStorage.getItem(RATE_LIMIT_DATE_KEY);
-            
-            if (lastResetDate !== today) {
-                // Reset daily counter
-                localStorage.setItem(RATE_LIMIT_KEY, '0');
-                localStorage.setItem(RATE_LIMIT_DATE_KEY, today);
-            }
-            
-            updateUsageDisplay();
-        }
-
-        function updateUsageDisplay() {
-            const usage = parseInt(localStorage.getItem(RATE_LIMIT_KEY) || '0');
-            const remaining = Math.max(0, DAILY_FREE_LIMIT - usage);
-            postsRemaining.textContent = remaining;
-            
-            if (remaining === 0) {
-                generateBtn.disabled = true;
-                generateBtn.style.opacity = '0.5';
-                btnText.textContent = '🔒 Daily Limit Reached';
-            }
-        }
-
-        function incrementUsage() {
-            const usage = parseInt(localStorage.getItem(RATE_LIMIT_KEY) || '0');
-            localStorage.setItem(RATE_LIMIT_KEY, (usage + 1).toString());
-            updateUsageDisplay();
-            
-            if (usage + 1 >= DAILY_FREE_LIMIT) {
-                setTimeout(() => showRateLimitModal(), 1000);
-            }
-        }
-
-        function showRateLimitModal() {
-            rateLimitModal.style.display = 'flex';
-        }
-
-        function closeModal() {
-            rateLimitModal.style.display = 'none';
-        }
-
-        function resetDailyLimit() {
-            localStorage.setItem(RATE_LIMIT_KEY, '0');
-            generateBtn.disabled = false;
-            generateBtn.style.opacity = '1';
-            btnText.textContent = '🚀 Generate LinkedIn Post';
-            updateUsageDisplay();
-            closeModal();
-        }
-
-        function showUpgradeInfo() {
-            alert('🚀 Upgrade feature coming soon! This would typically redirect to a payment page.');
-            closeModal();
-        }
 
         // Update character count
         newsInput.addEventListener('input', (e) => {
@@ -978,12 +852,6 @@
         generateBtn.addEventListener('click', generatePost);
 
         async function generatePost(refinementType = null) {
-            const usage = parseInt(localStorage.getItem(RATE_LIMIT_KEY) || '0');
-            if (usage >= DAILY_FREE_LIMIT) {
-                showRateLimitModal();
-                return;
-            }
-
             const newsText = newsInput.value.trim();
             
             if (!newsText && !refinementType) {
@@ -1011,17 +879,9 @@
                     currentPost = response.email_template;
                     suggestedHashtags = response.suggested_hashtags || [];
                     displayPost(response.email_template, suggestedHashtags);
-                    
-                    // Only increment usage for new posts, not refinements
-                    if (!refinementType) {
-                        incrementUsage();
-                    }
                 } else if (response.quick_take) {
                     currentPost = response.quick_take;
                     displayPost(response.quick_take, []);
-                    if (!refinementType) {
-                        incrementUsage();
-                    }
                 } else {
                     throw new Error('Invalid response format');
                 }
@@ -1033,7 +893,6 @@
                 generateBtn.disabled = false;
                 btnText.style.display = 'block';
                 loading.style.display = 'none';
-                updateUsageDisplay();
             }
         }
 
@@ -1393,9 +1252,6 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            // PRD Enhancement: Initialize usage tracking
-            initializeUsageTracking();
-            
             // Check if API endpoint is configured
             if (API_ENDPOINT === 'YOUR_API_GATEWAY_ENDPOINT_HERE') {
                 const disclaimer = document.querySelector('.disclaimer');
@@ -1409,13 +1265,6 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
                 
                 generateBtn.disabled = true;
                 generateBtn.style.opacity = '0.5';
-            }
-        });
-
-        // Close modal when clicking outside
-        rateLimitModal.addEventListener('click', function(e) {
-            if (e.target === rateLimitModal) {
-                closeModal();
             }
         });
     </script>
