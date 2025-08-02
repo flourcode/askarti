@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News2Post - Transform Any News Into Viral LinkedIn Posts</title>
+    <title>News2Post - AI LinkedIn Post Generator</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -352,59 +352,15 @@
             line-height: 1.6;
             white-space: pre-wrap;
             color: var(--notion-default);
-            margin-bottom: 16px;
+            margin-bottom: 16px; /* Adjusted margin */
         }
-
-        /* Engagement Prediction */
-        .engagement-prediction {
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            background: var(--bg-gray);
-            border-radius: 8px;
-            margin: 12px 0;
-            border: 1px solid var(--border-color);
-        }
-
-        .prediction-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: var(--notion-gray);
-        }
-
-        .prediction-icon {
-            font-size: 14px;
-        }
-
-        .linkedin-actions {
-            display: flex;
-            justify-content: space-around;
-            padding-top: 12px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .linkedin-action {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 12px;
-            color: var(--notion-gray);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .linkedin-action:hover {
-            background: var(--bg-hover);
-        }
+        
+        /* Removed .engagement-prediction and .linkedin-actions styles */
 
         /* Quick Actions */
         .quick-actions {
             display: grid;
-            grid-template-columns: repeat(1, 1fr); /* Simplified to 1 column for less complexity */
+            grid-template-columns: 1fr; /* Always single column */
             gap: 8px;
             margin: 16px 0;
         }
@@ -552,6 +508,7 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
+            padding: 16px; /* Added padding for smaller screens */
         }
 
         .modal-content {
@@ -559,6 +516,7 @@
             padding: 24px;
             border-radius: 12px;
             max-width: 400px;
+            width: 100%; /* Make modal responsive */
             margin: 20px;
             text-align: center;
             box-shadow: var(--shadow-lg);
@@ -566,11 +524,15 @@
 
         @media (max-width: 768px) {
             .hero h1 {
-                font-size: clamp(2.5rem, 10vw, 4rem);
+                font-size: clamp(2rem, 8vw, 3rem); /* Adjusted for smaller screens */
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem; /* Adjusted for smaller screens */
             }
 
             .tool-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr; /* Always single column on mobile */
                 gap: 30px;
             }
 
@@ -588,6 +550,9 @@
 
             .action-buttons {
                 grid-template-columns: 1fr;
+            }
+            .modal-content {
+                max-width: 90%; /* Allow modals to take more width on small screens */
             }
         }
 
@@ -646,10 +611,6 @@
 
     <div class="container">
         <div class="tool-section">
-            <div class="section-header">
-                <h2 class="section-title">Transform Your Content</h2>
-                <p class="section-subtitle">Paste any news article, blog post, or text below and watch AI turn it into a LinkedIn post that gets noticed</p>
-            </div>
 
             <div class="tool-grid">
                 <div class="input-panel">
@@ -702,7 +663,7 @@
 
     <script>
         // Configuration
-        const API_ENDPOINT = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
+        const API_ENDPOINT = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI'; // Replace with your actual API Gateway endpoint
         
         // State
         let selectedTone = 'professional';
@@ -860,40 +821,6 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
                        </div>
                        
                        <div class="linkedin-content" id="post-content">${escapeHtml(finalContent)}</div>
-                       
-                       <div class="engagement-prediction">
-                           <div class="prediction-item">
-                               <span class="prediction-icon">👍</span>
-                               <span class="prediction-text">Likely Engagement</span>
-                           </div>
-                           <div class="prediction-item">
-                               <span class="prediction-icon">💬</span>
-                               <span class="prediction-text">Good Readability</span>
-                           </div>
-                           <div class="prediction-item">
-                               <span class="prediction-icon">⚡</span>
-                               <span class="prediction-text">Ready to Post</span>
-                           </div>
-                       </div>
-                       
-                       <div class="linkedin-actions">
-                           <div class="linkedin-action">
-                               <span>👍</span>
-                               <span>Like</span>
-                           </div>
-                           <div class="linkedin-action">
-                               <span>💬</span>
-                               <span>Comment</span>
-                           </div>
-                           <div class="linkedin-action">
-                               <span>🔄</span>
-                               <span>Repost</span>
-                           </div>
-                           <div class="linkedin-action">
-                               <span>📤</span>
-                               <span>Send</span>
-                           </div>
-                       </div>
                    </div>
                    
                    <div class="quick-actions">
