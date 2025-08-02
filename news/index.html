@@ -931,22 +931,42 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
        }
 
        async function makeAPIRequest(prompt) {
-           const response = await fetch(API_ENDPOINT, {
-               method: 'POST',
-               headers: {
-                   'Content-Type': 'application/json',
-               },
-               body: JSON.stringify({
-                   situation: prompt,
-                   forceType: 'outreach'
-               })
-           });
+           console.log('Making API request with prompt length:', prompt.length);
+           
+           const requestBody = {
+               situation: prompt,
+               forceType: 'outreach'
+           };
+           
+           console.log('Request body:', requestBody);
+           
+           try {
+               const response = await fetch(API_ENDPOINT, {
+                   method: 'POST',
+                   headers: {
+                       'Content-Type': 'application/json',
+                       'Accept': 'application/json'
+                   },
+                   body: JSON.stringify(requestBody)
+               });
 
-           if (!response.ok) {
-               throw new Error(`API error: ${response.status}`);
+               console.log('Response status:', response.status);
+               console.log('Response headers:', response.headers);
+               
+               if (!response.ok) {
+                   const errorText = await response.text();
+                   console.error('API Error Response:', errorText);
+                   throw new Error(`API error: ${response.status} - ${errorText}`);
+               }
+
+               const responseData = await response.json();
+               console.log('Success response:', responseData);
+               return responseData;
+               
+           } catch (error) {
+               console.error('Fetch error:', error);
+               throw error;
            }
-
-           return await response.json();
        }
 
        function formatLinkedInContent(text) {
