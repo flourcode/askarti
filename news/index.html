@@ -352,38 +352,10 @@
             line-height: 1.6;
             white-space: pre-wrap;
             color: var(--notion-default);
-            margin-bottom: 16px; /* Adjusted margin */
+            margin-bottom: 16px;
         }
         
-        /* Removed .engagement-prediction and .linkedin-actions styles */
-
-        /* Quick Actions */
-        .quick-actions {
-            display: grid;
-            grid-template-columns: 1fr; /* Always single column */
-            gap: 8px;
-            margin: 16px 0;
-        }
-
-        .quick-action-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 12px;
-            background: var(--bg-gray);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            justify-content: center;
-        }
-
-        .quick-action-btn:hover {
-            background: var(--bg-hover);
-            border-color: var(--notion-blue);
-            transform: translateY(-1px);
-        }
+        /* Removed .quick-actions styles as it's no longer needed */
 
         /* Action Buttons */
         .action-buttons {
@@ -429,7 +401,7 @@
             background: var(--notion-purple);
         }
 
-        .regenerate-btn {
+        .regenerate-btn { /* This button is no longer explicitly used, but leaving style just in case of future use */
             background: transparent;
             color: var(--notion-default);
             border: 1px solid var(--notion-default);
@@ -508,7 +480,7 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            padding: 16px; /* Added padding for smaller screens */
+            padding: 16px;
         }
 
         .modal-content {
@@ -516,7 +488,7 @@
             padding: 24px;
             border-radius: 12px;
             max-width: 400px;
-            width: 100%; /* Make modal responsive */
+            width: 100%;
             margin: 20px;
             text-align: center;
             box-shadow: var(--shadow-lg);
@@ -524,15 +496,15 @@
 
         @media (max-width: 768px) {
             .hero h1 {
-                font-size: clamp(2rem, 8vw, 3rem); /* Adjusted for smaller screens */
+                font-size: clamp(2rem, 8vw, 3rem);
             }
 
             .hero-subtitle {
-                font-size: 1.2rem; /* Adjusted for smaller screens */
+                font-size: 1.2rem;
             }
 
             .tool-grid {
-                grid-template-columns: 1fr; /* Always single column on mobile */
+                grid-template-columns: 1fr;
                 gap: 30px;
             }
 
@@ -552,7 +524,7 @@
                 grid-template-columns: 1fr;
             }
             .modal-content {
-                max-width: 90%; /* Allow modals to take more width on small screens */
+                max-width: 90%;
             }
         }
 
@@ -611,6 +583,10 @@
 
     <div class="container">
         <div class="tool-section">
+            <div class="section-header">
+                <h2 class="section-title">Transform Your Content</h2>
+                <p class="section-subtitle">Paste any news article, blog post, or text below and watch AI turn it into a LinkedIn post that gets noticed</p>
+            </div>
 
             <div class="tool-grid">
                 <div class="input-panel">
@@ -663,7 +639,7 @@
 
     <script>
         // Configuration
-        const API_ENDPOINT = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI'; // Replace with your actual API Gateway endpoint
+        const API_ENDPOINT = 'ADD API'; // Replace with your actual API Gateway endpoint
         
         // State
         let selectedTone = 'professional';
@@ -823,13 +799,6 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
                        <div class="linkedin-content" id="post-content">${escapeHtml(finalContent)}</div>
                    </div>
                    
-                   <div class="quick-actions">
-                       <button class="quick-action-btn" onclick="generateVariations()">
-                           <span>🎲</span>
-                           <span>Generate Variations</span>
-                       </button>
-                   </div>
-                   
                    <div class="action-buttons">
                        <button class="copy-btn" onclick="copyPost()">
                            <span>📋</span>
@@ -849,80 +818,8 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
            window.generatedContent = finalContent;
        }
 
-       // Generate Variations
-       function generateVariations() {
-           if (!currentNews) { // Use original news input for variations
-               showError('Please input news first to generate variations.');
-               return;
-           }
-           
-           const variationsContainer = document.createElement('div');
-           variationsContainer.className = 'modal-overlay';
-           variationsContainer.innerHTML = `
-               <div class="modal-content" style="max-width: 600px;">
-                   <h3 style="margin-bottom: 16px;">🎲 Generating 3 Variations...</h3>
-                   <p style="color: var(--notion-gray); margin-bottom: 20px;">
-                       We are creating different versions of your post in various tones.
-                   </p>
-                   <div class="loading" style="margin: 20px auto; display: block;"></div>
-                   <button onclick="closeModal()" style="padding: 8px 16px; background: var(--bg-gray); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; margin-top: 20px;">Cancel</button>
-               </div>
-           `;
-           document.body.appendChild(variationsContainer);
-           window.currentModal = variationsContainer; // Store reference to modal
-
-           const tones = ['professional', 'conversational', 'thought-leader'];
-           Promise.all(tones.map(tone => generateSingleVariation(tone)))
-               .then(results => displayVariations(results))
-               .catch(error => {
-                   console.error('Variation generation failed:', error);
-                   showError('Failed to generate variations. Please try again.');
-                   closeModal();
-               });
-       }
-
-       async function generateSingleVariation(tone) {
-           const prompt = createPrompt(currentNews, tone); // Use original news input
-           const response = await makeAPIRequest(prompt);
-           return { tone, content: response.email_template || response.quick_take, hashtags: response.suggested_hashtags };
-       }
-
-       function displayVariations(variations) {
-           const variationsHtml = `
-               <div class="modal-content" style="max-width: 600px;">
-                   <h3 style="margin-bottom: 16px;">🎲 Choose Your Favorite Variation:</h3>
-                   <div style="max-height: 400px; overflow-y: auto; padding-right: 10px;">
-                       ${variations.map((variation, index) => `
-                           <div style="background: var(--bg-gray); padding: 16px; border-radius: 8px; margin-bottom: 12px; border: 1px solid var(--border-color);">
-                               <div style="font-weight: 600; margin-bottom: 8px; text-transform: capitalize;">${variation.tone} Tone</div>
-                               <div style="font-size: 14px; line-height: 1.5; white-space: pre-wrap;">${escapeHtml(variation.content)}\n\n${variation.hashtags.join(' ')}</div>
-                               <button style="margin-top: 12px; padding: 8px 16px; background: var(--notion-blue); color: white; border: none; border-radius: 6px; cursor: pointer;" onclick="selectVariation(${index})">Select This One</button>
-                           </div>
-                       `).join('')}
-                   </div>
-                   <button onclick="closeModal()" style="padding: 8px 16px; background: var(--bg-gray); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; margin-top: 20px;">Close</button>
-               </div>
-           `;
-           if (window.currentModal) {
-               window.currentModal.innerHTML = variationsHtml;
-           } else {
-               const modal = document.createElement('div');
-               modal.className = 'modal-overlay';
-               modal.innerHTML = variationsHtml;
-               document.body.appendChild(modal);
-               window.currentModal = modal;
-           }
-           window.currentVariations = variations; // Store variations for selection
-       }
-
-       function selectVariation(index) {
-           if (!window.currentVariations) return;
-           const selected = window.currentVariations[index];
-           currentPost = `${selected.content}\n\n${selected.hashtags.join(' ')}`;
-           displayPost(selected.content, selected.hashtags); // Re-render main display
-           closeModal();
-           showSuccessMessage('Variation selected and displayed!');
-       }
+       // Removed generateVariations, generateSingleVariation, displayVariations, selectVariation functions
+       // as they are no longer needed.
 
        function closeModal() {
            if (window.currentModal) {
