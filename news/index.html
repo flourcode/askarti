@@ -141,60 +141,6 @@
             margin-right: auto;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 24px;
-            margin-bottom: 60px;
-        }
-
-        .stat-card {
-            background: var(--bg-gray);
-            padding: 32px;
-            border-radius: 12px;
-            transition: all 0.3s;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--notion-blue), var(--notion-purple));
-            transform: translateX(-100%);
-            transition: transform 0.3s;
-        }
-
-        .stat-card:hover::before {
-            transform: translateX(0);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--notion-default);
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            font-size: 0.875rem;
-            color: var(--notion-gray);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
         .tool-section {
             background: var(--bg-default);
             border-radius: 12px;
@@ -355,47 +301,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Post Health Bar */
-        .post-health-bar {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-
-        .health-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 12px;
-            background: var(--bg-gray);
-            border-radius: 20px;
-            font-size: 12px;
-            border: 1px solid var(--border-color);
-        }
-
-        .health-item.excellent {
-            background: linear-gradient(135deg, #d4edda, #c3e6cb);
-            border-color: var(--notion-green);
-            color: var(--notion-green);
-        }
-
-        .health-item.good {
-            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
-            border-color: var(--notion-yellow);
-            color: var(--notion-yellow);
-        }
-
-        .health-item.poor {
-            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
-            border-color: var(--notion-red);
-            color: var(--notion-red);
-        }
-
-        .health-icon {
-            font-size: 14px;
-        }
-
         /* LinkedIn-Style Post Preview */
         .linkedin-post-preview {
             background: var(--bg-default);
@@ -440,30 +345,6 @@
         .linkedin-user-info p {
             font-size: 12px;
             color: var(--notion-gray);
-        }
-
-        .post-actions-top {
-            display: flex;
-            gap: 8px;
-        }
-
-        .mini-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-gray);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-
-        .mini-btn:hover {
-            background: var(--bg-hover);
-            transform: translateY(-1px);
         }
 
         .linkedin-content {
@@ -523,7 +404,7 @@
         /* Quick Actions */
         .quick-actions {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(1, 1fr); /* Simplified to 1 column for less complexity */
             gap: 8px;
             margin: 16px 0;
         }
@@ -551,7 +432,7 @@
         /* Action Buttons */
         .action-buttons {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr; /* Simplified to 2 columns */
             gap: 12px;
             margin: 20px 0;
         }
@@ -560,12 +441,14 @@
             background: var(--notion-green);
             color: white;
             border: none;
-            padding: 12px 16px;
+            padding: 14px 24px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
             font-weight: 500;
             transition: all 0.2s;
+            width: 100%;
+            font-family: inherit;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -610,95 +493,6 @@
             background: var(--notion-default);
             color: white;
             transform: translateY(-1px);
-        }
-
-        /* Enhanced Metrics */
-        .enhanced-metrics {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 16px;
-            margin-top: 24px;
-        }
-
-        .metric-card {
-            background: var(--bg-gray);
-            padding: 16px;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid var(--border-color);
-        }
-
-        .metric-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--notion-blue);
-            margin-bottom: 4px;
-        }
-
-        .metric-value.excellent {
-            color: var(--notion-green);
-        }
-
-        .metric-value.good {
-            color: var(--notion-yellow);
-        }
-
-        .metric-value.poor {
-            color: var(--notion-red);
-        }
-
-        .metric-label {
-            font-size: 0.75rem;
-            color: var(--notion-gray);
-        }
-
-        .engagement-score {
-            background: linear-gradient(135deg, var(--notion-blue), var(--notion-purple));
-            color: white;
-        }
-
-        .engagement-score .metric-value {
-            color: white;
-        }
-
-        /* Posting Insights */
-        .posting-insights {
-            background: var(--bg-gray);
-            padding: 16px;
-            border-radius: 8px;
-            margin-top: 16px;
-            border: 1px solid var(--border-color);
-        }
-
-        .posting-insights h4 {
-            font-size: 14px;
-            margin-bottom: 12px;
-            color: var(--notion-default);
-        }
-
-        .insights-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
-        }
-
-        .insight-item {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .insight-label {
-            font-size: 11px;
-            color: var(--notion-gray);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .insight-value {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--notion-default);
         }
 
         .results-section {
@@ -746,31 +540,33 @@
             to { transform: translateX(100%); opacity: 0; }
         }
 
-        .schedule-option {
-            padding: 12px 16px; 
-            background: var(--bg-gray); 
-            border: 1px solid var(--border-color);
-            border-radius: 6px; 
-            cursor: pointer; 
-            text-align: left; 
-            transition: all 0.2s;
-            font-size: 14px; 
-            width: 100%;
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
         }
 
-        .schedule-option:hover {
-            background: var(--bg-hover); 
-            border-color: var(--notion-blue);
+        .modal-content {
+            background: var(--bg-default);
+            padding: 24px;
+            border-radius: 12px;
+            max-width: 400px;
+            margin: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
         }
 
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: clamp(2.5rem, 10vw, 4rem);
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 16px;
             }
 
             .tool-grid {
@@ -792,14 +588,6 @@
 
             .action-buttons {
                 grid-template-columns: 1fr;
-            }
-
-            .quick-actions {
-                grid-template-columns: 1fr;
-            }
-
-            .enhanced-metrics {
-                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -852,25 +640,6 @@
             <div class="hero-content">
                 <h1 class="fade-in">News to LinkedIn Gold</h1>
                 <p class="hero-subtitle fade-in">Transform any article, news, or text into engaging LinkedIn posts that drive likes, shares, and meaningful conversations</p>
-                
-                <div class="stats-grid fade-in">
-                    <div class="stat-card">
-                        <div class="stat-number">✨</div>
-                        <div class="stat-label">AI-Powered Writing</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">🎯</div>
-                        <div class="stat-label">6 Tone Options</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">📈</div>
-                        <div class="stat-label">Engagement Optimized</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">⚡</div>
-                        <div class="stat-label">Instant Results</div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
@@ -966,12 +735,12 @@
        });
 
        // Generate post
-       generateBtn.addEventListener('click', generatePost);
+       generateBtn.addEventListener('click', () => generatePost());
 
-       async function generatePost(refinementType = null) {
+       async function generatePost() {
            const newsText = newsInput.value.trim();
            
-           if (!newsText && !refinementType) {
+           if (!newsText) {
                showError('Please paste some news or text to transform');
                return;
            }
@@ -982,13 +751,7 @@
            loading.style.display = 'block';
 
            try {
-               let prompt;
-               if (refinementType && currentPost) {
-                   prompt = createRefinementPrompt(currentPost, refinementType);
-               } else {
-                   prompt = createPrompt(newsText, selectedTone);
-               }
-               
+               const prompt = createPrompt(newsText, selectedTone);
                const response = await makeAPIRequest(prompt);
                
                if (response.email_template) {
@@ -1011,21 +774,7 @@
                loading.style.display = 'none';
            }
        }
-
-       function createRefinementPrompt(currentPost, refinementType) {
-           const refinements = {
-               'shorter': 'Make this LinkedIn post shorter while keeping the key message and impact:',
-               'more-emojis': 'Add more relevant emojis to this LinkedIn post to make it more engaging:',
-               'rephrase-hook': 'Rephrase the opening hook of this LinkedIn post to be more attention-grabbing:'
-           };
-
-           return `${refinements[refinementType]}
-
-"${currentPost}"
-
-Maintain the same tone and professional quality. Return only the refined post.`;
-       }
-
+       
        function createPrompt(newsText, tone) {
            const toneDescriptions = {
                professional: 'professional and authoritative',
@@ -1099,29 +848,8 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
            const finalContent = hashtags.length > 0 ? 
                `${content}\n\n${hashtags.join(' ')}` : content;
 
-           const engagementScore = calculateEngagementScore(finalContent);
-           const readabilityScore = calculateReadability(finalContent);
-           const postStats = analyzePostStructure(finalContent);
-           
            const html = `
                <div class="results-section fade-in">
-                   <!-- Post Length Indicator -->
-                   <div class="post-health-bar">
-                       <div class="health-item ${postStats.lengthClass}">
-                           <span class="health-icon">${postStats.lengthIcon}</span>
-                           <span class="health-text">Length: ${postStats.lengthLabel}</span>
-                       </div>
-                       <div class="health-item ${postStats.hookClass}">
-                           <span class="health-icon">${postStats.hookIcon}</span>
-                           <span class="health-text">Hook: ${postStats.hookLabel}</span>
-                       </div>
-                       <div class="health-item ${postStats.ctaClass}">
-                           <span class="health-icon">${postStats.ctaIcon}</span>
-                           <span class="health-text">CTA: ${postStats.ctaLabel}</span>
-                       </div>
-                   </div>
-
-                   <!-- LinkedIn-Style Preview -->
                    <div class="linkedin-post-preview">
                        <div class="linkedin-header">
                            <div class="linkedin-avatar">N2P</div>
@@ -1129,31 +857,22 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
                                <h4>Your LinkedIn Post</h4>
                                <p>Just now • 🌐</p>
                            </div>
-                           <div class="post-actions-top">
-                               <button class="mini-btn" onclick="schedulePost()" title="Schedule for later">
-                                   <span>⏰</span>
-                               </button>
-                               <button class="mini-btn" onclick="saveAsDraft()" title="Save as draft">
-                                   <span>💾</span>
-                               </button>
-                           </div>
                        </div>
                        
                        <div class="linkedin-content" id="post-content">${escapeHtml(finalContent)}</div>
                        
-                       <!-- Engagement Prediction -->
                        <div class="engagement-prediction">
                            <div class="prediction-item">
                                <span class="prediction-icon">👍</span>
-                               <span class="prediction-text">${postStats.predictedLikes} likes</span>
+                               <span class="prediction-text">Likely Engagement</span>
                            </div>
                            <div class="prediction-item">
                                <span class="prediction-icon">💬</span>
-                               <span class="prediction-text">${postStats.predictedComments} comments</span>
+                               <span class="prediction-text">Good Readability</span>
                            </div>
                            <div class="prediction-item">
-                               <span class="prediction-icon">🔄</span>
-                               <span class="prediction-text">${postStats.predictedShares} reposts</span>
+                               <span class="prediction-icon">⚡</span>
+                               <span class="prediction-text">Ready to Post</span>
                            </div>
                        </div>
                        
@@ -1177,27 +896,13 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
                        </div>
                    </div>
                    
-                   <!-- Quick Actions -->
                    <div class="quick-actions">
-                       <button class="quick-action-btn" onclick="optimizeForMobile()">
-                           <span>📱</span>
-                           <span>Mobile-Optimize</span>
-                       </button>
-                       <button class="quick-action-btn" onclick="addCallToAction()">
-                           <span>📢</span>
-                           <span>Stronger CTA</span>
-                       </button>
-                       <button class="quick-action-btn" onclick="addPersonalStory()">
-                           <span>👤</span>
-                           <span>Add Personal Touch</span>
-                       </button>
                        <button class="quick-action-btn" onclick="generateVariations()">
                            <span>🎲</span>
-                           <span>3 Variations</span>
+                           <span>Generate Variations</span>
                        </button>
                    </div>
                    
-                   <!-- Main Action Buttons -->
                    <div class="action-buttons">
                        <button class="copy-btn" onclick="copyPost()">
                            <span>📋</span>
@@ -1207,57 +912,6 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
                            <span>📧</span>
                            <span>Share to LinkedIn</span>
                        </button>
-                       <button class="regenerate-btn" onclick="generatePost()">
-                           <span>🔄</span>
-                           <span>Try Different Style</span>
-                       </button>
-                   </div>
-                   
-                   <!-- Enhanced Metrics -->
-                   <div class="enhanced-metrics">
-                       <div class="metric-card engagement-score">
-                           <div class="metric-value">${engagementScore.score}/10</div>
-                           <div class="metric-label">Engagement Score</div>
-                       </div>
-                       <div class="metric-card">
-                           <div class="metric-value ${readabilityScore.class}">${readabilityScore.label}</div>
-                           <div class="metric-label">Readability</div>
-                       </div>
-                       <div class="metric-card">
-                           <div class="metric-value">${postStats.wordCount}</div>
-                           <div class="metric-label">Words</div>
-                       </div>
-                       <div class="metric-card">
-                           <div class="metric-value">${postStats.readTime}</div>
-                           <div class="metric-label">Read Time</div>
-                       </div>
-                       <div class="metric-card">
-                           <div class="metric-value ${postStats.viralScore.class}">${postStats.viralScore.score}</div>
-                           <div class="metric-label">Viral Potential</div>
-                       </div>
-                       <div class="metric-card">
-                           <div class="metric-value">${hashtags.length}</div>
-                           <div class="metric-label">Hashtags</div>
-                       </div>
-                   </div>
-
-                   <!-- Best Time to Post -->
-                   <div class="posting-insights">
-                       <h4>📊 Posting Insights</h4>
-                       <div class="insights-grid">
-                           <div class="insight-item">
-                               <span class="insight-label">Best time:</span>
-                               <span class="insight-value">${getBestPostingTime()}</span>
-                           </div>
-                           <div class="insight-item">
-                               <span class="insight-label">Industry peak:</span>
-                               <span class="insight-value">${getIndustryPeakTime(finalContent)}</span>
-                           </div>
-                           <div class="insight-item">
-                               <span class="insight-label">Estimated reach:</span>
-                               <span class="insight-value">${postStats.estimatedReach}</span>
-                           </div>
-                       </div>
                    </div>
                </div>
            `;
@@ -1268,236 +922,88 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
            window.generatedContent = finalContent;
        }
 
-       // Analyze post structure for busy professionals
-       function analyzePostStructure(content) {
-           const wordCount = content.split(/\s+/).length;
-           const lines = content.split('\n').length;
-           const hasQuestion = /[?]/.test(content);
-           const hasEmojis = /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu.test(content);
-           const firstLine = content.split('\n')[0];
-           
-           // Length analysis
-           let lengthClass = 'poor', lengthIcon = '❌', lengthLabel = 'Too long';
-           if (wordCount >= 50 && wordCount <= 150) {
-               lengthClass = 'excellent';
-               lengthIcon = '✅';
-               lengthLabel = 'Perfect';
-           } else if (wordCount >= 30 && wordCount <= 200) {
-               lengthClass = 'good';
-               lengthIcon = '⚠️';
-               lengthLabel = 'Good';
-           }
-
-           // Hook analysis
-           let hookClass = 'poor', hookIcon = '❌', hookLabel = 'Weak';
-           if (firstLine.length < 60 && (/[!?]/.test(firstLine) || /\b(imagine|what if|did you know|breaking|just)\b/i.test(firstLine))) {
-               hookClass = 'excellent';
-               hookIcon = '🎣';
-               hookLabel = 'Strong';
-           } else if (firstLine.length < 80) {
-               hookClass = 'good';
-               hookIcon = '⚠️';
-               hookLabel = 'Good';
-           }
-
-           // CTA analysis
-           let ctaClass = 'poor', ctaIcon = '❌', ctaLabel = 'Missing';
-           if (hasQuestion || /\b(thoughts|agree|share|comment|what do you think)\b/i.test(content)) {
-               ctaClass = 'excellent';
-               ctaIcon = '📢';
-               ctaLabel = 'Strong';
-           }
-
-           // Viral potential
-           let viralScore = 0;
-           if (hasEmojis) viralScore += 2;
-           if (hasQuestion) viralScore += 2;
-           if (wordCount >= 50 && wordCount <= 150) viralScore += 3;
-           if (lines >= 3 && lines <= 8) viralScore += 2;
-           if (/\b(breaking|exclusive|revealed|secret|truth)\b/i.test(content)) viralScore += 1;
-
-           const viralClass = viralScore >= 7 ? 'excellent' : viralScore >= 4 ? 'good' : 'poor';
-
-           // Engagement predictions (simplified algorithm)
-           const baseEngagement = Math.max(10, wordCount * 0.5);
-           const predictedLikes = Math.round(baseEngagement * (viralScore / 10) * (Math.random() * 0.5 + 0.75));
-           const predictedComments = Math.round(predictedLikes * 0.15);
-           const predictedShares = Math.round(predictedLikes * 0.08);
-
-           return {
-               wordCount,
-               readTime: `${Math.ceil(wordCount / 200)}min`,
-               lengthClass, lengthIcon, lengthLabel,
-               hookClass, hookIcon, hookLabel,
-               ctaClass, ctaIcon, ctaLabel,
-               viralScore: { score: viralScore, class: viralClass },
-               predictedLikes,
-               predictedComments,
-               predictedShares,
-               estimatedReach: `${Math.round(predictedLikes * 15)}-${Math.round(predictedLikes * 25)}`
-           };
-       }
-
-       // Time-based recommendations for busy professionals
-       function getBestPostingTime() {
-           const now = new Date();
-           const hour = now.getHours();
-           
-           if (hour >= 7 && hour <= 9) return "Now (Morning Peak)";
-           if (hour >= 12 && hour <= 14) return "Now (Lunch Peak)";
-           if (hour >= 17 && hour <= 19) return "Now (Evening Peak)";
-           
-           // Calculate next optimal time
-           let nextPeak = 7; // Default to tomorrow morning
-           if (hour < 7) nextPeak = 7;
-           else if (hour < 12) nextPeak = 12;
-           else if (hour < 17) nextPeak = 17;
-           else nextPeak = 7; // Next day
-
-           const nextTime = new Date();
-           if (nextPeak === 7 && hour >= 17) {
-               nextTime.setDate(nextTime.getDate() + 1);
-               nextTime.setHours(7, 0, 0, 0);
-           } else {
-               nextTime.setHours(nextPeak, 0, 0, 0);
-           }
-
-           return nextTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-       }
-
-       // Industry-specific timing
-       function getIndustryPeakTime(content) {
-           if (/\b(tech|software|ai|startup)\b/i.test(content)) return "9-11 AM (Tech Peak)";
-           if (/\b(finance|banking|investment)\b/i.test(content)) return "7-9 AM (Finance Peak)";
-           if (/\b(healthcare|medical|pharma)\b/i.test(content)) return "12-2 PM (Healthcare Peak)";
-           if (/\b(education|learning|training)\b/i.test(content)) return "8-10 AM (Education Peak)";
-           return "8-10 AM (General Peak)";
-       }
-
-       // Quick optimization functions for busy users
-       function optimizeForMobile() {
-           if (!window.generatedContent) return;
-           
-           const prompt = `Make this LinkedIn post more mobile-friendly with shorter paragraphs and better line breaks:
-
-"${window.generatedContent}"
-
-Optimize for mobile viewing by:
-- Using shorter paragraphs (max 2 lines each)
-- Adding strategic line breaks
-- Keeping sentences concise
-- Maintaining the same message and hashtags`;
-
-           makeOptimizationRequest(prompt, 'Mobile-optimized post generated!');
-       }
-
-       function addCallToAction() {
-           if (!window.generatedContent) return;
-           
-           const prompt = `Strengthen the call-to-action in this LinkedIn post:
-
-"${window.generatedContent}"
-
-Make the CTA more compelling by:
-- Adding a specific question at the end
-- Using action-oriented language
-- Encouraging engagement (comments, shares, thoughts)
-- Maintaining the same tone and hashtags`;
-
-           makeOptimizationRequest(prompt, 'CTA strengthened!');
-       }
-
-       function addPersonalStory() {
-           if (!window.generatedContent) return;
-           
-           const prompt = `Add a brief personal touch to this LinkedIn post:
-
-"${window.generatedContent}"
-
-Enhance with:
-- A personal insight or experience
-- "I" statements for authenticity
-- Relatable elements
-- Keep it professional but human
-- Maintain the same hashtags`;
-
-           makeOptimizationRequest(prompt, 'Personal touch added!');
-       }
-
+       // Generate Variations
        function generateVariations() {
-           if (!window.generatedContent) return;
+           if (!currentNews) { // Use original news input for variations
+               showError('Please input news first to generate variations.');
+               return;
+           }
            
-           const variations = document.createElement('div');
-           variations.className = 'variations-container';
-           variations.innerHTML = `
-               <div style="background: var(--bg-gray); padding: 16px; border-radius: 8px; margin: 16px 0; border: 1px solid var(--border-color);">
-                   <h4 style="margin-bottom: 12px; font-size: 14px;">🎲 Generating 3 variations...</h4>
+           const variationsContainer = document.createElement('div');
+           variationsContainer.className = 'modal-overlay';
+           variationsContainer.innerHTML = `
+               <div class="modal-content" style="max-width: 600px;">
+                   <h3 style="margin-bottom: 16px;">🎲 Generating 3 Variations...</h3>
+                   <p style="color: var(--notion-gray); margin-bottom: 20px;">
+                       We are creating different versions of your post in various tones.
+                   </p>
                    <div class="loading" style="margin: 20px auto; display: block;"></div>
+                   <button onclick="closeModal()" style="padding: 8px 16px; background: var(--bg-gray); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; margin-top: 20px;">Cancel</button>
                </div>
            `;
-           
-           document.querySelector('.results-section').appendChild(variations);
-           
-           // Generate 3 variations with different tones
+           document.body.appendChild(variationsContainer);
+           window.currentModal = variationsContainer; // Store reference to modal
+
            const tones = ['professional', 'conversational', 'thought-leader'];
-           Promise.all(tones.map(tone => generateVariation(tone)))
+           Promise.all(tones.map(tone => generateSingleVariation(tone)))
                .then(results => displayVariations(results))
-               .catch(error => console.error('Variation generation failed:', error));
+               .catch(error => {
+                   console.error('Variation generation failed:', error);
+                   showError('Failed to generate variations. Please try again.');
+                   closeModal();
+               });
        }
 
-       async function generateVariation(tone) {
-           const originalNews = newsInput.value.trim();
-           const prompt = createPrompt(originalNews, tone);
+       async function generateSingleVariation(tone) {
+           const prompt = createPrompt(currentNews, tone); // Use original news input
            const response = await makeAPIRequest(prompt);
-           return { tone, content: response.email_template || response.quick_take };
+           return { tone, content: response.email_template || response.quick_take, hashtags: response.suggested_hashtags };
        }
 
        function displayVariations(variations) {
-           const container = document.querySelector('.variations-container');
-           container.innerHTML = `
-               <h4 style="margin-bottom: 12px; font-size: 14px;">🎲 Choose your favorite variation:</h4>
-               ${variations.map((variation, index) => `
-                   <div class="variation-option" style="background: var(--bg-default); padding: 12px; border-radius: 6px; margin: 8px 0; border: 1px solid var(--border-color); cursor: pointer;" onclick="selectVariation(${index})">
-                       <div style="font-size: 12px; color: var(--notion-gray); margin-bottom: 8px; text-transform: capitalize;">${variation.tone} Tone</div>
-                       <div style="font-size: 13px; line-height: 1.4;">${escapeHtml(variation.content.substring(0, 100))}...</div>
+           const variationsHtml = `
+               <div class="modal-content" style="max-width: 600px;">
+                   <h3 style="margin-bottom: 16px;">🎲 Choose Your Favorite Variation:</h3>
+                   <div style="max-height: 400px; overflow-y: auto; padding-right: 10px;">
+                       ${variations.map((variation, index) => `
+                           <div style="background: var(--bg-gray); padding: 16px; border-radius: 8px; margin-bottom: 12px; border: 1px solid var(--border-color);">
+                               <div style="font-weight: 600; margin-bottom: 8px; text-transform: capitalize;">${variation.tone} Tone</div>
+                               <div style="font-size: 14px; line-height: 1.5; white-space: pre-wrap;">${escapeHtml(variation.content)}\n\n${variation.hashtags.join(' ')}</div>
+                               <button style="margin-top: 12px; padding: 8px 16px; background: var(--notion-blue); color: white; border: none; border-radius: 6px; cursor: pointer;" onclick="selectVariation(${index})">Select This One</button>
+                           </div>
+                       `).join('')}
                    </div>
-               `).join('')}
+                   <button onclick="closeModal()" style="padding: 8px 16px; background: var(--bg-gray); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; margin-top: 20px;">Close</button>
+               </div>
            `;
-           
-           // Store variations for selection
-           window.currentVariations = variations;
+           if (window.currentModal) {
+               window.currentModal.innerHTML = variationsHtml;
+           } else {
+               const modal = document.createElement('div');
+               modal.className = 'modal-overlay';
+               modal.innerHTML = variationsHtml;
+               document.body.appendChild(modal);
+               window.currentModal = modal;
+           }
+           window.currentVariations = variations; // Store variations for selection
        }
 
        function selectVariation(index) {
            if (!window.currentVariations) return;
-           
            const selected = window.currentVariations[index];
-           currentPost = selected.content;
-           displayPost(selected.content, []);
-           
-           // Remove variations container
-           const container = document.querySelector('.variations-container');
-           if (container) container.remove();
+           currentPost = `${selected.content}\n\n${selected.hashtags.join(' ')}`;
+           displayPost(selected.content, selected.hashtags); // Re-render main display
+           closeModal();
+           showSuccessMessage('Variation selected and displayed!');
        }
 
-       async function makeOptimizationRequest(prompt, successMessage) {
-           generateBtn.disabled = true;
-           
-           try {
-               const response = await makeAPIRequest(prompt);
-               const optimizedContent = response.email_template || response.quick_take;
-               currentPost = optimizedContent;
-               displayPost(optimizedContent, []);
-               
-               // Show success message briefly
-               showSuccessMessage(successMessage);
-           } catch (error) {
-               console.error('Optimization failed:', error);
-               showError('Optimization failed. Please try again.');
-           } finally {
-               generateBtn.disabled = false;
+       function closeModal() {
+           if (window.currentModal) {
+               document.body.removeChild(window.currentModal);
+               window.currentModal = null;
            }
        }
+
 
        function showSuccessMessage(message) {
            const toast = document.createElement('div');
@@ -1516,96 +1022,17 @@ Enhance with:
            }, 2000);
        }
 
-       // Schedule and save functions for busy professionals
-       function schedulePost() {
-           const modal = document.createElement('div');
-           modal.className = 'schedule-modal';
-           modal.style.cssText = `
-               position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-               background: rgba(0,0,0,0.5); display: flex; align-items: center;
-               justify-content: center; z-index: 1000;
-           `;
-           
-           modal.innerHTML = `
-               <div style="background: var(--bg-default); padding: 24px; border-radius: 12px; max-width: 400px; margin: 20px;">
-                   <h3 style="margin-bottom: 16px;">⏰ Schedule Your Post</h3>
-                   <p style="color: var(--notion-gray); margin-bottom: 16px; font-size: 14px;">
-                       Choose when to remind you to post this content:
-                   </p>
-                   
-                   <div style="display: grid; gap: 12px; margin-bottom: 20px;">
-                       <button class="schedule-option" onclick="scheduleReminder('9am-tomorrow')">
-                           📅 Tomorrow 9 AM (Peak time)
-                       </button>
-                       <button class="schedule-option" onclick="scheduleReminder('custom')">
-                           🕒 Custom time
-                       </button>
-                       <button class="schedule-option" onclick="scheduleReminder('copy-link')">
-                           🔗 Copy scheduling link
-                       </button>
-                   </div>
-                   
-                   <div style="display: flex; gap: 12px; justify-content: flex-end;">
-                       <button onclick="closeScheduleModal()" style="padding: 8px 16px; background: var(--bg-gray); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">Cancel</button>
-                   </div>
-               </div>
-           `;
-           
-           document.body.appendChild(modal);
-           window.currentScheduleModal = modal;
-       }
-
-       function closeScheduleModal() {
-           if (window.currentScheduleModal) {
-               document.body.removeChild(window.currentScheduleModal);
-               window.currentScheduleModal = null;
-           }
-       }
-
-       function scheduleReminder(type) {
-           if (type === 'copy-link') {
-               const linkedInUrl = `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(window.generatedContent)}`;
-               navigator.clipboard.writeText(linkedInUrl);
-               showSuccessMessage('LinkedIn composer link copied! Bookmark it to post later.');
-           } else if (type === '9am-tomorrow') {
-               showSuccessMessage('Reminder set for tomorrow 9 AM! (Feature coming soon)');
-           } else {
-               showSuccessMessage('Custom scheduling coming soon!');
-           }
-           closeScheduleModal();
-       }
-
-       function saveAsDraft() {
-           const drafts = JSON.parse(localStorage.getItem('news2post_drafts') || '[]');
-           const draft = {
-               id: Date.now(),
-               content: window.generatedContent,
-               created: new Date().toISOString(),
-               title: window.generatedContent.split('\n')[0].substring(0, 50) + '...'
-           };
-           
-           drafts.unshift(draft);
-           drafts.splice(10); // Keep only last 10 drafts
-           
-           localStorage.setItem('news2post_drafts', JSON.stringify(drafts));
-           showSuccessMessage('💾 Draft saved! Access it anytime from your browser.');
-       }
-
        function shareToLinkedIn() {
            copyPost();
            
            const modal = document.createElement('div');
-           modal.style.cssText = `
-               position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-               background: rgba(0,0,0,0.5); display: flex; align-items: center;
-               justify-content: center; z-index: 1000;
-           `;
+           modal.className = 'modal-overlay';
            
            const text = encodeURIComponent(window.generatedContent);
            const linkedInUrl = `https://www.linkedin.com/feed/?shareActive=true&text=${text}`;
            
            modal.innerHTML = `
-               <div style="background: var(--bg-default); padding: 24px; border-radius: 12px; max-width: 400px; margin: 20px; text-align: center;">
+               <div class="modal-content">
                    <h3 style="margin-bottom: 16px;">🚀 Ready to Post!</h3>
                    <p style="color: var(--notion-gray); margin-bottom: 20px; font-size: 14px;">
                        Your post is copied to clipboard. LinkedIn will open with the composer ready.
@@ -1614,7 +1041,7 @@ Enhance with:
                        <button onclick="openLinkedIn('${linkedInUrl}')" style="padding: 12px 20px; background: #0077B5; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
                            Open LinkedIn
                        </button>
-                       <button onclick="closeShareModal()" style="padding: 12px 20px; background: var(--bg-gray); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">
+                       <button onclick="closeModal()" style="padding: 12px 20px; background: var(--bg-gray); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">
                            Later
                        </button>
                    </div>
@@ -1622,76 +1049,13 @@ Enhance with:
            `;
            
            document.body.appendChild(modal);
-           window.currentShareModal = modal;
+           window.currentModal = modal;
        }
 
        function openLinkedIn(url) {
            window.open(url, '_blank');
-           closeShareModal();
+           closeModal();
            showSuccessMessage('LinkedIn opened! Paste your post and hit publish.');
-       }
-
-       function closeShareModal() {
-           if (window.currentShareModal) {
-               document.body.removeChild(window.currentShareModal);
-               window.currentShareModal = null;
-           }
-       }
-
-       function calculateEngagementScore(content) {
-           let score = 0;
-           let hookStrength = 'Weak';
-           let hookClass = 'poor';
-
-           const firstLine = content.split('\n')[0];
-           if (firstLine.length > 10) {
-               if (/[?!]/.test(firstLine) || /\b(imagine|what if|did you know|breaking|just|wow)\b/i.test(firstLine)) {
-                   score += 3;
-                   hookStrength = 'Strong';
-                   hookClass = 'excellent';
-               } else if (firstLine.length < 50) {
-                   score += 2;
-                   hookStrength = 'Good';
-                   hookClass = 'good';
-               } else {
-                   score += 1;
-               }
-           }
-
-           const lines = content.split('\n').length;
-           if (lines >= 3 && lines <= 8) score += 2;
-           else if (lines >= 2) score += 1;
-
-           const emojiCount = (content.match(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu) || []).length;
-           if (emojiCount >= 2 && emojiCount <= 6) score += 2;
-           else if (emojiCount >= 1) score += 1;
-
-           if (/[?]$/.test(content.trim()) || /\b(thoughts|agree|experience|share|comment)\b/i.test(content)) {
-               score += 2;
-           }
-
-           const wordCount = content.split(/\s+/).length;
-           if (wordCount >= 50 && wordCount <= 150) score += 1;
-
-           return {
-               score: Math.min(10, score),
-               hookStrength,
-               hookClass
-           };
-       }
-
-       function calculateReadability(content) {
-           const words = content.split(/\s+/).length;
-           const sentences = content.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
-           const avgWordsPerSentence = words / sentences;
-
-           if (avgWordsPerSentence <= 15) {
-               return { label: 'Easy', class: 'excellent' };
-           } else if (avgWordsPerSentence <= 20) {
-               return { label: 'Medium', class: 'good' };
-           } else {
-               return { label: 'Hard', class: 'poor' };
-           }
        }
 
        async function copyPost() {
@@ -1708,6 +1072,7 @@ Enhance with:
                    copyBtn.classList.remove('copied');
                }, 2000);
            } catch (err) {
+               // Fallback for older browsers
                const textarea = document.createElement('textarea');
                textarea.value = window.generatedContent;
                document.body.appendChild(textarea);
@@ -1747,11 +1112,11 @@ Enhance with:
        }
 
        document.addEventListener('DOMContentLoaded', function() {
-           if (API_ENDPOINT === 'YOUR_API_GATEWAY_ENDPOINT_HERE') {
+           if (API_ENDPOINT === 'ADD API') { // Check if default placeholder is still there
                const disclaimer = document.querySelector('.disclaimer');
                disclaimer.innerHTML = `
                    <strong>⚠️ Configuration Required:</strong> 
-                   This demo requires an AI API endpoint to be configured. Please update the API_ENDPOINT in the code.
+                   This demo requires an AI API endpoint to be configured. Please replace 'ADD API' with your actual API Gateway endpoint in the JavaScript code.
                `;
                disclaimer.style.background = '#fef2f2';
                disclaimer.style.borderColor = '#fecaca';
