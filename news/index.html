@@ -322,11 +322,10 @@
             color: var(--notion-default);
             margin-bottom: 16px;
         }
-        /* Removed .quick-actions styles as it's no longer needed */
         /* Action Buttons */
         .action-buttons {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* Simplified to 2 columns */
+            grid-template-columns: 1fr 1fr;
             gap: 12px;
             margin: 20px 0;
         }
@@ -361,7 +360,7 @@
         .copy-btn.copied {
             background: var(--notion-purple);
         }
-        .regenerate-btn { /* This button is no longer explicitly used, but leaving style just in case of future use */
+        .regenerate-btn {
             background: transparent;
             color: var(--notion-default);
             border: 1px solid var(--notion-default);
@@ -450,6 +449,9 @@
             .hero-subtitle {
                 font-size: 1.2rem;
             }
+            .hero-logo img {
+                height: 60px;
+            }
             .tool-grid {
                 grid-template-columns: 1fr;
                 gap: 30px;
@@ -499,6 +501,9 @@
     <header class="header">
         <div class="container">
             <div class="header-content">
+                <a href="/" aria-label="AskArti Home" class="inline-block">
+                    <img src="/images/asklite.png" alt="AskArti Logo" class="h-20 w-auto mx-auto sm:h-24">
+                </a>
                 <div class="header-actions">
                     <button class="theme-toggle" onclick="toggleTheme()" style="width: 40px; height: 40px; border-radius: 8px; border: none; background: var(--bg-gray); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 18px;">🌓</button>
                 </div>
@@ -538,7 +543,7 @@
                             <button class="tone-btn" data-tone="thought-leader">🧠 Thought Leader</button>
                             <button class="tone-btn" data-tone="inspirational">✨ Inspirational</button>
                             <button class="tone-btn" data-tone="analytical">📊 Analytical</button>
-                            <button class="tone-btn" data-tone="conversational">💬 Conversational</button>
+                            <button class="tone-btn" data-tone="b2b-bro">💪 B2B Bro</button>
                             <button class="tone-btn" data-tone="controversial">🔥 Hot Take</button>
                         </div>
                     </div>
@@ -630,7 +635,7 @@
                'thought-leader': 'thought-provoking and insightful',
                inspirational: 'inspirational and motivational',
                analytical: 'data-driven and analytical',
-               conversational: 'casual and conversational',
+               'b2b-bro': 'like a B2B sales bro who finds sales lessons in everything. Use phrases like "Here\'s what this taught me about the grind", "Sales lesson right here", "This is pure prospecting gold", "Another reminder that sales is about relationships", etc. Everything relates back to B2B sales, prospecting, closing deals, and the hustle',
                controversial: 'bold and slightly controversial to spark debate'
            };
            return `Transform this news/text into a viral LinkedIn post. Make it ${toneDescriptions[tone]}:
@@ -708,8 +713,6 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
            // Store content for copy function
            window.generatedContent = finalContent;
        }
-       // Removed generateVariations, generateSingleVariation, displayVariations, selectVariation functions
-       // as they are no longer needed.
        function closeModal() {
            if (window.currentModal) {
                document.body.removeChild(window.currentModal);
@@ -735,91 +738,92 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
            copyPost();
            const modal = document.createElement('div');
            modal.className = 'modal-overlay';
-           const text = encodeURIComponent(window.generatedContent);
-           const linkedInUrl = `https://www.linkedin.com/feed/?shareActive=true&text=${text}`;
            modal.innerHTML = `
                <div class="modal-content">
                    <h3 style="margin-bottom: 16px;">🚀 Ready to Post!</h3>
                    <p style="color: var(--notion-gray); margin-bottom: 20px; font-size: 14px;">
-                       Your post is copied to clipboard. LinkedIn will open with the composer ready.
+                       Your post has been copied to your clipboard. Click below to open LinkedIn and paste it into a new post.
                    </p>
                    <div style="display: flex; gap: 12px; justify-content: center;">
-                       <button onclick="openLinkedIn('${linkedInUrl}')" style="padding: 12px 20px; background: #0077B5; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
+                       <button onclick="openLinkedIn()" style="padding: 12px 20px; background: #0077B5; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
                            Open LinkedIn
                        </button>
                        <button onclick="closeModal()" style="padding: 12px 20px; background: var(--bg-gray); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">
                            Later
                        </button>
                    </div>
-               </div>
-           `;
-           document.body.appendChild(modal);
-           window.currentModal = modal;
-       }
-       function openLinkedIn(url) {
-           window.open(url, '_blank');
-           closeModal();
-           showSuccessMessage('LinkedIn opened! Paste your post and hit publish.');
-       }
-       async function copyPost() {
-           const copyBtn = document.querySelector('.copy-btn');
-           const copyText = document.getElementById('copy-text');
-           try {
-               await navigator.clipboard.writeText(window.generatedContent);
-               copyText.textContent = 'Copied!';
-               copyBtn.classList.add('copied');
-               setTimeout(() => {
-                   copyText.textContent = 'Copy Post';
-                   copyBtn.classList.remove('copied');
-               }, 2000);
-           } catch (err) {
-               // Fallback for older browsers
-               const textarea = document.createElement('textarea');
-               textarea.value = window.generatedContent;
-               document.body.appendChild(textarea);
-               textarea.select();
-               document.execCommand('copy');
-               document.body.removeChild(textarea);
-               copyText.textContent = 'Copied!';
-               setTimeout(() => {
-                   copyText.textContent = 'Copy Post';
-               }, 2000);
-           }
-       }
-       function showError(message) {
-           results.innerHTML = `
-               <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 16px; color: #991b1b;">
-                   <strong>Error:</strong> ${message}
-               </div>
-           `;
-       }
-       function escapeHtml(text) {
-           const div = document.createElement('div');
-           div.textContent = text;
-           return div.innerHTML;
-       }
-       function toggleTheme() {
-           document.body.classList.toggle('dark-mode');
-           const isDark = document.body.classList.contains('dark-mode');
-           localStorage.setItem('darkMode', isDark);
-       }
-       if (localStorage.getItem('darkMode') === 'true') {
-           document.body.classList.add('dark-mode');
-       }
-       document.addEventListener('DOMContentLoaded', function() {
-           if (API_ENDPOINT === 'ADD API') { // Check if default placeholder is still there
-               const disclaimer = document.querySelector('.disclaimer');
-               disclaimer.innerHTML = `
-                   <strong>⚠️ Configuration Required:</strong> 
-                   This demo requires an AI API endpoint to be configured. Please replace 'ADD API' with your actual API Gateway endpoint in the JavaScript code.
-               `;
-               disclaimer.style.background = '#fef2f2';
-               disclaimer.style.borderColor = '#fecaca';
-               disclaimer.style.color = '#991b1b';
-               generateBtn.disabled = true;
-               generateBtn.style.opacity = '0.5';
-           }
-       });
-   </script>
+                   <div style="margin-top: 16px; padding: 12px; background: var(--bg-gray); border-radius: 6px; font-size: 12px; color: var(--notion-gray);">
+                      💡 Tip: Once LinkedIn opens, click "Start a post" and paste (Ctrl+V or Cmd+V) your content
+                  </div>
+              </div>
+          `;
+          document.body.appendChild(modal);
+          window.currentModal = modal;
+      }
+      function openLinkedIn() {
+          window.open('https://www.linkedin.com/feed/', '_blank');
+          closeModal();
+          showSuccessMessage('LinkedIn opened! Click "Start a post" and paste your content (Ctrl+V)');
+      }
+      async function copyPost() {
+          const copyBtn = document.querySelector('.copy-btn');
+          const copyText = document.getElementById('copy-text');
+          try {
+              await navigator.clipboard.writeText(window.generatedContent);
+              copyText.textContent = 'Copied!';
+              copyBtn.classList.add('copied');
+              setTimeout(() => {
+                  copyText.textContent = 'Copy Post';
+                  copyBtn.classList.remove('copied');
+              }, 2000);
+          } catch (err) {
+              // Fallback for older browsers
+              const textarea = document.createElement('textarea');
+              textarea.value = window.generatedContent;
+              document.body.appendChild(textarea);
+              textarea.select();
+              document.execCommand('copy');
+              document.body.removeChild(textarea);
+              copyText.textContent = 'Copied!';
+              setTimeout(() => {
+                  copyText.textContent = 'Copy Post';
+              }, 2000);
+          }
+      }
+      function showError(message) {
+          results.innerHTML = `
+              <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 16px; color: #991b1b;">
+                  <strong>Error:</strong> ${message}
+              </div>
+          `;
+      }
+      function escapeHtml(text) {
+          const div = document.createElement('div');
+          div.textContent = text;
+          return div.innerHTML;
+      }
+      function toggleTheme() {
+          document.body.classList.toggle('dark-mode');
+          const isDark = document.body.classList.contains('dark-mode');
+          localStorage.setItem('darkMode', isDark);
+      }
+      if (localStorage.getItem('darkMode') === 'true') {
+          document.body.classList.add('dark-mode');
+      }
+      document.addEventListener('DOMContentLoaded', function() {
+          if (API_ENDPOINT === 'ADD API') {
+              const disclaimer = document.querySelector('.disclaimer');
+              disclaimer.innerHTML = `
+                  <strong>⚠️ Configuration Required:</strong> 
+                  This demo requires an AI API endpoint to be configured. Please replace 'ADD API' with your actual API Gateway endpoint in the JavaScript code.
+              `;
+              disclaimer.style.background = '#fef2f2';
+              disclaimer.style.borderColor = '#fecaca';
+              disclaimer.style.color = '#991b1b';
+              generateBtn.disabled = true;
+              generateBtn.style.opacity = '0.5';
+          }
+      });
+  </script>
 </body>
 </html>
