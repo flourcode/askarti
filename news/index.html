@@ -304,24 +304,26 @@
         /* LinkedIn-Style Post Preview */
         .linkedin-post-preview {
             background: var(--bg-default);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
+            border: 1px solid #e1e4e8;
+            border-radius: 8px;
+            padding: 0;
             margin-bottom: 20px;
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.15), 0 2px 3px rgba(0,0,0,0.2);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
         }
 
         .linkedin-header {
             display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 12px 16px 8px;
+            position: relative;
         }
 
         .linkedin-avatar {
             width: 48px;
             height: 48px;
-            background: linear-gradient(135deg, var(--notion-blue), var(--notion-purple));
+            background: linear-gradient(135deg, #0077b5, #005885);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -329,38 +331,155 @@
             color: white;
             font-weight: 600;
             font-size: 18px;
+            flex-shrink: 0;
         }
 
         .linkedin-user-info {
             flex: 1;
+            min-width: 0;
         }
 
         .linkedin-user-info h4 {
             font-size: 14px;
             font-weight: 600;
-            color: var(--notion-default);
-            margin-bottom: 2px;
+            color: #000000;
+            margin-bottom: 0;
+            line-height: 1.33333;
         }
 
-        .linkedin-user-info p {
+        .linkedin-user-info .title {
             font-size: 12px;
-            color: var(--notion-gray);
+            color: rgba(0,0,0,0.6);
+            line-height: 1.33333;
+            margin-bottom: 4px;
+        }
+
+        .linkedin-user-info .meta {
+            font-size: 12px;
+            color: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .linkedin-more-btn {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: rgba(0,0,0,0.6);
+            font-size: 20px;
+            padding: 4px;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .linkedin-more-btn:hover {
+            background: rgba(0,0,0,0.08);
         }
 
         .linkedin-content {
             font-size: 14px;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            color: var(--notion-default);
-            margin-bottom: 16px;
+            line-height: 1.5;
+            color: rgba(0,0,0,0.9);
+            padding: 0 16px 12px;
+            word-wrap: break-word;
+        }
+
+        .linkedin-content strong {
+            font-weight: 600;
+            color: rgba(0,0,0,1);
+        }
+
+        .linkedin-content em {
+            font-style: italic;
+            color: rgba(0,0,0,0.8);
+        }
+
+        .linkedin-engagement {
+            border-top: 1px solid rgba(0,0,0,0.15);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .linkedin-reactions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: rgba(0,0,0,0.6);
+        }
+
+        .reaction-icons {
+            display: flex;
+            align-items: center;
+            margin-right: 4px;
+        }
+
+        .reaction-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-left: -2px;
+            border: 1px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .reaction-icon.like { background: #378fe9; color: white; }
+        .reaction-icon.love { background: #df704d; color: white; }
+        .reaction-icon.celebrate { background: #f5c75b; color: white; }
+
+        .linkedin-stats {
+            font-size: 12px;
+            color: rgba(0,0,0,0.6);
+        }
+
+        .linkedin-actions {
+            border-top: 1px solid rgba(0,0,0,0.15);
+            display: flex;
+            padding: 4px 8px;
+        }
+
+        .linkedin-action-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 12px 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-radius: 4px;
+            transition: background-color 0.15s ease;
+        }
+
+        .linkedin-action-btn:hover {
+            background: rgba(0,0,0,0.08);
+        }
+
+        .linkedin-action-btn.liked {
+            color: #0073b1;
         }
         
-        /* Removed .quick-actions styles as it's no longer needed */
-
         /* Action Buttons */
         .action-buttons {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* Simplified to 2 columns */
+            grid-template-columns: 1fr 1fr;
             gap: 12px;
             margin: 20px 0;
         }
@@ -401,7 +520,7 @@
             background: var(--notion-purple);
         }
 
-        .regenerate-btn { /* This button is no longer explicitly used, but leaving style just in case of future use */
+        .regenerate-btn {
             background: transparent;
             color: var(--notion-default);
             border: 1px solid var(--notion-default);
@@ -555,170 +674,52 @@
         body.dark-mode .btn-primary:hover {
             background: #D3D3D2;
         }
-		/* LinkedIn-Style Post Preview */
-        .linkedin-post-preview {
-            background: var(--bg-default);
-            border: 1px solid #e1e4e8;
-            border-radius: 8px;
-            padding: 0;
-            margin-bottom: 20px;
-            box-shadow: 0 0 0 1px rgba(0,0,0,0.15), 0 2px 3px rgba(0,0,0,0.2);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+
+        body.dark-mode .linkedin-post-preview {
+            background: #1b1f23;
+            border-color: #30363d;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.15), 0 2px 3px rgba(0,0,0,0.4);
         }
 
-        .linkedin-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            padding: 12px 16px 8px;
-            position: relative;
+        body.dark-mode .linkedin-user-info h4 {
+            color: #ffffff;
         }
 
-        .linkedin-avatar {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, #0077b5, #005885);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 18px;
-            flex-shrink: 0;
+        body.dark-mode .linkedin-user-info .title,
+        body.dark-mode .linkedin-user-info .meta,
+        body.dark-mode .linkedin-more-btn,
+        body.dark-mode .linkedin-reactions,
+        body.dark-mode .linkedin-stats {
+            color: rgba(255,255,255,0.6);
         }
 
-        .linkedin-user-info {
-            flex: 1;
-            min-width: 0;
+        body.dark-mode .linkedin-content {
+            color: rgba(255,255,255,0.9);
         }
 
-        .linkedin-user-info h4 {
-            font-size: 14px;
-            font-weight: 600;
-            color: #000000;
-            margin-bottom: 0;
-            line-height: 1.33333;
+        body.dark-mode .linkedin-content strong {
+            color: rgba(255,255,255,1);
         }
 
-        .linkedin-user-info .title {
-            font-size: 12px;
-            color: rgba(0,0,0,0.6);
-            line-height: 1.33333;
-            margin-bottom: 4px;
+        body.dark-mode .linkedin-content em {
+            color: rgba(255,255,255,0.8);
         }
 
-        .linkedin-user-info .meta {
-            font-size: 12px;
-            color: rgba(0,0,0,0.6);
-            display: flex;
-            align-items: center;
-            gap: 4px;
+        body.dark-mode .linkedin-engagement,
+        body.dark-mode .linkedin-actions {
+            border-color: rgba(255,255,255,0.15);
         }
 
-        .linkedin-more-btn {
-            position: absolute;
-            top: 12px;
-            right: 16px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: rgba(0,0,0,0.6);
-            font-size: 20px;
-            padding: 4px;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        body.dark-mode .linkedin-action-btn {
+            color: rgba(255,255,255,0.6);
         }
 
-        .linkedin-more-btn:hover {
-            background: rgba(0,0,0,0.08);
+        body.dark-mode .linkedin-action-btn:hover {
+            background: rgba(255,255,255,0.08);
         }
 
-        .linkedin-content {
-            font-size: 14px;
-            line-height: 1.5;
-            white-space: pre-wrap;
-            color: rgba(0,0,0,0.9);
-            padding: 0 16px 12px;
-            word-wrap: break-word;
-        }
-
-        .linkedin-engagement {
-            border-top: 1px solid rgba(0,0,0,0.15);
-            padding: 8px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .linkedin-reactions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: rgba(0,0,0,0.6);
-        }
-
-        .reaction-icons {
-            display: flex;
-            align-items: center;
-            margin-right: 4px;
-        }
-
-        .reaction-icon {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            margin-left: -2px;
-            border: 1px solid white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-        }
-
-        .reaction-icon.like { background: #378fe9; color: white; }
-        .reaction-icon.love { background: #df704d; color: white; }
-        .reaction-icon.celebrate { background: #f5c75b; color: white; }
-
-        .linkedin-stats {
-            font-size: 12px;
-            color: rgba(0,0,0,0.6);
-        }
-
-        .linkedin-actions {
-            border-top: 1px solid rgba(0,0,0,0.15);
-            display: flex;
-            padding: 4px 8px;
-        }
-
-        .linkedin-action-btn {
-            flex: 1;
-            background: none;
-            border: none;
-            padding: 12px 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            color: rgba(0,0,0,0.6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            border-radius: 4px;
-            transition: background-color 0.15s ease;
-        }
-
-        .linkedin-action-btn:hover {
-            background: rgba(0,0,0,0.08);
-        }
-
-        .linkedin-action-btn.liked {
-            color: #0073b1;
+        body.dark-mode .linkedin-action-btn.liked {
+            color: #58a6ff;
         }
     </style>
 </head>
@@ -887,7 +888,7 @@
                controversial: 'bold and slightly controversial to spark debate'
            };
 
-           return `Transform this news/text into a viral LinkedIn post. Make it ${toneDescriptions[tone]}:
+           return `Transform this news/text into a viral LinkedIn post with proper LinkedIn formatting. Make it ${toneDescriptions[tone]}:
 
 "${newsText}"
 
@@ -895,11 +896,22 @@ Create a LinkedIn post that:
 - Starts with an irresistible hook (first line should grab attention)
 - Uses line breaks strategically for readability
 - Includes relevant emojis throughout (but not excessive)
+- Uses LinkedIn markdown formatting for emphasis:
+  * Use **bold text** for key points and important phrases
+  * Use *italic text* for subtle emphasis
+  * Use bullet points with • or - for lists
+  * Use line breaks to create visual structure
 - Has a clear takeaway or insight
 - Ends with a thought-provoking question or call-to-action
 - Is between 100-200 words
 - Sounds authentic and human, not robotic
 - Uses "I" statements when appropriate
+
+IMPORTANT: Format the post using LinkedIn's supported markdown:
+- **Bold text** for emphasis on key points
+- *Italic text* for subtle emphasis
+- Use line breaks for readability
+- Structure with bullet points where appropriate
 
 After the post, on a new line, add exactly 5 relevant hashtags for this content. Choose ONLY from these popular LinkedIn hashtags based on the content topic:
 
@@ -937,6 +949,25 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
            return await response.json();
        }
 
+       function formatLinkedInContent(text) {
+           // Escape HTML first to prevent XSS
+           const div = document.createElement('div');
+           div.textContent = text;
+           let escaped = div.innerHTML;
+           
+           // Apply LinkedIn markdown formatting
+           // Bold text: **text** -> <strong>text</strong>
+           escaped = escaped.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+           
+           // Italic text: *text* -> <em>text</em>
+           escaped = escaped.replace(/\*(.*?)\*/g, '<em>$1</em>');
+           
+           // Convert line breaks to proper HTML
+           escaped = escaped.replace(/\n/g, '<br>');
+           
+           return escaped;
+       }
+
        function displayPost(content, hashtags = []) {
            // Parse hashtags from content if they exist
            const lines = content.split('\n');
@@ -954,14 +985,51 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
                <div class="results-section fade-in">
                    <div class="linkedin-post-preview">
                        <div class="linkedin-header">
-                           <div class="linkedin-avatar">N2P</div>
+                           <div class="linkedin-avatar">YN</div>
                            <div class="linkedin-user-info">
-                               <h4>Your LinkedIn Post</h4>
-                               <p>Just now • 🌐</p>
+                               <h4>Your Name</h4>
+                               <div class="title">Your Professional Title</div>
+                               <div class="meta">
+                                   <span>Just now</span>
+                                   <span>•</span>
+                                   <span>🌍</span>
+                               </div>
                            </div>
+                           <button class="linkedin-more-btn">⋯</button>
                        </div>
                        
-                       <div class="linkedin-content" id="post-content">${escapeHtml(finalContent)}</div>
+                       <div class="linkedin-content">${formatLinkedInContent(finalContent)}</div>
+                       
+                       <div class="linkedin-engagement">
+                           <div class="linkedin-reactions">
+                               <div class="reaction-icons">
+                                   <div class="reaction-icon like">👍</div>
+                                   <div class="reaction-icon love">❤️</div>
+                                   <div class="reaction-icon celebrate">🎉</div>
+                               </div>
+                               <span>23 reactions</span>
+                           </div>
+                           <div class="linkedin-stats">5 comments • 2 reposts</div>
+                       </div>
+                       
+                       <div class="linkedin-actions">
+                           <button class="linkedin-action-btn">
+                               <span>👍</span>
+                               <span>Like</span>
+                           </button>
+                           <button class="linkedin-action-btn">
+                               <span>💬</span>
+                               <span>Comment</span>
+                           </button>
+                           <button class="linkedin-action-btn">
+                               <span>🔄</span>
+                               <span>Repost</span>
+                           </button>
+                           <button class="linkedin-action-btn">
+                               <span>📤</span>
+                               <span>Send</span>
+                           </button>
+                       </div>
                    </div>
                    
                    <div class="action-buttons">
@@ -981,10 +1049,25 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
            
            // Store content for copy function
            window.generatedContent = finalContent;
-       }
 
-       // Removed generateVariations, generateSingleVariation, displayVariations, selectVariation functions
-       // as they are no longer needed.
+           // Add click handlers for LinkedIn action buttons
+           document.querySelectorAll('.linkedin-action-btn').forEach((btn, index) => {
+               btn.addEventListener('click', (e) => {
+                   e.preventDefault();
+                   if (index === 0) { // Like button
+                       btn.classList.toggle('liked');
+                       const likeText = btn.querySelector('span:last-child');
+                       if (btn.classList.contains('liked')) {
+                           likeText.textContent = 'Liked';
+                           btn.style.color = '#0073b1';
+                       } else {
+                           likeText.textContent = 'Like';
+                           btn.style.color = 'rgba(0,0,0,0.6)';
+                       }
+                   }
+               });
+           });
+       }
 
        function closeModal() {
            if (window.currentModal) {
@@ -992,7 +1075,6 @@ The post should feel native to LinkedIn and drive engagement (likes, comments, r
                window.currentModal = null;
            }
        }
-
 
        function showSuccessMessage(message) {
            const toast = document.createElement('div');
