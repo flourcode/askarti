@@ -355,7 +355,48 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* PRD Enhancement: LinkedIn-Style Post Preview */
+        /* Post Health Bar */
+        .post-health-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .health-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            background: var(--bg-gray);
+            border-radius: 20px;
+            font-size: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .health-item.excellent {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border-color: var(--notion-green);
+            color: var(--notion-green);
+        }
+
+        .health-item.good {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border-color: var(--notion-yellow);
+            color: var(--notion-yellow);
+        }
+
+        .health-item.poor {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            border-color: var(--notion-red);
+            color: var(--notion-red);
+        }
+
+        .health-icon {
+            font-size: 14px;
+        }
+
+        /* LinkedIn-Style Post Preview */
         .linkedin-post-preview {
             background: var(--bg-default);
             border: 1px solid var(--border-color);
@@ -385,6 +426,10 @@
             font-size: 18px;
         }
 
+        .linkedin-user-info {
+            flex: 1;
+        }
+
         .linkedin-user-info h4 {
             font-size: 14px;
             font-weight: 600;
@@ -397,12 +442,59 @@
             color: var(--notion-gray);
         }
 
+        .post-actions-top {
+            display: flex;
+            gap: 8px;
+        }
+
+        .mini-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-gray);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .mini-btn:hover {
+            background: var(--bg-hover);
+            transform: translateY(-1px);
+        }
+
         .linkedin-content {
             font-size: 14px;
             line-height: 1.6;
             white-space: pre-wrap;
             color: var(--notion-default);
             margin-bottom: 16px;
+        }
+
+        /* Engagement Prediction */
+        .engagement-prediction {
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            background: var(--bg-gray);
+            border-radius: 8px;
+            margin: 12px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .prediction-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--notion-gray);
+        }
+
+        .prediction-icon {
+            font-size: 14px;
         }
 
         .linkedin-actions {
@@ -428,125 +520,40 @@
             background: var(--bg-hover);
         }
 
-        /* PRD Enhancement: Hashtag Suggestions */
-        .hashtag-suggestions {
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
             margin: 16px 0;
         }
 
-        .hashtag-suggestions h5 {
-            font-size: 12px;
-            color: var(--notion-gray);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .hashtag-container {
+        .quick-action-btn {
             display: flex;
-            flex-wrap: wrap;
+            align-items: center;
             gap: 8px;
-        }
-
-        .hashtag-suggestion {
+            padding: 10px 12px;
             background: var(--bg-gray);
             border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 6px 12px;
-            font-size: 12px;
-            color: var(--notion-blue);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .hashtag-suggestion:hover {
-            background: var(--notion-blue);
-            color: white;
-        }
-
-        .hashtag-suggestion.added {
-            background: var(--notion-green);
-            color: white;
-            border-color: var(--notion-green);
-        }
-
-        /* PRD Enhancement: Enhanced Metrics and Engagement Score */
-        .enhanced-metrics {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 16px;
-            margin-top: 24px;
-        }
-
-        .metric-card {
-            background: var(--bg-gray);
-            padding: 16px;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid var(--border-color);
-        }
-
-        .metric-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--notion-blue);
-            margin-bottom: 4px;
-        }
-
-        .metric-value.excellent {
-            color: var(--notion-green);
-        }
-
-        .metric-value.good {
-            color: var(--notion-yellow);
-        }
-
-        .metric-value.poor {
-            color: var(--notion-red);
-        }
-
-        .metric-label {
-            font-size: 0.75rem;
-            color: var(--notion-gray);
-        }
-
-        .engagement-score {
-            background: linear-gradient(135deg, var(--notion-blue), var(--notion-purple));
-            color: white;
-        }
-
-        .engagement-score .metric-value {
-            color: white;
-        }
-
-        /* PRD Enhancement: Refinement Buttons */
-        .refinement-buttons {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin: 16px 0;
-        }
-
-        .refinement-btn {
-            background: var(--bg-default);
-            border: 1px solid var(--border-color);
-            padding: 8px 12px;
             border-radius: 6px;
             font-size: 12px;
             cursor: pointer;
             transition: all 0.2s;
-            text-align: center;
+            justify-content: center;
         }
 
-        .refinement-btn:hover {
+        .quick-action-btn:hover {
             background: var(--bg-hover);
             border-color: var(--notion-blue);
+            transform: translateY(-1px);
         }
 
+        /* Action Buttons */
         .action-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 12px;
-            margin-top: 20px;
+            margin: 20px 0;
         }
 
         .copy-btn, .linkedin-share-btn {
@@ -605,7 +612,94 @@
             transform: translateY(-1px);
         }
 
-        /* PRD Enhancement: Free Tier Modal */
+        /* Enhanced Metrics */
+        .enhanced-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .metric-card {
+            background: var(--bg-gray);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--notion-blue);
+            margin-bottom: 4px;
+        }
+
+        .metric-value.excellent {
+            color: var(--notion-green);
+        }
+
+        .metric-value.good {
+            color: var(--notion-yellow);
+        }
+
+        .metric-value.poor {
+            color: var(--notion-red);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--notion-gray);
+        }
+
+        .engagement-score {
+            background: linear-gradient(135deg, var(--notion-blue), var(--notion-purple));
+            color: white;
+        }
+
+        .engagement-score .metric-value {
+            color: white;
+        }
+
+        /* Posting Insights */
+        .posting-insights {
+            background: var(--bg-gray);
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .posting-insights h4 {
+            font-size: 14px;
+            margin-bottom: 12px;
+            color: var(--notion-default);
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .insight-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .insight-label {
+            font-size: 11px;
+            color: var(--notion-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .insight-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--notion-default);
+        }
 
         .results-section {
             background: var(--bg-default);
@@ -642,6 +736,33 @@
             margin-top: 4px;
         }
 
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        .schedule-option {
+            padding: 12px 16px; 
+            background: var(--bg-gray); 
+            border: 1px solid var(--border-color);
+            border-radius: 6px; 
+            cursor: pointer; 
+            text-align: left; 
+            transition: all 0.2s;
+            font-size: 14px; 
+            width: 100%;
+        }
+
+        .schedule-option:hover {
+            background: var(--bg-hover); 
+            border-color: var(--notion-blue);
+        }
+
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: clamp(2.5rem, 10vw, 4rem);
@@ -673,7 +794,7 @@
                 grid-template-columns: 1fr;
             }
 
-            .refinement-buttons {
+            .quick-actions {
                 grid-template-columns: 1fr;
             }
 
@@ -814,8 +935,6 @@
         // Configuration
         const API_ENDPOINT = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
         
-
-        
         // State
         let selectedTone = 'professional';
         let currentNews = '';
@@ -829,8 +948,6 @@
         const btnText = document.getElementById('btn-text');
         const loading = document.getElementById('loading');
         const results = document.getElementById('results');
-        const usageCounter = document.getElementById('usage-counter');
-        const postsRemaining = document.getElementById('posts-remaining');
 
         // Update character count
         newsInput.addEventListener('input', (e) => {
@@ -840,88 +957,86 @@
         });
 
         // Tone selection
-        document.querySelectorAll('.tone-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                selectedTone = btn.dataset.tone;
-            });
-        });
+       document.querySelectorAll('.tone-btn').forEach(btn => {
+           btn.addEventListener('click', () => {
+               document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
+               btn.classList.add('active');
+               selectedTone = btn.dataset.tone;
+           });
+       });
 
-        // Generate post
-        generateBtn.addEventListener('click', generatePost);
+       // Generate post
+       generateBtn.addEventListener('click', generatePost);
 
-        async function generatePost(refinementType = null) {
-            const newsText = newsInput.value.trim();
-            
-            if (!newsText && !refinementType) {
-                showError('Please paste some news or text to transform');
-                return;
-            }
+       async function generatePost(refinementType = null) {
+           const newsText = newsInput.value.trim();
+           
+           if (!newsText && !refinementType) {
+               showError('Please paste some news or text to transform');
+               return;
+           }
 
-            // Show loading state
-            generateBtn.disabled = true;
-            btnText.style.display = 'none';
-            loading.style.display = 'block';
+           // Show loading state
+           generateBtn.disabled = true;
+           btnText.style.display = 'none';
+           loading.style.display = 'block';
 
-            try {
-                let prompt;
-                if (refinementType && currentPost) {
-                    // PRD Enhancement: Refinement request
-                    prompt = createRefinementPrompt(currentPost, refinementType);
-                } else {
-                    prompt = createPrompt(newsText, selectedTone);
-                }
-                
-                const response = await makeAPIRequest(prompt);
-                
-                if (response.email_template) {
-                    currentPost = response.email_template;
-                    suggestedHashtags = response.suggested_hashtags || [];
-                    displayPost(response.email_template, suggestedHashtags);
-                } else if (response.quick_take) {
-                    currentPost = response.quick_take;
-                    displayPost(response.quick_take, []);
-                } else {
-                    throw new Error('Invalid response format');
-                }
-                
-            } catch (error) {
-                console.error('Error:', error);
-                showError('Failed to generate post. Please try again.');
-            } finally {
-                generateBtn.disabled = false;
-                btnText.style.display = 'block';
-                loading.style.display = 'none';
-            }
-        }
+           try {
+               let prompt;
+               if (refinementType && currentPost) {
+                   prompt = createRefinementPrompt(currentPost, refinementType);
+               } else {
+                   prompt = createPrompt(newsText, selectedTone);
+               }
+               
+               const response = await makeAPIRequest(prompt);
+               
+               if (response.email_template) {
+                   currentPost = response.email_template;
+                   suggestedHashtags = response.suggested_hashtags || [];
+                   displayPost(response.email_template, suggestedHashtags);
+               } else if (response.quick_take) {
+                   currentPost = response.quick_take;
+                   displayPost(response.quick_take, []);
+               } else {
+                   throw new Error('Invalid response format');
+               }
+               
+           } catch (error) {
+               console.error('Error:', error);
+               showError('Failed to generate post. Please try again.');
+           } finally {
+               generateBtn.disabled = false;
+               btnText.style.display = 'block';
+               loading.style.display = 'none';
+           }
+       }
 
-        // PRD Enhancement: Refinement prompts
-        function createRefinementPrompt(currentPost, refinementType) {
-            const refinements = {
-                'shorter': 'Make this LinkedIn post shorter while keeping the key message and impact:',
-                'more-emojis': 'Add more relevant emojis to this LinkedIn post to make it more engaging:',
-                'rephrase-hook': 'Rephrase the opening hook of this LinkedIn post to be more attention-grabbing:'
-            };
+       function createRefinementPrompt(currentPost, refinementType) {
+           const refinements = {
+               'shorter': 'Make this LinkedIn post shorter while keeping the key message and impact:',
+               'more-emojis': 'Add more relevant emojis to this LinkedIn post to make it more engaging:',
+               'rephrase-hook': 'Rephrase the opening hook of this LinkedIn post to be more attention-grabbing:'
+           };
 
-            return `${refinements[refinementType]}
+           return `${refinements[refinementType]}
 
 "${currentPost}"
 
 Maintain the same tone and professional quality. Return only the refined post.`;
-        }
+       }
 
-        function createPrompt(newsText, tone) {
-            const toneDescriptions = {
-                professional: 'professional and authoritative',
-                'thought-leader': 'thought-provoking and insightful',
-                inspirational: 'inspirational and motivational',
-                analytical: 'data-driven and analytical',
-                conversational: 'casual and conversational',
-                controversial: 'bold and slightly controversial to spark debate'
-            };
+       function createPrompt(newsText, tone) {
+           const toneDescriptions = {
+               professional: 'professional and authoritative',
+               'thought-leader': 'thought-provoking and insightful',
+               inspirational: 'inspirational and motivational',
+               analytical: 'data-driven and analytical',
+               conversational: 'casual and conversational',
+               controversial: 'bold and slightly controversial to spark debate'
+           };
 
-            return `Transform this news/text into a viral LinkedIn post. Make it ${toneDescriptions[tone]}:
+           return `Transform this news/text into a viral LinkedIn post. Make it ${toneDescriptions[tone]}:
 
 "${newsText}"
 
@@ -950,335 +1065,702 @@ TRENDS & INSIGHTS: #trends #future #insights #analysis #research #news #update #
 Select the 5 most relevant hashtags from the above categories that best match your post content. Separate them with spaces.
 
 The post should feel native to LinkedIn and drive engagement (likes, comments, reposts).`;
-        }
+       }
 
-        async function makeAPIRequest(prompt) {
-            const response = await fetch(API_ENDPOINT, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    situation: prompt,
-                    forceType: 'outreach'
-                })
-            });
+       async function makeAPIRequest(prompt) {
+           const response = await fetch(API_ENDPOINT, {
+               method: 'POST',
+               headers: {
+                   'Content-Type': 'application/json',
+               },
+               body: JSON.stringify({
+                   situation: prompt,
+                   forceType: 'outreach'
+               })
+           });
 
-            if (!response.ok) {
-                throw new Error(`API error: ${response.status}`);
-            }
+           if (!response.ok) {
+               throw new Error(`API error: ${response.status}`);
+           }
 
-            return await response.json();
-        }
+           return await response.json();
+       }
 
-        // PRD Enhancement: LinkedIn-style post display with engagement metrics
-        function displayPost(content, hashtags = []) {
-            // Parse hashtags from content if they exist
-            const lines = content.split('\n');
-            const lastLine = lines[lines.length - 1];
-            if (lastLine.includes('#')) {
-                hashtags = lastLine.split(' ').filter(word => word.startsWith('#'));
-                content = lines.slice(0, -1).join('\n').trim();
-            }
+       function displayPost(content, hashtags = []) {
+           // Parse hashtags from content if they exist
+           const lines = content.split('\n');
+           const lastLine = lines[lines.length - 1];
+           if (lastLine.includes('#')) {
+               hashtags = lastLine.split(' ').filter(word => word.startsWith('#'));
+               content = lines.slice(0, -1).join('\n').trim();
+           }
 
-            const engagementScore = calculateEngagementScore(content);
-            const readabilityScore = calculateReadability(content);
-            
-            const html = `
-                <div class="results-section fade-in">
-                    <!-- PRD Enhancement: LinkedIn-Style Preview -->
-                    <div class="linkedin-post-preview">
-                        <div class="linkedin-header">
-                            <div class="linkedin-avatar">N2P</div>
-                            <div class="linkedin-user-info">
-                                <h4>News2Post AI</h4>
-                                <p>Just now • 🌐</p>
-                            </div>
-                        </div>
-                        
-                        <div class="linkedin-content" id="post-content">${escapeHtml(content)}</div>
-                        
-                        <!-- PRD Enhancement: Hashtag Suggestions -->
-                        ${hashtags.length > 0 ? `
-                        <div class="hashtag-suggestions">
-                            <h5>Suggested Hashtags (Click to add)</h5>
-                            <div class="hashtag-container">
-                                ${hashtags.map(tag => `
-                                    <span class="hashtag-suggestion" onclick="addHashtag('${tag}')">${tag}</span>
-                                `).join('')}
-                            </div>
-                        </div>
-                        ` : ''}
-                        
-                        <div class="linkedin-actions">
-                            <div class="linkedin-action">
-                                <span>👍</span>
-                                <span>Like</span>
-                            </div>
-                            <div class="linkedin-action">
-                                <span>💬</span>
-                                <span>Comment</span>
-                            </div>
-                            <div class="linkedin-action">
-                                <span>🔄</span>
-                                <span>Repost</span>
-                            </div>
-                            <div class="linkedin-action">
-                                <span>📤</span>
-                                <span>Send</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- PRD Enhancement: Refinement Buttons -->
-                    <div class="refinement-buttons">
-                        <button class="refinement-btn" onclick="generatePost('shorter')">
-                            ✂️ Make Shorter
-                        </button>
-                        <button class="refinement-btn" onclick="generatePost('more-emojis')">
-                            😊 More Emojis
-                        </button>
-                        <button class="refinement-btn" onclick="generatePost('rephrase-hook')">
-                            🎣 Better Hook
-                        </button>
-                    </div>
-                    
-                    <!-- PRD Enhancement: Enhanced Action Buttons -->
-                    <div class="action-buttons">
-                        <button class="copy-btn" onclick="copyPost()">
-                            <span>📋</span>
-                            <span id="copy-text">Copy Post</span>
-                        </button>
-                        <button class="linkedin-share-btn" onclick="shareToLinkedIn()">
-                            <span>📧</span>
-                            <span>Share to LinkedIn</span>
-                        </button>
-                        <button class="regenerate-btn" onclick="generatePost()">
-                            <span>🔄</span>
-                            <span>Try Different Style</span>
-                        </button>
-                    </div>
-                    
-                    <!-- PRD Enhancement: Enhanced Metrics -->
-                    <div class="enhanced-metrics">
-                        <div class="metric-card engagement-score">
-                            <div class="metric-value">${engagementScore.score}/10</div>
-                            <div class="metric-label">Engagement Score</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value ${readabilityScore.class}">${readabilityScore.label}</div>
-                            <div class="metric-label">Readability</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value" id="emoji-count">0</div>
-                            <div class="metric-label">Emojis</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value" id="line-count">0</div>
-                            <div class="metric-label">Lines</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value" id="char-length">0</div>
-                            <div class="metric-label">Characters</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value ${engagementScore.hookClass}">${engagementScore.hookStrength}</div>
-                            <div class="metric-label">Hook Strength</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            results.innerHTML = html;
-            
-            // Update metrics
-            updateMetrics(content);
-            
-            // Store content for copy function
-            window.generatedContent = content;
-        }
+           // Auto-append hashtags to content
+           const finalContent = hashtags.length > 0 ? 
+               `${content}\n\n${hashtags.join(' ')}` : content;
 
-        // PRD Enhancement: Engagement Score Calculation
-        function calculateEngagementScore(content) {
-            let score = 0;
-            let hookStrength = 'Weak';
-            let hookClass = 'poor';
+           const engagementScore = calculateEngagementScore(finalContent);
+           const readabilityScore = calculateReadability(finalContent);
+           const postStats = analyzePostStructure(finalContent);
+           
+           const html = `
+               <div class="results-section fade-in">
+                   <!-- Post Length Indicator -->
+                   <div class="post-health-bar">
+                       <div class="health-item ${postStats.lengthClass}">
+                           <span class="health-icon">${postStats.lengthIcon}</span>
+                           <span class="health-text">Length: ${postStats.lengthLabel}</span>
+                       </div>
+                       <div class="health-item ${postStats.hookClass}">
+                           <span class="health-icon">${postStats.hookIcon}</span>
+                           <span class="health-text">Hook: ${postStats.hookLabel}</span>
+                       </div>
+                       <div class="health-item ${postStats.ctaClass}">
+                           <span class="health-icon">${postStats.ctaIcon}</span>
+                           <span class="health-text">CTA: ${postStats.ctaLabel}</span>
+                       </div>
+                   </div>
 
-            // Hook strength (first line analysis)
-            const firstLine = content.split('\n')[0];
-            if (firstLine.length > 10) {
-                if (/[?!]/.test(firstLine) || /\b(imagine|what if|did you know|breaking|just|wow)\b/i.test(firstLine)) {
-                    score += 3;
-                    hookStrength = 'Strong';
-                    hookClass = 'excellent';
-                } else if (firstLine.length < 50) {
-                    score += 2;
-                    hookStrength = 'Good';
-                    hookClass = 'good';
-                } else {
-                    score += 1;
-                }
-            }
+                   <!-- LinkedIn-Style Preview -->
+                   <div class="linkedin-post-preview">
+                       <div class="linkedin-header">
+                           <div class="linkedin-avatar">N2P</div>
+                           <div class="linkedin-user-info">
+                               <h4>Your LinkedIn Post</h4>
+                               <p>Just now • 🌐</p>
+                           </div>
+                           <div class="post-actions-top">
+                               <button class="mini-btn" onclick="schedulePost()" title="Schedule for later">
+                                   <span>⏰</span>
+                               </button>
+                               <button class="mini-btn" onclick="saveAsDraft()" title="Save as draft">
+                                   <span>💾</span>
+                               </button>
+                           </div>
+                       </div>
+                       
+                       <div class="linkedin-content" id="post-content">${escapeHtml(finalContent)}</div>
+                       
+                       <!-- Engagement Prediction -->
+                       <div class="engagement-prediction">
+                           <div class="prediction-item">
+                               <span class="prediction-icon">👍</span>
+                               <span class="prediction-text">${postStats.predictedLikes} likes</span>
+                           </div>
+                           <div class="prediction-item">
+                               <span class="prediction-icon">💬</span>
+                               <span class="prediction-text">${postStats.predictedComments} comments</span>
+                           </div>
+                           <div class="prediction-item">
+                               <span class="prediction-icon">🔄</span>
+                               <span class="prediction-text">${postStats.predictedShares} reposts</span>
+                           </div>
+                       </div>
+                       
+                       <div class="linkedin-actions">
+                           <div class="linkedin-action">
+                               <span>👍</span>
+                               <span>Like</span>
+                           </div>
+                           <div class="linkedin-action">
+                               <span>💬</span>
+                               <span>Comment</span>
+                           </div>
+                           <div class="linkedin-action">
+                               <span>🔄</span>
+                               <span>Repost</span>
+                           </div>
+                           <div class="linkedin-action">
+                               <span>📤</span>
+                               <span>Send</span>
+                           </div>
+                       </div>
+                   </div>
+                   
+                   <!-- Quick Actions -->
+                   <div class="quick-actions">
+                       <button class="quick-action-btn" onclick="optimizeForMobile()">
+                           <span>📱</span>
+                           <span>Mobile-Optimize</span>
+                       </button>
+                       <button class="quick-action-btn" onclick="addCallToAction()">
+                           <span>📢</span>
+                           <span>Stronger CTA</span>
+                       </button>
+                       <button class="quick-action-btn" onclick="addPersonalStory()">
+                           <span>👤</span>
+                           <span>Add Personal Touch</span>
+                       </button>
+                       <button class="quick-action-btn" onclick="generateVariations()">
+                           <span>🎲</span>
+                           <span>3 Variations</span>
+                       </button>
+                   </div>
+                   
+                   <!-- Main Action Buttons -->
+                   <div class="action-buttons">
+                       <button class="copy-btn" onclick="copyPost()">
+                           <span>📋</span>
+                           <span id="copy-text">Copy Post</span>
+                       </button>
+                       <button class="linkedin-share-btn" onclick="shareToLinkedIn()">
+                           <span>📧</span>
+                           <span>Share to LinkedIn</span>
+                       </button>
+                       <button class="regenerate-btn" onclick="generatePost()">
+                           <span>🔄</span>
+                           <span>Try Different Style</span>
+                       </button>
+                   </div>
+                   
+                   <!-- Enhanced Metrics -->
+                   <div class="enhanced-metrics">
+                       <div class="metric-card engagement-score">
+                           <div class="metric-value">${engagementScore.score}/10</div>
+                           <div class="metric-label">Engagement Score</div>
+                       </div>
+                       <div class="metric-card">
+                           <div class="metric-value ${readabilityScore.class}">${readabilityScore.label}</div>
+                           <div class="metric-label">Readability</div>
+                       </div>
+                       <div class="metric-card">
+                           <div class="metric-value">${postStats.wordCount}</div>
+                           <div class="metric-label">Words</div>
+                       </div>
+                       <div class="metric-card">
+                           <div class="metric-value">${postStats.readTime}</div>
+                           <div class="metric-label">Read Time</div>
+                       </div>
+                       <div class="metric-card">
+                           <div class="metric-value ${postStats.viralScore.class}">${postStats.viralScore.score}</div>
+                           <div class="metric-label">Viral Potential</div>
+                       </div>
+                       <div class="metric-card">
+                           <div class="metric-value">${hashtags.length}</div>
+                           <div class="metric-label">Hashtags</div>
+                       </div>
+                   </div>
 
-            // Line breaks (strategic formatting)
-            const lines = content.split('\n').length;
-            if (lines >= 3 && lines <= 8) score += 2;
-            else if (lines >= 2) score += 1;
+                   <!-- Best Time to Post -->
+                   <div class="posting-insights">
+                       <h4>📊 Posting Insights</h4>
+                       <div class="insights-grid">
+                           <div class="insight-item">
+                               <span class="insight-label">Best time:</span>
+                               <span class="insight-value">${getBestPostingTime()}</span>
+                           </div>
+                           <div class="insight-item">
+                               <span class="insight-label">Industry peak:</span>
+                               <span class="insight-value">${getIndustryPeakTime(finalContent)}</span>
+                           </div>
+                           <div class="insight-item">
+                               <span class="insight-label">Estimated reach:</span>
+                               <span class="insight-value">${postStats.estimatedReach}</span>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           `;
+           
+           results.innerHTML = html;
+           
+           // Store content for copy function
+           window.generatedContent = finalContent;
+       }
 
-            // Emoji usage
-            const emojiCount = (content.match(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu) || []).length;
-            if (emojiCount >= 2 && emojiCount <= 6) score += 2;
-            else if (emojiCount >= 1) score += 1;
+       // Analyze post structure for busy professionals
+       function analyzePostStructure(content) {
+           const wordCount = content.split(/\s+/).length;
+           const lines = content.split('\n').length;
+           const hasQuestion = /[?]/.test(content);
+           const hasEmojis = /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu.test(content);
+           const firstLine = content.split('\n')[0];
+           
+           // Length analysis
+           let lengthClass = 'poor', lengthIcon = '❌', lengthLabel = 'Too long';
+           if (wordCount >= 50 && wordCount <= 150) {
+               lengthClass = 'excellent';
+               lengthIcon = '✅';
+               lengthLabel = 'Perfect';
+           } else if (wordCount >= 30 && wordCount <= 200) {
+               lengthClass = 'good';
+               lengthIcon = '⚠️';
+               lengthLabel = 'Good';
+           }
 
-            // Call to action
-            if (/[?]$/.test(content.trim()) || /\b(thoughts|agree|experience|share|comment)\b/i.test(content)) {
-                score += 2;
-            }
+           // Hook analysis
+           let hookClass = 'poor', hookIcon = '❌', hookLabel = 'Weak';
+           if (firstLine.length < 60 && (/[!?]/.test(firstLine) || /\b(imagine|what if|did you know|breaking|just)\b/i.test(firstLine))) {
+               hookClass = 'excellent';
+               hookIcon = '🎣';
+               hookLabel = 'Strong';
+           } else if (firstLine.length < 80) {
+               hookClass = 'good';
+               hookIcon = '⚠️';
+               hookLabel = 'Good';
+           }
 
-            // Word count optimization
-            const wordCount = content.split(/\s+/).length;
-            if (wordCount >= 50 && wordCount <= 150) score += 1;
+           // CTA analysis
+           let ctaClass = 'poor', ctaIcon = '❌', ctaLabel = 'Missing';
+           if (hasQuestion || /\b(thoughts|agree|share|comment|what do you think)\b/i.test(content)) {
+               ctaClass = 'excellent';
+               ctaIcon = '📢';
+               ctaLabel = 'Strong';
+           }
 
-            return {
-                score: Math.min(10, score),
-                hookStrength,
-                hookClass
-            };
-        }
+           // Viral potential
+           let viralScore = 0;
+           if (hasEmojis) viralScore += 2;
+           if (hasQuestion) viralScore += 2;
+           if (wordCount >= 50 && wordCount <= 150) viralScore += 3;
+           if (lines >= 3 && lines <= 8) viralScore += 2;
+           if (/\b(breaking|exclusive|revealed|secret|truth)\b/i.test(content)) viralScore += 1;
 
-        // PRD Enhancement: Readability Analysis
-        function calculateReadability(content) {
-            const words = content.split(/\s+/).length;
-            const sentences = content.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
-            const avgWordsPerSentence = words / sentences;
+           const viralClass = viralScore >= 7 ? 'excellent' : viralScore >= 4 ? 'good' : 'poor';
 
-            if (avgWordsPerSentence <= 15) {
-                return { label: 'Easy', class: 'excellent' };
-            } else if (avgWordsPerSentence <= 20) {
-                return { label: 'Medium', class: 'good' };
-            } else {
-                return { label: 'Hard', class: 'poor' };
-            }
-        }
+           // Engagement predictions (simplified algorithm)
+           const baseEngagement = Math.max(10, wordCount * 0.5);
+           const predictedLikes = Math.round(baseEngagement * (viralScore / 10) * (Math.random() * 0.5 + 0.75));
+           const predictedComments = Math.round(predictedLikes * 0.15);
+           const predictedShares = Math.round(predictedLikes * 0.08);
 
-        function updateMetrics(content) {
-            // Count emojis
-            const emojiRegex = /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu;
-            const emojiCount = (content.match(emojiRegex) || []).length;
-            document.getElementById('emoji-count').textContent = emojiCount;
-            
-            // Count lines
-            const lineCount = content.split('\n').length;
-            document.getElementById('line-count').textContent = lineCount;
-            
-            // Character count
-            document.getElementById('char-length').textContent = content.length;
-        }
+           return {
+               wordCount,
+               readTime: `${Math.ceil(wordCount / 200)}min`,
+               lengthClass, lengthIcon, lengthLabel,
+               hookClass, hookIcon, hookLabel,
+               ctaClass, ctaIcon, ctaLabel,
+               viralScore: { score: viralScore, class: viralClass },
+               predictedLikes,
+               predictedComments,
+               predictedShares,
+               estimatedReach: `${Math.round(predictedLikes * 15)}-${Math.round(predictedLikes * 25)}`
+           };
+       }
 
-        // PRD Enhancement: Add hashtag functionality
-        function addHashtag(hashtag) {
-            const postContent = document.getElementById('post-content');
-            const currentContent = postContent.textContent;
-            
-            if (!currentContent.includes(hashtag)) {
-                const newContent = currentContent + '\n\n' + hashtag;
-                postContent.textContent = newContent;
-                window.generatedContent = newContent;
-                
-                // Mark hashtag as added
-                event.target.classList.add('added');
-                event.target.textContent = hashtag + ' ✓';
-            }
-        }
+       // Time-based recommendations for busy professionals
+       function getBestPostingTime() {
+           const now = new Date();
+           const hour = now.getHours();
+           
+           if (hour >= 7 && hour <= 9) return "Now (Morning Peak)";
+           if (hour >= 12 && hour <= 14) return "Now (Lunch Peak)";
+           if (hour >= 17 && hour <= 19) return "Now (Evening Peak)";
+           
+           // Calculate next optimal time
+           let nextPeak = 7; // Default to tomorrow morning
+           if (hour < 7) nextPeak = 7;
+           else if (hour < 12) nextPeak = 12;
+           else if (hour < 17) nextPeak = 17;
+           else nextPeak = 7; // Next day
 
-        async function copyPost() {
-            const copyBtn = document.querySelector('.copy-btn');
-            const copyText = document.getElementById('copy-text');
-            
-            try {
-                await navigator.clipboard.writeText(window.generatedContent);
-                copyText.textContent = 'Copied!';
-                copyBtn.classList.add('copied');
-                
-                setTimeout(() => {
-                    copyText.textContent = 'Copy Post';
-                    copyBtn.classList.remove('copied');
-                }, 2000);
-            } catch (err) {
-                // Fallback
-                const textarea = document.createElement('textarea');
-                textarea.value = window.generatedContent;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                
-                copyText.textContent = 'Copied!';
-                setTimeout(() => {
-                    copyText.textContent = 'Copy Post';
-                }, 2000);
-            }
-        }
+           const nextTime = new Date();
+           if (nextPeak === 7 && hour >= 17) {
+               nextTime.setDate(nextTime.getDate() + 1);
+               nextTime.setHours(7, 0, 0, 0);
+           } else {
+               nextTime.setHours(nextPeak, 0, 0, 0);
+           }
 
-        // PRD Enhancement: LinkedIn Share functionality
-        function shareToLinkedIn() {
-            // Copy content first
-            copyPost();
-            
-            // Open LinkedIn with instructions
-            const message = encodeURIComponent("Your LinkedIn post has been copied to clipboard! Paste it in the LinkedIn composer that will open.");
-            const linkedInUrl = `https://www.linkedin.com/feed/?shareActive=true`;
-            
-            // Show user instruction
-            setTimeout(() => {
-                alert('📋 Post copied to clipboard!\n\n📧 LinkedIn will open in a new tab. Simply paste your post in the composer.');
-                window.open(linkedInUrl, '_blank');
-            }, 500);
-        }
+           return nextTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+       }
 
-        function showError(message) {
-            results.innerHTML = `
-                <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 16px; color: #991b1b;">
-                    <strong>Error:</strong> ${message}
-                </div>
-            `;
-        }
+       // Industry-specific timing
+       function getIndustryPeakTime(content) {
+           if (/\b(tech|software|ai|startup)\b/i.test(content)) return "9-11 AM (Tech Peak)";
+           if (/\b(finance|banking|investment)\b/i.test(content)) return "7-9 AM (Finance Peak)";
+           if (/\b(healthcare|medical|pharma)\b/i.test(content)) return "12-2 PM (Healthcare Peak)";
+           if (/\b(education|learning|training)\b/i.test(content)) return "8-10 AM (Education Peak)";
+           return "8-10 AM (General Peak)";
+       }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
+       // Quick optimization functions for busy users
+       function optimizeForMobile() {
+           if (!window.generatedContent) return;
+           
+           const prompt = `Make this LinkedIn post more mobile-friendly with shorter paragraphs and better line breaks:
 
-        // Theme toggle
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('darkMode', isDark);
-        }
+"${window.generatedContent}"
 
-        // Load saved theme
-        if (localStorage.getItem('darkMode') === 'true') {
-            document.body.classList.add('dark-mode');
-        }
+Optimize for mobile viewing by:
+- Using shorter paragraphs (max 2 lines each)
+- Adding strategic line breaks
+- Keeping sentences concise
+- Maintaining the same message and hashtags`;
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if API endpoint is configured
-            if (API_ENDPOINT === 'YOUR_API_GATEWAY_ENDPOINT_HERE') {
-                const disclaimer = document.querySelector('.disclaimer');
-                disclaimer.innerHTML = `
-                    <strong>⚠️ Configuration Required:</strong> 
-                    This demo requires an AI API endpoint to be configured. Please update the API_ENDPOINT in the code.
-                `;
-                disclaimer.style.background = '#fef2f2';
-                disclaimer.style.borderColor = '#fecaca';
-                disclaimer.style.color = '#991b1b';
-                
-                generateBtn.disabled = true;
-                generateBtn.style.opacity = '0.5';
-            }
-        });
-    </script>
+           makeOptimizationRequest(prompt, 'Mobile-optimized post generated!');
+       }
+
+       function addCallToAction() {
+           if (!window.generatedContent) return;
+           
+           const prompt = `Strengthen the call-to-action in this LinkedIn post:
+
+"${window.generatedContent}"
+
+Make the CTA more compelling by:
+- Adding a specific question at the end
+- Using action-oriented language
+- Encouraging engagement (comments, shares, thoughts)
+- Maintaining the same tone and hashtags`;
+
+           makeOptimizationRequest(prompt, 'CTA strengthened!');
+       }
+
+       function addPersonalStory() {
+           if (!window.generatedContent) return;
+           
+           const prompt = `Add a brief personal touch to this LinkedIn post:
+
+"${window.generatedContent}"
+
+Enhance with:
+- A personal insight or experience
+- "I" statements for authenticity
+- Relatable elements
+- Keep it professional but human
+- Maintain the same hashtags`;
+
+           makeOptimizationRequest(prompt, 'Personal touch added!');
+       }
+
+       function generateVariations() {
+           if (!window.generatedContent) return;
+           
+           const variations = document.createElement('div');
+           variations.className = 'variations-container';
+           variations.innerHTML = `
+               <div style="background: var(--bg-gray); padding: 16px; border-radius: 8px; margin: 16px 0; border: 1px solid var(--border-color);">
+                   <h4 style="margin-bottom: 12px; font-size: 14px;">🎲 Generating 3 variations...</h4>
+                   <div class="loading" style="margin: 20px auto; display: block;"></div>
+               </div>
+           `;
+           
+           document.querySelector('.results-section').appendChild(variations);
+           
+           // Generate 3 variations with different tones
+           const tones = ['professional', 'conversational', 'thought-leader'];
+           Promise.all(tones.map(tone => generateVariation(tone)))
+               .then(results => displayVariations(results))
+               .catch(error => console.error('Variation generation failed:', error));
+       }
+
+       async function generateVariation(tone) {
+           const originalNews = newsInput.value.trim();
+           const prompt = createPrompt(originalNews, tone);
+           const response = await makeAPIRequest(prompt);
+           return { tone, content: response.email_template || response.quick_take };
+       }
+
+       function displayVariations(variations) {
+           const container = document.querySelector('.variations-container');
+           container.innerHTML = `
+               <h4 style="margin-bottom: 12px; font-size: 14px;">🎲 Choose your favorite variation:</h4>
+               ${variations.map((variation, index) => `
+                   <div class="variation-option" style="background: var(--bg-default); padding: 12px; border-radius: 6px; margin: 8px 0; border: 1px solid var(--border-color); cursor: pointer;" onclick="selectVariation(${index})">
+                       <div style="font-size: 12px; color: var(--notion-gray); margin-bottom: 8px; text-transform: capitalize;">${variation.tone} Tone</div>
+                       <div style="font-size: 13px; line-height: 1.4;">${escapeHtml(variation.content.substring(0, 100))}...</div>
+                   </div>
+               `).join('')}
+           `;
+           
+           // Store variations for selection
+           window.currentVariations = variations;
+       }
+
+       function selectVariation(index) {
+           if (!window.currentVariations) return;
+           
+           const selected = window.currentVariations[index];
+           currentPost = selected.content;
+           displayPost(selected.content, []);
+           
+           // Remove variations container
+           const container = document.querySelector('.variations-container');
+           if (container) container.remove();
+       }
+
+       async function makeOptimizationRequest(prompt, successMessage) {
+           generateBtn.disabled = true;
+           
+           try {
+               const response = await makeAPIRequest(prompt);
+               const optimizedContent = response.email_template || response.quick_take;
+               currentPost = optimizedContent;
+               displayPost(optimizedContent, []);
+               
+               // Show success message briefly
+               showSuccessMessage(successMessage);
+           } catch (error) {
+               console.error('Optimization failed:', error);
+               showError('Optimization failed. Please try again.');
+           } finally {
+               generateBtn.disabled = false;
+           }
+       }
+
+       function showSuccessMessage(message) {
+           const toast = document.createElement('div');
+           toast.style.cssText = `
+               position: fixed; top: 20px; right: 20px; z-index: 1000;
+               background: var(--notion-green); color: white; padding: 12px 16px;
+               border-radius: 8px; font-size: 14px; box-shadow: var(--shadow-lg);
+               animation: slideIn 0.3s ease-out;
+           `;
+           toast.textContent = message;
+           document.body.appendChild(toast);
+           
+           setTimeout(() => {
+               toast.style.animation = 'slideOut 0.3s ease-in';
+               setTimeout(() => document.body.removeChild(toast), 300);
+           }, 2000);
+       }
+
+       // Schedule and save functions for busy professionals
+       function schedulePost() {
+           const modal = document.createElement('div');
+           modal.className = 'schedule-modal';
+           modal.style.cssText = `
+               position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+               background: rgba(0,0,0,0.5); display: flex; align-items: center;
+               justify-content: center; z-index: 1000;
+           `;
+           
+           modal.innerHTML = `
+               <div style="background: var(--bg-default); padding: 24px; border-radius: 12px; max-width: 400px; margin: 20px;">
+                   <h3 style="margin-bottom: 16px;">⏰ Schedule Your Post</h3>
+                   <p style="color: var(--notion-gray); margin-bottom: 16px; font-size: 14px;">
+                       Choose when to remind you to post this content:
+                   </p>
+                   
+                   <div style="display: grid; gap: 12px; margin-bottom: 20px;">
+                       <button class="schedule-option" onclick="scheduleReminder('9am-tomorrow')">
+                           📅 Tomorrow 9 AM (Peak time)
+                       </button>
+                       <button class="schedule-option" onclick="scheduleReminder('custom')">
+                           🕒 Custom time
+                       </button>
+                       <button class="schedule-option" onclick="scheduleReminder('copy-link')">
+                           🔗 Copy scheduling link
+                       </button>
+                   </div>
+                   
+                   <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                       <button onclick="closeScheduleModal()" style="padding: 8px 16px; background: var(--bg-gray); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">Cancel</button>
+                   </div>
+               </div>
+           `;
+           
+           document.body.appendChild(modal);
+           window.currentScheduleModal = modal;
+       }
+
+       function closeScheduleModal() {
+           if (window.currentScheduleModal) {
+               document.body.removeChild(window.currentScheduleModal);
+               window.currentScheduleModal = null;
+           }
+       }
+
+       function scheduleReminder(type) {
+           if (type === 'copy-link') {
+               const linkedInUrl = `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(window.generatedContent)}`;
+               navigator.clipboard.writeText(linkedInUrl);
+               showSuccessMessage('LinkedIn composer link copied! Bookmark it to post later.');
+           } else if (type === '9am-tomorrow') {
+               showSuccessMessage('Reminder set for tomorrow 9 AM! (Feature coming soon)');
+           } else {
+               showSuccessMessage('Custom scheduling coming soon!');
+           }
+           closeScheduleModal();
+       }
+
+       function saveAsDraft() {
+           const drafts = JSON.parse(localStorage.getItem('news2post_drafts') || '[]');
+           const draft = {
+               id: Date.now(),
+               content: window.generatedContent,
+               created: new Date().toISOString(),
+               title: window.generatedContent.split('\n')[0].substring(0, 50) + '...'
+           };
+           
+           drafts.unshift(draft);
+           drafts.splice(10); // Keep only last 10 drafts
+           
+           localStorage.setItem('news2post_drafts', JSON.stringify(drafts));
+           showSuccessMessage('💾 Draft saved! Access it anytime from your browser.');
+       }
+
+       function shareToLinkedIn() {
+           copyPost();
+           
+           const modal = document.createElement('div');
+           modal.style.cssText = `
+               position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+               background: rgba(0,0,0,0.5); display: flex; align-items: center;
+               justify-content: center; z-index: 1000;
+           `;
+           
+           const text = encodeURIComponent(window.generatedContent);
+           const linkedInUrl = `https://www.linkedin.com/feed/?shareActive=true&text=${text}`;
+           
+           modal.innerHTML = `
+               <div style="background: var(--bg-default); padding: 24px; border-radius: 12px; max-width: 400px; margin: 20px; text-align: center;">
+                   <h3 style="margin-bottom: 16px;">🚀 Ready to Post!</h3>
+                   <p style="color: var(--notion-gray); margin-bottom: 20px; font-size: 14px;">
+                       Your post is copied to clipboard. LinkedIn will open with the composer ready.
+                   </p>
+                   <div style="display: flex; gap: 12px; justify-content: center;">
+                       <button onclick="openLinkedIn('${linkedInUrl}')" style="padding: 12px 20px; background: #0077B5; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
+                           Open LinkedIn
+                       </button>
+                       <button onclick="closeShareModal()" style="padding: 12px 20px; background: var(--bg-gray); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">
+                           Later
+                       </button>
+                   </div>
+               </div>
+           `;
+           
+           document.body.appendChild(modal);
+           window.currentShareModal = modal;
+       }
+
+       function openLinkedIn(url) {
+           window.open(url, '_blank');
+           closeShareModal();
+           showSuccessMessage('LinkedIn opened! Paste your post and hit publish.');
+       }
+
+       function closeShareModal() {
+           if (window.currentShareModal) {
+               document.body.removeChild(window.currentShareModal);
+               window.currentShareModal = null;
+           }
+       }
+
+       function calculateEngagementScore(content) {
+           let score = 0;
+           let hookStrength = 'Weak';
+           let hookClass = 'poor';
+
+           const firstLine = content.split('\n')[0];
+           if (firstLine.length > 10) {
+               if (/[?!]/.test(firstLine) || /\b(imagine|what if|did you know|breaking|just|wow)\b/i.test(firstLine)) {
+                   score += 3;
+                   hookStrength = 'Strong';
+                   hookClass = 'excellent';
+               } else if (firstLine.length < 50) {
+                   score += 2;
+                   hookStrength = 'Good';
+                   hookClass = 'good';
+               } else {
+                   score += 1;
+               }
+           }
+
+           const lines = content.split('\n').length;
+           if (lines >= 3 && lines <= 8) score += 2;
+           else if (lines >= 2) score += 1;
+
+           const emojiCount = (content.match(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu) || []).length;
+           if (emojiCount >= 2 && emojiCount <= 6) score += 2;
+           else if (emojiCount >= 1) score += 1;
+
+           if (/[?]$/.test(content.trim()) || /\b(thoughts|agree|experience|share|comment)\b/i.test(content)) {
+               score += 2;
+           }
+
+           const wordCount = content.split(/\s+/).length;
+           if (wordCount >= 50 && wordCount <= 150) score += 1;
+
+           return {
+               score: Math.min(10, score),
+               hookStrength,
+               hookClass
+           };
+       }
+
+       function calculateReadability(content) {
+           const words = content.split(/\s+/).length;
+           const sentences = content.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+           const avgWordsPerSentence = words / sentences;
+
+           if (avgWordsPerSentence <= 15) {
+               return { label: 'Easy', class: 'excellent' };
+           } else if (avgWordsPerSentence <= 20) {
+               return { label: 'Medium', class: 'good' };
+           } else {
+               return { label: 'Hard', class: 'poor' };
+           }
+       }
+
+       async function copyPost() {
+           const copyBtn = document.querySelector('.copy-btn');
+           const copyText = document.getElementById('copy-text');
+           
+           try {
+               await navigator.clipboard.writeText(window.generatedContent);
+               copyText.textContent = 'Copied!';
+               copyBtn.classList.add('copied');
+               
+               setTimeout(() => {
+                   copyText.textContent = 'Copy Post';
+                   copyBtn.classList.remove('copied');
+               }, 2000);
+           } catch (err) {
+               const textarea = document.createElement('textarea');
+               textarea.value = window.generatedContent;
+               document.body.appendChild(textarea);
+               textarea.select();
+               document.execCommand('copy');
+               document.body.removeChild(textarea);
+               
+               copyText.textContent = 'Copied!';
+               setTimeout(() => {
+                   copyText.textContent = 'Copy Post';
+               }, 2000);
+           }
+       }
+
+       function showError(message) {
+           results.innerHTML = `
+               <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 16px; color: #991b1b;">
+                   <strong>Error:</strong> ${message}
+               </div>
+           `;
+       }
+
+       function escapeHtml(text) {
+           const div = document.createElement('div');
+           div.textContent = text;
+           return div.innerHTML;
+       }
+
+       function toggleTheme() {
+           document.body.classList.toggle('dark-mode');
+           const isDark = document.body.classList.contains('dark-mode');
+           localStorage.setItem('darkMode', isDark);
+       }
+
+       if (localStorage.getItem('darkMode') === 'true') {
+           document.body.classList.add('dark-mode');
+       }
+
+       document.addEventListener('DOMContentLoaded', function() {
+           if (API_ENDPOINT === 'YOUR_API_GATEWAY_ENDPOINT_HERE') {
+               const disclaimer = document.querySelector('.disclaimer');
+               disclaimer.innerHTML = `
+                   <strong>⚠️ Configuration Required:</strong> 
+                   This demo requires an AI API endpoint to be configured. Please update the API_ENDPOINT in the code.
+               `;
+               disclaimer.style.background = '#fef2f2';
+               disclaimer.style.borderColor = '#fecaca';
+               disclaimer.style.color = '#991b1b';
+               
+               generateBtn.disabled = true;
+               generateBtn.style.opacity = '0.5';
+           }
+       });
+   </script>
 </body>
 </html>
