@@ -1,1 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News2Post - Turn Any News Into Viral LinkedIn Posts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        :root {
+            --primary: #0A66C2;
+            --primary-dark: #004C8C;
+            --success: #057642;
+            --bg: #F3F2EF;
+            --card: #FFFFFF;
+            --text: #000000E6;
+            --text-secondary: #00000099;
+            --border: #00000014;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 40px 0 32px;
+        }
+
+        .logo {
+            font-size: 56px;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+        }
+
+        h1 {
+            font-size: clamp(36px, 5vw, 52px);
+            font-weight: 900;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, #B24592 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .examples {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .example-tag {
+            padding: 6px 14px;
+            background: #E7F3FF;
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .main-card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+        }
+
+        .input-section {
+            margin-bottom: 24px;
+        }
+
+        .input-label {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            resize: vertical;
+            font-family: inherit;
+            line-height: 1.5;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(10, 102, 194, 0.1);
+        }
+
+        .char-count {
+            position: absolute;
+            bottom: 8px;
+            right: 12px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            background: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .tone-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .tone-btn {
+            padding: 12px 16px;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .tone-btn:hover {
+            border-color: var(--primary);
+            background: #E7F3FF;
+        }
+
+        .tone-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 24px;
+        }
+
+        .generate-btn:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .generate-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.8s;
+        }
+
+        .generate-btn:hover::after {
+            left: 100%;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .results {
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        .post-preview {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .post-author {
+            flex: 1;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .post-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .post-content {
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            color: var(--text);
+        }
+
+        .engagement-bar {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .engagement-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .copy-btn {
+            background: var(--success);
+            color: white;
+        }
+
+        .copy-btn:hover {
+            background: #046132;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .copy-btn.copied {
+            background: var(--primary);
+        }
+
+        .regenerate-btn {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .regenerate-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .stat-card {
+            background: #F8F9FA;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .tips {
+            background: #FFF4E6;
+            border: 1px solid #FFB366;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 24px;
+        }
+
+        .tips-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tips-list {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 16px;
+            }
+            
+            .main-card {
+                padding: 20px;
+            }
+            
+            .tone-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .error {
+            background: #FEE;
+            border: 1px solid #FCC;
+            color: #C00;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <div class="logo">📰➡️💼</div>
+            <h1>News2Post</h1>
+            <p class="subtitle">Transform any news into viral LinkedIn posts in seconds</p>
+            <div class="examples">
+                <span class="example-tag">🔥 Tech News</span>
+                <span class="example-tag">📈 Market Updates</span>
+                <span class="example-tag">🚀 Product Launches</span>
+                <span class="example-tag">💡 Industry Insights</span>
+            </div>
+        </div>
+
+        <div class="main-card">
+            <div class="input-section">
+                <label class="input-label" for="news-input">
+                    📋 Paste your news article, headline, or any text
+                </label>
+                <div class="input-wrapper">
+                    <textarea 
+                        id="news-input" 
+                        placeholder="Example: 'Microsoft announces new AI-powered Excel features that can automatically generate formulas and insights from natural language queries...'"
+                        maxlength="3000"
+                    ></textarea>
+                    <span class="char-count">0/3000</span>
+                </div>
+            </div>
+
+            <div class="tone-section">
+                <label class="input-label">🎯 Choose your tone</label>
+                <div class="tone-selector">
+                    <button class="tone-btn selected" data-tone="professional">💼 Professional</button>
+                    <button class="tone-btn" data-tone="thought-leader">🧠 Thought Leader</button>
+                    <button class="tone-btn" data-tone="inspirational">✨ Inspirational</button>
+                    <button class="tone-btn" data-tone="analytical">📊 Analytical</button>
+                    <button class="tone-btn" data-tone="conversational">💬 Conversational</button>
+                    <button class="tone-btn" data-tone="controversial">🔥 Hot Take</button>
+                </div>
+            </div>
+
+            <button class="generate-btn" id="generate-btn">
+                <span id="btn-text">🚀 Generate LinkedIn Post</span>
+                <div class="loading" style="display: none;"></div>
+            </button>
+        </div>
+
+        <div class="results" id="results">
+            <div class="post-preview">
+                <div class="post-header">
+                    <div class="avatar">YOU</div>
+                    <div class="post-author">
+                        <div class="author-name">Your Name</div>
+                        <div class="post-time">Just now • 🌐</div>
+                    </div>
+                </div>
+                <div class="post-content" id="post-content"></div>
+                <div class="engagement-bar">
+                    <div class="engagement-item">👍 Like</div>
+                    <div class="engagement-item">💭 Comment</div>
+                    <div class="engagement-item">🔄 Repost</div>
+                    <div class="engagement-item">📤 Send</div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn copy-btn" id="copy-btn">
+                    <span>📋</span>
+                    <span id="copy-text">Copy Post</span>
+                </button>
+                <button class="action-btn regenerate-btn" id="regenerate-btn">
+                    <span>🔄</span>
+                    <span>Try Different Style</span>
+                </button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="emoji-count">0</div>
+                    <div class="stat-label">Emojis Used</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="line-count">0</div>
+                    <div class="stat-label">Lines</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="hook-strength">0/10</div>
+                    <div class="stat-label">Hook Strength</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tips">
+            <div class="tips-title">
+                <span>💡</span>
+                <span>Pro Tips for Maximum Engagement</span>
+            </div>
+            <div class="tips-list">
+                • Post between 7-9 AM or 5-6 PM in your timezone<br>
+                • Add a relevant image to increase engagement by 2x<br>
+                • Tag relevant people or companies mentioned<br>
+                • End with a question to boost comments
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_ENDPOINT = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
+        
+        // State
+        let selectedTone = 'professional';
+        let currentNews = '';
+
+        // DOM Elements
+        const newsInput = document.getElementById('news-input');
+        const charCount = document.querySelector('.char-count');
+        const generateBtn = document.getElementById('generate-btn');
+        const btnText = document.getElementById('btn-text');
+        const loader = document.querySelector('.loading');
+        const results = document.getElementById('results');
+        const postContent = document.getElementById('post-content');
+        const copyBtn = document.getElementById('copy-btn');
+        const copyText = document.getElementById('copy-text');
+        const regenerateBtn = document.getElementById('regenerate-btn');
+
+        // Update character count
+        newsInput.addEventListener('input', (e) => {
+            const length = e.target.value.length;
+            charCount.textContent = `${length}/3000`;
+            currentNews = e.target.value;
+        });
+
+        // Tone selection
+        document.querySelectorAll('.tone-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedTone = btn.dataset.tone;
+            });
+        });
+
+        // Generate post
+        generateBtn.addEventListener('click', generatePost);
+        regenerateBtn.addEventListener('click', generatePost);
+
+        async function generatePost() {
+            const newsText = newsInput.value.trim();
+            
+            if (!newsText) {
+                showError('Please paste some news or text to transform');
+                return;
+            }
+
+            // Show loading state
+            generateBtn.disabled = true;
+            btnText.style.display = 'none';
+            loader.style.display = 'block';
+            results.classList.remove('show');
+
+            try {
+                const prompt = createPrompt(newsText, selectedTone);
+                const response = await makeAPIRequest(prompt);
+                
+                if (response.email_template) {
+                    displayPost(response.email_template);
+                } else if (response.quick_take) {
+                    displayPost(response.quick_take);
+                } else {
+                    throw new Error('Invalid response format');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Failed to generate post. Please try again.');
+            } finally {
+                generateBtn.disabled = false;
+                btnText.style.display = 'block';
+                loader.style.display = 'none';
+            }
+        }
+
+        function createPrompt(newsText, tone) {
+            const toneDescriptions = {
+                professional: 'professional and authoritative',
+                'thought-leader': 'thought-provoking and insightful',
+                inspirational: 'inspirational and motivational',
+                analytical: 'data-driven and analytical',
+                conversational: 'casual and conversational',
+                controversial: 'bold and slightly controversial to spark debate'
+            };
+
+            return `Transform this news/text into a viral LinkedIn post. Make it ${toneDescriptions[tone]}:
+
+"${newsText}"
+
+Create a LinkedIn post that:
+- Starts with an irresistible hook (first line should grab attention)
+- Uses line breaks strategically for readability
+- Includes relevant emojis throughout (but not excessive)
+- Has a clear takeaway or insight
+- Ends with a thought-provoking question or call-to-action
+- Is between 100-200 words
+- Sounds authentic and human, not robotic
+- Uses "I" statements when appropriate
+- Includes 1-3 relevant hashtags at the end
+
+The post should feel native to LinkedIn and drive engagement (likes, comments, reposts).`;
+        }
+
+        async function makeAPIRequest(prompt) {
+            const response = await fetch(API_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    situation: prompt,
+                    forceType: 'outreach'
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`API error: ${response.status}`);
+            }
+
+            return await response.json();
+        }
+
+        function displayPost(content) {
+            postContent.textContent = content;
+            results.classList.add('show');
+            
+            // Update stats
+            const emojiCount = (content.match(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu) || []).length;
+            const lineCount = content.split('\n').length;
+            const hookStrength = calculateHookStrength(content);
+            
+            document.getElementById('emoji-count').textContent = emojiCount;
+            document.getElementById('line-count').textContent = lineCount;
+            document.getElementById('hook-strength').textContent = `${hookStrength}/10`;
+            
+            // Smooth scroll to results
+            results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function calculateHookStrength(content) {
+            const firstLine = content.split('\n')[0];
+            let score = 5;
+            
+            if (firstLine.includes('?')) score += 2;
+            if (firstLine.match(/[\u{1F600}-\u{1F64F}]/gu)) score += 1;
+            if (firstLine.length < 100) score += 1;
+            if (firstLine.match(/\d+/)) score += 1;
+            
+            return Math.min(score, 10);
+        }
+
+        // Copy functionality
+        copyBtn.addEventListener('click', async () => {
+            const textToCopy = postContent.textContent;
+            
+            try {
+                await navigator.clipboard.writeText(textToCopy);
+                copyText.textContent = 'Copied!';
+                copyBtn.classList.add('copied');
+                
+                setTimeout(() => {
+                    copyText.textContent = 'Copy Post';
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                // Fallback
+                const textarea = document.createElement('textarea');
+                textarea.value = textToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                
+                copyText.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyText.textContent = 'Copy Post';
+                }, 2000);
+            }
+        });
+
+        function showError(message) {
+            const error = document.createElement('div');
+            error.className = 'error';
+            error.textContent = message;
+            generateBtn.parentElement.appendChild(error);
+            
+            setTimeout(() => error.remove(), 5000);
+        }
+
+        // Auto-resize textarea
+        newsInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+    </script>
+</body>
+</html>
