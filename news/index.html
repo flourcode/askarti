@@ -3,315 +3,379 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News2Post - Turn Any News Into Viral LinkedIn Posts</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>News2Post - Transform Any News Into Viral LinkedIn Posts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --notion-default: #37352F;
+            --notion-gray: #787774;
+            --notion-brown: #9F6B53;
+            --notion-orange: #D9730D;
+            --notion-yellow: #CB912F;
+            --notion-green: #448361;
+            --notion-blue: #337EA9;
+            --notion-purple: #9065B0;
+            --notion-pink: #C14C8A;
+            --notion-red: #D44C47;
+            
+            --bg-default: #FFFFFF;
+            --bg-gray: #F7F6F3;
+            --bg-brown: #F4EEEE;
+            --bg-hover: #F7F6F3;
+            --bg-selected: #E9E5E3;
+            --border-color: #E3E2E0;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.04);
+            --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --primary: #0A66C2;
-            --primary-dark: #004C8C;
-            --success: #057642;
-            --bg: #F3F2EF;
-            --card: #FFFFFF;
-            --text: #000000E6;
-            --text-secondary: #00000099;
-            --border: #00000014;
-            --shadow: 0 2px 8px rgba(0,0,0,0.1);
-            --shadow-lg: 0 4px 16px rgba(0,0,0,0.15);
-        }
-
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-default);
+            color: var(--notion-default);
+            line-height: 1.5;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 24px;
         }
 
-        .hero {
-            text-align: center;
-            padding: 40px 0 32px;
+        .header {
+            background: var(--bg-default);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .header-content {
+            padding: 16px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .logo {
-            font-size: 56px;
-            margin-bottom: 16px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--notion-default);
         }
 
-        h1 {
-            font-size: clamp(36px, 5vw, 52px);
-            font-weight: 900;
-            margin-bottom: 12px;
-            background: linear-gradient(135deg, var(--primary) 0%, #B24592 100%);
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--notion-blue) 0%, var(--notion-purple) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .hero {
+            padding: 80px 0 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(51, 126, 169, 0.03) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, var(--notion-default) 0%, var(--notion-gray) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            line-height: 1.1;
         }
 
-        .subtitle {
-            font-size: 20px;
-            color: var(--text-secondary);
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--notion-gray);
+            margin-bottom: 48px;
+            font-weight: 400;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        .stat-card {
+            background: var(--bg-gray);
+            padding: 32px;
+            border-radius: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--notion-blue), var(--notion-purple));
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--notion-default);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--notion-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tool-section {
+            background: var(--bg-default);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--notion-default);
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--notion-gray);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .input-panel, .output-panel {
+            background: var(--bg-gray);
+            padding: 32px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .panel-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: var(--notion-default);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
             margin-bottom: 8px;
             font-weight: 500;
+            color: var(--notion-default);
+            font-size: 14px;
         }
 
-        .examples {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin-top: 16px;
-            flex-wrap: wrap;
-        }
-
-        .example-tag {
-            padding: 6px 14px;
-            background: #E7F3FF;
-            color: var(--primary);
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .main-card {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 32px;
-            box-shadow: var(--shadow);
-            margin-bottom: 24px;
-        }
-
-        .input-section {
-            margin-bottom: 24px;
-        }
-
-        .input-label {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            display: block;
-        }
-
-        .input-wrapper {
-            position: relative;
-        }
-
-        textarea {
+        .form-textarea {
             width: 100%;
-            min-height: 120px;
-            padding: 16px;
-            border: 2px solid var(--border);
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s;
-            resize: vertical;
+            font-size: 14px;
+            transition: all 0.2s;
+            background: var(--bg-default);
+            color: var(--notion-default);
             font-family: inherit;
-            line-height: 1.5;
+            min-height: 150px;
+            resize: vertical;
         }
 
-        textarea:focus {
+        .form-textarea:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(10, 102, 194, 0.1);
-        }
-
-        .char-count {
-            position: absolute;
-            bottom: 8px;
-            right: 12px;
-            font-size: 12px;
-            color: var(--text-secondary);
-            background: white;
-            padding: 2px 6px;
-            border-radius: 4px;
+            border-color: var(--notion-blue);
+            box-shadow: 0 0 0 3px rgba(51, 126, 169, 0.1);
         }
 
         .tone-selector {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 12px;
-            margin-top: 16px;
+            margin-bottom: 24px;
         }
 
         .tone-btn {
             padding: 12px 16px;
-            background: var(--bg);
-            border: 2px solid var(--border);
+            background: var(--bg-default);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             text-align: center;
+            color: var(--notion-gray);
         }
 
         .tone-btn:hover {
-            border-color: var(--primary);
-            background: #E7F3FF;
+            border-color: var(--notion-blue);
+            background: var(--bg-hover);
+            color: var(--notion-default);
         }
 
-        .tone-btn.selected {
-            background: var(--primary);
+        .tone-btn.active {
+            background: var(--notion-default);
             color: white;
-            border-color: var(--primary);
+            border-color: var(--notion-default);
         }
 
-        .generate-btn {
-            width: 100%;
-            padding: 18px;
-            background: var(--primary);
+        .btn-primary {
+            background: var(--notion-default);
             color: white;
             border: none;
+            padding: 14px 24px;
             border-radius: 8px;
-            font-size: 18px;
-            font-weight: 700;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
+            width: 100%;
+            font-family: inherit;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            position: relative;
-            overflow: hidden;
-            margin-top: 24px;
+            gap: 8px;
         }
 
-        .generate-btn:hover:not(:disabled) {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+        .btn-primary:hover {
+            background: var(--notion-gray);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
         }
 
-        .generate-btn:disabled {
+        .btn-primary:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-        }
-
-        .generate-btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.8s;
-        }
-
-        .generate-btn:hover::after {
-            left: 100%;
+            transform: none;
         }
 
         .loading {
             display: inline-block;
             width: 20px;
             height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-top-color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid white;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .results {
-            display: none;
-            animation: slideUp 0.5s ease-out;
-        }
-
-        .results.show {
-            display: block;
-        }
-
-        @keyframes slideUp {
-            from { 
-                opacity: 0; 
-                transform: translateY(30px); 
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0); 
-            }
+        .results-section {
+            background: var(--bg-default);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 24px;
         }
 
         .post-preview {
-            background: var(--card);
-            border-radius: 12px;
+            background: var(--bg-gray);
             padding: 24px;
-            box-shadow: var(--shadow);
+            border-radius: 8px;
             margin-bottom: 20px;
-            border: 1px solid var(--border);
-        }
-
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .avatar {
-            width: 48px;
-            height: 48px;
-            background: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .post-author {
-            flex: 1;
-        }
-
-        .author-name {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .post-time {
-            font-size: 12px;
-            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
         }
 
         .post-content {
             font-size: 14px;
             line-height: 1.6;
             white-space: pre-wrap;
-            color: var(--text);
-        }
-
-        .engagement-bar {
-            display: flex;
-            gap: 24px;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid var(--border);
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .engagement-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            color: var(--notion-default);
         }
 
         .action-buttons {
@@ -321,228 +385,264 @@
             margin-top: 20px;
         }
 
-        .action-btn {
-            padding: 14px 24px;
+        .copy-btn {
+            background: var(--notion-green);
+            color: white;
             border: none;
+            padding: 12px 24px;
             border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
 
-        .copy-btn {
-            background: var(--success);
-            color: white;
-        }
-
         .copy-btn:hover {
-            background: #046132;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
+            background: var(--notion-blue);
+            transform: translateY(-1px);
         }
 
         .copy-btn.copied {
-            background: var(--primary);
+            background: var(--notion-purple);
         }
 
         .regenerate-btn {
             background: transparent;
-            color: var(--primary);
-            border: 2px solid var(--primary);
+            color: var(--notion-default);
+            border: 1px solid var(--notion-default);
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .regenerate-btn:hover {
-            background: var(--primary);
+            background: var(--notion-default);
             color: white;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
+            transform: translateY(-1px);
         }
 
-        .stats-grid {
+        .metrics-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 16px;
             margin-top: 24px;
         }
 
-        .stat-card {
-            background: #F8F9FA;
-            padding: 16px;
+        .metric-card {
+            background: var(--bg-gray);
+            padding: 20px;
             border-radius: 8px;
             text-align: center;
+            border: 1px solid var(--border-color);
         }
 
-        .stat-value {
-            font-size: 24px;
+        .metric-value {
+            font-size: 2rem;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--notion-blue);
+            margin-bottom: 4px;
         }
 
-        .stat-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 4px;
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--notion-gray);
         }
 
-        .tips {
-            background: #FFF4E6;
-            border: 1px solid #FFB366;
+        .disclaimer {
+            background: var(--bg-gray);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 16px;
             margin-top: 24px;
+            font-size: 13px;
+            color: var(--notion-gray);
+            line-height: 1.5;
         }
 
-        .tips-title {
-            font-weight: 700;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
         }
 
-        .tips-list {
-            font-size: 14px;
-            line-height: 1.8;
-            color: var(--text-secondary);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        @media (max-width: 640px) {
+        .char-count {
+            text-align: right;
+            font-size: 12px;
+            color: var(--notion-gray);
+            margin-top: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: clamp(2.5rem, 10vw, 4rem);
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+
+            .tool-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
             .container {
-                padding: 16px;
+                padding: 0 16px;
             }
-            
-            .main-card {
-                padding: 20px;
+
+            .tool-section {
+                padding: 24px;
             }
-            
+
             .tone-selector {
                 grid-template-columns: repeat(2, 1fr);
             }
-            
+
             .action-buttons {
                 grid-template-columns: 1fr;
             }
         }
 
-        .error {
-            background: #FEE;
-            border: 1px solid #FCC;
-            color: #C00;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 16px;
-            font-size: 14px;
+        body.dark-mode {
+            --bg-default: #191919;
+            --bg-gray: #2F2F2F;
+            --bg-hover: #363636;
+            --bg-selected: #404040;
+            --border-color: #373737;
+            --notion-default: #E3E3E2;
+            --notion-gray: #9B9B99;
+        }
+
+        body.dark-mode .header {
+            background: rgba(25, 25, 25, 0.85);
+        }
+
+        body.dark-mode .tone-btn.active {
+            background: #E3E3E2;
+            color: #191919;
+        }
+
+        body.dark-mode .btn-primary {
+            background: #E3E3E2;
+            color: #191919;
+        }
+
+        body.dark-mode .btn-primary:hover {
+            background: #D3D3D2;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="hero">
-            <div class="logo">📰➡️💼</div>
-            <h1>News2Post</h1>
-            <p class="subtitle">Transform any news into viral LinkedIn posts in seconds</p>
-            <div class="examples">
-                <span class="example-tag">🔥 Tech News</span>
-                <span class="example-tag">📈 Market Updates</span>
-                <span class="example-tag">🚀 Product Launches</span>
-                <span class="example-tag">💡 Industry Insights</span>
-            </div>
-        </div>
-
-        <div class="main-card">
-            <div class="input-section">
-                <label class="input-label" for="news-input">
-                    📋 Paste your news article, headline, or any text
-                </label>
-                <div class="input-wrapper">
-                    <textarea 
-                        id="news-input" 
-                        placeholder="Example: 'Microsoft announces new AI-powered Excel features that can automatically generate formulas and insights from natural language queries...'"
-                        maxlength="3000"
-                    ></textarea>
-                    <span class="char-count">0/3000</span>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">📰</div>
+                    <span>News2Post</span>
+                </div>
+                <div class="header-actions">
+                    <button class="theme-toggle" onclick="toggleTheme()" style="width: 40px; height: 40px; border-radius: 8px; border: none; background: var(--bg-gray); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 18px;">🌓</button>
                 </div>
             </div>
-
-            <div class="tone-section">
-                <label class="input-label">🎯 Choose your tone</label>
-                <div class="tone-selector">
-                    <button class="tone-btn selected" data-tone="professional">💼 Professional</button>
-                    <button class="tone-btn" data-tone="thought-leader">🧠 Thought Leader</button>
-                    <button class="tone-btn" data-tone="inspirational">✨ Inspirational</button>
-                    <button class="tone-btn" data-tone="analytical">📊 Analytical</button>
-                    <button class="tone-btn" data-tone="conversational">💬 Conversational</button>
-                    <button class="tone-btn" data-tone="controversial">🔥 Hot Take</button>
-                </div>
-            </div>
-
-            <button class="generate-btn" id="generate-btn">
-                <span id="btn-text">🚀 Generate LinkedIn Post</span>
-                <div class="loading" style="display: none;"></div>
-            </button>
         </div>
+    </header>
 
-        <div class="results" id="results">
-            <div class="post-preview">
-                <div class="post-header">
-                    <div class="avatar">YOU</div>
-                    <div class="post-author">
-                        <div class="author-name">Your Name</div>
-                        <div class="post-time">Just now • 🌐</div>
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="fade-in">News to LinkedIn Gold</h1>
+                <p class="hero-subtitle fade-in">Transform any article, news, or text into engaging LinkedIn posts that drive likes, shares, and meaningful conversations</p>
+                
+                <div class="stats-grid fade-in">
+                    <div class="stat-card">
+                        <div class="stat-number">✨</div>
+                        <div class="stat-label">AI-Powered Writing</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">🎯</div>
+                        <div class="stat-label">6 Tone Options</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">📈</div>
+                        <div class="stat-label">Engagement Optimized</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">⚡</div>
+                        <div class="stat-label">Instant Results</div>
                     </div>
                 </div>
-                <div class="post-content" id="post-content"></div>
-                <div class="engagement-bar">
-                    <div class="engagement-item">👍 Like</div>
-                    <div class="engagement-item">💭 Comment</div>
-                    <div class="engagement-item">🔄 Repost</div>
-                    <div class="engagement-item">📤 Send</div>
-                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="tool-section">
+            <div class="section-header">
+                <h2 class="section-title">Transform Your Content</h2>
+                <p class="section-subtitle">Paste any news article, blog post, or text below and watch AI turn it into a LinkedIn post that gets noticed</p>
             </div>
 
-            <div class="action-buttons">
-                <button class="action-btn copy-btn" id="copy-btn">
-                    <span>📋</span>
-                    <span id="copy-text">Copy Post</span>
-                </button>
-                <button class="action-btn regenerate-btn" id="regenerate-btn">
-                    <span>🔄</span>
-                    <span>Try Different Style</span>
-                </button>
-            </div>
+            <div class="tool-grid">
+                <div class="input-panel">
+                    <h3 class="panel-title">📥 Input Your Content</h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Paste your news, article, or any text here</label>
+                        <textarea 
+                            class="form-textarea" 
+                            id="news-input" 
+                            placeholder="Example: 'OpenAI announces GPT-5 with breakthrough capabilities in reasoning and multimodal understanding. The new model can process images, audio, and text simultaneously while maintaining context across different modalities...'"
+                            maxlength="3000"
+                        ></textarea>
+                        <div class="char-count" id="char-count">0 / 3000</div>
+                    </div>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value" id="emoji-count">0</div>
-                    <div class="stat-label">Emojis Used</div>
+                    <div class="form-group">
+                        <label class="form-label">Choose your tone</label>
+                        <div class="tone-selector">
+                            <button class="tone-btn active" data-tone="professional">💼 Professional</button>
+                            <button class="tone-btn" data-tone="thought-leader">🧠 Thought Leader</button>
+                            <button class="tone-btn" data-tone="inspirational">✨ Inspirational</button>
+                            <button class="tone-btn" data-tone="analytical">📊 Analytical</button>
+                            <button class="tone-btn" data-tone="conversational">💬 Conversational</button>
+                            <button class="tone-btn" data-tone="controversial">🔥 Hot Take</button>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" id="generate-btn">
+                        <span id="btn-text">🚀 Generate LinkedIn Post</span>
+                        <div class="loading" id="loading" style="display: none;"></div>
+                    </button>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="line-count">0</div>
-                    <div class="stat-label">Lines</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="hook-strength">0/10</div>
-                    <div class="stat-label">Hook Strength</div>
+
+                <div class="output-panel">
+                    <h3 class="panel-title">✨ Your LinkedIn Post</h3>
+                    <div id="results">
+                        <p style="color: var(--notion-gray); text-align: center; padding: 40px; font-size: 14px;">
+                            Your AI-generated LinkedIn post will appear here. Just paste your content and click generate!
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="tips">
-            <div class="tips-title">
-                <span>💡</span>
-                <span>Pro Tips for Maximum Engagement</span>
-            </div>
-            <div class="tips-list">
-                • Post between 7-9 AM or 5-6 PM in your timezone<br>
-                • Add a relevant image to increase engagement by 2x<br>
-                • Tag relevant people or companies mentioned<br>
-                • End with a question to boost comments
-            </div>
+        <div class="disclaimer">
+            <strong>💡 Pro Tips:</strong> The best LinkedIn posts start with a hook, use strategic line breaks for readability, include relevant emojis, and end with a question or call-to-action. Our AI handles all of this automatically!
         </div>
     </div>
 
