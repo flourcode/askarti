@@ -199,8 +199,9 @@
 
         .refresh-btn:hover {
             background: var(--bg-card-hover);
-            color: var(--accent-green);
             border-color: var(--accent-green);
+            color: var(--accent-green);
+            text-shadow: 0 0 3px var(--accent-green);
             box-shadow: 0 0 10px rgba(0, 255, 136, 0.4), inset 0 0 5px rgba(0, 255, 136, 0.3);
         }
 
@@ -732,20 +733,18 @@
         // This URL points to the public S3 object where your Lambda stores the aggregated news.
         const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json';
         
-        // This array is now only used to define what categories/filters should exist initially.
+        // This array defines the base categories for filter chips, ensuring they always appear.
         // It should broadly cover the categories assigned by the Lambda.
         const EXPECTED_CATEGORIES = [
             'federal_tech', 'defense', 'gov_operations', 'business', 
-            'policy', 'budget', // Categories directly from RSS_FEEDS in Lambda
+            'policy', 'budget' // Categories from RSS_FEEDS in Lambda
             // Add any other categories that are explicitly assigned in the Lambda's RSS_FEEDS
-            // even if no articles currently have them, to ensure their filter chips exist.
-            // Example: 'cybersecurity', 'contracts', 'procurement', etc. if you ever add feeds for them.
-            // I've removed the ones that weren't assigned in the provided RSS_FEEDS for brevity.
+            // or that you know will frequently appear and want dedicated filter chips for.
         ];
 
         // State
         let allArticles = [];
-        let currentFilter = 'all';
+        let currentFilter = 'all'; // Default to 'all' to show all news
         let isLoading = false;
         let lastRefresh = null;
 
@@ -847,16 +846,18 @@
         }
 
         function updateFilters() {
-            // Dynamically get categories from the actual fetched articles
+            // Dynamically get all unique categories from the actual fetched articles
             const dynamicCategories = new Set(allArticles.map(a => a.category));
             
-            // Combine with explicitly expected categories to ensure all filter chips exist and are sorted
+            // Combine with explicitly expected categories to ensure filter chips for all known types
+            // and remove duplicates via Set, then convert back to array and sort alphabetically.
             const allPossibleCategories = new Set([...EXPECTED_CATEGORIES, ...Array.from(dynamicCategories)]);
             
             const filters = ['all', ...Array.from(allPossibleCategories)].sort();
             
-            // Re-select active filter if it still exists
-            const activeFilter = document.querySelector('.filter-chip.active')?.dataset.filter || 'all';
+            // Ensure the active filter is correctly set based on currentFilter
+            // This is crucial if a filter was selected and then a refresh happens.
+            const activeFilter = currentFilter; 
             
             const filterNames = {
                 'all': 'ALL INTEL',
@@ -864,13 +865,13 @@
                 'budget': 'FISCAL DATA / BUDGET',
                 'federal_tech': 'FEDERAL TECH NEWS',
                 'defense': 'DEFENSE NEWS',
-                'defense_tech': 'DEFENSE TECH',
-                'cybersecurity': 'CYBERSECURITY',
+                'defense_tech': 'DEFENSE TECH', // Added back for completeness in mapping
+                'cybersecurity': 'CYBERSECURITY', // Added back for completeness in mapping
                 'gov_operations': 'GOV OPERATIONS',
-                'procurement': 'PROCUREMENT',
-                'state_local_tech': 'STATE & LOCAL TECH',
+                'procurement': 'PROCUREMENT', // Added back for completeness in mapping
+                'state_local_tech': 'STATE & LOCAL TECH', // Added back for completeness in mapping
                 'business': 'BUSINESS TRENDS',
-                'federal': 'FEDERAL (GENERAL)', 
+                'federal': 'FEDERAL (GENERAL)', // Added back for completeness in mapping
                 'policy': 'POLICY & REGULATORY'
             };
             
@@ -892,6 +893,7 @@
                 });
             });
             
+            // Re-apply active class if it was lost during innerHTML reset
             const currentFilterChip = document.querySelector(`.filter-chip[data-filter="${currentFilter}"]`);
             if (currentFilterChip) currentFilterChip.classList.add('active');
         }
@@ -899,11 +901,12 @@
         function getFilteredArticles() {
             let filtered = allArticles;
             
+            // This is the ONLY place filtering happens based on the selected category chip.
             if (currentFilter !== 'all') {
                 filtered = filtered.filter(article => article.category === currentFilter);
             }
             
-            return filtered; // This is the ONLY place filtering happens based on the selected category.
+            return filtered;
         }
 
         function createNewsCell(article, index) {
@@ -917,6 +920,8 @@
             const valueDisplay = article.contractValue ? 
                 `<div class="value-indicator">[VALUE: ${article.contractValue}]</div>` : '';
 
+            // This map needs to be comprehensive for all tags generated by the Lambda,
+            // to ensure correct styling.
             const tagClassMap = {
                 'IDIQ': 'contract-tag', 'GSA': 'contract-tag', 'SEWP': 'contract-tag', 'CIO-SP3': 'contract-tag', 'OASIS': 'contract-tag', 'RFP/Solicitation': 'contract-tag', 'Grants': 'contract-tag',
                 'DoD': 'agency-tag', 'Navy': 'agency-tag', 'Army': 'agency-tag', 'USAF': 'agency-tag', 'USSF': 'agency-tag', 'DHS': 'agency-tag', 'VA': 'agency-tag', 'HHS': 'agency-tag',
