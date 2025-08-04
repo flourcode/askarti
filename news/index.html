@@ -733,13 +733,14 @@
         const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json';
         
         // This array is now only used to define what categories/filters should exist initially.
-        // The actual category values are expected to come from the S3 JSON directly.
-        // It's good practice to list all expected categories here for consistent UI.
+        // It should broadly cover the categories assigned by the Lambda.
         const EXPECTED_CATEGORIES = [
-            'federal_tech', 'defense', 'gov_operations', 'business', // Categories from RSS_FEEDS in Lambda
-            // You can add more specific filter categories here if you want them to always appear,
-            // even if no articles currently have them (e.g., 'cybersecurity', 'contracts', 'budget', 'policy')
-            'policy', 'budget', 'contracts', 'cybersecurity', 'defense_tech', 'procurement', 'state_local_tech', 'federal'
+            'federal_tech', 'defense', 'gov_operations', 'business', 
+            'policy', 'budget', // Categories directly from RSS_FEEDS in Lambda
+            // Add any other categories that are explicitly assigned in the Lambda's RSS_FEEDS
+            // even if no articles currently have them, to ensure their filter chips exist.
+            // Example: 'cybersecurity', 'contracts', 'procurement', etc. if you ever add feeds for them.
+            // I've removed the ones that weren't assigned in the provided RSS_FEEDS for brevity.
         ];
 
         // State
@@ -782,7 +783,7 @@
                     ...item,
                     description: item.description || '', // Ensure description is always a string
                     normalizedTitle: normalizeTitle(item.title)
-                    // contractValue, priority, and tags are expected to be present if Lambda adds them
+                    // contractValue, and priority are no longer expected. Tags are optional.
                 }));
             } catch (error) {
                 console.error(`Error fetching aggregated news from S3:`, error.message);
@@ -795,8 +796,8 @@
             hideError();
 
             try {
-                const fetchedArticles = await fetchArticlesFromS3();
-                allArticles = fetchedArticles; // Data is already sorted by pubDate from Lambda
+                const fetchedData = await fetchArticlesFromS3();
+                allArticles = fetchedData; // Data is already sorted by pubDate from Lambda
                 
                 lastRefresh = new Date();
                 updateStats();
@@ -902,7 +903,7 @@
                 filtered = filtered.filter(article => article.category === currentFilter);
             }
             
-            return filtered;
+            return filtered; // This is the ONLY place filtering happens based on the selected category.
         }
 
         function createNewsCell(article, index) {
@@ -911,19 +912,20 @@
             cell.dataset.category = article.category;
             cell.style.setProperty('--delay', `${index * 0.04}s`);
             
-            // contractValue is now directly from the Lambda, if it exists
+            // contractValue and priority are no longer expected or used here.
+            // Display contractValue only if it truly exists on the article object.
             const valueDisplay = article.contractValue ? 
                 `<div class="value-indicator">[VALUE: ${article.contractValue}]</div>` : '';
 
             const tagClassMap = {
-                'IDIQ': 'contract-tag', 'GSA': 'contract-tag', 'SEWP': 'contract-tag', 'CIO-SP3': 'contract-tag', 'OASIS': 'contract-tag', 'RFP/Solicitation': 'contract-tag', 'Grants': 'contract-tag', // Updated combined tag
+                'IDIQ': 'contract-tag', 'GSA': 'contract-tag', 'SEWP': 'contract-tag', 'CIO-SP3': 'contract-tag', 'OASIS': 'contract-tag', 'RFP/Solicitation': 'contract-tag', 'Grants': 'contract-tag',
                 'DoD': 'agency-tag', 'Navy': 'agency-tag', 'Army': 'agency-tag', 'USAF': 'agency-tag', 'USSF': 'agency-tag', 'DHS': 'agency-tag', 'VA': 'agency-tag', 'HHS': 'agency-tag',
                 'NASA': 'agency-tag', 'DOJ': 'agency-tag', 'State Dept': 'agency-tag', 'Treasury': 'agency-tag', 'DOE': 'agency-tag', 'FEMA': 'agency-tag', 'NIST': 'agency-tag', 'USDA': 'agency-tag', 'DOT': 'agency-tag', 'CMS': 'agency-tag', 'CBP': 'agency-tag', 'USMC': 'agency-tag', 'NatGuard': 'agency-tag', 'CyberCom': 'agency-tag', 'OCC': 'agency-tag', 'GAO': 'agency-tag',
-                'Cloud': 'tech-tag', 'Cybersecurity': 'tech-tag', 'AI/ML': 'tech-tag', 'Data Analytics': 'tech-tag', 'Software': 'tech-tag', 'Infrastructure': 'tech-tag', 'Digital Xform': 'tech-tag', '5G': 'tech-tag', 'Quantum Tech': 'tech-tag', 'Zero Trust': 'tech-tag', // Updated tag names
-                'URGENT': 'urgent-tag', 'Fast-Track': 'urgent-tag', 'FY-End': 'urgent-tag', 'Budget Impact': 'budget-tag' // Updated tag names
+                'Cloud': 'tech-tag', 'Cybersecurity': 'tech-tag', 'AI/ML': 'tech-tag', 'Data Analytics': 'tech-tag', 'Software': 'tech-tag', 'Infrastructure': 'tech-tag', 'Digital Xform': 'tech-tag', '5G': 'tech-tag', 'Quantum Tech': 'tech-tag', 'Zero Trust': 'tech-tag',
+                'FY-End': 'urgent-tag', 'Budget Impact': 'budget-tag'
             };
 
-            // Tags are now directly from the Lambda
+            // Tags are now directly from the Lambda and displayed if they exist.
             const tagsHtml = (article.tags || []).map(tag => {
                 const tagClass = tagClassMap[tag] || ''; 
                 return `<span class="opportunity-tag ${tagClass}">${tag}</span>`;
@@ -977,7 +979,7 @@
 
         function renderGrid() {
             newsGrid.innerHTML = '';
-            const filteredArticles = getFilteredArticles();
+            const filteredArticles = getFilteredArticles(); // This is the only filter point
             
             if (filteredArticles.length === 0 && !isLoading) {
                 newsGrid.innerHTML = `
