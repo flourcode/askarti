@@ -28,16 +28,15 @@
             /* Category Colors (re-tuned for sci-fi palette) */
             --cat-federal_tech: #ff3366; /* Red for alerts */
             --cat-defense: #8A2BE2; /* Amethyst (Purple) */
-            --cat-defense_tech: #ff69b4; /* Hot Pink (removed as category) */
-            --cat-cybersecurity: #ffcc00; /* Amber (removed as category) */
             --cat-gov_operations: #00aaff; /* Sky Blue */
-            --cat-procurement: #00ff88; /* Green (removed as category) */
-            --cat-state_local_tech: #9cb2c9; /* Muted Blue (removed as category) */
             --cat-business: #33ccff; /* Light Blue */
-            --cat-contracts: #00ff88; /* Green (removed as category) */
             --cat-budget: #9933ff; /* Purple */
             --cat-policy: #00e6ff; /* Electric Blue */
-            --cat-federal: #00e6ff; /* Added for general federal category (removed as category) */
+
+            /* Market Data Colors */
+            --market-up: var(--accent-green);
+            --market-down: var(--accent-red);
+            --market-neutral: var(--text-secondary);
         }
 
         * {
@@ -410,12 +409,23 @@
             border-top: 1px dashed rgba(61, 90, 128, 0.2); /* Lighter dashed line */
         }
 
-        /* Removed all tag-related CSS */
-        .opportunity-tags-container {
-            display: none; /* Hide tags container */
+        /* Market Data Styling within News Cells */
+        .company-stock-info {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            flex-shrink: 0;
         }
-        .value-indicator {
-            display: none; /* Hide value indicator */
+
+        .company-stock-ticker {
+            color: var(--accent-blue);
+            text-shadow: 0 0 3px rgba(0, 230, 255, 0.3);
+        }
+        .company-stock-price {
+            color: var(--text-primary);
         }
 
         .post-button {
@@ -503,6 +513,66 @@
             filter: drop-shadow(0 0 4px rgba(0, 230, 255, 0.3));
         }
 
+        /* New Market Snapshot Section */
+        .market-snapshot {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            box-shadow: 0 0 10px rgba(0, 230, 255, 0.1);
+        }
+
+        .market-snapshot h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--accent-blue);
+            text-shadow: 0 0 5px var(--accent-blue);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .market-ticker-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .market-ticker-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            padding: 8px 10px;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .market-ticker-name {
+            font-weight: 700;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 2px;
+        }
+
+        .market-ticker-symbol {
+            font-size: 0.75rem;
+            color: var(--accent-blue);
+            font-weight: 700;
+            text-shadow: 0 0 2px var(--accent-blue);
+        }
+
+        .market-ticker-price {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-top: 4px;
+            font-variant-numeric: tabular-nums; /* Align numbers */
+        }
+        
         /* Responsive */
         @media (max-width: 1600px) {
             .news-grid {
@@ -517,6 +587,9 @@
             }
             .news-cell {
                 height: 190px; /* Adjusted height */
+            }
+            .market-ticker-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             }
         }
 
@@ -557,6 +630,16 @@
                 font-size: 0.55rem;
                 padding: 0.15rem 0.4rem;
                 height: 18px;
+            }
+            .market-ticker-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+            .market-ticker-item {
+                font-size: 0.75rem;
+                padding: 6px 8px;
+            }
+            .market-ticker-price {
+                font-size: 0.8rem;
             }
         }
 
@@ -600,13 +683,23 @@
             .cell-description {
                 font-size: 0.7rem;
             }
-            .cell-footer {
-                padding-top: 5px;
-            }
             .post-button {
                 font-size: 0.5rem;
                 padding: 0.1rem 0.25rem;
                 height: 16px;
+            }
+            .market-snapshot h2 {
+                font-size: 1rem;
+            }
+            .market-ticker-grid {
+                grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            }
+            .market-ticker-item {
+                font-size: 0.65rem;
+                padding: 5px 6px;
+            }
+            .market-ticker-price {
+                font-size: 0.7rem;
             }
         }
 
@@ -675,11 +768,20 @@
             <div class="filters-group" id="filterContainer">
                 <span class="filter-label">ACCESS CATEGORIES:</span>
                 <div class="filter-chip active" data-filter="all">ALL INTEL</div>
-            </div>
+                </div>
         </div>
     </div>
 
     <div class="container">
+        <div class="market-snapshot" id="marketSnapshot">
+            <h2>MARKET SNAPSHOT</h2>
+            <div class="market-ticker-grid" id="marketTickerGrid">
+                <div class="skeleton market-ticker-item"><div class="skeleton-text"></div><div class="skeleton-text short"></div><div class="skeleton-text price"></div></div>
+                <div class="skeleton market-ticker-item"><div class="skeleton-text"></div><div class="skeleton-text short"></div><div class="skeleton-text price"></div></div>
+                <div class="skeleton market-ticker-item"><div class="skeleton-text"></div><div class="skeleton-text short"></div><div class="skeleton-text price"></div></div>
+            </div>
+        </div>
+
         <div class="error-message" id="errorMessage"></div>
         <div class="news-grid" id="newsGrid">
             </div>
@@ -687,7 +789,6 @@
 
     <script>
         // Configuration
-        // This URL points to the public S3 object where your Lambda stores the aggregated news.
         const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json';
         
         // This array defines the base categories for filter chips, ensuring they always appear.
@@ -698,6 +799,7 @@
 
         // State
         let allArticles = [];
+        let allCompanyFinancialData = []; // New state variable for company data
         let currentFilter = 'all'; 
         let isLoading = false;
         let lastRefresh = null;
@@ -709,6 +811,8 @@
         const statusIndicator = document.getElementById('statusIndicator');
         const errorMessage = document.getElementById('errorMessage');
         const filterContainer = document.getElementById('filterContainer');
+        const marketSnapshot = document.getElementById('marketSnapshot');
+        const marketTickerGrid = document.getElementById('marketTickerGrid');
 
         // Utility functions (unchanged)
         function timeAgo(dateString) {
@@ -719,25 +823,33 @@
         function normalizeTitle(title) { let normalized = title.toLowerCase(); normalized = normalized.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()'"?\[\]]/g,""); normalized = normalized.replace(/\s{2,}/g," "); return normalized.trim(); }
 
         // Fetch from S3 JSON file
-        async function fetchArticlesFromS3() {
+        async function fetchAggregatedDataFromS3() {
             try {
-                console.log(`Fetching aggregated news from S3: ${S3_JSON_URL}`);
+                console.log(`Fetching aggregated data from S3: ${S3_JSON_URL}`);
                 const response = await fetch(S3_JSON_URL);
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status} from S3: ${S3_JSON_URL}`);
                 }
                 const data = await response.json();
+                
                 if (!data || !data.items || !Array.isArray(data.items)) {
-                    throw new Error('Invalid data structure from S3 JSON.');
+                    throw new Error('Invalid news items structure from S3 JSON.');
                 }
+                if (!data.companyFinancialData || !Array.isArray(data.companyFinancialData)) {
+                    console.warn('Company financial data missing or invalid in S3 JSON. Proceeding without it.');
+                    data.companyFinancialData = []; // Ensure it's an array even if missing
+                }
+
+                allCompanyFinancialData = data.companyFinancialData; // Populate new state variable
+                
                 return data.items.map(item => ({
                     ...item,
                     description: item.description || '', 
                     normalizedTitle: normalizeTitle(item.title)
                 }));
             } catch (error) {
-                console.error(`Error fetching aggregated news from S3:`, error.message);
-                return []; 
+                console.error(`Error fetching aggregated data from S3:`, error.message);
+                return { items: [], companyFinancialData: [] }; // Return empty data on error
             }
         }
 
@@ -746,18 +858,19 @@
             hideError();
 
             try {
-                const fetchedData = await fetchArticlesFromS3();
+                const fetchedData = await fetchAggregatedDataFromS3();
                 allArticles = fetchedData; 
                 
                 lastRefresh = new Date();
                 updateStats();
                 updateFilters(); 
+                renderMarketSnapshot(); // Render market snapshot
                 renderGrid();
                 
             } catch (error) {
                 console.error('An unexpected critical error occurred during data fetching:', error);
                 errorMessage.style.display = 'block';
-                errorMessage.textContent = `Error loading news: ${error.message}. Please try again later.`;
+                errorMessage.textContent = `Error loading data: ${error.message}. Please try again later.`;
                 statusIndicator.className = 'pulse-indicator error';
             } finally {
                 setLoadingState(false); 
@@ -798,8 +911,11 @@
 
         function updateFilters() {
             const dynamicCategories = new Set(allArticles.map(a => a.category));
+            const dynamicCompanies = new Set(allArticles.flatMap(a => (a.relatedCompanies || []).map(rc => rc.ticker)));
+            
             const allPossibleCategories = new Set(['all', ...EXPECTED_CATEGORIES, ...Array.from(dynamicCategories)]);
-            const filters = Array.from(allPossibleCategories).sort();
+            // Add company tickers as potential filters as well
+            const filters = ['all', ...Array.from(allPossibleCategories), ...Array.from(dynamicCompanies)].sort();
             
             const activeFilter = currentFilter; 
             
@@ -816,11 +932,18 @@
             
             filterContainer.innerHTML = `
                 <span class="filter-label">ACCESS CATEGORIES:</span>
-                ${filters.map(filter => `
-                    <div class="filter-chip ${filter === activeFilter ? 'active' : ''}" data-filter="${filter}">
-                        ${filterNames[filter] || filter.toUpperCase().replace('_', ' ')}
-                    </div>
-                `).join('')}
+                ${filters.map(filter => {
+                    let displayLabel = filterNames[filter] || filter.toUpperCase().replace('_', ' ');
+                    // If it's a ticker, display as such
+                    if (allCompanyFinancialData.find(c => c.ticker === filter)) {
+                        displayLabel = `📈 ${filter}`;
+                    }
+                    return `
+                        <div class="filter-chip ${filter === activeFilter ? 'active' : ''}" data-filter="${filter}">
+                            ${displayLabel}
+                        </div>
+                    `;
+                }).join('')}
             `;
             
             document.querySelectorAll('.filter-chip').forEach(chip => {
@@ -839,10 +962,36 @@
         function getFilteredArticles() {
             let filtered = allArticles;
             if (currentFilter !== 'all') {
-                filtered = filtered.filter(article => article.category === currentFilter);
+                // If the filter matches a category:
+                if (EXPECTED_CATEGORIES.includes(currentFilter) || allArticles.some(a => a.category === currentFilter)) {
+                    filtered = filtered.filter(article => article.category === currentFilter);
+                } else { // Assume it's a ticker filter
+                    filtered = filtered.filter(article => (article.relatedCompanies || []).some(rc => rc.ticker === currentFilter));
+                }
             }
             return filtered;
         }
+
+        function renderMarketSnapshot() {
+            marketTickerGrid.innerHTML = '';
+            if (allCompanyFinancialData.length === 0) {
+                marketSnapshot.style.display = 'none'; // Hide if no data
+                return;
+            }
+            marketSnapshot.style.display = 'block'; // Show if data exists
+
+            allCompanyFinancialData.forEach(company => {
+                const tickerItem = document.createElement('div');
+                tickerItem.className = 'market-ticker-item';
+                tickerItem.innerHTML = `
+                    <span class="market-ticker-name" title="${company.companyName}">${company.companyName}</span>
+                    <span class="market-ticker-symbol">${company.ticker}</span>
+                    <span class="market-ticker-price">${company.previousClose ? `$${company.previousClose.toFixed(2)}` : 'N/A'}</span>
+                `;
+                marketTickerGrid.appendChild(tickerItem);
+            });
+        }
+
 
         function createNewsCell(article, index) {
             const cell = document.createElement('div');
@@ -850,8 +999,17 @@
             cell.dataset.category = article.category;
             cell.style.setProperty('--delay', `${index * 0.04}s`);
             
-            // Removed contractValue display
-            // Removed tagsHtml and related content
+            let companyStockInfoHtml = '';
+            if (article.relatedCompanies && article.relatedCompanies.length > 0) {
+                // Display info for the first related company (can be expanded to loop if multiple)
+                const firstRelated = article.relatedCompanies[0];
+                companyStockInfoHtml = `
+                    <div class="company-stock-info">
+                        <span class="company-stock-ticker">${firstRelated.ticker}</span>
+                        <span class="company-stock-price">${firstRelated.previousClose ? `$${firstRelated.previousClose.toFixed(2)}` : 'N/A'}</span>
+                    </div>
+                `;
+            }
             
             cell.innerHTML = `
                 <div>
@@ -865,6 +1023,7 @@
                     <div class="cell-description">${(article.description || '').slice(0, 100)}${(article.description || '').length > 100 ? '...' : ''}</div>
                 </div>
                 <div class="cell-footer">
+                    ${companyStockInfoHtml}
                     <button class="post-button" title="Broadcast Opportunity">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M19 13.5H5c-.825 0-1.5-.675-1.5-1.5S4.175 10.5 5 10.5h14c.825 0 1.5.675 1.5 1.5s-.675 1.5-1.5 1.5zM12 21.5c-.825 0-1.5-.675-1.5-1.5v-14c0-.825.675-1.5 1.5-1.5s1.5.675 1.5 1.5v14c0 .825-.675 1.5-1.5 1.5z"/>
@@ -949,8 +1108,12 @@
             const articleTitle = article.title;
             const articleExcerpt = article.description.slice(0, 250) + (article.description.length > 250 ? '...' : '');
             
-            // No auto-hashtags from 'tags' anymore
-            let additionalHashtags = `#FederalSales #GovTech`;
+            let relatedTickers = '';
+            if (article.relatedCompanies && article.relatedCompanies.length > 0) {
+                relatedTickers = article.relatedCompanies.map(rc => `$${rc.ticker}`).join(' ');
+            }
+
+            let additionalHashtags = `#FederalSales #GovTech ${relatedTickers}`;
             if (article.source) {
                 additionalHashtags += ` #${article.source.replace(/\s|\/|-/g, '')}`;
             }
