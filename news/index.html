@@ -26,18 +26,17 @@
             --glow-color: rgba(0, 230, 255, 0.4); /* Soft glow effect */
 
             /* Category Colors (re-tuned for sci-fi palette) */
-            --cat-federal: #ff3366; /* Red for alerts */
-            --cat-contracts: #00ff88; /* Green for opportunities */
-            --cat-budget: #9933ff; /* Purple for financial */
-            --cat-aws: #ff9900; /* Orange */
-            --cat-azure: #00aaff; /* Sky Blue */
-            --cat-gcp: #00ccff; /* Cyan */
-            --cat-policy: #00e6ff; /* Electric Blue */
-            --cat-business: #9cb2c9; /* Muted Blue */
-
-            /* Tags */
-            --tag-bg-base: #1c314a; /* Darker base for tags */
-            --tag-border-base: #2a415d; /* Border for tags */
+            --cat-federal_tech: #ff3366; /* Red for alerts */
+            --cat-defense: #8A2BE2; /* Amethyst (Purple) */
+            --cat-defense_tech: #ff69b4; /* Hot Pink */
+            --cat-cybersecurity: #ffcc00; /* Amber */
+            --cat-gov_operations: #00aaff; /* Sky Blue */
+            --cat-procurement: #00ff88; /* Green for opportunities */
+            --cat-state_local_tech: #9cb2c9; /* Muted Blue */
+            --cat-business: #33ccff; /* Light Blue */
+            --cat-contracts: #00ff88; /* Green (retained for consistency with procurement focus) */
+            --cat-budget: #9933ff; /* Purple (retained for consistency) */
+            --cat-policy: #00e6ff; /* Electric Blue (retained for consistency) */
         }
 
         * {
@@ -285,12 +284,14 @@
         /* Specific active chip colors */
         .filter-chip[data-filter="contracts"].active { background: var(--cat-contracts); border-color: var(--cat-contracts); box-shadow: 0 0 8px var(--cat-contracts), inset 0 0 8px rgba(0, 255, 136, 0.6); }
         .filter-chip[data-filter="budget"].active { background: var(--cat-budget); border-color: var(--cat-budget); box-shadow: 0 0 8px var(--cat-budget), inset 0 0 8px rgba(153, 51, 255, 0.6); }
-        .filter-chip[data-filter="aws"].active { background: var(--cat-aws); border-color: var(--cat-aws); box-shadow: 0 0 8px var(--cat-aws), inset 0 0 8px rgba(255, 204, 0, 0.6); }
-        .filter-chip[data-filter="azure"].active { background: var(--cat-azure); border-color: var(--cat-azure); box-shadow: 0 0 8px var(--cat-azure), inset 0 0 8px rgba(0, 170, 255, 0.6); }
-        .filter-chip[data-filter="gcp"].active { background: var(--cat-gcp); border-color: var(--cat-gcp); box-shadow: 0 0 8px var(--cat-gcp), inset 0 0 8px rgba(0, 204, 255, 0.6); }
-        .filter-chip[data-filter="federal"].active { background: var(--cat-federal); border-color: var(--cat-federal); box-shadow: 0 0 8px var(--cat-federal), inset 0 0 8px rgba(255, 51, 102, 0.6); }
-        .filter-chip[data-filter="policy"].active { background: var(--cat-policy); border-color: var(--cat-policy); box-shadow: 0 0 8px var(--cat-policy), inset 0 0 8px rgba(0, 230, 255, 0.6); }
-        .filter-chip[data-filter="business"].active { background: var(--cat-business); border-color: var(--cat-business); box-shadow: 0 0 8px var(--cat-business), inset 0 0 8px rgba(156, 178, 201, 0.6); }
+        .filter-chip[data-filter="federal_tech"].active { background: var(--cat-federal_tech); border-color: var(--cat-federal_tech); box-shadow: 0 0 8px var(--cat-federal_tech), inset 0 0 8px rgba(255, 51, 102, 0.6); }
+        .filter-chip[data-filter="defense"].active { background: var(--cat-defense); border-color: var(--cat-defense); box-shadow: 0 0 8px var(--cat-defense), inset 0 0 8px rgba(138, 43, 226, 0.6); }
+        .filter-chip[data-filter="defense_tech"].active { background: var(--cat-defense_tech); border-color: var(--cat-defense_tech); box-shadow: 0 0 8px var(--cat-defense_tech), inset 0 0 8px rgba(255, 105, 180, 0.6); }
+        .filter-chip[data-filter="cybersecurity"].active { background: var(--cat-cybersecurity); border-color: var(--cat-cybersecurity); box-shadow: 0 0 8px var(--cat-cybersecurity), inset 0 0 8px rgba(255, 204, 0, 0.6); }
+        .filter-chip[data-filter="gov_operations"].active { background: var(--cat-gov_operations); border-color: var(--cat-gov_operations); box-shadow: 0 0 8px var(--cat-gov_operations), inset 0 0 8px rgba(0, 170, 255, 0.6); }
+        .filter-chip[data-filter="procurement"].active { background: var(--cat-procurement); border-color: var(--cat-procurement); box-shadow: 0 0 8px var(--cat-procurement), inset 0 0 8px rgba(0, 255, 136, 0.6); }
+        .filter-chip[data-filter="state_local_tech"].active { background: var(--cat-state_local_tech); border-color: var(--cat-state_local_tech); box-shadow: 0 0 8px var(--cat-state_local_tech), inset 0 0 8px rgba(156, 178, 201, 0.6); }
+        .filter-chip[data-filter="business"].active { background: var(--cat-business); border-color: var(--cat-business); box-shadow: 0 0 8px var(--cat-business), inset 0 0 8px rgba(51, 204, 255, 0.6); }
         .filter-chip[data-filter="all"].active { background: var(--accent-blue); border-color: var(--accent-blue); } /* Default for 'All Intel' */
 
 
@@ -346,12 +347,16 @@
 
         .news-cell[data-category="contracts"]::after { background: var(--cat-contracts); }
         .news-cell[data-category="budget"]::after { background: var(--cat-budget); }
-        .news-cell[data-category="aws"]::after { background: var(--cat-aws); }
-        .news-cell[data-category="azure"]::after { background: var(--cat-azure); }
-        .news-cell[data-category="gcp"]::after { background: var(--cat-gcp); }
+        .news-cell[data-category="federal_tech"]::after { background: var(--cat-federal_tech); }
+        .news-cell[data-category="defense"]::after { background: var(--cat-defense); }
+        .news-cell[data-category="defense_tech"]::after { background: var(--cat-defense_tech); }
+        .news-cell[data-category="cybersecurity"]::after { background: var(--cat-cybersecurity); }
+        .news-cell[data-category="gov_operations"]::after { background: var(--cat-gov_operations); }
+        .news-cell[data-category="procurement"]::after { background: var(--cat-procurement); }
+        .news-cell[data-category="state_local_tech"]::after { background: var(--cat-state_local_tech); }
+        .news-cell[data-category="business"]::after { background: var(--cat-business); }
         .news-cell[data-category="federal"]::after { background: var(--cat-federal); }
         .news-cell[data-category="policy"]::after { background: var(--cat-policy); }
-        .news-cell[data-category="business"]::after { background: var(--cat-business); }
 
 
         .cell-header {
@@ -444,9 +449,6 @@
         /* Specific tag colors */
         .opportunity-tag.contract-tag { color: var(--accent-green); border-color: rgba(0, 255, 136, 0.4); box-shadow: inset 0 0 3px rgba(0, 255, 136, 0.2); }
         .opportunity-tag.budget-tag { color: var(--cat-budget); border-color: rgba(153, 51, 255, 0.4); box-shadow: inset 0 0 3px rgba(153, 51, 255, 0.2); }
-        .opportunity-tag.aws-tag { color: var(--cat-aws); border-color: rgba(255, 153, 0, 0.4); box-shadow: inset 0 0 3px rgba(255, 153, 0, 0.2); }
-        .opportunity-tag.azure-tag { color: var(--cat-azure); border-color: rgba(0, 170, 255, 0.4); box-shadow: inset 0 0 3px rgba(0, 170, 255, 0.2); }
-        .opportunity-tag.gcp-tag { color: var(--cat-gcp); border-color: rgba(0, 204, 255, 0.4); box-shadow: inset 0 0 3px rgba(0, 204, 255, 0.2); }
         .opportunity-tag.urgent-tag { color: var(--accent-red); border-color: rgba(255, 51, 102, 0.4); box-shadow: inset 0 0 3px rgba(255, 51, 102, 0.2); }
         .opportunity-tag.agency-tag { color: var(--accent-blue); border-color: rgba(0, 230, 255, 0.4); box-shadow: inset 0 0 3px rgba(0, 230, 255, 0.2); }
         .opportunity-tag.tech-tag { color: var(--accent-green); border-color: rgba(0, 255, 136, 0.4); box-shadow: inset 0 0 3px rgba(0, 255, 136, 0.2); }
@@ -728,55 +730,23 @@
 
     <script>
         // Configuration
-        const API_KEY = 'pzpp2di7od5conjdcuejixvtawzapwzyvcha23ue'; // Your API key
-        const RSS_FEEDS = [
-            // Federal Government (.gov) RSS Feeds
-            { name: 'USAGov Blog', url: 'https://blog.usa.gov/rss.xml', category: 'federal', priority: 'medium' },
-            { name: 'GAO Blog', url: 'https://gao.gov/blog/feed', category: 'federal', priority: 'medium' },
-            { name: 'U.S. Department of Education Blog', url: 'https://blog.ed.gov/feed', category: 'federal', priority: 'medium' },
-            { name: 'National Institute of Standards and Technology', url: 'https://www.nist.gov/blogs/taking-measure/feed', category: 'federal', priority: 'medium' },
-            { name: 'US Department of Labor Blog', url: 'https://blog.dol.gov/feed', category: 'federal', priority: 'medium' },
-            { name: 'U.S. Department of Commerce Blog', url: 'https://www.commerce.gov/news/blog/feed', category: 'federal', priority: 'medium' },
-            { name: 'USDA Blog', url: 'https://www.usda.gov/media/blog/rss.xml', category: 'federal', priority: 'medium' },
-            { name: 'Federal Trade Commission Business Blog', url: 'https://www.ftc.gov/business-guidance/blog/rss.xml', category: 'federal', priority: 'medium' },
-            { name: 'U.S. Department of Transportation Newsroom', url: 'https://www.transportation.gov/newsroom/rss.xml', category: 'federal', priority: 'medium' },
-            { name: 'CMS (Centers for Medicare & Medicaid Services)', url: 'https://www.cms.gov/about-cms/contact/newsroom/rss.xml', category: 'federal', priority: 'medium' },
-            { name: 'FEMA Blog', url: 'https://www.fema.gov/about/news-multimedia/blog/rss.xml', category: 'federal', priority: 'medium' },
-            { name: 'Library of Congress Blog', url: 'https://blogs.loc.gov/loc/feed/', category: 'federal', priority: 'medium' },
-            { name: 'U.S. Department of Treasury News', url: 'https://home.treasury.gov/news/press-release/rss.xml', category: 'federal', priority: 'medium' },
-            { name: 'U.S. Trade Representative (USTR)', url: 'https://ustr.gov/rss.xml', category: 'federal', priority: 'medium' },
-            { name: 'U.S. Census Bureau Releases', url: 'https://www.census.gov/rss/newsreleases.xml', category: 'federal', priority: 'medium' },
-            { name: 'HealthCare.gov Blog', url: 'https://www.healthcare.gov/blog/rss.xml', category: 'federal', priority: 'medium' },
-            { name: 'U.S. Department of the Interior Blog', url: 'https://www.doi.gov/blog/feed', category: 'federal', priority: 'medium' },
-            { name: 'Grants.gov Opportunities', url: 'https://www.grants.gov/connect/rss-feeds', category: 'contracts', priority: 'high' },
-            { name: 'Federal Reserve Board News', url: 'https://www.federalreserve.gov/feeds/feeds.htm', category: 'federal', priority: 'medium' },
-            { name: 'U.S. Department of State', url: 'https://www.state.gov/rss-feeds', category: 'federal', priority: 'medium' },
-            { name: 'U.S. Government Bookstore Blog', url: 'https://bookstore.gpo.gov/catalog/feed', category: 'federal', priority: 'low' },
-            { name: 'U.S. Department of Justice News', url: 'https://www.justice.gov/news/blogs', category: 'federal', priority: 'medium' },
-            { name: 'OCC (Office of Comptroller of the Currency)', url: 'https://www.occ.gov/rss/index-rss.html', category: 'federal', priority: 'medium' },
-            { name: 'Office of Government Ethics', url: 'https://www.oge.gov/web/oge.nsf/Resources/RSS+Feeds', category: 'policy', priority: 'medium' },
-            { name: 'GovInfo (federal publications, laws, courts)', url: 'https://www.govinfo.gov/feeds', category: 'policy', priority: 'medium' },
-            { name: 'GSA Newsroom', url: 'https://www.gsa.gov/about-us/newsroom/rss-feeds', category: 'federal', priority: 'high' },
-            { name: 'GovTrack', url: 'https://www.govtrack.us/rss', category: 'policy', priority: 'medium' },
-            { name: 'FCC (Federal Communications Commission)', url: 'https://www.fcc.gov/news-events/rss-feeds-and-email-updates-fcc', category: 'federal', priority: 'medium' },
-            { name: 'CBP (Customs & Border Protection)', url: 'https://www.cbp.gov/about/rss', category: 'federal', priority: 'medium' },
-            { name: 'U.S. Courts', url: 'https://www.uscourts.gov/rss-feeds', category: 'federal', priority: 'low' },
-            { name: 'USDA Research & Science', url: 'https://www.usda.gov/about-usda/policies-and-links/digital/rss-feeds', category: 'federal', priority: 'medium' },
-
-            // Military & Defense (.mil) RSS Feeds
-            { name: 'Department of Defense News', url: 'https://www.defense.gov/News/RSS/', category: 'federal', priority: 'high' },
-            { name: 'Department of Defense Newsroom', url: 'https://www.defense.gov/Newsroom/rss.xml', category: 'federal', priority: 'high' },
-            { name: 'Department of the Air Force', url: 'https://www.af.mil/RSS/', category: 'federal', priority: 'high' },
-            { name: 'Department of the Navy', url: 'https://www.navy.mil/Resources/Rss-Feeds/', category: 'federal', priority: 'high' },
-            { name: 'United States Marine Corps', url: 'https://www.marines.mil/RSS/', category: 'federal', priority: 'high' },
-            { name: 'U.S. Army', url: 'https://www.army.mil/core/support/creating-content/rc/rss_feeds.html', category: 'federal', priority: 'high' },
-            { name: 'National Guard Bureau', url: 'https://www.nationalguard.mil/News/RSS-Feeds/', category: 'federal', priority: 'medium' },
-            { name: 'U.S. Army Engineering and Support Center', url: 'https://www.hnc.usace.army.mil/Contact/RSS/', category: 'federal', priority: 'medium' },
-            { name: 'U.S. Army Corps of Engineers (St. Paul)', url: 'https://www.mvp.usace.army.mil/Contact/RSS/', category: 'federal', priority: 'medium' },
-            { name: 'U.S. Space Force', url: 'https://www.spaceforce.mil/RSS/', category: 'federal', priority: 'high' },
-            { name: 'U.S. Cyber Command', url: 'https://www.cybercom.mil/RSS/', category: 'federal', priority: 'high' },
-            { name: 'DoD Travel/Policy (DTMO)', url: 'https://www.travel.dod.mil/About/News/RSS/', category: 'policy', priority: 'medium' },
-            { name: 'Marine Forces Reserve', url: 'https://www.marforres.marines.mil/RSS/', category: 'federal', priority: 'medium' }
+        // This URL points to the public S3 object where your Lambda stores the aggregated news.
+        const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json';
+        
+        // This array is now only used to define what categories/filters should exist initially.
+        // The actual feed fetching is done by the Lambda.
+        const RSS_FEEDS_CONFIG = [ 
+            { category: 'federal_tech' },
+            { category: 'defense' },
+            { category: 'defense_tech' },
+            { category: 'cybersecurity' },
+            { category: 'gov_operations' },
+            { category: 'procurement' },
+            { category: 'state_local_tech' },
+            { category: 'business' },
+            { category: 'contracts' }, 
+            { category: 'budget' },
+            { category: 'policy' }
         ];
 
         // State
@@ -784,8 +754,6 @@
         let currentFilter = 'all';
         let isLoading = false;
         let lastRefresh = null;
-        const processedArticleLinks = new Set();
-        const processedArticleTitles = new Set();
 
         // UI Elements
         const newsGrid = document.getElementById('newsGrid');
@@ -795,67 +763,69 @@
         const errorMessage = document.getElementById('errorMessage');
         const filterContainer = document.getElementById('filterContainer');
 
-        // Analytics & Categorization Functions (unchanged logic)
-        function calculateOpportunityScore(title, description, source, category) {
-            const text = (title + ' ' + description).toLowerCase();
-            let score = 0;
-            const contractKeywords = ['billion', 'million', 'contract', 'award', 'solicitation', 'rfp', 'idiq', 'gsa', 'sewp', 'procurement', 'bid', 'grants.gov'];
-            contractKeywords.forEach(keyword => { if (text.includes(keyword)) score += 20; });
-            const highValueAgencies = ['dod', 'pentagon', 'navy', 'army', 'air force', 'dhs', 'va', 'hhs', 'nasa', 'doj', 'state department', 'treasury', 'gsa', 'cyber command', 'space force'];
-            highValueAgencies.forEach(agency => { if (text.includes(agency)) score += 15; });
-            const techKeywords = ['cloud', 'digital transformation', 'modernization', 'cybersecurity', 'ai', 'machine learning', 'data', 'software', 'infrastructure', 'it modernization', '5g'];
-            techKeywords.forEach(keyword => { if (text.includes(keyword)) score += 10; });
-            const urgencyKeywords = ['urgent', 'immediate', 'accelerated', 'fast-track', 'emergency', 'deadline', 'fiscal year end'];
-            urgencyKeywords.forEach(keyword => { if (text.includes(keyword)) score += 25; });
-            if (['Department of Defense News', 'Department of the Air Force', 'Department of the Navy', 'U.S. Army', 'GSA Newsroom', 'Grants.gov Opportunities'].includes(source)) { score += 5; }
-            return Math.min(score, 100);
-        }
-
+        // Analytics & Categorization Functions (Moved to backend, simplified for frontend display)
         function extractContractValue(title, description) {
             const text = title + ' ' + description;
             const billionMatch = text.match(/\$?(\d+(?:\.\d+)?)\s*billion/i);
             const millionMatch = text.match(/\$?(\d+(?:\.\d+)?)\s*million/i);
             if (billionMatch) { return `${billionMatch[1]}B`; } 
-            else if (millionMatch) { const value = parseFloat(millionMatch[1]); if (value >= 10) { return `${millionMatch[1]}M`; } }
+            else if (millionMatch) { const value = parseFloat(millionMatch[1]); if (value >= 10) { return `${millionMatch[1]}M`; } } 
             return null;
-        }
-
-        function categorizeForSales(title, description, feedCategory, source) {
-            const text = (title + ' ' + description).toLowerCase();
-            if (text.includes('contract') || text.includes('award') || text.includes('solicitation') || text.includes('rfp') || text.includes('procurement') || text.includes('bid') || text.includes('grants.gov')) { return 'contracts'; }
-            if (text.includes('budget') || text.includes('funding') || text.includes('appropriation') || text.includes('billion') || text.includes('million') || text.includes('investment') || text.includes('cbo')) { return 'budget'; }
-            if (text.includes('policy') || text.includes('regulation') || text.includes('mandate') || text.includes('requirement') || text.includes('compliance') || text.includes('executive order') || text.includes('ethics') || text.includes('govinfo') || text.includes('govtrack')) { return 'policy'; }
-            // Since we only have .gov and .mil, most remaining will be federal news
-            return 'federal';
         }
 
         function extractSalesIntelTags(title, description, category) {
             const text = (title + ' ' + description).toLowerCase();
             const tags = new Set();
-            if (text.includes('idiq')) tags.add('IDIQ'); if (text.includes('gsa')) tags.add('GSA'); if (text.includes('sewp')) tags.add('SEWP'); if (text.includes('cio-sp3')) tags.add('CIO-SP3'); if (text.includes('oasis')) tags.add('OASIS'); if (text.includes('rfp')) tags.add('RFP'); if (text.includes('solicitation')) tags.add('Solicitation'); if (text.includes('grants')) tags.add('Grants');
-            const agencies = { 'dod': 'DoD', 'pentagon': 'DoD', 'defense': 'DoD', 'navy': 'Navy', 'army': 'Army', 'air force': 'USAF', 'space force': 'USSF', 'dhs': 'DHS', 'va': 'VA', 'hhs': 'HHS', 'treasury': 'Treasury', 'state department': 'State Dept', 'justice': 'DOJ', 'energy': 'DOE', 'nasa': 'NASA', 'gsa': 'GSA', 'fema': 'FEMA', 'nist': 'NIST', 'usda': 'USDA', 'dot': 'DOT', 'cms': 'CMS', 'cbp': 'CBP' };
-            Object.keys(agencies).forEach(key => { if (text.includes(key)) { tags.add(agencies[key]); } });
-            if (text.includes('cloud')) tags.add('Cloud'); else if (text.includes('cybersecurity') || text.includes('security')) tags.add('Security'); else if (text.includes('ai') || text.includes('artificial intelligence') || text.includes('machine learning')) tags.add('AI/ML'); else if (text.includes('data analytics') || text.includes('big data')) tags.add('Data Analytics'); else if (text.includes('software')) tags.add('Software'); else if (text.includes('infrastructure')) tags.add('Infrastructure'); else if (text.includes('digital transformation')) tags.add('Digital Xform'); else if (text.includes('5g')) tags.add('5G');
-            if (text.includes('urgent') || text.includes('immediate')) tags.add('URGENT'); if (text.includes('fast-track') || text.includes('accelerated')) tags.add('Fast-Track'); if (text.includes('fiscal year end') || text.includes('fy-end')) tags.add('FY-End');
             
-            // Add specific tags based on source for .mil feeds
-            if (source.includes('Department of Defense') || source.includes('DoD')) tags.add('DoD');
-            if (source.includes('Air Force')) tags.add('USAF');
-            if (source.includes('Navy')) tags.add('Navy');
-            if (source.includes('Marine Corps')) tags.add('USMC');
-            if (source.includes('Army')) tags.add('Army');
-            if (source.includes('National Guard')) tags.add('National Guard');
-            if (source.includes('Space Force')) tags.add('USSF');
-            if (source.includes('Cyber Command')) tags.add('CyberCom');
+            // Contract/Procurement Tags
+            if (text.includes('idiq')) tags.add('IDIQ'); 
+            if (text.includes('gsa')) tags.add('GSA'); 
+            if (text.includes('sewp')) tags.add('SEWP'); 
+            if (text.includes('cio-sp3')) tags.add('CIO-SP3'); 
+            if (text.includes('oasis')) tags.add('OASIS'); 
+            if (text.includes('rfp')) tags.add('RFP'); 
+            if (text.includes('solicitation')) tags.add('Solicitation'); 
+            if (text.includes('grants')) tags.add('Grants');
 
+            // Agency Tags
+            const agencies = { 
+                'dod': 'DoD', 'pentagon': 'DoD', 'defense': 'DoD', 
+                'navy': 'Navy', 'marine corps': 'USMC', 'army': 'Army', 'air force': 'USAF', 'space force': 'USSF', 
+                'cyber command': 'CyberCom', 'national guard': 'NatGuard',
+                'dhs': 'DHS', 'va': 'VA', 'hhs': 'HHS', 'nasa': 'NASA', 
+                'doj': 'DOJ', 'state department': 'State Dept', 'treasury': 'Treasury', 
+                'energy': 'DOE', 'fema': 'FEMA', 'nist': 'NIST', 'usda': 'USDA', 
+                'dot': 'DOT', 'cms': 'CMS', 'cbp': 'CBP', 'occ': 'OCC', 'gao': 'GAO',
+                'fedscoop': 'FedScoop', 'nextgov': 'NextGov', 'fcw': 'FCW', 'defensenews': 'DefenseNews',
+                'govtech': 'GovTech', 'govexec': 'GovExec', 'federal times': 'FedTimes', 'washingtontechnology': 'WashTech',
+                'c4isrnet': 'C4ISRNET', 'fifth domain': 'FifthDomain', 'breaking defense': 'BreakingDefense', 'govconwire': 'GovConWire'
+            };
+            Object.keys(agencies).forEach(key => { if (text.includes(key)) { tags.add(agencies[key]); } });
+            
+            // Technology Tags
+            if (text.includes('cloud')) tags.add('Cloud'); 
+            else if (text.includes('cybersecurity') || text.includes('security')) tags.add('Security'); 
+            else if (text.includes('ai') || text.includes('artificial intelligence') || text.includes('machine learning')) tags.add('AI/ML'); 
+            else if (text.includes('data analytics') || text.includes('big data')) tags.add('Data Analytics'); 
+            else if (text.includes('software')) tags.add('Software'); 
+            else if (text.includes('infrastructure')) tags.add('Infrastructure'); 
+            else if (text.includes('digital transformation')) tags.add('Digital Xform'); 
+            else if (text.includes('5g')) tags.add('5G');
+            else if (text.includes('quantum')) tags.add('Quantum Tech');
 
-            return Array.from(tags).slice(0, 5);
+            // Urgency/Timing Tags
+            if (text.includes('urgent') || text.includes('immediate')) tags.add('URGENT'); 
+            if (text.includes('fast-track') || text.includes('accelerated')) tags.add('Fast-Track'); 
+            if (text.includes('fiscal year end') || text.includes('fy-end') || text.includes('fy25') || text.includes('fy26')) tags.add('FY-End'); 
+
+            return Array.from(tags).slice(0, 5); // Limit to 5 tags
         }
 
-        function getPriorityLevel(opportunityScore, contractValue, category) {
-            if (opportunityScore >= 70 || contractValue || category === 'contracts') { return 'hot'; }
-            if (opportunityScore >= 40 || category === 'budget' || category === 'policy' || category === 'federal') { return 'warm'; }
-            return 'cold';
+        // getPriorityLevel based on contract value or category only
+        function getPriorityLevel(contractValue, category) { 
+            if (contractValue || category === 'contracts' || category === 'procurement') { return 'hot'; } 
+            if (category === 'budget' || category === 'policy' || category === 'defense' || category === 'defense_tech' || category === 'cybersecurity') { return 'warm'; }
+            return 'cold'; // Default for other categories
         }
 
         // Utility functions (unchanged)
@@ -866,101 +836,51 @@
         function stripHtml(html) { const tmp = document.createElement('div'); tmp.innerHTML = html; return tmp.textContent || tmp.innerText || ''; }
         function normalizeTitle(title) { let normalized = title.toLowerCase(); normalized = normalized.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()'"?\[\]]/g,""); normalized = normalized.replace(/\s{2,}/g," "); return normalized.trim(); }
 
-        // Helper for Throttling API Calls
-        function delay(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-
-        // API functions
-        async function fetchRSSFeed(feed) {
+        // Fetch from S3 JSON file
+        async function fetchArticlesFromS3() {
             try {
-                await delay(300); // Wait 300ms between each feed fetch
-
-                const encodedUrl = encodeURIComponent(feed.url);
-                const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodedUrl}&api_key=${API_KEY}&count=20`);
-                
+                console.log(`Fetching aggregated news from S3: ${S3_JSON_URL}`);
+                const response = await fetch(S3_JSON_URL);
                 if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
+                    throw new Error(`HTTP ${response.status} from S3: ${S3_JSON_URL}`);
                 }
-                
                 const data = await response.json();
-                
-                if (data.status !== 'ok') {
-                    throw new Error(data.message || 'API Error');
+                if (!data || !data.items || !Array.isArray(data.items)) {
+                    throw new Error('Invalid data structure from S3 JSON.');
                 }
-                
+                // The backend Lambda is now doing the heavy lifting. The frontend just displays.
+                // We'll re-calculate priority on the client side for sorting and display, as the old code did.
                 return data.items.map(item => {
-                    const description = stripHtml(item.description);
-                    const category = categorizeForSales(item.title, description, feed.category, feed.name);
-                    const opportunityScore = calculateOpportunityScore(item.title, description, feed.name, category);
-                    const contractValue = extractContractValue(item.title, description);
-                    const priority = getPriorityLevel(opportunityScore, contractValue, category);
-                    
+                    const contractValue = extractContractValue(item.title, item.description || '');
+                    const priority = getPriorityLevel(contractValue, item.category);
                     return {
-                        title: item.title,
-                        description: description,
-                        link: item.link,
-                        pubDate: item.pubDate,
-                        source: feed.name,
-                        feedCategory: feed.category,
-                        category: category,
-                        tags: extractSalesIntelTags(item.title, description, category),
-                        opportunityScore: opportunityScore,
+                        ...item, 
                         contractValue: contractValue,
-                        priority: priority,
+                        priority: priority, 
+                        description: item.description || '', 
                         normalizedTitle: normalizeTitle(item.title)
                     };
                 });
             } catch (error) {
-                console.error(`Error fetching ${feed.name}:`, error);
-                return { error: true, feedName: feed.name, message: error.message }; 
+                console.error(`Error fetching aggregated news from S3:`, error.message);
+                return []; 
             }
         }
 
         async function fetchAllFeeds() {
             setLoadingState(true);
-            const allFeedPromises = RSS_FEEDS.map(feed => fetchRSSFeed(feed));
-            
+            hideError();
+
             try {
-                const results = await Promise.allSettled(allFeedPromises);
-                allArticles = [];
-                processedArticleLinks.clear();
-                processedArticleTitles.clear();
+                const fetchedArticles = await fetchArticlesFromS3();
+                allArticles = fetchedArticles;
                 
-                let feedsWithErrors = false;
-
-                results.forEach((result) => {
-                    if (result.status === 'fulfilled') {
-                        if (result.value.error) {
-                            feedsWithErrors = true;
-                            // console.warn(`Feed ${result.value.feedName} returned an error: ${result.value.message}`); // Keep for debugging
-                        } else {
-                            result.value.forEach(article => {
-                                if (processedArticleLinks.has(article.link)) {
-                                    return;
-                                }
-                                processedArticleLinks.add(article.link);
-
-                                if (processedArticleTitles.has(article.normalizedTitle)) {
-                                    return;
-                                }
-                                processedArticleTitles.add(article.normalizedTitle);
-
-                                allArticles.push(article);
-                            });
-                        }
-                    } else {
-                        feedsWithErrors = true;
-                        // console.error(`Feed promise rejected:`, result.reason); // Keep for debugging
-                    }
-                });
-                
-                // No public error message display needed for user
-                // The status indicator will briefly turn red if any errors, then green
-                
+                // Sort by priority then date
                 allArticles.sort((a, b) => {
-                    if (a.opportunityScore !== b.opportunityScore) {
-                        return b.opportunityScore - a.opportunityScore;
+                    const priorityOrder = { 'hot': 3, 'warm': 2, 'cold': 1 };
+                    const priorityDiff = priorityOrder[b.priority] - priorityOrder[a.priority];
+                    if (priorityDiff !== 0) {
+                        return priorityDiff;
                     }
                     return new Date(b.pubDate) - new Date(a.pubDate);
                 });
@@ -971,16 +891,14 @@
                 renderGrid();
                 
             } catch (error) {
-                console.error('An unexpected critical error occurred during feed processing:', error);
+                console.error('An unexpected critical error occurred during data fetching:', error);
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = `Error loading news: ${error.message}. Please try again later.`;
+                statusIndicator.className = 'pulse-indicator error';
             } finally {
                 setLoadingState(false); 
-                if (feedsWithErrors) {
-                    statusIndicator.className = 'pulse-indicator error';
-                    setTimeout(() => {
-                        statusIndicator.className = 'pulse-indicator'; // Revert to normal after 3s
-                    }, 3000); 
-                } else {
-                    statusIndicator.className = 'pulse-indicator'; // All good
+                if (!errorMessage.style.display || errorMessage.style.display === 'none') {
+                    statusIndicator.className = 'pulse-indicator';
                 }
             }
         }
@@ -995,17 +913,15 @@
                 statusIndicator.className = 'pulse-indicator loading';
                 lastUpdate.textContent = 'ANALYZING...';
             }
-            // else: statusIndicator is controlled by fetchAllFeeds.finally
         }
 
         function showError(message) {
-            // Error messages are now just logged to console, not displayed to user.
-            // statusIndicator will briefly show red.
             console.error("Silent Error (not displayed to user):", message);
         }
 
         function hideError() {
-            // No action needed as error message div is always display: none
+            errorMessage.style.display = 'none';
+            errorMessage.textContent = '';
         }
 
         function updateStats() {
@@ -1017,24 +933,34 @@
         }
 
         function updateFilters() {
-            const categories = new Set(allArticles.map(a => a.category));
-            const filters = ['all', ...Array.from(categories)].sort();
+            const dynamicCategories = new Set(allArticles.map(a => a.category));
+            const baseCategories = new Set(RSS_FEEDS_CONFIG.map(f => f.category)); // Get from the config array
+            
+            const filters = ['all', ...Array.from(new Set([...Array.from(baseCategories), ...Array.from(dynamicCategories)]))].sort();
             
             const activeFilter = document.querySelector('.filter-chip.active')?.dataset.filter || 'all';
             
             const filterNames = {
                 'all': 'ALL INTEL',
-                'contracts': 'CONTRACTS / PROCUREMENTS',
+                'contracts': 'CONTRACTS / GRANTS', 
                 'budget': 'FISCAL DATA / BUDGET',
-                'federal': 'FEDERAL NEWS / COMMAND INTEL',
-                'policy': 'POLICY & REGULATORY DIRECTIVES',
+                'federal_tech': 'FEDERAL TECH NEWS',
+                'defense': 'DEFENSE NEWS',
+                'defense_tech': 'DEFENSE TECH',
+                'cybersecurity': 'CYBERSECURITY',
+                'gov_operations': 'GOV OPERATIONS',
+                'procurement': 'PROCUREMENT',
+                'state_local_tech': 'STATE & LOCAL TECH',
+                'business': 'BUSINESS TRENDS',
+                'federal': 'FEDERAL (GENERAL)', 
+                'policy': 'POLICY & REGULATORY'
             };
             
             filterContainer.innerHTML = `
                 <span class="filter-label">ACCESS CATEGORIES:</span>
                 ${filters.map(filter => `
                     <div class="filter-chip ${filter === activeFilter ? 'active' : ''}" data-filter="${filter}">
-                        ${filterNames[filter] || filter.toUpperCase()}
+                        ${filterNames[filter] || filter.toUpperCase().replace('_', ' ')}
                     </div>
                 `).join('')}
             `;
@@ -1074,12 +1000,12 @@
             const tagClassMap = {
                 'IDIQ': 'contract-tag', 'GSA': 'contract-tag', 'SEWP': 'contract-tag', 'CIO-SP3': 'contract-tag', 'OASIS': 'contract-tag', 'RFP': 'contract-tag', 'Solicitation': 'contract-tag', 'Grants': 'contract-tag',
                 'DoD': 'agency-tag', 'Navy': 'agency-tag', 'Army': 'agency-tag', 'USAF': 'agency-tag', 'USSF': 'agency-tag', 'DHS': 'agency-tag', 'VA': 'agency-tag', 'HHS': 'agency-tag',
-                'NASA': 'agency-tag', 'DOJ': 'agency-tag', 'State Dept': 'agency-tag', 'Treasury': 'agency-tag', 'DOE': 'agency-tag', 'FEMA': 'agency-tag', 'NIST': 'agency-tag', 'USDA': 'agency-tag', 'DOT': 'agency-tag', 'CMS': 'agency-tag', 'CBP': 'agency-tag', 'USMC': 'agency-tag', 'National Guard': 'agency-tag', 'CyberCom': 'agency-tag',
-                'Cloud': 'tech-tag', 'Cybersecurity': 'tech-tag', 'AI/ML': 'tech-tag', 'Data Analytics': 'tech-tag', 'Software': 'tech-tag', 'Infrastructure': 'tech-tag', 'Digital Xform': 'tech-tag', '5G': 'tech-tag',
+                'NASA': 'agency-tag', 'DOJ': 'agency-tag', 'State Dept': 'agency-tag', 'Treasury': 'agency-tag', 'DOE': 'agency-tag', 'FEMA': 'agency-tag', 'NIST': 'agency-tag', 'USDA': 'agency-tag', 'DOT': 'agency-tag', 'CMS': 'agency-tag', 'CBP': 'agency-tag', 'USMC': 'agency-tag', 'NatGuard': 'agency-tag', 'CyberCom': 'agency-tag', 'OCC': 'agency-tag', 'GAO': 'agency-tag',
+                'Cloud': 'tech-tag', 'Security': 'tech-tag', 'AI/ML': 'tech-tag', 'Data Analytics': 'tech-tag', 'Software': 'tech-tag', 'Infrastructure': 'tech-tag', 'Digital Xform': 'tech-tag', '5G': 'tech-tag', 'Quantum Tech': 'tech-tag',
                 'URGENT': 'urgent-tag', 'Fast-Track': 'urgent-tag', 'FY-End': 'urgent-tag',
             };
 
-            const tagsHtml = article.tags.map(tag => {
+            const tagsHtml = (article.tags || []).map(tag => {
                 const tagClass = tagClassMap[tag] || ''; 
                 return `<span class="opportunity-tag ${tagClass}">${tag}</span>`;
             }).join('');
@@ -1093,7 +1019,7 @@
                         </div>
                     </div>
                     <div class="cell-title">${article.title}</div>
-                    <div class="cell-description">${article.description.slice(0, 120)}${article.description.length > 120 ? '...' : ''}</div>
+                    <div class="cell-description">${(article.description || '').slice(0, 120)}${(article.description || '').length > 120 ? '...' : ''}</div>
                 </div>
                 <div class="cell-footer">
                     <div class="opportunity-tags-container">
@@ -1184,7 +1110,7 @@
             const articleTitle = article.title;
             const articleExcerpt = article.description.slice(0, 250) + (article.description.length > 250 ? '...' : '');
             
-            const autoHashtags = article.tags.map(tag => `#${tag.replace(/\s/g, '')}`).join(' ');
+            const autoHashtags = (article.tags || []).map(tag => `#${tag.replace(/\s/g, '')}`).join(' ');
             let additionalHashtags = `#FederalSales #GovTech`;
             if (article.source) {
                 additionalHashtags += ` #${article.source.replace(/\s/g, '')}`;
