@@ -37,6 +37,7 @@
             --cat-contracts: #00ff88; /* Green (retained for consistency with procurement focus) */
             --cat-budget: #9933ff; /* Purple (retained for consistency) */
             --cat-policy: #00e6ff; /* Electric Blue (retained for consistency) */
+            --cat-federal: #00e6ff; /* Added for general federal category */
         }
 
         * {
@@ -156,9 +157,6 @@
         @keyframes pulse-glow-yellow {
             0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 5px var(--accent-yellow), inset 0 0 3px var(--accent-yellow); }
             50% { opacity: 0.6; transform: scale(0.85); box-shadow: 0 0 10px var(--accent-yellow), inset 0 0 6px var(--accent-yellow); }
-        }
-        .pulse-indicator.error {
-             animation-name: pulse-glow-red;
         }
         @keyframes pulse-glow-red {
             0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 5px var(--accent-red), inset 0 0 3px var(--accent-red); }
@@ -293,6 +291,7 @@
         .filter-chip[data-filter="state_local_tech"].active { background: var(--cat-state_local_tech); border-color: var(--cat-state_local_tech); box-shadow: 0 0 8px var(--cat-state_local_tech), inset 0 0 8px rgba(156, 178, 201, 0.6); }
         .filter-chip[data-filter="business"].active { background: var(--cat-business); border-color: var(--cat-business); box-shadow: 0 0 8px var(--cat-business), inset 0 0 8px rgba(51, 204, 255, 0.6); }
         .filter-chip[data-filter="all"].active { background: var(--accent-blue); border-color: var(--accent-blue); } /* Default for 'All Intel' */
+        .filter-chip[data-filter="federal"].active { background: var(--cat-federal); border-color: var(--cat-federal); box-shadow: 0 0 8px var(--cat-federal), inset 0 0 8px rgba(0, 230, 255, 0.6); }
 
 
         /* News Grid (Micronews Squares) */
@@ -734,19 +733,13 @@
         const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json';
         
         // This array is now only used to define what categories/filters should exist initially.
-        // The actual feed fetching is done by the Lambda.
-        const RSS_FEEDS_CONFIG = [ 
-            { category: 'federal_tech' },
-            { category: 'defense' },
-            { category: 'defense_tech' },
-            { category: 'cybersecurity' },
-            { category: 'gov_operations' },
-            { category: 'procurement' },
-            { category: 'state_local_tech' },
-            { category: 'business' },
-            { category: 'contracts' }, 
-            { category: 'budget' },
-            { category: 'policy' }
+        // The actual category values are expected to come from the S3 JSON directly.
+        // It's good practice to list all expected categories here for consistent UI.
+        const EXPECTED_CATEGORIES = [
+            'federal_tech', 'defense', 'gov_operations', 'business', // Categories from RSS_FEEDS in Lambda
+            // You can add more specific filter categories here if you want them to always appear,
+            // even if no articles currently have them (e.g., 'cybersecurity', 'contracts', 'budget', 'policy')
+            'policy', 'budget', 'contracts', 'cybersecurity', 'defense_tech', 'procurement', 'state_local_tech', 'federal'
         ];
 
         // State
@@ -762,71 +755,6 @@
         const statusIndicator = document.getElementById('statusIndicator');
         const errorMessage = document.getElementById('errorMessage');
         const filterContainer = document.getElementById('filterContainer');
-
-        // Analytics & Categorization Functions (Moved to backend, simplified for frontend display)
-        function extractContractValue(title, description) {
-            const text = title + ' ' + description;
-            const billionMatch = text.match(/\$?(\d+(?:\.\d+)?)\s*billion/i);
-            const millionMatch = text.match(/\$?(\d+(?:\.\d+)?)\s*million/i);
-            if (billionMatch) { return `${billionMatch[1]}B`; } 
-            else if (millionMatch) { const value = parseFloat(millionMatch[1]); if (value >= 10) { return `${millionMatch[1]}M`; } } 
-            return null;
-        }
-
-        function extractSalesIntelTags(title, description, category) {
-            const text = (title + ' ' + description).toLowerCase();
-            const tags = new Set();
-            
-            // Contract/Procurement Tags
-            if (text.includes('idiq')) tags.add('IDIQ'); 
-            if (text.includes('gsa')) tags.add('GSA'); 
-            if (text.includes('sewp')) tags.add('SEWP'); 
-            if (text.includes('cio-sp3')) tags.add('CIO-SP3'); 
-            if (text.includes('oasis')) tags.add('OASIS'); 
-            if (text.includes('rfp')) tags.add('RFP'); 
-            if (text.includes('solicitation')) tags.add('Solicitation'); 
-            if (text.includes('grants')) tags.add('Grants');
-
-            // Agency Tags
-            const agencies = { 
-                'dod': 'DoD', 'pentagon': 'DoD', 'defense': 'DoD', 
-                'navy': 'Navy', 'marine corps': 'USMC', 'army': 'Army', 'air force': 'USAF', 'space force': 'USSF', 
-                'cyber command': 'CyberCom', 'national guard': 'NatGuard',
-                'dhs': 'DHS', 'va': 'VA', 'hhs': 'HHS', 'nasa': 'NASA', 
-                'doj': 'DOJ', 'state department': 'State Dept', 'treasury': 'Treasury', 
-                'energy': 'DOE', 'fema': 'FEMA', 'nist': 'NIST', 'usda': 'USDA', 
-                'dot': 'DOT', 'cms': 'CMS', 'cbp': 'CBP', 'occ': 'OCC', 'gao': 'GAO',
-                'fedscoop': 'FedScoop', 'nextgov': 'NextGov', 'fcw': 'FCW', 'defensenews': 'DefenseNews',
-                'govtech': 'GovTech', 'govexec': 'GovExec', 'federal times': 'FedTimes', 'washingtontechnology': 'WashTech',
-                'c4isrnet': 'C4ISRNET', 'fifth domain': 'FifthDomain', 'breaking defense': 'BreakingDefense', 'govconwire': 'GovConWire'
-            };
-            Object.keys(agencies).forEach(key => { if (text.includes(key)) { tags.add(agencies[key]); } });
-            
-            // Technology Tags
-            if (text.includes('cloud')) tags.add('Cloud'); 
-            else if (text.includes('cybersecurity') || text.includes('security')) tags.add('Security'); 
-            else if (text.includes('ai') || text.includes('artificial intelligence') || text.includes('machine learning')) tags.add('AI/ML'); 
-            else if (text.includes('data analytics') || text.includes('big data')) tags.add('Data Analytics'); 
-            else if (text.includes('software')) tags.add('Software'); 
-            else if (text.includes('infrastructure')) tags.add('Infrastructure'); 
-            else if (text.includes('digital transformation')) tags.add('Digital Xform'); 
-            else if (text.includes('5g')) tags.add('5G');
-            else if (text.includes('quantum')) tags.add('Quantum Tech');
-
-            // Urgency/Timing Tags
-            if (text.includes('urgent') || text.includes('immediate')) tags.add('URGENT'); 
-            if (text.includes('fast-track') || text.includes('accelerated')) tags.add('Fast-Track'); 
-            if (text.includes('fiscal year end') || text.includes('fy-end') || text.includes('fy25') || text.includes('fy26')) tags.add('FY-End'); 
-
-            return Array.from(tags).slice(0, 5); // Limit to 5 tags
-        }
-
-        // getPriorityLevel based on contract value or category only
-        function getPriorityLevel(contractValue, category) { 
-            if (contractValue || category === 'contracts' || category === 'procurement') { return 'hot'; } 
-            if (category === 'budget' || category === 'policy' || category === 'defense' || category === 'defense_tech' || category === 'cybersecurity') { return 'warm'; }
-            return 'cold'; // Default for other categories
-        }
 
         // Utility functions (unchanged)
         function timeAgo(dateString) {
@@ -848,19 +776,14 @@
                 if (!data || !data.items || !Array.isArray(data.items)) {
                     throw new Error('Invalid data structure from S3 JSON.');
                 }
-                // The backend Lambda is now doing the heavy lifting. The frontend just displays.
-                // We'll re-calculate priority on the client side for sorting and display, as the old code did.
-                return data.items.map(item => {
-                    const contractValue = extractContractValue(item.title, item.description || '');
-                    const priority = getPriorityLevel(contractValue, item.category);
-                    return {
-                        ...item, 
-                        contractValue: contractValue,
-                        priority: priority, 
-                        description: item.description || '', 
-                        normalizedTitle: normalizeTitle(item.title)
-                    };
-                });
+                // The Lambda is now responsible for all processing including sorting and tagging.
+                // Frontend just displays the data as is.
+                return data.items.map(item => ({
+                    ...item,
+                    description: item.description || '', // Ensure description is always a string
+                    normalizedTitle: normalizeTitle(item.title)
+                    // contractValue, priority, and tags are expected to be present if Lambda adds them
+                }));
             } catch (error) {
                 console.error(`Error fetching aggregated news from S3:`, error.message);
                 return []; 
@@ -873,17 +796,7 @@
 
             try {
                 const fetchedArticles = await fetchArticlesFromS3();
-                allArticles = fetchedArticles;
-                
-                // Sort by priority then date
-                allArticles.sort((a, b) => {
-                    const priorityOrder = { 'hot': 3, 'warm': 2, 'cold': 1 };
-                    const priorityDiff = priorityOrder[b.priority] - priorityOrder[a.priority];
-                    if (priorityDiff !== 0) {
-                        return priorityDiff;
-                    }
-                    return new Date(b.pubDate) - new Date(a.pubDate);
-                });
+                allArticles = fetchedArticles; // Data is already sorted by pubDate from Lambda
                 
                 lastRefresh = new Date();
                 updateStats();
@@ -933,11 +846,15 @@
         }
 
         function updateFilters() {
+            // Dynamically get categories from the actual fetched articles
             const dynamicCategories = new Set(allArticles.map(a => a.category));
-            const baseCategories = new Set(RSS_FEEDS_CONFIG.map(f => f.category)); // Get from the config array
             
-            const filters = ['all', ...Array.from(new Set([...Array.from(baseCategories), ...Array.from(dynamicCategories)]))].sort();
+            // Combine with explicitly expected categories to ensure all filter chips exist and are sorted
+            const allPossibleCategories = new Set([...EXPECTED_CATEGORIES, ...Array.from(dynamicCategories)]);
             
+            const filters = ['all', ...Array.from(allPossibleCategories)].sort();
+            
+            // Re-select active filter if it still exists
             const activeFilter = document.querySelector('.filter-chip.active')?.dataset.filter || 'all';
             
             const filterNames = {
@@ -994,17 +911,19 @@
             cell.dataset.category = article.category;
             cell.style.setProperty('--delay', `${index * 0.04}s`);
             
+            // contractValue is now directly from the Lambda, if it exists
             const valueDisplay = article.contractValue ? 
                 `<div class="value-indicator">[VALUE: ${article.contractValue}]</div>` : '';
 
             const tagClassMap = {
-                'IDIQ': 'contract-tag', 'GSA': 'contract-tag', 'SEWP': 'contract-tag', 'CIO-SP3': 'contract-tag', 'OASIS': 'contract-tag', 'RFP': 'contract-tag', 'Solicitation': 'contract-tag', 'Grants': 'contract-tag',
+                'IDIQ': 'contract-tag', 'GSA': 'contract-tag', 'SEWP': 'contract-tag', 'CIO-SP3': 'contract-tag', 'OASIS': 'contract-tag', 'RFP/Solicitation': 'contract-tag', 'Grants': 'contract-tag', // Updated combined tag
                 'DoD': 'agency-tag', 'Navy': 'agency-tag', 'Army': 'agency-tag', 'USAF': 'agency-tag', 'USSF': 'agency-tag', 'DHS': 'agency-tag', 'VA': 'agency-tag', 'HHS': 'agency-tag',
                 'NASA': 'agency-tag', 'DOJ': 'agency-tag', 'State Dept': 'agency-tag', 'Treasury': 'agency-tag', 'DOE': 'agency-tag', 'FEMA': 'agency-tag', 'NIST': 'agency-tag', 'USDA': 'agency-tag', 'DOT': 'agency-tag', 'CMS': 'agency-tag', 'CBP': 'agency-tag', 'USMC': 'agency-tag', 'NatGuard': 'agency-tag', 'CyberCom': 'agency-tag', 'OCC': 'agency-tag', 'GAO': 'agency-tag',
-                'Cloud': 'tech-tag', 'Security': 'tech-tag', 'AI/ML': 'tech-tag', 'Data Analytics': 'tech-tag', 'Software': 'tech-tag', 'Infrastructure': 'tech-tag', 'Digital Xform': 'tech-tag', '5G': 'tech-tag', 'Quantum Tech': 'tech-tag',
-                'URGENT': 'urgent-tag', 'Fast-Track': 'urgent-tag', 'FY-End': 'urgent-tag',
+                'Cloud': 'tech-tag', 'Cybersecurity': 'tech-tag', 'AI/ML': 'tech-tag', 'Data Analytics': 'tech-tag', 'Software': 'tech-tag', 'Infrastructure': 'tech-tag', 'Digital Xform': 'tech-tag', '5G': 'tech-tag', 'Quantum Tech': 'tech-tag', 'Zero Trust': 'tech-tag', // Updated tag names
+                'URGENT': 'urgent-tag', 'Fast-Track': 'urgent-tag', 'FY-End': 'urgent-tag', 'Budget Impact': 'budget-tag' // Updated tag names
             };
 
+            // Tags are now directly from the Lambda
             const tagsHtml = (article.tags || []).map(tag => {
                 const tagClass = tagClassMap[tag] || ''; 
                 return `<span class="opportunity-tag ${tagClass}">${tag}</span>`;
@@ -1083,7 +1002,8 @@
                 return;
             }
             
-            const articlesToShow = filteredArticles.slice(0, 50);
+            // Display all filtered articles; they are already sorted by freshness from Lambda
+            const articlesToShow = filteredArticles; 
             
             articlesToShow.forEach((article, index) => {
                 newsGrid.appendChild(createNewsCell(article, index));
@@ -1110,10 +1030,11 @@
             const articleTitle = article.title;
             const articleExcerpt = article.description.slice(0, 250) + (article.description.length > 250 ? '...' : '');
             
-            const autoHashtags = (article.tags || []).map(tag => `#${tag.replace(/\s/g, '')}`).join(' ');
+            // Tags from Lambda, if any
+            const autoHashtags = (article.tags || []).map(tag => `#${tag.replace(/\s|\/|-/g, '')}`).join(' '); // Clean tags for hashtags
             let additionalHashtags = `#FederalSales #GovTech`;
             if (article.source) {
-                additionalHashtags += ` #${article.source.replace(/\s/g, '')}`;
+                additionalHashtags += ` #${article.source.replace(/\s|\/|-/g, '')}`;
             }
 
             const postText = `📡 FED SALES INTEL BROADCAST:\n\n"REPORT: ${articleTitle}"\n\n${articleExcerpt}\n\n${autoHashtags} ${additionalHashtags}`;
