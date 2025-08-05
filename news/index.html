@@ -332,27 +332,17 @@
             }
         }
 
-        // Create filters
+        // Create filters based on individual sources
         function createFilters() {
-            const categories = [...new Set(articles.map(a => a.category))].sort();
-            const filterNames = {
-                'all': 'All',
-                'defense': 'Defense',
-                'defense': 'Army',
-                'defense': 'Navy',
-                'defense': 'Marines',
-                'defense': 'Air Force',
-				'homeland': 'DHS',
-				'executive': 'White House'
-            };
+            const sources = [...new Set(articles.map(a => a.source))].sort();
             
             filterContainer.innerHTML = `
                 <button class="filter-tab ${currentFilter === 'all' ? 'active' : ''}" data-filter="all">
                     All
                 </button>
-                ${categories.map(cat => `
-                    <button class="filter-tab ${currentFilter === cat ? 'active' : ''}" data-filter="${cat}">
-                        ${filterNames[cat] || cat}
+                ${sources.map(source => `
+                    <button class="filter-tab ${currentFilter === source ? 'active' : ''}" data-filter="${source}">
+                        ${source}
                     </button>
                 `).join('')}
             `;
@@ -368,17 +358,17 @@
             });
         }
 
-        // Render articles
+        // Render articles - filter by source
         function renderArticles() {
             const filtered = currentFilter === 'all' 
                 ? articles 
-                : articles.filter(a => a.category === currentFilter);
+                : articles.filter(a => a.source === currentFilter);
             
             if (filtered.length === 0) {
                 content.innerHTML = `
                     <div class="empty-state">
                         <h3>No articles found</h3>
-                        <p>Try selecting a different category or refreshing the feed.</p>
+                        <p>Try selecting a different source or refreshing the feed.</p>
                     </div>
                 `;
                 return;
