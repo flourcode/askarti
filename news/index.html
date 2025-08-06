@@ -4,24 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Read Board</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* E-reader inspired colors, kept for consistent aesthetic base */
-            --bg-primary: #f8f5ed; /* Off-white, warm background */
-            --bg-secondary: #f0ede5;
-            --bg-tertiary: #e7e4dc;
+            --bg-primary: #fdfdfb;
+            --bg-secondary: #f9f9f7;
+            --bg-tertiary: #f4f4f1;
             --surface: #ffffff;
-            --border-light: #e0dbd2;
-            --border-medium: #d1cbc2;
-            --text-primary: #333333; /* Soft black for main text */
-            --text-secondary: #5a5a5a;
-            --text-tertiary: #888888;
-            --text-quaternary: #aaaaaa;
+            --border-light: #f0f0ed;
+            --border-medium: #e8e8e3;
+            --text-primary: #2d2d2d;
+            --text-secondary: #6b6b6b;
+            --text-tertiary: #9d9d9d;
+            --text-quaternary: #bdbdbd;
             --accent-subtle: #4a5568;
             --accent-muted: #718096;
-            --shadow-soft: rgba(0, 0, 0, 0.03);
-            --shadow-medium: rgba(0, 0, 0, 0.06);
+            --shadow-soft: rgba(0, 0, 0, 0.02);
+            --shadow-medium: rgba(0, 0, 0, 0.04);
         }
         * {
             margin: 0;
@@ -32,8 +31,8 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
-            line-height: 1.5; /* Slightly tighter line height */
-            font-size: 14px; /* Default font size */
+            line-height: 1.5;
+            font-size: 14px;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             font-weight: 300;
@@ -42,13 +41,13 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 15px; /* Decreased padding for more horizontal space */
+            padding: 0 20px;
         }
         /* Compact header */
         header {
-            padding: 12px 0 8px 0; /* Reduced padding */
+            padding: 16px 0 12px 0;
             border-bottom: 1px solid var(--border-light);
-            margin-bottom: 10px; /* Reduced margin */
+            margin-bottom: 20px;
         }
         .header-content {
             display: flex;
@@ -57,322 +56,248 @@
         }
         .header-left {
             display: flex;
-            flex-direction: column; /* Stack vertically for more compact header */
-            align-items: flex-start;
-            gap: 2px; /* Very small gap */
+            align-items: center;
+            gap: 12px;
         }
         .greeting {
-            font-size: 9px; /* Smaller font size */
-            color: var(--text-tertiary); /* Lighter color */
+            font-size: 10px;
+            color: var(--text-quaternary);
             text-transform: uppercase;
-            letter-spacing: 0.1em; /* Tighter letter spacing */
+            letter-spacing: 0.08em;
             font-weight: 400;
         }
         h1 {
             font-size: 16px;
-            font-weight: 600; /* Slightly bolder */
+            font-weight: 500;
             color: var(--text-primary);
             letter-spacing: -0.01em;
         }
         .last-updated {
-            font-size: 9px; /* Smaller font size */
+            font-size: 10px;
             color: var(--text-quaternary);
             text-transform: uppercase;
-            letter-spacing: 0.08em; /* Tighter letter spacing */
+            letter-spacing: 0.06em;
             font-weight: 400;
         }
-        .action-btn {
+        .refresh-btn {
             background: none;
             border: 1px solid var(--border-medium);
             color: var(--text-tertiary);
-            padding: 5px 10px; /* Smaller button padding */
-            border-radius: 14px; /* More rounded, smaller */
+            padding: 6px 12px;
+            border-radius: 16px;
             cursor: pointer;
             font-family: inherit;
-            font-size: 10px; /* Smaller font size */
+            font-size: 10px;
             font-weight: 400;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 5px; /* Smaller gap */
-            white-space: nowrap;
+            gap: 6px;
         }
-        .action-btn:hover {
+        .refresh-btn:hover {
             background: var(--bg-secondary);
             border-color: var(--border-medium);
             color: var(--text-secondary);
         }
-        .action-btn:disabled {
+        .refresh-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
-        .refresh-btn.loading svg {
-            animation: gentleSpin 2s linear infinite;
+        /* Responsive filter tabs */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 20px;
+            overflow: visible;
+            -webkit-overflow-scrolling: touch;
+            padding: 4px 0 12px 0;
         }
-
-        /* Digest-specific layout */
-        .digest-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px; /* Reduced gap between main digest sections */
-        }
-
-        .section {
-            background: var(--surface);
-            padding: 18px; /* Reduced padding */
-            border: 1px solid var(--border-light);
-            border-radius: 8px; /* Slightly less rounded */
-            box-shadow: var(--shadow-soft);
-            animation: fadeIn 0.4s ease forwards; /* Faster animation */
-        }
-
-        .section-title {
-            font-size: 16px; /* Slightly smaller title */
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 12px; /* Reduced margin */
-            letter-spacing: -0.01em;
-            border-bottom: 1px solid var(--border-light);
-            padding-bottom: 8px; /* Reduced padding */
-        }
-
-        /* Key Intelligence specific */
-        .key-intelligence-summary {
-            font-size: 14px; /* Smaller font size */
-            font-weight: 400;
-            line-height: 1.5; /* Tighter line height */
-            color: var(--text-secondary);
-            margin-bottom: 15px; /* Reduced margin */
-        }
-
-        /* Deal Drivers grid (now the primary "articles") */
-        .deal-drivers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Tighter min-width */
-            gap: 12px; /* Reduced gap */
-        }
-
-        .deal-driver {
-            background: var(--bg-secondary);
-            padding: 15px; /* Reduced padding */
+        .filter-tab {
+            background: none;
             border: 1px solid var(--border-medium);
-            border-radius: 6px; /* Slightly less rounded */
-            transition: all 0.2s ease;
+            color: var(--text-tertiary);
+            padding: 6px 12px;
             cursor: pointer;
+            font-family: inherit;
+            font-size: 10px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+        .filter-tab:hover {
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+        }
+        .filter-tab.active {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+            border-color: var(--border-medium);
+        }
+        /* Dense grid layout */
+        .article-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .article {
+            background: var(--surface);
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            box-shadow: var(--shadow-soft);
             display: flex;
             flex-direction: column;
             height: fit-content;
         }
-        .deal-driver:hover {
+        .article:hover {
             box-shadow: var(--shadow-medium);
-            transform: translateY(-1px); /* More subtle hover */
-            border-color: var(--accent-muted);
+            transform: translateY(-1px);
+            border-color: var(--border-medium);
         }
-
-        .deal-driver-meta {
-            font-size: 9px; /* Smaller font size */
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 9px;
             color: var(--text-quaternary);
             text-transform: uppercase;
-            letter-spacing: 0.1em; /* Tighter letter spacing */
+            letter-spacing: 0.08em;
             font-weight: 400;
-            margin-bottom: 6px; /* Reduced margin */
-            display: flex;
-            align-items: center;
-            gap: 6px; /* Reduced gap */
         }
-        .deal-driver-type {
+        .article-source {
             color: var(--accent-muted);
-            font-weight: 600;
+            font-weight: 500;
         }
-        .deal-driver-source {
-            color: var(--text-tertiary);
+        .article-separator {
+            width: 2px;
+            height: 2px;
+            background: var(--text-quaternary);
+            border-radius: 50%;
         }
-
-        .deal-driver-headline {
-            font-size: 14px; /* Smaller headline */
-            font-weight: 600;
+        .article-time {
+            color: var(--text-quaternary);
+        }
+        .article-title {
+            font-size: 14px;
+            font-weight: 500;
             color: var(--text-primary);
             line-height: 1.3;
-            margin-bottom: 6px; /* Reduced margin */
+            margin-bottom: 8px;
             letter-spacing: -0.01em;
         }
-        .deal-driver-summary {
-            font-size: 12px; /* Smaller summary text */
+        .article-description {
+            font-size: 12px;
             color: var(--text-secondary);
-            line-height: 1.4; /* Tighter line height */
-            font-weight: 300;
-            margin-bottom: 8px; /* Reduced margin */
-            flex-grow: 1;
-        }
-        .deal-driver-action-insight {
-            font-size: 12px; /* Smaller action insight text */
-            color: var(--accent-subtle);
-            font-weight: 500;
             line-height: 1.4;
-            margin-top: 4px; /* Reduced margin */
-            padding-top: 6px; /* Reduced padding */
-            border-top: 1px dashed var(--border-light);
-        }
-
-        /* Share on LinkedIn link */
-        .share-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 9px; /* Smaller font size */
-            color: #0077B5; /* LinkedIn brand color */
-            text-decoration: none;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-top: 6px; /* Small margin-top */
-            transition: color 0.2s ease;
-        }
-        .share-link:hover {
-            color: #004F7B;
-            text-decoration: underline;
-        }
-        .share-link svg {
-            width: 10px; /* Smaller icon */
-            height: 10px;
-        }
-
-
-        /* Quick Intel & Action Items */
-        .list-item {
-            display: flex;
-            margin-bottom: 8px; /* Reduced margin */
-            font-size: 13px; /* Smaller font size */
-            line-height: 1.4; /* Tighter line height */
-            color: var(--text-secondary);
-        }
-        .list-item strong {
-            color: var(--text-primary);
-            font-weight: 500;
-            margin-right: 6px; /* Reduced margin */
-            white-space: nowrap;
-        }
-        .list-item .item-text {
+            font-weight: 300;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
             flex-grow: 1;
         }
-        .list-item .item-text.action-why {
-            font-size: 11px; /* Smaller why text */
-            color: var(--text-tertiary);
-            margin-top: 2px; /* Reduced margin */
-            display: block;
+        .read-time {
+            font-size: 8px;
+            color: var(--text-quaternary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 8px;
+            font-weight: 400;
         }
-
-        /* Desktop Layouts */
-        @media (min-width: 1000px) {
-            .digest-container {
-                grid-template-columns: 3fr 1fr; /* Main content and sidebar */
-                gap: 25px; /* Reduced gap */
-            }
-            .main-content {
-                grid-column: 1;
-            }
-            .sidebar {
-                grid-column: 2;
-                display: flex;
-                flex-direction: column;
-                gap: 20px; /* Reduced gap */
-            }
-            .deal-drivers-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 15px; /* Slightly larger gap for desktop grid */
-            }
-        }
-
+        /* Desktop 4-column grid */
         @media (min-width: 1200px) {
-            .deal-drivers-grid {
-                grid-template-columns: repeat(4, 1fr); /* 4 columns on larger screens */
-                gap: 15px;
+            .article-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
             }
-            .section {
-                padding: 20px; /* Slightly more padding on large screens */
+            .article {
+                padding: 20px;
             }
-            .deal-driver {
-                padding: 18px; /* Slightly more padding on large screens */
+            .article-title {
+                font-size: 15px;
+                margin-bottom: 12px;
+            }
+            .article-description {
+                font-size: 13px;
+                line-height: 1.5;
             }
         }
-
-
-        /* Mobile specific adjustments */
+        @media (min-width: 900px) and (max-width: 1199px) {
+            .article-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 18px;
+            }
+        }
+        @media (min-width: 600px) and (max-width: 899px) {
+            .article-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+        }
+        /* Mobile: single column with wrapping filters */
         @media (max-width: 599px) {
             .container {
-                padding: 0 10px; /* Even tighter padding on mobile */
+                padding: 0 16px;
             }
             header {
-                padding: 10px 0 6px 0; /* Even tighter padding */
-                margin-bottom: 8px; /* Even tighter margin */
+                padding: 12px 0 8px 0;
+                margin-bottom: 16px;
             }
             .header-content {
                 flex-direction: column;
-                gap: 6px;
+                gap: 8px;
                 align-items: flex-start;
             }
             .header-left {
-                gap: 2px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
             }
-            h1 {
-                font-size: 16px;
+            .filters {
+                margin-bottom: 16px;
+                gap: 4px;
             }
-            .header-actions {
-                width: 100%;
-                justify-content: flex-end;
-                gap: 6px; /* Smaller gap */
-            }
-            .action-btn {
-                padding: 4px 8px; /* Even smaller button */
+            .filter-tab {
+                padding: 5px 10px;
                 font-size: 9px;
             }
-            .digest-container {
-                gap: 15px; /* Even tighter gap */
-            }
-            .section {
-                padding: 15px; /* Even tighter padding */
-            }
-            .section-title {
-                font-size: 15px;
-                margin-bottom: 10px;
-            }
-            .key-intelligence-summary {
-                font-size: 13px;
-                margin-bottom: 12px;
-            }
-            .deal-drivers-grid {
+            .article-grid {
                 grid-template-columns: 1fr;
-                gap: 10px; /* Even tighter gap */
+                gap: 12px;
             }
-            .deal-driver {
-                padding: 12px; /* Even tighter padding */
+            .article {
+                padding: 14px;
             }
-            .deal-driver-headline {
+            .article-title {
                 font-size: 13px;
             }
-            .deal-driver-summary, .deal-driver-action-insight {
+            .article-description {
                 font-size: 11px;
+                -webkit-line-clamp: 2;
             }
-            .share-link {
-                font-size: 8px;
-                margin-top: 4px;
-            }
-            .list-item {
-                font-size: 12px;
-                margin-bottom: 6px;
-            }
-            .list-item .item-text.action-why {
-                font-size: 10px;
+            .refresh-btn {
+                align-self: flex-end;
+                padding: 4px 8px;
+                font-size: 9px;
             }
         }
-
         /* States */
         .empty-state {
             grid-column: 1 / -1;
             text-align: center;
-            padding: 60px 20px; /* Reduced padding */
+            padding: 60px 20px;
             color: var(--text-tertiary);
         }
         .empty-state .icon {
@@ -395,24 +320,24 @@
         .loading {
             grid-column: 1 / -1;
             text-align: center;
-            padding: 30px; /* Reduced padding */
+            padding: 40px;
             color: var(--text-tertiary);
             font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.1em;
             font-weight: 400;
         }
         .error-message {
-            background: #fff0f0;
-            border: 1px solid #ffcccc;
-            color: #cc0000;
-            padding: 10px 15px; /* Reduced padding */
+            background: #fef9f9;
+            border: 1px solid #f5e6e6;
+            color: var(--text-secondary);
+            padding: 12px 16px;
             border-radius: 8px;
-            margin-bottom: 15px; /* Reduced margin */
+            margin-bottom: 20px;
             font-size: 12px;
             display: none;
             text-align: center;
-            font-weight: 400;
+            font-weight: 300;
         }
         /* Progress indicator */
         .reading-progress {
@@ -420,7 +345,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 2px; /* Thinner progress bar */
+            height: 2px;
             background: var(--border-light);
             z-index: 100;
         }
@@ -438,31 +363,32 @@
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(10px); /* Smaller animation distance */
+                transform: translateY(10px);
             }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-        .section, .deal-driver {
+        .article {
             animation: fadeIn 0.4s ease forwards;
         }
-        /* Specific delays for sections, not individual items within sections to keep it clean */
-        .section:nth-of-type(1) { animation-delay: 0.05s; }
-        .section:nth-of-type(2) { animation-delay: 0.1s; }
-        .section:nth-of-type(3) { animation-delay: 0.15s; }
-        .section:nth-of-type(4) { animation-delay: 0.2s; }
-
+        .article:nth-child(1) { animation-delay: 0.05s; }
+        .article:nth-child(2) { animation-delay: 0.1s; }
+        .article:nth-child(3) { animation-delay: 0.15s; }
+        .article:nth-child(4) { animation-delay: 0.2s; }
         @keyframes gentleSpin {
             to { transform: rotate(360deg); }
         }
+        .refresh-btn.loading svg {
+            animation: gentleSpin 2s linear infinite;
+        }
         /* Focus states */
-        .action-btn:focus,
-        .deal-driver:focus {
+        .refresh-btn:focus,
+        .filter-tab:focus,
+        .article:focus {
             outline: 2px solid var(--accent-muted);
-            outline-offset: 2px; /* Smaller offset */
-            border-color: transparent;
+            outline-offset: 2px;
         }
     </style>
 </head>
@@ -474,41 +400,43 @@
         <header>
             <div class="header-content">
                 <div class="header-left">
-                    <div class="greeting" id="greeting"></div>
+                    <div class="greeting" id="greeting">Good Morning</div>
                     <h1>The Read Board</h1>
                     <div class="last-updated" id="lastUpdated">Loading...</div>
                 </div>
-                <div class="header-actions">
-                    <button class="action-btn refresh-btn" id="refreshBtn" onclick="refreshFeed()">
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
-                        </svg>
-                        Refresh
-                    </button>
-                </div>
+                <button class="refresh-btn" id="refreshBtn" onclick="refreshFeed()">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+                    </svg>
+                    Refresh
+                </button>
             </div>
         </header>
+        <div class="filters" id="filterContainer">
+            <button class="filter-tab active" data-filter="all">All</button>
+        </div>
         <div class="error-message" id="errorMessage"></div>
         <div id="content">
-            <div class="loading">Preparing your daily federal sales briefing...</div>
+            <div class="article-grid">
+                <div class="loading">Preparing your briefing...</div>
+            </div>
         </div>
     </div>
     <script>
         // Configuration
-const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json';
-
+        const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json';
         // State
-        let currentDigest = null;
+        let articles = [];
+        let currentFilter = 'all';
         let isLoading = false;
-
         // UI Elements
         const content = document.getElementById('content');
         const refreshBtn = document.getElementById('refreshBtn');
         const errorMessage = document.getElementById('errorMessage');
+        const filterContainer = document.getElementById('filterContainer');
         const lastUpdated = document.getElementById('lastUpdated');
         const greeting = document.getElementById('greeting');
         const progressBar = document.getElementById('progressBar');
-
         // Set greeting based on time and display current date
         function setGreetingAndDate() {
             const now = new Date();
@@ -525,7 +453,6 @@ const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily
 
             greeting.textContent = `${greetingText}. Welcome to The Read Board. Today is ${formattedDate}.`;
         }
-
         // Reading progress
         function updateReadingProgress() {
             const scrollTop = window.pageYOffset;
@@ -533,20 +460,7 @@ const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily
             const scrollPercent = (scrollTop / docHeight) * 100;
             progressBar.style.width = Math.min(scrollPercent, 100) + '%';
         }
-
-        // Utility function to generate LinkedIn share URL
-        function getLinkedInShareUrl(url, title, summary) {
-            let shareUrl = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(url);
-            // LinkedIn's share-offsite endpoint primarily uses the URL's og:tags for content.
-            // Direct title/summary through query params might not always work reliably for `share-offsite`.
-            // For a more robust solution, ensure your shared page has proper Open Graph tags.
-            // However, we can still include them for potential fallback or future proofing.
-            // For example, if you were using an older /shareArticle endpoint, these would be directly used.
-            // For this implementation, the primary purpose is to share the *link* of the original article.
-            return shareUrl;
-        }
-
-        // Utility functions (timeAgo remains relevant for lastUpdated timestamp)
+        // Utility functions
         function timeAgo(dateString) {
             const now = new Date();
             const date = new Date(dateString);
@@ -560,146 +474,85 @@ const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily
             if (days < 7) return `${days}d`;
             return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         }
-
-        // Fetch AI-generated digest
-        async function fetchDigest(forceRefresh = false) {
+        function estimateReadTime(text) {
+            const wordsPerMinute = 200;
+            const words = (text || '').split(' ').length;
+            const minutes = Math.ceil(words / wordsPerMinute);
+            return `${minutes} min`;
+        }
+        // Fetch articles
+        async function fetchArticles() {
             try {
-                let url = API_DIGEST_URL;
-                if (forceRefresh) {
-                    url += '?refresh=true'; // Add refresh parameter to trigger backend regeneration
-                }
-                const response = await fetch(url);
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(`HTTP ${response.status}: ${errorData.error || response.statusText}`);
-                }
+                const response = await fetch(S3_JSON_URL);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
-                return data;
+                if (data.summary?.timestamp) {
+                    lastUpdated.textContent = `${timeAgo(data.summary.timestamp)}`;
+                }
+                return data.items || [];
             } catch (error) {
-                console.error('Error fetching digest:', error);
+                console.error('Error fetching articles:', error);
                 throw error;
             }
         }
-
-        // Render the AI-generated digest
-        function renderDigest() {
-            if (!currentDigest || currentDigest.status === "collecting_data" || currentDigest.status === "error") {
+        // Create filters
+        function createFilters() {
+            const sources = [...new Set(articles.map(a => a.source))].sort();
+            filterContainer.innerHTML = `
+                <button class="filter-tab ${currentFilter === 'all' ? 'active' : ''}" data-filter="all">
+                    All
+                </button>
+                ${sources.map(source => `
+                    <button class="filter-tab ${currentFilter === source ? 'active' : ''}" data-filter="${source}">
+                        ${source}
+                    </button>
+                `).join('')}
+            `;
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    renderArticles();
+                });
+            });
+        }
+        // Render articles in grid
+        function renderArticles() {
+            const filtered = currentFilter === 'all' 
+                ? articles 
+                : articles.filter(a => a.source === currentFilter);
+            if (filtered.length === 0) {
                 content.innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon">📡</div>
-                        <h3>${currentDigest ? currentDigest.key_intelligence : 'No briefing available'}</h3>
-                        <p>${currentDigest && currentDigest.quick_intel.length > 0 ? currentDigest.quick_intel.map(q => q.insight).join('. ') : 'Please try refreshing the page or check back in a few minutes.'}</p>
-                    </div>
-                `;
-                lastUpdated.textContent = 'Last refreshed: ---';
-                return;
-            }
-
-            // Update last updated timestamp from digest data
-            // Assuming digest_date from AI is sufficient or you can add a new timestamp field in digest.json
-            if (currentDigest.digest_date) {
-                lastUpdated.textContent = `Generated: ${currentDigest.digest_date}`; 
-            } else {
-                lastUpdated.textContent = 'Generated: Today'; // Fallback
-            }
-           
-            let html = '<div class="digest-container">';
-
-            // Main Content Area
-            html += '<div class="main-content">';
-
-            // Key Intelligence Section
-            if (currentDigest.key_intelligence) {
-                html += `
-                    <div class="section">
-                        <h2 class="section-title">Key Intelligence</h2>
-                        <p class="key-intelligence-summary">${currentDigest.key_intelligence}</p>
-                    </div>
-                `;
-            }
-
-            // Deal Drivers Section (now the primary "articles")
-            if (currentDigest.deal_drivers && currentDigest.deal_drivers.length > 0) {
-                html += `
-                    <div class="section">
-                        <h2 class="section-title">Deal Drivers</h2>
-                        <div class="deal-drivers-grid">
-                            ${currentDigest.deal_drivers.map(driver => `
-                                <article class="deal-driver" onclick="window.open('${driver.link}', '_blank')" tabindex="0" role="button" aria-label="Read: ${driver.headline}">
-                                    <div class="deal-driver-meta">
-                                        <span class="deal-driver-type">${driver.type.replace(/_/g, ' ')}</span>
-                                        <div class="article-separator"></div>
-                                        <span class="deal-driver-source">${driver.source}</span>
-                                    </div>
-                                    <h3 class="deal-driver-headline">${driver.headline}</h3>
-                                    <p class="deal-driver-summary">${driver.summary}</p>
-                                    ${driver.action_insight ? `<p class="deal-driver-action-insight"><strong>Angle:</strong> ${driver.action_insight}</p>` : ''}
-                                    <a href="${getLinkedInShareUrl(driver.link, driver.headline, driver.summary)}" target="_blank" class="share-link" onclick="event.stopPropagation();">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                                        Share
-                                    </a>
-                                </article>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            } else {
-                 html += `
-                    <div class="section">
-                        <h2 class="section-title">Deal Drivers</h2>
+                    <div class="article-grid">
                         <div class="empty-state">
                             <div class="icon">📋</div>
-                            <h3>No Deal Drivers yet</h3>
-                            <p>The AI is still processing the latest news for actionable insights.</p>
+                            <h3>No articles</h3>
+                            <p>No updates from this source. Try another filter or refresh.</p>
                         </div>
                     </div>
                 `;
+                return;
             }
-
-            html += '</div>'; // End main-content
-
-            // Sidebar (Quick Intel & Action Items)
-            html += '<div class="sidebar">';
-
-            // Quick Intel Section
-            if (currentDigest.quick_intel && currentDigest.quick_intel.length > 0) {
-                html += `
-                    <div class="section">
-                        <h2 class="section-title">Quick Intel</h2>
-                        <ul>
-                            ${currentDigest.quick_intel.map(intel => `
-                                <li class="list-item"><strong>${intel.category}:</strong> <span class="item-text">${intel.insight}</span></li>
-                            `).join('')}
-                        </ul>
-                    </div>
-                `;
-            }
-
-            // Action Items Section
-            if (currentDigest.action_items && currentDigest.action_items.length > 0) {
-                html += `
-                    <div class="section">
-                        <h2 class="section-title">Your Moves Today</h2>
-                        <ul>
-                            ${currentDigest.action_items.map(item => `
-                                <li class="list-item">
-                                    <strong>${item.priority}.</strong> <span class="item-text">${item.action}</span>
-                                    ${item.why ? `<span class="item-text action-why">${item.why}</span>` : ''}
-                                </li>
-                            `).join('')}
-                        </ul>
-                    </div>
-                `;
-            }
-
-            html += '</div>'; // End sidebar
-            html += '</div>'; // End digest-container
-
-            content.innerHTML = html;
-
-            // Keyboard navigation for deal drivers
-            document.querySelectorAll('.deal-driver').forEach(driver => {
-                driver.addEventListener('keydown', function(e) {
+            content.innerHTML = `
+                <div class="article-grid">
+                    ${filtered.map(article => `
+                        <article class="article" onclick="window.open('${article.link}', '_blank')" tabindex="0" role="button" aria-label="Read: ${article.title}">
+                            <div class="article-meta">
+                                <span class="article-source">${article.source}</span>
+                                <div class="article-separator"></div>
+                                <span class="article-time">${timeAgo(article.pubDate)}</span>
+                            </div>
+                            <h2 class="article-title">${article.title}</h2>
+                            <p class="article-description">${article.description || 'Read more for details.'}</p>
+                            <div class="read-time">${estimateReadTime(article.description || article.title)}</div>
+                        </article>
+                    `).join('')}
+                </div>
+            `;
+            // Keyboard navigation
+            document.querySelectorAll('.article').forEach(article => {
+                article.addEventListener('keydown', function(e) {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
                         this.click();
@@ -707,62 +560,40 @@ const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily
                 });
             });
         }
-
-        // Refresh feed (now fetches/generates digest)
+        // Refresh feed
         async function refreshFeed() {
             if (isLoading) return;
             isLoading = true;
             refreshBtn.disabled = true;
             refreshBtn.classList.add('loading');
             errorMessage.style.display = 'none';
-            content.innerHTML = '<div class="loading">Preparing your daily federal sales briefing...</div>'; // Show loading state immediately
-
             try {
-                currentDigest = await fetchDigest(true); // Force refresh the digest
-                renderDigest();
+                articles = await fetchArticles();
+                createFilters();
+                renderArticles();
             } catch (error) {
-                console.error("Refresh failed:", error);
                 errorMessage.style.display = 'block';
-                errorMessage.textContent = `Unable to get your briefing: ${error.message}. Please try again.`;
-                currentDigest = { status: "error", key_intelligence: "Failed to load briefing.", quick_intel: [{category: "Error", insight: "Check your internet connection or try again later."}] };
-                renderDigest(); // Render error state
+                errorMessage.textContent = 'Unable to refresh. Try again.';
+                content.innerHTML = `
+                    <div class="article-grid">
+                        <div class="empty-state">
+                            <div class="icon">📡</div>
+                            <h3>Connection Issue</h3>
+                            <p>Having trouble reaching sources. Try refreshing.</p>
+                        </div>
+                    </div>
+                `;
             } finally {
                 isLoading = false;
                 refreshBtn.disabled = false;
                 refreshBtn.classList.remove('loading');
             }
         }
-
         // Initialize
         setGreetingAndDate();
-        // Initial load should try to get existing digest first, then refresh if needed
-        async function initialLoad() {
-            isLoading = true;
-            refreshBtn.disabled = true;
-            refreshBtn.classList.add('loading');
-            content.innerHTML = '<div class="loading">Preparing your daily federal sales briefing...</div>';
-            try {
-                currentDigest = await fetchDigest(false); // Try to get pre-generated digest first
-                if (!currentDigest || currentDigest.status === "collecting_data" || currentDigest.status === "error") {
-                    console.log("Initial digest not available or failed, attempting refresh...");
-                    currentDigest = await fetchDigest(true); // If not available or error, trigger regeneration
-                }
-                renderDigest();
-            } catch (error) {
-                console.error("Initial load failed:", error);
-                errorMessage.style.display = 'block';
-                errorMessage.textContent = `Failed to load initial briefing: ${error.message}. Please try again.`;
-                currentDigest = { status: "error", key_intelligence: "Failed to load briefing.", quick_intel: [{category: "Error", insight: "Check your internet connection or try again later."}] };
-                renderDigest(); // Render error state
-            } finally {
-                isLoading = false;
-                refreshBtn.disabled = false;
-                refreshBtn.classList.remove('loading');
-            }
-        }
-        initialLoad(); // Call initial load function
+        refreshFeed();
         window.addEventListener('scroll', updateReadingProgress);
-        setInterval(setGreetingAndDate, 3600000); // Update greeting every hour
+        setInterval(setGreetingAndDate, 3600000);
     </script>
 </body>
 </html>
