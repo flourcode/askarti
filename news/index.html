@@ -449,8 +449,7 @@
             outline: 2px solid var(--accent-muted);
             outline-offset: 2px;
         }
-
-        /* Footer Styles */
+		/* Footer Styles */
         footer {
             margin-top: 30px;
             padding: 15px 0 20px 0;
@@ -517,15 +516,13 @@
                 <div class="loading">Preparing your briefing...</div>
             </div>
         </div>
-    </div>
-
-    <footer>
+		 <footer>
         <div class="container footer-content">
             <span id="copyrightInfo"></span>
             <a href="#" class="footer-link" id="sharePageLink">Share this page</a>
         </div>
     </footer>
-
+    </div>
     <script>
         // Configuration
         const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json';
@@ -533,17 +530,17 @@
         // State
         let articles = [];
         let currentFilter = 'all';
+        // REMOVED: isLoading state as refresh button is removed
         
         // UI Elements
         const content = document.getElementById('content');
+        // REMOVED: refreshBtn as refresh button is removed
         const errorMessage = document.getElementById('errorMessage');
         const filterContainer = document.getElementById('filterContainer');
         const lastUpdated = document.getElementById('lastUpdated');
         const greeting = document.getElementById('greeting');
         const currentDateElement = document.getElementById('currentDate');
         const progressBar = document.getElementById('progressBar');
-        const copyrightInfo = document.getElementById('copyrightInfo');
-        const sharePageLink = document.getElementById('sharePageLink');
         
         // Set greeting based on time and display current date
         function setGreetingAndDate() {
@@ -560,9 +557,6 @@
             
             currentDateElement.textContent = formattedDate;
             greeting.textContent = `${greetingText}. Welcome to The Read Board.`;
-
-            // Set copyright year
-            copyrightInfo.textContent = `© ${now.getFullYear()} The Read Board. All rights reserved.`;
         }
         
         // Reading progress
@@ -728,30 +722,37 @@
             });
         }
         
+        // Refresh feed (renamed to initialize and simplified)
+        async function initializeFeed() {
+            // REMOVED: isLoading state and checks as refresh button is removed
+            // REMOVED: refreshBtn manipulation
+            errorMessage.style.display = 'none';
+            
+            try {
+                articles = await fetchArticles();
+                createFilters();
+                renderArticles();
+            } catch (error) {
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = 'Unable to load content. Please check your connection.';
+                content.innerHTML = `
+                    <div class="article-grid">
+                        <div class="empty-state">
+                            <div class="icon">📡</div>
+                            <h3>Connection Issue</h3>
+                            <p>Having trouble reaching sources. Please try again later.</p>
+                        </div>
+                    </div>
+                `;
+            }
+            // REMOVED: finally block as refresh button is removed
+        }
+        
         // Initialize
         setGreetingAndDate();
-        initializeFeed();
+        initializeFeed(); // Call the renamed function on load
         window.addEventListener('scroll', updateReadingProgress);
         setInterval(setGreetingAndDate, 3600000);
-
-        // Share functionality
-        sharePageLink.addEventListener('click', async (e) => {
-            e.preventDefault();
-            if (navigator.share) {
-                try {
-                    await navigator.share({
-                        title: document.title,
-                        url: window.location.href
-                    });
-                    console.log('Page shared successfully');
-                } catch (error) {
-                    console.error('Error sharing the page:', error);
-                }
-            } else {
-                // Fallback for browsers that do not support navigator.share
-                prompt('Copy this link to share:', window.location.href);
-            }
-        });
     </script>
 </body>
 </html>
