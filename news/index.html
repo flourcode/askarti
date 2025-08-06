@@ -3,18 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Federal Intel Reader</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Federal Intel • Morning Brief</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Source+Serif+Pro:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #ffffff;
-            --surface: #fafafa;
-            --border: #e5e5e5;
-            --text-primary: #1a1a1a;
+            --bg-primary: #fdfdfb;
+            --bg-secondary: #f9f9f7;
+            --bg-tertiary: #f4f4f1;
+            --surface: #ffffff;
+            --border-light: #f0f0ed;
+            --border-medium: #e8e8e3;
+            --text-primary: #2d2d2d;
             --text-secondary: #6b6b6b;
-            --text-tertiary: #999999;
-            --accent: #0066cc;
-            --hover: #f5f5f5;
+            --text-tertiary: #9d9d9d;
+            --text-quaternary: #bdbdbd;
+            --accent-subtle: #4a5568;
+            --accent-muted: #718096;
+            --shadow-soft: rgba(0, 0, 0, 0.02);
+            --shadow-medium: rgba(0, 0, 0, 0.04);
         }
 
         * {
@@ -25,60 +31,92 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--bg);
+            background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
             font-size: 14px;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            font-weight: 300;
+            letter-spacing: -0.005em;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 680px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
         }
 
-        /* Header */
+        /* Header with morning greeting */
         header {
-            border-bottom: 1px solid var(--border);
-            padding: 24px 0;
-            margin-bottom: 32px;
+            padding: 40px 0 32px 0;
+            text-align: center;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 40px;
         }
 
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .greeting {
+            font-size: 11px;
+            color: var(--text-quaternary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 8px;
+            font-weight: 400;
         }
 
         h1 {
-            font-size: 16px;
-            font-weight: 600;
+            font-family: 'Source Serif Pro', Georgia, serif;
+            font-size: 28px;
+            font-weight: 400;
             color: var(--text-primary);
-            letter-spacing: -0.01em;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            font-weight: 300;
+            margin-bottom: 24px;
+        }
+
+        .last-updated {
+            font-size: 10px;
+            color: var(--text-quaternary);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 400;
+        }
+
+        /* Minimal controls */
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
         }
 
         .refresh-btn {
             background: none;
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            padding: 6px 12px;
-            border-radius: 6px;
+            border: 1px solid var(--border-medium);
+            color: var(--text-tertiary);
+            padding: 8px 16px;
+            border-radius: 20px;
             cursor: pointer;
             font-family: inherit;
-            font-size: 13px;
-            font-weight: 500;
-            transition: all 0.15s ease;
+            font-size: 11px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .refresh-btn:hover {
-            background: var(--hover);
-            border-color: var(--text-tertiary);
-            color: var(--text-primary);
+            background: var(--bg-secondary);
+            border-color: var(--border-medium);
+            color: var(--text-secondary);
         }
 
         .refresh-btn:disabled {
@@ -86,204 +124,309 @@
             cursor: not-allowed;
         }
 
-        /* Filter tabs */
+        /* Gentle filter tabs */
         .filters {
             display: flex;
-            gap: 4px;
-            margin-bottom: 24px;
-            border-bottom: 1px solid var(--border);
+            gap: 0;
+            margin-bottom: 40px;
+            justify-content: center;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
+            padding: 0 0 8px 0;
         }
 
         .filter-tab {
             background: none;
             border: none;
-            color: var(--text-secondary);
-            padding: 8px 12px;
+            color: var(--text-tertiary);
+            padding: 10px 20px;
             cursor: pointer;
             font-family: inherit;
-            font-size: 13px;
-            font-weight: 500;
+            font-size: 11px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
             white-space: nowrap;
-            border-bottom: 2px solid transparent;
-            margin-bottom: -1px;
-            transition: all 0.15s ease;
+            transition: all 0.3s ease;
+            border-radius: 16px;
+            position: relative;
         }
 
         .filter-tab:hover {
-            color: var(--text-primary);
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
         }
 
         .filter-tab.active {
             color: var(--text-primary);
-            border-bottom-color: var(--text-primary);
+            background: var(--bg-tertiary);
         }
 
-        /* Article list */
+        /* Calm article layout */
         .article-list {
             display: flex;
             flex-direction: column;
-            gap: 1px;
-            background: var(--border);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            overflow: hidden;
+            gap: 32px;
         }
 
         .article {
-            background: var(--bg);
-            padding: 20px;
+            background: var(--surface);
+            padding: 32px;
             cursor: pointer;
-            transition: background 0.15s ease;
-            position: relative;
+            transition: all 0.4s ease;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            box-shadow: var(--shadow-soft);
         }
 
         .article:hover {
-            background: var(--hover);
-        }
-
-        .article-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 8px;
-            gap: 16px;
+            box-shadow: var(--shadow-medium);
+            transform: translateY(-1px);
+            border-color: var(--border-medium);
         }
 
         .article-meta {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: var(--text-tertiary);
-            flex-shrink: 0;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 10px;
+            color: var(--text-quaternary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 400;
         }
 
         .article-source {
-            color: var(--text-secondary);
+            color: var(--accent-muted);
             font-weight: 500;
+        }
+
+        .article-separator {
+            width: 2px;
+            height: 2px;
+            background: var(--text-quaternary);
+            border-radius: 50%;
         }
 
         .article-time {
-            color: var(--text-tertiary);
+            color: var(--text-quaternary);
         }
 
         .article-title {
-            font-size: 15px;
-            font-weight: 500;
+            font-family: 'Source Serif Pro', Georgia, serif;
+            font-size: 20px;
+            font-weight: 400;
             color: var(--text-primary);
             line-height: 1.4;
-            margin-bottom: 6px;
+            margin-bottom: 16px;
             letter-spacing: -0.01em;
         }
 
         .article-description {
-            font-size: 13px;
+            font-size: 14px;
             color: var(--text-secondary);
-            line-height: 1.5;
+            line-height: 1.6;
+            font-weight: 300;
             display: -webkit-box;
-            -webkit-line-clamp: 2;
+            -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
 
-        /* Empty state */
+        /* Reading indicator */
+        .read-time {
+            font-size: 9px;
+            color: var(--text-quaternary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 16px;
+            font-weight: 400;
+        }
+
+        /* Gentle states */
         .empty-state {
             text-align: center;
-            padding: 80px 20px;
-            color: var(--text-secondary);
+            padding: 120px 20px;
+            color: var(--text-tertiary);
+        }
+
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 24px;
+            opacity: 0.3;
         }
 
         .empty-state h3 {
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 8px;
-            color: var(--text-primary);
+            font-family: 'Source Serif Pro', Georgia, serif;
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
         }
 
         .empty-state p {
             font-size: 13px;
             color: var(--text-tertiary);
+            font-weight: 300;
+            line-height: 1.5;
         }
 
-        /* Loading state */
         .loading {
             text-align: center;
-            padding: 40px;
+            padding: 80px;
             color: var(--text-tertiary);
-            font-size: 13px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 400;
         }
 
-        /* Error state */
         .error-message {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #dc2626;
-            padding: 12px 16px;
-            border-radius: 6px;
-            margin-bottom: 24px;
+            background: #fef9f9;
+            border: 1px solid #f5e6e6;
+            color: var(--text-secondary);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 32px;
             font-size: 13px;
             display: none;
+            text-align: center;
+            font-weight: 300;
         }
 
-        /* Responsive */
-        @media (max-width: 600px) {
+        /* Progress indicator */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--border-light);
+            z-index: 100;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-subtle), var(--accent-muted));
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 680px) {
             .container {
-                padding: 0 16px;
+                padding: 0 20px;
             }
             
             header {
-                padding: 20px 0;
-                margin-bottom: 24px;
+                padding: 32px 0 24px 0;
+                margin-bottom: 32px;
+            }
+            
+            h1 {
+                font-size: 24px;
             }
             
             .article {
-                padding: 16px;
+                padding: 24px 20px;
+                border-radius: 8px;
             }
             
-            .article-header {
-                flex-direction: column;
-                gap: 8px;
+            .article-title {
+                font-size: 18px;
+            }
+            
+            .article-list {
+                gap: 24px;
             }
             
             .filters {
-                margin-bottom: 20px;
+                margin-bottom: 32px;
+                justify-content: flex-start;
+                padding-left: 0;
+            }
+            
+            .filter-tab {
+                padding: 8px 16px;
+                font-size: 10px;
             }
         }
 
-        /* Loading animation */
-        @keyframes spin {
+        /* Ultra-smooth animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .article {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .article:nth-child(1) { animation-delay: 0.1s; }
+        .article:nth-child(2) { animation-delay: 0.15s; }
+        .article:nth-child(3) { animation-delay: 0.2s; }
+        .article:nth-child(4) { animation-delay: 0.25s; }
+        .article:nth-child(5) { animation-delay: 0.3s; }
+
+        @keyframes gentleSpin {
             to { transform: rotate(360deg); }
         }
 
         .refresh-btn.loading svg {
-            animation: spin 1s linear infinite;
+            animation: gentleSpin 2s linear infinite;
+        }
+
+        /* Focus states for accessibility */
+        .refresh-btn:focus,
+        .filter-tab:focus,
+        .article:focus {
+            outline: 2px solid var(--accent-muted);
+            outline-offset: 2px;
         }
     </style>
 </head>
 <body>
+    <div class="reading-progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
     <div class="container">
         <header>
-            <div class="header-content">
-                <h1>Federal Intel</h1>
-                <button class="refresh-btn" id="refreshBtn" onclick="refreshFeed()">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
-                    </svg>
-                    Refresh
-                </button>
-            </div>
+            <div class="greeting" id="greeting">Good Morning</div>
+            <h1>Federal Intelligence Brief</h1>
+            <div class="subtitle">Your daily digest of federal developments</div>
+            <div class="last-updated" id="lastUpdated">Loading...</div>
         </header>
 
+        <div class="controls">
+            <button class="refresh-btn" id="refreshBtn" onclick="refreshFeed()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+                </svg>
+                Refresh
+            </button>
+        </div>
+
         <div class="filters" id="filterContainer">
-            <button class="filter-tab active" data-filter="all">All</button>
+            <button class="filter-tab active" data-filter="all">All Sources</button>
         </div>
 
         <div class="error-message" id="errorMessage"></div>
 
         <div id="content">
-            <div class="loading">Loading articles...</div>
+            <div class="loading">Preparing your briefing...</div>
         </div>
     </div>
 
@@ -301,6 +444,31 @@
         const refreshBtn = document.getElementById('refreshBtn');
         const errorMessage = document.getElementById('errorMessage');
         const filterContainer = document.getElementById('filterContainer');
+        const lastUpdated = document.getElementById('lastUpdated');
+        const greeting = document.getElementById('greeting');
+        const progressBar = document.getElementById('progressBar');
+
+        // Set greeting based on time
+        function setGreeting() {
+            const hour = new Date().getHours();
+            let greetingText = 'Good Morning';
+            
+            if (hour >= 12 && hour < 17) {
+                greetingText = 'Good Afternoon';
+            } else if (hour >= 17) {
+                greetingText = 'Good Evening';
+            }
+            
+            greeting.textContent = greetingText;
+        }
+
+        // Reading progress
+        function updateReadingProgress() {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            progressBar.style.width = Math.min(scrollPercent, 100) + '%';
+        }
 
         // Utility functions
         function timeAgo(dateString) {
@@ -308,14 +476,21 @@
             const date = new Date(dateString);
             const seconds = Math.floor((now - date) / 1000);
             
-            if (seconds < 60) return 'just now';
+            if (seconds < 60) return 'moments ago';
             const minutes = Math.floor(seconds / 60);
-            if (minutes < 60) return `${minutes}m ago`;
+            if (minutes < 60) return `${minutes} min ago`;
             const hours = Math.floor(minutes / 60);
             if (hours < 24) return `${hours}h ago`;
             const days = Math.floor(hours / 24);
             if (days < 7) return `${days}d ago`;
             return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        function estimateReadTime(text) {
+            const wordsPerMinute = 200;
+            const words = text.split(' ').length;
+            const minutes = Math.ceil(words / wordsPerMinute);
+            return `${minutes} min read`;
         }
 
         // Fetch articles
@@ -325,6 +500,13 @@
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 
                 const data = await response.json();
+                
+                // Update last updated time
+                if (data.summary?.timestamp) {
+                    const updateTime = new Date(data.summary.timestamp);
+                    lastUpdated.textContent = `Updated ${timeAgo(data.summary.timestamp)}`;
+                }
+                
                 return data.items || [];
             } catch (error) {
                 console.error('Error fetching articles:', error);
@@ -338,7 +520,7 @@
             
             filterContainer.innerHTML = `
                 <button class="filter-tab ${currentFilter === 'all' ? 'active' : ''}" data-filter="all">
-                    All
+                    All Sources
                 </button>
                 ${sources.map(source => `
                     <button class="filter-tab ${currentFilter === source ? 'active' : ''}" data-filter="${source}">
@@ -358,7 +540,7 @@
             });
         }
 
-        // Render articles - filter by source
+        // Render articles with calm design
         function renderArticles() {
             const filtered = currentFilter === 'all' 
                 ? articles 
@@ -367,8 +549,9 @@
             if (filtered.length === 0) {
                 content.innerHTML = `
                     <div class="empty-state">
-                        <h3>No articles found</h3>
-                        <p>Try selecting a different source or refreshing the feed.</p>
+                        <div class="icon">☕</div>
+                        <h3>All caught up</h3>
+                        <p>No new updates from this source.<br>Try refreshing or check back later.</p>
                     </div>
                 `;
                 return;
@@ -377,20 +560,29 @@
             content.innerHTML = `
                 <div class="article-list">
                     ${filtered.map(article => `
-                        <article class="article" onclick="window.open('${article.link}', '_blank')">
-                            <div class="article-header">
-                                <div class="article-meta">
-                                    <span class="article-source">${article.source}</span>
-                                    <span>·</span>
-                                    <span class="article-time">${timeAgo(article.pubDate)}</span>
-                                </div>
+                        <article class="article" onclick="window.open('${article.link}', '_blank')" tabindex="0" role="button" aria-label="Read article: ${article.title}">
+                            <div class="article-meta">
+                                <span class="article-source">${article.source}</span>
+                                <div class="article-separator"></div>
+                                <span class="article-time">${timeAgo(article.pubDate)}</span>
                             </div>
                             <h2 class="article-title">${article.title}</h2>
-                            <p class="article-description">${article.description || ''}</p>
+                            <p class="article-description">${article.description || 'Read more to discover the full story.'}</p>
+                            <div class="read-time">${estimateReadTime(article.description || article.title)}</div>
                         </article>
                     `).join('')}
                 </div>
             `;
+
+            // Add keyboard navigation
+            document.querySelectorAll('.article').forEach(article => {
+                article.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+            });
         }
 
         // Refresh feed
@@ -408,8 +600,14 @@
                 renderArticles();
             } catch (error) {
                 errorMessage.style.display = 'block';
-                errorMessage.textContent = 'Failed to load articles. Please try again.';
-                content.innerHTML = '<div class="empty-state"><p>Unable to load articles.</p></div>';
+                errorMessage.textContent = 'Unable to refresh briefing. Please try again in a moment.';
+                content.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📡</div>
+                        <h3>Connection Issue</h3>
+                        <p>We're having trouble reaching our sources.<br>Please try refreshing in a moment.</p>
+                    </div>
+                `;
             } finally {
                 isLoading = false;
                 refreshBtn.disabled = false;
@@ -418,7 +616,14 @@
         }
 
         // Initialize
+        setGreeting();
         refreshFeed();
+
+        // Add scroll listener for reading progress
+        window.addEventListener('scroll', updateReadingProgress);
+        
+        // Update greeting every hour
+        setInterval(setGreeting, 3600000);
     </script>
 </body>
 </html>
