@@ -312,7 +312,7 @@
             h1 {
                 font-size: 14px;
             }
-            .refresh-btn {
+            .refresh-btn { /* This style block can be removed if the button is removed */
                 padding: 2px 6px;
                 font-size: 8px;
             }
@@ -436,11 +436,13 @@
         @keyframes gentleSpin {
             to { transform: rotate(360deg); }
         }
+        /* This rule can be removed if the refresh button is removed */
         .refresh-btn.loading svg {
             animation: gentleSpin 2s linear infinite;
         }
         
         /* Focus states */
+        /* These rules can be adjusted or removed if the button is removed */
         .refresh-btn:focus,
         .filter-tab:focus,
         .article:focus {
@@ -462,13 +464,7 @@
                     <div class="greeting" id="greeting"></div>
                     <div class="last-updated" id="lastUpdated">Loading...</div>
                 </div>
-                <button class="refresh-btn" id="refreshBtn" onclick="refreshFeed()">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
-                    </svg>
-                    Refresh
-                </button>
-            </div>
+                </div>
         </header>
         
         <div class="filters" id="filterContainer">
@@ -489,11 +485,11 @@
         // State
         let articles = [];
         let currentFilter = 'all';
-        let isLoading = false;
+        // REMOVED: isLoading state as refresh button is removed
         
         // UI Elements
         const content = document.getElementById('content');
-        const refreshBtn = document.getElementById('refreshBtn');
+        // REMOVED: refreshBtn as refresh button is removed
         const errorMessage = document.getElementById('errorMessage');
         const filterContainer = document.getElementById('filterContainer');
         const lastUpdated = document.getElementById('lastUpdated');
@@ -681,13 +677,10 @@
             });
         }
         
-        // Refresh feed
-        async function refreshFeed() {
-            if (isLoading) return;
-            
-            isLoading = true;
-            refreshBtn.disabled = true;
-            refreshBtn.classList.add('loading');
+        // Refresh feed (renamed to initialize and simplified)
+        async function initializeFeed() {
+            // REMOVED: isLoading state and checks as refresh button is removed
+            // REMOVED: refreshBtn manipulation
             errorMessage.style.display = 'none';
             
             try {
@@ -696,26 +689,23 @@
                 renderArticles();
             } catch (error) {
                 errorMessage.style.display = 'block';
-                errorMessage.textContent = 'Unable to refresh. Try again.';
+                errorMessage.textContent = 'Unable to load content. Please check your connection.';
                 content.innerHTML = `
                     <div class="article-grid">
                         <div class="empty-state">
                             <div class="icon">📡</div>
                             <h3>Connection Issue</h3>
-                            <p>Having trouble reaching sources. Try refreshing.</p>
+                            <p>Having trouble reaching sources. Please try again later.</p>
                         </div>
                     </div>
                 `;
-            } finally {
-                isLoading = false;
-                refreshBtn.disabled = false;
-                refreshBtn.classList.remove('loading');
             }
+            // REMOVED: finally block as refresh button is removed
         }
         
         // Initialize
         setGreetingAndDate();
-        refreshFeed();
+        initializeFeed(); // Call the renamed function on load
         window.addEventListener('scroll', updateReadingProgress);
         setInterval(setGreetingAndDate, 3600000);
     </script>
