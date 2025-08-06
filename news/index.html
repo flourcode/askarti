@@ -702,11 +702,36 @@
             statRead.textContent = readCount;
         }
         
-        // Fetch articles
+        // Fetch articles with fallback support
         async function fetchArticles() {
             try {
                 const response = await fetch(`${S3_BASE_URL}${currentFeed}.json`);
+                
+                if (response.status === 403) {
+                    throw new Error('Access denied. Please check S3 bucket permissions.');
+                }
+                
+                if (response.status === 404) {
+                    // Try fallback to daily-news if current feed doesn't exist
+                    if (currentFeed !== 'daily-news') {
+                        console.log(`Feed '${currentFeed}' not found, trying daily-news...`);
+                        currentFeed = 'daily-news';
+                        feedSelector.value = 'daily-news';
+                        const fallbackResponse = await fetch(`${S3_BASE_URL}daily-news.json`);
+                        if (fallbackResponse.ok) {
+                            const data = await fallbackResponse.json();
+                            if (data.summary?.timestamp) {
+                                lastUpdated.textContent = `Updated ${timeAgo(data.summary.timestamp)}`;
+                            }
+                            localStorage.setItem('lastVisit', new Date().toISOString());
+                            return data.items || [];
+                        }
+                    }
+                    throw new Error(`Feed '${currentFeed}' not found. It may not be configured yet.`);
+                }
+                
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
                 const data = await response.json();
                 
                 if (data.summary?.timestamp) {
@@ -719,6 +744,20 @@
                 return data.items || [];
             } catch (error) {
                 console.error('Error fetching articles:', error);
+                
+                // Try to load from localStorage cache as last resort
+                const cachedData = localStorage.getItem(`cache_${currentFeed}`);
+                if (cachedData) {
+                    try {
+                        const cached = JSON.parse(cachedData);
+                        console.log('Loading from cache...');
+                        lastUpdated.textContent = `Cached ${timeAgo(cached.timestamp)}`;
+                        return cached.items || [];
+                    } catch (e) {
+                        console.error('Cache parse error:', e);
+                    }
+                }
+                
                 throw error;
             }
         }
@@ -854,7 +893,7 @@
             }
         }
         
-        // Refresh feed
+        // Refresh feed with better error handling
         async function refreshFeed() {
             if (isLoading) return;
             
@@ -864,14 +903,40 @@
             
             try {
                 articles = await fetchArticles();
+                
+                // Cache successful fetches
+                if (articles.length > 0) {
+                    localStorage.setItem(`cache_${currentFeed}`, JSON.stringify({
+                        items: articles,
+                        timestamp: new Date().toISOString()
+                    }));
+                }
+                
                 renderArticles();
             } catch (error) {
+                let errorTitle = 'Connection Issue';
+                let errorDesc = 'Having trouble reaching sources. Try refreshing.';
+                let errorIcon = '📡';
+                
+                if (error.message.includes('403') || error.message.includes('Access denied')) {
+                    errorTitle = 'Access Denied';
+                    errorDesc = 'S3 bucket needs public read permissions. Check AWS console.';
+                    errorIcon = '🔒';
+                } else if (error.message.includes('404') || error.message.includes('not found')) {
+                    errorTitle = 'Feed Not Found';
+                    errorDesc = `The '${currentFeed}' feed hasn't been set up yet. Try 'daily-news' or run the Lambda function.`;
+                    errorIcon = '🔍';
+                }
+                
                 content.innerHTML = `
                     <div class="article-grid">
                         <div class="empty-state">
-                            <div class="icon">📡</div>
-                            <h3>Connection Issue</h3>
-                            <p>Having trouble reaching sources. Try refreshing.</p>
+                            <div class="icon">${errorIcon}</div>
+                            <h3>${errorTitle}</h3>
+                            <p>${errorDesc}</p>
+                            <p style="margin-top: 8px; font-size: 9px; color: var(--text-quaternary);">
+                                ${error.message}
+                            </p>
                         </div>
                     </div>
                 `;
