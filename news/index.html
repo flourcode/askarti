@@ -437,16 +437,21 @@
         const lastUpdated = document.getElementById('lastUpdated');
         const greeting = document.getElementById('greeting');
         const progressBar = document.getElementById('progressBar');
-        // Set greeting based on time
-        function setGreeting() {
-            const hour = new Date().getHours();
-            let greetingText = 'Morning';
+        // Set greeting based on time and display current date
+        function setGreetingAndDate() {
+            const now = new Date();
+            const hour = now.getHours();
+            let greetingText = 'Good Morning';
             if (hour >= 12 && hour < 17) {
-                greetingText = 'Afternoon';
+                greetingText = 'Good Afternoon';
             } else if (hour >= 17) {
-                greetingText = 'Evening';
+                greetingText = 'Good Evening';
             }
-            greeting.textContent = greetingText;
+            
+            const options = { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' };
+            const formattedDate = now.toLocaleDateString('en-US', options);
+
+            greeting.textContent = `${greetingText}. Welcome to The Read Board. Today is ${formattedDate}.`;
         }
         // Reading progress
         function updateReadingProgress() {
@@ -585,10 +590,10 @@
             }
         }
         // Initialize
-        setGreeting();
+        setGreetingAndDate();
         refreshFeed();
         window.addEventListener('scroll', updateReadingProgress);
-        setInterval(setGreeting, 3600000);
+        setInterval(setGreetingAndDate, 3600000);
     </script>
 </body>
 </html>
