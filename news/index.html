@@ -4,23 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Read Board</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #fdfdfb;
-            --bg-secondary: #f9f9f7;
-            --bg-tertiary: #f4f4f1;
+            /* E-reader inspired colors */
+            --bg-primary: #f8f5ed; /* Off-white, warm background */
+            --bg-secondary: #f0ede5;
+            --bg-tertiary: #e7e4dc;
             --surface: #ffffff;
-            --border-light: #f0f0ed;
-            --border-medium: #e8e8e3;
-            --text-primary: #2d2d2d;
-            --text-secondary: #6b6b6b;
-            --text-tertiary: #9d9d9d;
-            --text-quaternary: #bdbdbd;
+            --border-light: #e0dbd2;
+            --border-medium: #d1cbc2;
+            --text-primary: #333333; /* Soft black for main text */
+            --text-secondary: #5a5a5a;
+            --text-tertiary: #888888;
+            --text-quaternary: #aaaaaa;
             --accent-subtle: #4a5568;
             --accent-muted: #718096;
-            --shadow-soft: rgba(0, 0, 0, 0.02);
-            --shadow-medium: rgba(0, 0, 0, 0.04);
+            --shadow-soft: rgba(0, 0, 0, 0.03);
+            --shadow-medium: rgba(0, 0, 0, 0.06);
         }
         * {
             margin: 0;
@@ -31,86 +32,103 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
-            line-height: 1.5;
-            font-size: 14px;
+            line-height: 1.6; /* Increased line height for readability */
+            font-size: 15px; /* Slightly larger base font size */
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             font-weight: 300;
-            letter-spacing: -0.005em;
+            letter-spacing: -0.008em; /* Tighter letter spacing for sans-serif */
         }
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 25px; /* Increased padding for more breathing room */
         }
-        /* Compact header */
+        /* Header adjustments for e-reader feel */
         header {
-            padding: 16px 0 12px 0;
+            padding: 20px 0 15px 0;
             border-bottom: 1px solid var(--border-light);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         .header-content {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-end; /* Align items to the bottom */
         }
         .header-left {
             display: flex;
-            align-items: center;
-            gap: 12px;
+            flex-direction: column; /* Stack elements vertically */
+            align-items: flex-start;
+            gap: 4px; /* Reduced gap */
         }
         .greeting {
-            font-size: 10px;
+            font-size: 11px; /* Slightly larger for greeting */
             color: var(--text-quaternary);
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.09em;
             font-weight: 400;
+            margin-bottom: 2px;
         }
         h1 {
-            font-size: 16px;
-            font-weight: 500;
+            font-size: 20px; /* Larger, more prominent title */
+            font-weight: 600; /* Bolder for emphasis */
             color: var(--text-primary);
-            letter-spacing: -0.01em;
+            letter-spacing: -0.02em;
         }
         .last-updated {
             font-size: 10px;
             color: var(--text-quaternary);
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.07em;
             font-weight: 400;
+            margin-top: 4px;
         }
-        .refresh-btn {
+        .header-actions {
+            display: flex;
+            gap: 10px; /* Space between buttons */
+        }
+        .action-btn {
             background: none;
             border: 1px solid var(--border-medium);
             color: var(--text-tertiary);
-            padding: 6px 12px;
-            border-radius: 16px;
+            padding: 7px 14px; /* Slightly larger buttons */
+            border-radius: 18px; /* More rounded */
             cursor: pointer;
             font-family: inherit;
-            font-size: 10px;
+            font-size: 11px; /* Slightly larger text */
             font-weight: 400;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 7px;
+            white-space: nowrap;
         }
-        .refresh-btn:hover {
+        .action-btn:hover {
             background: var(--bg-secondary);
             border-color: var(--border-medium);
             color: var(--text-secondary);
         }
-        .refresh-btn:disabled {
+        .action-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+        }
+        .action-btn.active {
+            background: var(--bg-tertiary);
+            border-color: var(--border-medium);
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        .refresh-btn.loading svg {
+            animation: gentleSpin 2s linear infinite;
         }
         /* Responsive filter tabs */
         .filters {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 20px;
+            gap: 8px; /* Slightly larger gap */
+            margin-bottom: 25px;
             overflow: visible;
             -webkit-overflow-scrolling: touch;
             padding: 4px 0 12px 0;
@@ -119,16 +137,16 @@
             background: none;
             border: 1px solid var(--border-medium);
             color: var(--text-tertiary);
-            padding: 6px 12px;
+            padding: 7px 14px;
             cursor: pointer;
             font-family: inherit;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 400;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             white-space: nowrap;
-            transition: all 0.3s ease;
-            border-radius: 12px;
+            transition: all 0.2s ease;
+            border-radius: 14px;
             flex-shrink: 0;
             position: relative;
             z-index: 1;
@@ -141,20 +159,21 @@
             color: var(--text-primary);
             background: var(--bg-tertiary);
             border-color: var(--border-medium);
+            font-weight: 500;
         }
         /* Dense grid layout */
         .article-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Wider min-width */
+            gap: 20px; /* Increased gap */
         }
         .article {
             background: var(--surface);
-            padding: 16px;
+            padding: 20px; /* More padding */
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             border: 1px solid var(--border-light);
-            border-radius: 8px;
+            border-radius: 10px; /* Slightly more rounded corners */
             box-shadow: var(--shadow-soft);
             display: flex;
             flex-direction: column;
@@ -162,27 +181,27 @@
         }
         .article:hover {
             box-shadow: var(--shadow-medium);
-            transform: translateY(-1px);
+            transform: translateY(-2px); /* More pronounced hover effect */
             border-color: var(--border-medium);
         }
         .article-meta {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 10px;
-            font-size: 9px;
+            gap: 10px; /* Increased gap */
+            margin-bottom: 12px; /* More space below meta */
+            font-size: 10px; /* Slightly larger meta info */
             color: var(--text-quaternary);
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.09em;
             font-weight: 400;
         }
         .article-source {
             color: var(--accent-muted);
-            font-weight: 500;
+            font-weight: 600; /* Bolder source name */
         }
         .article-separator {
-            width: 2px;
-            height: 2px;
+            width: 3px; /* Slightly larger separator */
+            height: 3px;
             background: var(--text-quaternary);
             border-radius: 50%;
         }
@@ -190,154 +209,169 @@
             color: var(--text-quaternary);
         }
         .article-title {
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 16px; /* Larger title */
+            font-weight: 600; /* Bolder title */
             color: var(--text-primary);
-            line-height: 1.3;
-            margin-bottom: 8px;
-            letter-spacing: -0.01em;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            letter-spacing: -0.015em;
         }
         .article-description {
-            font-size: 12px;
+            font-size: 14px; /* Larger description text */
             color: var(--text-secondary);
-            line-height: 1.4;
+            line-height: 1.55; /* Enhanced line height for readability */
             font-weight: 300;
             display: -webkit-box;
-            -webkit-line-clamp: 3;
+            -webkit-line-clamp: 4; /* Allow more lines by default */
             -webkit-box-orient: vertical;
             overflow: hidden;
             flex-grow: 1;
         }
+        /* Speed read mode specific styles */
+        .speed-read .article-description {
+            -webkit-line-clamp: unset; /* Remove line clamping for extracted text */
+            height: auto;
+            max-height: none;
+        }
+        .speed-read-highlight {
+            font-weight: 500; /* Highlight extracted sentences */
+            color: var(--text-primary);
+        }
         .read-time {
-            font-size: 8px;
+            font-size: 9px;
             color: var(--text-quaternary);
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            margin-top: 8px;
+            margin-top: 10px; /* More space above read time */
             font-weight: 400;
         }
         /* Desktop 4-column grid */
         @media (min-width: 1200px) {
             .article-grid {
                 grid-template-columns: repeat(4, 1fr);
-                gap: 20px;
+                gap: 25px;
             }
             .article {
-                padding: 20px;
+                padding: 22px;
             }
             .article-title {
-                font-size: 15px;
-                margin-bottom: 12px;
+                font-size: 17px;
+                margin-bottom: 14px;
             }
             .article-description {
-                font-size: 13px;
-                line-height: 1.5;
+                font-size: 14.5px;
+                line-height: 1.6;
             }
         }
         @media (min-width: 900px) and (max-width: 1199px) {
             .article-grid {
                 grid-template-columns: repeat(3, 1fr);
-                gap: 18px;
+                gap: 20px;
             }
         }
         @media (min-width: 600px) and (max-width: 899px) {
             .article-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 16px;
+                gap: 18px;
             }
         }
         /* Mobile: single column with wrapping filters */
         @media (max-width: 599px) {
             .container {
-                padding: 0 16px;
+                padding: 0 18px;
             }
             header {
-                padding: 12px 0 8px 0;
-                margin-bottom: 16px;
+                padding: 15px 0 10px 0;
+                margin-bottom: 20px;
             }
             .header-content {
                 flex-direction: column;
-                gap: 8px;
+                gap: 10px;
                 align-items: flex-start;
             }
             .header-left {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 4px;
+                gap: 6px;
+            }
+            h1 {
+                font-size: 18px;
+            }
+            .header-actions {
+                width: 100%;
+                justify-content: flex-end; /* Align buttons to the right on mobile */
+                gap: 8px;
+            }
+            .action-btn {
+                padding: 6px 10px;
+                font-size: 10px;
             }
             .filters {
-                margin-bottom: 16px;
-                gap: 4px;
+                margin-bottom: 20px;
+                gap: 6px;
             }
             .filter-tab {
-                padding: 5px 10px;
-                font-size: 9px;
+                padding: 6px 12px;
+                font-size: 10px;
             }
             .article-grid {
                 grid-template-columns: 1fr;
-                gap: 12px;
+                gap: 15px;
             }
             .article {
-                padding: 14px;
+                padding: 18px;
             }
             .article-title {
-                font-size: 13px;
+                font-size: 15px;
             }
             .article-description {
-                font-size: 11px;
-                -webkit-line-clamp: 2;
-            }
-            .refresh-btn {
-                align-self: flex-end;
-                padding: 4px 8px;
-                font-size: 9px;
+                font-size: 13px;
+                -webkit-line-clamp: 3; /* More lines for mobile speed read */
             }
         }
         /* States */
         .empty-state {
             grid-column: 1 / -1;
             text-align: center;
-            padding: 60px 20px;
+            padding: 80px 20px;
             color: var(--text-tertiary);
         }
         .empty-state .icon {
-            font-size: 32px;
-            margin-bottom: 16px;
+            font-size: 40px;
+            margin-bottom: 20px;
             opacity: 0.3;
         }
         .empty-state h3 {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
             color: var(--text-secondary);
         }
         .empty-state p {
-            font-size: 12px;
+            font-size: 14px;
             color: var(--text-tertiary);
             font-weight: 300;
-            line-height: 1.4;
+            line-height: 1.5;
         }
         .loading {
             grid-column: 1 / -1;
             text-align: center;
-            padding: 40px;
+            padding: 50px;
             color: var(--text-tertiary);
-            font-size: 11px;
+            font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.12em;
             font-weight: 400;
         }
         .error-message {
-            background: #fef9f9;
-            border: 1px solid #f5e6e6;
-            color: var(--text-secondary);
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 12px;
+            background: #fff0f0; /* Softer error color */
+            border: 1px solid #ffcccc;
+            color: #cc0000; /* Stronger error text */
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 13px;
             display: none;
             text-align: center;
-            font-weight: 300;
+            font-weight: 400;
         }
         /* Progress indicator */
         .reading-progress {
@@ -345,7 +379,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 2px;
+            height: 3px; /* Thicker progress bar */
             background: var(--border-light);
             z-index: 100;
         }
@@ -363,7 +397,7 @@
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(15px); /* More pronounced animation */
             }
             to {
                 opacity: 1;
@@ -371,24 +405,22 @@
             }
         }
         .article {
-            animation: fadeIn 0.4s ease forwards;
+            animation: fadeIn 0.5s ease forwards; /* Slower animation */
         }
-        .article:nth-child(1) { animation-delay: 0.05s; }
-        .article:nth-child(2) { animation-delay: 0.1s; }
-        .article:nth-child(3) { animation-delay: 0.15s; }
-        .article:nth-child(4) { animation-delay: 0.2s; }
+        .article:nth-child(1) { animation-delay: 0.08s; }
+        .article:nth-child(2) { animation-delay: 0.16s; }
+        .article:nth-child(3) { animation-delay: 0.24s; }
+        .article:nth-child(4) { animation-delay: 0.32s; }
         @keyframes gentleSpin {
             to { transform: rotate(360deg); }
         }
-        .refresh-btn.loading svg {
-            animation: gentleSpin 2s linear infinite;
-        }
         /* Focus states */
-        .refresh-btn:focus,
+        .action-btn:focus,
         .filter-tab:focus,
         .article:focus {
             outline: 2px solid var(--accent-muted);
-            outline-offset: 2px;
+            outline-offset: 3px; /* Larger offset for visibility */
+            border-color: transparent; /* Hide border on focus to avoid double border */
         }
     </style>
 </head>
@@ -400,16 +432,25 @@
         <header>
             <div class="header-content">
                 <div class="header-left">
-                    <div class="greeting" id="greeting">Good Morning</div>
+                    <div class="greeting" id="greeting"></div>
                     <h1>The Read Board</h1>
                     <div class="last-updated" id="lastUpdated">Loading...</div>
                 </div>
-                <button class="refresh-btn" id="refreshBtn" onclick="refreshFeed()">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
-                    </svg>
-                    Refresh
-                </button>
+                <div class="header-actions">
+                    <button class="action-btn" id="speedReadToggle" onclick="toggleSpeedRead()">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                            <line x1="4" y1="22" x2="4" y2="15"></line>
+                        </svg>
+                        Speed Read
+                    </button>
+                    <button class="action-btn refresh-btn" id="refreshBtn" onclick="refreshFeed()">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+                        </svg>
+                        Refresh
+                    </button>
+                </div>
             </div>
         </header>
         <div class="filters" id="filterContainer">
@@ -425,10 +466,13 @@
     <script>
         // Configuration
         const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json';
+
         // State
         let articles = [];
         let currentFilter = 'all';
         let isLoading = false;
+        let isSpeedReadMode = false; // New state variable for speed read mode
+
         // UI Elements
         const content = document.getElementById('content');
         const refreshBtn = document.getElementById('refreshBtn');
@@ -437,6 +481,8 @@
         const lastUpdated = document.getElementById('lastUpdated');
         const greeting = document.getElementById('greeting');
         const progressBar = document.getElementById('progressBar');
+        const speedReadToggle = document.getElementById('speedReadToggle');
+
         // Set greeting based on time and display current date
         function setGreetingAndDate() {
             const now = new Date();
@@ -453,6 +499,7 @@
 
             greeting.textContent = `${greetingText}. Welcome to The Read Board. Today is ${formattedDate}.`;
         }
+
         // Reading progress
         function updateReadingProgress() {
             const scrollTop = window.pageYOffset;
@@ -460,6 +507,7 @@
             const scrollPercent = (scrollTop / docHeight) * 100;
             progressBar.style.width = Math.min(scrollPercent, 100) + '%';
         }
+
         // Utility functions
         function timeAgo(dateString) {
             const now = new Date();
@@ -474,12 +522,42 @@
             if (days < 7) return `${days}d`;
             return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         }
+
         function estimateReadTime(text) {
             const wordsPerMinute = 200;
             const words = (text || '').split(' ').length;
             const minutes = Math.ceil(words / wordsPerMinute);
             return `${minutes} min`;
         }
+
+        /**
+         * AI (Simulated) Key Sentence Extraction:
+         * This function simulates AI by taking the first N sentences.
+         * In a real application, this would involve a backend AI service
+         * that performs natural language processing to identify and extract
+         * truly key sentences based on semantic analysis, keywords, etc.
+         */
+        function extractKeySentences(text, numSentences = 2) {
+            if (!text) return '';
+            // Basic sentence splitting (can be improved for more complex cases)
+            const sentences = text.match(/[^.!?]+[.!?]*/g) || [];
+            if (sentences.length === 0) return '';
+
+            const extracted = sentences.slice(0, numSentences).join(' ').trim();
+            if (extracted.length < text.length && sentences.length > numSentences) {
+                return `<span class="speed-read-highlight">${extracted}</span>...`;
+            }
+            return `<span class="speed-read-highlight">${extracted}</span>`;
+        }
+
+        // Toggle Speed Read Mode
+        function toggleSpeedRead() {
+            isSpeedReadMode = !isSpeedReadMode;
+            speedReadToggle.classList.toggle('active', isSpeedReadMode);
+            document.body.classList.toggle('speed-read', isSpeedReadMode); // Add class to body for global styles
+            renderArticles(); // Re-render articles to apply mode change
+        }
+
         // Fetch articles
         async function fetchArticles() {
             try {
@@ -495,6 +573,7 @@
                 throw error;
             }
         }
+
         // Create filters
         function createFilters() {
             const sources = [...new Set(articles.map(a => a.source))].sort();
@@ -517,11 +596,13 @@
                 });
             });
         }
+
         // Render articles in grid
         function renderArticles() {
             const filtered = currentFilter === 'all' 
                 ? articles 
                 : articles.filter(a => a.source === currentFilter);
+            
             if (filtered.length === 0) {
                 content.innerHTML = `
                     <div class="article-grid">
@@ -534,22 +615,30 @@
                 `;
                 return;
             }
+
             content.innerHTML = `
                 <div class="article-grid">
-                    ${filtered.map(article => `
-                        <article class="article" onclick="window.open('${article.link}', '_blank')" tabindex="0" role="button" aria-label="Read: ${article.title}">
-                            <div class="article-meta">
-                                <span class="article-source">${article.source}</span>
-                                <div class="article-separator"></div>
-                                <span class="article-time">${timeAgo(article.pubDate)}</span>
-                            </div>
-                            <h2 class="article-title">${article.title}</h2>
-                            <p class="article-description">${article.description || 'Read more for details.'}</p>
-                            <div class="read-time">${estimateReadTime(article.description || article.title)}</div>
-                        </article>
-                    `).join('')}
+                    ${filtered.map(article => {
+                        const descriptionText = isSpeedReadMode 
+                            ? extractKeySentences(article.description || article.title, 3) // Extract 3 key sentences in speed read mode
+                            : (article.description || 'Read more for details.');
+                        
+                        return `
+                            <article class="article" onclick="window.open('${article.link}', '_blank')" tabindex="0" role="button" aria-label="Read: ${article.title}">
+                                <div class="article-meta">
+                                    <span class="article-source">${article.source}</span>
+                                    <div class="article-separator"></div>
+                                    <span class="article-time">${timeAgo(article.pubDate)}</span>
+                                </div>
+                                <h2 class="article-title">${article.title}</h2>
+                                <p class="article-description">${descriptionText}</p>
+                                <div class="read-time">${estimateReadTime(isSpeedReadMode ? extractKeySentences(article.description || article.title, 3) : (article.description || article.title))}</div>
+                            </article>
+                        `;
+                    }).join('')}
                 </div>
             `;
+
             // Keyboard navigation
             document.querySelectorAll('.article').forEach(article => {
                 article.addEventListener('keydown', function(e) {
@@ -560,6 +649,7 @@
                 });
             });
         }
+
         // Refresh feed
         async function refreshFeed() {
             if (isLoading) return;
@@ -589,6 +679,7 @@
                 refreshBtn.classList.remove('loading');
             }
         }
+
         // Initialize
         setGreetingAndDate();
         refreshFeed();
