@@ -3,973 +3,592 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Read Board • Speed Brief</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>The Read Board</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* E-reader inspired palette */
-            --ink: #1a1a1a;
-            --paper: #fafaf8;
-            --paper-alt: #f5f5f0;
-            --border: #e5e5e0;
-            --dim: #787878;
-            --accent: #0066cc;
-            --highlight: #fff9e6;
+            --bg-primary: #fdfdfb;
+            --bg-secondary: #f9f9f7;
+            --bg-tertiary: #f4f4f1;
+            --surface: #ffffff;
+            --border-light: #f0f0ed;
+            --border-medium: #e8e8e3;
+            --text-primary: #2d2d2d;
+            --text-secondary: #6b6b6b;
+            --text-tertiary: #9d9d9d;
+            --text-quaternary: #bdbdbd;
+            --accent-subtle: #4a5568;
+            --accent-muted: #718096;
+            --shadow-soft: rgba(0, 0, 0, 0.02);
+            --shadow-medium: rgba(0, 0, 0, 0.04);
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
-            font-family: 'Inter', -apple-system, system-ui, sans-serif;
-            background: var(--paper);
-            color: var(--ink);
-            line-height: 1.6;
-            font-size: 15px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            font-size: 14px;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            font-weight: 400;
-            letter-spacing: -0.011em;
+            font-weight: 300;
+            letter-spacing: -0.005em;
         }
-
         .container {
-            max-width: 720px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 20px;
         }
-
-        /* Minimal header */
+        /* Compact header */
         header {
-            padding: 24px 0;
-            border-bottom: 1px solid var(--border);
+            padding: 16px 0 12px 0;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 20px;
         }
-
         .header-content {
             display: flex;
             justify-content: space-between;
-            align-items: baseline;
+            align-items: center;
         }
-
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .greeting {
+            font-size: 10px;
+            color: var(--text-quaternary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 400;
+        }
         h1 {
-            font-size: 18px;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-        }
-
-        .header-meta {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            font-size: 13px;
-            color: var(--dim);
-        }
-
-        /* Mode toggle */
-        .mode-toggle {
-            display: flex;
-            background: var(--paper-alt);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            overflow: hidden;
-            margin: 20px 0;
-        }
-
-        .mode-btn {
-            flex: 1;
-            padding: 10px 16px;
-            background: none;
-            border: none;
-            font-family: inherit;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--dim);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-
-        .mode-btn.active {
-            background: var(--ink);
-            color: var(--paper);
-        }
-
-        .mode-btn:first-child {
-            border-right: 1px solid var(--border);
-        }
-
-        /* Stats bar */
-        .stats-bar {
-            display: flex;
-            justify-content: space-between;
-            padding: 16px 0;
-            border-bottom: 1px solid var(--border);
-            font-size: 12px;
-            color: var(--dim);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .stat {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .stat-value {
-            font-weight: 600;
-            color: var(--ink);
-        }
-
-        /* Speed read content */
-        .speed-content {
-            padding: 24px 0;
-        }
-
-        .loading-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--dim);
-            font-size: 13px;
-        }
-
-        .loading-dots {
-            display: inline-block;
-            width: 60px;
-            text-align: left;
-        }
-
-        .loading-dots::after {
-            content: '...';
-            animation: dots 1.5s steps(4, end) infinite;
-        }
-
-        @keyframes dots {
-            0%, 20% { content: ''; }
-            40% { content: '.'; }
-            60% { content: '..'; }
-            80%, 100% { content: '...'; }
-        }
-
-        /* Article blocks (now deal drivers) */
-        .deal-driver-block {
-            margin-bottom: 32px;
-            padding-bottom: 32px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .deal-driver-block:last-child {
-            border-bottom: none;
-        }
-
-        .deal-driver-header {
-            display: flex;
-            align-items: baseline;
-            gap: 12px;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-        }
-
-        .deal-driver-source {
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--accent);
-        }
-
-        .deal-driver-time {
-            font-size: 11px;
-            color: var(--dim);
-        }
-
-        .deal-driver-title {
-            font-size: 17px;
-            font-weight: 600;
-            line-height: 1.3;
-            margin-bottom: 12px;
-            letter-spacing: -0.015em;
-        }
-
-        .deal-driver-title a {
-            color: var(--ink);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .deal-driver-title a:hover {
-            color: var(--accent);
-        }
-
-        /* Key points - the speed read magic */
-        .deal-driver-summary {
-            margin: 16px 0;
-            padding-left: 20px;
-            border-left: 2px solid var(--border);
-            font-size: 14px;
-            line-height: 1.5;
-            color: var(--ink);
-            position: relative;
-        }
-
-        .deal-driver-summary::before {
-            content: '→';
-            position: absolute;
-            left: -18px;
-            color: var(--dim);
-            font-size: 12px;
-        }
-
-        .highlight {
-            background: var(--highlight);
-            padding: 1px 3px;
-            border-radius: 2px;
-        }
-
-        /* Original mode */
-        .original-content {
-            display: none;
-        }
-
-        .original-content.active {
-            display: block;
-        }
-
-        .speed-content.hidden {
-            display: none;
-        }
-
-        .article-original {
-            margin-bottom: 24px;
-            padding: 20px;
-            background: var(--paper-alt);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .article-original:hover {
-            background: var(--paper);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .article-original .article-meta {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 8px;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        .article-original .article-source {
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        .article-original .article-time {
-            color: var(--dim);
-        }
-
-        .article-original .article-title {
             font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            line-height: 1.3;
-        }
-
-        .article-original .article-description {
-            font-size: 14px;
-            color: var(--dim);
-            line-height: 1.5;
-        }
-
-        /* Filter chips */
-        .filter-chips {
-            display: flex;
-            gap: 8px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-
-        .filter-chip {
-            padding: 6px 12px;
-            background: var(--paper);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            font-size: 12px;
             font-weight: 500;
-            color: var(--dim);
-            cursor: pointer;
-            transition: all 0.2s ease;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
         }
-
-        .filter-chip:hover {
-            border-color: var(--ink);
-            color: var(--ink);
+        .last-updated {
+            font-size: 10px;
+            color: var(--text-quaternary);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 400;
         }
-
-        .filter-chip.active {
-            background: var(--ink);
-            color: var(--paper);
-            border-color: var(--ink);
-        }
-
-        /* Error state */
-        .error-message {
-            background: #fff5f5;
-            border: 1px solid #ffdddd;
-            color: var(--ink);
-            padding: 12px 16px;
-            border-radius: 6px;
-            margin: 20px 0;
-            font-size: 13px;
-            text-align: center;
-        }
-
-        /* AI process button */
-        .ai-process-btn {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: var(--accent);
-            color: var(--paper);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 24px;
+        .refresh-btn {
+            background: none;
+            border: 1px solid var(--border-medium);
+            color: var(--text-tertiary);
+            padding: 6px 12px;
+            border-radius: 16px;
             cursor: pointer;
             font-family: inherit;
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 10px;
+            font-weight: 400;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
-
-        .ai-process-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 102, 204, 0.4);
+        .refresh-btn:hover {
+            background: var(--bg-secondary);
+            border-color: var(--border-medium);
+            color: var(--text-secondary);
         }
-
-        .ai-process-btn:disabled {
+        .refresh-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
-
-        .ai-process-btn.processing {
-            background: #4ade80;
+        /* Responsive filter tabs */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 20px;
+            overflow: visible;
+            -webkit-overflow-scrolling: touch;
+            padding: 4px 0 12px 0;
         }
-
-        /* Mobile adjustments */
-        @media (max-width: 640px) {
+        .filter-tab {
+            background: none;
+            border: 1px solid var(--border-medium);
+            color: var(--text-tertiary);
+            padding: 6px 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 10px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+        .filter-tab:hover {
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+        }
+        .filter-tab.active {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+            border-color: var(--border-medium);
+        }
+        /* Dense grid layout */
+        .article-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .article {
+            background: var(--surface);
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            flex-direction: column;
+            height: fit-content;
+        }
+        .article:hover {
+            box-shadow: var(--shadow-medium);
+            transform: translateY(-1px);
+            border-color: var(--border-medium);
+        }
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 9px;
+            color: var(--text-quaternary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 400;
+        }
+        .article-source {
+            color: var(--accent-muted);
+            font-weight: 500;
+        }
+        .article-separator {
+            width: 2px;
+            height: 2px;
+            background: var(--text-quaternary);
+            border-radius: 50%;
+        }
+        .article-time {
+            color: var(--text-quaternary);
+        }
+        .article-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            line-height: 1.3;
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+        .article-description {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            font-weight: 300;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex-grow: 1;
+        }
+        .read-time {
+            font-size: 8px;
+            color: var(--text-quaternary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 8px;
+            font-weight: 400;
+        }
+        /* Desktop 4-column grid */
+        @media (min-width: 1200px) {
+            .article-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+            }
+            .article {
+                padding: 20px;
+            }
+            .article-title {
+                font-size: 15px;
+                margin-bottom: 12px;
+            }
+            .article-description {
+                font-size: 13px;
+                line-height: 1.5;
+            }
+        }
+        @media (min-width: 900px) and (max-width: 1199px) {
+            .article-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 18px;
+            }
+        }
+        @media (min-width: 600px) and (max-width: 899px) {
+            .article-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+        }
+        /* Mobile: single column with wrapping filters */
+        @media (max-width: 599px) {
             .container {
                 padding: 0 16px;
             }
-            
             header {
-                padding: 20px 0;
+                padding: 12px 0 8px 0;
+                margin-bottom: 16px;
             }
-            
             .header-content {
                 flex-direction: column;
                 gap: 8px;
+                align-items: flex-start;
             }
-            
-            .mode-toggle {
-                margin: 16px 0;
+            .header-left {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
             }
-            
-            .deal-driver-title {
-                font-size: 16px;
+            .filters {
+                margin-bottom: 16px;
+                gap: 4px;
             }
-            
-            .deal-driver-summary {
+            .filter-tab {
+                padding: 5px 10px;
+                font-size: 9px;
+            }
+            .article-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .article {
+                padding: 14px;
+            }
+            .article-title {
                 font-size: 13px;
             }
-            
-            .ai-process-btn {
-                bottom: 16px;
-                right: 16px;
-                padding: 10px 16px;
+            .article-description {
                 font-size: 11px;
+                -webkit-line-clamp: 2;
+            }
+            .refresh-btn {
+                align-self: flex-end;
+                padding: 4px 8px;
+                font-size: 9px;
             }
         }
-
-        /* Print styles */
-        @media print {
-            body {
-                background: white;
-                color: black;
-            }
-            
-            .mode-toggle,
-            .ai-process-btn,
-            .filter-chips {
-                display: none !important;
-            }
-            
-            .deal-driver-block {
-                page-break-inside: avoid;
-            }
+        /* States */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-tertiary);
         }
-
-        /* Focus visible for accessibility */
-        button:focus-visible,
-        a:focus-visible {
-            outline: 2px solid var(--accent);
-            outline-offset: 2px;
+        .empty-state .icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+            opacity: 0.3;
         }
-
-        /* Business value insight */
-        .action-insight {
-            margin-top: 12px;
-            padding: 8px;
-            background: var(--highlight);
-            border-radius: 4px;
+        .empty-state h3 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+        .empty-state p {
             font-size: 12px;
-            color: var(--dim);
+            color: var(--text-tertiary);
+            font-weight: 300;
+            line-height: 1.4;
         }
-
-        /* Priority badge */
-        .category-badge {
-            color: #dc2626; /* Default for contract_opportunity */
-            font-weight: 600;
-            font-size: 10px;
+        .loading {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: var(--text-tertiary);
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.1em;
+            font-weight: 400;
         }
-        .category-badge.leadership_move { color: #2563eb; } /* Blue */
-        .category-badge.policy_update { color: #f59e0b; } /* Amber */
-        .category-badge.budget_news { color: #16a34a; } /* Green */
-        
-        /* Quick Intel and Action Items sections */
-        .digest-section {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
-        }
-
-        .digest-section h2 {
-            font-size: 18px;
-            font-weight: 600;
+        .error-message {
+            background: #fef9f9;
+            border: 1px solid #f5e6e6;
+            color: var(--text-secondary);
+            padding: 12px 16px;
+            border-radius: 8px;
             margin-bottom: 20px;
-            letter-spacing: -0.02em;
+            font-size: 12px;
+            display: none;
+            text-align: center;
+            font-weight: 300;
         }
-
-        .quick-intel-item, .action-item {
-            margin-bottom: 12px;
-            font-size: 14px;
-            line-height: 1.5;
-            color: var(--ink);
+        /* Progress indicator */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--border-light);
+            z-index: 100;
         }
-
-        .quick-intel-item strong {
-            color: var(--accent);
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-subtle), var(--accent-muted));
+            width: 0%;
+            transition: width 0.1s ease;
         }
-
-        .action-item span.priority {
-            font-weight: 600;
-            margin-right: 8px;
-            color: var(--accent);
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .article {
+            animation: fadeIn 0.4s ease forwards;
+        }
+        .article:nth-child(1) { animation-delay: 0.05s; }
+        .article:nth-child(2) { animation-delay: 0.1s; }
+        .article:nth-child(3) { animation-delay: 0.15s; }
+        .article:nth-child(4) { animation-delay: 0.2s; }
+        @keyframes gentleSpin {
+            to { transform: rotate(360deg); }
+        }
+        .refresh-btn.loading svg {
+            animation: gentleSpin 2s linear infinite;
+        }
+        /* Focus states */
+        .refresh-btn:focus,
+        .filter-tab:focus,
+        .article:focus {
+            outline: 2px solid var(--accent-muted);
+            outline-offset: 2px;
         }
     </style>
 </head>
 <body>
+    <div class="reading-progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
     <div class="container">
         <header>
             <div class="header-content">
-                <h1>Read Board</h1>
-                <div class="header-meta">
-                    <span id="articleCount">Loading</span>
-                    <span>•</span>
-                    <span id="currentTime"></span>
+                <div class="header-left">
+                    <div class="greeting" id="greeting">Good Morning</div>
+                    <h1>The Read Board</h1>
+                    <div class="last-updated" id="lastUpdated">Loading...</div>
                 </div>
+                <button class="refresh-btn" id="refreshBtn" onclick="refreshFeed()">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+                    </svg>
+                    Refresh
+                </button>
             </div>
         </header>
-
-        <div class="mode-toggle">
-            <button class="mode-btn active" id="speedBtn" onclick="toggleMode('speed')">
-                Speed Read
-            </button>
-            <button class="mode-btn" id="originalBtn" onclick="toggleMode('original')">
-                Original
-            </button>
+        <div class="filters" id="filterContainer">
+            <button class="filter-tab active" data-filter="all">All</button>
         </div>
-
-        <div class="stats-bar">
-            <div class="stat">
-                <span class="stat-value" id="totalArticles">0</span>
-                <span>articles</span>
-            </div>
-            <div class="stat">
-                <span class="stat-value" id="keyPoints">0</span>
-                <span>key points</span>
-            </div>
-            <div class="stat">
-                <span class="stat-value" id="readTime">0</span>
-                <span>min read</span>
+        <div class="error-message" id="errorMessage"></div>
+        <div id="content">
+            <div class="article-grid">
+                <div class="loading">Preparing your briefing...</div>
             </div>
         </div>
-
-        <div class="filter-chips" id="filterContainer">
-            <button class="filter-chip active" data-filter="all">All</button>
-        </div>
-
-        <div class="error-message" id="errorMessage" style="display: none;"></div>
-
-        <div class="speed-content" id="speedContent">
-            <div class="loading-state">
-                Extracting key intelligence<span class="loading-dots"></span>
-            </div>
-        </div>
-
-        <div class="original-content" id="originalContent"></div>
     </div>
-
-    <button class="ai-process-btn" id="aiProcessBtn" onclick="fetchAndRenderDigest()" title="Refresh AI Digest">
-        <span id="aiButtonText">Refresh Digest</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-        </svg>
-    </button>
-
     <script>
-        // Configuration - Using your existing infrastructure
-        const API_ENDPOINT = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
-        const S3_RAW_NEWS_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json'; // For original view fallback
-        
+        // Configuration
+        const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json';
         // State
-        let rawArticles = []; // Stores articles from daily-news.json for original view
-        let aiDigestData = null; // Stores the full AI-processed digest
+        let articles = [];
         let currentFilter = 'all';
-        let currentMode = 'speed';
-
-        // Initialize
-        async function init() {
-            updateTime();
-            setInterval(updateTime, 60000);
-            await fetchAndRenderDigest(); // Load AI digest on init
-            await loadRawArticlesForOriginalView(); // Load raw articles for original view
+        let isLoading = false;
+        // UI Elements
+        const content = document.getElementById('content');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const filterContainer = document.getElementById('filterContainer');
+        const lastUpdated = document.getElementById('lastUpdated');
+        const greeting = document.getElementById('greeting');
+        const progressBar = document.getElementById('progressBar');
+        // Set greeting based on time
+        function setGreeting() {
+            const hour = new Date().getHours();
+            let greetingText = 'Morning';
+            if (hour >= 12 && hour < 17) {
+                greetingText = 'Afternoon';
+            } else if (hour >= 17) {
+                greetingText = 'Evening';
+            }
+            greeting.textContent = greetingText;
         }
-
-        // Update time
-        function updateTime() {
+        // Reading progress
+        function updateReadingProgress() {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            progressBar.style.width = Math.min(scrollPercent, 100) + '%';
+        }
+        // Utility functions
+        function timeAgo(dateString) {
             const now = new Date();
-            const timeStr = now.toLocaleTimeString('en-US', { 
-                hour: 'numeric', 
-                minute: '2-digit',
-                hour12: true 
-            });
-            const dateStr = now.toLocaleDateString('en-US', { 
-                weekday: 'short',
-                month: 'short',
-                day: 'numeric'
-            });
-            document.getElementById('currentTime').textContent = `${dateStr} • ${timeStr}`;
+            const date = new Date(dateString);
+            const seconds = Math.floor((now - date) / 1000);
+            if (seconds < 60) return 'now';
+            const minutes = Math.floor(seconds / 60);
+            if (minutes < 60) return `${minutes}m`;
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `${hours}h`;
+            const days = Math.floor(hours / 24);
+            if (days < 7) return `${days}d`;
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         }
-
-        // Fetch and Render AI Digest
-        async function fetchAndRenderDigest() {
-            const btn = document.getElementById('aiProcessBtn');
-            const btnText = document.getElementById('aiButtonText');
-            
-            if (btn.disabled) return;
-            
-            btn.disabled = true;
-            btnText.textContent = 'Fetching AI...';
-            document.getElementById('speedContent').innerHTML = `
-                <div class="loading-state">
-                    Extracting key intelligence<span class="loading-dots"></span>
-                </div>
-            `;
-            showError(''); // Clear any previous errors
-
-            try {
-                // Request the digest from your AskArtiAPI
-                const response = await fetch(API_ENDPOINT, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ 
-                        situation: "daily digest", // Explicitly request daily digest
-                        forceType: "digest" // Force the API to respond with digest type
-                    })
-                });
-                
-                const responseData = await response.json();
-                
-                if (!response.ok || responseData.status === 'error') {
-                    console.error('API Response Error:', responseData.error || responseData.message);
-                    throw new Error(responseData.error || responseData.message || `API returned status ${response.status}`);
-                }
-                
-                aiDigestData = responseData;
-                console.log('AI Digest Data:', aiDigestData);
-
-                // Update header date for digest
-                document.getElementById('currentTime').textContent = aiDigestData.digest_date;
-
-                // Update counts based on AI digest
-                document.getElementById('totalArticles').textContent = aiDigestData.deal_drivers?.length || 0;
-                document.getElementById('keyPoints').textContent = aiDigestData.quick_intel?.length || 0; // Using quick_intel count for key points
-                document.getElementById('readTime').textContent = Math.ceil((aiDigestData.deal_drivers?.length || 0) * 0.75); // Estimate read time
-
-                createFiltersFromDigest(); // Create filters based on deal driver categories
-                renderSpeedRead(); // Render the speed read view with AI data
-
-                btn.classList.add('processing');
-                btnText.textContent = 'AI Ready';
-                
-            } catch (error) {
-                console.error('Error fetching AI digest:', error);
-                showError(`Failed to load AI digest: ${error.message}. Please try again.`);
-                
-                // Fallback to local processing if AI fails and raw articles are available
-                if (rawArticles.length > 0) {
-                    processLocally(rawArticles); // Re-process locally if AI fails
-                    renderSpeedRead();
-                    updateStats();
-                    btnText.textContent = 'Local Mode';
-                } else {
-                    document.getElementById('speedContent').innerHTML = `
-                        <div class="loading-state">
-                            No AI digest available and no raw articles to process.
-                        </div>
-                    `;
-                    btnText.textContent = 'Error';
-                }
-                btn.classList.remove('processing'); // Remove processing class on error
-            } finally {
-                btn.disabled = false;
-            }
+        function estimateReadTime(text) {
+            const wordsPerMinute = 200;
+            const words = (text || '').split(' ').length;
+            const minutes = Math.ceil(words / wordsPerMinute);
+            return `${minutes} min`;
         }
-
-        // Load raw articles for the original view
-        async function loadRawArticlesForOriginalView() {
+        // Fetch articles
+        async function fetchArticles() {
             try {
-                const response = await fetch(S3_RAW_NEWS_URL);
-                if (!response.ok) throw new Error('Failed to fetch raw articles from S3');
-                
+                const response = await fetch(S3_JSON_URL);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
-                rawArticles = data.items || [];
-                console.log('Loaded raw articles for original view:', rawArticles.length);
-                
-            } catch (error) {
-                console.error('Error loading raw articles for original view:', error);
-                // This error doesn't stop the speed read, but impacts original view
-            }
-        }
-
-        // Process articles locally (fallback if AI fails or for original view stats)
-        function processLocally(articlesToProcess) {
-            // This function is now primarily for generating local key points if AI digest isn't available
-            // or for calculating stats for the original view.
-            return articlesToProcess.map(article => ({
-                ...article,
-                keyPoints: extractKeyPoints(article),
-                priority: detectPriority(article),
-                extractionMethod: 'local'
-            }));
-        }
-
-        // Extract key points locally (for local fallback or if needed for original view stats)
-        function extractKeyPoints(article) {
-            const text = article.description || article.title;
-            const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
-            
-            const points = [];
-            const importantTerms = [
-                'billion', 'million', 'contract', 'award', 'program',
-                'acquisition', 'procurement', 'requirement', 'capability',
-                'deadline', 'RFP', 'RFI', 'sources sought', 'IDIQ',
-                'task order', 'modification', 'sole source', 'competed'
-            ];
-            
-            sentences.forEach(sentence => {
-                const cleaned = sentence.trim();
-                const hasImportantTerm = importantTerms.some(term => 
-                    cleaned.toLowerCase().includes(term)
-                );
-                
-                if (hasImportantTerm && cleaned.length > 20 && cleaned.length < 200) {
-                    points.push(cleaned);
+                if (data.summary?.timestamp) {
+                    lastUpdated.textContent = `${timeAgo(data.summary.timestamp)}`;
                 }
-            });
-            
-            if (points.length === 0) {
-                sentences.slice(0, 3).forEach(sentence => {
-                    const cleaned = sentence.trim();
-                    if (cleaned.length > 20 && cleaned.length < 200) {
-                        points.push(cleaned);
-                    }
-                });
+                return data.items || [];
+            } catch (error) {
+                console.error('Error fetching articles:', error);
+                throw error;
             }
-            
-            if (points.length === 0) {
-                points.push(article.title);
-            }
-            
-            return points.slice(0, 3);
         }
-
-        // Detect priority (for local fallback or original view stats)
-        function detectPriority(article) {
-            const text = `${article.title} ${article.description}`.toLowerCase();
-            
-            if (text.includes('billion') || 
-                text.includes('award') && text.match(/\$[\d,]+m/i) ||
-                text.includes('major') && text.includes('contract') ||
-                text.includes('urgent') || 
-                text.includes('breaking')) {
-                return 'high';
-            }
-            
-            if (text.includes('million') || 
-                text.includes('contract') || 
-                text.includes('program') ||
-                text.includes('acquisition')) {
-                return 'medium';
-            }
-            
-            return 'low';
-        }
-
-        // Create filter chips based on AI digest categories
-        function createFiltersFromDigest() {
-            const categories = [...new Set(aiDigestData.deal_drivers.map(dd => dd.type))];
-            const container = document.getElementById('filterContainer');
-            
-            container.innerHTML = `
-                <button class="filter-chip ${currentFilter === 'all' ? 'active' : ''}" 
-                        data-filter="all" onclick="setFilter('all')">
+        // Create filters
+        function createFilters() {
+            const sources = [...new Set(articles.map(a => a.source))].sort();
+            filterContainer.innerHTML = `
+                <button class="filter-tab ${currentFilter === 'all' ? 'active' : ''}" data-filter="all">
                     All
                 </button>
-                ${categories.map(category => `
-                    <button class="filter-chip ${currentFilter === category ? 'active' : ''}" 
-                            data-filter="${category}" onclick="setFilter('${category}')">
-                        ${category.replace(/_/g, ' ')}
+                ${sources.map(source => `
+                    <button class="filter-tab ${currentFilter === source ? 'active' : ''}" data-filter="${source}">
+                        ${source}
                     </button>
                 `).join('')}
             `;
-        }
-
-        // Set filter
-        function setFilter(filter) {
-            currentFilter = filter;
-            document.querySelectorAll('.filter-chip').forEach(chip => {
-                chip.classList.toggle('active', chip.dataset.filter === filter);
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    renderArticles();
+                });
             });
-            
-            if (currentMode === 'speed') {
-                renderSpeedRead();
-            } else {
-                renderOriginal();
-            }
-            updateStats();
         }
-
-        // Render speed read view using AI digest data
-        function renderSpeedRead() {
-            const container = document.getElementById('speedContent');
-            if (!aiDigestData || !aiDigestData.deal_drivers) {
-                container.innerHTML = '<div class="loading-state">No AI digest data available.</div>';
-                return;
-            }
-
-            const filteredDealDrivers = currentFilter === 'all' 
-                ? aiDigestData.deal_drivers 
-                : aiDigestData.deal_drivers.filter(dd => dd.type === currentFilter);
-            
-            if (filteredDealDrivers.length === 0) {
-                container.innerHTML = '<div class="loading-state">No deal drivers found for this filter.</div>';
-                return;
-            }
-            
-            let htmlContent = `
-                <p class="deal-driver-summary" style="border-left: none; padding-left: 0;">
-                    <strong>Key Intelligence:</strong> ${aiDigestData.key_intelligence || 'N/A'}
-                </p>
-            `;
-
-            htmlContent += filteredDealDrivers.map(driver => {
-                const categoryBadgeClass = driver.type ? `category-badge ${driver.type}` : 'category-badge';
-                return `
-                <div class="deal-driver-block">
-                    <div class="deal-driver-header">
-                        <span class="deal-driver-source">${driver.source || 'N/A'}</span>
-                        <span class="${categoryBadgeClass}">${driver.type ? driver.type.replace(/_/g, ' ').toUpperCase() : 'N/A'}</span>
-                        <span class="deal-driver-time">${timeAgo(aiDigestData.digest_date)}</span>
-                    </div>
-                    <h2 class="deal-driver-title">
-                        <a href="${driver.link}" target="_blank">${driver.headline}</a>
-                    </h2>
-                    <div class="deal-driver-summary">
-                        ${highlightKeyTerms(driver.summary)}
-                    </div>
-                    ${driver.action_insight ? 
-                        `<div class="action-insight">💡 ${driver.action_insight}</div>` : ''
-                    }
-                </div>
-            `}).join('');
-
-            // Add Quick Intel section
-            if (aiDigestData.quick_intel && aiDigestData.quick_intel.length > 0) {
-                htmlContent += `
-                    <div class="digest-section">
-                        <h2>Quick Intel</h2>
-                        ${aiDigestData.quick_intel.map(intel => `
-                            <div class="quick-intel-item">
-                                <strong>${intel.category || 'Insight'}:</strong> ${intel.insight}
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            }
-
-            // Add Action Items section
-            if (aiDigestData.action_items && aiDigestData.action_items.length > 0) {
-                htmlContent += `
-                    <div class="digest-section">
-                        <h2>Your Moves Today</h2>
-                        ${aiDigestData.action_items.map(item => `
-                            <div class="action-item">
-                                <span class="priority">${item.priority}.</span> ${item.action} (${item.why})
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            }
-            
-            container.innerHTML = htmlContent;
-        }
-
-        // Render original view using rawArticles data
-        function renderOriginal() {
+        // Render articles in grid
+        function renderArticles() {
             const filtered = currentFilter === 'all' 
-                ? rawArticles 
-                : rawArticles.filter(a => a.source === currentFilter); // Note: filter by source not category for raw
-            
-            const container = document.getElementById('originalContent');
-            
+                ? articles 
+                : articles.filter(a => a.source === currentFilter);
             if (filtered.length === 0) {
-                container.innerHTML = '<div class="loading-state">No original articles found.</div>';
+                content.innerHTML = `
+                    <div class="article-grid">
+                        <div class="empty-state">
+                            <div class="icon">📋</div>
+                            <h3>No articles</h3>
+                            <p>No updates from this source. Try another filter or refresh.</p>
+                        </div>
+                    </div>
+                `;
                 return;
             }
-            
-            container.innerHTML = filtered.map(article => `
-                <div class="article-original" onclick="window.open('${article.link}', '_blank')">
-                    <div class="article-meta">
-                        <span class="article-source">${article.source}</span>
-                        <span class="article-time">${timeAgo(article.pubDate)}</span>
-                    </div>
-                    <div class="article-title">${article.title}</div>
-                    <div class="article-description">
-                        ${article.description || 'Click to read full article'}
-                    </div>
+            content.innerHTML = `
+                <div class="article-grid">
+                    ${filtered.map(article => `
+                        <article class="article" onclick="window.open('${article.link}', '_blank')" tabindex="0" role="button" aria-label="Read: ${article.title}">
+                            <div class="article-meta">
+                                <span class="article-source">${article.source}</span>
+                                <div class="article-separator"></div>
+                                <span class="article-time">${timeAgo(article.pubDate)}</span>
+                            </div>
+                            <h2 class="article-title">${article.title}</h2>
+                            <p class="article-description">${article.description || 'Read more for details.'}</p>
+                            <div class="read-time">${estimateReadTime(article.description || article.title)}</div>
+                        </article>
+                    `).join('')}
                 </div>
-            `).join('');
-        }
-
-        // Highlight key terms (for speed read view)
-        function highlightKeyTerms(text) {
-            const keyTerms = [
-                'contract', 'award', 'billion', 'million', 'program', 
-                'system', 'acquisition', 'procurement', 'RFP', 'RFI',
-                'policy', 'budget', 'leadership', 'move'
-            ];
-            let highlighted = text;
-            
-            keyTerms.forEach(term => {
-                const regex = new RegExp(`\\b(${term}s?)\\b`, 'gi');
-                highlighted = highlighted.replace(regex, '<span class="highlight">$1</span>');
+            `;
+            // Keyboard navigation
+            document.querySelectorAll('.article').forEach(article => {
+                article.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
             });
-            
-            return highlighted;
         }
-
-        // Toggle mode
-        function toggleMode(mode) {
-            currentMode = mode;
-            
-            document.getElementById('speedBtn').classList.toggle('active', mode === 'speed');
-            document.getElementById('originalBtn').classList.toggle('active', mode === 'original');
-            
-            document.getElementById('speedContent').classList.toggle('hidden', mode !== 'speed');
-            document.getElementById('originalContent').classList.toggle('active', mode === 'original');
-            
-            if (mode === 'speed') {
-                renderSpeedRead();
-            } else {
-                renderOriginal();
+        // Refresh feed
+        async function refreshFeed() {
+            if (isLoading) return;
+            isLoading = true;
+            refreshBtn.disabled = true;
+            refreshBtn.classList.add('loading');
+            errorMessage.style.display = 'none';
+            try {
+                articles = await fetchArticles();
+                createFilters();
+                renderArticles();
+            } catch (error) {
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = 'Unable to refresh. Try again.';
+                content.innerHTML = `
+                    <div class="article-grid">
+                        <div class="empty-state">
+                            <div class="icon">📡</div>
+                            <h3>Connection Issue</h3>
+                            <p>Having trouble reaching sources. Try refreshing.</p>
+                        </div>
+                    </div>
+                `;
+            } finally {
+                isLoading = false;
+                refreshBtn.disabled = false;
+                refreshBtn.classList.remove('loading');
             }
-            
-            updateStats();
         }
-
-        // Update statistics
-        function updateStats() {
-            let totalArticles = 0;
-            let totalKeyPoints = 0;
-            let avgReadTime = 0;
-
-            if (currentMode === 'speed' && aiDigestData && aiDigestData.deal_drivers) {
-                const filtered = currentFilter === 'all' 
-                    ? aiDigestData.deal_drivers 
-                    : aiDigestData.deal_drivers.filter(dd => dd.type === currentFilter);
-                
-                totalArticles = filtered.length;
-                totalKeyPoints = filtered.reduce((sum, dd) => sum + (dd.summary?.split(' ').length / 10 || 0), 0); // Estimate key points from summary length
-                totalKeyPoints += (aiDigestData.quick_intel?.length || 0); // Add quick intel as key points
-                totalKeyPoints += (aiDigestData.action_items?.length || 0); // Add action items as key points
-                avgReadTime = Math.ceil(totalKeyPoints * 0.5); // ~30 seconds per "key point"
-            } else if (currentMode === 'original' && rawArticles.length > 0) {
-                const filtered = currentFilter === 'all' 
-                    ? rawArticles 
-                    : rawArticles.filter(a => a.source === currentFilter);
-                
-                totalArticles = filtered.length;
-                // For original view, estimate key points from description length
-                totalKeyPoints = filtered.reduce((sum, a) => sum + (a.description?.split(' ').length / 10 || 0), 0);
-                avgReadTime = Math.ceil(totalKeyPoints * 0.5);
-            }
-            
-            document.getElementById('totalArticles').textContent = totalArticles;
-            document.getElementById('keyPoints').textContent = Math.round(totalKeyPoints);
-            document.getElementById('readTime').textContent = avgReadTime;
-        }
-
-        // Time ago helper
-        function timeAgo(dateString) {
-            const date = new Date(dateString);
-            const now = new Date();
-            const seconds = Math.floor((now - date) / 1000);
-            
-            if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-            if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-            if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        }
-
-        // Show error
-        function showError(message) {
-            const errorEl = document.getElementById('errorMessage');
-            errorEl.textContent = message;
-            errorEl.style.display = 'block';
-            setTimeout(() => {
-                errorEl.style.display = 'none';
-            }, 5000);
-        }
-
-        // Start the app
-        init();
+        // Initialize
+        setGreeting();
+        refreshFeed();
+        window.addEventListener('scroll', updateReadingProgress);
+        setInterval(setGreeting, 3600000);
     </script>
 </body>
 </html>
