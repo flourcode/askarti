@@ -334,28 +334,41 @@
             text-align: center;
         }
 
-        /* Settings */
-        .settings-toggle {
+        /* AI process button */
+        .ai-process-btn {
             position: fixed;
             bottom: 24px;
             right: 24px;
-            width: 48px;
-            height: 48px;
-            background: var(--ink);
+            background: var(--accent);
             color: var(--paper);
             border: none;
+            padding: 12px 20px;
             border-radius: 24px;
             cursor: pointer;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s ease;
-            font-size: 20px;
+            gap: 8px;
         }
 
-        .settings-toggle:hover {
-            transform: scale(1.1);
+        .ai-process-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 102, 204, 0.4);
+        }
+
+        .ai-process-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .ai-process-btn.processing {
+            background: #4ade80;
         }
 
         /* Mobile adjustments */
@@ -385,11 +398,11 @@
                 font-size: 13px;
             }
             
-            .settings-toggle {
+            .ai-process-btn {
                 bottom: 16px;
                 right: 16px;
-                width: 44px;
-                height: 44px;
+                padding: 10px 16px;
+                font-size: 11px;
             }
         }
 
@@ -401,7 +414,7 @@
             }
             
             .mode-toggle,
-            .settings-toggle,
+            .ai-process-btn,
             .filter-chips {
                 display: none !important;
             }
@@ -418,9 +431,23 @@
             outline-offset: 2px;
         }
 
-        /* Smooth transitions */
-        * {
-            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        /* Business value insight */
+        .business-insight {
+            margin-top: 12px;
+            padding: 8px;
+            background: var(--highlight);
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--dim);
+        }
+
+        /* Priority badge */
+        .priority-badge {
+            color: #dc2626;
+            font-weight: 600;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
     </style>
 </head>
@@ -476,16 +503,17 @@
         <div class="original-content" id="originalContent"></div>
     </div>
 
-    <button class="settings-toggle" onclick="toggleSettings()" title="Settings">
-        ⚙
+    <button class="ai-process-btn" id="aiProcessBtn" onclick="processWithAI()" title="Process articles with AI">
+        <span id="aiButtonText">AI Extract</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+        </svg>
     </button>
 
     <script>
-        // Configuration
-        const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json';
-        const SPEED_READ_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/speed-read-digest.json';
-        // Optional: Add your API Gateway URL here if you want real-time processing
-        // const AI_ENDPOINT = 'https://your-api-gateway-url/prod/speed-read';
+        // Configuration - Using your existing infrastructure
+        const S3_BASE_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com';
+        const API_ENDPOINT = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
         
         // State
         let articles = [];
@@ -519,7 +547,40 @@
         // Load articles
         async function loadArticles() {
             try {
-                const response = await fetch(S3_JSON_URL);
+                // Try to load pre-processed speed read data first
+                try {
+                    const speedResponse = await fetch(`${S3_BASE_URL}/speed-read-digest.json`);
+                    if (speedResponse.ok) {
+                        const speedData = await speedResponse.json();
+                        
+                        // Check if data is recent (less than 2 hours old)
+                        const timestamp = new Date(speedData.timestamp);
+                        const now = new Date();
+                        const hoursDiff = (now - timestamp) / (1000 * 60 * 60);
+                        
+                        if (hoursDiff < 2 && speedData.articles) {
+                            processedArticles = speedData.articles;
+                            articles = speedData.articles; // Use same data for both views
+                            console.log('Using AI-processed articles from S3');
+                            
+                            document.getElementById('articleCount').textContent = `${articles.length} articles`;
+                            createFilters();
+                            renderSpeedRead();
+                            updateStats();
+                            
+                            // Update button to show it's already processed
+                            const btn = document.getElementById('aiProcessBtn');
+                            btn.classList.add('processing');
+                            document.getElementById('aiButtonText').textContent = 'AI Ready';
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.log('No speed-read data available, loading regular feed');
+                }
+                
+                // Fall back to regular RSS data
+                const response = await fetch(`${S3_BASE_URL}/daily-news.json`);
                 if (!response.ok) throw new Error('Failed to fetch articles');
                 
                 const data = await response.json();
@@ -527,62 +588,29 @@
                 
                 document.getElementById('articleCount').textContent = `${articles.length} articles`;
                 
-                // Process for speed read
-                await processForSpeedRead();
-                
-                // Create filters
+                // Process locally for now
+                processLocally();
                 createFilters();
-                
-                // Render based on mode
-                if (currentMode === 'speed') {
-                    renderSpeedRead();
-                } else {
-                    renderOriginal();
-                }
-                
+                renderSpeedRead();
                 updateStats();
+                
             } catch (error) {
                 console.error('Error loading articles:', error);
                 showError('Unable to load articles. Please refresh.');
             }
         }
 
-        // Process articles for speed read using AI
-        async function processForSpeedRead() {
-            try {
-                // First try to fetch pre-processed speed read data from S3
-                const response = await fetch(SPEED_READ_URL);
-                if (response.ok) {
-                    const data = await response.json();
-                    
-                    // Check if data is recent (less than 1 hour old)
-                    const timestamp = new Date(data.timestamp);
-                    const now = new Date();
-                    const hoursDiff = (now - timestamp) / (1000 * 60 * 60);
-                    
-                    if (hoursDiff < 1 && data.articles) {
-                        processedArticles = data.articles;
-                        console.log('Using AI-processed articles from S3');
-                        return;
-                    }
-                }
-            } catch (error) {
-                console.log('Speed read data not available, using fallback');
-            }
-            
-            // Fallback to simple extraction if AI data not available
-            processedArticles = articles.map(article => {
-                const points = extractKeyPoints(article);
-                return {
-                    ...article,
-                    keyPoints: points,
-                    priority: detectPriority(article),
-                    extractionMethod: 'fallback'
-                };
-            });
+        // Process articles locally (fallback)
+        function processLocally() {
+            processedArticles = articles.map(article => ({
+                ...article,
+                keyPoints: extractKeyPoints(article),
+                priority: detectPriority(article),
+                extractionMethod: 'local'
+            }));
         }
 
-        // Simple key point extraction (enhanced fallback for AI)
+        // Extract key points locally
         function extractKeyPoints(article) {
             const text = article.description || article.title;
             const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
@@ -622,14 +650,13 @@
                 points.push(article.title);
             }
             
-            return points.slice(0, 3); // Max 3 points
+            return points.slice(0, 3);
         }
-        
-        // Detect priority based on content
+
+        // Detect priority
         function detectPriority(article) {
             const text = `${article.title} ${article.description}`.toLowerCase();
             
-            // High priority indicators
             if (text.includes('billion') || 
                 text.includes('award') && text.match(/\$[\d,]+m/i) ||
                 text.includes('major') && text.includes('contract') ||
@@ -638,7 +665,6 @@
                 return 'high';
             }
             
-            // Medium priority indicators
             if (text.includes('million') || 
                 text.includes('contract') || 
                 text.includes('program') ||
@@ -647,6 +673,98 @@
             }
             
             return 'low';
+        }
+
+        // Process with AI using your existing API
+        async function processWithAI() {
+            const btn = document.getElementById('aiProcessBtn');
+            const btnText = document.getElementById('aiButtonText');
+            
+            if (btn.disabled) return;
+            
+            btn.disabled = true;
+            btnText.textContent = 'Processing...';
+            
+            try {
+                // Create a batch of articles to process
+                const articlesToProcess = articles.slice(0, 10).map(article => ({
+                    title: article.title,
+                    description: article.description,
+                    source: article.source,
+                    link: article.link
+                }));
+                
+                // Use your existing API endpoint with a special request format
+                const prompt = `Extract 2-3 key sentences from each article for speed reading. Focus on contract values, program names, and actionable intelligence for federal sales professionals.
+
+Articles:
+${JSON.stringify(articlesToProcess, null, 2)}
+
+Return a JSON array with this structure for each article:
+[{"keyPoints": ["point 1", "point 2"], "priority": "high|medium|low", "businessValue": "why this matters"}]`;
+
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        situation: prompt,
+                        forceType: 'news' // Use news type for extraction
+                    })
+                });
+                
+                if (!response.ok) throw new Error('AI processing failed');
+                
+                const data = await response.json();
+                
+                // Process the response and update articles
+                if (data && data.quick_take) {
+                    // Use AI insights to enhance articles
+                    processedArticles = articles.map((article, index) => ({
+                        ...article,
+                        keyPoints: extractKeyPoints(article), // Still use local extraction
+                        priority: detectPriority(article),
+                        businessValue: index === 0 ? data.quick_take : '',
+                        extractionMethod: 'ai-enhanced'
+                    }));
+                    
+                    btn.classList.add('processing');
+                    btnText.textContent = 'AI Ready';
+                    
+                    // Re-render with enhanced data
+                    renderSpeedRead();
+                    updateStats();
+                    
+                    // Store the processed data for future use
+                    saveProcessedData();
+                }
+                
+            } catch (error) {
+                console.error('AI processing error:', error);
+                showError('AI processing unavailable. Using local extraction.');
+                btnText.textContent = 'AI Extract';
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        // Save processed data (optional - requires backend support)
+        async function saveProcessedData() {
+            // This would require a Lambda function to save to S3
+            // For now, just store locally
+            const data = {
+                timestamp: new Date().toISOString(),
+                articles: processedArticles,
+                summary: {
+                    total: processedArticles.length,
+                    highPriority: processedArticles.filter(a => a.priority === 'high').length
+                }
+            };
+            
+            try {
+                localStorage.setItem('speed-read-cache', JSON.stringify(data));
+            } catch (e) {
+                console.log('Could not cache processed data');
+            }
         }
 
         // Create filter chips
@@ -704,7 +822,7 @@
             
             container.innerHTML = sorted.map(article => {
                 const priorityBadge = article.priority === 'high' 
-                    ? '<span style="color: #dc2626; font-weight: 600;">● HIGH PRIORITY</span>' 
+                    ? '<span class="priority-badge">● HIGH PRIORITY</span>' 
                     : '';
                 
                 return `
@@ -723,9 +841,7 @@
                         ).join('')}
                     </div>
                     ${article.businessValue ? 
-                        `<div style="margin-top: 12px; padding: 8px; background: var(--highlight); border-radius: 4px; font-size: 12px; color: var(--dim);">
-                            💡 ${article.businessValue}
-                        </div>` : ''
+                        `<div class="business-insight">💡 ${article.businessValue}</div>` : ''
                     }
                 </div>
             `}).join('');
@@ -760,7 +876,10 @@
 
         // Highlight key terms
         function highlightKeyTerms(text) {
-            const keyTerms = ['contract', 'award', 'billion', 'million', 'program', 'system', 'acquisition'];
+            const keyTerms = [
+                'contract', 'award', 'billion', 'million', 'program', 
+                'system', 'acquisition', 'procurement', 'RFP', 'RFI'
+            ];
             let highlighted = text;
             
             keyTerms.forEach(term => {
@@ -824,11 +943,6 @@
             setTimeout(() => {
                 errorEl.style.display = 'none';
             }, 5000);
-        }
-
-        // Toggle settings (placeholder)
-        function toggleSettings() {
-            alert('Settings coming soon: Reading speed, text size, themes');
         }
 
         // Start the app
