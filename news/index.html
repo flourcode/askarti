@@ -675,7 +675,7 @@
             return 'low';
         }
 
-        // Process with AI using your existing API
+        // Process with AI using your existing API - FIXED VERSION
         async function processWithAI() {
             const btn = document.getElementById('aiProcessBtn');
             const btnText = document.getElementById('aiButtonText');
@@ -686,62 +686,94 @@
             btnText.textContent = 'Processing...';
             
             try {
-                // Create a batch of articles to process
-                const articlesToProcess = articles.slice(0, 10).map(article => ({
-                    title: article.title,
-                    description: article.description,
-                    source: article.source,
-                    link: article.link
-                }));
+                // Take the first 5 articles and create a news summary request
+                const topArticles = articles.slice(0, 5);
                 
-                // Use your existing API endpoint with a special request format
-                const prompt = `Extract 2-3 key sentences from each article for speed reading. Focus on contract values, program names, and actionable intelligence for federal sales professionals.
-
-Articles:
-${JSON.stringify(articlesToProcess, null, 2)}
-
-Return a JSON array with this structure for each article:
-[{"keyPoints": ["point 1", "point 2"], "priority": "high|medium|low", "businessValue": "why this matters"}]`;
-
+                // Format as a news digest that your API already understands
+                const newsText = topArticles.map(article => 
+                    `${article.title}\n${article.description || ''}\nSource: ${article.source}`
+                ).join('\n\n---\n\n');
+                
+                // Use the digest format your API already handles
                 const response = await fetch(API_ENDPOINT, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
-                        situation: prompt,
-                        forceType: 'news' // Use news type for extraction
+                        situation: newsText,
+                        forceType: 'news'
                     })
                 });
                 
-                if (!response.ok) throw new Error('AI processing failed');
+                if (!response.ok) {
+                    console.error('API Response not OK:', response.status);
+                    throw new Error(`API returned ${response.status}`);
+                }
                 
                 const data = await response.json();
+                console.log('AI Response received:', data);
                 
-                // Process the response and update articles
-                if (data && data.quick_take) {
-                    // Use AI insights to enhance articles
-                    processedArticles = articles.map((article, index) => ({
-                        ...article,
-                        keyPoints: extractKeyPoints(article), // Still use local extraction
-                        priority: detectPriority(article),
-                        businessValue: index === 0 ? data.quick_take : '',
-                        extractionMethod: 'ai-enhanced'
-                    }));
+                // Extract insights from the news analysis response
+                if (data && data.response_type === 'news') {
+                    // Enhanced processing using AI insights
+                    processedArticles = articles.map((article, index) => {
+                        const basePoints = extractKeyPoints(article);
+                        
+                        // Enhance first few articles with AI insights
+                        let enhancedPoints = basePoints;
+                        let businessValue = '';
+                        
+                        if (index === 0 && data.quick_take) {
+                            businessValue = data.quick_take.substring(0, 150);
+                        }
+                        
+                        // Use discovery questions as enhanced key points for top articles
+                        if (index < 3 && data.suggested_discovery_questions && data.suggested_discovery_questions[index]) {
+                            enhancedPoints = [
+                                basePoints[0] || article.title,
+                                data.suggested_discovery_questions[index]
+                            ];
+                        }
+                        
+                        return {
+                            ...article,
+                            keyPoints: enhancedPoints,
+                            priority: detectPriority(article),
+                            businessValue: businessValue,
+                            extractionMethod: index < 5 ? 'ai-enhanced' : 'local'
+                        };
+                    });
                     
                     btn.classList.add('processing');
-                    btnText.textContent = 'AI Ready';
+                    btnText.textContent = 'AI Enhanced';
                     
                     // Re-render with enhanced data
                     renderSpeedRead();
                     updateStats();
                     
-                    // Store the processed data for future use
+                    // Store the processed data
                     saveProcessedData();
+                    
+                } else if (data && data.error) {
+                    console.error('API returned error:', data.error);
+                    throw new Error(data.error);
+                } else {
+                    console.log('Unexpected API response format:', data);
+                    throw new Error('Unexpected response format');
                 }
                 
             } catch (error) {
                 console.error('AI processing error:', error);
-                showError('AI processing unavailable. Using local extraction.');
-                btnText.textContent = 'AI Extract';
+                
+                // Just use local extraction without showing error
+                processLocally();
+                renderSpeedRead();
+                updateStats();
+                
+                btnText.textContent = 'Local Mode';
+                btn.classList.add('processing');
+                
+                // Don't show error message - gracefully fall back
+                console.log('Falling back to local extraction');
             } finally {
                 btn.disabled = false;
             }
