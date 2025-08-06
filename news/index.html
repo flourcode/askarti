@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Federal Intel • Morning Brief</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Source+Serif+Pro:wght@400;500&display=swap" rel="stylesheet">
+    <title>Read Board</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #fdfdfb;
@@ -33,7 +33,7 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
-            line-height: 1.6;
+            line-height: 1.5;
             font-size: 14px;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -42,42 +42,43 @@
         }
 
         .container {
-            max-width: 680px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 20px;
         }
 
-        /* Header with morning greeting */
+        /* Compact header */
         header {
-            padding: 40px 0 32px 0;
-            text-align: center;
+            padding: 16px 0 12px 0;
             border-bottom: 1px solid var(--border-light);
-            margin-bottom: 40px;
+            margin-bottom: 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .greeting {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-quaternary);
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            margin-bottom: 8px;
             font-weight: 400;
         }
 
         h1 {
-            font-family: 'Source Serif Pro', Georgia, serif;
-            font-size: 28px;
-            font-weight: 400;
+            font-size: 16px;
+            font-weight: 500;
             color: var(--text-primary);
-            letter-spacing: -0.02em;
-            margin-bottom: 12px;
-        }
-
-        .subtitle {
-            font-size: 13px;
-            color: var(--text-tertiary);
-            font-weight: 300;
-            margin-bottom: 24px;
+            letter-spacing: -0.01em;
         }
 
         .last-updated {
@@ -88,29 +89,22 @@
             font-weight: 400;
         }
 
-        /* Minimal controls */
-        .controls {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 40px;
-        }
-
         .refresh-btn {
             background: none;
             border: 1px solid var(--border-medium);
             color: var(--text-tertiary);
-            padding: 8px 16px;
-            border-radius: 20px;
+            padding: 6px 12px;
+            border-radius: 16px;
             cursor: pointer;
             font-family: inherit;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 400;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .refresh-btn:hover {
@@ -124,32 +118,32 @@
             cursor: not-allowed;
         }
 
-        /* Gentle filter tabs */
+        /* Responsive filter tabs */
         .filters {
             display: flex;
-            gap: 0;
-            margin-bottom: 40px;
-            justify-content: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 20px;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            padding: 0 0 8px 0;
+            padding-bottom: 8px;
         }
 
         .filter-tab {
             background: none;
-            border: none;
+            border: 1px solid var(--border-medium);
             color: var(--text-tertiary);
-            padding: 10px 20px;
+            padding: 6px 12px;
             cursor: pointer;
             font-family: inherit;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 400;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.08em;
             white-space: nowrap;
             transition: all 0.3s ease;
-            border-radius: 16px;
-            position: relative;
+            border-radius: 12px;
+            flex-shrink: 0;
         }
 
         .filter-tab:hover {
@@ -160,23 +154,27 @@
         .filter-tab.active {
             color: var(--text-primary);
             background: var(--bg-tertiary);
+            border-color: var(--border-medium);
         }
 
-        /* Calm article layout */
-        .article-list {
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
+        /* Dense grid layout */
+        .article-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
         }
 
         .article {
             background: var(--surface);
-            padding: 32px;
+            padding: 16px;
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.3s ease;
             border: 1px solid var(--border-light);
-            border-radius: 12px;
+            border-radius: 8px;
             box-shadow: var(--shadow-soft);
+            display: flex;
+            flex-direction: column;
+            height: fit-content;
         }
 
         .article:hover {
@@ -188,9 +186,9 @@
         .article-meta {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-            font-size: 10px;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 9px;
             color: var(--text-quaternary);
             text-transform: uppercase;
             letter-spacing: 0.08em;
@@ -214,69 +212,163 @@
         }
 
         .article-title {
-            font-family: 'Source Serif Pro', Georgia, serif;
-            font-size: 20px;
-            font-weight: 400;
+            font-size: 14px;
+            font-weight: 500;
             color: var(--text-primary);
-            line-height: 1.4;
-            margin-bottom: 16px;
+            line-height: 1.3;
+            margin-bottom: 8px;
             letter-spacing: -0.01em;
         }
 
         .article-description {
-            font-size: 14px;
+            font-size: 12px;
             color: var(--text-secondary);
-            line-height: 1.6;
+            line-height: 1.4;
             font-weight: 300;
             display: -webkit-box;
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            flex-grow: 1;
         }
 
-        /* Reading indicator */
         .read-time {
-            font-size: 9px;
+            font-size: 8px;
             color: var(--text-quaternary);
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            margin-top: 16px;
+            margin-top: 8px;
             font-weight: 400;
         }
 
-        /* Gentle states */
+        /* Desktop 4-column grid */
+        @media (min-width: 1200px) {
+            .article-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+            }
+            
+            .article {
+                padding: 20px;
+            }
+            
+            .article-title {
+                font-size: 15px;
+                margin-bottom: 12px;
+            }
+            
+            .article-description {
+                font-size: 13px;
+                line-height: 1.5;
+            }
+        }
+
+        @media (min-width: 900px) and (max-width: 1199px) {
+            .article-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 18px;
+            }
+        }
+
+        @media (min-width: 600px) and (max-width: 899px) {
+            .article-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+        }
+
+        /* Mobile: single column with wrapping filters */
+        @media (max-width: 599px) {
+            .container {
+                padding: 0 16px;
+            }
+            
+            header {
+                padding: 12px 0 8px 0;
+                margin-bottom: 16px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
+            }
+            
+            .header-left {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            
+            .filters {
+                margin-bottom: 16px;
+                gap: 4px;
+            }
+            
+            .filter-tab {
+                padding: 5px 10px;
+                font-size: 9px;
+            }
+            
+            .article-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .article {
+                padding: 14px;
+            }
+            
+            .article-title {
+                font-size: 13px;
+            }
+            
+            .article-description {
+                font-size: 11px;
+                -webkit-line-clamp: 2;
+            }
+            
+            .refresh-btn {
+                align-self: flex-end;
+                padding: 4px 8px;
+                font-size: 9px;
+            }
+        }
+
+        /* States */
         .empty-state {
+            grid-column: 1 / -1;
             text-align: center;
-            padding: 120px 20px;
+            padding: 60px 20px;
             color: var(--text-tertiary);
         }
 
         .empty-state .icon {
-            font-size: 48px;
-            margin-bottom: 24px;
+            font-size: 32px;
+            margin-bottom: 16px;
             opacity: 0.3;
         }
 
         .empty-state h3 {
-            font-family: 'Source Serif Pro', Georgia, serif;
-            font-size: 18px;
-            font-weight: 400;
-            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
             color: var(--text-secondary);
         }
 
         .empty-state p {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-tertiary);
             font-weight: 300;
-            line-height: 1.5;
+            line-height: 1.4;
         }
 
         .loading {
+            grid-column: 1 / -1;
             text-align: center;
-            padding: 80px;
+            padding: 40px;
             color: var(--text-tertiary);
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             font-weight: 400;
@@ -286,10 +378,10 @@
             background: #fef9f9;
             border: 1px solid #f5e6e6;
             color: var(--text-secondary);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 32px;
-            font-size: 13px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 12px;
             display: none;
             text-align: center;
             font-weight: 300;
@@ -313,56 +405,16 @@
             transition: width 0.1s ease;
         }
 
-        /* Smooth scroll behavior */
+        /* Smooth scroll */
         html {
             scroll-behavior: smooth;
         }
 
-        /* Mobile optimizations */
-        @media (max-width: 680px) {
-            .container {
-                padding: 0 20px;
-            }
-            
-            header {
-                padding: 32px 0 24px 0;
-                margin-bottom: 32px;
-            }
-            
-            h1 {
-                font-size: 24px;
-            }
-            
-            .article {
-                padding: 24px 20px;
-                border-radius: 8px;
-            }
-            
-            .article-title {
-                font-size: 18px;
-            }
-            
-            .article-list {
-                gap: 24px;
-            }
-            
-            .filters {
-                margin-bottom: 32px;
-                justify-content: flex-start;
-                padding-left: 0;
-            }
-            
-            .filter-tab {
-                padding: 8px 16px;
-                font-size: 10px;
-            }
-        }
-
-        /* Ultra-smooth animations */
+        /* Animations */
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(10px);
             }
             to {
                 opacity: 1;
@@ -371,14 +423,13 @@
         }
 
         .article {
-            animation: fadeIn 0.6s ease forwards;
+            animation: fadeIn 0.4s ease forwards;
         }
 
-        .article:nth-child(1) { animation-delay: 0.1s; }
-        .article:nth-child(2) { animation-delay: 0.15s; }
-        .article:nth-child(3) { animation-delay: 0.2s; }
-        .article:nth-child(4) { animation-delay: 0.25s; }
-        .article:nth-child(5) { animation-delay: 0.3s; }
+        .article:nth-child(1) { animation-delay: 0.05s; }
+        .article:nth-child(2) { animation-delay: 0.1s; }
+        .article:nth-child(3) { animation-delay: 0.15s; }
+        .article:nth-child(4) { animation-delay: 0.2s; }
 
         @keyframes gentleSpin {
             to { transform: rotate(360deg); }
@@ -388,7 +439,7 @@
             animation: gentleSpin 2s linear infinite;
         }
 
-        /* Focus states for accessibility */
+        /* Focus states */
         .refresh-btn:focus,
         .filter-tab:focus,
         .article:focus {
@@ -404,29 +455,31 @@
 
     <div class="container">
         <header>
-            <div class="greeting" id="greeting">Good Morning</div>
-            <h1>Federal Intelligence Brief</h1>
-            <div class="subtitle">Your daily digest of federal developments</div>
-            <div class="last-updated" id="lastUpdated">Loading...</div>
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="greeting" id="greeting">Good Morning</div>
+                    <h1>Federal Intel</h1>
+                    <div class="last-updated" id="lastUpdated">Loading...</div>
+                </div>
+                <button class="refresh-btn" id="refreshBtn" onclick="refreshFeed()">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+                    </svg>
+                    Refresh
+                </button>
+            </div>
         </header>
 
-        <div class="controls">
-            <button class="refresh-btn" id="refreshBtn" onclick="refreshFeed()">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
-                </svg>
-                Refresh
-            </button>
-        </div>
-
         <div class="filters" id="filterContainer">
-            <button class="filter-tab active" data-filter="all">All Sources</button>
+            <button class="filter-tab active" data-filter="all">All</button>
         </div>
 
         <div class="error-message" id="errorMessage"></div>
 
         <div id="content">
-            <div class="loading">Preparing your briefing...</div>
+            <div class="article-grid">
+                <div class="loading">Preparing your briefing...</div>
+            </div>
         </div>
     </div>
 
@@ -451,12 +504,12 @@
         // Set greeting based on time
         function setGreeting() {
             const hour = new Date().getHours();
-            let greetingText = 'Good Morning';
+            let greetingText = 'Morning';
             
             if (hour >= 12 && hour < 17) {
-                greetingText = 'Good Afternoon';
+                greetingText = 'Afternoon';
             } else if (hour >= 17) {
-                greetingText = 'Good Evening';
+                greetingText = 'Evening';
             }
             
             greeting.textContent = greetingText;
@@ -476,21 +529,21 @@
             const date = new Date(dateString);
             const seconds = Math.floor((now - date) / 1000);
             
-            if (seconds < 60) return 'moments ago';
+            if (seconds < 60) return 'now';
             const minutes = Math.floor(seconds / 60);
-            if (minutes < 60) return `${minutes} min ago`;
+            if (minutes < 60) return `${minutes}m`;
             const hours = Math.floor(minutes / 60);
-            if (hours < 24) return `${hours}h ago`;
+            if (hours < 24) return `${hours}h`;
             const days = Math.floor(hours / 24);
-            if (days < 7) return `${days}d ago`;
+            if (days < 7) return `${days}d`;
             return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         }
 
         function estimateReadTime(text) {
             const wordsPerMinute = 200;
-            const words = text.split(' ').length;
+            const words = (text || '').split(' ').length;
             const minutes = Math.ceil(words / wordsPerMinute);
-            return `${minutes} min read`;
+            return `${minutes} min`;
         }
 
         // Fetch articles
@@ -501,10 +554,8 @@
                 
                 const data = await response.json();
                 
-                // Update last updated time
                 if (data.summary?.timestamp) {
-                    const updateTime = new Date(data.summary.timestamp);
-                    lastUpdated.textContent = `Updated ${timeAgo(data.summary.timestamp)}`;
+                    lastUpdated.textContent = `${timeAgo(data.summary.timestamp)}`;
                 }
                 
                 return data.items || [];
@@ -514,13 +565,13 @@
             }
         }
 
-        // Create filters based on individual sources
+        // Create filters
         function createFilters() {
             const sources = [...new Set(articles.map(a => a.source))].sort();
             
             filterContainer.innerHTML = `
                 <button class="filter-tab ${currentFilter === 'all' ? 'active' : ''}" data-filter="all">
-                    All Sources
+                    All
                 </button>
                 ${sources.map(source => `
                     <button class="filter-tab ${currentFilter === source ? 'active' : ''}" data-filter="${source}">
@@ -529,7 +580,6 @@
                 `).join('')}
             `;
             
-            // Add event listeners
             document.querySelectorAll('.filter-tab').forEach(tab => {
                 tab.addEventListener('click', function() {
                     document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
@@ -540,7 +590,7 @@
             });
         }
 
-        // Render articles with calm design
+        // Render articles in grid
         function renderArticles() {
             const filtered = currentFilter === 'all' 
                 ? articles 
@@ -548,33 +598,35 @@
             
             if (filtered.length === 0) {
                 content.innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon">☕</div>
-                        <h3>All caught up</h3>
-                        <p>No new updates from this source.<br>Try refreshing or check back later.</p>
+                    <div class="article-grid">
+                        <div class="empty-state">
+                            <div class="icon">📋</div>
+                            <h3>No articles</h3>
+                            <p>No updates from this source. Try another filter or refresh.</p>
+                        </div>
                     </div>
                 `;
                 return;
             }
             
             content.innerHTML = `
-                <div class="article-list">
+                <div class="article-grid">
                     ${filtered.map(article => `
-                        <article class="article" onclick="window.open('${article.link}', '_blank')" tabindex="0" role="button" aria-label="Read article: ${article.title}">
+                        <article class="article" onclick="window.open('${article.link}', '_blank')" tabindex="0" role="button" aria-label="Read: ${article.title}">
                             <div class="article-meta">
                                 <span class="article-source">${article.source}</span>
                                 <div class="article-separator"></div>
                                 <span class="article-time">${timeAgo(article.pubDate)}</span>
                             </div>
                             <h2 class="article-title">${article.title}</h2>
-                            <p class="article-description">${article.description || 'Read more to discover the full story.'}</p>
+                            <p class="article-description">${article.description || 'Read more for details.'}</p>
                             <div class="read-time">${estimateReadTime(article.description || article.title)}</div>
                         </article>
                     `).join('')}
                 </div>
             `;
 
-            // Add keyboard navigation
+            // Keyboard navigation
             document.querySelectorAll('.article').forEach(article => {
                 article.addEventListener('keydown', function(e) {
                     if (e.key === 'Enter' || e.key === ' ') {
@@ -600,12 +652,14 @@
                 renderArticles();
             } catch (error) {
                 errorMessage.style.display = 'block';
-                errorMessage.textContent = 'Unable to refresh briefing. Please try again in a moment.';
+                errorMessage.textContent = 'Unable to refresh. Try again.';
                 content.innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon">📡</div>
-                        <h3>Connection Issue</h3>
-                        <p>We're having trouble reaching our sources.<br>Please try refreshing in a moment.</p>
+                    <div class="article-grid">
+                        <div class="empty-state">
+                            <div class="icon">📡</div>
+                            <h3>Connection Issue</h3>
+                            <p>Having trouble reaching sources. Try refreshing.</p>
+                        </div>
                     </div>
                 `;
             } finally {
@@ -618,11 +672,7 @@
         // Initialize
         setGreeting();
         refreshFeed();
-
-        // Add scroll listener for reading progress
         window.addEventListener('scroll', updateReadingProgress);
-        
-        // Update greeting every hour
         setInterval(setGreeting, 3600000);
     </script>
 </body>
