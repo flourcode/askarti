@@ -507,11 +507,6 @@
                     <div class="last-updated" id="lastUpdated">Loading...</div>
                 </div>
                 <div class="header-actions">
-                    <select class="feed-selector" id="feedSelector">
-                        <option value="daily-news">Daily News</option>
-                        <option value="tech">Tech</option>
-                        <option value="personal">Personal</option>
-                    </select>
                     <button class="action-btn" id="markAllRead" onclick="markAllRead()">
                         Mark All Read
                     </button>
@@ -563,7 +558,7 @@
     
     <script>
         // Configuration
-        const S3_BASE_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/';
+        const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json';
         
         // State
         let articles = [];
@@ -571,7 +566,6 @@
         let selectedIndex = -1;
         let readArticles = new Set(JSON.parse(localStorage.getItem('readArticles') || '[]'));
         let lastVisit = localStorage.getItem('lastVisit');
-        let currentFeed = 'daily-news';
         
         // UI Elements
         const content = document.getElementById('content');
@@ -579,27 +573,10 @@
         const lastUpdated = document.getElementById('lastUpdated');
         const greeting = document.getElementById('greeting');
         const currentDateElement = document.getElementById('currentDate');
-        const feedSelector = document.getElementById('feedSelector');
         const kbdHelp = document.getElementById('kbdHelp');
         const statTotal = document.getElementById('statTotal');
         const statNew = document.getElementById('statNew');
         const statRead = document.getElementById('statRead');
-        
-        // Check URL params for feed selection
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('feed')) {
-            currentFeed = urlParams.get('feed');
-            feedSelector.value = currentFeed;
-        }
-        
-        // Feed selector change
-        feedSelector.addEventListener('change', (e) => {
-            currentFeed = e.target.value;
-            const url = new URL(window.location);
-            url.searchParams.set('feed', currentFeed);
-            window.history.pushState({}, '', url);
-            refreshFeed();
-        });
         
         // Set greeting and date
         function setGreetingAndDate() {
@@ -702,32 +679,17 @@
             statRead.textContent = readCount;
         }
         
-        // Fetch articles with fallback support
+        // Fetch articles with better error handling
         async function fetchArticles() {
             try {
-                const response = await fetch(`${S3_BASE_URL}${currentFeed}.json`);
+                const response = await fetch(S3_JSON_URL);
                 
                 if (response.status === 403) {
                     throw new Error('Access denied. Please check S3 bucket permissions.');
                 }
                 
                 if (response.status === 404) {
-                    // Try fallback to daily-news if current feed doesn't exist
-                    if (currentFeed !== 'daily-news') {
-                        console.log(`Feed '${currentFeed}' not found, trying daily-news...`);
-                        currentFeed = 'daily-news';
-                        feedSelector.value = 'daily-news';
-                        const fallbackResponse = await fetch(`${S3_BASE_URL}daily-news.json`);
-                        if (fallbackResponse.ok) {
-                            const data = await fallbackResponse.json();
-                            if (data.summary?.timestamp) {
-                                lastUpdated.textContent = `Updated ${timeAgo(data.summary.timestamp)}`;
-                            }
-                            localStorage.setItem('lastVisit', new Date().toISOString());
-                            return data.items || [];
-                        }
-                    }
-                    throw new Error(`Feed '${currentFeed}' not found. It may not be configured yet.`);
+                    throw new Error('Feed not found. The Lambda function may need to run first.');
                 }
                 
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -746,7 +708,7 @@
                 console.error('Error fetching articles:', error);
                 
                 // Try to load from localStorage cache as last resort
-                const cachedData = localStorage.getItem(`cache_${currentFeed}`);
+                const cachedData = localStorage.getItem('cache_articles');
                 if (cachedData) {
                     try {
                         const cached = JSON.parse(cachedData);
@@ -906,7 +868,7 @@
                 
                 // Cache successful fetches
                 if (articles.length > 0) {
-                    localStorage.setItem(`cache_${currentFeed}`, JSON.stringify({
+                    localStorage.setItem('cache_articles', JSON.stringify({
                         items: articles,
                         timestamp: new Date().toISOString()
                     }));
@@ -924,7 +886,7 @@
                     errorIcon = '🔒';
                 } else if (error.message.includes('404') || error.message.includes('not found')) {
                     errorTitle = 'Feed Not Found';
-                    errorDesc = `The '${currentFeed}' feed hasn't been set up yet. Try 'daily-news' or run the Lambda function.`;
+                    errorDesc = 'The feed hasn\'t been set up yet. Try running the Lambda function.';
                     errorIcon = '🔍';
                 }
                 
