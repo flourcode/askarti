@@ -153,18 +153,18 @@
             80%, 100% { content: '...'; }
         }
 
-        /* Article blocks */
-        .article-block {
+        /* Article blocks (now deal drivers) */
+        .deal-driver-block {
             margin-bottom: 32px;
             padding-bottom: 32px;
             border-bottom: 1px solid var(--border);
         }
 
-        .article-block:last-child {
+        .deal-driver-block:last-child {
             border-bottom: none;
         }
 
-        .article-header {
+        .deal-driver-header {
             display: flex;
             align-items: baseline;
             gap: 12px;
@@ -172,7 +172,7 @@
             flex-wrap: wrap;
         }
 
-        .article-source {
+        .deal-driver-source {
             font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
@@ -180,12 +180,12 @@
             color: var(--accent);
         }
 
-        .article-time {
+        .deal-driver-time {
             font-size: 11px;
             color: var(--dim);
         }
 
-        .article-title {
+        .deal-driver-title {
             font-size: 17px;
             font-weight: 600;
             line-height: 1.3;
@@ -193,32 +193,28 @@
             letter-spacing: -0.015em;
         }
 
-        .article-title a {
+        .deal-driver-title a {
             color: var(--ink);
             text-decoration: none;
             transition: color 0.2s ease;
         }
 
-        .article-title a:hover {
+        .deal-driver-title a:hover {
             color: var(--accent);
         }
 
         /* Key points - the speed read magic */
-        .key-points {
+        .deal-driver-summary {
             margin: 16px 0;
             padding-left: 20px;
             border-left: 2px solid var(--border);
-        }
-
-        .key-point {
-            margin-bottom: 8px;
             font-size: 14px;
             line-height: 1.5;
             color: var(--ink);
             position: relative;
         }
 
-        .key-point::before {
+        .deal-driver-summary::before {
             content: '→';
             position: absolute;
             left: -18px;
@@ -390,11 +386,11 @@
                 margin: 16px 0;
             }
             
-            .article-title {
+            .deal-driver-title {
                 font-size: 16px;
             }
             
-            .key-point {
+            .deal-driver-summary {
                 font-size: 13px;
             }
             
@@ -419,7 +415,7 @@
                 display: none !important;
             }
             
-            .article-block {
+            .deal-driver-block {
                 page-break-inside: avoid;
             }
         }
@@ -432,7 +428,7 @@
         }
 
         /* Business value insight */
-        .business-insight {
+        .action-insight {
             margin-top: 12px;
             padding: 8px;
             background: var(--highlight);
@@ -442,12 +438,46 @@
         }
 
         /* Priority badge */
-        .priority-badge {
-            color: #dc2626;
+        .category-badge {
+            color: #dc2626; /* Default for contract_opportunity */
             font-weight: 600;
             font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 0.08em;
+        }
+        .category-badge.leadership_move { color: #2563eb; } /* Blue */
+        .category-badge.policy_update { color: #f59e0b; } /* Amber */
+        .category-badge.budget_news { color: #16a34a; } /* Green */
+        
+        /* Quick Intel and Action Items sections */
+        .digest-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .digest-section h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .quick-intel-item, .action-item {
+            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--ink);
+        }
+
+        .quick-intel-item strong {
+            color: var(--accent);
+        }
+
+        .action-item span.priority {
+            font-weight: 600;
+            margin-right: 8px;
+            color: var(--accent);
         }
     </style>
 </head>
@@ -503,8 +533,8 @@
         <div class="original-content" id="originalContent"></div>
     </div>
 
-    <button class="ai-process-btn" id="aiProcessBtn" onclick="processWithAI()" title="Process articles with AI">
-        <span id="aiButtonText">AI Extract</span>
+    <button class="ai-process-btn" id="aiProcessBtn" onclick="fetchAndRenderDigest()" title="Refresh AI Digest">
+        <span id="aiButtonText">Refresh Digest</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
         </svg>
@@ -512,12 +542,12 @@
 
     <script>
         // Configuration - Using your existing infrastructure
-        const S3_BASE_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com';
         const API_ENDPOINT = 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI';
+        const S3_RAW_NEWS_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json'; // For original view fallback
         
         // State
-        let articles = [];
-        let processedArticles = [];
+        let rawArticles = []; // Stores articles from daily-news.json for original view
+        let aiDigestData = null; // Stores the full AI-processed digest
         let currentFilter = 'all';
         let currentMode = 'speed';
 
@@ -525,7 +555,8 @@
         async function init() {
             updateTime();
             setInterval(updateTime, 60000);
-            await loadArticles();
+            await fetchAndRenderDigest(); // Load AI digest on init
+            await loadRawArticlesForOriginalView(); // Load raw articles for original view
         }
 
         // Update time
@@ -544,65 +575,104 @@
             document.getElementById('currentTime').textContent = `${dateStr} • ${timeStr}`;
         }
 
-        // Load articles
-        async function loadArticles() {
+        // Fetch and Render AI Digest
+        async function fetchAndRenderDigest() {
+            const btn = document.getElementById('aiProcessBtn');
+            const btnText = document.getElementById('aiButtonText');
+            
+            if (btn.disabled) return;
+            
+            btn.disabled = true;
+            btnText.textContent = 'Fetching AI...';
+            document.getElementById('speedContent').innerHTML = `
+                <div class="loading-state">
+                    Extracting key intelligence<span class="loading-dots"></span>
+                </div>
+            `;
+            showError(''); // Clear any previous errors
+
             try {
-                // Try to load pre-processed speed read data first
-                try {
-                    const speedResponse = await fetch(`${S3_BASE_URL}/speed-read-digest.json`);
-                    if (speedResponse.ok) {
-                        const speedData = await speedResponse.json();
-                        
-                        // Check if data is recent (less than 2 hours old)
-                        const timestamp = new Date(speedData.timestamp);
-                        const now = new Date();
-                        const hoursDiff = (now - timestamp) / (1000 * 60 * 60);
-                        
-                        if (hoursDiff < 2 && speedData.articles) {
-                            processedArticles = speedData.articles;
-                            articles = speedData.articles; // Use same data for both views
-                            console.log('Using AI-processed articles from S3');
-                            
-                            document.getElementById('articleCount').textContent = `${articles.length} articles`;
-                            createFilters();
-                            renderSpeedRead();
-                            updateStats();
-                            
-                            // Update button to show it's already processed
-                            const btn = document.getElementById('aiProcessBtn');
-                            btn.classList.add('processing');
-                            document.getElementById('aiButtonText').textContent = 'AI Ready';
-                            return;
-                        }
-                    }
-                } catch (e) {
-                    console.log('No speed-read data available, loading regular feed');
+                // Request the digest from your AskArtiAPI
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        situation: "daily digest", // Explicitly request daily digest
+                        forceType: "digest" // Force the API to respond with digest type
+                    })
+                });
+                
+                const responseData = await response.json();
+                
+                if (!response.ok || responseData.status === 'error') {
+                    console.error('API Response Error:', responseData.error || responseData.message);
+                    throw new Error(responseData.error || responseData.message || `API returned status ${response.status}`);
                 }
                 
-                // Fall back to regular RSS data
-                const response = await fetch(`${S3_BASE_URL}/daily-news.json`);
-                if (!response.ok) throw new Error('Failed to fetch articles');
-                
-                const data = await response.json();
-                articles = data.items || [];
-                
-                document.getElementById('articleCount').textContent = `${articles.length} articles`;
-                
-                // Process locally for now
-                processLocally();
-                createFilters();
-                renderSpeedRead();
-                updateStats();
+                aiDigestData = responseData;
+                console.log('AI Digest Data:', aiDigestData);
+
+                // Update header date for digest
+                document.getElementById('currentTime').textContent = aiDigestData.digest_date;
+
+                // Update counts based on AI digest
+                document.getElementById('totalArticles').textContent = aiDigestData.deal_drivers?.length || 0;
+                document.getElementById('keyPoints').textContent = aiDigestData.quick_intel?.length || 0; // Using quick_intel count for key points
+                document.getElementById('readTime').textContent = Math.ceil((aiDigestData.deal_drivers?.length || 0) * 0.75); // Estimate read time
+
+                createFiltersFromDigest(); // Create filters based on deal driver categories
+                renderSpeedRead(); // Render the speed read view with AI data
+
+                btn.classList.add('processing');
+                btnText.textContent = 'AI Ready';
                 
             } catch (error) {
-                console.error('Error loading articles:', error);
-                showError('Unable to load articles. Please refresh.');
+                console.error('Error fetching AI digest:', error);
+                showError(`Failed to load AI digest: ${error.message}. Please try again.`);
+                
+                // Fallback to local processing if AI fails and raw articles are available
+                if (rawArticles.length > 0) {
+                    processLocally(rawArticles); // Re-process locally if AI fails
+                    renderSpeedRead();
+                    updateStats();
+                    btnText.textContent = 'Local Mode';
+                } else {
+                    document.getElementById('speedContent').innerHTML = `
+                        <div class="loading-state">
+                            No AI digest available and no raw articles to process.
+                        </div>
+                    `;
+                    btnText.textContent = 'Error';
+                }
+                btn.classList.remove('processing'); // Remove processing class on error
+            } finally {
+                btn.disabled = false;
             }
         }
 
-        // Process articles locally (fallback)
-        function processLocally() {
-            processedArticles = articles.map(article => ({
+        // Load raw articles for the original view
+        async function loadRawArticlesForOriginalView() {
+            try {
+                const response = await fetch(S3_RAW_NEWS_URL);
+                if (!response.ok) throw new Error('Failed to fetch raw articles from S3');
+                
+                const data = await response.json();
+                rawArticles = data.items || [];
+                console.log('Loaded raw articles for original view:', rawArticles.length);
+                
+            } catch (error) {
+                console.error('Error loading raw articles for original view:', error);
+                // This error doesn't stop the speed read, but impacts original view
+            }
+        }
+
+        // Process articles locally (fallback if AI fails or for original view stats)
+        function processLocally(articlesToProcess) {
+            // This function is now primarily for generating local key points if AI digest isn't available
+            // or for calculating stats for the original view.
+            return articlesToProcess.map(article => ({
                 ...article,
                 keyPoints: extractKeyPoints(article),
                 priority: detectPriority(article),
@@ -610,7 +680,7 @@
             }));
         }
 
-        // Extract key points locally
+        // Extract key points locally (for local fallback or if needed for original view stats)
         function extractKeyPoints(article) {
             const text = article.description || article.title;
             const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
@@ -623,7 +693,6 @@
                 'task order', 'modification', 'sole source', 'competed'
             ];
             
-            // Find sentences with important terms
             sentences.forEach(sentence => {
                 const cleaned = sentence.trim();
                 const hasImportantTerm = importantTerms.some(term => 
@@ -635,7 +704,6 @@
                 }
             });
             
-            // If no sentences with important terms, take first 2 meaningful sentences
             if (points.length === 0) {
                 sentences.slice(0, 3).forEach(sentence => {
                     const cleaned = sentence.trim();
@@ -645,7 +713,6 @@
                 });
             }
             
-            // Ensure we have at least the title
             if (points.length === 0) {
                 points.push(article.title);
             }
@@ -653,7 +720,7 @@
             return points.slice(0, 3);
         }
 
-        // Detect priority
+        // Detect priority (for local fallback or original view stats)
         function detectPriority(article) {
             const text = `${article.title} ${article.description}`.toLowerCase();
             
@@ -675,151 +742,9 @@
             return 'low';
         }
 
-        // Process with AI using your existing API - WORKING VERSION
-        async function processWithAI() {
-            const btn = document.getElementById('aiProcessBtn');
-            const btnText = document.getElementById('aiButtonText');
-            
-            if (btn.disabled) return;
-            
-            btn.disabled = true;
-            btnText.textContent = 'Processing...';
-            
-            try {
-                // Format the top articles as a single news text for analysis
-                const topArticles = articles.slice(0, 3); // Just top 3 to stay under character limit
-                
-                // Create a simple news summary text that won't exceed 2500 chars
-                let newsText = "Analyze these federal news articles:\n\n";
-                
-                topArticles.forEach((article, index) => {
-                    newsText += `Article ${index + 1}: ${article.title}\n`;
-                    if (article.description) {
-                        // Truncate description to avoid hitting character limit
-                        const shortDesc = article.description.substring(0, 200);
-                        newsText += `${shortDesc}...\n`;
-                    }
-                    newsText += `Source: ${article.source}\n\n`;
-                });
-                
-                // Ensure we don't exceed the 2500 character limit
-                if (newsText.length > 2400) {
-                    newsText = newsText.substring(0, 2400) + "...";
-                }
-                
-                console.log('Sending request with text length:', newsText.length);
-                
-                // Send to your API with proper format
-                const response = await fetch(API_ENDPOINT, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ 
-                        situation: newsText
-                        // Don't force type, let the API detect it's news
-                    })
-                });
-                
-                const responseText = await response.text();
-                console.log('API Response status:', response.status);
-                
-                if (!response.ok) {
-                    console.error('API Response:', responseText);
-                    throw new Error(`API returned ${response.status}`);
-                }
-                
-                let data;
-                try {
-                    data = JSON.parse(responseText);
-                } catch (e) {
-                    console.error('Failed to parse response:', responseText);
-                    throw new Error('Invalid response format');
-                }
-                
-                console.log('AI Response type:', data.response_type);
-                
-                // Handle the response based on what we get back
-                if (data && (data.response_type === 'news' || data.quick_take || data.key_moves)) {
-                    // Enhanced processing using whatever AI insights we got
-                    processedArticles = articles.map((article, index) => {
-                        const basePoints = extractKeyPoints(article);
-                        let businessValue = '';
-                        
-                        // Add any AI insights we received
-                        if (index === 0 && data.quick_take) {
-                            businessValue = data.quick_take.substring(0, 150);
-                        }
-                        
-                        // If we got key moves, use them as insights
-                        if (data.key_moves && data.key_moves[index]) {
-                            businessValue = data.key_moves[index].action || businessValue;
-                        }
-                        
-                        return {
-                            ...article,
-                            keyPoints: basePoints,
-                            priority: detectPriority(article),
-                            businessValue: businessValue,
-                            extractionMethod: index < 3 ? 'ai-enhanced' : 'local'
-                        };
-                    });
-                    
-                    btn.classList.add('processing');
-                    btnText.textContent = 'AI Enhanced';
-                    
-                    // Re-render with enhanced data
-                    renderSpeedRead();
-                    updateStats();
-                    saveProcessedData();
-                    
-                } else {
-                    // Just use local extraction
-                    console.log('Using local extraction - unexpected response format');
-                    processLocally();
-                    renderSpeedRead();
-                    updateStats();
-                    btnText.textContent = 'Local Mode';
-                }
-                
-            } catch (error) {
-                console.error('AI processing error:', error);
-                
-                // Fallback to local extraction
-                processLocally();
-                renderSpeedRead();
-                updateStats();
-                
-                btnText.textContent = 'Local Mode';
-                btn.classList.add('processing');
-            } finally {
-                btn.disabled = false;
-            }
-        }
-
-        // Save processed data (optional - requires backend support)
-        async function saveProcessedData() {
-            // This would require a Lambda function to save to S3
-            // For now, just store locally
-            const data = {
-                timestamp: new Date().toISOString(),
-                articles: processedArticles,
-                summary: {
-                    total: processedArticles.length,
-                    highPriority: processedArticles.filter(a => a.priority === 'high').length
-                }
-            };
-            
-            try {
-                localStorage.setItem('speed-read-cache', JSON.stringify(data));
-            } catch (e) {
-                console.log('Could not cache processed data');
-            }
-        }
-
-        // Create filter chips
-        function createFilters() {
-            const sources = [...new Set(articles.map(a => a.source))];
+        // Create filter chips based on AI digest categories
+        function createFiltersFromDigest() {
+            const categories = [...new Set(aiDigestData.deal_drivers.map(dd => dd.type))];
             const container = document.getElementById('filterContainer');
             
             container.innerHTML = `
@@ -827,10 +752,10 @@
                         data-filter="all" onclick="setFilter('all')">
                     All
                 </button>
-                ${sources.map(source => `
-                    <button class="filter-chip ${currentFilter === source ? 'active' : ''}" 
-                            data-filter="${source}" onclick="setFilter('${source}')">
-                        ${source}
+                ${categories.map(category => `
+                    <button class="filter-chip ${currentFilter === category ? 'active' : ''}" 
+                            data-filter="${category}" onclick="setFilter('${category}')">
+                        ${category.replace(/_/g, ' ')}
                     </button>
                 `).join('')}
             `;
@@ -851,62 +776,91 @@
             updateStats();
         }
 
-        // Render speed read view
+        // Render speed read view using AI digest data
         function renderSpeedRead() {
-            const filtered = currentFilter === 'all' 
-                ? processedArticles 
-                : processedArticles.filter(a => a.source === currentFilter);
-            
             const container = document.getElementById('speedContent');
+            if (!aiDigestData || !aiDigestData.deal_drivers) {
+                container.innerHTML = '<div class="loading-state">No AI digest data available.</div>';
+                return;
+            }
+
+            const filteredDealDrivers = currentFilter === 'all' 
+                ? aiDigestData.deal_drivers 
+                : aiDigestData.deal_drivers.filter(dd => dd.type === currentFilter);
             
-            if (filtered.length === 0) {
-                container.innerHTML = '<div class="loading-state">No articles found</div>';
+            if (filteredDealDrivers.length === 0) {
+                container.innerHTML = '<div class="loading-state">No deal drivers found for this filter.</div>';
                 return;
             }
             
-            // Sort by priority if available
-            const sorted = filtered.sort((a, b) => {
-                const priorityOrder = { high: 0, medium: 1, low: 2 };
-                return (priorityOrder[a.priority] || 1) - (priorityOrder[b.priority] || 1);
-            });
-            
-            container.innerHTML = sorted.map(article => {
-                const priorityBadge = article.priority === 'high' 
-                    ? '<span class="priority-badge">● HIGH PRIORITY</span>' 
-                    : '';
-                
+            let htmlContent = `
+                <p class="deal-driver-summary" style="border-left: none; padding-left: 0;">
+                    <strong>Key Intelligence:</strong> ${aiDigestData.key_intelligence || 'N/A'}
+                </p>
+            `;
+
+            htmlContent += filteredDealDrivers.map(driver => {
+                const categoryBadgeClass = driver.type ? `category-badge ${driver.type}` : 'category-badge';
                 return `
-                <div class="article-block">
-                    <div class="article-header">
-                        <span class="article-source">${article.source}</span>
-                        ${priorityBadge}
-                        <span class="article-time">${timeAgo(article.pubDate)}</span>
+                <div class="deal-driver-block">
+                    <div class="deal-driver-header">
+                        <span class="deal-driver-source">${driver.source || 'N/A'}</span>
+                        <span class="${categoryBadgeClass}">${driver.type ? driver.type.replace(/_/g, ' ').toUpperCase() : 'N/A'}</span>
+                        <span class="deal-driver-time">${timeAgo(aiDigestData.digest_date)}</span>
                     </div>
-                    <h2 class="article-title">
-                        <a href="${article.link}" target="_blank">${article.title}</a>
+                    <h2 class="deal-driver-title">
+                        <a href="${driver.link}" target="_blank">${driver.headline}</a>
                     </h2>
-                    <div class="key-points">
-                        ${article.keyPoints.map(point => 
-                            `<div class="key-point">${highlightKeyTerms(point)}</div>`
-                        ).join('')}
+                    <div class="deal-driver-summary">
+                        ${highlightKeyTerms(driver.summary)}
                     </div>
-                    ${article.businessValue ? 
-                        `<div class="business-insight">💡 ${article.businessValue}</div>` : ''
+                    ${driver.action_insight ? 
+                        `<div class="action-insight">💡 ${driver.action_insight}</div>` : ''
                     }
                 </div>
             `}).join('');
+
+            // Add Quick Intel section
+            if (aiDigestData.quick_intel && aiDigestData.quick_intel.length > 0) {
+                htmlContent += `
+                    <div class="digest-section">
+                        <h2>Quick Intel</h2>
+                        ${aiDigestData.quick_intel.map(intel => `
+                            <div class="quick-intel-item">
+                                <strong>${intel.category || 'Insight'}:</strong> ${intel.insight}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // Add Action Items section
+            if (aiDigestData.action_items && aiDigestData.action_items.length > 0) {
+                htmlContent += `
+                    <div class="digest-section">
+                        <h2>Your Moves Today</h2>
+                        ${aiDigestData.action_items.map(item => `
+                            <div class="action-item">
+                                <span class="priority">${item.priority}.</span> ${item.action} (${item.why})
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = htmlContent;
         }
 
-        // Render original view
+        // Render original view using rawArticles data
         function renderOriginal() {
             const filtered = currentFilter === 'all' 
-                ? articles 
-                : articles.filter(a => a.source === currentFilter);
+                ? rawArticles 
+                : rawArticles.filter(a => a.source === currentFilter); // Note: filter by source not category for raw
             
             const container = document.getElementById('originalContent');
             
             if (filtered.length === 0) {
-                container.innerHTML = '<div class="loading-state">No articles found</div>';
+                container.innerHTML = '<div class="loading-state">No original articles found.</div>';
                 return;
             }
             
@@ -924,11 +878,12 @@
             `).join('');
         }
 
-        // Highlight key terms
+        // Highlight key terms (for speed read view)
         function highlightKeyTerms(text) {
             const keyTerms = [
                 'contract', 'award', 'billion', 'million', 'program', 
-                'system', 'acquisition', 'procurement', 'RFP', 'RFI'
+                'system', 'acquisition', 'procurement', 'RFP', 'RFI',
+                'policy', 'budget', 'leadership', 'move'
             ];
             let highlighted = text;
             
@@ -961,15 +916,33 @@
 
         // Update statistics
         function updateStats() {
-            const filtered = currentFilter === 'all' 
-                ? processedArticles 
-                : processedArticles.filter(a => a.source === currentFilter);
+            let totalArticles = 0;
+            let totalKeyPoints = 0;
+            let avgReadTime = 0;
+
+            if (currentMode === 'speed' && aiDigestData && aiDigestData.deal_drivers) {
+                const filtered = currentFilter === 'all' 
+                    ? aiDigestData.deal_drivers 
+                    : aiDigestData.deal_drivers.filter(dd => dd.type === currentFilter);
+                
+                totalArticles = filtered.length;
+                totalKeyPoints = filtered.reduce((sum, dd) => sum + (dd.summary?.split(' ').length / 10 || 0), 0); // Estimate key points from summary length
+                totalKeyPoints += (aiDigestData.quick_intel?.length || 0); // Add quick intel as key points
+                totalKeyPoints += (aiDigestData.action_items?.length || 0); // Add action items as key points
+                avgReadTime = Math.ceil(totalKeyPoints * 0.5); // ~30 seconds per "key point"
+            } else if (currentMode === 'original' && rawArticles.length > 0) {
+                const filtered = currentFilter === 'all' 
+                    ? rawArticles 
+                    : rawArticles.filter(a => a.source === currentFilter);
+                
+                totalArticles = filtered.length;
+                // For original view, estimate key points from description length
+                totalKeyPoints = filtered.reduce((sum, a) => sum + (a.description?.split(' ').length / 10 || 0), 0);
+                avgReadTime = Math.ceil(totalKeyPoints * 0.5);
+            }
             
-            const totalPoints = filtered.reduce((sum, a) => sum + (a.keyPoints?.length || 0), 0);
-            const avgReadTime = Math.ceil(totalPoints * 0.5); // ~30 seconds per key point
-            
-            document.getElementById('totalArticles').textContent = filtered.length;
-            document.getElementById('keyPoints').textContent = totalPoints;
+            document.getElementById('totalArticles').textContent = totalArticles;
+            document.getElementById('keyPoints').textContent = Math.round(totalKeyPoints);
             document.getElementById('readTime').textContent = avgReadTime;
         }
 
