@@ -19,204 +19,120 @@
             --text-quaternary: #bdbdbd;
             --accent-subtle: #4a5568;
             --accent-muted: #718096;
-            --accent-new: #10b981;
             --shadow-soft: rgba(0, 0, 0, 0.02);
             --shadow-medium: rgba(0, 0, 0, 0.04);
         }
-        
-        /* Dark mode for reduced eye strain */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-primary: #0a0a0a;
-                --bg-secondary: #141414;
-                --bg-tertiary: #1f1f1f;
-                --surface: #181818;
-                --border-light: #2a2a2a;
-                --border-medium: #333333;
-                --text-primary: #e5e5e5;
-                --text-secondary: #a0a0a0;
-                --text-tertiary: #6b6b6b;
-                --text-quaternary: #4a4a4a;
-                --accent-subtle: #9ca3af;
-                --accent-muted: #6b7280;
-                --accent-new: #34d399;
-                --shadow-soft: rgba(255, 255, 255, 0.02);
-                --shadow-medium: rgba(255, 255, 255, 0.04);
-            }
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
-            line-height: 1.4;
-            font-size: 13px;
+            line-height: 1.4; /* More compact line height */
+            font-size: 13px; /* Smaller base font size */
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             font-weight: 300;
             letter-spacing: -0.005em;
         }
-        
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 10px;
+            padding: 0 10px; /* Further decreased padding for more horizontal space */
         }
-        
         /* Compact header */
         header {
-            padding: 10px 0 6px 0;
+            padding: 10px 0 6px 0; /* Further reduced padding */
             border-bottom: 1px solid var(--border-light);
-            margin-bottom: 8px;
-            position: sticky;
-            top: 0;
-            background: var(--bg-primary);
-            z-index: 10;
-            backdrop-filter: blur(10px);
+            margin-bottom: 8px; /* Further reduced margin */
         }
-        
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
         .header-left {
             display: flex;
-            flex-direction: column;
+            flex-direction: column; /* Stack vertically for more compact header */
             align-items: flex-start;
-            gap: 1px;
+            gap: 1px; /* Minimal gap */
         }
-        
         .greeting {
-            font-size: 8px;
-            color: var(--text-tertiary);
+            font-size: 8px; /* Smaller font size */
+            color: var(--text-tertiary); /* Lighter color */
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.1em; /* Tighter letter spacing */
             font-weight: 400;
         }
-        
         h1 {
-            font-size: 15px;
+            font-size: 15px; /* Slightly smaller h1 */
             font-weight: 600;
             color: var(--text-primary);
             letter-spacing: -0.01em;
         }
-        
-        .current-date {
-            font-size: 8px;
+        .current-date { /* New style for current date */
+            font-size: 8px; /* Smaller font size */
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.08em;
             font-weight: 400;
-            margin-top: 1px;
-            margin-bottom: 1px;
+            margin-top: 1px; /* Minimal margin */
+            margin-bottom: 1px; /* Minimal margin */
         }
-        
         .last-updated {
-            font-size: 8px;
+            font-size: 8px; /* Smaller font size */
             color: var(--text-quaternary);
             text-transform: uppercase;
             letter-spacing: 0.08em;
             font-weight: 400;
-            margin-top: 1px;
+            margin-top: 1px; /* Minimal margin */
         }
-        
-        .header-actions {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-        }
-        
         .action-btn {
             background: none;
             border: 1px solid var(--border-medium);
             color: var(--text-tertiary);
-            padding: 4px 8px;
-            border-radius: 12px;
+            padding: 4px 8px; /* Smaller button padding */
+            border-radius: 12px; /* More rounded, smaller */
             cursor: pointer;
             font-family: inherit;
-            font-size: 9px;
+            font-size: 9px; /* Smaller font size */
             font-weight: 400;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 4px; /* Smaller gap */
             white-space: nowrap;
         }
-        
         .action-btn:hover {
             background: var(--bg-secondary);
             border-color: var(--border-medium);
             color: var(--text-secondary);
         }
-        
         .action-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
-        
         .refresh-btn.loading svg {
             animation: gentleSpin 2s linear infinite;
         }
-        
-        /* Feed selector */
-        .feed-selector {
-            font-size: 9px;
-            background: var(--surface);
-            border: 1px solid var(--border-medium);
-            color: var(--text-secondary);
-            padding: 3px 6px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-family: inherit;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
+        /* Responsive filter tabs */
+        .filters {
+            display: none; /* Hidden for maximal density as per prompt */
         }
-        
-        /* Time-based sections */
-        .time-section {
-            margin-bottom: 16px;
-        }
-        
-        .time-header {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-quaternary);
-            font-weight: 500;
-            margin-bottom: 6px;
-            padding-left: 2px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .time-header::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border-light);
-        }
-        
         /* Dense grid layout */
         .article-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 6px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* Tighter min-width */
+            gap: 6px; /* Reduced gap */
         }
-        
         .article {
             background: var(--surface);
-            padding: 12px;
+            padding: 12px; /* Reduced padding */
             cursor: pointer;
             transition: all 0.3s ease;
             border: 1px solid var(--border-light);
@@ -225,74 +141,46 @@
             display: flex;
             flex-direction: column;
             height: fit-content;
-            position: relative;
         }
-        
-        .article.new::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: var(--accent-new);
-            border-radius: 6px 0 0 6px;
-        }
-        
-        .article.read {
-            opacity: 0.6;
-        }
-        
-        .article.selected {
-            border-color: var(--accent-subtle);
-            box-shadow: 0 0 0 2px var(--accent-subtle);
-        }
-        
         .article:hover {
             box-shadow: var(--shadow-medium);
             transform: translateY(-1px);
             border-color: var(--border-medium);
         }
-        
         .article-meta {
             display: flex;
             align-items: center;
-            gap: 5px;
-            margin-bottom: 6px;
-            font-size: 8px;
+            gap: 5px; /* Reduced gap */
+            margin-bottom: 6px; /* Reduced margin */
+            font-size: 8px; /* Smaller font size */
             color: var(--text-quaternary);
             text-transform: uppercase;
             letter-spacing: 0.08em;
             font-weight: 400;
         }
-        
         .article-source {
             color: var(--accent-muted);
             font-weight: 500;
         }
-        
         .article-separator {
             width: 2px;
             height: 2px;
             background: var(--text-quaternary);
             border-radius: 50%;
         }
-        
         .article-time {
             color: var(--text-quaternary);
         }
-        
         .article-title {
-            font-size: 13px;
+            font-size: 13px; /* Smaller headline */
             font-weight: 500;
             color: var(--text-primary);
             line-height: 1.3;
-            margin-bottom: 5px;
+            margin-bottom: 5px; /* Reduced margin */
             letter-spacing: -0.01em;
         }
-        
         .article-description {
-            font-size: 11px;
+            font-size: 11px; /* Smaller summary text */
             color: var(--text-secondary);
             line-height: 1.4;
             font-weight: 300;
@@ -302,194 +190,176 @@
             overflow: hidden;
             flex-grow: 1;
         }
-        
-        /* Keyboard shortcuts help */
-        .kbd-help {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            background: var(--surface);
-            border: 1px solid var(--border-medium);
-            border-radius: 8px;
-            padding: 8px;
-            font-size: 9px;
-            color: var(--text-tertiary);
-            display: none;
-            z-index: 100;
-            box-shadow: var(--shadow-medium);
-        }
-        
-        .kbd-help.visible {
-            display: block;
-        }
-        
-        .kbd-item {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 4px;
-        }
-        
-        .kbd {
-            background: var(--bg-tertiary);
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-family: monospace;
-            color: var(--text-secondary);
-        }
-        
-        /* Stats bar */
-        .stats-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border-light);
-            padding: 4px 10px;
-            font-size: 9px;
-            color: var(--text-quaternary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 9;
-        }
-        
-        .stats-left {
-            display: flex;
-            gap: 12px;
-        }
-        
-        .stat-item {
-            display: flex;
-            gap: 4px;
-        }
-        
-        .stat-label {
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-        
-        .stat-value {
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-        
         /* Desktop 4-column grid */
         @media (min-width: 1200px) {
             .article-grid {
                 grid-template-columns: repeat(4, 1fr);
-                gap: 8px;
+                gap: 8px; /* Consistent gap for desktop */
+            }
+            .article {
+                padding: 14px;
+            }
+            .article-title {
+                font-size: 13.5px;
+                margin-bottom: 6px;
+            }
+            .article-description {
+                font-size: 11.5px;
+                line-height: 1.4;
             }
         }
-        
         @media (min-width: 900px) and (max-width: 1199px) {
             .article-grid {
                 grid-template-columns: repeat(3, 1fr);
                 gap: 6px;
             }
         }
-        
         @media (min-width: 600px) and (max-width: 899px) {
             .article-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 6px;
             }
         }
-        
-        /* Mobile */
+        /* Mobile: single column with compact elements */
         @media (max-width: 599px) {
             .container {
-                padding: 0 5px;
+                padding: 0 5px; /* Even tighter padding on mobile */
             }
-            
             header {
                 padding: 6px 0 3px 0;
                 margin-bottom: 3px;
             }
-            
             .header-content {
                 flex-direction: column;
                 gap: 3px;
                 align-items: flex-start;
             }
-            
+            .header-left {
+                gap: 0px; /* No gap */
+            }
+            .greeting, .current-date, .last-updated {
+                font-size: 7px; /* Smallest font size for mobile header info */
+            }
+            h1 {
+                font-size: 14px;
+            }
+            .refresh-btn {
+                padding: 2px 6px;
+                font-size: 8px;
+            }
             .article-grid {
                 grid-template-columns: 1fr;
                 gap: 6px;
             }
-            
-            .stats-bar {
-                font-size: 8px;
-                padding: 3px 5px;
+            .article {
+                padding: 10px;
+            }
+            .article-title {
+                font-size: 12px;
+                margin-bottom: 3px;
+            }
+            .article-description {
+                font-size: 10px;
+                line-height: 1.3;
+                -webkit-line-clamp: 3;
+            }
+            .article-meta {
+                margin-bottom: 4px;
             }
         }
-        
         /* States */
         .empty-state {
             grid-column: 1 / -1;
             text-align: center;
-            padding: 30px 10px;
+            padding: 30px 10px; /* Reduced padding */
             color: var(--text-tertiary);
         }
-        
         .empty-state .icon {
             font-size: 24px;
             margin-bottom: 10px;
             opacity: 0.3;
         }
-        
         .empty-state h3 {
             font-size: 13px;
             font-weight: 500;
             margin-bottom: 5px;
             color: var(--text-secondary);
         }
-        
         .empty-state p {
             font-size: 10px;
             color: var(--text-tertiary);
             font-weight: 300;
             line-height: 1.3;
         }
-        
         .loading {
             grid-column: 1 / -1;
             text-align: center;
-            padding: 15px;
+            padding: 15px; /* Reduced padding */
             color: var(--text-tertiary);
             font-size: 9px;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             font-weight: 400;
         }
-        
+        .error-message {
+            background: #fef9f9;
+            border: 1px solid #f5e6e6;
+            color: var(--text-secondary);
+            padding: 6px 10px; /* Reduced padding */
+            border-radius: 4px;
+            margin-bottom: 8px; /* Reduced margin */
+            font-size: 10px;
+            display: none;
+            text-align: center;
+            font-weight: 300;
+        }
+        /* Progress indicator */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px; /* Thinner progress bar */
+            background: var(--border-light);
+            z-index: 100;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-subtle), var(--accent-muted));
+            width: 0%;
+            transition: width 0.1s ease;
+        }
         /* Smooth scroll */
         html {
             scroll-behavior: smooth;
         }
-        
         /* Animations */
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(3px);
+                transform: translateY(3px); /* Even smaller animation distance */
             }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-        
         .article {
-            animation: fadeIn 0.2s ease forwards;
+            animation: fadeIn 0.2s ease forwards; /* Faster animation */
         }
-        
+        .article:nth-child(1) { animation-delay: 0.02s; }
+        .article:nth-child(2) { animation-delay: 0.04s; }
+        .article:nth-child(3) { animation-delay: 0.06s; }
+        .article:nth-child(4) { animation-delay: 0.08s; }
         @keyframes gentleSpin {
             to { transform: rotate(360deg); }
         }
-        
+        .refresh-btn.loading svg {
+            animation: gentleSpin 2s linear infinite;
+        }
         /* Focus states */
         .refresh-btn:focus,
+        .filter-tab:focus,
         .article:focus {
             outline: 2px solid var(--accent-muted);
             outline-offset: 2px;
@@ -497,88 +367,51 @@
     </style>
 </head>
 <body>
+    <div class="reading-progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
     <div class="container">
         <header>
             <div class="header-content">
                 <div class="header-left">
                     <h1>The Read Board</h1>
-                    <div class="current-date" id="currentDate"></div>
-                    <div class="greeting" id="greeting"></div>
-                    <div class="last-updated" id="lastUpdated">Loading...</div>
+                    <div class="current-date" id="currentDate"></div> <div class="greeting" id="greeting"></div> <div class="last-updated" id="lastUpdated">Loading...</div>
                 </div>
-                <div class="header-actions">
-                    <button class="action-btn" id="markAllRead" onclick="markAllRead()">
-                        Mark All Read
-                    </button>
-                    <button class="action-btn refresh-btn" id="refreshBtn" onclick="refreshFeed()">
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
-                        </svg>
-                        Refresh
-                    </button>
-                </div>
+                <button class="refresh-btn" id="refreshBtn" onclick="refreshFeed()">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+                    </svg>
+                    Refresh
+                </button>
             </div>
         </header>
-        
+        <div class="filters" id="filterContainer" style="display: none;">
+            <button class="filter-tab active" data-filter="all">All</button>
+        </div>
+        <div class="error-message" id="errorMessage"></div>
         <div id="content">
             <div class="article-grid">
                 <div class="loading">Preparing your briefing...</div>
             </div>
         </div>
     </div>
-    
-    <div class="stats-bar">
-        <div class="stats-left">
-            <div class="stat-item">
-                <span class="stat-label">Total:</span>
-                <span class="stat-value" id="statTotal">0</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">New:</span>
-                <span class="stat-value" id="statNew">0</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">Read:</span>
-                <span class="stat-value" id="statRead">0</span>
-            </div>
-        </div>
-        <div class="stat-item">
-            <span class="stat-label">Press ? for shortcuts</span>
-        </div>
-    </div>
-    
-    <div class="kbd-help" id="kbdHelp">
-        <div class="kbd-item"><span class="kbd">J</span> Next article</div>
-        <div class="kbd-item"><span class="kbd">K</span> Previous article</div>
-        <div class="kbd-item"><span class="kbd">O</span> Open article</div>
-        <div class="kbd-item"><span class="kbd">R</span> Refresh</div>
-        <div class="kbd-item"><span class="kbd">M</span> Mark all read</div>
-        <div class="kbd-item"><span class="kbd">?</span> Toggle help</div>
-    </div>
-    
     <script>
         // Configuration
         const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json';
-        
         // State
         let articles = [];
+        let currentFilter = 'all';
         let isLoading = false;
-        let selectedIndex = -1;
-        let readArticles = new Set(JSON.parse(localStorage.getItem('readArticles') || '[]'));
-        let lastVisit = localStorage.getItem('lastVisit');
-        
         // UI Elements
         const content = document.getElementById('content');
         const refreshBtn = document.getElementById('refreshBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const filterContainer = document.getElementById('filterContainer');
         const lastUpdated = document.getElementById('lastUpdated');
         const greeting = document.getElementById('greeting');
-        const currentDateElement = document.getElementById('currentDate');
-        const kbdHelp = document.getElementById('kbdHelp');
-        const statTotal = document.getElementById('statTotal');
-        const statNew = document.getElementById('statNew');
-        const statRead = document.getElementById('statRead');
-        
-        // Set greeting and date
+        const currentDateElement = document.getElementById('currentDate'); // Get the new element
+        const progressBar = document.getElementById('progressBar');
+        // Set greeting based on time and display current date
         function setGreetingAndDate() {
             const now = new Date();
             const hour = now.getHours();
@@ -588,27 +421,20 @@
             } else if (hour >= 17) {
                 greetingText = 'Good Evening';
             }
-            
-            const options = { weekday: 'short', day: 'numeric', month: 'short' };
+            const options = { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' };
             const formattedDate = now.toLocaleDateString('en-US', options);
-            
+            // Display date and greeting in separate lines
             currentDateElement.textContent = formattedDate;
-            greeting.textContent = `${greetingText}. ${getPersonalizedMessage()}`;
+            greeting.textContent = `${greetingText}. Welcome to The Read Board.`;
         }
-        
-        // Personalized message based on visit patterns
-        function getPersonalizedMessage() {
-            const messages = [
-                "Here's what's new.",
-                "Your briefing is ready.",
-                "Fresh updates await.",
-                "Catch up on the latest.",
-                "Your curated feed."
-            ];
-            return messages[Math.floor(Math.random() * messages.length)];
+        // Reading progress
+        function updateReadingProgress() {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            progressBar.style.width = Math.min(scrollPercent, 100) + '%';
         }
-        
-        // Time ago helper
+        // Utility functions
         function timeAgo(dateString) {
             const now = new Date();
             const date = new Date(dateString);
@@ -622,170 +448,77 @@
             if (days < 7) return `${days}d`;
             return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         }
-        
-        // Group articles by time
-        function groupArticlesByTime(articles) {
-            const now = new Date();
-            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const yesterdayStart = new Date(todayStart.getTime() - 24 * 60 * 60 * 1000);
-            
-            const groups = {
-                today: [],
-                yesterday: [],
-                earlier: []
-            };
-            
-            articles.forEach(article => {
-                const date = new Date(article.pubDate);
-                if (date >= todayStart) {
-                    groups.today.push(article);
-                } else if (date >= yesterdayStart) {
-                    groups.yesterday.push(article);
-                } else {
-                    groups.earlier.push(article);
-                }
-            });
-            
-            return groups;
-        }
-        
-        // Check if article is new since last visit
-        function isNewArticle(article) {
-            if (!lastVisit) return true;
-            return new Date(article.pubDate) > new Date(lastVisit);
-        }
-        
-        // Mark article as read
-        function markAsRead(link) {
-            readArticles.add(link);
-            localStorage.setItem('readArticles', JSON.stringify([...readArticles]));
-            updateStats();
-        }
-        
-        // Mark all as read
-        function markAllRead() {
-            articles.forEach(article => readArticles.add(article.link));
-            localStorage.setItem('readArticles', JSON.stringify([...readArticles]));
-            renderArticles();
-        }
-        
-        // Update stats
-        function updateStats() {
-            const newCount = articles.filter(a => isNewArticle(a) && !readArticles.has(a.link)).length;
-            const readCount = articles.filter(a => readArticles.has(a.link)).length;
-            
-            statTotal.textContent = articles.length;
-            statNew.textContent = newCount;
-            statRead.textContent = readCount;
-        }
-        
-        // Fetch articles with better error handling
+        // Removed getLinkedInShareUrl as the feature is removed
+        // Fetch articles
         async function fetchArticles() {
             try {
                 const response = await fetch(S3_JSON_URL);
-                
-                if (response.status === 403) {
-                    throw new Error('Access denied. Please check S3 bucket permissions.');
-                }
-                
-                if (response.status === 404) {
-                    throw new Error('Feed not found. The Lambda function may need to run first.');
-                }
-                
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                
                 const data = await response.json();
-                
                 if (data.summary?.timestamp) {
-                    lastUpdated.textContent = `Updated ${timeAgo(data.summary.timestamp)}`;
+                    lastUpdated.textContent = `${timeAgo(data.summary.timestamp)}`;
                 }
-                
-                // Store last visit time
-                localStorage.setItem('lastVisit', new Date().toISOString());
-                
                 return data.items || [];
             } catch (error) {
                 console.error('Error fetching articles:', error);
-                
-                // Try to load from localStorage cache as last resort
-                const cachedData = localStorage.getItem('cache_articles');
-                if (cachedData) {
-                    try {
-                        const cached = JSON.parse(cachedData);
-                        console.log('Loading from cache...');
-                        lastUpdated.textContent = `Cached ${timeAgo(cached.timestamp)}`;
-                        return cached.items || [];
-                    } catch (e) {
-                        console.error('Cache parse error:', e);
-                    }
-                }
-                
                 throw error;
             }
         }
-        
-        // Render articles with time grouping
+        // Create filters - kept for structure but display:none in CSS
+        function createFilters() {
+            const sources = [...new Set(articles.map(a => a.source))].sort();
+            filterContainer.innerHTML = `
+                <button class="filter-tab ${currentFilter === 'all' ? 'active' : ''}" data-filter="all">
+                    All
+                </button>
+                ${sources.map(source => `
+                    <button class="filter-tab ${currentFilter === source ? 'active' : ''}" data-filter="${source}">
+                        ${source}
+                    </button>
+                `).join('')}
+            `;
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    renderArticles();
+                });
+            });
+        }
+        // Render articles in grid
         function renderArticles() {
-            if (articles.length === 0) {
+            const filtered = currentFilter === 'all' 
+                ? articles 
+                : articles.filter(a => a.source === currentFilter);
+            if (filtered.length === 0) {
                 content.innerHTML = `
                     <div class="article-grid">
                         <div class="empty-state">
                             <div class="icon">📋</div>
                             <h3>No articles</h3>
-                            <p>Check back later or try refreshing.</p>
+                            <p>No updates from this source. Try another filter or refresh.</p>
                         </div>
                     </div>
                 `;
                 return;
             }
-            
-            const groups = groupArticlesByTime(articles);
-            let html = '';
-            
-            // Render each time group
-            ['today', 'yesterday', 'earlier'].forEach(groupName => {
-                if (groups[groupName].length === 0) return;
-                
-                const label = groupName === 'today' ? 'Today' : 
-                             groupName === 'yesterday' ? 'Yesterday' : 
-                             'Earlier';
-                
-                html += `
-                    <div class="time-section">
-                        <div class="time-header">${label}</div>
-                        <div class="article-grid">
-                            ${groups[groupName].map((article, idx) => {
-                                const globalIdx = articles.indexOf(article);
-                                const isNew = isNewArticle(article) && !readArticles.has(article.link);
-                                const isRead = readArticles.has(article.link);
-                                const isSelected = globalIdx === selectedIndex;
-                                
-                                return `
-                                    <article class="article ${isNew ? 'new' : ''} ${isRead ? 'read' : ''} ${isSelected ? 'selected' : ''}" 
-                                             data-index="${globalIdx}"
-                                             data-link="${article.link}"
-                                             onclick="openArticle('${article.link}', ${globalIdx})" 
-                                             tabindex="0" 
-                                             role="button">
-                                        <div class="article-meta">
-                                            <span class="article-source">${article.source}</span>
-                                            <div class="article-separator"></div>
-                                            <span class="article-time">${timeAgo(article.pubDate)}</span>
-                                        </div>
-                                        <h2 class="article-title">${article.title}</h2>
-                                        <p class="article-description">${article.description || 'Read more for details.'}</p>
-                                    </article>
-                                `;
-                            }).join('')}
-                        </div>
-                    </div>
-                `;
-            });
-            
-            content.innerHTML = html;
-            updateStats();
-            
-            // Add keyboard event listeners
+            content.innerHTML = `
+                <div class="article-grid">
+                    ${filtered.map(article => `
+                        <article class="article" onclick="window.open('${article.link}', '_blank')" tabindex="0" role="button" aria-label="Read: ${article.title}">
+                            <div class="article-meta">
+                                <span class="article-source">${article.source}</span>
+                                <div class="article-separator"></div>
+                                <span class="article-time">${timeAgo(article.pubDate)}</span>
+                            </div>
+                            <h2 class="article-title">${article.title}</h2>
+                            <p class="article-description">${article.description || 'Read more for details.'}</p>
+                            </article>
+                    `).join('')}
+                </div>
+            `;
+            // Keyboard navigation
             document.querySelectorAll('.article').forEach(article => {
                 article.addEventListener('keydown', function(e) {
                     if (e.key === 'Enter' || e.key === ' ') {
@@ -795,110 +528,26 @@
                 });
             });
         }
-        
-        // Open article
-        function openArticle(link, index) {
-            markAsRead(link);
-            selectedIndex = index;
-            window.open(link, '_blank');
-            renderArticles();
-        }
-        
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            // Don't interfere with form inputs
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
-            
-            switch(e.key.toLowerCase()) {
-                case 'j':
-                    e.preventDefault();
-                    navigateArticle(1);
-                    break;
-                case 'k':
-                    e.preventDefault();
-                    navigateArticle(-1);
-                    break;
-                case 'o':
-                case 'enter':
-                    e.preventDefault();
-                    if (selectedIndex >= 0 && selectedIndex < articles.length) {
-                        openArticle(articles[selectedIndex].link, selectedIndex);
-                    }
-                    break;
-                case 'r':
-                    e.preventDefault();
-                    refreshFeed();
-                    break;
-                case 'm':
-                    e.preventDefault();
-                    markAllRead();
-                    break;
-                case '?':
-                    e.preventDefault();
-                    kbdHelp.classList.toggle('visible');
-                    break;
-            }
-        });
-        
-        // Navigate articles with keyboard
-        function navigateArticle(direction) {
-            const newIndex = Math.max(0, Math.min(articles.length - 1, selectedIndex + direction));
-            if (newIndex !== selectedIndex) {
-                selectedIndex = newIndex;
-                renderArticles();
-                
-                // Scroll to selected article
-                const selectedEl = document.querySelector(`.article[data-index="${selectedIndex}"]`);
-                if (selectedEl) {
-                    selectedEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }
-        }
-        
-        // Refresh feed with better error handling
+        // Refresh feed
         async function refreshFeed() {
             if (isLoading) return;
-            
             isLoading = true;
             refreshBtn.disabled = true;
             refreshBtn.classList.add('loading');
-            
+            errorMessage.style.display = 'none';
             try {
                 articles = await fetchArticles();
-                
-                // Cache successful fetches
-                if (articles.length > 0) {
-                    localStorage.setItem('cache_articles', JSON.stringify({
-                        items: articles,
-                        timestamp: new Date().toISOString()
-                    }));
-                }
-                
+                createFilters();
                 renderArticles();
             } catch (error) {
-                let errorTitle = 'Connection Issue';
-                let errorDesc = 'Having trouble reaching sources. Try refreshing.';
-                let errorIcon = '📡';
-                
-                if (error.message.includes('403') || error.message.includes('Access denied')) {
-                    errorTitle = 'Access Denied';
-                    errorDesc = 'S3 bucket needs public read permissions. Check AWS console.';
-                    errorIcon = '🔒';
-                } else if (error.message.includes('404') || error.message.includes('not found')) {
-                    errorTitle = 'Feed Not Found';
-                    errorDesc = 'The feed hasn\'t been set up yet. Try running the Lambda function.';
-                    errorIcon = '🔍';
-                }
-                
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = 'Unable to refresh. Try again.';
                 content.innerHTML = `
                     <div class="article-grid">
                         <div class="empty-state">
-                            <div class="icon">${errorIcon}</div>
-                            <h3>${errorTitle}</h3>
-                            <p>${errorDesc}</p>
-                            <p style="margin-top: 8px; font-size: 9px; color: var(--text-quaternary);">
-                                ${error.message}
-                            </p>
+                            <div class="icon">📡</div>
+                            <h3>Connection Issue</h3>
+                            <p>Having trouble reaching sources. Try refreshing.</p>
                         </div>
                     </div>
                 `;
@@ -908,21 +557,11 @@
                 refreshBtn.classList.remove('loading');
             }
         }
-        
-        // Clean up old read articles (keep only last 1000)
-        function cleanupReadArticles() {
-            if (readArticles.size > 1000) {
-                const sorted = [...readArticles].slice(-1000);
-                readArticles = new Set(sorted);
-                localStorage.setItem('readArticles', JSON.stringify(sorted));
-            }
-        }
-        
         // Initialize
         setGreetingAndDate();
         refreshFeed();
-        cleanupReadArticles();
-        setInterval(setGreetingAndDate, 60000); // Update every minute
+        window.addEventListener('scroll', updateReadingProgress);
+        setInterval(setGreetingAndDate, 3600000);
     </script>
 </body>
 </html>
