@@ -114,168 +114,167 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
-        .action-btn.active {
-            background: var(--bg-tertiary);
-            border-color: var(--border-medium);
-            color: var(--text-primary);
-            font-weight: 500;
-        }
         .refresh-btn.loading svg {
             animation: gentleSpin 2s linear infinite;
         }
-        /* Responsive filter tabs */
+        /* Filters are less prominent now */
         .filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px; /* Slightly larger gap */
-            margin-bottom: 25px;
-            overflow: visible;
-            -webkit-overflow-scrolling: touch;
-            padding: 4px 0 12px 0;
+            display: none; /* Filters are removed as AI digest handles categorization */
         }
-        .filter-tab {
-            background: none;
-            border: 1px solid var(--border-medium);
-            color: var(--text-tertiary);
-            padding: 7px 14px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 11px;
-            font-weight: 400;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            white-space: nowrap;
-            transition: all 0.2s ease;
-            border-radius: 14px;
-            flex-shrink: 0;
-            position: relative;
-            z-index: 1;
-        }
-        .filter-tab:hover {
-            color: var(--text-secondary);
-            background: var(--bg-secondary);
-        }
-        .filter-tab.active {
-            color: var(--text-primary);
-            background: var(--bg-tertiary);
-            border-color: var(--border-medium);
-            font-weight: 500;
-        }
-        /* Dense grid layout */
-        .article-grid {
+
+        /* Digest-specific layout */
+        .digest-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Wider min-width */
-            gap: 20px; /* Increased gap */
+            grid-template-columns: 1fr;
+            gap: 30px; /* More space between main digest sections */
         }
-        .article {
+
+        .section {
             background: var(--surface);
-            padding: 20px; /* More padding */
-            cursor: pointer;
-            transition: all 0.2s ease;
+            padding: 25px; /* Ample padding */
             border: 1px solid var(--border-light);
-            border-radius: 10px; /* Slightly more rounded corners */
+            border-radius: 10px;
             box-shadow: var(--shadow-soft);
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            letter-spacing: -0.01em;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 10px;
+        }
+
+        /* Key Intelligence specific */
+        .key-intelligence-summary {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        /* Deal Drivers grid (now the primary "articles") */
+        .deal-drivers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .deal-driver {
+            background: var(--bg-secondary); /* Slightly different background for individual drivers */
+            padding: 20px;
+            border: 1px solid var(--border-medium);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            cursor: pointer;
             display: flex;
             flex-direction: column;
             height: fit-content;
         }
-        .article:hover {
+        .deal-driver:hover {
             box-shadow: var(--shadow-medium);
-            transform: translateY(-2px); /* More pronounced hover effect */
-            border-color: var(--border-medium);
+            transform: translateY(-2px);
+            border-color: var(--accent-muted);
         }
-        .article-meta {
-            display: flex;
-            align-items: center;
-            gap: 10px; /* Increased gap */
-            margin-bottom: 12px; /* More space below meta */
-            font-size: 10px; /* Slightly larger meta info */
+
+        .deal-driver-meta {
+            font-size: 10px;
             color: var(--text-quaternary);
             text-transform: uppercase;
-            letter-spacing: 0.09em;
+            letter-spacing: 0.08em;
             font-weight: 400;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .article-source {
+        .deal-driver-type {
             color: var(--accent-muted);
-            font-weight: 600; /* Bolder source name */
+            font-weight: 600;
         }
-        .article-separator {
-            width: 3px; /* Slightly larger separator */
-            height: 3px;
-            background: var(--text-quaternary);
-            border-radius: 50%;
+        .deal-driver-source {
+            color: var(--text-tertiary);
         }
-        .article-time {
-            color: var(--text-quaternary);
-        }
-        .article-title {
-            font-size: 16px; /* Larger title */
-            font-weight: 600; /* Bolder title */
+
+        .deal-driver-headline {
+            font-size: 16px;
+            font-weight: 600;
             color: var(--text-primary);
             line-height: 1.4;
             margin-bottom: 10px;
-            letter-spacing: -0.015em;
+            letter-spacing: -0.01em;
         }
-        .article-description {
-            font-size: 14px; /* Larger description text */
+        .deal-driver-summary {
+            font-size: 13px;
             color: var(--text-secondary);
-            line-height: 1.55; /* Enhanced line height for readability */
+            line-height: 1.5;
             font-weight: 300;
-            display: -webkit-box;
-            -webkit-line-clamp: 4; /* Allow more lines by default */
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            margin-bottom: 10px;
+            flex-grow: 1; /* Allows summary to take available space */
+        }
+        .deal-driver-action-insight {
+            font-size: 13px;
+            color: var(--accent-subtle);
+            font-weight: 500;
+            line-height: 1.4;
+            margin-top: 5px;
+            padding-top: 8px;
+            border-top: 1px dashed var(--border-light);
+        }
+
+        /* Quick Intel & Action Items */
+        .list-item {
+            display: flex;
+            margin-bottom: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+        }
+        .list-item strong {
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-right: 8px;
+            white-space: nowrap; /* Keep category/priority on one line */
+        }
+        .list-item .item-text {
             flex-grow: 1;
         }
-        /* Speed read mode specific styles */
-        .speed-read .article-description {
-            -webkit-line-clamp: unset; /* Remove line clamping for extracted text */
-            height: auto;
-            max-height: none;
+        .list-item .item-text.action-why {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-top: 4px;
+            display: block;
         }
-        .speed-read-highlight {
-            font-weight: 500; /* Highlight extracted sentences */
-            color: var(--text-primary);
-        }
-        .read-time {
-            font-size: 9px;
-            color: var(--text-quaternary);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-top: 10px; /* More space above read time */
-            font-weight: 400;
-        }
-        /* Desktop 4-column grid */
-        @media (min-width: 1200px) {
-            .article-grid {
-                grid-template-columns: repeat(4, 1fr);
+
+        /* Desktop Layouts */
+        @media (min-width: 1000px) {
+            .digest-container {
+                grid-template-columns: 3fr 1fr; /* Main content and sidebar */
+                gap: 35px;
+            }
+            .main-content {
+                grid-column: 1;
+            }
+            .sidebar {
+                grid-column: 2;
+                display: flex;
+                flex-direction: column;
                 gap: 25px;
             }
-            .article {
-                padding: 22px;
-            }
-            .article-title {
-                font-size: 17px;
-                margin-bottom: 14px;
-            }
-            .article-description {
-                font-size: 14.5px;
-                line-height: 1.6;
-            }
         }
-        @media (min-width: 900px) and (max-width: 1199px) {
-            .article-grid {
+
+        @media (min-width: 1200px) {
+            .deal-drivers-grid {
                 grid-template-columns: repeat(3, 1fr);
-                gap: 20px;
+                gap: 25px;
             }
         }
-        @media (min-width: 600px) and (max-width: 899px) {
-            .article-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 18px;
-            }
-        }
-        /* Mobile: single column with wrapping filters */
+
+        /* Mobile specific adjustments */
         @media (max-width: 599px) {
             .container {
                 padding: 0 18px;
@@ -297,36 +296,48 @@
             }
             .header-actions {
                 width: 100%;
-                justify-content: flex-end; /* Align buttons to the right on mobile */
+                justify-content: flex-end;
                 gap: 8px;
             }
             .action-btn {
                 padding: 6px 10px;
                 font-size: 10px;
             }
-            .filters {
-                margin-bottom: 20px;
-                gap: 6px;
+            .digest-container {
+                gap: 20px;
             }
-            .filter-tab {
-                padding: 6px 12px;
-                font-size: 10px;
+            .section {
+                padding: 20px;
             }
-            .article-grid {
+            .section-title {
+                font-size: 16px;
+                margin-bottom: 12px;
+            }
+            .key-intelligence-summary {
+                font-size: 14px;
+                margin-bottom: 15px;
+            }
+            .deal-drivers-grid {
                 grid-template-columns: 1fr;
                 gap: 15px;
             }
-            .article {
+            .deal-driver {
                 padding: 18px;
             }
-            .article-title {
+            .deal-driver-headline {
                 font-size: 15px;
             }
-            .article-description {
+            .deal-driver-summary, .deal-driver-action-insight {
+                font-size: 12px;
+            }
+            .list-item {
                 font-size: 13px;
-                -webkit-line-clamp: 3; /* More lines for mobile speed read */
+            }
+            .list-item .item-text.action-why {
+                font-size: 11px;
             }
         }
+
         /* States */
         .empty-state {
             grid-column: 1 / -1;
@@ -404,20 +415,21 @@
                 transform: translateY(0);
             }
         }
-        .article {
+        .section, .deal-driver {
             animation: fadeIn 0.5s ease forwards; /* Slower animation */
         }
-        .article:nth-child(1) { animation-delay: 0.08s; }
-        .article:nth-child(2) { animation-delay: 0.16s; }
-        .article:nth-child(3) { animation-delay: 0.24s; }
-        .article:nth-child(4) { animation-delay: 0.32s; }
+        /* Specific delays for sections, not individual items within sections to keep it clean */
+        .section:nth-of-type(1) { animation-delay: 0.08s; }
+        .section:nth-of-type(2) { animation-delay: 0.16s; }
+        .section:nth-of-type(3) { animation-delay: 0.24s; }
+        .section:nth-of-type(4) { animation-delay: 0.32s; }
+
         @keyframes gentleSpin {
             to { transform: rotate(360deg); }
         }
         /* Focus states */
         .action-btn:focus,
-        .filter-tab:focus,
-        .article:focus {
+        .deal-driver:focus {
             outline: 2px solid var(--accent-muted);
             outline-offset: 3px; /* Larger offset for visibility */
             border-color: transparent; /* Hide border on focus to avoid double border */
@@ -437,13 +449,6 @@
                     <div class="last-updated" id="lastUpdated">Loading...</div>
                 </div>
                 <div class="header-actions">
-                    <button class="action-btn" id="speedReadToggle" onclick="toggleSpeedRead()">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
-                            <line x1="4" y1="22" x2="4" y2="15"></line>
-                        </svg>
-                        Speed Read
-                    </button>
                     <button class="action-btn refresh-btn" id="refreshBtn" onclick="refreshFeed()">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
@@ -453,35 +458,27 @@
                 </div>
             </div>
         </header>
-        <div class="filters" id="filterContainer">
-            <button class="filter-tab active" data-filter="all">All</button>
-        </div>
         <div class="error-message" id="errorMessage"></div>
         <div id="content">
-            <div class="article-grid">
-                <div class="loading">Preparing your briefing...</div>
-            </div>
+            <div class="loading">Preparing your daily federal sales briefing...</div>
         </div>
     </div>
     <script>
         // Configuration
-        const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json';
+        // IMPORTANT: Replace 'YOUR_API_GATEWAY_ENDPOINT_URL' with your actual API Gateway URL
+        const API_DIGEST_URL = 'YOUR_API_GATEWAY_ENDPOINT_URL'; 
 
         // State
-        let articles = [];
-        let currentFilter = 'all';
+        let currentDigest = null;
         let isLoading = false;
-        let isSpeedReadMode = false; // New state variable for speed read mode
 
         // UI Elements
         const content = document.getElementById('content');
         const refreshBtn = document.getElementById('refreshBtn');
         const errorMessage = document.getElementById('errorMessage');
-        const filterContainer = document.getElementById('filterContainer');
         const lastUpdated = document.getElementById('lastUpdated');
         const greeting = document.getElementById('greeting');
         const progressBar = document.getElementById('progressBar');
-        const speedReadToggle = document.getElementById('speedReadToggle');
 
         // Set greeting based on time and display current date
         function setGreetingAndDate() {
@@ -508,7 +505,7 @@
             progressBar.style.width = Math.min(scrollPercent, 100) + '%';
         }
 
-        // Utility functions
+        // Utility functions (timeAgo remains relevant for lastUpdated timestamp)
         function timeAgo(dateString) {
             const now = new Date();
             const date = new Date(dateString);
@@ -523,125 +520,142 @@
             return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         }
 
-        function estimateReadTime(text) {
-            const wordsPerMinute = 200;
-            const words = (text || '').split(' ').length;
-            const minutes = Math.ceil(words / wordsPerMinute);
-            return `${minutes} min`;
-        }
-
-        /**
-         * AI (Simulated) Key Sentence Extraction:
-         * This function simulates AI by taking the first N sentences.
-         * In a real application, this would involve a backend AI service
-         * that performs natural language processing to identify and extract
-         * truly key sentences based on semantic analysis, keywords, etc.
-         */
-        function extractKeySentences(text, numSentences = 2) {
-            if (!text) return '';
-            // Basic sentence splitting (can be improved for more complex cases)
-            const sentences = text.match(/[^.!?]+[.!?]*/g) || [];
-            if (sentences.length === 0) return '';
-
-            const extracted = sentences.slice(0, numSentences).join(' ').trim();
-            if (extracted.length < text.length && sentences.length > numSentences) {
-                return `<span class="speed-read-highlight">${extracted}</span>...`;
-            }
-            return `<span class="speed-read-highlight">${extracted}</span>`;
-        }
-
-        // Toggle Speed Read Mode
-        function toggleSpeedRead() {
-            isSpeedReadMode = !isSpeedReadMode;
-            speedReadToggle.classList.toggle('active', isSpeedReadMode);
-            document.body.classList.toggle('speed-read', isSpeedReadMode); // Add class to body for global styles
-            renderArticles(); // Re-render articles to apply mode change
-        }
-
-        // Fetch articles
-        async function fetchArticles() {
+        // Fetch AI-generated digest
+        async function fetchDigest(forceRefresh = false) {
             try {
-                const response = await fetch(S3_JSON_URL);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const data = await response.json();
-                if (data.summary?.timestamp) {
-                    lastUpdated.textContent = `${timeAgo(data.summary.timestamp)}`;
+                let url = API_DIGEST_URL;
+                if (forceRefresh) {
+                    url += '?refresh=true'; // Add refresh parameter to trigger backend regeneration
                 }
-                return data.items || [];
+                const response = await fetch(url);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`HTTP ${response.status}: ${errorData.error || response.statusText}`);
+                }
+                const data = await response.json();
+                return data;
             } catch (error) {
-                console.error('Error fetching articles:', error);
+                console.error('Error fetching digest:', error);
                 throw error;
             }
         }
 
-        // Create filters
-        function createFilters() {
-            const sources = [...new Set(articles.map(a => a.source))].sort();
-            filterContainer.innerHTML = `
-                <button class="filter-tab ${currentFilter === 'all' ? 'active' : ''}" data-filter="all">
-                    All
-                </button>
-                ${sources.map(source => `
-                    <button class="filter-tab ${currentFilter === source ? 'active' : ''}" data-filter="${source}">
-                        ${source}
-                    </button>
-                `).join('')}
-            `;
-            document.querySelectorAll('.filter-tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    currentFilter = this.dataset.filter;
-                    renderArticles();
-                });
-            });
-        }
-
-        // Render articles in grid
-        function renderArticles() {
-            const filtered = currentFilter === 'all' 
-                ? articles 
-                : articles.filter(a => a.source === currentFilter);
-            
-            if (filtered.length === 0) {
+        // Render the AI-generated digest
+        function renderDigest() {
+            if (!currentDigest || currentDigest.status === "collecting_data" || currentDigest.status === "error") {
                 content.innerHTML = `
-                    <div class="article-grid">
-                        <div class="empty-state">
-                            <div class="icon">📋</div>
-                            <h3>No articles</h3>
-                            <p>No updates from this source. Try another filter or refresh.</p>
-                        </div>
+                    <div class="empty-state">
+                        <div class="icon">📡</div>
+                        <h3>${currentDigest ? currentDigest.key_intelligence : 'No briefing available'}</h3>
+                        <p>${currentDigest ? currentDigest.quick_intel.map(q => q.insight).join('. ') : 'Please try refreshing the page or check back in a few minutes.'}</p>
                     </div>
                 `;
+                lastUpdated.textContent = 'Last refreshed: ---';
                 return;
             }
 
-            content.innerHTML = `
-                <div class="article-grid">
-                    ${filtered.map(article => {
-                        const descriptionText = isSpeedReadMode 
-                            ? extractKeySentences(article.description || article.title, 3) // Extract 3 key sentences in speed read mode
-                            : (article.description || 'Read more for details.');
-                        
-                        return `
-                            <article class="article" onclick="window.open('${article.link}', '_blank')" tabindex="0" role="button" aria-label="Read: ${article.title}">
-                                <div class="article-meta">
-                                    <span class="article-source">${article.source}</span>
-                                    <div class="article-separator"></div>
-                                    <span class="article-time">${timeAgo(article.pubDate)}</span>
-                                </div>
-                                <h2 class="article-title">${article.title}</h2>
-                                <p class="article-description">${descriptionText}</p>
-                                <div class="read-time">${estimateReadTime(isSpeedReadMode ? extractKeySentences(article.description || article.title, 3) : (article.description || article.title))}</div>
-                            </article>
-                        `;
-                    }).join('')}
-                </div>
-            `;
+            // Update last updated timestamp from digest data
+            if (currentDigest.summary && currentDigest.summary.timestamp) {
+                 lastUpdated.textContent = `Last refreshed: ${timeAgo(currentDigest.summary.timestamp)}`;
+            } else if (currentDigest.digest_date) {
+                // If timestamp from summary is not available, use digest_date from the AI output (less precise for "time ago")
+                lastUpdated.textContent = `Generated: ${currentDigest.digest_date}`; 
+            }
+           
 
-            // Keyboard navigation
-            document.querySelectorAll('.article').forEach(article => {
-                article.addEventListener('keydown', function(e) {
+            let html = '<div class="digest-container">';
+
+            // Main Content Area
+            html += '<div class="main-content">';
+
+            // Key Intelligence Section
+            if (currentDigest.key_intelligence) {
+                html += `
+                    <div class="section">
+                        <h2 class="section-title">Key Intelligence</h2>
+                        <p class="key-intelligence-summary">${currentDigest.key_intelligence}</p>
+                    </div>
+                `;
+            }
+
+            // Deal Drivers Section (formerly "Articles")
+            if (currentDigest.deal_drivers && currentDigest.deal_drivers.length > 0) {
+                html += `
+                    <div class="section">
+                        <h2 class="section-title">Deal Drivers</h2>
+                        <div class="deal-drivers-grid">
+                            ${currentDigest.deal_drivers.map(driver => `
+                                <article class="deal-driver" onclick="window.open('${driver.link}', '_blank')" tabindex="0" role="button" aria-label="Read: ${driver.headline}">
+                                    <div class="deal-driver-meta">
+                                        <span class="deal-driver-type">${driver.type.replace(/_/g, ' ')}</span>
+                                        <div class="article-separator"></div>
+                                        <span class="deal-driver-source">${driver.source}</span>
+                                    </div>
+                                    <h3 class="deal-driver-headline">${driver.headline}</h3>
+                                    <p class="deal-driver-summary">${driver.summary}</p>
+                                    ${driver.action_insight ? `<p class="deal-driver-action-insight"><strong>Angle:</strong> ${driver.action_insight}</p>` : ''}
+                                </article>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                 html += `
+                    <div class="section">
+                        <h2 class="section-title">Deal Drivers</h2>
+                        <div class="empty-state">
+                            <div class="icon">📋</div>
+                            <h3>No Deal Drivers yet</h3>
+                            <p>The AI is still processing the latest news for actionable insights.</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            html += '</div>'; // End main-content
+
+            // Sidebar (Quick Intel & Action Items)
+            html += '<div class="sidebar">';
+
+            // Quick Intel Section
+            if (currentDigest.quick_intel && currentDigest.quick_intel.length > 0) {
+                html += `
+                    <div class="section">
+                        <h2 class="section-title">Quick Intel</h2>
+                        <ul>
+                            ${currentDigest.quick_intel.map(intel => `
+                                <li class="list-item"><strong>${intel.category}:</strong> <span class="item-text">${intel.insight}</span></li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            // Action Items Section
+            if (currentDigest.action_items && currentDigest.action_items.length > 0) {
+                html += `
+                    <div class="section">
+                        <h2 class="section-title">Your Moves Today</h2>
+                        <ul>
+                            ${currentDigest.action_items.map(item => `
+                                <li class="list-item">
+                                    <strong>${item.priority}.</strong> <span class="item-text">${item.action}</span>
+                                    ${item.why ? `<span class="item-text action-why">${item.why}</span>` : ''}
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            html += '</div>'; // End sidebar
+            html += '</div>'; // End digest-container
+
+            content.innerHTML = html;
+
+            // Keyboard navigation for deal drivers
+            document.querySelectorAll('.deal-driver').forEach(driver => {
+                driver.addEventListener('keydown', function(e) {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
                         this.click();
@@ -650,29 +664,24 @@
             });
         }
 
-        // Refresh feed
+        // Refresh feed (now fetches/generates digest)
         async function refreshFeed() {
             if (isLoading) return;
             isLoading = true;
             refreshBtn.disabled = true;
             refreshBtn.classList.add('loading');
             errorMessage.style.display = 'none';
+            content.innerHTML = '<div class="loading">Preparing your daily federal sales briefing...</div>'; // Show loading state immediately
+
             try {
-                articles = await fetchArticles();
-                createFilters();
-                renderArticles();
+                currentDigest = await fetchDigest(true); // Force refresh the digest
+                renderDigest();
             } catch (error) {
+                console.error("Refresh failed:", error);
                 errorMessage.style.display = 'block';
-                errorMessage.textContent = 'Unable to refresh. Try again.';
-                content.innerHTML = `
-                    <div class="article-grid">
-                        <div class="empty-state">
-                            <div class="icon">📡</div>
-                            <h3>Connection Issue</h3>
-                            <p>Having trouble reaching sources. Try refreshing.</p>
-                        </div>
-                    </div>
-                `;
+                errorMessage.textContent = `Unable to get your briefing: ${error.message}. Please try again.`;
+                currentDigest = { status: "error", key_intelligence: "Failed to load briefing.", quick_intel: [{insight: "Check your internet connection or try again later."}] };
+                renderDigest(); // Render error state
             } finally {
                 isLoading = false;
                 refreshBtn.disabled = false;
@@ -682,9 +691,34 @@
 
         // Initialize
         setGreetingAndDate();
-        refreshFeed();
+        // Initial load should try to get existing digest first, then refresh if needed
+        async function initialLoad() {
+            isLoading = true;
+            refreshBtn.disabled = true;
+            refreshBtn.classList.add('loading');
+            content.innerHTML = '<div class="loading">Preparing your daily federal sales briefing...</div>';
+            try {
+                currentDigest = await fetchDigest(false); // Try to get pre-generated digest first
+                if (!currentDigest || currentDigest.status === "collecting_data" || currentDigest.status === "error") {
+                    console.log("Initial digest not available or failed, attempting refresh...");
+                    currentDigest = await fetchDigest(true); // If not available or error, trigger regeneration
+                }
+                renderDigest();
+            } catch (error) {
+                console.error("Initial load failed:", error);
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = `Failed to load initial briefing: ${error.message}. Please try again.`;
+                currentDigest = { status: "error", key_intelligence: "Failed to load briefing.", quick_intel: [{insight: "Check your internet connection or try again later."}] };
+                renderDigest(); // Render error state
+            } finally {
+                isLoading = false;
+                refreshBtn.disabled = false;
+                refreshBtn.classList.remove('loading');
+            }
+        }
+        initialLoad(); // Call initial load function
         window.addEventListener('scroll', updateReadingProgress);
-        setInterval(setGreetingAndDate, 3600000);
+        setInterval(setGreetingAndDate, 3600000); // Update greeting every hour
     </script>
 </body>
 </html>
