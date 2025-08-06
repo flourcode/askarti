@@ -73,12 +73,22 @@
             color: var(--text-primary);
             letter-spacing: -0.01em;
         }
+        .current-date { /* New style for current date */
+            font-size: 9px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 400;
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
         .last-updated {
             font-size: 9px; /* Smaller font size */
             color: var(--text-quaternary);
             text-transform: uppercase;
             letter-spacing: 0.08em; /* Tighter letter spacing */
             font-weight: 400;
+            margin-top: 2px; /* Small space below greeting */
         }
         .action-btn {
             background: none;
@@ -113,39 +123,6 @@
         /* Responsive filter tabs */
         .filters {
             display: none; /* Hidden for maximal density as per prompt */
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 10px; /* Reduced margin */
-            overflow: visible;
-            -webkit-overflow-scrolling: touch;
-            padding: 4px 0 8px 0; /* Reduced padding */
-        }
-        .filter-tab {
-            background: none;
-            border: 1px solid var(--border-medium);
-            color: var(--text-tertiary);
-            padding: 6px 12px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 10px;
-            font-weight: 400;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            white-space: nowrap;
-            transition: all 0.3s ease;
-            border-radius: 12px;
-            flex-shrink: 0;
-            position: relative;
-            z-index: 1;
-        }
-        .filter-tab:hover {
-            color: var(--text-secondary);
-            background: var(--bg-secondary);
-        }
-        .filter-tab.active {
-            color: var(--text-primary);
-            background: var(--bg-tertiary);
-            border-color: var(--border-medium);
         }
         /* Dense grid layout */
         .article-grid {
@@ -290,8 +267,14 @@
             h1 {
                 font-size: 15px;
             }
+            .current-date {
+                font-size: 8px;
+                margin-top: 1px;
+                margin-bottom: 1px;
+            }
             .last-updated {
                 font-size: 8px;
+                margin-top: 1px;
             }
             .refresh-btn {
                 align-self: flex-end;
@@ -420,24 +403,6 @@
             outline: 2px solid var(--accent-muted);
             outline-offset: 2px;
         }
-		/* Add this to your <style> block */
-.current-date {
-    font-size: 10px; /* Adjust as needed, similar to last-updated */
-    color: var(--text-secondary); /* Or var(--text-tertiary) */
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-weight: 400;
-    margin-top: 2px; /* Small space below title */
-    margin-bottom: 2px; /* Small space above greeting */
-}
-
-/* Adjust greeting and last-updated margins if needed */
-.greeting {
-    margin-top: 0; /* Remove top margin if new .current-date adds it */
-}
-.last-updated {
-    margin-top: 2px; /* Ensure a small gap below greeting */
-}
     </style>
 </head>
 <body>
@@ -448,9 +413,9 @@
         <header>
             <div class="header-content">
                 <div class="header-left">
-    <h1>The Read Board</h1>
-    <div class="current-date" id="currentDate"></div> <div class="greeting" id="greeting"></div> <div class="last-updated" id="lastUpdated">Loading...</div>
-</div>
+                    <h1>The Read Board</h1>
+                    <div class="current-date" id="currentDate"></div> <div class="greeting" id="greeting"></div> <div class="last-updated" id="lastUpdated">Loading...</div>
+                </div>
                 <button class="refresh-btn" id="refreshBtn" onclick="refreshFeed()">
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                         <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
@@ -483,28 +448,27 @@
         const filterContainer = document.getElementById('filterContainer');
         const lastUpdated = document.getElementById('lastUpdated');
         const greeting = document.getElementById('greeting');
+        const currentDateElement = document.getElementById('currentDate'); // Get the new element
         const progressBar = document.getElementById('progressBar');
+
         // Set greeting based on time and display current date
         function setGreetingAndDate() {
-    const now = new Date();
-    const hour = now.getHours();
-    let greetingText = 'Good Morning';
-    if (hour >= 12 && hour < 17) {
-        greetingText = 'Good Afternoon';
-    } else if (hour >= 17) {
-        greetingText = 'Good Evening';
-    }
-    
-    const options = { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' };
-    const formattedDate = now.toLocaleDateString('en-US', options);
+            const now = new Date();
+            const hour = now.getHours();
+            let greetingText = 'Good Morning';
+            if (hour >= 12 && hour < 17) {
+                greetingText = 'Good Afternoon';
+            } else if (hour >= 17) {
+                greetingText = 'Good Evening';
+            }
+            
+            const options = { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' };
+            const formattedDate = now.toLocaleDateString('en-US', options);
 
-    // Get the new currentDate element
-    const currentDateElement = document.getElementById('currentDate');
-
-    // Set text content for each element separately
-    currentDateElement.textContent = formattedDate; // Display only the date here
-    greeting.textContent = `${greetingText}. Welcome to The Read Board.`; // Display greeting and welcome message here
-}
+            // Display date and greeting in separate lines
+            currentDateElement.textContent = formattedDate;
+            greeting.textContent = `${greetingText}. Welcome to The Read Board.`;
+        }
         // Reading progress
         function updateReadingProgress() {
             const scrollTop = window.pageYOffset;
@@ -532,8 +496,6 @@
             // LinkedIn's sharing endpoint generally pulls meta tags from the URL,
             // but for a quick share, the basic URL parameter works for share-offsite.
             let shareUrl = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(url);
-            // If you want to pre-populate text, it's more complex and requires `shareArticle` endpoint often with API keys.
-            // For minimalist approach, linking to the article for LinkedIn to pull its own data is best.
             return shareUrl;
         }
 
