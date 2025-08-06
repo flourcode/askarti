@@ -675,7 +675,7 @@
             return 'low';
         }
 
-        // Process with AI using your existing API - FIXED VERSION
+        // Process with AI using your existing API - WORKING VERSION
         async function processWithAI() {
             const btn = document.getElementById('aiProcessBtn');
             const btnText = document.getElementById('aiButtonText');
@@ -686,60 +686,82 @@
             btnText.textContent = 'Processing...';
             
             try {
-                // Take the first 5 articles and create a news summary request
-                const topArticles = articles.slice(0, 5);
+                // Format the top articles as a single news text for analysis
+                const topArticles = articles.slice(0, 3); // Just top 3 to stay under character limit
                 
-                // Format as a news digest that your API already understands
-                const newsText = topArticles.map(article => 
-                    `${article.title}\n${article.description || ''}\nSource: ${article.source}`
-                ).join('\n\n---\n\n');
+                // Create a simple news summary text that won't exceed 2500 chars
+                let newsText = "Analyze these federal news articles:\n\n";
                 
-                // Use the digest format your API already handles
+                topArticles.forEach((article, index) => {
+                    newsText += `Article ${index + 1}: ${article.title}\n`;
+                    if (article.description) {
+                        // Truncate description to avoid hitting character limit
+                        const shortDesc = article.description.substring(0, 200);
+                        newsText += `${shortDesc}...\n`;
+                    }
+                    newsText += `Source: ${article.source}\n\n`;
+                });
+                
+                // Ensure we don't exceed the 2500 character limit
+                if (newsText.length > 2400) {
+                    newsText = newsText.substring(0, 2400) + "...";
+                }
+                
+                console.log('Sending request with text length:', newsText.length);
+                
+                // Send to your API with proper format
                 const response = await fetch(API_ENDPOINT, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify({ 
-                        situation: newsText,
-                        forceType: 'news'
+                        situation: newsText
+                        // Don't force type, let the API detect it's news
                     })
                 });
                 
+                const responseText = await response.text();
+                console.log('API Response status:', response.status);
+                
                 if (!response.ok) {
-                    console.error('API Response not OK:', response.status);
+                    console.error('API Response:', responseText);
                     throw new Error(`API returned ${response.status}`);
                 }
                 
-                const data = await response.json();
-                console.log('AI Response received:', data);
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (e) {
+                    console.error('Failed to parse response:', responseText);
+                    throw new Error('Invalid response format');
+                }
                 
-                // Extract insights from the news analysis response
-                if (data && data.response_type === 'news') {
-                    // Enhanced processing using AI insights
+                console.log('AI Response type:', data.response_type);
+                
+                // Handle the response based on what we get back
+                if (data && (data.response_type === 'news' || data.quick_take || data.key_moves)) {
+                    // Enhanced processing using whatever AI insights we got
                     processedArticles = articles.map((article, index) => {
                         const basePoints = extractKeyPoints(article);
-                        
-                        // Enhance first few articles with AI insights
-                        let enhancedPoints = basePoints;
                         let businessValue = '';
                         
+                        // Add any AI insights we received
                         if (index === 0 && data.quick_take) {
                             businessValue = data.quick_take.substring(0, 150);
                         }
                         
-                        // Use discovery questions as enhanced key points for top articles
-                        if (index < 3 && data.suggested_discovery_questions && data.suggested_discovery_questions[index]) {
-                            enhancedPoints = [
-                                basePoints[0] || article.title,
-                                data.suggested_discovery_questions[index]
-                            ];
+                        // If we got key moves, use them as insights
+                        if (data.key_moves && data.key_moves[index]) {
+                            businessValue = data.key_moves[index].action || businessValue;
                         }
                         
                         return {
                             ...article,
-                            keyPoints: enhancedPoints,
+                            keyPoints: basePoints,
                             priority: detectPriority(article),
                             businessValue: businessValue,
-                            extractionMethod: index < 5 ? 'ai-enhanced' : 'local'
+                            extractionMethod: index < 3 ? 'ai-enhanced' : 'local'
                         };
                     });
                     
@@ -749,31 +771,27 @@
                     // Re-render with enhanced data
                     renderSpeedRead();
                     updateStats();
-                    
-                    // Store the processed data
                     saveProcessedData();
                     
-                } else if (data && data.error) {
-                    console.error('API returned error:', data.error);
-                    throw new Error(data.error);
                 } else {
-                    console.log('Unexpected API response format:', data);
-                    throw new Error('Unexpected response format');
+                    // Just use local extraction
+                    console.log('Using local extraction - unexpected response format');
+                    processLocally();
+                    renderSpeedRead();
+                    updateStats();
+                    btnText.textContent = 'Local Mode';
                 }
                 
             } catch (error) {
                 console.error('AI processing error:', error);
                 
-                // Just use local extraction without showing error
+                // Fallback to local extraction
                 processLocally();
                 renderSpeedRead();
                 updateStats();
                 
                 btnText.textContent = 'Local Mode';
                 btn.classList.add('processing');
-                
-                // Don't show error message - gracefully fall back
-                console.log('Falling back to local extraction');
             } finally {
                 btn.disabled = false;
             }
