@@ -420,6 +420,24 @@
             outline: 2px solid var(--accent-muted);
             outline-offset: 2px;
         }
+		/* Add this to your <style> block */
+.current-date {
+    font-size: 10px; /* Adjust as needed, similar to last-updated */
+    color: var(--text-secondary); /* Or var(--text-tertiary) */
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 400;
+    margin-top: 2px; /* Small space below title */
+    margin-bottom: 2px; /* Small space above greeting */
+}
+
+/* Adjust greeting and last-updated margins if needed */
+.greeting {
+    margin-top: 0; /* Remove top margin if new .current-date adds it */
+}
+.last-updated {
+    margin-top: 2px; /* Ensure a small gap below greeting */
+}
     </style>
 </head>
 <body>
@@ -430,10 +448,9 @@
         <header>
             <div class="header-content">
                 <div class="header-left">
-                    <h1>The Read Board</h1>
-                    <div class="greeting" id="greeting"></div>
-                    <div class="last-updated" id="lastUpdated">Loading...</div>
-                </div>
+    <h1>The Read Board</h1>
+    <div class="current-date" id="currentDate"></div> <div class="greeting" id="greeting"></div> <div class="last-updated" id="lastUpdated">Loading...</div>
+</div>
                 <button class="refresh-btn" id="refreshBtn" onclick="refreshFeed()">
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                         <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
@@ -469,21 +486,25 @@
         const progressBar = document.getElementById('progressBar');
         // Set greeting based on time and display current date
         function setGreetingAndDate() {
-            const now = new Date();
-            const hour = now.getHours();
-            let greetingText = 'Good Morning';
-            if (hour >= 12 && hour < 17) {
-                greetingText = 'Good Afternoon';
-            } else if (hour >= 17) {
-                greetingText = 'Good Evening';
-            }
-            
-            const options = { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' };
-            const formattedDate = now.toLocaleDateString('en-US', options);
+    const now = new Date();
+    const hour = now.getHours();
+    let greetingText = 'Good Morning';
+    if (hour >= 12 && hour < 17) {
+        greetingText = 'Good Afternoon';
+    } else if (hour >= 17) {
+        greetingText = 'Good Evening';
+    }
+    
+    const options = { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' };
+    const formattedDate = now.toLocaleDateString('en-US', options);
 
-            // Updated greeting order to be more compact "Wed, 6 August 2025. Good Morning. Welcome to..."
-            greeting.textContent = `${formattedDate}. ${greetingText}. Welcome to The Read Board.`;
-        }
+    // Get the new currentDate element
+    const currentDateElement = document.getElementById('currentDate');
+
+    // Set text content for each element separately
+    currentDateElement.textContent = formattedDate; // Display only the date here
+    greeting.textContent = `${greetingText}. Welcome to The Read Board.`; // Display greeting and welcome message here
+}
         // Reading progress
         function updateReadingProgress() {
             const scrollTop = window.pageYOffset;
