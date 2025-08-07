@@ -792,10 +792,6 @@
            z-index: 99;
        }
        
-       .pull-to-refresh.visible {
-           top: 10px;
-       }
-       
        .pull-to-refresh.refreshing {
            animation: gentleSpin 1s linear infinite;
        }
@@ -1113,6 +1109,47 @@
 		from { transform: translateX(0%); }
 		to { transform: translateX(-50%); }
 	}
+
+    /* Ad Placement CSS */
+    .ad-placeholder {
+        background: var(--surface);
+        border: 1px dashed var(--border-medium);
+        border-radius: 8px;
+        padding: 24px;
+        margin-bottom: 16px;
+        text-align: center;
+        font-family: 'Inter', sans-serif;
+        font-size: 12px;
+        color: var(--text-tertiary);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        height: 120px; /* Adjust height as needed */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow-soft);
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .ad-placeholder:hover {
+        background: var(--bg-tertiary);
+    }
+    .ad-content {
+        color: var(--text-secondary);
+        font-weight: 500;
+        text-transform: none;
+        letter-spacing: normal;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    .ad-label {
+        font-size: 9px;
+        color: var(--text-quaternary);
+        margin-top: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
    </style>
 </head>
 <body>
@@ -1744,7 +1781,18 @@ function getStockTickerHtml() {
     `;
 }
 
-// Update the renderArticles function to include contracts
+function renderAdPlaceholder() {
+    // This function will generate the HTML for a placeholder ad
+    // You can replace this content with your actual ad code
+    return `
+        <div class="ad-placeholder">
+            <div class="ad-content">Your sponsored content or ad here.</div>
+            <div class="ad-label">Advertisement</div>
+        </div>
+    `;
+}
+
+// Update the renderArticles function to include ad placements
 async function renderArticles() {
    // Fetch stock data first
    stockData = await fetchStockData();
@@ -1761,11 +1809,10 @@ async function renderArticles() {
        html += renderContractsSection(currentContractsData);
    }
 
-   // === INSERT CORRECTED STOCK TICKER HERE ===
+   // Add the stock ticker
    if (currentFilter === 'all') {
        html += getStockTickerHtml();
    }
-   // === END STOCK TICKER INSERTION ===
    
    if (filtered.length === 0) {
        const messages = emptyStateMessages[currentFilter] || emptyStateMessages['all'];
@@ -1782,9 +1829,10 @@ async function renderArticles() {
        `;
    } else {
     const groups = groupArticlesByDate(filtered);
-   
-    // Render each group
-    Object.entries(groups).forEach(([key, group]) => {
+    const dateGroups = Object.entries(groups);
+
+    // Render each group and insert an ad after each one
+    dateGroups.forEach(([key, group]) => {
         if (group.articles.length > 0) {
             html += `
                 <div class="date-group">
@@ -1821,6 +1869,9 @@ async function renderArticles() {
                     </div>
                 </div>
             `;
+
+            // Insert a placeholder ad after each date group
+            html += renderAdPlaceholder();
         }
     });
    }
