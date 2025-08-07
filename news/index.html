@@ -1115,20 +1115,18 @@ html {
     color: var(--text-secondary);
 }
 
-/* New CSS for percent change */
 .stock-percent-change {
-    font-size: 9px; /* Slightly smaller than price */
-    font-weight: 500;
-    margin-left: -4px; /* Adjust spacing as needed */
-}
+        font-size: 10px;
+        font-weight: 500;
+    }
+    
+    .stock-change-positive {
+        color: var(--fresh-accent);
+    }
 
-.stock-change-positive {
-    color: #28a745; /* Green color for positive change */
-}
-
-.stock-change-negative {
-    color: #dc3545; /* Red color for negative change */
-}
+    .stock-change-negative {
+        color: var(--breaking-accent);
+    }
 
 @keyframes tickerScroll {
     from { transform: translateX(0%); }
@@ -1735,7 +1733,7 @@ async function fetchStockData() {
         // Find the correct indices for the headers
         let tickerIndex = -1;
         let priceIndex = -1;
-        let changeIndex = -1; // Index for the 'Change' column
+        let percentChangeIndex = -1;
         
         // Split the first line (headers) by comma
         const headers = lines[0].split(',');
@@ -1747,34 +1745,27 @@ async function fetchStockData() {
             if (header === 'Price') {
                 priceIndex = i;
             }
-            if (header === 'Change') { // Find 'Change' header
-                changeIndex = i;
+            if (header === 'Change%') {
+                percentChangeIndex = i;
             }
         }
         
-        if (tickerIndex === -1 || priceIndex === -1 || changeIndex === -1) {
-            console.error('Error: Could not find "Ticker", "Price", or "Change" headers in the Google Sheet.');
+        if (tickerIndex === -1 || priceIndex === -1 || percentChangeIndex === -1) {
+            console.error('Error: Could not find "Ticker", "Price", or "Change%" headers in the Google Sheet.');
             return [];
         }
 
         const data = [];
         for (let i = 1; i < lines.length; i++) {
             const values = lines[i].split(',').map(value => value.trim().replace(/^"|"$/g, ''));
-            if (values.length > tickerIndex && values.length > priceIndex && values.length > changeIndex) {
-                const price = parseFloat(values[priceIndex].replace(/[^0-9.]/g, ''));
-                const change = parseFloat(values[changeIndex].replace(/[^0-9.-]/g, '')); // Allow negative sign for change
-
-                // Calculate percent change, handle division by zero
-                // The formula for percentage change is (Current Price - Previous Price) / Previous Price * 100
-                // If 'change' is the difference, then Previous Price = Current Price - Change
-                const previousPrice = price - change;
-                const percentChange = (previousPrice !== 0) ? ((change / previousPrice) * 100).toFixed(2) : '0.00';
+            if (values.length > tickerIndex && values.length > priceIndex && values.length > percentChangeIndex) {
+                // Parse the percent change directly from the sheet
+                const percentChangeValue = values[percentChangeIndex].replace(/[^0-9.-]/g, '');
                 
                 data.push({
                     ticker: values[tickerIndex],
-                    price: price,
-                    change: change, 
-                    percentChange: parseFloat(percentChange) // Store the calculated percent change
+                    price: parseFloat(values[priceIndex].replace(/[^0-9.]/g, '')),
+                    percentChange: parseFloat(percentChangeValue) // Use the parsed value directly
                 });
             }
         }
