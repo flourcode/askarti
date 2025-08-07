@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIB DASH - Defense Industrial Base Intelligence</title>
+    <title>The Read Board - Intelligence Briefings</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -1067,6 +1067,15 @@
 		overflow: hidden;
         position: relative;
 	}
+    
+    .stock-ticker-header {
+        font-size: 8px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--text-tertiary);
+        margin-bottom: 8px;
+    }
 
     .ticker-scroll-wrapper {
         position: relative;
@@ -1121,7 +1130,7 @@
        <header>
            <div class="header-content">
                <div class="header-left">
-                   <h1>DIB DASH</h1>
+                   <h1>DIB News</h1>
                    <div class="current-date" id="currentDate"></div>
                    <div class="greeting" id="greeting"></div>
                    <div class="last-updated" id="lastUpdated">Loading...</div>
@@ -1159,13 +1168,13 @@
        <footer>
            <div class="footer-content">
                <div class="footer-about">
-                   <p>Defense Industrial Base Intelligence. Stay informed with what matters most.</p>
+                   <p>Curated intelligence briefings for the modern professional. Stay informed with what matters most.</p>
                </div>
                <div class="footer-links">
                    <a href="#" class="share-link" id="shareLink">Share with your bestie</a>
                </div>
                <div class="footer-copyright">
-                   <p>&copy; 2025 DIBDASH.com. All rights reserved.</p>
+                   <p>&copy; 2025 TheReadBoard.com. All rights reserved.</p>
                </div>
            </div>
        </footer>
@@ -1306,7 +1315,7 @@
            const formattedDate = now.toLocaleDateString('en-US', options);
            
            currentDateElement.textContent = formattedDate;
-           greeting.innerHTML = `${greetingText}. Welcome to DIB DASH. ${weekendEmoji}`;
+           greeting.innerHTML = `${greetingText}. Welcome to The Read Board. ${weekendEmoji}`;
            
            // Contextual message
            contextualMessage.textContent = getContextualMessage(now);
@@ -1645,60 +1654,62 @@ function closeModal() {
 
 // === NEW CODE FOR STOCK TICKER ===
 
-// Stock data provided by the user
-const stockData = [
-    { ticker: 'LDOS', company: 'Leidos', price: 159.20 },
-    { ticker: 'BAH', company: 'Booz Allen Hamilton', price: 109.71 },
-    { ticker: 'LMT', company: 'Lockheed Martin', price: 421.01 },
-    { ticker: 'GD', company: 'General Dynamics', price: 310.74 },
-    { ticker: 'RTX', company: 'RTX', price: 156.81 },
-    { ticker: 'BA', company: 'Boeing', price: 221.90 },
-    { ticker: 'SAIC', company: 'SAIC', price: 110.73 },
-    { ticker: 'LHX', company: 'L3Harris Technologies', price: 278.26 },
-    { ticker: 'NOC', company: 'Northrop Grumman', price: 586.44 },
-    { ticker: 'CACI', company: 'CACI International', price: 460.93 },
-    { ticker: 'ACN', company: 'Accenture', price: 255.37 },
-    { ticker: 'AMTM', company: 'Amentum', price: 24.19 },
-    { ticker: 'DELL', company: 'Dell Technologies', price: 127.32 },
-    { ticker: 'KBR', company: 'KBR', price: 46.49 },
-    { ticker: 'MMS', company: 'Maximus', price: 72.74 },
-    { ticker: 'FLR', company: 'Fluor Corp', price: 41.42 },
-    { ticker: 'HII', company: 'Huntington Ingalls Ind.', price: 269.83 },
-    { ticker: 'T', company: 'AT&T Corp', price: 27.75 },
-    { ticker: 'VVX', company: 'V2X', price: 47.34 },
-    { ticker: 'IBM', company: 'IBM Corp', price: 250.05 },
-    { ticker: 'PSN', company: 'Parsons Corp', price: 73.72 },
-    { ticker: 'GIB', company: 'CGI Federal (CGI Inc.)', price: 95.48 },
-    { ticker: 'LUMN', company: 'Lumen Technologies', price: 3.71 },
-    { ticker: 'ICFI', company: 'ICF International', price: 88.45 },
-    { ticker: 'TXT', company: 'Textron Inc.', price: 77.23 },
-    { ticker: 'ORCL', company: 'Oracle', price: 244.42 },
-    { ticker: 'ACM', company: 'AECOM', price: 110.99 },
-    { ticker: 'VZ', company: 'Verizon Communications', price: 42.88 },
-    { ticker: 'TTEK', company: 'Tetra Tech', price: 35.88 },
-    { ticker: 'PLTR', company: 'Palantir Technologies', price: 154.27 },
-    { ticker: 'MSFT', company: 'Microsoft Corp.', price: 524.11 },
-    { ticker: 'DRS', company: 'Leonardo DRS', price: 41.67 },
-    { ticker: 'NNI', company: 'Nelnet', price: 124.54 },
-    { ticker: 'VSAT', company: 'Viasat Inc.', price: 16.58 },
-    { ticker: 'CDW', company: 'CDW', price: 168.86 },
-    { ticker: 'J', company: 'Jacobs Engineering', price: 139.06 },
-    { ticker: 'HPQ', company: 'HP Inc.', price: 24.45 },
-    { ticker: 'NVDA', company: 'NVIDIA', price: 173.72 },
-    { ticker: 'AMZN', company: 'Amazon (AWS)', price: 214.75 },
-];
+let stockData = []; // This will now hold the fetched data
+
+// Google Sheets URL to get the data as CSV
+const GOOGLE_SHEETS_URL = 'https://docs.google.com/spreadsheets/d/1svXheHx4C1XVLITnVsW7nbT0v-B8tJxDviZG-Op2v58/gviz/tq?tqx=out:csv&sheet=Sheet1';
+
+/**
+ * Fetches and parses stock data from the Google Sheet.
+ * @returns {Promise<Array>} A promise that resolves with an array of stock objects.
+ */
+async function fetchStockData() {
+    try {
+        const response = await fetch(GOOGLE_SHEETS_URL + '&t=' + Date.now()); // Add timestamp to prevent caching
+        if (!response.ok) {
+            throw new Error(`Failed to fetch Google Sheet data: ${response.statusText}`);
+        }
+        const csv = await response.text();
+        const lines = csv.split('\n');
+        const headers = lines[0].split(',').map(header => header.trim().replace(/^"|"$/g, ''));
+        const data = [];
+        for (let i = 1; i < lines.length; i++) {
+            const values = lines[i].split(',').map(value => value.trim().replace(/^"|"$/g, ''));
+            if (values.length === headers.length) {
+                const stock = {};
+                for (let j = 0; j < headers.length; j++) {
+                    let key = headers[j].toLowerCase().replace(/\s/g, ''); // 'Ticker' -> 'ticker'
+                    let value = values[j];
+                    if (key === 'closeprice') {
+                        value = parseFloat(value.replace(/[^0-9.]/g, ''));
+                    }
+                    stock[key] = value;
+                }
+                data.push(stock);
+            }
+        }
+        return data;
+    } catch (error) {
+        console.error('Error fetching stock data:', error);
+        return [];
+    }
+}
 
 /**
  * Generates the full HTML string for the stock ticker with all data.
  * @returns {string} The HTML for the stock ticker section.
  */
 function getStockTickerHtml() {
+    if (stockData.length === 0) {
+        return '';
+    }
+    
     const stockItemsHtml = stockData.map(stock => {
         // Here you could add logic for a "change" icon or color
         return `
             <div class="stock-item">
                 <span class="stock-ticker">${stock.ticker}</span>
-                <span class="stock-price">$${stock.price.toFixed(2)}</span>
+                <span class="stock-price">$${parseFloat(stock.closeprice).toFixed(2)}</span>
             </div>
         `;
     }).join('');
@@ -1708,6 +1719,9 @@ function getStockTickerHtml() {
 
     return `
         <div class="stock-ticker-section">
+            <div class="stock-ticker-header">
+                Current Price (20-minute delay)
+            </div>
             <div class="ticker-scroll-wrapper">
                 <div class="ticker-scroll-content">
                     ${tickerContent}
@@ -1718,7 +1732,10 @@ function getStockTickerHtml() {
 }
 
 // Update the renderArticles function to include contracts
-function renderArticles() {
+async function renderArticles() {
+   // Fetch stock data first
+   stockData = await fetchStockData();
+
    const filtered = currentFilter === 'all' 
        ? articles 
        : articles.filter(a => a.category === currentFilter);
