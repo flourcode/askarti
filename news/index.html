@@ -1534,7 +1534,6 @@ function renderContractsSection(contractsData) {
     const insights = contractsData.insights || {
         totalContracts: 0,
         totalValue: 0,
-        fmsCount: 0
     };
     
     const agencyCards = Object.entries(contractsData.agencies)
@@ -1601,7 +1600,6 @@ function renderContractsSection(contractsData) {
             <div class="contracts-header">
                 <div class="contracts-title">
                     Contract Awards • Week of ${date}
-                    ${insights.fmsCount > 0 ? `<span class="contracts-badge">FMS: ${insights.fmsCount}</span>` : ''}
                 </div>
                 <div class="contracts-summary">
                     ${insights.totalContracts || 0} contracts • ${formatCurrency(insights.totalValue || 0)} total
@@ -1810,7 +1808,7 @@ async function renderArticles() {
                                         <span class="article-time">${timeAgo(article.pubDate)}</span>
                                         ${hints.length > 0 ? `
                                             <div class="article-hints">
-                                                ${hints.map(h => `<span class="hint-emoji">${h}</span>`).join('')}
+                                                ${hints.map(h => `<span class="hint-emoji"></span>`).join('')}
                                             </div>
                                         ` : ''}
                                         <span class="reading-time">${readingTime} min</span>
