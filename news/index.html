@@ -1671,21 +1671,36 @@ async function fetchStockData() {
         }
         const csv = await response.text();
         const lines = csv.split('\n');
-        const headers = lines[0].split(',').map(header => header.trim().replace(/^"|"$/g, ''));
+        
+        // Find the correct indices for the headers
+        let tickerIndex = -1;
+        let priceIndex = -1;
+        
+        // Split the first line (headers) by comma
+        const headers = lines[0].split(',');
+        for (let i = 0; i < headers.length; i++) {
+            const header = headers[i].trim().replace(/^"|"$/g, '');
+            if (header === 'Ticker') {
+                tickerIndex = i;
+            }
+            if (header === 'Price') {
+                priceIndex = i;
+            }
+        }
+        
+        if (tickerIndex === -1 || priceIndex === -1) {
+            console.error('Error: Could not find "Ticker" or "Price" headers in the Google Sheet.');
+            return [];
+        }
+
         const data = [];
         for (let i = 1; i < lines.length; i++) {
             const values = lines[i].split(',').map(value => value.trim().replace(/^"|"$/g, ''));
-            if (values.length === headers.length) {
-                const stock = {};
-                for (let j = 0; j < headers.length; j++) {
-                    let key = headers[j].toLowerCase().replace(/\s/g, ''); // 'Ticker' -> 'ticker'
-                    let value = values[j];
-                    if (key === 'closeprice') {
-                        value = parseFloat(value.replace(/[^0-9.]/g, ''));
-                    }
-                    stock[key] = value;
-                }
-                data.push(stock);
+            if (values.length > tickerIndex && values.length > priceIndex) {
+                data.push({
+                    ticker: values[tickerIndex],
+                    price: parseFloat(values[priceIndex].replace(/[^0-9.]/g, ''))
+                });
             }
         }
         return data;
@@ -1709,7 +1724,7 @@ function getStockTickerHtml() {
         return `
             <div class="stock-item">
                 <span class="stock-ticker">${stock.ticker}</span>
-                <span class="stock-price">$${parseFloat(stock.closeprice).toFixed(2)}</span>
+                <span class="stock-price">$${parseFloat(stock.price).toFixed(2)}</span>
             </div>
         `;
     }).join('');
