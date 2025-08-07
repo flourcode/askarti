@@ -1464,17 +1464,25 @@ function formatCurrency(value) {
 }
 
 function renderContractsSection(contractsData) {
-    if (!contractsData || !contractsData.agencies) return '';
+    if (!contractsData || !contractsData.agencies) {
+        console.log('No contracts data available');
+        return '';
+    }
     
     const date = new Date(contractsData.date || new Date()).toLocaleDateString('en-US', { 
         month: 'long', 
         day: 'numeric' 
     });
     
-    const insights = contractsData.insights;
+    // Safely access insights with defaults
+    const insights = contractsData.insights || {
+        totalContracts: 0,
+        totalValue: 0,
+        fmsCount: 0
+    };
     
     const agencyCards = Object.entries(contractsData.agencies)
-        .filter(([agency, data]) => data.contracts.length > 0)
+        .filter(([agency, data]) => data && data.contracts && data.contracts.length > 0)
         .map(([agency, data]) => {
             // Get top 3 contracts by value
             const topContracts = data.contracts
@@ -1494,55 +1502,60 @@ function renderContractsSection(contractsData) {
                 <div class="agency-card" onclick="showAgencyDetails('${agency}')" tabindex="0">
                     <div class="agency-header">
                         <div class="agency-name">
-                            <span class="agency-icon">${data.icon}</span>
+                            <span class="agency-icon">${data.icon || '📄'}</span>
                             ${agency}
                         </div>
-                        <div class="agency-total">${formatCurrency(data.total)}</div>
+                        <div class="agency-total">${formatCurrency(data.total || 0)}</div>
                     </div>
                     
                     <div class="agency-stats">
                         <div class="stat-item">
                             <span class="stat-label">Contracts</span>
-                           <span class="stat-value">${data.contracts.length}</span>
-                       </div>
-                       <div class="stat-item">
-                           <span class="stat-label">Avg Value</span>
-                           <span class="stat-value">${formatCurrency(Math.round(data.total / data.contracts.length))}</span>
-                       </div>
-                       <div class="stat-item">
-                           <span class="stat-label">Top Type</span>
-                           <span class="stat-value">${topType ? topType[0] : 'General'}</span>
-                       </div>
-                   </div>
-                   
-                   <div class="top-contracts">
-                       ${topContracts.map(contract => `
-                           <div class="contract-item">
-                               <span class="contract-company">${contract.company}</span>
-                               <span class="contract-value">${contract.formattedValue}</span>
-                           </div>
-                       `).join('')}
-                   </div>
-               </div>
-           `;
-       }).join('');
-   
-   return `
-       <div class="contracts-section">
-           <div class="contracts-header">
-               <div class="contracts-title">
-                   💼 Contract Awards • ${date}
-                   ${insights.fmsCount > 0 ? `<span class="contracts-badge">FMS: ${insights.fmsCount}</span>` : ''}
-               </div>
-               <div class="contracts-summary">
-                   ${insights.totalContracts} contracts • ${formatCurrency(insights.totalValue)} total
-               </div>
-           </div>
-           <div class="contracts-grid">
-               ${agencyCards}
-           </div>
-       </div>
-   `;
+                            <span class="stat-value">${data.contracts.length}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Avg Value</span>
+                            <span class="stat-value">${formatCurrency(Math.round((data.total || 0) / data.contracts.length))}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Top Type</span>
+                            <span class="stat-value">${topType ? topType[0] : 'General'}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="top-contracts">
+                        ${topContracts.map(contract => `
+                            <div class="contract-item">
+                                <span class="contract-company">${contract.company || 'Unknown'}</span>
+                                <span class="contract-value">${contract.formattedValue || formatCurrency(contract.value || 0)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    
+    // Only render if we have agency cards
+    if (!agencyCards) {
+        return '';
+    }
+    
+    return `
+        <div class="contracts-section">
+            <div class="contracts-header">
+                <div class="contracts-title">
+                    💼 Contract Awards • ${date}
+                    ${insights.fmsCount > 0 ? `<span class="contracts-badge">FMS: ${insights.fmsCount}</span>` : ''}
+                </div>
+                <div class="contracts-summary">
+                    ${insights.totalContracts || 0} contracts • ${formatCurrency(insights.totalValue || 0)} total
+                </div>
+            </div>
+            <div class="contracts-grid">
+                ${agencyCards}
+            </div>
+        </div>
+    `;
 }
 
 // Store contracts data globally for modal access
@@ -1765,45 +1778,58 @@ function setupAdminPanel() {
 }
 
 function processContracts() {
-   const text = document.getElementById('contractsInput').value;
-   const status = document.getElementById('uploadStatus');
-   
-   if (!text) {
-       status.textContent = 'Please paste contract text';
-       return;
-   }
-   
-   const date = new Date().toISOString().split('T')[0];
-   status.textContent = 'Processing...';
-   
-   // Send to your Lambda endpoint
-   fetch('https://jcsmad2nf7gbhxyarmpykpmdwm0bafge.lambda-url.us-east-1.on.aws/contracts', {
-       method: 'POST',
-       headers: {
-           'Content-Type': 'application/json'
-       },
-       body: JSON.stringify({ 
-           date: date,
-           contractText: text 
-       })
-   })
-   .then(response => response.json())
-   .then(data => {
-       if (data.success) {
-           status.textContent = `✓ Uploaded ${data.insights.totalContracts} contracts totaling ${formatCurrency(data.insights.totalValue)}`;
-           document.getElementById('contractsInput').value = '';
-           
-           // Refresh the feed after a moment
-           setTimeout(() => {
-               refreshFeed();
-           }, 2000);
-       } else {
-           status.textContent = 'Upload failed. Please try again.';
-       }
-   })
-   .catch(error => {
-       status.textContent = 'Error: ' + error.message;
-   });
+    const text = document.getElementById('contractsInput').value;
+    const status = document.getElementById('uploadStatus');
+    
+    if (!text) {
+        status.textContent = 'Please paste contract text';
+        return;
+    }
+    
+    const date = new Date().toISOString().split('T')[0];
+    status.textContent = 'Processing...';
+    
+    // Send to your Lambda endpoint
+    fetch('https://jcsmad2nf7gbhxyarmpykpmdwm0bafge.lambda-url.us-east-1.on.aws/contracts', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+            date: date,
+            contractText: text 
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Lambda response:', data); // Debug log
+        
+        if (data.success) {
+            // Check if insights exists before accessing properties
+            if (data.insights) {
+                status.textContent = `✓ Uploaded ${data.insights.totalContracts || 0} contracts totaling ${formatCurrency(data.insights.totalValue || 0)}`;
+            } else {
+                status.textContent = '✓ Contracts uploaded successfully';
+            }
+            document.getElementById('contractsInput').value = '';
+            
+            // Refresh the feed after a moment
+            setTimeout(() => {
+                refreshFeed();
+            }, 2000);
+        } else {
+            status.textContent = data.error || 'Upload failed. Please try again.';
+        }
+    })
+    .catch(error => {
+        console.error('Error processing contracts:', error);
+        status.textContent = 'Error: ' + error.message;
+    });
 }
 
 // Update the initialization to include admin panel setup
