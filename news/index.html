@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIB Dash - Defense Industrial Base Intelligence</title>
+    <title>DIBLoop - Defense Industrial Base Intelligence</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -1130,7 +1130,7 @@
        <header>
            <div class="header-content">
                <div class="header-left">
-                   <h1>DIB Dash - Defense Industrial Base Intelligence</h1>
+                   <h1>DIBLoop - Defense Industrial Base Intelligence</h1>
                    <div class="current-date" id="currentDate"></div>
                    <div class="greeting" id="greeting"></div>
                    <div class="last-updated" id="lastUpdated">Loading...</div>
@@ -1168,13 +1168,13 @@
        <footer>
            <div class="footer-content">
                <div class="footer-about">
-                   <p>Curated intelligence for Defense Sales and BD Professionals. Stay informed with what matters most.</p>
+                   <p>Curated intelligence for Defense professionals. Stay in the loop.</p>
                </div>
                <div class="footer-links">
                    <a href="#" class="share-link" id="shareLink">Share with your bestie</a>
                </div>
                <div class="footer-copyright">
-                   <p>&copy; 2025 DIBDash.com. All rights reserved.</p>
+                   <p>&copy; 2025 DIBLoop.com. All rights reserved.</p>
                </div>
            </div>
        </footer>
@@ -1599,7 +1599,7 @@ function renderContractsSection(contractsData) {
         <div class="contracts-section">
             <div class="contracts-header">
                 <div class="contracts-title">
-                    Contract Awards • Week of ${date}
+                    Contract Awards • ${date}
                 </div>
                 <div class="contracts-summary">
                     ${insights.totalContracts || 0} contracts • ${formatCurrency(insights.totalValue || 0)} total
@@ -2034,7 +2034,15 @@ setupAdminPanel();
            cycleLoadingMessage();
            
            try {
-               articles = await fetchArticles();
+               // Fetch both news and stock data
+               const [fetchedArticles, fetchedStockData] = await Promise.all([
+                   fetchArticles(),
+                   fetchStockData()
+               ]);
+               
+               articles = fetchedArticles;
+               stockData = fetchedStockData;
+               
                createFilters();
                renderArticles();
                showToast('Feed refreshed');
