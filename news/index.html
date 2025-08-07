@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Read Board - Intelligence Briefings</title>
+    <title>DIB DASH - Defense Industrial Base Intelligence</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -1056,6 +1056,54 @@
         gap: 4px;
     }
 }
+	/* Stock Ticker specific styling */
+	.stock-ticker-section {
+		margin-bottom: 20px;
+        background: var(--surface);
+		border: 1px solid var(--border-light);
+		border-radius: 8px;
+		box-shadow: var(--shadow-soft);
+        padding: 8px 12px;
+		overflow: hidden;
+        position: relative;
+	}
+
+    .ticker-scroll-wrapper {
+        position: relative;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .ticker-scroll-content {
+        display: inline-block;
+        animation: tickerScroll 120s linear infinite;
+        will-change: transform;
+    }
+
+	.stock-item {
+		display: inline-flex;
+        align-items: center;
+        gap: 8px;
+		padding: 0 16px;
+	}
+
+	.stock-ticker {
+		font-size: 10px;
+		font-weight: 600;
+		color: var(--text-primary);
+		text-transform: uppercase;
+        letter-spacing: 0.05em;
+	}
+
+	.stock-price {
+		font-size: 10px;
+		color: var(--text-secondary);
+	}
+	
+	@keyframes tickerScroll {
+		from { transform: translateX(0%); }
+		to { transform: translateX(-50%); }
+	}
    </style>
 </head>
 <body>
@@ -1073,7 +1121,7 @@
        <header>
            <div class="header-content">
                <div class="header-left">
-                   <h1>DIB News</h1>
+                   <h1>DIB DASH</h1>
                    <div class="current-date" id="currentDate"></div>
                    <div class="greeting" id="greeting"></div>
                    <div class="last-updated" id="lastUpdated">Loading...</div>
@@ -1111,13 +1159,13 @@
        <footer>
            <div class="footer-content">
                <div class="footer-about">
-                   <p>Curated intelligence briefings for the modern professional. Stay informed with what matters most.</p>
+                   <p>Defense Industrial Base Intelligence. Stay informed with what matters most.</p>
                </div>
                <div class="footer-links">
                    <a href="#" class="share-link" id="shareLink">Share with your bestie</a>
                </div>
                <div class="footer-copyright">
-                   <p>&copy; 2025 TheReadBoard.com. All rights reserved.</p>
+                   <p>&copy; 2025 DIBDASH.com. All rights reserved.</p>
                </div>
            </div>
        </footer>
@@ -1258,7 +1306,7 @@
            const formattedDate = now.toLocaleDateString('en-US', options);
            
            currentDateElement.textContent = formattedDate;
-           greeting.innerHTML = `${greetingText}. Welcome to The Read Board. ${weekendEmoji}`;
+           greeting.innerHTML = `${greetingText}. Welcome to DIB DASH. ${weekendEmoji}`;
            
            // Contextual message
            contextualMessage.textContent = getContextualMessage(now);
@@ -1455,7 +1503,6 @@
        }
        
 // Add these functions to your existing JavaScript
-
 function formatCurrency(value) {
     if (value >= 1000000000) return `$${(value / 1000000000).toFixed(1)}B`;
     if (value >= 1000000) return `$${(value / 1000000).toFixed(1)}M`;
@@ -1596,6 +1643,80 @@ function closeModal() {
    document.getElementById('contractModal').classList.remove('active');
 }
 
+// === NEW CODE FOR STOCK TICKER ===
+
+// Stock data provided by the user
+const stockData = [
+    { ticker: 'LDOS', company: 'Leidos', price: 159.20 },
+    { ticker: 'BAH', company: 'Booz Allen Hamilton', price: 109.71 },
+    { ticker: 'LMT', company: 'Lockheed Martin', price: 421.01 },
+    { ticker: 'GD', company: 'General Dynamics', price: 310.74 },
+    { ticker: 'RTX', company: 'RTX', price: 156.81 },
+    { ticker: 'BA', company: 'Boeing', price: 221.90 },
+    { ticker: 'SAIC', company: 'SAIC', price: 110.73 },
+    { ticker: 'LHX', company: 'L3Harris Technologies', price: 278.26 },
+    { ticker: 'NOC', company: 'Northrop Grumman', price: 586.44 },
+    { ticker: 'CACI', company: 'CACI International', price: 460.93 },
+    { ticker: 'ACN', company: 'Accenture', price: 255.37 },
+    { ticker: 'AMTM', company: 'Amentum', price: 24.19 },
+    { ticker: 'DELL', company: 'Dell Technologies', price: 127.32 },
+    { ticker: 'KBR', company: 'KBR', price: 46.49 },
+    { ticker: 'MMS', company: 'Maximus', price: 72.74 },
+    { ticker: 'FLR', company: 'Fluor Corp', price: 41.42 },
+    { ticker: 'HII', company: 'Huntington Ingalls Ind.', price: 269.83 },
+    { ticker: 'T', company: 'AT&T Corp', price: 27.75 },
+    { ticker: 'VVX', company: 'V2X', price: 47.34 },
+    { ticker: 'IBM', company: 'IBM Corp', price: 250.05 },
+    { ticker: 'PSN', company: 'Parsons Corp', price: 73.72 },
+    { ticker: 'GIB', company: 'CGI Federal (CGI Inc.)', price: 95.48 },
+    { ticker: 'LUMN', company: 'Lumen Technologies', price: 3.71 },
+    { ticker: 'ICFI', company: 'ICF International', price: 88.45 },
+    { ticker: 'TXT', company: 'Textron Inc.', price: 77.23 },
+    { ticker: 'ORCL', company: 'Oracle', price: 244.42 },
+    { ticker: 'ACM', company: 'AECOM', price: 110.99 },
+    { ticker: 'VZ', company: 'Verizon Communications', price: 42.88 },
+    { ticker: 'TTEK', company: 'Tetra Tech', price: 35.88 },
+    { ticker: 'PLTR', company: 'Palantir Technologies', price: 154.27 },
+    { ticker: 'MSFT', company: 'Microsoft Corp.', price: 524.11 },
+    { ticker: 'DRS', company: 'Leonardo DRS', price: 41.67 },
+    { ticker: 'NNI', company: 'Nelnet', price: 124.54 },
+    { ticker: 'VSAT', company: 'Viasat Inc.', price: 16.58 },
+    { ticker: 'CDW', company: 'CDW', price: 168.86 },
+    { ticker: 'J', company: 'Jacobs Engineering', price: 139.06 },
+    { ticker: 'HPQ', company: 'HP Inc.', price: 24.45 },
+    { ticker: 'NVDA', company: 'NVIDIA', price: 173.72 },
+    { ticker: 'AMZN', company: 'Amazon (AWS)', price: 214.75 },
+];
+
+/**
+ * Generates the full HTML string for the stock ticker with all data.
+ * @returns {string} The HTML for the stock ticker section.
+ */
+function getStockTickerHtml() {
+    const stockItemsHtml = stockData.map(stock => {
+        // Here you could add logic for a "change" icon or color
+        return `
+            <div class="stock-item">
+                <span class="stock-ticker">${stock.ticker}</span>
+                <span class="stock-price">$${stock.price.toFixed(2)}</span>
+            </div>
+        `;
+    }).join('');
+
+    // Duplicate the content to ensure a seamless loop
+    const tickerContent = stockItemsHtml + stockItemsHtml;
+
+    return `
+        <div class="stock-ticker-section">
+            <div class="ticker-scroll-wrapper">
+                <div class="ticker-scroll-content">
+                    ${tickerContent}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
 // Update the renderArticles function to include contracts
 function renderArticles() {
    const filtered = currentFilter === 'all' 
@@ -1609,12 +1730,18 @@ function renderArticles() {
    if (currentContractsData && currentFilter === 'all') {
        html += renderContractsSection(currentContractsData);
    }
+
+   // === INSERT CORRECTED STOCK TICKER HERE ===
+   if (currentFilter === 'all') {
+       html += getStockTickerHtml();
+   }
+   // === END STOCK TICKER INSERTION ===
    
    if (filtered.length === 0) {
        const messages = emptyStateMessages[currentFilter] || emptyStateMessages['all'];
        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
        
-       content.innerHTML = html + `
+       html += `
            <div class="article-grid">
                <div class="empty-state">
                    <div class="icon">📋</div>
@@ -1623,52 +1750,51 @@ function renderArticles() {
                </div>
            </div>
        `;
-       return;
+   } else {
+    const groups = groupArticlesByDate(filtered);
+   
+    // Render each group
+    Object.entries(groups).forEach(([key, group]) => {
+        if (group.articles.length > 0) {
+            html += `
+                <div class="date-group">
+                    <div class="date-group-header">${group.label}</div>
+                    <div class="article-grid">
+                        ${group.articles.map((article, index) => {
+                            const freshnessClass = getFreshnessClass(article.pubDate);
+                            const hints = getArticleHints(article);
+                            const readingTime = article.readingTime || 2;
+                            
+                            return `
+                                <article class="article ${freshnessClass}" 
+                                         data-index="${index}"
+                                         onclick="openArticle('${article.link}')" 
+                                         tabindex="0" 
+                                         role="button" 
+                                         aria-label="Read: ${article.title}">
+                                    <div class="article-meta">
+                                        <span class="article-source ${getCategoryClass(article.category)}">${article.source}</span>
+                                        <div class="article-separator"></div>
+                                        <span class="article-time">${timeAgo(article.pubDate)}</span>
+                                        ${hints.length > 0 ? `
+                                            <div class="article-hints">
+                                                ${hints.map(h => `<span class="hint-emoji">${h}</span>`).join('')}
+                                            </div>
+                                        ` : ''}
+                                        <span class="reading-time">${readingTime} min</span>
+                                    </div>
+                                    <h2 class="article-title">${article.title}</h2>
+                                    <p class="article-description">${article.description || 'Read more for details.'}</p>
+                                </article>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+    });
    }
-   
-   const groups = groupArticlesByDate(filtered);
-   
-   // Render each group
-   Object.entries(groups).forEach(([key, group]) => {
-       if (group.articles.length > 0) {
-           html += `
-               <div class="date-group">
-                   <div class="date-group-header">${group.label}</div>
-                   <div class="article-grid">
-                       ${group.articles.map((article, index) => {
-                           const freshnessClass = getFreshnessClass(article.pubDate);
-                           const hints = getArticleHints(article);
-                           const readingTime = article.readingTime || 2;
-                           
-                           return `
-                               <article class="article ${freshnessClass}" 
-                                        data-index="${index}"
-                                        onclick="openArticle('${article.link}')" 
-                                        tabindex="0" 
-                                        role="button" 
-                                        aria-label="Read: ${article.title}">
-                                   <div class="article-meta">
-                                       <span class="article-source ${getCategoryClass(article.category)}">${article.source}</span>
-                                       <div class="article-separator"></div>
-                                       <span class="article-time">${timeAgo(article.pubDate)}</span>
-                                       ${hints.length > 0 ? `
-                                           <div class="article-hints">
-                                               ${hints.map(h => `<span class="hint-emoji">${h}</span>`).join('')}
-                                           </div>
-                                       ` : ''}
-                                       <span class="reading-time">${readingTime} min</span>
-                                   </div>
-                                   <h2 class="article-title">${article.title}</h2>
-                                   <p class="article-description">${article.description || 'Read more for details.'}</p>
-                               </article>
-                           `;
-                       }).join('')}
-                   </div>
-               </div>
-           `;
-       }
-   });
-   
+
    content.innerHTML = html;
    
    // Add keyboard navigation and focus mode
