@@ -2578,7 +2578,7 @@ function setupShare() {
 // Add these functions to your existing index.html JavaScript section
 
 // 🤖 NEW: Configuration for your mainlambda endpoint
-const MAIN_LAMBDA_URL = 'https://p55rql7nsrzlaqtcyjaqpjd32a0vdfwu.lambda-url.us-east-1.on.aws/'; // Replace with your actual Lambda URL
+const MAIN_LAMBDA_URL = 'YOUR_MAIN_LAMBDA_URL_HERE'; // Replace with your actual Lambda URL
 
 // 🤖 NEW: Fetch or generate intelligence digest
 async function fetchIntelligenceDigest(forceGenerate = false) {
@@ -2632,7 +2632,7 @@ async function fetchIntelligenceDigest(forceGenerate = false) {
     }
 }
 
-// 🤖 NEW: Enhanced render intelligence section
+// 🤖 NEW: Enhanced render intelligence section for BD professionals
 function renderIntelligenceSection(intelligenceDigest) {
     if (!intelligenceDigest) {
         intelligenceSection.style.display = 'none';
@@ -2642,39 +2642,89 @@ function renderIntelligenceSection(intelligenceDigest) {
     intelligenceSection.style.display = 'block';
     
     // Update summary
-    intelligenceSummary.textContent = intelligenceDigest.executive_summary || 'Processing latest intelligence...';
+    intelligenceSummary.textContent = intelligenceDigest.executive_summary || 'Processing latest contract intelligence...';
     
-    // Update threat level
-    const threatLevel = intelligenceDigest.threat_level || 'unknown';
-    threatIndicator.textContent = threatLevel.toUpperCase();
-    threatIndicator.className = `threat-indicator threat-${threatLevel}`;
+    // Update opportunity temperature (replaces threat level)
+    const temperature = intelligenceDigest.opportunity_temperature || intelligenceDigest.threat_level || 'unknown';
+    const tempMap = {
+        'cold': 'low',
+        'warming': 'moderate', 
+        'hot': 'elevated',
+        'urgent': 'high',
+        'low': 'low',
+        'moderate': 'moderate',
+        'elevated': 'elevated', 
+        'high': 'high'
+    };
     
-    // Update hot topics
-    if (intelligenceDigest.market_intelligence?.hot_topics) {
+    const mappedTemp = tempMap[temperature] || 'moderate';
+    threatIndicator.textContent = temperature.toUpperCase();
+    threatIndicator.className = `threat-indicator threat-${mappedTemp}`;
+    
+    // Update hot topics (focus on technology spending)
+    if (intelligenceDigest.technology_spending_trends?.hot_categories) {
+        hotTopics.innerHTML = intelligenceDigest.technology_spending_trends.hot_categories
+            .slice(0, 5)
+            .map(topic => `<li>${topic}</li>`)
+            .join('');
+    } else if (intelligenceDigest.market_intelligence?.hot_topics) {
         hotTopics.innerHTML = intelligenceDigest.market_intelligence.hot_topics
             .slice(0, 5)
             .map(topic => `<li>${topic}</li>`)
             .join('');
     }
     
-    // Update active agencies
-    if (intelligenceDigest.market_intelligence?.active_agencies) {
+    // Update active agencies (from procurement pipeline)
+    if (intelligenceDigest.major_contract_intel) {
+        const agencies = [...new Set(intelligenceDigest.major_contract_intel.map(intel => intel.agency))];
+        activeAgencies.innerHTML = agencies
+            .slice(0, 5)
+            .map(agency => `<li>${agency}</li>`)
+            .join('');
+    } else if (intelligenceDigest.market_intelligence?.active_agencies) {
         activeAgencies.innerHTML = intelligenceDigest.market_intelligence.active_agencies
             .slice(0, 5)
             .map(agency => `<li>${agency}</li>`)
             .join('');
     }
     
-    // Update contract opportunities
-    if (intelligenceDigest.market_intelligence?.contract_opportunities) {
+    // Update contract opportunities (from procurement pipeline)
+    if (intelligenceDigest.procurement_pipeline?.upcoming_opportunities) {
+        contractOpportunities.innerHTML = intelligenceDigest.procurement_pipeline.upcoming_opportunities
+            .slice(0, 5)
+            .map(opp => `<li>${opp}</li>`)
+            .join('');
+    } else if (intelligenceDigest.market_intelligence?.contract_opportunities) {
         contractOpportunities.innerHTML = intelligenceDigest.market_intelligence.contract_opportunities
             .slice(0, 5)
             .map(opp => `<li>${opp}</li>`)
             .join('');
     }
     
-    // Update key developments
-    if (intelligenceDigest.key_developments) {
+    // Update key developments (major contract intel)
+    if (intelligenceDigest.major_contract_intel) {
+        keyDevelopments.innerHTML = intelligenceDigest.major_contract_intel
+            .slice(0, 3)
+            .map(intel => `
+                <div class="development-item">
+                    <div class="development-header">
+                        <span class="development-category">${intel.technology_area || intel.type || 'Contract'}</span>
+                        <span class="development-urgency urgency-${intel.urgency || 'medium'}">${(intel.urgency || 'medium').toUpperCase()}</span>
+                    </div>
+                    <div class="development-headline">${intel.headline}</div>
+                    <div class="development-significance">
+                        <strong>${intel.contract_value || 'Value TBD'}</strong> • ${intel.agency}<br>
+                        ${intel.business_impact}
+                    </div>
+                    ${intel.action_required ? `
+                        <div style="margin-top: 6px; font-size: 10px; background: var(--bg-tertiary); padding: 4px 8px; border-radius: 4px;">
+                            <strong>Action:</strong> ${intel.action_required}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+    } else if (intelligenceDigest.key_developments) {
+        // Fallback to old format
         keyDevelopments.innerHTML = intelligenceDigest.key_developments
             .slice(0, 3)
             .map(dev => `
@@ -2684,7 +2734,7 @@ function renderIntelligenceSection(intelligenceDigest) {
                         <span class="development-urgency urgency-${dev.urgency || 'low'}">${(dev.urgency || 'low').toUpperCase()}</span>
                     </div>
                     <div class="development-headline">${dev.headline || 'Development Update'}</div>
-                    <div class="development-significance">${dev.significance || dev.implications || 'Monitoring for impact on defense industrial base.'}</div>
+                    <div class="development-significance">${dev.significance || dev.implications || 'Monitoring for impact.'}</div>
                 </div>
             `).join('');
     }
@@ -2694,6 +2744,12 @@ function renderIntelligenceSection(intelligenceDigest) {
     opportunityScoreValue.textContent = score;
     scoreFill.style.width = `${(score / 10) * 100}%`;
     
+    // Add revenue forecast if available
+    if (intelligenceDigest.revenue_forecast) {
+        const forecastElement = document.querySelector('.revenue-forecast') || createRevenueElement();
+        forecastElement.textContent = `Pipeline: ${intelligenceDigest.revenue_forecast}`;
+    }
+    
     // Update last analysis time if available
     if (intelligenceDigest.generated_at) {
         const analysisTime = new Date(intelligenceDigest.generated_at);
@@ -2701,7 +2757,29 @@ function renderIntelligenceSection(intelligenceDigest) {
         intelligenceSummary.title = `Last analysis: ${timeAgoText}`;
     }
     
-    console.log('✅ Intelligence section rendered successfully');
+    console.log('✅ Enhanced BD intelligence section rendered successfully');
+}
+
+// Add revenue forecast element
+function createRevenueElement() {
+    const opportunityScore = document.querySelector('.opportunity-score');
+    if (!opportunityScore) return null;
+    
+    const revenueDiv = document.createElement('div');
+    revenueDiv.className = 'revenue-forecast';
+    revenueDiv.style.cssText = `
+        margin-top: 8px;
+        padding: 6px 8px;
+        background: var(--bg-secondary);
+        border-radius: 4px;
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--accent-subtle);
+        text-align: center;
+    `;
+    
+    opportunityScore.appendChild(revenueDiv);
+    return revenueDiv;
 }
 
 // 🤖 NEW: Add intelligence refresh button functionality
@@ -3030,6 +3108,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('✅ Intelligence system initialized');
 });
+
+console.log('🤖 Intelligence integration loaded successfully');
 
 console.log('🤖 Intelligence integration loaded successfully');
 // Initialize everything
