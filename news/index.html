@@ -184,8 +184,6 @@ h1 {
     animation: gentleSpin 2s linear infinite;
 }
 
-/* Density controls - REMOVED */
-
 /* Category filters */
 .filters {
     display: flex;
@@ -264,7 +262,7 @@ h1 {
     padding-bottom: 4px;
 }
 
-/* Article grid with density modes */
+/* Article grid */
 .article-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -380,7 +378,7 @@ body.focus-mode .article:not(.focused) {
 
 .article-actions {
     display: flex;
-    justify-content: flex-start;
+    justify-content: flex-start; /* Changed to flex-start */
     align-items: center;
     gap: 8px; /* Added a gap between the buttons */
     margin-top: 12px;
@@ -412,20 +410,6 @@ body.focus-mode .article:not(.focused) {
 .article-action-button:hover {
     background: var(--bg-secondary);
     border-color: var(--accent-muted);
-}
-
-.linkedin-share {
-    color: var(--text-secondary); /* Use text-secondary color to match other button text */
-    font-weight: 500;
-}
-
-.linkedin-share:hover {
-    color: var(--text-primary); /* Darken text on hover */
-}
-
-/* Remove SVG styling */
-.linkedin-share svg {
-    display: none;
 }
 
 
@@ -569,10 +553,6 @@ footer {
     
     h1 {
         font-size: 14px;
-    }
-    
-    .density-controls {
-        display: none;
     }
     
     .filters {
@@ -1237,16 +1217,14 @@ html {
    </div>
    
    <div class="toast" id="toast"></div>
-   <!-- Contract Details Modal -->
-<div class="modal-overlay" id="contractModal" onclick="if(event.target === this) closeModal()">
+   <div class="modal-overlay" id="contractModal" onclick="if(event.target === this) closeModal()">
     <div class="modal-content">
         <div class="modal-header">
             <h2 class="modal-title" id="modalAgencyName">Agency Contracts</h2>
             <button class="modal-close" onclick="closeModal()">&times;</button>
         </div>
         <div class="contracts-list" id="modalContractsList">
-            <!-- Contract details will be inserted here -->
-        </div>
+            </div>
     </div>
 </div>
    <script>
@@ -1257,7 +1235,6 @@ html {
        let articles = [];
        let currentFilter = 'all';
        let isLoading = false;
-       let currentDensity = 'comfortable';
        let focusMode = false;
        let scrollPosition = 0;
        
@@ -1300,7 +1277,6 @@ html {
        function getUrlParams() {
            const params = new URLSearchParams(window.location.search);
            return {
-               view: params.get('view') || 'comfortable',
                category: params.get('category') || 'all'
            };
        }
@@ -1311,7 +1287,7 @@ html {
            window.history.replaceState({}, '', url);
        }
        
-       // Initialize from URL params - REMOVED DENSITY
+       // Initialize from URL params
        function initializeFromParams() {
            const params = getUrlParams();
            currentFilter = params.category;
@@ -1958,7 +1934,7 @@ async function triggerRSSFetch() {
     button.disabled = true;
     button.innerHTML = `
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spinning">
-            <path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/>
+            <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
         </svg>
         Fetching RSS...
     `;
@@ -2033,7 +2009,6 @@ function setupAdminPanel() {
             ">
                 <h3 style="font-size: 12px; margin-bottom: 12px; color: var(--text-primary);">Admin Controls</h3>
                 
-                <!-- RSS Fetch Section -->
                 <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);">
                     <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
                         <button id="rssFetchBtn" onclick="triggerRSSFetch()" style="
@@ -2062,7 +2037,6 @@ function setupAdminPanel() {
                     "></div>
                 </div>
                 
-                <!-- Contract Upload Section -->
                 <div>
                     <h4 style="font-size: 11px; margin-bottom: 8px; color: var(--text-primary);">Upload Today's Contracts</h4>
                     <textarea id="contractsInput" placeholder="Paste contracts text here..." style="
@@ -2243,7 +2217,14 @@ setupAdminPanel();
            // Ignore if typing in an input
            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
            
-           // Number keys 1-9: Open articles - removed as articles are no longer click-to-open
+           // Number keys 1-9: Open articles
+           if (e.key >= '1' && e.key <= '9') {
+               const index = parseInt(e.key) - 1;
+               const articles = document.querySelectorAll('.article');
+               if (articles[index]) {
+                   articles[index].click();
+               }
+           }
            
            // F: Focus on filters
            if (e.key === 'f' || e.key === 'F') {
@@ -2258,7 +2239,14 @@ setupAdminPanel();
                refreshFeed();
            }
            
-           // D: Cycle density - removed
+           // D: Cycle density
+           if (e.key === 'd' || e.key === 'D') {
+               e.preventDefault();
+               const densities = ['compact', 'comfortable', 'spacious'];
+               const currentIndex = densities.indexOf(currentDensity);
+               const nextDensity = densities[(currentIndex + 1) % densities.length];
+               setDensity(nextDensity);
+           }
            
            // ?: Show help
            if (e.key === '?') {
@@ -2278,7 +2266,27 @@ setupAdminPanel();
            }
        });
        
-       // Density controls - REMOVED
+       // Density controls
+       function setDensity(density) {
+           currentDensity = density;
+           document.body.className = `density-${density}`;
+           if (document.body.classList.contains('evening-mode')) {
+               document.body.classList.add('evening-mode');
+           }
+           
+           document.querySelectorAll('.density-btn').forEach(btn => {
+               btn.classList.toggle('active', btn.dataset.density === density);
+           });
+           
+           updateUrlParams('view', density);
+           showToast(`View: ${density}`);
+       }
+       
+       document.querySelectorAll('.density-btn').forEach(btn => {
+           btn.addEventListener('click', function() {
+               setDensity(this.dataset.density);
+           });
+       });
        
        // Pull to refresh (mobile)
        let startY = 0;
