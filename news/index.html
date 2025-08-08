@@ -380,41 +380,54 @@ body.focus-mode .article:not(.focused) {
 
 .article-actions {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
+    gap: 8px; /* Added a gap between the buttons */
     margin-top: 12px;
     padding-top: 10px;
     border-top: 1px solid var(--border-light);
 }
 
-.article-link {
-    font-size: 10px;
+/* Updated styles for the buttons */
+.article-action-button {
+    background: var(--surface);
+    border: 1px solid var(--border-medium);
     color: var(--text-secondary);
-    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-weight: 400;
-    transition: color 0.2s ease;
+    letter-spacing: 0.05em;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 
-.article-link:hover {
-    color: var(--text-primary);
-    text-decoration: underline;
+.article-action-button:hover {
+    background: var(--bg-secondary);
+    border-color: var(--accent-muted);
 }
 
 .linkedin-share {
-    color: #0A66C2; /* LinkedIn blue */
-    font-size: 10px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 4px;
+    color: var(--text-secondary); /* Use text-secondary color to match other button text */
     font-weight: 500;
 }
 
 .linkedin-share:hover {
-    text-decoration: underline;
+    color: var(--text-primary); /* Darken text on hover */
 }
+
+/* Remove SVG styling */
+.linkedin-share svg {
+    display: none;
+}
+
 
 /* Keyboard shortcuts help */
 .keyboard-help {
@@ -1864,12 +1877,9 @@ async function renderArticles() {
                                     <h2 class="article-title">${article.title}</h2>
                                     <p class="article-description">${article.description || 'Read more for details.'}</p>
                                     <div class="article-actions">
-                                        <a href="${article.link}" target="_blank" class="article-link">Read More</a>
-                                        <a href="${linkedInUrl}" target="_blank" class="linkedin-share">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
-                                                <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542V13.394h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.01-.702-.522-1.248-1.367-1.248-.843 0-1.366.546-1.366 1.248 0 .694.524 1.248 1.373 1.248h.001zM14.288 13.394v-3.765c0-1.636-.855-2.42-2.316-2.42-1.077 0-1.635.632-1.928 1.134v-.981h-2.14c.028.646 0 7.226 0 7.226h2.401v-3.84c0-.205.01-.41.085-.559.186-.417.652-1.018 1.411-1.018.99 0 1.39.754 1.39 1.86v4.457h2.401z"/>
-                                            </svg>
-                                            Share
+                                        <a href="${article.link}" target="_blank" class="article-action-button">Read More</a>
+                                        <a href="${linkedInUrl}" target="_blank" class="article-action-button">
+                                            Share on LinkedIn
                                         </a>
                                     </div>
                                 </article>
