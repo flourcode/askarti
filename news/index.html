@@ -36,7 +36,33 @@
     --paper-white: #f9fbf8;
     --paper-cream: #f6f8f5;
 }
+body.dark-mode {
+    --bg-primary: #1e211e;
+    --bg-secondary: #252925;
+    --bg-tertiary: #2c302c;
+    --surface: #222622;
+    --border-light: #3a403a;
+    --border-medium: #4c524c;
+    --text-primary: #e0e5e0;
+    --text-secondary: #b0b5b0;
+    --text-tertiary: #808580;
+    --text-quaternary: #606560;
+    --accent-subtle: #6a806a;
+    --accent-muted: #8ab08a;
+    --shadow-soft: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.2);
+    --category-defense: #72a672;
+    --category-industry: #8a8fb0;
+    --category-government: #b08a6b;
+    --fresh-accent: #72a683;
+    --breaking-accent: #b07a7a;
 
+    /* E-ink specific additions for dark mode */
+    --ink-green: #6a806a;
+    --ink-grey: #8a8e8a;
+    --paper-white: #202420;
+    --paper-cream: #282c28;
+}
 /* Evening mode with warmer e-ink tones */
 body.evening-mode {
     --bg-primary: #f2f4f1;
@@ -1150,12 +1176,6 @@ html {
        <div class="progress-bar" id="progressBar"></div>
    </div>
    
-   <div class="pull-to-refresh" id="pullToRefresh">
-       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-           <path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/>
-       </svg>
-   </div>
-   
    <div class="container">
        <header>
            <div class="header-content">
@@ -1166,14 +1186,21 @@ html {
                    <div class="last-updated" id="lastUpdated">Loading...</div>
                    <div class="contextual-message" id="contextualMessage"></div>
                </div>
-               <div class="header-right">
-                   <button class="action-btn refresh-btn" id="refreshBtn">
-                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                           <path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/>
-                       </svg>
-                       Refresh
-                   </button>
-               </div>
+   
+<div class="header-right">
+    <button class="action-btn" id="darkModeToggle">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        Dark Mode
+    </button>
+    <button class="action-btn refresh-btn" id="refreshBtn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/>
+        </svg>
+        Refresh
+    </button>
+</div>
            </div>
        </header>
        
@@ -1368,7 +1395,37 @@ html {
                }, 100);
            }
        }
+       // Dark Mode Toggle
+       const darkModeToggle = document.getElementById('darkModeToggle');
+       const body = document.body;
        
+       function enableDarkMode() {
+           body.classList.add('dark-mode');
+           darkModeToggle.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> Light Mode`;
+           localStorage.setItem('theme', 'dark');
+       }
+       
+       function disableDarkMode() {
+           body.classList.remove('dark-mode');
+           darkModeToggle.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> Dark Mode`;
+           localStorage.setItem('theme', 'light');
+       }
+       
+       // Check for saved theme preference
+       const savedTheme = localStorage.getItem('theme');
+       if (savedTheme === 'dark') {
+           enableDarkMode();
+       } else {
+           disableDarkMode(); // Ensure light mode is set if no preference or 'light'
+       }
+       
+       darkModeToggle.addEventListener('click', () => {
+           if (body.classList.contains('dark-mode')) {
+               disableDarkMode();
+           } else {
+               enableDarkMode();
+           }
+       });
        // Utility functions
        function timeAgo(dateString) {
            const now = new Date();
