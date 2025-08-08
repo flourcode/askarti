@@ -29,6 +29,7 @@
     --category-government: #6b5a3d;
     --fresh-accent: #4a7c59;
     --breaking-accent: #7c4a4a;
+    --ai-accent: #6b4a7c;
     
     /* E-ink specific additions */
     --ink-green: #3d4f3d;
@@ -184,6 +185,64 @@ h1 {
     animation: gentleSpin 2s linear infinite;
 }
 
+/* AI Analysis Button */
+.ai-analysis-btn {
+    background: var(--ai-accent);
+    border-color: var(--ai-accent);
+    color: white;
+}
+
+.ai-analysis-btn:hover {
+    background: rgba(107, 74, 124, 0.8);
+}
+
+.ai-analysis-btn.loading {
+    animation: aiPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes aiPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(0.98); }
+}
+
+/* AI Status Banner */
+.ai-status-banner {
+    background: linear-gradient(135deg, var(--ai-accent), rgba(107, 74, 124, 0.8));
+    color: white;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    font-size: 10px;
+    animation: slideInFromTop 0.3s ease;
+}
+
+.ai-status-banner.visible {
+    display: flex;
+}
+
+.ai-status-icon {
+    font-size: 14px;
+    animation: gentleSpin 2s linear infinite;
+}
+
+.ai-status-text {
+    flex: 1;
+}
+
+.ai-status-details {
+    font-size: 9px;
+    opacity: 0.9;
+    text-align: right;
+}
+
+@keyframes slideInFromTop {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
 /* Density controls */
 .density-controls {
     display: flex;
@@ -271,6 +330,15 @@ h1 {
     margin-left: 4px;
 }
 
+.ai-count {
+    font-size: 8px;
+    background: var(--ai-accent);
+    color: white;
+    padding: 1px 4px;
+    border-radius: 8px;
+    margin-left: 4px;
+}
+
 /* Date group headers */
 .date-group {
     margin-bottom: 16px;
@@ -316,6 +384,397 @@ body.density-spacious .article-grid {
     flex-direction: column;
     height: fit-content;
     position: relative;
+}
+
+/* Virtual Sales Agent Styles */
+.article.has-opportunity {
+    border-left: 3px solid var(--ai-accent);
+    background: linear-gradient(135deg, var(--surface) 0%, var(--bg-secondary) 100%);
+}
+
+.opportunity-indicator {
+    font-size: 12px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.agent-actions {
+    margin-top: 12px;
+    border-top: 1px solid var(--border-light);
+    padding-top: 10px;
+    background: var(--bg-secondary);
+    border-radius: 6px;
+    padding: 10px;
+    margin: 8px -2px 0 -2px;
+}
+
+.agent-actions-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 4px 0;
+    transition: all 0.2s ease;
+}
+
+.agent-actions-header:hover {
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    padding: 4px 6px;
+}
+
+.actions-icon {
+    font-size: 14px;
+    color: var(--ai-accent);
+}
+
+.actions-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    flex: 1;
+}
+
+.high-priority-badge {
+    background: var(--breaking-accent);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 8px;
+    margin-left: 8px;
+    font-weight: 500;
+}
+
+.actions-toggle {
+    background: var(--ai-accent);
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.actions-toggle:hover {
+    background: rgba(107, 74, 124, 0.8);
+    transform: translateY(-1px);
+}
+
+.agent-actions-content {
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.agent-actions-content.hidden {
+    display: none;
+}
+
+.agent-action {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.agent-action:hover {
+    box-shadow: 0 2px 8px var(--shadow-medium);
+    transform: translateY(-1px);
+}
+
+.agent-action.priority-high {
+    border-left: 4px solid var(--breaking-accent);
+}
+
+.agent-action.priority-medium {
+    border-left: 4px solid #f39c12;
+}
+
+.agent-action.priority-low {
+    border-left: 4px solid var(--text-quaternary);
+}
+
+.agent-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.agent-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.agent-avatar {
+    font-size: 16px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-tertiary);
+    border-radius: 50%;
+}
+
+.agent-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.agent-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.agent-role {
+    font-size: 9px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+}
+
+.action-metrics {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.confidence-score {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 6px;
+    border-radius: 10px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+}
+
+.confidence-score.high-confidence {
+    background: var(--fresh-accent);
+    color: white;
+}
+
+.confidence-score.medium-confidence {
+    background: #f39c12;
+    color: white;
+}
+
+.confidence-score.low-confidence {
+    background: var(--text-quaternary);
+    color: white;
+}
+
+.priority-indicator {
+    font-size: 8px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.priority-indicator.priority-high {
+    background: var(--breaking-accent);
+    color: white;
+}
+
+.priority-indicator.priority-medium {
+    background: #f39c12;
+    color: white;
+}
+
+.priority-indicator.priority-low {
+    background: var(--text-quaternary);
+    color: white;
+}
+
+.action-content h4 {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 8px 0 6px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.action-content ul {
+    margin: 0 0 10px 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.action-content li {
+    margin: 4px 0;
+    padding: 6px 8px;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    font-size: 10px;
+    line-height: 1.4;
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.action-content li:hover {
+    background: var(--border-light);
+}
+
+.action-content li.completed {
+    background: var(--fresh-accent);
+    color: white;
+    opacity: 0.7;
+}
+
+.action-content li.completed .action-text {
+    text-decoration: line-through;
+}
+
+.action-text {
+    flex: 1;
+}
+
+.action-done {
+    background: none;
+    border: 1px solid var(--border-medium);
+    color: var(--text-tertiary);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.action-done:hover {
+    background: var(--fresh-accent);
+    color: white;
+    border-color: var(--fresh-accent);
+}
+
+.action-done.completed {
+    background: var(--fresh-accent);
+    color: white;
+    border-color: var(--fresh-accent);
+}
+
+.success-metrics ul {
+    list-style: none;
+    padding: 0;
+}
+
+.success-metrics li {
+    background: none;
+    padding: 3px 0;
+    color: var(--text-tertiary);
+    border-radius: 0;
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.success-metrics li:before {
+    content: "📊";
+    font-size: 10px;
+}
+
+.action-controls {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-light);
+    flex-wrap: wrap;
+}
+
+.action-controls button {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-medium);
+    color: var(--text-secondary);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+}
+
+.action-controls button:hover {
+    background: var(--ai-accent);
+    color: white;
+    border-color: var(--ai-accent);
+    transform: translateY(-1px);
+}
+
+.copy-single-action {
+    background: var(--ai-accent);
+    color: white;
+    border-color: var(--ai-accent);
+}
+
+.actions-summary {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 2px solid var(--border-light);
+    justify-content: center;
+}
+
+.actions-summary button {
+    background: var(--ai-accent);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 9px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.actions-summary button:hover {
+    background: rgba(107, 74, 124, 0.8);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px var(--shadow-medium);
 }
 
 body.density-compact .article {
@@ -615,9 +1074,60 @@ footer {
         line-height: 1.3;
         -webkit-line-clamp: 3;
     }
-	.article-meta {
-       margin-bottom: 4px;
-   }
+    
+    .article-meta {
+        margin-bottom: 4px;
+    }
+    
+    .ai-status-banner {
+        flex-direction: column;
+        text-align: center;
+        gap: 6px;
+    }
+    
+    /* Mobile Virtual Sales Agent Adjustments */
+    .agent-actions {
+        margin: 8px -6px 0 -6px;
+        padding: 8px;
+    }
+    
+    .agent-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+    
+    .action-metrics {
+        align-self: flex-end;
+    }
+    
+    .action-controls {
+        justify-content: center;
+    }
+    
+    .actions-summary {
+        flex-direction: column;
+        gap: 6px;
+    }
+    
+    .actions-summary button {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .agent-action {
+        padding: 10px;
+    }
+    
+    .action-content li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    .action-done {
+        align-self: flex-end;
+    }
    
    footer {
        margin-top: 30px;
@@ -675,72 +1185,70 @@ footer {
     grid-column: 1 / -1;
     text-align: center;
     padding: 15px;
-    color: var(--text-tertiary);
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-weight: 400;
+   color: var(--text-tertiary);
+   font-size: 9px;
+   text-transform: uppercase;
+   letter-spacing: 0.1em;
+   font-weight: 400;
 }
 
 .loading-message {
-    animation: fadeInOut 2s ease infinite;
+   animation: fadeInOut 2s ease infinite;
 }
 
 @keyframes fadeInOut {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
+   0%, 100% { opacity: 0.5; }
+   50% { opacity: 1; }
 }
 
 .error-message {
-    background: #fef9f9;
-    border: 1px solid #f5e6e6;
-    color: var(--text-secondary);
-    padding: 6px 10px;
-    border-radius: 4px;
-    margin-bottom: 8px;
-    font-size: 10px;
-    display: none;
-    text-align: center;
-    font-weight: 300;
+   background: #fef9f9;
+   border: 1px solid #f5e6e6;
+   color: var(--text-secondary);
+   padding: 6px 10px;
+   border-radius: 4px;
+   margin-bottom: 8px;
+   font-size: 10px;
+   display: none;
 }
 
 /* Progress indicator */
 .reading-progress {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: var(--border-light);
-    z-index: 100;
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 1px;
+   background: var(--border-light);
+   z-index: 100;
 }
 
 .progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent-subtle), var(--accent-muted));
-    width: 0%;
-    transition: width 0.1s ease;
+   height: 100%;
+   background: linear-gradient(90deg, var(--accent-subtle), var(--accent-muted));
+   width: 0%;
+   transition: width 0.1s ease;
 }
 
 /* Smooth scroll */
 html {
-    scroll-behavior: smooth;
+   scroll-behavior: smooth;
 }
 
 /* Animations */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(3px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+   from {
+       opacity: 0;
+       transform: translateY(3px);
+   }
+   to {
+       opacity: 1;
+       transform: translateY(0);
+   }
 }
 
 .article {
-    animation: fadeIn 0.2s ease forwards;
+   animation: fadeIn 0.2s ease forwards;
 }
 
 .article:nth-child(1) { animation-delay: 0.02s; }
@@ -749,7 +1257,7 @@ html {
 .article:nth-child(4) { animation-delay: 0.08s; }
 
 @keyframes gentleSpin {
-    to { transform: rotate(360deg); }
+   to { transform: rotate(360deg); }
 }
 
 /* Focus states */
@@ -757,830 +1265,1295 @@ html {
 .filter-tab:focus,
 .article:focus,
 .share-link:focus {
-    outline: 2px solid var(--accent-muted);
-    outline-offset: 2px;
+   outline: 2px solid var(--accent-muted);
+   outline-offset: 2px;
 }
 
 /* Toast notification */
 .toast {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: var(--surface);
-    border: 1px solid var(--border-medium);
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 10px;
-    color: var(--text-primary);
-    box-shadow: 0 2px 8px var(--shadow-medium);
-    opacity: 0;
-    transition: all 0.3s ease;
-    z-index: 1001;
+   position: fixed;
+   bottom: 20px;
+   left: 50%;
+   transform: translateX(-50%) translateY(100px);
+   background: var(--surface);
+   border: 1px solid var(--border-medium);
+   padding: 8px 16px;
+   border-radius: 20px;
+   font-size: 10px;
+   color: var(--text-primary);
+   box-shadow: 0 2px 8px var(--shadow-medium);
+   opacity: 0;
+   transition: all 0.3s ease;
+   z-index: 1001;
 }
 
 .toast.visible {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
+   transform: translateX(-50%) translateY(0);
+   opacity: 1;
 }
 
 /* Pull to refresh indicator (mobile) */
 .pull-to-refresh {
-    position: fixed;
-    top: -50px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40px;
-    height: 40px;
-    background: var(--surface);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px var(--shadow-medium);
-    transition: top 0.3s ease;
-    z-index: 99;
+   position: fixed;
+   top: -50px;
+   left: 50%;
+   transform: translateX(-50%);
+   width: 40px;
+   height: 40px;
+   background: var(--surface);
+   border-radius: 50%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   box-shadow: 0 2px 8px var(--shadow-medium);
+   transition: top 0.3s ease;
+   z-index: 99;
 }
 
 .pull-to-refresh.refreshing {
-    animation: gentleSpin 1s linear infinite;
+   animation: gentleSpin 1s linear infinite;
 }
+
 /* Contract Awards Section */
 .contracts-section {
-    margin-bottom: 20px;
-    padding: 12px 0;
-    border-bottom: 2px solid var(--border-light);
+   margin-bottom: 20px;
+   padding: 12px 0;
+   border-bottom: 2px solid var(--border-light);
 }
 
 .contracts-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   margin-bottom: 12px;
 }
 
 .contracts-title {
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    gap: 6px;
+   font-size: 12px;
+   font-weight: 600;
+   text-transform: uppercase;
+   letter-spacing: 0.08em;
+   color: var(--text-primary);
+   display: flex;
+   align-items: center;
+   gap: 6px;
 }
 
 .contracts-badge {
-    background: var(--accent-subtle);
-    color: white;
-    padding: 2px 6px;
-    border-radius: 10px;
-    font-size: 9px;
-    font-weight: 500;
+   background: var(--accent-subtle);
+   color: white;
+   padding: 2px 6px;
+   border-radius: 10px;
+   font-size: 9px;
+   font-weight: 500;
 }
 
 .contracts-summary {
-    font-size: 10px;
-    color: var(--text-tertiary);
+   font-size: 10px;
+   color: var(--text-tertiary);
 }
 
 .contracts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 8px;
-    margin-bottom: 10px;
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+   gap: 8px;
+   margin-bottom: 10px;
 }
 
 .agency-card {
-    background: var(--surface);
-    border: 1px solid var(--border-light);
-    border-radius: 8px;
-    padding: 12px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    position: relative;
+   background: var(--surface);
+   border: 1px solid var(--border-light);
+   border-radius: 8px;
+   padding: 12px;
+   cursor: pointer;
+   transition: all 0.2s ease;
+   position: relative;
 }
 
 .agency-card:hover {
-    box-shadow: 0 2px 8px var(--shadow-medium);
-    transform: translateY(-1px);
-    border-color: var(--border-medium);
+   box-shadow: 0 2px 8px var(--shadow-medium);
+   transform: translateY(-1px);
+   border-color: var(--border-medium);
 }
 
 .agency-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   margin-bottom: 8px;
 }
 
 .agency-name {
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--accent-subtle);
-    display: flex;
-    align-items: center;
-    gap: 4px;
+   font-size: 10px;
+   font-weight: 600;
+   text-transform: uppercase;
+   letter-spacing: 0.08em;
+   color: var(--accent-subtle);
+   display: flex;
+   align-items: center;
+   gap: 4px;
 }
 
 .agency-icon {
-    font-size: 14px;
+   font-size: 14px;
 }
 
 .agency-total {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text-primary);
+   font-size: 16px;
+   font-weight: 600;
+   color: var(--text-primary);
 }
 
 .agency-stats {
-    display: flex;
-    gap: 12px;
-    margin-top: 6px;
-    padding-top: 6px;
-    border-top: 1px solid var(--border-light);
+   display: flex;
+   gap: 12px;
+   margin-top: 6px;
+   padding-top: 6px;
+   border-top: 1px solid var(--border-light);
 }
 
 .stat-item {
-    display: flex;
-    flex-direction: column;
+   display: flex;
+   flex-direction: column;
 }
 
 .stat-label {
-    font-size: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-quaternary);
+   font-size: 8px;
+   text-transform: uppercase;
+   letter-spacing: 0.08em;
+   color: var(--text-quaternary);
 }
 
 .stat-value {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--text-secondary);
+   font-size: 11px;
+   font-weight: 500;
+   color: var(--text-secondary);
 }
 
 .top-contracts {
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px solid var(--border-light);
+   margin-top: 8px;
+   padding-top: 8px;
+   border-top: 1px solid var(--border-light);
 }
 
 .contract-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
-    margin: 4px 0;
-    font-size: 10px;
-    color: var(--text-secondary);
+   display: flex;
+   justify-content: space-between;
+   align-items: start;
+   margin: 4px 0;
+   font-size: 10px;
+   color: var(--text-secondary);
 }
 
 .contract-company {
-    flex: 1;
-    font-weight: 500;
-    color: var(--text-primary);
-    margin-right: 8px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+   flex: 1;
+   font-weight: 500;
+   color: var(--text-primary);
+   margin-right: 8px;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
 }
 
 .contract-value {
-    font-weight: 600;
-    color: var(--accent-subtle);
-    white-space: nowrap;
+   font-weight: 600;
+   color: var(--accent-subtle);
+   white-space: nowrap;
 }
 
 .contract-type-badge {
-    display: inline-block;
-    font-size: 7px;
-    padding: 2px 4px;
-    border-radius: 4px;
-    background: var(--bg-tertiary);
-    color: var(--text-tertiary);
-    margin-left: 4px;
-    text-transform: uppercase;
+   display: inline-block;
+   font-size: 7px;
+   padding: 2px 4px;
+   border-radius: 4px;
+   background: var(--bg-tertiary);
+   color: var(--text-tertiary);
+   margin-left: 4px;
+   text-transform: uppercase;
 }
 
 /* Contract details modal */
 .modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
+   display: none;
+   position: fixed;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: rgba(0, 0, 0, 0.5);
+   z-index: 1000;
+   align-items: center;
+   justify-content: center;
 }
 
 .modal-overlay.active {
-    display: flex;
+   display: flex;
 }
 
 .modal-content {
-    background: var(--surface);
-    border-radius: 12px;
-    max-width: 600px;
-    max-height: 80vh;
-    overflow-y: auto;
-    padding: 20px;
-    margin: 20px;
+   background: var(--surface);
+   border-radius: 12px;
+   max-width: 600px;
+   max-height: 80vh;
+   overflow-y: auto;
+   padding: 20px;
+   margin: 20px;
 }
 
 .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin-bottom: 16px;
 }
 
 .modal-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-primary);
+   font-size: 14px;
+   font-weight: 600;
+   color: var(--text-primary);
 }
 
 .modal-close {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: var(--text-tertiary);
+   background: none;
+   border: none;
+   font-size: 20px;
+   cursor: pointer;
+   color: var(--text-tertiary);
 }
 
 .contracts-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+   display: flex;
+   flex-direction: column;
+   gap: 8px;
 }
 
 .contract-detail {
-    padding: 10px;
-    background: var(--bg-secondary);
-    border-radius: 6px;
-    font-size: 11px;
+   padding: 10px;
+   background: var(--bg-secondary);
+   border-radius: 6px;
+   font-size: 11px;
 }
 
 .contract-detail-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 6px;
+   display: flex;
+   justify-content: space-between;
+   margin-bottom: 6px;
 }
 
 .contract-detail-company {
-    font-weight: 600;
-    color: var(--text-primary);
+   font-weight: 600;
+   color: var(--text-primary);
 }
 
 .contract-detail-value {
-    font-weight: 600;
-    color: var(--accent-subtle);
+   font-weight: 600;
+   color: var(--accent-subtle);
 }
 
 .contract-detail-info {
-    color: var(--text-secondary);
-    line-height: 1.4;
+   color: var(--text-secondary);
+   line-height: 1.4;
 }
 
-/* Mobile adjustments */
-@media (max-width: 599px) {
-    .contracts-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .agency-stats {
-        gap: 8px;
-    }
-    
-    .contracts-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-    }
-}
 /* Stock Ticker specific styling */
 .stock-ticker-section {
-    margin-bottom: 20px;
-    background: var(--surface);
-    border: 1px solid var(--border-light);
-    border-radius: 8px;
-    box-shadow: var(--shadow-soft);
-    padding: 8px 12px;
-    overflow: hidden;
-    position: relative;
+   margin-bottom: 20px;
+   background: var(--surface);
+   border: 1px solid var(--border-light);
+   border-radius: 8px;
+   box-shadow: var(--shadow-soft);
+   padding: 8px 12px;
+   overflow: hidden;
+   position: relative;
 }
 
 .stock-ticker-header {
-    font-size: 8px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-tertiary);
-    margin-bottom: 8px;
+   font-size: 8px;
+   font-weight: 600;
+   text-transform: uppercase;
+   letter-spacing: 0.08em;
+   color: var(--text-tertiary);
+   margin-bottom: 8px;
 }
 
 .ticker-scroll-wrapper {
-    position: relative;
-    white-space: nowrap;
-    overflow: hidden;
+   position: relative;
+   white-space: nowrap;
+   overflow: hidden;
 }
 
 .ticker-scroll-content {
-    display: inline-block;
-    animation: tickerScroll 120s linear infinite;
-    will-change: transform;
+   display: inline-block;
+   animation: tickerScroll 120s linear infinite;
+   will-change: transform;
 }
 
 .stock-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0 16px;
+   display: inline-flex;
+   align-items: center;
+   gap: 8px;
+   padding: 0 16px;
 }
 
 .stock-ticker {
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--text-primary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+   font-size: 10px;
+   font-weight: 600;
+   color: var(--text-primary);
+   text-transform: uppercase;
+   letter-spacing: 0.05em;
 }
 
 .stock-price {
-    font-size: 10px;
-    color: var(--text-secondary);
+   font-size: 10px;
+   color: var(--text-secondary);
 }
 
 .stock-percent-change {
-    font-size: 9px; /* Slightly smaller than price */
-    font-weight: 500;
-    margin-left: -4px; /* Adjust spacing as needed */
+   font-size: 9px;
+   font-weight: 500;
+   margin-left: -4px;
 }
 
 .stock-change-positive {
-    color: #28a745; /* Green color for positive change */
+   color: #28a745;
 }
 
 .stock-change-negative {
-    color: #dc3545; /* Red color for negative change */
+   color: #dc3545;
 }
 
 @keyframes tickerScroll {
-    from { transform: translateX(0%); }
-    to { transform: translateX(-50%); }
+   from { transform: translateX(0%); }
+   to { transform: translateX(-50%); }
 }
 
 /* Ad Placement CSS */
 .ad-placeholder {
-    background: var(--surface);
-    border: 1px dashed var(--border-medium);
-    border-radius: 8px;
-    padding: 24px;
-    margin-bottom: 16px;
-    text-align: center;
-    font-family: 'Inter', sans-serif;
-    font-size: 12px;
-    color: var(--text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    height: 120px; /* Adjust height as needed */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: var(--shadow-soft);
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+   background: var(--surface);
+   border: 1px dashed var(--border-medium);
+   border-radius: 8px;
+   padding: 24px;
+   margin-bottom: 16px;
+   text-align: center;
+   font-family: 'Inter', sans-serif;
+   font-size: 12px;
+   color: var(--text-tertiary);
+   text-transform: uppercase;
+   letter-spacing: 0.1em;
+   height: 120px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   box-shadow: var(--shadow-soft);
+   cursor: pointer;
+   transition: background-color 0.2s ease;
 }
 
 .ad-placeholder:hover {
-    background: var(--bg-tertiary);
+   background: var(--bg-tertiary);
 }
+
 .ad-content {
-    color: var(--text-secondary);
-    font-weight: 500;
-    text-transform: none;
-    letter-spacing: normal;
-    font-size: 14px;
-    line-height: 1.4;
+   color: var(--text-secondary);
+   font-weight: 500;
+   text-transform: none;
+   letter-spacing: normal;
+   font-size: 14px;
+   line-height: 1.4;
 }
+
 .ad-label {
-    font-size: 9px;
-    color: var(--text-quaternary);
-    margin-top: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+   font-size: 9px;
+   color: var(--text-quaternary);
+   margin-top: 8px;
+   text-transform: uppercase;
+   letter-spacing: 0.1em;
 }
-   </style>
+
+/* Mobile adjustments */
+@media (max-width: 599px) {
+   .contracts-grid {
+       grid-template-columns: 1fr;
+   }
+   
+   .agency-stats {
+       gap: 8px;
+   }
+   
+   .contracts-header {
+       flex-direction: column;
+       align-items: flex-start;
+       gap: 4px;
+   }
+}
+
+/* Dark mode adjustments */
+body.evening-mode .agent-actions {
+   background: var(--bg-tertiary);
+}
+
+body.evening-mode .agent-action {
+   background: var(--paper-cream);
+}
+
+body.evening-mode .action-content li {
+   background: var(--bg-primary);
+}
+
+/* Animation for new agent actions */
+@keyframes slideInActions {
+   from {
+       opacity: 0;
+       transform: translateY(-10px);
+   }
+   to {
+       opacity: 1;
+       transform: translateY(0);
+   }
+}
+
+.agent-actions-content:not(.hidden) {
+   animation: slideInActions 0.3s ease forwards;
+}
+
+/* Focus states for accessibility */
+.actions-toggle:focus,
+.action-done:focus,
+.action-controls button:focus,
+.actions-summary button:focus {
+   outline: 2px solid var(--accent-muted);
+   outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+   .agent-actions {
+       border: 1px solid #ccc;
+       page-break-inside: avoid;
+   }
+   
+   .action-controls,
+   .actions-summary {
+       display: none;
+   }
+}
+</style>
 </head>
 <body>
-   <div class="reading-progress">
-       <div class="progress-bar" id="progressBar"></div>
-   </div>
-   
-   <div class="pull-to-refresh" id="pullToRefresh">
-       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-           <path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/>
-       </svg>
-   </div>
-   
-   <div class="container">
-       <header>
-           <div class="header-content">
-               <div class="header-left">
-                   <h1>⬟ DIBDash - Defense Industrial Base Intelligence</h1>
-                   <div class="current-date" id="currentDate"></div>
-                   <div class="greeting" id="greeting"></div>
-                   <div class="last-updated" id="lastUpdated">Loading...</div>
-                   <div class="contextual-message" id="contextualMessage"></div>
-               </div>
-               <div class="header-right">
-                   <div class="density-controls">
-                       <button class="density-btn" data-density="compact">Compact</button>
-                       <button class="density-btn active" data-density="comfortable">Comfortable</button>
-                       <button class="density-btn" data-density="spacious">Spacious</button>
-                   </div>
-                   <button class="action-btn refresh-btn" id="refreshBtn">
-                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                           <path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/>
-                       </svg>
-                       Refresh
-                   </button>
-               </div>
-           </div>
-       </header>
-       
-       <div class="filters" id="filterContainer">
-           <button class="filter-tab active" data-filter="all">All</button>
-       </div>
-       
-       <div class="error-message" id="errorMessage"></div>
-       <div id="content">
-           <div class="article-grid">
-               <div class="loading">
-                   <div class="loading-message" id="loadingMessage">Gathering intelligence...</div>
-               </div>
-           </div>
-       </div>
-       
-       <footer>
-           <div class="footer-content">
-               <div class="footer-about">
-                   <p>Curated intelligence for Defense professionals.</p>
-               </div>
-               <div class="footer-links">
-                   <a href="#" class="share-link" id="shareLink">Share With a Friend.</a>
-               </div>
-               <div class="footer-copyright">
-                   <p>&copy; 2025 DIBDash.com. All rights reserved.</p>
-               </div>
-           </div>
-       </footer>
-   </div>
-   
-   <div class="keyboard-help" id="keyboardHelp">
-       <h3>Keyboard Shortcuts</h3>
-       <div class="shortcut"><span>Articles</span><kbd>1-9</kbd></div>
-       <div class="shortcut"><span>Filter</span><kbd>F</kbd></div>
-       <div class="shortcut"><span>Refresh</span><kbd>R</kbd></div>
-       <div class="shortcut"><span>Density</span><kbd>D</kbd></div>
-       <div class="shortcut"><span>Help</span><kbd>?</kbd></div>
-       <div class="shortcut"><span>Close</span><kbd>ESC</kbd></div>
-   </div>
-   
-   <div class="toast" id="toast"></div>
-   <!-- Contract Details Modal -->
-<div class="modal-overlay" id="contractModal" onclick="if(event.target === this) closeModal()">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 class="modal-title" id="modalAgencyName">Agency Contracts</h2>
-            <button class="modal-close" onclick="closeModal()">&times;</button>
+    <div class="reading-progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    
+    <div class="pull-to-refresh" id="pullToRefresh">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/>
+        </svg>
+    </div>
+    
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>⬟ DIBDash - Defense Industrial Base Intelligence</h1>
+                    <div class="current-date" id="currentDate"></div>
+                    <div class="greeting" id="greeting"></div>
+                    <div class="last-updated" id="lastUpdated">Loading...</div>
+                    <div class="contextual-message" id="contextualMessage"></div>
+                </div>
+                <div class="header-right">
+                    <div class="density-controls">
+                        <button class="density-btn" data-density="compact">Compact</button>
+                        <button class="density-btn active" data-density="comfortable">Comfortable</button>
+                        <button class="density-btn" data-density="spacious">Spacious</button>
+                    </div>
+                    <button class="action-btn ai-analysis-btn" id="aiAnalysisBtn">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                        AI Analysis
+                    </button>
+                    <button class="action-btn refresh-btn" id="refreshBtn">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/>
+                        </svg>
+                        Refresh
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- AI Analysis Status Banner -->
+        <div class="ai-status-banner" id="aiStatusBanner">
+            <div class="ai-status-icon">🤖</div>
+            <div class="ai-status-text">
+                <div id="aiStatusMessage">Running AI analysis on daily news...</div>
+                <div class="ai-status-details" id="aiStatusDetails"></div>
+            </div>
         </div>
-        <div class="contracts-list" id="modalContractsList">
-            <!-- Contract details will be inserted here -->
+        
+        <div class="filters" id="filterContainer">
+            <button class="filter-tab active" data-filter="all">All</button>
+        </div>
+        
+        <div class="error-message" id="errorMessage"></div>
+        <div id="content">
+            <div class="article-grid">
+                <div class="loading">
+                    <div class="loading-message" id="loadingMessage">Gathering intelligence...</div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <div class="footer-content">
+                <div class="footer-about">
+                    <p>Curated intelligence for Defense professionals. Now powered by AI virtual sales agents.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="share-link" id="shareLink">Share With a Friend.</a>
+                </div>
+                <div class="footer-copyright">
+                    <p>&copy; 2025 DIBDash.com. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <div class="keyboard-help" id="keyboardHelp">
+        <h3>Keyboard Shortcuts</h3>
+        <div class="shortcut"><span>Articles</span><kbd>1-9</kbd></div>
+        <div class="shortcut"><span>Filter</span><kbd>F</kbd></div>
+        <div class="shortcut"><span>Refresh</span><kbd>R</kbd></div>
+        <div class="shortcut"><span>AI Analysis</span><kbd>A</kbd></div>
+        <div class="shortcut"><span>Density</span><kbd>D</kbd></div>
+        <div class="shortcut"><span>Help</span><kbd>?</kbd></div>
+        <div class="shortcut"><span>Close</span><kbd>ESC</kbd></div>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+
+    <!-- Contract Details Modal -->
+    <div class="modal-overlay" id="contractModal" onclick="if(event.target === this) closeModal()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalAgencyName">Agency Contracts</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="contracts-list" id="modalContractsList">
+                <!-- Contract details will be inserted here -->
+            </div>
         </div>
     </div>
-</div>
-   <script>
-       // Configuration
-       const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json';
-       
-       // State
-       let articles = [];
-       let currentFilter = 'all';
-       let isLoading = false;
-       let currentDensity = 'comfortable';
-       let focusMode = false;
-       let scrollPosition = 0;
-       
-       // Loading messages
-       const loadingMessages = [
-           "Gathering intelligence...",
-           "Scanning defense channels...",
-           "Checking industry updates...",
-           "Analyzing government feeds...",
-           "Almost there...",
-           "Compiling your briefing..."
-       ];
-       let loadingMessageIndex = 0;
-       
-       // Empty state messages by category
-       const emptyStateMessages = {
-           defense: ["Intel is quiet today", "All quiet on the defense front", "Defense channels are silent"],
-           industry: ["Markets taking a breather", "Industry in stealth mode", "No industry updates"],
-           government: ["Capitol Hill is unusually quiet", "Government on pause", "No government activity"],
-           all: ["No updates at the moment", "Channels are quiet", "Nothing new to report"]
-       };
-       
-       // UI Elements
-       const content = document.getElementById('content');
-       const refreshBtn = document.getElementById('refreshBtn');
-       const errorMessage = document.getElementById('errorMessage');
-       const filterContainer = document.getElementById('filterContainer');
-       const lastUpdated = document.getElementById('lastUpdated');
-       const greeting = document.getElementById('greeting');
-       const currentDateElement = document.getElementById('currentDate');
-       const progressBar = document.getElementById('progressBar');
-       const shareLink = document.getElementById('shareLink');
-       const contextualMessage = document.getElementById('contextualMessage');
-       const loadingMessage = document.getElementById('loadingMessage');
-       const keyboardHelp = document.getElementById('keyboardHelp');
-       const toast = document.getElementById('toast');
-       const pullToRefresh = document.getElementById('pullToRefresh');
-       
-       // URL parameters for preferences
-       function getUrlParams() {
-           const params = new URLSearchParams(window.location.search);
-           return {
-               view: params.get('view') || 'comfortable',
-               category: params.get('category') || 'all'
-           };
-       }
-       
-       function updateUrlParams(key, value) {
-           const url = new URL(window.location);
-           url.searchParams.set(key, value);
-           window.history.replaceState({}, '', url);
-       }
-       
-       // Initialize from URL params
-       function initializeFromParams() {
-           const params = getUrlParams();
-           currentDensity = params.view;
-           currentFilter = params.category;
-           
-           // Apply density
-           document.body.className = `density-${currentDensity}`;
-           document.querySelectorAll('.density-btn').forEach(btn => {
-               btn.classList.toggle('active', btn.dataset.density === currentDensity);
-           });
-       }
-       
-       // Show toast notification
-       function showToast(message, duration = 2000) {
-           toast.textContent = message;
-           toast.classList.add('visible');
-           setTimeout(() => {
-               toast.classList.remove('visible');
-           }, duration);
-       }
-       
-       // Set greeting based on time and context
-       function setGreetingAndDate() {
-           const now = new Date();
-           const hour = now.getHours();
-           const day = now.getDay();
-           
-           // Time-based greeting
-           let greetingText = 'Good Morning';
-           if (hour >= 12 && hour < 17) {
-               greetingText = 'Good Afternoon';
-           } else if (hour >= 17) {
-               greetingText = 'Good Evening';
-           }
-           
-           // Weekend emoji
-           const weekendEmoji = (day === 0 || day === 6) ? '<span class="weekend-emoji">☕</span>' : '';
-           
-           // Evening mode
-           if (hour >= 20 || hour < 6) {
-               document.body.classList.add('evening-mode');
-           } else {
-               document.body.classList.remove('evening-mode');
-           }
-           
-           const options = { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' };
-           const formattedDate = now.toLocaleDateString('en-US', options);
-           
-           currentDateElement.textContent = formattedDate;
-           greeting.innerHTML = `${greetingText}. Welcome to the Loop. ${weekendEmoji}`;
-           
-           // Contextual message
-           contextualMessage.textContent = getContextualMessage(now);
-       }
-       
-       // Get contextual message based on time/day
-       function getContextualMessage(now) {
-           const day = now.getDay();
-           const hour = now.getHours();
-           
-           if (day === 1 && hour < 10) return "Monday briefing ready";
-           if (day === 5 && hour > 15) return "Weekend preview";
-           if (hour > 20) return "Evening digest";
-           if (hour < 7) return "Early bird briefing";
-           if (day === 0 || day === 6) return "Weekend reading";
-           return "";
-       }
-       
-       // Reading progress
-       function updateReadingProgress() {
-           const scrollTop = window.pageYOffset;
-           const docHeight = document.body.scrollHeight - window.innerHeight;
-           const scrollPercent = (scrollTop / docHeight) * 100;
-           progressBar.style.width = Math.min(scrollPercent, 100) + '%';
-       }
-       
-       // Save scroll position
-       function saveScrollPosition() {
-           scrollPosition = window.pageYOffset;
-       }
-       
-       function restoreScrollPosition() {
-           if (scrollPosition > 0) {
-               setTimeout(() => {
-                   window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
-               }, 100);
-           }
-       }
-       
-       // Utility functions
-       function timeAgo(dateString) {
-           const now = new Date();
-           const date = new Date(dateString);
-           const seconds = Math.floor((now - date) / 1000);
-           if (seconds < 60) return 'now';
-           const minutes = Math.floor(seconds / 60);
-           if (minutes < 60) return `${minutes}m`;
-           const hours = Math.floor(minutes / 60);
-           if (hours < 24) return `${hours}h`;
-           const days = Math.floor(hours / 24);
-           if (days < 7) return `${days}d`;
-           return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-       }
-       
-       // Get freshness class
-       function getFreshnessClass(dateString) {
-           const hours = (new Date() - new Date(dateString)) / 3600000;
-           if (hours < 2) return 'fresh';
-           if (hours < 6) return 'recent';
-           return '';
-       }
-       
-       // Get article hints
-       function getArticleHints(article) {
-           const hints = [];
-           
-           // Breaking news
-           const hours = (new Date() - new Date(article.pubDate)) / 3600000;
-           if (hours < 1) hints.push('⚡');
-           
-           // Data/analysis
-           if (article.characteristics?.includes('data')) hints.push('📊');
-           
-           // Long read
-           if (article.characteristics?.includes('longread')) hints.push('📖');
-           
-           // Tech focus
-           if (article.characteristics?.includes('tech')) hints.push('🔬');
-           
-           return hints;
-       }
-       
-       // Smart truncation (handled by Lambda now, but kept for fallback)
-       function smartTruncate(text, maxLength = 200) {
-           if (!text || text.length <= maxLength) return text;
-           
-           const truncated = text.substring(0, maxLength);
-           const lastPeriod = truncated.lastIndexOf('. ');
-           const lastQuestion = truncated.lastIndexOf('? ');
-           const lastExclamation = truncated.lastIndexOf('! ');
-           
-           const lastBoundary = Math.max(lastPeriod, lastQuestion, lastExclamation);
-           
-           if (lastBoundary > maxLength * 0.6) {
-               return text.substring(0, lastBoundary + 2);
-           }
-           
-           const lastSpace = truncated.lastIndexOf(' ');
-           return text.substring(0, lastSpace) + '...';
-       }
-       
-       // Group articles by date
-       function groupArticlesByDate(articles) {
-           const now = new Date();
-           const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-           const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
-           const thisWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-           
-           const groups = {
-               today: { label: 'Today', articles: [] },
-               yesterday: { label: 'Yesterday', articles: [] },
-               thisWeek: { label: 'This Week', articles: [] },
-               older: { label: 'Earlier', articles: [] }
-           };
-           
-           articles.forEach(article => {
-               const articleDate = new Date(article.pubDate);
-               const articleDay = new Date(articleDate.getFullYear(), articleDate.getMonth(), articleDate.getDate());
-               
-               if (articleDay.getTime() === today.getTime()) {
-                   groups.today.articles.push(article);
-               } else if (articleDay.getTime() === yesterday.getTime()) {
-                   groups.yesterday.articles.push(article);
-               } else if (articleDay.getTime() >= thisWeek.getTime()) {
-                   groups.thisWeek.articles.push(article);
-               } else {
-                   groups.older.articles.push(article);
-               }
-           });
-           
-           return groups;
-       }
-       
-       // Get category class for styling
-       function getCategoryClass(category) {
-           return category ? category.toLowerCase() : '';
-       }
-       
-       // Fetch articles
-       async function fetchArticles() {
-           try {
-               const response = await fetch(S3_JSON_URL + '?t=' + Date.now());
-               if (!response.ok) throw new Error(`HTTP ${response.status}`);
-               const data = await response.json();
-               
-               if (data.summary?.timestamp) {
-                   lastUpdated.textContent = `Updated ${timeAgo(data.summary.timestamp)}`;
-               }
-               
-               return data.items || [];
-           } catch (error) {
-               console.error('Error fetching articles:', error);
-               throw error;
-           }
-       }
-       
-       // Create category filters
-       function createFilters() {
-           const categories = [...new Set(articles.map(a => a.category))].filter(Boolean).sort();
-           
-           // Count fresh articles per category
-           const freshCounts = {};
-           articles.forEach(article => {
-               if (getFreshnessClass(article.pubDate) === 'fresh') {
-                   freshCounts[article.category] = (freshCounts[article.category] || 0) + 1;
-                   freshCounts['all'] = (freshCounts['all'] || 0) + 1;
-               }
-           });
-           
-           filterContainer.innerHTML = `
-               <button class="filter-tab ${currentFilter === 'all' ? 'active' : ''}" data-filter="all">
-                   All ${freshCounts['all'] ? `<span class="fresh-count">${freshCounts['all']}</span>` : ''}
-               </button>
-               ${categories.map(category => `
-                   <button class="filter-tab ${getCategoryClass(category)} ${currentFilter === category ? 'active' : ''}" data-filter="${category}">
-                       ${category.charAt(0).toUpperCase() + category.slice(1)}
-                       ${freshCounts[category] ? `<span class="fresh-count">${freshCounts[category]}</span>` : ''}
-                   </button>
-               `).join('')}
-           `;
-           
-           // Add event listeners
-           document.querySelectorAll('.filter-tab').forEach(tab => {
-               tab.addEventListener('click', function() {
-                   document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-                   this.classList.add('active');
-                   currentFilter = this.dataset.filter;
-                   updateUrlParams('category', currentFilter);
-                   saveScrollPosition();
-                   renderArticles();
-                   restoreScrollPosition();
-               });
-           });
-       }
-       
-// Add these functions to your existing JavaScript
+
+    <script>
+// Configuration
+const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json';
+const AI_ANALYSIS_ENDPOINT = 'https://jcsmad2nf7gbhxyarmpykpmdwm0bafge.lambda-url.us-east-1.on.aws/';
+
+// State
+let articles = [];
+let currentFilter = 'all';
+let isLoading = false;
+let currentDensity = 'comfortable';
+let focusMode = false;
+let scrollPosition = 0;
+let isAiAnalysisRunning = false;
+let aiAnalysisData = null; // This will store the overall AI analysis summary
+let currentContractsData = null; // Stores current contracts data
+
+// Loading messages
+const loadingMessages = [
+    "Gathering intelligence...",
+    "Scanning defense channels...",
+    "Checking industry updates...",
+    "Analyzing government feeds...",
+    "Almost there...",
+    "Compiling your briefing..."
+];
+let loadingMessageIndex = 0;
+
+// AI Analysis messages
+const aiAnalysisMessages = [
+    "AI agents analyzing news...",
+    "Virtual sales team identifying opportunities...",
+    "Processing strategic intelligence...",
+    "Generating action items...",
+    "Finalizing recommendations..."
+];
+let aiMessageIndex = 0;
+
+// Empty state messages by category
+const emptyStateMessages = {
+    defense: ["Intel is quiet today", "All quiet on the defense front", "Defense channels are silent"],
+    industry: ["Markets taking a breather", "Industry in stealth mode", "No industry updates"],
+    government: ["Capitol Hill is unusually quiet", "Government on pause", "No government activity"],
+    all: ["No updates at the moment", "Channels are quiet", "Nothing new to report"]
+};
+
+// UI Elements
+const content = document.getElementById('content');
+const refreshBtn = document.getElementById('refreshBtn');
+const aiAnalysisBtn = document.getElementById('aiAnalysisBtn');
+const aiStatusBanner = document.getElementById('aiStatusBanner');
+const aiStatusMessage = document.getElementById('aiStatusMessage');
+const aiStatusDetails = document.getElementById('aiStatusDetails');
+const errorMessage = document.getElementById('errorMessage');
+const filterContainer = document.getElementById('filterContainer');
+const lastUpdated = document.getElementById('lastUpdated');
+const greeting = document.getElementById('greeting');
+const currentDateElement = document.getElementById('currentDate');
+const progressBar = document.getElementById('progressBar');
+const shareLink = document.getElementById('shareLink');
+const contextualMessage = document.getElementById('contextualMessage');
+// The 'loadingMessage' element needs to be obtained dynamically if the 'content' div is re-rendered
+// const loadingMessage = document.getElementById('loadingMessage'); 
+const keyboardHelp = document.getElementById('keyboardHelp');
+const toast = document.getElementById('toast');
+const pullToRefresh = document.getElementById('pullToRefresh');
+const contractModal = document.getElementById('contractModal');
+const modalAgencyName = document.getElementById('modalAgencyName');
+const modalContractsList = document.getElementById('modalContractsList');
+
+// URL parameters for preferences
+function getUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+        view: params.get('view') || 'comfortable',
+        category: params.get('category') || 'all'
+    };
+}
+
+function updateUrlParams(key, value) {
+    const url = new URL(window.location);
+    url.searchParams.set(key, value);
+    window.history.replaceState({}, '', url);
+}
+
+// Initialize from URL params
+function initializeFromParams() {
+    const params = getUrlParams();
+    currentDensity = params.view;
+    currentFilter = params.category;
+    
+    // Apply density
+    document.body.className = `density-${currentDensity}`;
+    document.querySelectorAll('.density-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.density === currentDensity);
+    });
+}
+
+// Show toast notification
+function showToast(message, duration = 2000) {
+    toast.textContent = message;
+    toast.classList.add('visible');
+    setTimeout(() => {
+        toast.classList.remove('visible');
+    }, duration);
+}
+
+// AI Analysis Functions
+async function runAiAnalysis() {
+    if (isAiAnalysisRunning) {
+        showToast('AI analysis already running...');
+        return;
+    }
+    
+    console.log('Starting AI analysis...');
+    isAiAnalysisRunning = true;
+    aiAnalysisBtn.classList.add('loading');
+    aiAnalysisBtn.disabled = true;
+    
+    // Show status banner
+    aiStatusBanner.classList.add('visible');
+    aiStatusMessage.textContent = 'Starting AI analysis of daily news...';
+    aiStatusDetails.textContent = 'Virtual sales agents are analyzing opportunities';
+    
+    // Cycle through AI analysis messages
+    aiMessageIndex = 0;
+    const messageInterval = setInterval(() => {
+        if (isAiAnalysisRunning) {
+            aiStatusMessage.textContent = aiAnalysisMessages[aiMessageIndex];
+            aiMessageIndex = (aiMessageIndex + 1) % aiAnalysisMessages.length;
+        } else {
+            clearInterval(messageInterval);
+        }
+    }, 2000);
+    
+    try {
+        const response = await fetch(AI_ANALYSIS_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                situation: 'run AI analysis on daily news with virtual sales agents',
+                mode: 'regular',
+                forceType: 'ai_analysis'
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const result = await response.json();
+        console.log('AI Analysis Result (from Lambda):', result);
+        
+        if (result.status === 'complete') {
+            // Re-fetch the daily-news.json from S3 to get the newly enhanced data
+            // This is crucial because the lambda updates the S3 file, not this direct response
+            await refreshFeed(); 
+            
+            // Update status banner with results
+            aiStatusMessage.textContent = `✅ AI Analysis Complete!`;
+            aiStatusDetails.innerHTML = `
+                Found ${result.opportunitiesFound} opportunities • 
+                ${result.totalAgentActions} action items • 
+                ${result.averageConfidence}% avg confidence
+            `;
+            
+            showToast(`AI Analysis complete! Found ${result.opportunitiesFound} opportunities`);
+            
+            // Hide status banner after 5 seconds
+            setTimeout(() => {
+                aiStatusBanner.classList.remove('visible');
+            }, 5000);
+            
+        } else if (result.status === 'error') {
+            throw new Error(result.message || 'AI analysis failed');
+        }
+        
+    } catch (error) {
+        console.error('AI Analysis Error:', error);
+        aiStatusMessage.textContent = '❌ AI Analysis Failed';
+        aiStatusDetails.textContent = error.message || 'Please try again later';
+        
+        setTimeout(() => {
+            aiStatusBanner.classList.remove('visible');
+        }, 3000);
+        
+        showToast('AI analysis failed. Please try again.');
+    } finally {
+        isAiAnalysisRunning = false;
+        aiAnalysisBtn.classList.remove('loading');
+        aiAnalysisBtn.disabled = false;
+        clearInterval(messageInterval);
+    }
+}
+
+// Set greeting based on time and context
+function setGreetingAndDate() {
+    const now = new Date();
+    const hour = now.getHours();
+    const day = now.getDay();
+    
+    // Time-based greeting
+    let greetingText = 'Good Morning';
+    if (hour >= 12 && hour < 17) {
+        greetingText = 'Good Afternoon';
+    } else if (hour >= 17) {
+        greetingText = 'Good Evening';
+    }
+    
+    // Weekend emoji
+    const weekendEmoji = (day === 0 || day === 6) ? '<span class="weekend-emoji">☕</span>' : '';
+    
+    // Evening mode
+    if (hour >= 20 || hour < 6) {
+        document.body.classList.add('evening-mode');
+    } else {
+        document.body.classList.remove('evening-mode');
+    }
+    
+    const options = { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' };
+    const formattedDate = now.toLocaleDateString('en-US', options);
+    
+    currentDateElement.textContent = formattedDate;
+    greeting.innerHTML = `${greetingText}. Welcome to the Loop. ${weekendEmoji}`;
+    
+    // Contextual message
+    contextualMessage.textContent = getContextualMessage(now);
+}
+
+// Get contextual message based on time/day
+function getContextualMessage(now) {
+    const day = now.getDay();
+    const hour = now.getHours();
+    
+    if (day === 1 && hour < 10) return "Monday briefing ready";
+    if (day === 5 && hour > 15) return "Weekend preview";
+    if (hour > 20) return "Evening digest";
+    if (hour < 7) return "Early bird briefing";
+    if (day === 0 || day === 6) return "Weekend reading";
+    return "";
+}
+
+// Reading progress
+function updateReadingProgress() {
+    const scrollTop = window.pageYOffset;
+    const docHeight = document.body.scrollHeight - window.innerHeight;
+    const scrollPercent = (scrollTop / docHeight) * 100;
+    progressBar.style.width = Math.min(scrollPercent, 100) + '%';
+}
+
+// Save scroll position
+function saveScrollPosition() {
+    scrollPosition = window.pageYOffset;
+}
+
+function restoreScrollPosition() {
+    if (scrollPosition > 0) {
+        setTimeout(() => {
+            window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
+        }, 100);
+    }
+}
+
+// Utility functions
+function timeAgo(dateString) {
+    const now = new Date();
+    const date = new Date(dateString);
+    const seconds = Math.floor((now - date) / 1000);
+    if (seconds < 60) return 'now';
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h`;
+    const days = Math.floor(hours / 24);
+    if (days < 7) return `${days}d`;
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+// Get freshness class
+function getFreshnessClass(dateString) {
+    const hours = (new Date() - new Date(dateString)) / 3600000;
+    if (hours < 2) return 'fresh';
+    if (hours < 6) return 'recent';
+    return '';
+}
+
+// Get article hints
+function getArticleHints(article) {
+    const hints = [];
+    
+    // Breaking news
+    const hours = (new Date() - new Date(article.pubDate)) / 3600000;
+    if (hours < 1 && article.characteristics?.includes('breaking')) hints.push('⚡'); // Only show if also flagged as breaking
+    
+    // Data/analysis
+    if (article.characteristics?.includes('data')) hints.push('📊');
+    
+    // Long read
+    if (article.characteristics?.includes('longread')) hints.push('📖');
+    
+    // Tech focus
+    if (article.characteristics?.includes('tech')) hints.push('🔬');
+    
+    // AI Enhanced
+    if (article.aiEnhanced) hints.push('🤖'); // Assuming aiEnhanced is set by the Lambda
+    
+    return hints;
+}
+
+// Smart truncation (handled by Lambda now, but kept for fallback)
+function smartTruncate(text, maxLength = 200) {
+    if (!text || text.length <= maxLength) return text;
+    
+    const truncated = text.substring(0, maxLength);
+    const lastPeriod = truncated.lastIndexOf('. ');
+    const lastQuestion = truncated.lastIndexOf('? ');
+    const lastExclamation = truncated.lastIndexOf('! ');
+    
+    const lastBoundary = Math.max(lastPeriod, lastQuestion, lastExclamation);
+    
+    if (lastBoundary > maxLength * 0.6) {
+        return text.substring(0, lastBoundary + 2);
+    }
+    
+    const lastSpace = truncated.lastIndexOf(' ');
+    return text.substring(0, lastSpace) + '...';
+}
+
+// Group articles by date
+function groupArticlesByDate(articles) {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+    const thisWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+    
+    const groups = {
+        today: { label: 'Today', articles: [] },
+        yesterday: { label: 'Yesterday', articles: [] },
+        thisWeek: { label: 'This Week', articles: [] },
+        older: { label: 'Earlier', articles: [] }
+    };
+    
+    articles.forEach(article => {
+        const articleDate = new Date(article.pubDate);
+        const articleDay = new Date(articleDate.getFullYear(), articleDate.getMonth(), articleDate.getDate());
+        
+        if (articleDay.getTime() === today.getTime()) {
+            groups.today.articles.push(article);
+        } else if (articleDay.getTime() === yesterday.getTime()) {
+            groups.yesterday.articles.push(article);
+        } else if (articleDay.getTime() >= thisWeek.getTime()) {
+            groups.thisWeek.articles.push(article);
+        } else {
+            groups.older.articles.push(article);
+        }
+    });
+    
+    return groups;
+}
+
+// Get category class for styling
+function getCategoryClass(category) {
+    return category ? category.toLowerCase() : '';
+}
+
+// Fetch articles
+async function fetchArticles() {
+    try {
+        const response = await fetch(S3_JSON_URL + '?t=' + Date.now()); // Add timestamp to prevent caching
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        
+        if (data.summary?.timestamp) {
+            lastUpdated.textContent = `Updated ${timeAgo(data.summary.timestamp)}`;
+        }
+        
+        // Store AI analysis data if available in the main daily-news.json
+        if (data.aiAnalysis) {
+            aiAnalysisData = data.aiAnalysis; // This is crucial for displaying overall AI status
+            console.log('AI Analysis data loaded from daily-news.json:', aiAnalysisData);
+            // Optionally update the AI status banner if it's already visible or just after load
+            // Only show if the analysis was complete and there are opportunities
+            if (aiAnalysisData.status === 'complete' && aiAnalysisData.opportunitiesFound > 0) {
+                 aiStatusBanner.classList.add('visible');
+                 aiStatusMessage.textContent = `✅ AI Analysis Last Run: ${timeAgo(aiAnalysisData.lastAnalyzed)}`;
+                 aiStatusDetails.innerHTML = `
+                     Found ${aiAnalysisData.opportunitiesFound} opportunities • 
+                     ${aiAnalysisData.totalAgentActions} action items • 
+                     ${aiAnalysisData.averageConfidence}% avg confidence
+                 `;
+            } else {
+                aiStatusBanner.classList.remove('visible');
+            }
+        } else {
+            // If no AI analysis data, ensure the banner is hidden
+            aiStatusBanner.classList.remove('visible');
+        }
+
+        // Store contracts data globally
+        if (data.contracts) {
+            currentContractsData = data.contracts;
+        } else {
+            currentContractsData = null; // Clear if no contracts
+        }
+        
+        return data.items || [];
+    } catch (error) {
+        console.error('Error fetching articles:', error);
+        throw error;
+    }
+}
+
+// Create category filters
+function createFilters() {
+    const categories = [...new Set(articles.map(a => a.category))].filter(Boolean).sort();
+    
+    // Count fresh articles per category
+    const freshCounts = {};
+    const aiCounts = {};
+    
+    articles.forEach(article => {
+        if (getFreshnessClass(article.pubDate) === 'fresh') {
+            freshCounts[article.category] = (freshCounts[article.category] || 0) + 1;
+            freshCounts['all'] = (freshCounts['all'] || 0) + 1;
+        }
+        
+        if (article.aiEnhanced && article.agentActions && article.agentActions.length > 0) {
+            aiCounts[article.category] = (aiCounts[article.category] || 0) + 1;
+            aiCounts['all'] = (aiCounts['all'] || 0) + 1;
+        }
+    });
+    
+    filterContainer.innerHTML = `
+        <button class="filter-tab ${currentFilter === 'all' ? 'active' : ''}" data-filter="all">
+            All 
+            ${freshCounts['all'] ? `<span class="fresh-count">${freshCounts['all']}</span>` : ''}
+            ${aiCounts['all'] ? `<span class="ai-count">🤖 ${aiCounts['all']}</span>` : ''}
+        </button>
+        ${categories.map(category => `
+            <button class="filter-tab ${getCategoryClass(category)} ${currentFilter === category ? 'active' : ''}" data-filter="${category}">
+                ${category.charAt(0).toUpperCase() + category.slice(1)}
+                ${freshCounts[category] ? `<span class="fresh-count">${freshCounts[category]}</span>` : ''}
+                ${aiCounts[category] ? `<span class="ai-count">🤖 ${aiCounts[category]}</span>` : ''}
+            </button>
+        `).join('')}
+    `;
+    
+    // Add event listeners
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            currentFilter = this.dataset.filter;
+            updateUrlParams('category', currentFilter);
+            saveScrollPosition();
+            renderArticles();
+            restoreScrollPosition();
+        });
+    });
+}
+
+// Virtual Sales Agent Functions
+function renderArticleWithAgentActions(article, index) {
+    const freshnessClass = getFreshnessClass(article.pubDate);
+    const hints = getArticleHints(article);
+    const readingTime = article.readingTime || 2;
+    const hasOpportunity = article.aiEnhanced && article.agentActions && article.agentActions.length > 0;
+    const opportunityClass = hasOpportunity ? 'has-opportunity' : '';
+    
+    return `
+        <article class="article ${freshnessClass} ${opportunityClass}" 
+                 data-index="${index}"
+                 onclick="openArticle('${article.link}')" 
+                 tabindex="0" 
+                 role="button" 
+                 aria-label="Read: ${article.title}">
+            <div class="article-meta">
+                <span class="article-source ${getCategoryClass(article.category)}">${article.source}</span>
+                <div class="article-separator"></div>
+                <span class="article-time">${timeAgo(article.pubDate)}</span>
+                ${hints.length > 0 ? `
+                    <div class="article-hints">
+                        ${hints.map(h => `<span class="hint-emoji">${h}</span>`).join('')}
+                    </div>
+                ` : ''}
+                <span class="reading-time">${readingTime} min</span>
+            </div>
+            <h2 class="article-title">${article.title}</h2>
+            <p class="article-description">${article.description || 'Read more for details.'}</p>
+            
+            ${hasOpportunity ? renderAgentActions(article.agentActions, index) : ''}
+        </article>
+    `;
+}
+
+function renderAgentActions(agentActions, articleIndex) {
+    if (!agentActions || agentActions.length === 0) return '';
+    
+    const highPriorityCount = agentActions.filter(action => action.priority === 'high').length;
+    const totalActions = agentActions.reduce((sum, action) => 
+        sum + (action.immediate_actions?.length || 0) + (action.followup_actions?.length || 0), 0);
+    
+    return `
+        <div class="agent-actions" data-article="${articleIndex}">
+            <div class="agent-actions-header" onclick="toggleAgentActions(event, ${articleIndex})">
+                <span class="actions-icon">🤖</span>
+                <span class="actions-title">
+                    ${agentActions.length} Agent${agentActions.length > 1 ? 's' : ''} • ${totalActions} Action${totalActions > 1 ? 's' : ''}
+                    ${highPriorityCount > 0 ? `<span class="high-priority-badge">${highPriorityCount} High Priority</span>` : ''}
+                </span>
+                <button class="actions-toggle">Show Actions</button>
+            </div>
+            <div class="agent-actions-content hidden">
+                ${agentActions.map((action, actionIndex) => renderSingleAgentAction(action, articleIndex, actionIndex)).join('')}
+                <div class="actions-summary">
+                    <button class="copy-all-actions" onclick="copyAllActions(${articleIndex})">
+                        📋 Copy All Action Plans
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function renderSingleAgentAction(action, articleIndex, actionIndex) {
+    const priorityClass = `priority-${action.priority}`;
+    const confidenceColor = action.confidence >= 80 ? 'high-confidence' : 
+                           action.confidence >= 60 ? 'medium-confidence' : 'low-confidence';
+    
+    return `
+        <div class="agent-action ${priorityClass}" data-action="${actionIndex}">
+            <div class="agent-header">
+                <div class="agent-info">
+                    <span class="agent-avatar">${action.agent.avatar}</span>
+                    <div class="agent-details">
+                        <span class="agent-name">${action.agent.name}</span>
+                        <span class="agent-role">${action.agent.role}</span>
+                    </div>
+                </div>
+                <div class="action-metrics">
+                    <span class="confidence-score ${confidenceColor}" title="Confidence Score">
+                        ${action.confidence}%
+                    </span>
+                    <span class="priority-indicator ${priorityClass}" title="Priority Level">
+                        ${action.priority.toUpperCase()}
+                    </span>
+                </div>
+            </div>
+            
+            <div class="action-content">
+                <div class="immediate-actions">
+                    <h4>⚡ Immediate Actions (${action.timeline || 'ASAP'})</h4>
+                    <ul>
+                        ${(action.immediate_actions || []).map(actionItem => `
+                            <li>
+                                <span class="action-text">${actionItem}</span>
+                                <button class="action-done" onclick="markActionDone(this)" title="Mark as done">✓</button>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+                
+                ${action.followup_actions && action.followup_actions.length > 0 ? `
+                <div class="followup-actions">
+                    <h4>📅 Follow-up Actions</h4>
+                    <ul>
+                        ${action.followup_actions.map(actionItem => `
+                            <li>
+                                <span class="action-text">${actionItem}</span>
+                                <button class="action-done" onclick="markActionDone(this)" title="Mark as done">✓</button>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+                ` : ''}
+                
+                ${action.success_metrics && action.success_metrics.length > 0 ? `
+                <div class="success-metrics">
+                    <h4>📊 Success Metrics</h4>
+                    <ul>
+                        ${action.success_metrics.map(metric => `<li>${metric}</li>`).join('')}
+                    </ul>
+                </div>
+                ` : ''}
+            </div>
+            
+            <div class="action-controls">
+                <button class="copy-single-action" onclick="copySingleAction(${articleIndex}, ${actionIndex})">
+                    📋 Copy Plan
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+// Event handlers for agent actions
+function toggleAgentActions(event, articleIndex) {
+    event.stopPropagation(); // Prevent article click
+    
+    const actionsContainer = document.querySelector(`[data-article="${articleIndex}"] .agent-actions-content`);
+    const toggleButton = document.querySelector(`[data-article="${articleIndex}"] .actions-toggle`);
+    
+    if (actionsContainer.classList.contains('hidden')) {
+        actionsContainer.classList.remove('hidden');
+        toggleButton.textContent = 'Hide Actions';
+    } else {
+        actionsContainer.classList.add('hidden');
+        toggleButton.textContent = 'Show Actions';
+    }
+}
+
+function markActionDone(button) {
+    button.classList.add('completed');
+    button.textContent = '✓';
+    button.disabled = true;
+    
+    const actionItem = button.closest('li');
+    actionItem.classList.add('completed');
+    
+    showToast('Action marked complete');
+}
+
+function copySingleAction(articleIndex, actionIndex) {
+    const article = articles[articleIndex];
+    const action = article.agentActions[actionIndex];
+    
+    const actionPlan = action.formatted_for_copy || formatActionForCopy(article, action);
+    
+    navigator.clipboard.writeText(actionPlan).then(() => {
+        showToast(`${action.agent.name}'s action plan copied!`);
+    }).catch(() => {
+        showToast('Action plan ready - check console for text');
+        console.log('Action Plan:', actionPlan);
+    });
+}
+
+function copyAllActions(articleIndex) {
+    const article = articles[articleIndex];
+    if (!article || !article.agentActions) return;
+    
+    const allActionPlans = article.agentActions.map(action => 
+        action.formatted_for_copy || formatActionForCopy(article, action)
+    ).join('\n\n' + '='.repeat(50) + '\n\n');
+    
+    const fullPlan = `
+OPPORTUNITY: ${article.title}
+SOURCE: ${article.source}
+LINK: ${article.link}
+DATE: ${article.pubDate}
+
+${'='.repeat(70)}
+
+${allActionPlans}
+    `.trim();
+    
+    navigator.clipboard.writeText(fullPlan).then(() => {
+        showToast(`All ${article.agentActions.length} action plans copied!`);
+    }).catch(() => {
+        showToast('Action plans ready - check console for text');
+        console.log('All Action Plans:', fullPlan);
+    });
+}
+
+function formatActionForCopy(article, action) {
+    return `
+${action.agent.role.toUpperCase()} - ${action.agent.name}
+Priority: ${action.priority.toUpperCase()} | Confidence: ${action.confidence}%
+
+IMMEDIATE ACTIONS (${action.timeline || 'ASAP'}):
+${(action.immediate_actions || []).map((item, i) => `${i + 1}. ${item}`).join('\n')}
+
+FOLLOW-UP ACTIONS:
+${(action.followup_actions || []).map((item, i) => `${i + 1}. ${item}`).join('\n')}
+
+SUCCESS METRICS:
+${(action.success_metrics || []).map(metric => `• ${metric}`).join('\n')}
+
+SOURCE: ${article.title}
+LINK: ${article.link}
+    `.trim();
+}
+
 function formatCurrency(value) {
+    if (value === undefined || value === null) return '$0';
     if (value >= 1000000000) return `$${(value / 1000000000).toFixed(1)}B`;
     if (value >= 1000000) return `$${(value / 1000000).toFixed(1)}M`;
     if (value >= 1000) return `$${(value / 1000).toFixed(0)}K`;
     return `$${value}`;
 }
 
+// Utility function for HTML attribute escaping - defined globally for reuse
+function escapeHtmlAttribute(s) {
+    return (s + '').replace(/[&<>"']/g, function (c) {
+        switch (c) {
+            case '&': return '&amp;';
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '"': return '&quot;';
+            case "'": return '&#039;'; // Use numeric entity for single quotes in attributes
+        }
+    });
+}
+
 function renderContractsSection(contractsData) {
+    // Moved escapeHtmlAttribute to global scope or ensure it's accessible.
+    // If you define it inside this function, it's recreated every time, which is less efficient.
+    // For this full code block, it's defined just above this function.
+
     if (!contractsData || !contractsData.agencies) {
         console.log('No contracts data available');
         return '';
@@ -1615,7 +2588,7 @@ function renderContractsSection(contractsData) {
                 .sort((a, b) => b[1] - a[1])[0];
             
             return `
-                <div class="agency-card" onclick="showAgencyDetails('${agency}')" tabindex="0">
+                <div class="agency-card" onclick="showAgencyDetails('${escapeHtmlAttribute(agency)}')">
                     <div class="agency-header">
                         <div class="agency-name">
                             <span class="agency-icon">${data.icon || '📄'}</span>
@@ -1631,7 +2604,7 @@ function renderContractsSection(contractsData) {
                         </div>
                         <div class="stat-item">
                             <span class="stat-label">Avg Value</span>
-                            <span class="stat-value">${formatCurrency(Math.round((data.total || 0) / data.contracts.length))}</span>
+                            <span class="stat-value">${formatCurrency(Math.round((data.total || 0) / (data.contracts.length || 1)))}</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-label">Top Type</span>
@@ -1673,9 +2646,6 @@ function renderContractsSection(contractsData) {
     `;
 }
 
-// Store contracts data globally for modal access
-let currentContractsData = null;
-
 function showAgencyDetails(agencyName) {
    if (!currentContractsData || !currentContractsData.agencies[agencyName]) return;
    
@@ -1711,7 +2681,7 @@ function closeModal() {
    document.getElementById('contractModal').classList.remove('active');
 }
 
-// === NEW CODE FOR STOCK TICKER ===
+// === STOCK TICKER CODE ===
 
 let stockData = []; // This will now hold the fetched data
 
@@ -1794,7 +2764,7 @@ function getStockTickerHtml() {
         return `
             <div class="stock-item">
                 <span class="stock-ticker">${stock.ticker}</span>
-                <span class="stock-price">$${stock.price.toFixed(2)}</span>
+                <span class="stock-price">${stock.price.toFixed(2)}</span>
                 <span class="stock-percent-change ${changeClass}">${changeSign}${stock.percentChange.toFixed(2)}%</span>
             </div>
         `;
@@ -1825,642 +2795,346 @@ function renderAdPlaceholder() {
     `;
 }
 
-// Update the renderArticles function to include ad placements
 async function renderArticles() {
-   // Fetch stock data first
-   stockData = await fetchStockData();
+    // Fetch stock data first
+    stockData = await fetchStockData();
 
-   const filtered = currentFilter === 'all' 
-       ? articles 
-       : articles.filter(a => a.category === currentFilter);
-   
-   // Build the HTML starting with contracts if available
-   let html = '';
-   
-   // Add contracts section at the top if we have contracts data
-   if (currentContractsData && currentFilter === 'all') {
-       html += renderContractsSection(currentContractsData);
-   }
-
-   // Add the stock ticker
-   if (currentFilter === 'all') {
-       html += getStockTickerHtml();
-   }
-   
-   if (filtered.length === 0) {
-       const messages = emptyStateMessages[currentFilter] || emptyStateMessages['all'];
-       const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-       
-       html += `
-           <div class="article-grid">
-               <div class="empty-state">
-                   <div class="icon">📋</div>
-                   <h3>${randomMessage}</h3>
-                   <p>Try another filter or check back later.</p>
-               </div>
-           </div>
-       `;
-   } else {
-    const groups = groupArticlesByDate(filtered);
-    const dateGroups = Object.entries(groups);
-
-    // Render each group and insert an ad after each one
-    dateGroups.forEach(([key, group]) => {
-        if (group.articles.length > 0) {
-            html += `
-                <div class="date-group">
-                    <div class="date-group-header">${group.label}</div>
-                    <div class="article-grid">
-                        ${group.articles.map((article, index) => {
-                            const freshnessClass = getFreshnessClass(article.pubDate);
-                            const hints = getArticleHints(article);
-                            const readingTime = article.readingTime || 2;
-                            
-                            return `
-                                <article class="article ${freshnessClass}" 
-                                         data-index="${index}"
-                                         onclick="openArticle('${article.link}')" 
-                                         tabindex="0" 
-                                         role="button" 
-                                         aria-label="Read: ${article.title}">
-                                    <div class="article-meta">
-                                        <span class="article-source ${getCategoryClass(article.category)}">${article.source}</span>
-                                        <div class="article-separator"></div>
-                                        <span class="article-time">${timeAgo(article.pubDate)}</span>
-                                        ${hints.length > 0 ? `
-                                            <div class="article-hints">
-                                                ${hints.map(h => `<span class="hint-emoji"></span>`).join('')}
-                                            </div>
-                                        ` : ''}
-                                        <span class="reading-time">${readingTime} min</span>
-                                    </div>
-                                    <h2 class="article-title">${article.title}</h2>
-                                    <p class="article-description">${article.description || 'Read more for details.'}</p>
-                                </article>
-                            `;
-                        }).join('')}
-                    </div>
-                </div>
-            `;
-
-            // Insert a placeholder ad after each date group
-            html += renderAdPlaceholder();
-        }
-    });
-   }
-
-   content.innerHTML = html;
-   
-   // Add keyboard navigation and focus mode
-   document.querySelectorAll('.article').forEach(article => {
-       article.addEventListener('keydown', function(e) {
-           if (e.key === 'Enter' || e.key === ' ') {
-               e.preventDefault();
-               this.click();
-           }
-       });
-       
-       article.addEventListener('dblclick', function(e) {
-           e.preventDefault();
-           toggleFocusMode(this);
-       });
-   });
-   
-   // Add keyboard navigation for agency cards
-   document.querySelectorAll('.agency-card').forEach(card => {
-       card.addEventListener('keydown', function(e) {
-           if (e.key === 'Enter' || e.key === ' ') {
-               e.preventDefault();
-               this.click();
-           }
-       });
-   });
-}
-
-// Update the fetchArticles function to also get contracts
-async function fetchArticles() {
-   try {
-       const response = await fetch(S3_JSON_URL + '?t=' + Date.now());
-       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-       const data = await response.json();
-       
-       if (data.summary?.timestamp) {
-           lastUpdated.textContent = `Updated ${timeAgo(data.summary.timestamp)}`;
-       }
-       
-       // Store contracts data if available
-       currentContractsData = data.contracts || null;
-       
-       return data.items || [];
-   } catch (error) {
-       console.error('Error fetching articles:', error);
-       throw error;
-   }
-}
-// RSS Fetch endpoint (your Lambda Function URL)
-const RSS_FETCH_URL = 'https://jcsmad2nf7gbhxyarmpykpmdwm0bafge.lambda-url.us-east-1.on.aws/';
-
-// Function to trigger full RSS fetch
-async function triggerRSSFetch() {
-    const statusElement = document.getElementById('rssFetchStatus');
-    const button = document.getElementById('rssFetchBtn');
+    const filtered = currentFilter === 'all' 
+        ? articles 
+        : articles.filter(a => a.category === currentFilter);
     
-    if (!statusElement || !button) return;
+    // Build the HTML starting with contracts if available
+    let html = '';
     
-    // Disable button and show loading state
-    button.disabled = true;
-    button.innerHTML = `
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spinning">
-            <path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/>
-        </svg>
-        Fetching RSS...
-    `;
-    statusElement.textContent = 'Triggering RSS fetch...';
-    statusElement.style.color = 'var(--text-secondary)';
-    
-    try {
-        const response = await fetch(RSS_FETCH_URL, {
-            method: 'GET', // or POST depending on your Lambda setup
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const result = await response.json();
-        console.log('RSS Fetch result:', result);
-        
-        if (result.success) {
-            statusElement.textContent = `✓ Fetched ${result.count || 0} articles from ${result.sources?.length || 0} sources`;
-            statusElement.style.color = 'var(--fresh-accent)';
-            
-            // Refresh the local feed after successful fetch
-            setTimeout(() => {
-                refreshFeed();
-            }, 1000);
-        } else {
-            throw new Error(result.error || 'RSS fetch failed');
-        }
-        
-    } catch (error) {
-        console.error('Error triggering RSS fetch:', error);
-        statusElement.textContent = 'Error: ' + error.message;
-        statusElement.style.color = 'var(--breaking-accent)';
-    } finally {
-        // Re-enable button
-        button.disabled = false;
-        button.innerHTML = `
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
-            </svg>
-            Fetch RSS
-        `;
-        
-        // Clear status after 5 seconds
-        setTimeout(() => {
-            if (statusElement.textContent.includes('✓') || statusElement.textContent.includes('Error:')) {
-                statusElement.textContent = '';
-            }
-        }, 5000);
+    // Add contracts section at the top if we have contracts data
+    if (currentContractsData && currentFilter === 'all') {
+        html += renderContractsSection(currentContractsData);
     }
-}
-function setupAdminPanel() {
-    // Check for admin mode via URL parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('admin') === 'true') {
-        const adminHtml = `
-            <div id="adminPanel" style="
-                position: fixed;
-                bottom: 20px;
-                left: 20px;
-                background: var(--surface);
-                border: 2px solid var(--accent-subtle);
-                border-radius: 8px;
-                padding: 16px;
-                box-shadow: 0 4px 12px var(--shadow-medium);
-                z-index: 1000;
-                max-width: 450px;
-            ">
-                <h3 style="font-size: 12px; margin-bottom: 12px; color: var(--text-primary);">Admin Controls</h3>
-                
-                <!-- RSS Fetch Section -->
-                <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);">
-                    <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
-                        <button id="rssFetchBtn" onclick="triggerRSSFetch()" style="
-                            padding: 6px 12px;
-                            background: var(--accent-subtle);
-                            color: white;
-                            border: none;
-                            border-radius: 4px;
-                            font-size: 10px;
-                            cursor: pointer;
-                            display: flex;
-                            align-items: center;
-                            gap: 4px;
-                        ">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
-                            </svg>
-                            Fetch RSS
-                        </button>
-                        <span style="font-size: 10px; color: var(--text-tertiary);">Trigger full RSS update</span>
-                    </div>
-                    <div id="rssFetchStatus" style="
-                        font-size: 9px;
-                        color: var(--text-secondary);
-                        min-height: 14px;
-                    "></div>
-                </div>
-                
-                <!-- Contract Upload Section -->
-                <div>
-                    <h4 style="font-size: 11px; margin-bottom: 8px; color: var(--text-primary);">Upload Today's Contracts</h4>
-                    <textarea id="contractsInput" placeholder="Paste contracts text here..." style="
-                        width: 100%;
-                        height: 120px;
-                        font-size: 10px;
-                        padding: 8px;
-                        border: 1px solid var(--border-medium);
-                        border-radius: 4px;
-                        margin-bottom: 8px;
-                        resize: vertical;
-                    "></textarea>
-                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                        <button onclick="processContracts()" style="
-                            padding: 6px 12px;
-                            background: var(--category-government);
-                            color: white;
-                            border: none;
-                            border-radius: 4px;
-                            font-size: 10px;
-                            cursor: pointer;
-                        ">Process & Upload</button>
-                        <button onclick="document.getElementById('adminPanel').remove()" style="
-                            padding: 6px 12px;
-                            background: var(--border-medium);
-                            color: var(--text-primary);
-                            border: none;
-                            border-radius: 4px;
-                            font-size: 10px;
-                            cursor: pointer;
-                        ">Close</button>
-                    </div>
-                    <div id="uploadStatus" style="
-                        font-size: 10px;
-                        color: var(--text-secondary);
-                        min-height: 14px;
-                    "></div>
+
+    // Add the stock ticker
+    if (currentFilter === 'all') {
+        html += getStockTickerHtml();
+    }
+    
+    if (filtered.length === 0) {
+        const messages = emptyStateMessages[currentFilter] || emptyStateMessages['all'];
+        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+        
+        html += `
+            <div class="article-grid">
+                <div class="empty-state">
+                    <div class="icon">📋</div>
+                    <h3>${randomMessage}</h3>
+                    <p>Try another filter or check back later.</p>
                 </div>
             </div>
         `;
-        document.body.insertAdjacentHTML('beforeend', adminHtml);
+    } else {
+     const groups = groupArticlesByDate(filtered);
+     const dateGroups = Object.entries(groups);
+
+     // Render each group and insert an ad after each one
+     dateGroups.forEach(([key, group]) => {
+         if (group.articles.length > 0) {
+             html += `
+                 <div class="date-group">
+                     <div class="date-group-header">${group.label}</div>
+                     <div class="article-grid">
+                         ${group.articles.map((article, index) => {
+                             // Use the new agent-aware rendering function
+                             return renderArticleWithAgentActions(article, index);
+                         }).join('')}
+                     </div>
+                 </div>
+             `;
+
+             // Insert a placeholder ad after each date group
+             html += renderAdPlaceholder();
+         }
+     });
     }
-}
-function processContracts() {
-    const text = document.getElementById('contractsInput').value;
-    const status = document.getElementById('uploadStatus');
+
+    content.innerHTML = html;
     
-    if (!text) {
-        status.textContent = 'Please paste contract text';
-        return;
-    }
-    
-    const date = new Date().toISOString().split('T')[0];
-    status.textContent = 'Processing...';
-    
-    // Send to your Lambda endpoint
-    fetch('https://jcsmad2nf7gbhxyarmpykpmdwm0bafge.lambda-url.us-east-1.on.aws/contracts', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 
-            date: date,
-            contractText: text 
-        })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Lambda response:', data); // Debug log
-        
-        if (data.success) {
-            // Check if insights exists before accessing properties
-            if (data.insights) {
-                status.textContent = `✓ Uploaded ${data.insights.totalContracts || 0} contracts totaling ${formatCurrency(data.insights.totalValue || 0)}`;
-            } else {
-                status.textContent = '✓ Contracts uploaded successfully';
+    // Add keyboard navigation and focus mode
+    document.querySelectorAll('.article').forEach(article => {
+        article.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                // Check if we're clicking on agent actions
+                if (!e.target.closest('.agent-actions')) {
+                    this.click();
+                }
             }
-            document.getElementById('contractsInput').value = '';
-            
-            // Refresh the feed after a moment
-            setTimeout(() => {
-                refreshFeed();
-            }, 2000);
-        } else {
-            status.textContent = data.error || 'Upload failed. Please try again.';
-        }
-    })
-    .catch(error => {
-        console.error('Error processing contracts:', error);
-        status.textContent = 'Error: ' + error.message;
-    });
+        });
+        
+        article.addEventListener('dblclick', function(e) {
+            e.preventDefault();
+            toggleFocusMode(this);
+        });
+    }); // This correctly closes the forEach method's callback function and the forEach method itself.
+
+} // <--- THIS IS THE CRITICAL MISSING CLOSING BRACE FOR async function renderArticles()
+
+// Focus mode toggle
+function toggleFocusMode(article) {
+    if (focusMode) {
+        document.body.classList.remove('focus-mode');
+        focusMode = false;
+    } else {
+        document.body.classList.add('focus-mode');
+        document.querySelectorAll('.article').forEach(a => a.classList.remove('focused'));
+        article.classList.add('focused');
+        focusMode = true;
+    }
 }
 
-// Update the initialization to include admin panel setup
-// Add this to your existing initialization code
-setupAdminPanel();
-       
-       // Open article and save position
-       function openArticle(link) {
-           saveScrollPosition();
-           window.open(link, '_blank');
-       }
-       
-       // Toggle focus mode
-       function toggleFocusMode(articleElement) {
-           if (focusMode) {
-               document.body.classList.remove('focus-mode');
-               document.querySelectorAll('.article').forEach(a => a.classList.remove('focused'));
-               focusMode = false;
-           } else {
-               document.body.classList.add('focus-mode');
-               articleElement.classList.add('focused');
-               focusMode = true;
-           }
-       }
-       
-       // Cycle loading messages
-       function cycleLoadingMessage() {
-           if (isLoading) {
-               loadingMessage.textContent = loadingMessages[loadingMessageIndex];
-               loadingMessageIndex = (loadingMessageIndex + 1) % loadingMessages.length;
-               setTimeout(cycleLoadingMessage, 800);
-           }
-       }
-       
-       // Refresh feed
-       async function refreshFeed() {
-           if (isLoading) return;
-           
-           isLoading = true;
-           refreshBtn.classList.add('loading');
-           refreshBtn.disabled = true;
-           errorMessage.style.display = 'none';
-           
-           // Start cycling loading messages
-           loadingMessageIndex = 0;
-           cycleLoadingMessage();
-           
-           try {
-               // Fetch both news and stock data
-               const [fetchedArticles, fetchedStockData] = await Promise.all([
-                   fetchArticles(),
-                   fetchStockData()
-               ]);
-               
-               articles = fetchedArticles;
-               stockData = fetchedStockData;
-               
-               createFilters();
-               renderArticles();
-               showToast('Feed refreshed');
-           } catch (error) {
-               errorMessage.style.display = 'block';
-               errorMessage.textContent = 'Unable to load content. Please check your connection.';
-               content.innerHTML = `
-                   <div class="article-grid">
-                       <div class="empty-state">
-                           <div class="icon">📡</div>
-                           <h3>Connection Issue</h3>
-                           <p>Having trouble reaching sources. Please try again.</p>
-                       </div>
-                   </div>
-               `;
-           } finally {
-               isLoading = false;
-               refreshBtn.classList.remove('loading');
-               refreshBtn.disabled = false;
-           }
-       }
-       
-       // Keyboard shortcuts
-       document.addEventListener('keydown', function(e) {
-           // Ignore if typing in an input
-           if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-           
-           // Number keys 1-9: Open articles
-           if (e.key >= '1' && e.key <= '9') {
-               const index = parseInt(e.key) - 1;
-               const articles = document.querySelectorAll('.article');
-               if (articles[index]) {
-                   articles[index].click();
-               }
-           }
-           
-           // F: Focus on filters
-           if (e.key === 'f' || e.key === 'F') {
-               e.preventDefault();
-               const nextFilter = document.querySelector('.filter-tab:not(.active)');
-               if (nextFilter) nextFilter.click();
-           }
-           
-           // R: Refresh
-           if (e.key === 'r' || e.key === 'R') {
-               e.preventDefault();
-               refreshFeed();
-           }
-           
-           // D: Cycle density
-           if (e.key === 'd' || e.key === 'D') {
-               e.preventDefault();
-               const densities = ['compact', 'comfortable', 'spacious'];
-               const currentIndex = densities.indexOf(currentDensity);
-               const nextDensity = densities[(currentIndex + 1) % densities.length];
-               setDensity(nextDensity);
-           }
-           
-           // ?: Show help
-           if (e.key === '?') {
-               e.preventDefault();
-               keyboardHelp.classList.toggle('visible');
-           }
-           
-           // ESC: Close help or exit focus mode
-           if (e.key === 'Escape') {
-               if (keyboardHelp.classList.contains('visible')) {
-                   keyboardHelp.classList.remove('visible');
-               } else if (focusMode) {
-                   document.body.classList.remove('focus-mode');
-                   document.querySelectorAll('.article').forEach(a => a.classList.remove('focused'));
-                   focusMode = false;
-               }
-           }
-       });
-       
-       // Density controls
-       function setDensity(density) {
-           currentDensity = density;
-           document.body.className = `density-${density}`;
-           if (document.body.classList.contains('evening-mode')) {
-               document.body.classList.add('evening-mode');
-           }
-           
-           document.querySelectorAll('.density-btn').forEach(btn => {
-               btn.classList.toggle('active', btn.dataset.density === density);
-           });
-           
-           updateUrlParams('view', density);
-           showToast(`View: ${density}`);
-       }
-       
-       document.querySelectorAll('.density-btn').forEach(btn => {
-           btn.addEventListener('click', function() {
-               setDensity(this.dataset.density);
-           });
-       });
-       
-       // Pull to refresh (mobile)
-       let startY = 0;
-       let pullDistance = 0;
-       let isPulling = false;
-       
-       document.addEventListener('touchstart', function(e) {
-           if (window.scrollY === 0) {
-               startY = e.touches[0].pageY;
-               isPulling = true;
-           }
-       });
-       
-       document.addEventListener('touchmove', function(e) {
-           if (!isPulling) return;
-           
-           pullDistance = e.touches[0].pageY - startY;
-           
-           if (pullDistance > 0 && pullDistance < 150) {
-               pullToRefresh.classList.add('visible');
-               pullToRefresh.style.transform = `translateX(-50%) translateY(${Math.min(pullDistance / 2, 50)}px)`;
-           }
-       });
-       
-       document.addEventListener('touchend', function(e) {
-    if (!isPulling) return;
+// Show empty state
+function showEmptyState() {
+    const messages = emptyStateMessages[currentFilter] || emptyStateMessages['all'];
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
     
-    if (pullDistance > 100) {
-        pullToRefresh.classList.add('refreshing');
-        refreshFeed().then(() => {
-            pullToRefresh.classList.remove('refreshing');
-            pullToRefresh.classList.remove('visible');
-            pullToRefresh.style.transform = 'translateX(-50%)';
+    content.innerHTML = `
+        <div class="article-grid">
+            <div class="empty-state">
+                <div class="icon">📋</div>
+                <h3>${randomMessage}</h3>
+                <p>Try another filter or check back later.</p>
+            </div>
+        </div>
+    `;
+}
+
+// Main refresh function
+async function refreshFeed() {
+    isLoading = true;
+    errorMessage.style.display = 'none';
+    refreshBtn.classList.add('loading');
+    refreshBtn.disabled = true;
+    
+    // Show loading state
+    content.innerHTML = `
+        <div class="article-grid">
+            <div class="loading">
+                <div class="loading-message" id="loadingMessage">${loadingMessages[0]}</div>
+            </div>
+        </div>
+    `;
+    
+    // Cycle loading messages
+    const loadingInterval = setInterval(() => {
+        if (isLoading) {
+            const loadingEl = document.getElementById('loadingMessage'); // Get element each time
+            if (loadingEl) {
+                loadingMessageIndex = (loadingMessageIndex + 1) % loadingMessages.length;
+                loadingEl.textContent = loadingMessages[loadingMessageIndex];
+            }
+        }
+    }, 1500);
+    
+    try {
+        articles = await fetchArticles();
+        
+        // currentContractsData is set within fetchArticles now
+        
+        createFilters(); // Re-create filters to update counts (including AI counts)
+        await renderArticles();
+        
+        showToast('Feed updated!');
+        
+    } catch (error) {
+        console.error('Refresh failed:', error);
+        errorMessage.textContent = 'Failed to load news. Please try again.';
+        errorMessage.style.display = 'block';
+        showEmptyState();
+    } finally {
+        isLoading = false;
+        refreshBtn.classList.remove('loading');
+        refreshBtn.disabled = false;
+        clearInterval(loadingInterval);
+    }
+}
+
+// Open article in new tab
+function openArticle(url) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    
+    switch(e.key.toLowerCase()) {
+        case 'r':
+            e.preventDefault();
+            refreshFeed();
+            break;
+        case 'a':
+            e.preventDefault();
+            runAiAnalysis();
+            break;
+        case 'f':
+            e.preventDefault();
+            const currentActiveFilter = document.querySelector('.filter-tab.active');
+            let nextFilter = currentActiveFilter ? currentActiveFilter.nextElementSibling : null;
+            if (!nextFilter || !nextFilter.classList.contains('filter-tab')) {
+                nextFilter = document.querySelector('.filter-tab[data-filter="all"]'); // Loop back to 'All'
+            }
+            if (nextFilter) nextFilter.click();
+            break;
+        case 'd':
+            e.preventDefault();
+            cycleDensity();
+            break;
+        case '?':
+            e.preventDefault();
+            keyboardHelp.classList.toggle('visible');
+            break;
+        case 'escape':
+            keyboardHelp.classList.remove('visible');
+            // Close modal if open
+            if (contractModal.classList.contains('active')) {
+                closeModal();
+            }
+            if (focusMode) {
+                document.body.classList.remove('focus-mode');
+                focusMode = false;
+            }
+            break;
+        default:
+            // Article shortcuts (1-9)
+            if (e.key >= '1' && e.key <= '9') {
+                const index = parseInt(e.key) - 1;
+                const articleElements = document.querySelectorAll('.article');
+                if (articleElements[index]) {
+                    articleElements[index].click();
+                }
+            }
+            break;
+    }
+});
+
+// Density controls
+function cycleDensity() {
+    const densities = ['compact', 'comfortable', 'spacious'];
+    const currentIndex = densities.indexOf(currentDensity);
+    const nextIndex = (currentIndex + 1) % densities.length;
+    currentDensity = densities[nextIndex];
+    
+    document.body.className = `density-${currentDensity}`;
+    
+    document.querySelectorAll('.density-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.density === currentDensity);
+    });
+    
+    updateUrlParams('view', currentDensity);
+    showToast(`${currentDensity.charAt(0).toUpperCase() + currentDensity.slice(1)} view`);
+}
+
+// Density button handlers
+document.querySelectorAll('.density-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        currentDensity = this.dataset.density;
+        document.body.className = `density-${currentDensity}`;
+        
+        document.querySelectorAll('.density-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        updateUrlParams('view', currentDensity);
+    });
+});
+
+// Refresh button
+refreshBtn.addEventListener('click', refreshFeed);
+
+// AI Analysis button
+aiAnalysisBtn.addEventListener('click', runAiAnalysis);
+
+// Share functionality
+shareLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    if (navigator.share) {
+        navigator.share({
+            title: 'DIBDash - Defense Industrial Base Intelligence',
+            text: 'Curated intelligence for Defense professionals',
+            url: window.location.href
         });
     } else {
-        pullToRefresh.classList.remove('visible');
-        pullToRefresh.style.transform = 'translateX(-50%)';
+        // Fallback to clipboard
+        navigator.clipboard.writeText(window.location.href).then(() => {
+            showToast('Link copied to clipboard!');
+        }).catch(() => {
+            showToast('Share: ' + window.location.href);
+        });
+    }
+});
+
+// Scroll listeners
+let scrollTimeout;
+window.addEventListener('scroll', function() {
+    updateReadingProgress();
+    
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        saveScrollPosition();
+    }, 150);
+});
+
+// Pull to refresh (mobile)
+let startY = 0;
+let pullDistance = 0;
+let isPulling = false;
+
+document.addEventListener('touchstart', function(e) {
+    // Only activate if at the very top of the page
+    if (window.pageYOffset === 0 && e.touches.length === 1) {
+        startY = e.touches[0].pageY;
+        isPulling = true;
+        pullToRefresh.style.transition = 'none'; // Disable transition for immediate feedback
+    }
+});
+
+document.addEventListener('touchmove', function(e) {
+    if (isPulling && !isLoading) {
+        pullDistance = e.touches[0].pageY - startY;
+        if (pullDistance > 0) {
+            e.preventDefault(); // Prevent scrolling
+            // Limit pull distance to avoid excessive stretching
+            pullToRefresh.style.top = Math.min(pullDistance - 50, 10) + 'px';
+            
+            if (pullDistance > 100) { // Threshold for refreshing
+                pullToRefresh.classList.add('refreshing');
+            } else {
+                pullToRefresh.classList.remove('refreshing');
+            }
+        }
+    }
+});
+
+document.addEventListener('touchend', function() {
+    pullToRefresh.style.transition = 'top 0.3s ease'; // Re-enable transition
+    if (isPulling && pullDistance > 100 && !isLoading) {
+        refreshFeed();
     }
     
-    startY = 0;
-    pullDistance = 0;
     isPulling = false;
+    pullDistance = 0;
+    pullToRefresh.style.top = '-50px'; // Reset position
+    pullToRefresh.classList.remove('refreshing');
 });
-       
-       // Share functionality
-       function setupShare() {
-           shareLink.addEventListener('click', function(e) {
-               e.preventDefault();
-               if (navigator.share) {
-                   navigator.share({
-                       title: 'The Read Board',
-                       text: 'Check out The Read Board - curated intelligence briefings for the modern professional',
-                       url: window.location.href
-                   }).catch(err => console.log('Error sharing:', err));
-               } else {
-                   // Fallback: copy to clipboard
-                   navigator.clipboard.writeText(window.location.href).then(() => {
-                       showToast('Link copied!');
-                   }).catch(() => {
-                       // Ultimate fallback: open email
-                       const subject = encodeURIComponent('Check out The Read Board');
-                       const body = encodeURIComponent('I thought you might like this curated news site: ' + window.location.href);
-                       window.open(`mailto:?subject=${subject}&body=${body}`);
-                   });
-               }
-           });
-       }
-       
-       // Refresh button
-       refreshBtn.addEventListener('click', refreshFeed);
-       
-       // Visibility API - refresh when tab becomes visible after being hidden for > 30 min
-       let hiddenTime = null;
-       
-       document.addEventListener('visibilitychange', function() {
-           if (document.hidden) {
-               hiddenTime = Date.now();
-           } else if (hiddenTime) {
-               const timeDiff = Date.now() - hiddenTime;
-               if (timeDiff > 30 * 60 * 1000) { // 30 minutes
-                   showToast('Content refreshed');
-                   refreshFeed();
-               }
-               hiddenTime = null;
-           }
-       });
-       
-       // Performance optimization - Intersection Observer for lazy loading
-       if ('IntersectionObserver' in window) {
-           const imageObserver = new IntersectionObserver((entries, observer) => {
-               entries.forEach(entry => {
-                   if (entry.isIntersecting) {
-                       const article = entry.target;
-                       article.style.opacity = '1';
-                       observer.unobserve(article);
-                   }
-               });
-           });
-           
-           // Observe articles as they're created
-           const observeArticles = () => {
-               document.querySelectorAll('.article').forEach(article => {
-                   article.style.opacity = '0';
-                   article.style.transition = 'opacity 0.3s ease';
-                   imageObserver.observe(article);
-               });
-           };
-           
-           // Call after rendering
-           const originalRenderArticles = renderArticles;
-           renderArticles = function() {
-               originalRenderArticles.apply(this, arguments);
-               setTimeout(observeArticles, 100);
-           };
-       }
-       
-       // Initialize
-       initializeFromParams();
-       setGreetingAndDate();
-       refreshFeed();
-       setupShare();
-       
-       // Event listeners
-       window.addEventListener('scroll', updateReadingProgress);
-       window.addEventListener('beforeunload', saveScrollPosition);
-       
-       // Update greeting every hour
-       setInterval(setGreetingAndDate, 3600000);
-       
-       // Auto-refresh every 15 minutes if page is visible
-       setInterval(() => {
-           if (!document.hidden && !isLoading) {
-               refreshFeed();
-           }
-       }, 15 * 60 * 1000);
-   </script>
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    setGreetingAndDate();
+    initializeFromParams();
+    
+    // Initial load
+    refreshFeed();
+    
+    // Update time every minute
+    setInterval(setGreetingAndDate, 60000);
+});
+</script>
 </body>
 </html>
