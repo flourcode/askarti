@@ -534,10 +534,6 @@
                 font-size: 14px;
             }
             
-            .density-controls {
-                display: none;
-            }
-            
             .filters {
                 gap: 4px;
                 margin-bottom: 10px;
@@ -1218,6 +1214,7 @@
             // Configuration
             const S3_JSON_URL = 'https://askarti-daily-data.s3.us-east-1.amazonaws.com/daily-news.json';
             const GOOGLE_SHEETS_URL = 'https://docs.google.com/spreadsheets/d/1svXheHx4C1XVLITnVsW7nbT0v-B8tJxDviZG-Op2v58/gviz/tq?tqx=out:csv&sheet=Sheet1';
+            const RSS_FETCH_URL = 'https://jcsmad2nf7gbhxyarmpykpmdwm0bafge.lambda-url.us-east-1.on.aws/'; // Your Lambda Function URL
 
             // State
             let articles = [];
@@ -1590,6 +1587,11 @@
                     </div>
                 `;
             }
+            
+            function renderAdPlaceholder() {
+                // This function will generate the HTML for a placeholder ad
+                return '';
+            }
 
             function renderArticles() {
                 const filtered = currentFilter === 'all'
@@ -1810,7 +1812,11 @@
                     const index = parseInt(e.key) - 1;
                     const articles = document.querySelectorAll('.article');
                     if (articles[index]) {
-                        openArticle(articles[index].querySelector('a').href);
+                        // Find the first anchor link within the article and click it.
+                        const readMoreLink = articles[index].querySelector('.article-action-link:first-of-type');
+                        if (readMoreLink) {
+                            openArticle(readMoreLink.href);
+                        }
                     }
                 }
                 
@@ -1905,6 +1911,122 @@
                     refreshFeed();
                 }
             }, 15 * 60 * 1000);
+
+            // Admin panel functions
+            async function triggerRSSFetch() {
+                const statusElement = document.getElementById('rssFetchStatus');
+                const button = document.getElementById('rssFetchBtn');
+                
+                if (!statusElement || !button) return;
+                
+                button.disabled = true;
+                button.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spinning"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/></svg> Fetching RSS...`;
+                statusElement.textContent = 'Triggering RSS fetch...';
+                statusElement.style.color = 'var(--text-secondary)';
+                
+                try {
+                    const response = await fetch(RSS_FETCH_URL, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        statusElement.textContent = `✓ Fetched ${result.count || 0} articles`;
+                        statusElement.style.color = 'var(--fresh-accent)';
+                        setTimeout(() => refreshFeed(), 1000);
+                    } else {
+                        throw new Error(result.error || 'RSS fetch failed');
+                    }
+                } catch (error) {
+                    console.error('Error triggering RSS fetch:', error);
+                    statusElement.textContent = 'Error: ' + error.message;
+                    statusElement.style.color = 'var(--breaking-accent)';
+                } finally {
+                    button.disabled = false;
+                    button.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6M3 12a9 9 0 0 1-15 6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/></svg> Refresh`;
+                    setTimeout(() => { if (statusElement.textContent.includes('✓') || statusElement.textContent.includes('Error:')) statusElement.textContent = ''; }, 5000);
+                }
+            }
+
+            function processContracts() {
+                const text = document.getElementById('contractsInput').value;
+                const status = document.getElementById('uploadStatus');
+                
+                if (!text) {
+                    status.textContent = 'Please paste contract text';
+                    return;
+                }
+                
+                const date = new Date().toISOString().split('T')[0];
+                status.textContent = 'Processing...';
+                
+                fetch(RSS_FETCH_URL + 'contracts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ date: date, contractText: text })
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        const totalContracts = data.insights ? data.insights.totalContracts : 0;
+                        const totalValue = data.insights ? formatCurrency(data.insights.totalValue) : '$0';
+                        status.textContent = `✓ Uploaded ${totalContracts} contracts totaling ${totalValue}`;
+                        document.getElementById('contractsInput').value = '';
+                        setTimeout(() => refreshFeed(), 2000);
+                    } else {
+                        status.textContent = data.error || 'Upload failed.';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error processing contracts:', error);
+                    status.textContent = 'Error: ' + error.message;
+                });
+            }
+            
+            function setupAdminPanel() {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('admin') === 'true') {
+                    const adminHtml = `
+                        <div id="adminPanel" style="position: fixed; bottom: 20px; left: 20px; background: var(--surface); border: 2px solid var(--accent-subtle); border-radius: 8px; padding: 16px; box-shadow: 0 4px 12px var(--shadow-medium); z-index: 1000; max-width: 450px;">
+                            <h3 style="font-size: 12px; margin-bottom: 12px; color: var(--text-primary);">Admin Controls</h3>
+                            <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);">
+                                <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+                                    <button id="rssFetchBtn" onclick="triggerRSSFetch()" style="padding: 6px 12px; background: var(--accent-subtle); color: white; border: none; border-radius: 4px; font-size: 10px; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                                        </svg>
+                                        Fetch RSS
+                                    </button>
+                                    <span style="font-size: 10px; color: var(--text-tertiary);">Trigger full RSS update</span>
+                                </div>
+                                <div id="rssFetchStatus" style="font-size: 9px; color: var(--text-secondary); min-height: 14px;"></div>
+                            </div>
+                            <div>
+                                <h4 style="font-size: 11px; margin-bottom: 8px; color: var(--text-primary);">Upload Today's Contracts</h4>
+                                <textarea id="contractsInput" placeholder="Paste contracts text here..." style="width: 100%; height: 120px; font-size: 10px; padding: 8px; border: 1px solid var(--border-medium); border-radius: 4px; margin-bottom: 8px; resize: vertical;"></textarea>
+                                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                    <button onclick="processContracts()" style="padding: 6px 12px; background: var(--category-government); color: white; border: none; border-radius: 4px; font-size: 10px; cursor: pointer;">Process & Upload</button>
+                                    <button onclick="document.getElementById('adminPanel').remove()" style="padding: 6px 12px; background: var(--border-medium); color: var(--text-primary); border: none; border-radius: 4px; font-size: 10px; cursor: pointer;">Close</button>
+                                </div>
+                                <div id="uploadStatus" style="font-size: 10px; color: var(--text-secondary); min-height: 14px;"></div>
+                            </div>
+                        </div>
+                    `;
+                    document.body.insertAdjacentHTML('beforeend', adminHtml);
+                }
+            }
+            
+            // Re-bind the admin functions globally so the HTML onclick attributes can find them
+            window.triggerRSSFetch = triggerRSSFetch;
+            window.processContracts = processContracts;
+
         })(); // End of IIFE
     </script>
 </body>
