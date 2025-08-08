@@ -2575,7 +2575,463 @@ function setupShare() {
         }
     });
 }
+// Add these functions to your existing index.html JavaScript section
 
+// 🤖 NEW: Configuration for your mainlambda endpoint
+const MAIN_LAMBDA_URL = 'YOUR_MAIN_LAMBDA_URL_HERE'; // Replace with your actual Lambda URL
+
+// 🤖 NEW: Fetch or generate intelligence digest
+async function fetchIntelligenceDigest(forceGenerate = false) {
+    try {
+        console.log('🤖 Fetching intelligence digest...');
+        
+        let requestBody;
+        if (forceGenerate) {
+            // Request to generate new intelligence
+            requestBody = {
+                situation: "Generate intelligence digest from RSS data",
+                mode: "intelligence"
+            };
+        } else {
+            // Request to get existing intelligence
+            requestBody = {
+                situation: "Get existing intelligence digest", 
+                mode: "get-intelligence"
+            };
+        }
+        
+        const response = await fetch(MAIN_LAMBDA_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        });
+        
+        if (!response.ok) {
+            if (response.status === 404 && !forceGenerate) {
+                // No existing intelligence, try to generate it
+                console.log('🤖 No existing intelligence found, generating new one...');
+                return await fetchIntelligenceDigest(true);
+            }
+            throw new Error(`HTTP ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            console.log('✅ Intelligence digest fetched successfully');
+            return result.digest || result; // Handle both response formats
+        } else {
+            throw new Error(result.error || 'Failed to fetch intelligence');
+        }
+        
+    } catch (error) {
+        console.error('❌ Error fetching intelligence digest:', error);
+        return null;
+    }
+}
+
+// 🤖 NEW: Enhanced render intelligence section
+function renderIntelligenceSection(intelligenceDigest) {
+    if (!intelligenceDigest) {
+        intelligenceSection.style.display = 'none';
+        return;
+    }
+    
+    intelligenceSection.style.display = 'block';
+    
+    // Update summary
+    intelligenceSummary.textContent = intelligenceDigest.executive_summary || 'Processing latest intelligence...';
+    
+    // Update threat level
+    const threatLevel = intelligenceDigest.threat_level || 'unknown';
+    threatIndicator.textContent = threatLevel.toUpperCase();
+    threatIndicator.className = `threat-indicator threat-${threatLevel}`;
+    
+    // Update hot topics
+    if (intelligenceDigest.market_intelligence?.hot_topics) {
+        hotTopics.innerHTML = intelligenceDigest.market_intelligence.hot_topics
+            .slice(0, 5)
+            .map(topic => `<li>${topic}</li>`)
+            .join('');
+    }
+    
+    // Update active agencies
+    if (intelligenceDigest.market_intelligence?.active_agencies) {
+        activeAgencies.innerHTML = intelligenceDigest.market_intelligence.active_agencies
+            .slice(0, 5)
+            .map(agency => `<li>${agency}</li>`)
+            .join('');
+    }
+    
+    // Update contract opportunities
+    if (intelligenceDigest.market_intelligence?.contract_opportunities) {
+        contractOpportunities.innerHTML = intelligenceDigest.market_intelligence.contract_opportunities
+            .slice(0, 5)
+            .map(opp => `<li>${opp}</li>`)
+            .join('');
+    }
+    
+    // Update key developments
+    if (intelligenceDigest.key_developments) {
+        keyDevelopments.innerHTML = intelligenceDigest.key_developments
+            .slice(0, 3)
+            .map(dev => `
+                <div class="development-item">
+                    <div class="development-header">
+                        <span class="development-category">${dev.category || 'General'}</span>
+                        <span class="development-urgency urgency-${dev.urgency || 'low'}">${(dev.urgency || 'low').toUpperCase()}</span>
+                    </div>
+                    <div class="development-headline">${dev.headline || 'Development Update'}</div>
+                    <div class="development-significance">${dev.significance || dev.implications || 'Monitoring for impact on defense industrial base.'}</div>
+                </div>
+            `).join('');
+    }
+    
+    // Update opportunity score
+    const score = intelligenceDigest.opportunity_score || 0;
+    opportunityScoreValue.textContent = score;
+    scoreFill.style.width = `${(score / 10) * 100}%`;
+    
+    // Update last analysis time if available
+    if (intelligenceDigest.generated_at) {
+        const analysisTime = new Date(intelligenceDigest.generated_at);
+        const timeAgoText = timeAgo(analysisTime.toISOString());
+        intelligenceSummary.title = `Last analysis: ${timeAgoText}`;
+    }
+    
+    console.log('✅ Intelligence section rendered successfully');
+}
+
+// 🤖 NEW: Add intelligence refresh button functionality
+function addIntelligenceRefreshButton() {
+    const intelligenceHeader = document.querySelector('.intelligence-header');
+    if (!intelligenceHeader) return;
+    
+    // Check if button already exists
+    if (document.getElementById('intelligenceRefreshBtn')) return;
+    
+    const refreshButton = document.createElement('button');
+    refreshButton.id = 'intelligenceRefreshBtn';
+    refreshButton.className = 'action-btn';
+    refreshButton.innerHTML = `
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+        </svg>
+        Refresh
+    `;
+    refreshButton.title = 'Generate fresh intelligence analysis';
+    
+    refreshButton.addEventListener('click', async () => {
+        refreshButton.disabled = true;
+        refreshButton.classList.add('loading');
+        refreshButton.innerHTML = `
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spinning">
+                <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+            </svg>
+            Analyzing...
+        `;
+        
+        try {
+            const freshIntelligence = await fetchIntelligenceDigest(true);
+            if (freshIntelligence) {
+                renderIntelligenceSection(freshIntelligence);
+                showToast('🤖 Fresh intelligence analysis generated');
+            } else {
+                showToast('❌ Failed to generate intelligence');
+            }
+        } catch (error) {
+            console.error('Error refreshing intelligence:', error);
+            showToast('❌ Intelligence refresh failed');
+        } finally {
+            refreshButton.disabled = false;
+            refreshButton.classList.remove('loading');
+            refreshButton.innerHTML = `
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                </svg>
+                Refresh
+            `;
+        }
+    });
+    
+    // Insert before the toggle button
+    const controlsDiv = document.createElement('div');
+    controlsDiv.style.display = 'flex';
+    controlsDiv.style.alignItems = 'center';
+    controlsDiv.style.gap = '8px';
+    
+    controlsDiv.appendChild(refreshButton);
+    controlsDiv.appendChild(intelligenceToggle);
+    
+    intelligenceHeader.appendChild(controlsDiv);
+}
+
+// 🤖 NEW: Enhanced fetch articles function with intelligence integration
+async function fetchArticlesWithIntelligence() {
+    try {
+        // Fetch the standard RSS data
+        const response = await fetch(S3_JSON_URL + '?t=' + Date.now());
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        
+        if (data.summary?.timestamp) {
+            lastUpdated.textContent = `Updated ${timeAgo(data.summary.timestamp)}`;
+        }
+        
+        // 🤖 NEW: Check if we need to fetch intelligence separately
+        let intelligenceDigest = null;
+        
+        // First, try to get intelligence from the RSS data (if it exists there)
+        if (data.intelligence?.digest) {
+            intelligenceDigest = data.intelligence.digest;
+            console.log('✅ Found intelligence in RSS data');
+        } else {
+            // If not in RSS data, fetch from mainlambda
+            console.log('🤖 Fetching intelligence from mainlambda...');
+            intelligenceDigest = await fetchIntelligenceDigest();
+        }
+        
+        // Store intelligence data globally
+        intelligenceData = intelligenceDigest;
+        
+        // Update contextual message with AI insights
+        if (intelligenceDigest?.threat_level) {
+            const threatLevel = intelligenceDigest.threat_level;
+            const threatMessages = {
+                low: "All clear • Normal operations",
+                moderate: "Monitoring developments", 
+                elevated: "Heightened activity detected",
+                high: "Critical developments"
+            };
+            contextualMessage.textContent = threatMessages[threatLevel] || "";
+        }
+        
+        // Store contracts data
+        currentContractsData = data.contracts || null;
+        
+        return data.items || [];
+        
+    } catch (error) {
+        console.error('Error fetching articles with intelligence:', error);
+        throw error;
+    }
+}
+
+// 🤖 NEW: Enhanced render articles function
+async function renderArticlesWithIntelligence() {
+    // Fetch stock data first
+    stockData = await fetchStockData();
+
+    const filtered = currentFilter === 'all' 
+        ? articles 
+        : articles.filter(a => a.category === currentFilter);
+    
+    // Build the HTML starting with intelligence and contracts
+    let html = '';
+    
+    // 🤖 NEW: Render AI intelligence section if available and on 'all' filter
+    if (intelligenceData && currentFilter === 'all') {
+        renderIntelligenceSection(intelligenceData);
+        // Add refresh button if not already present
+        addIntelligenceRefreshButton();
+    } else {
+        intelligenceSection.style.display = 'none';
+    }
+    
+    // Add contracts section at the top if we have contracts data
+    if (currentContractsData && currentFilter === 'all') {
+        html += renderContractsSection(currentContractsData);
+    }
+
+    // Add the stock ticker
+    if (currentFilter === 'all') {
+        html += getStockTickerHtml();
+    }
+    
+    // Rest of the article rendering logic remains the same...
+    if (filtered.length === 0) {
+        const messages = emptyStateMessages[currentFilter] || emptyStateMessages['all'];
+        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+        
+        html += `
+            <div class="article-grid">
+                <div class="empty-state">
+                    <div class="icon">📋</div>
+                    <h3>${randomMessage}</h3>
+                    <p>Try another filter or check back later.</p>
+                </div>
+            </div>
+        `;
+    } else {
+        const groups = groupArticlesByDate(filtered);
+        const dateGroups = Object.entries(groups);
+
+        dateGroups.forEach(([key, group]) => {
+            if (group.articles.length > 0) {
+                html += `
+                    <div class="date-group">
+                        <div class="date-group-header">${group.label}</div>
+                        <div class="article-grid">
+                            ${group.articles.map((article, index) => {
+                                const freshnessClass = getFreshnessClass(article.pubDate);
+                                const hints = getArticleHints(article);
+                                const readingTime = article.readingTime || 2;
+                                
+                                const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(article.link)}`;
+                                
+                                return `
+                                    <article class="article ${freshnessClass}" 
+                                             data-index="${index}"
+                                             tabindex="0" 
+                                             role="article" 
+                                             aria-label="Article: ${article.title}">
+                                        <div class="article-meta">
+                                            <span class="article-source ${getCategoryClass(article.category)}">${article.source}</span>
+                                            <div class="article-separator"></div>
+                                            <span class="article-time">${timeAgo(article.pubDate)}</span>
+                                            ${hints.length > 0 ? `
+                                                <div class="article-hints">
+                                                    ${hints.map(h => `<span class="hint-emoji"></span>`).join('')}
+                                                </div>
+                                            ` : ''}
+                                            <span class="reading-time">${readingTime} min</span>
+                                        </div>
+                                        <h2 class="article-title">${article.title}</h2>
+                                        <p class="article-description">${article.description || 'Read more for details.'}</p>
+                                        <div class="article-actions">
+                                            <a href="${article.link}" target="_blank" class="article-action-button">Read More</a>
+                                            <a href="${linkedInUrl}" target="_blank" class="article-action-button">
+                                                Share on LinkedIn
+                                            </a>
+                                        </div>
+                                    </article>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+
+                html += renderAdPlaceholder();
+            }
+        });
+    }
+
+    content.innerHTML = html;
+    
+    // Add existing event listeners for articles and agency cards...
+    document.querySelectorAll('.article').forEach(article => {
+        article.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+            }
+        });
+        
+        article.addEventListener('dblclick', function(e) {
+            e.preventDefault();
+            toggleFocusMode(this);
+        });
+    });
+    
+    document.querySelectorAll('.agency-card').forEach(card => {
+        card.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
+    });
+}
+
+// 🤖 NEW: Enhanced refresh feed function with intelligence
+async function refreshFeedWithIntelligence() {
+    if (isLoading) return;
+    
+    isLoading = true;
+    refreshBtn.classList.add('loading');
+    refreshBtn.disabled = true;
+    errorMessage.style.display = 'none';
+    
+    // Start cycling loading messages (include AI-related messages)
+    loadingMessageIndex = 0;
+    cycleLoadingMessage();
+    
+    try {
+        // Fetch articles with AI intelligence
+        const fetchedArticles = await fetchArticlesWithIntelligence();
+        articles = fetchedArticles;
+        
+        // Fetch stock data
+        stockData = await fetchStockData();
+        
+        createFilters();
+        await renderArticlesWithIntelligence();
+        
+        // Show enhanced toast with AI info
+        if (intelligenceData?.threat_level) {
+            showToast(`🤖 Feed refreshed with AI intelligence • Threat level: ${intelligenceData.threat_level}`);
+        } else {
+            showToast('Feed refreshed • Intelligence analysis pending');
+        }
+    } catch (error) {
+        errorMessage.style.display = 'block';
+        errorMessage.textContent = 'Unable to load content. Please check your connection.';
+        content.innerHTML = `
+            <div class="article-grid">
+                <div class="empty-state">
+                    <div class="icon">📡</div>
+                    <h3>Connection Issue</h3>
+                    <p>Having trouble reaching sources. Please try again.</p>
+                </div>
+            </div>
+        `;
+    } finally {
+        isLoading = false;
+        refreshBtn.classList.remove('loading');
+        refreshBtn.disabled = false;
+    }
+}
+
+// 🤖 NEW: Override the original functions with intelligence-enhanced versions
+// Replace the original fetchArticles function
+window.fetchArticles = fetchArticlesWithIntelligence;
+
+// Replace the original renderArticles function  
+window.renderArticles = renderArticlesWithIntelligence;
+
+// Replace the original refreshFeed function
+window.refreshFeed = refreshFeedWithIntelligence;
+
+// 🤖 NEW: Add keyboard shortcut for intelligence refresh
+document.addEventListener('keydown', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    
+    // I: Toggle or refresh intelligence section
+    if (e.key === 'i' || e.key === 'I') {
+        e.preventDefault();
+        if (intelligenceSection.style.display !== 'none') {
+            const refreshBtn = document.getElementById('intelligenceRefreshBtn');
+            if (refreshBtn && !refreshBtn.disabled) {
+                refreshBtn.click(); // Refresh intelligence
+            } else {
+                intelligenceToggle.click(); // Toggle if refresh not available
+            }
+        }
+    }
+});
+
+// 🤖 NEW: Initialize intelligence on page load
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🤖 Initializing intelligence system...');
+    
+    // Set up intelligence refresh button (will be added when intelligence section is rendered)
+    // The button is added dynamically in addIntelligenceRefreshButton()
+    
+    console.log('✅ Intelligence system initialized');
+});
+
+console.log('🤖 Intelligence integration loaded successfully');
 // Initialize everything
 initializeFromParams();
 setGreetingAndDate();
