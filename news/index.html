@@ -184,31 +184,7 @@ h1 {
     animation: gentleSpin 2s linear infinite;
 }
 
-/* Density controls */
-.density-controls {
-    display: flex;
-    gap: 2px;
-    background: var(--bg-tertiary);
-    padding: 2px;
-    border-radius: 10px;
-}
-
-.density-btn {
-    padding: 3px 6px;
-    font-size: 8px;
-    border-radius: 8px;
-    background: none;
-    border: none;
-    color: var(--text-tertiary);
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.density-btn.active {
-    background: var(--surface);
-    color: var(--text-primary);
-    box-shadow: 0 1px 2px var(--shadow-soft);
-}
+/* Density controls - REMOVED */
 
 /* Category filters */
 .filters {
@@ -296,18 +272,14 @@ h1 {
     transition: gap 0.3s ease;
 }
 
-body.density-compact .article-grid {
-    gap: 4px;
-}
-
-body.density-spacious .article-grid {
-    gap: 10px;
+/* Default to a comfortable density */
+body .article-grid {
+    gap: 6px;
 }
 
 .article {
     background: var(--surface);
     padding: 12px;
-    cursor: pointer;
     transition: all 0.3s ease;
     border: 1px solid var(--border-light);
     border-radius: 6px;
@@ -316,14 +288,6 @@ body.density-spacious .article-grid {
     flex-direction: column;
     height: fit-content;
     position: relative;
-}
-
-body.density-compact .article {
-    padding: 10px;
-}
-
-body.density-spacious .article {
-    padding: 16px;
 }
 
 .article:hover {
@@ -402,16 +366,6 @@ body.focus-mode .article:not(.focused) {
     letter-spacing: -0.01em;
 }
 
-body.density-compact .article-title {
-    font-size: 12px;
-    margin-bottom: 3px;
-}
-
-body.density-spacious .article-title {
-    font-size: 14px;
-    margin-bottom: 7px;
-}
-
 .article-description {
     font-size: 11px;
     color: var(--text-secondary);
@@ -422,21 +376,44 @@ body.density-spacious .article-title {
     -webkit-box-orient: vertical;
     overflow: hidden;
     flex-grow: 1;
-    transition: -webkit-line-clamp 0.3s ease;
 }
 
-body.density-compact .article-description {
+.article-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-light);
+}
+
+.article-link {
     font-size: 10px;
-    -webkit-line-clamp: 2;
+    color: var(--text-secondary);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 400;
+    transition: color 0.2s ease;
 }
 
-body.density-spacious .article-description {
-    font-size: 12px;
-    -webkit-line-clamp: 4;
+.article-link:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
 }
 
-.article:hover .article-description {
-    -webkit-line-clamp: 5;
+.linkedin-share {
+    color: #0A66C2; /* LinkedIn blue */
+    font-size: 10px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 500;
+}
+
+.linkedin-share:hover {
+    text-decoration: underline;
 }
 
 /* Keyboard shortcuts help */
@@ -1198,11 +1175,6 @@ html {
                    <div class="contextual-message" id="contextualMessage"></div>
                </div>
                <div class="header-right">
-                   <div class="density-controls">
-                       <button class="density-btn" data-density="compact">Compact</button>
-                       <button class="density-btn active" data-density="comfortable">Comfortable</button>
-                       <button class="density-btn" data-density="spacious">Spacious</button>
-                   </div>
                    <button class="action-btn refresh-btn" id="refreshBtn">
                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                            <path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/>
@@ -1326,17 +1298,10 @@ html {
            window.history.replaceState({}, '', url);
        }
        
-       // Initialize from URL params
+       // Initialize from URL params - REMOVED DENSITY
        function initializeFromParams() {
            const params = getUrlParams();
-           currentDensity = params.view;
            currentFilter = params.category;
-           
-           // Apply density
-           document.body.className = `density-${currentDensity}`;
-           document.querySelectorAll('.density-btn').forEach(btn => {
-               btn.classList.toggle('active', btn.dataset.density === currentDensity);
-           });
        }
        
        // Show toast notification
@@ -1876,13 +1841,15 @@ async function renderArticles() {
                             const hints = getArticleHints(article);
                             const readingTime = article.readingTime || 2;
                             
+                            // LinkedIn share URL
+                            const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(article.link)}`;
+                            
                             return `
                                 <article class="article ${freshnessClass}" 
                                          data-index="${index}"
-                                         onclick="openArticle('${article.link}')" 
                                          tabindex="0" 
-                                         role="button" 
-                                         aria-label="Read: ${article.title}">
+                                         role="article" 
+                                         aria-label="Article: ${article.title}">
                                     <div class="article-meta">
                                         <span class="article-source ${getCategoryClass(article.category)}">${article.source}</span>
                                         <div class="article-separator"></div>
@@ -1896,6 +1863,15 @@ async function renderArticles() {
                                     </div>
                                     <h2 class="article-title">${article.title}</h2>
                                     <p class="article-description">${article.description || 'Read more for details.'}</p>
+                                    <div class="article-actions">
+                                        <a href="${article.link}" target="_blank" class="article-link">Read More</a>
+                                        <a href="${linkedInUrl}" target="_blank" class="linkedin-share">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
+                                                <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542V13.394h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.01-.702-.522-1.248-1.367-1.248-.843 0-1.366.546-1.366 1.248 0 .694.524 1.248 1.373 1.248h.001zM14.288 13.394v-3.765c0-1.636-.855-2.42-2.316-2.42-1.077 0-1.635.632-1.928 1.134v-.981h-2.14c.028.646 0 7.226 0 7.226h2.401v-3.84c0-.205.01-.41.085-.559.186-.417.652-1.018 1.411-1.018.99 0 1.39.754 1.39 1.86v4.457h2.401z"/>
+                                            </svg>
+                                            Share
+                                        </a>
+                                    </div>
                                 </article>
                             `;
                         }).join('')}
@@ -1914,9 +1890,10 @@ async function renderArticles() {
    // Add keyboard navigation and focus mode
    document.querySelectorAll('.article').forEach(article => {
        article.addEventListener('keydown', function(e) {
+           // Number keys 1-9 are now for a separate function, not tied to opening articles
            if (e.key === 'Enter' || e.key === ' ') {
                e.preventDefault();
-               this.click();
+               // Do nothing or implement a new action, as articles are no longer clickable
            }
        });
        
@@ -2256,14 +2233,7 @@ setupAdminPanel();
            // Ignore if typing in an input
            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
            
-           // Number keys 1-9: Open articles
-           if (e.key >= '1' && e.key <= '9') {
-               const index = parseInt(e.key) - 1;
-               const articles = document.querySelectorAll('.article');
-               if (articles[index]) {
-                   articles[index].click();
-               }
-           }
+           // Number keys 1-9: Open articles - removed as articles are no longer click-to-open
            
            // F: Focus on filters
            if (e.key === 'f' || e.key === 'F') {
@@ -2278,14 +2248,7 @@ setupAdminPanel();
                refreshFeed();
            }
            
-           // D: Cycle density
-           if (e.key === 'd' || e.key === 'D') {
-               e.preventDefault();
-               const densities = ['compact', 'comfortable', 'spacious'];
-               const currentIndex = densities.indexOf(currentDensity);
-               const nextDensity = densities[(currentIndex + 1) % densities.length];
-               setDensity(nextDensity);
-           }
+           // D: Cycle density - removed
            
            // ?: Show help
            if (e.key === '?') {
@@ -2305,27 +2268,7 @@ setupAdminPanel();
            }
        });
        
-       // Density controls
-       function setDensity(density) {
-           currentDensity = density;
-           document.body.className = `density-${density}`;
-           if (document.body.classList.contains('evening-mode')) {
-               document.body.classList.add('evening-mode');
-           }
-           
-           document.querySelectorAll('.density-btn').forEach(btn => {
-               btn.classList.toggle('active', btn.dataset.density === density);
-           });
-           
-           updateUrlParams('view', density);
-           showToast(`View: ${density}`);
-       }
-       
-       document.querySelectorAll('.density-btn').forEach(btn => {
-           btn.addEventListener('click', function() {
-               setDensity(this.dataset.density);
-           });
-       });
+       // Density controls - REMOVED
        
        // Pull to refresh (mobile)
        let startY = 0;
