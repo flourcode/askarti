@@ -1,2965 +1,775 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>AskArti - Your 24/7 Sales Buddy</title>
-    
-    <meta name="description" content="Get personalized federal sales advice from AskArti. Free AI tool provides SMART goals, customer messaging, and deal strategies for government contractors and sales professionals.">
-    <meta name="keywords" content="federal sales, government sales, AI sales coach, sales strategy, federal contractors, govcon, sales advice">
-    <meta name="author" content="Mark">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://askarti.com">
-    
-    <meta property="og:title" content="AskArti - Your Federal Sales Buddy">
-    <meta property="og:description" content="Get personalized federal sales advice from AskArti.">
-    <meta property="og:image" content="https://askarti.com/images/arti_right.png">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="AskArti - Your Federal Sales Buddy">
-    <meta name="twitter:description" content="Get personalized federal sales advice from AskArti.">
-    <meta name="twitter:image" content="https://askarti.com/images/arti_right.png">
-    
-    <link rel="icon" href="/images/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-    <meta name="theme-color" content="#ffffff">
-    
-    <link rel="preconnect" href="https://cdn.tailwindcss.com">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="/images/arti_right.png" as="image">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script> 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WLGEPY5H4G"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-WLGEPY5H4G');
-    </script>
-<script>
-tailwind.config = {
-    theme: {
-        extend: {
-            fontFamily: {
-                sans: ['Inter', 'sans-serif'],
-                serif: ['Merriweather', 'serif']
-            },
-            colors: {
-                'brand-purple': '#8E88A7',
-                'brand-purple-faint': '#E1DDEE',
-                'brand-gray': {
-                    50: '#F9FAFB', 100: '#F3F4F6', 200: '#E5E7EB',
-                    400: '#9CA3AF', 600: '#4B5563', 800: '#1F2937', 900: '#111827'
-                },
-                'brand-yellow': { bg: '#FCF8E8', text: '#7A6A34', border: '#F5EED8' },
-                'brand-blue': { bg: '#E8EDF2', text: '#3A4F6A', border: '#D4DCE6' },
-                'brand-green': { bg: '#EBF0EA', text: '#4A5C4A', border: '#D8E2D9' },
-                'confidence': {
-                    'low': '#ef4444',
-                    'medium': '#f59e0b', 
-                    'high': '#10b981',
-                    'prime': '#8b5cf6'
-                }
-            }
-        }
-    }
-}
-</script>
-
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AskArti.com – AI Sales Coach for Federal Sellers</title>
+<meta name="description" content="Get instant AI coaching for your toughest sales challenges. AskArti helps federal sellers and small businesses win more deals with smart AI prompts and proven strategies." />
 <style>
-/* === CSS VARIABLES & BASE === */
-:root {
-    --brand-purple: #8E88A7;
-    --brand-purple-faint: #E1DDEE;
-    --brand-gray-50: #F9FAFB;
-    --brand-gray-100: #F3F4F6;
-    --brand-gray-800: #1F2937;
-    --confidence-low: #ef4444;
-    --confidence-medium: #f59e0b;
-    --confidence-high: #10b981;
-    --confidence-prime: #8b5cf6;
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-    background-color: var(--brand-gray-50);
-    font-family: 'Inter', sans-serif;
-    color: var(--brand-gray-800);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-/* === LAYOUT === */
-.main-container {
-    max-width: 768px;
-    margin: 0 auto;
-    padding: 1rem;
-}
-
-.fade-in {
-    animation: fadeIn 0.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* === CARDS === */
-.io-card {
-    background-color: white;
-    border-radius: 1rem;
-    border: 0px solid #E5E7EB;
-    padding: 1.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.2s ease;
-}
-
-.results-card {
-    background-color: white;
-    border-radius: 1rem;
-    border: 1px solid #E5E7EB;
-    overflow: hidden;
-    margin-top: 1.5rem;
-}
-
-.results-card-header {
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid #E5E7EB;
-}
-
-.results-card-body {
-    padding: 1.5rem;
-}
-
-.results-card-body > div {
-    margin-bottom: 1.5rem;
-}
-
-/* === ICP PROFILE CARDS - SUBDUED ASKARTI STYLE === */
-.icp-profile-card {
-    background-color: white;
-    border: 1px solid #E5E7EB;
-    border-radius: 1rem;
-    padding: 1rem;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    min-height: 120px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.icp-profile-card:hover {
-    border-color: var(--brand-purple);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(142, 136, 167, 0.15);
-}
-
-.icp-profile-card.selected {
-    border-color: var(--brand-purple);
-    background-color: var(--brand-purple-faint);
-    box-shadow: 0 4px 12px rgba(142, 136, 167, 0.2);
-}
-/* === CONFIDENCE METER === */
-.confidence-meter {
-    width: 100%;
-    height: 6px;
-    background: #E5E7EB;
-    border-radius: 3px;
-    overflow: hidden;
-    position: relative;
-}
-
-.confidence-fill {
-    height: 100%;
-    border-radius: 3px;
-    transition: all 0.5s ease;
-    position: relative;
-}
-
-.confidence-fill::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
-    animation: shimmer 2s infinite;
-}
-
-@keyframes shimmer {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-}
-
-.confidence-0-25 { background: linear-gradient(90deg, var(--confidence-low) 0%, #dc2626 100%); }
-.confidence-25-50 { background: linear-gradient(90deg, #dc2626 0%, var(--confidence-medium) 100%); }
-.confidence-50-75 { background: linear-gradient(90deg, var(--confidence-medium) 0%, var(--confidence-high) 100%); }
-.confidence-75-100 { background: linear-gradient(90deg, var(--confidence-high) 0%, var(--confidence-prime) 100%); }
-
-/* === OPPORTUNITY CARDS === */
-.opportunity-card {
-    background-color: white;
-    border: 1px solid #E5E7EB;
-    border-radius: 1rem;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.opportunity-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-}
-
-.opportunity-card.confidence-low::before { background: var(--confidence-low); }
-.opportunity-card.confidence-medium::before { background: var(--confidence-medium); }
-.opportunity-card.confidence-high::before { background: var(--confidence-high); }
-.opportunity-card.confidence-prime::before { background: var(--confidence-prime); }
-
-.opportunity-card:hover {
-    transform: translateY(-1px);
-    border-color: var(--brand-purple);
-    box-shadow: 0 4px 12px rgba(142, 136, 167, 0.15);
-}
-
-/* === TYPOGRAPHY === */
-h1, h2, h3, h4, h5, h6 {
-    font-weight: 700;
-    margin-bottom: 1rem;
-}
-
-p, li, span {
-    font-weight: 400;
+  :root{
+    --bg: #FAFBFC;
+    --panel: #FFFFFF;
+    --text: #0D0D12;
+    --text-secondary: #525866;
+    --text-muted: #6B7684;
+    --border: #E4E7EC;
+    --border-light: #F2F4F7;
+    --accent: #0D0D12;
+    --accent-light: #667085;
+    --accent-bg: rgba(13, 13, 18, 0.04);
+    --success: #027A48;
+    --radius: 16px;
+    --radius-sm: 8px;
+    --radius-lg: 24px;
+    --shadow-xs: 0px 1px 2px rgba(16, 24, 40, 0.05);
+    --shadow-sm: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);
+    --shadow-md: 0px 4px 8px -2px rgba(16, 24, 40, 0.1), 0px 2px 4px -2px rgba(16, 24, 40, 0.06);
+    --shadow-lg: 0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03);
+    --max-width: 1216px;
+    --section-padding: 96px;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
     line-height: 1.6;
-}
-
-/* === FORM INPUTS === */
-textarea, input[type="text"], select {
-    font-size: 16px !important;
-    transition: all 0.2s ease;
-    font-weight: 400;
-    color: #374151;
-    line-height: 1.4;
-}
-
-#situation-input, #chat-input, #target-agencies, #solution-categories, #deal-size {
-    font-weight: 400 !important;
-    color: #4B5563 !important;
-    letter-spacing: 0.005em;
-    line-height: 1.4 !important;
-    font-size: 15px !important;
-}
-
-#situation-input::placeholder, #chat-input::placeholder {
-    color: #9CA3AF;
-    font-weight: 300;
-    font-style: italic;
-    line-height: 1.4;
-}
-
-#situation-input:focus, #chat-input:focus, #target-agencies:focus, #solution-categories:focus, #deal-size:focus {
-    color: #1F2937;
-    outline: none;
-    ring: 1px;
-    ring-color: #8E88A7;
-    border-color: #8E88A7;
-}
-
-.textarea-container {
-    position: relative;
-}
-
-.auto-expand {
-    min-height: calc(3 * 1.4em + 1.5rem);
-    max-height: calc(6 * 1.4em + 1.5rem);
-    transition: height 0.2s ease;
-    overflow-y: hidden;
-    resize: none;
-    line-height: 1.4 !important;
-}
-
-.auto-expand.scrollable {
-    overflow-y: auto;
-    transition: none;
-}
-
-/* === BUTTONS === */
-.btn {
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.011em;
+  }
+  
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  
+  /* Header */
+  header {
+    background: rgba(250, 251, 252, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+  }
+  
+  .logo {
+    font-weight: 700;
+    font-size: 32px;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+  
+  .nav-items {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+  
+  .nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+    transition: color 0.2s ease;
+  }
+  
+  .nav-link:hover {
+    color: var(--text);
+  }
+  
+  .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    padding: 12px 20px;
+    border-radius: var(--radius-sm);
     font-weight: 600;
-    border-radius: 0.75rem;
-    padding: 0.75rem 1.5rem;
-    min-height: 44px;
-    min-width: 44px;
+    font-size: 16px;
+    text-decoration: none;
     transition: all 0.2s ease;
     cursor: pointer;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.btn:active { transform: scale(0.95); }
-
-.btn-primary {
-    background-color: var(--brand-purple);
+    border: none;
+    font-family: inherit;
+    letter-spacing: -0.011em;
+  }
+  
+  .btn-primary {
+    background: var(--accent);
     color: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.btn-primary:hover {
-    background-color: #7A7391;
+    box-shadow: var(--shadow-xs);
+  }
+  
+  .btn-primary:hover {
+    background: #1a1a1a;
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
-.btn-primary:active {
-    transform: scale(0.95);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.btn-secondary {
-    background-color: white;
-    color: #374151;
-    border: 1px solid #D1D5DB;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.btn-secondary:hover {
-    background-color: #F9FAFB;
-    border-color: #9CA3AF;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.btn-secondary:active {
-    transform: scale(0.95);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.btn-recommended {
-    border-width: 2px;
-    border-color: var(--brand-purple);
-    box-shadow: 0 4px 12px rgba(124, 107, 190, 0.2);
-}
-
-.quick-prompt {
-    transition: all 0.2s ease-in-out;
-    border: 1px solid var(--brand-gray-100);
-    padding: 0.75rem 1rem;
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .btn-secondary {
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-xs);
+  }
+  
+  .btn-secondary:hover {
+    background: var(--accent-bg);
+    border-color: var(--accent-light);
+  }
+  
+  /* Demo Section */
+  .demo-section {
+    padding: var(--section-padding) 0;
+    background: var(--panel);
+  }
+  
+  .demo-header {
     text-align: center;
-}
-
-.quick-prompt:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    border-color: #E5E7EB;
-}
-
-.quick-prompt:active { transform: scale(0.95); }
-
-.mode-btn {
-    min-height: 44px;
-    transition: all 0.2s ease;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.mode-btn:active { transform: scale(0.95); }
-
-/* === UTILITY BUTTONS === */
-.clear-btn, .copy-btn {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    background-color: rgba(255, 255, 255, 0.9);
-    border: 1px solid #E5E7EB;
-    border-radius: 0.375rem;
+    margin-bottom: 64px;
+  }
+  
+  .demo-header h2 {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  
+  .demo-header p {
+    font-size: 20px;
+    color: var(--text-secondary);
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  
+  .chat-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  
+  .chat-input-area {
+    padding: 20px 24px;
+    background: var(--panel);
+  }
+  
+  .chat-input-container {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #6B7280;
+    gap: 12px;
+    align-items: flex-end;
+  }
+  
+  .chat-input {
+    flex: 1;
+    padding: 16px 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    font-size: 15px;
+    resize: none;
+    min-height: 48px;
+    max-height: 120px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+  
+  .chat-input:focus {
+    border-color: var(--accent);
+  }
+  
+  .chat-input::placeholder {
+    color: var(--text-muted);
+  }
+  
+  .chat-send-btn {
+    padding: 16px 24px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 15px;
     cursor: pointer;
     transition: all 0.2s ease;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.clear-btn {
-    padding: 0.25rem;
-    min-width: 28px;
-    min-height: 28px;
-    border-color: rgba(229, 231, 235, 0.7);
-    opacity: 0;
-    visibility: hidden;
-    backdrop-filter: blur(8px);
-}
-
-.copy-btn {
-    padding: 0.5rem;
-    min-width: 44px;
-    min-height: 44px;
-    background-color: rgba(255, 255, 255, 0.7);
-    border-radius: 0.5rem;
-    font-size: 0.75rem;
-    color: #4B5563;
-}
-
-.clear-btn:hover, .copy-btn:hover {
-    background-color: white;
-    border-color: #9CA3AF;
+    white-space: nowrap;
+  }
+  
+  .chat-send-btn:hover {
+    background: #1a1a1a;
     transform: translateY(-1px);
-    color: #374151;
-}
-
-.clear-btn:hover { transform: scale(1.05); }
-.copy-btn:hover { box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-
-.clear-btn:active, .copy-btn:active { transform: scale(0.95); }
-
-.clear-btn.show {
-    opacity: 1;
-    visibility: visible;
-}
-
-.copy-btn.copied {
-    background-color: #10B981;
-    color: white;
-    border-color: #10B981;
-}
-
-.copy-btn.copied:hover {
-    background-color: #059669;
-    border-color: #059669;
-}
-
-/* === ANIMATIONS === */
-@keyframes copyFlash {
-    0% { background-color: rgba(16, 185, 129, 0.1); }
-    50% { background-color: rgba(16, 185, 129, 0.3); }
-    100% { background-color: rgba(16, 185, 129, 0.1); }
-}
-
-.copy-flash { animation: copyFlash 0.6s ease-in-out; }
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.loader {
+  }
+  
+  .chat-send-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  /* Results Section */
+  .results-section {
+    margin-top: 40px;
+    padding: 32px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    display: none;
+  }
+  
+  .results-section.show {
+    display: block;
+    animation: slideUp 0.4s ease-out;
+  }
+  
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .result-title {
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--text);
+  }
+  
+  .result-actions {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .prompt-display {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+  }
+  
+  .result-note {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  
+  .loader {
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-top: 2px solid white;
     border-radius: 50%;
     width: 1.25rem;
     height: 1.25rem;
     animation: spin 1s linear infinite;
-}
-
-.btn-secondary .loader {
-    border-color: rgba(0, 0, 0, 0.1);
-    border-top-color: var(--brand-purple);
-}
-
-/* === CHAT === */
-.chat-container {
-    height: 60dvh;
-    max-height: 500px;
-    overflow-y: auto;
-    padding: 1rem;
-    background-color: #F9FAFB;
-    border-radius: 1rem;
-    border: 0px solid #E5E7EB;
-}
-
-.chat-message-user {
-    background-color: var(--brand-purple);
-    color: white;
-    border-radius: 1rem 1rem 0.25rem 1rem;
-}
-
-.chat-message-arti {
-    background-color: white;
-    color: #1f2937;
-    border: 1px solid #e5e7eb;
-    border-radius: 1rem 1rem 1rem 0.25rem;
-}
-
-/* === DIGEST STYLES === */
-.digest-card .results-card-body { padding: 2rem; }
-
-.digest-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 0px solid #E5E7EB;
-}
-
-.digest-header img {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    background-color: var(--brand-purple-faint);
-    padding: 0.25rem;
-    border: none;
-}
-
-.digest-header h2 {
-    font-size: 1.75rem;
-    font-weight: 800;
-    color: #111827;
-    letter-spacing: -0.025em;
-    margin-bottom: 0.25rem;
-}
-
-.digest-header-meta {
-    font-size: 0.875rem;
-    color: #6B7280;
-    text-transform: uppercase;
-    font-weight: 600;
-}
-
-.digest-section {
-    padding-top: 1.5rem;
-    margin-top: 1.5rem;
-    border-top: 1px solid #E5E7EB;
-}
-
-.digest-section-title {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--brand-purple);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 1rem;
-}
-
-.digest-item {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 0 1rem;
-    margin-bottom: 2rem;
-}
-
-.digest-item-number {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #374151;
-    line-height: 1.2;
-}
-
-.digest-item-headline {
-    font-weight: 700;
-    font-size: 1.125rem;
-    color: #1F2937;
-    margin-bottom: 0.25rem;
-}
-
-.digest-item-headline a {
-    color: inherit;
-    text-decoration: none;
-    transition: background-color 0.2s ease;
-}
-
-.digest-item-headline a:hover {
-    background-color: var(--brand-purple-faint);
-}
-
-.digest-item-summary, .digest-item-insight {
-    font-family: 'Merriweather', serif;
-    font-size: 1rem;
-    line-height: 1.7;
-    color: #374151;
-	word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-.digest-item-insight {
-    font-style: italic;
-    color: var(--brand-purple);
-    margin-top: 0.75rem;
-}
-
-.digest-item-meta { margin-top: 0.75rem; }
-
-.digest-code-block {
-    background-color: #F9FAFB;
-    border: 1px solid #E5E7EB;
-    border-radius: 0.5rem;
-    padding: 1rem;
-    font-family: monospace;
-    font-size: 0.875rem;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    word-break: normal;
-    overflow-wrap: break-word;
-    position: relative;
-    line-height: 1.5;
-}
-
-.digest-tag {
-    display: inline-block;
-    background-color: #F3F4F6;
-    color: #374151;
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
-}
-
-/* === TAGS === */
-.tag {
-    display: inline-block;
-    background-color: var(--brand-purple-faint);
-    color: var(--brand-purple);
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    border: 1px solid rgba(142, 136, 167, 0.3);
-    margin-right: 0.5rem;
-    margin-bottom: 0.25rem;
-}
-
-.tag-urgent {
-    background-color: rgba(239, 68, 68, 0.1);
-    color: #dc2626;
-    border-color: rgba(239, 68, 68, 0.3);
-}
-
-.tag-shaping {
-    background-color: rgba(245, 158, 11, 0.1);
-    color: #d97706;
-    border-color: rgba(245, 158, 11, 0.3);
-}
-
-.tag-active {
-    background-color: rgba(16, 185, 129, 0.1);
-    color: #059669;
-    border-color: rgba(16, 185, 129, 0.3);
-}
-
-/* === MISC === */
-.checkmark {
-    width: 16px;
-    height: 16px;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    fill: none;
-}
-
-.mermaid-container {
-    background-color: #ffffff;
-    border: 1px solid #E5E7EB;
-    border-radius: 0.5rem;
-    padding: 1rem;
-    margin: 1rem 0;
-}
-
-/* === MOBILE RESPONSIVE === */
-@media (max-width: 640px) {
-    .main-container { padding: 0.5rem; padding-bottom: 0.5rem; }
-    .io-card, .results-card-body { padding: 0.75rem; }
-    .results-card-header { padding: 0.75rem 1rem; }
-    .results-card-body > div { margin-bottom: 1rem; }
-    .btn { padding: 0.75rem 1rem; font-size: 0.9rem; }
-    .copy-btn { padding: 0.625rem; min-width: 48px; min-height: 48px; }
-    .clear-btn { padding: 0.25rem; min-width: 32px; min-height: 32px; }
-    .quick-prompt { padding: 0.5rem 0.625rem; min-height: 36px; font-size: 0.8rem; }
-    .mt-4 { margin-top: 0.5rem; }
-    .mt-6 { margin-top: 0.75rem; }
-    .chat-container { height: 45dvh; max-height: 350px; padding: 0.75rem; }
-    .mode-btn { padding: 0.5rem 0.75rem; font-size: 0.8rem; min-height: 40px; }
-    header { margin-bottom: 0.5rem; }
-    header img { height: 4rem; }
-    footer { margin-top: 2rem; }
-    .space-y-3 > * + * { margin-top: 0.5rem; }
-    .space-y-4 > * + * { margin-top: 0.75rem; }
-    .space-y-6 > * + * { margin-top: 1rem; }
-    .space-y-8 > * + * { margin-top: 1.25rem; }
-    .digest-card .results-card-body { padding: 1.25rem; }
-    .digest-header h2 { font-size: 1.5rem; }
-    .digest-item-headline { font-size: 1rem; }
-    .auto-expand {
-        min-height: calc(4 * 1.4em + 1.5rem);
-        max-height: calc(8 * 1.4em + 1.5rem);
-    }
-    #situation-input:focus {
-        font-size: 16px !important;
-        transform: none;
-    }
-    .auto-expand.scrollable {
-        -webkit-overflow-scrolling: touch;
-        overflow-y: auto;
-    }
-    .icp-profile-card {
-        padding: 0.75rem;
-        min-height: 100px;
-    }
-    .opportunity-card {
-        padding: 0.75rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .copy-playbook-btn { padding: 0.5rem 0.75rem; font-size: 0.75rem; }
-    .copy-playbook-btn svg { width: 1rem; height: 1rem; margin-right: 0.25rem; }
-    .results-card-header .flex { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
-    .results-card-header .flex > div:first-child { flex: 1; width: 100%; }
-    .copy-playbook-btn { align-self: stretch; justify-content: center; width: 100%; }
-    .playbook-persona-circle { min-width: 2rem !important; width: 2rem !important; height: 2rem !important; flex-shrink: 0 !important; font-size: 0.75rem !important; }
-}
-
-.sample-link {
-    color: var(--brand-purple);
-    font-weight: 600;
-    text-decoration: none;
-    border-bottom: 1px dotted var(--brand-purple);
-    transition: all 0.2s ease;
-}
-
-.sample-link:hover {
-    background-color: var(--brand-purple-faint);
-    border-bottom-style: solid;
-}
-
-/* Pulsing animation for the button when content is added */
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(142, 136, 167, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(142, 136, 167, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(142, 136, 167, 0); }
-}
-
-.btn-pulse {
-    animation: pulse 1.5s ease-in-out 3;
-}
-
-.btn-highlight {
-    background: linear-gradient(135deg, var(--brand-purple) 0%, #7A7391 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(142, 136, 167, 0.3);
-}
-
-.border-l-3 {
-    border-left-width: 3px;
-}
-
-.border-purple-300 {
-    border-left-color: #d8b4fe;
-}
-
-.border-blue-300 {
-    border-left-color: #93c5fd;
-}
-
-.border-green-300 {
-    border-left-color: #86efac;
-}
-
-.border-yellow-300 {
-    border-left-color: #fde047;
-}
-.border-red-300 {
-   border-left-color: #fca5a5;
-}
-.border-orange-300 {
-   border-left-color: #fdba74;
-}
-
-.border-indigo-300 {
-   border-left-color: #a5b4fc;
-}
-
-/* This is the corrected block */
-.results-card,
-.digest-card {
-   box-sizing: border-box !important;
-}
-
-.results-card-body,
-.digest-card .results-card-body {
-   max-width: 100% !important;
-   box-sizing: border-box !important;
-   word-wrap: break-word !important;
-   overflow-wrap: break-word !important;
-}
-
-.digest-header,
-.digest-section,
-.digest-item {
-   max-width: 100% !important;
-   box-sizing: border-box !important;
-}
-
-.digest-item > div:nth-child(2) {
-   min-width: 0 !important;
-   flex: 1 !important;
-}
-
-.digest-item-summary,
-.digest-item-insight,
-.digest-item-headline,
-.digest-code-block {
-   max-width: 100% !important;
-   word-wrap: break-word !important;
-   overflow-wrap: break-word !important;
-   box-sizing: border-box !important;
-}
-
-.results-card p,
-.results-card h1,
-.results-card h2,
-.results-card h3,
-.results-card h4,
-.results-card li,
-.results-card span {
-   max-width: 100% !important;
-   word-wrap: break-word !important;
-   overflow-wrap: break-word !important;
-}
-/* === CONFIDENCE METER === */
-.confidence-meter {
-    width: 100%;
-    height: 6px;
-    background: #E5E7EB;
-    border-radius: 3px;
-    overflow: hidden;
-    position: relative;
-}
-
-.confidence-fill {
-    height: 100%;
-    border-radius: 3px;
-    transition: all 0.5s ease;
-    position: relative;
-}
-
-.confidence-fill::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
-    animation: shimmer 2s infinite;
-}
-
-@keyframes shimmer {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-}
-
-/* Fixed confidence meter bar colors - Red to Amber to Green based on width percentage */
-.confidence-fill.confidence-low { background: #ef4444; } /* Red for 0-39% */
-.confidence-fill.confidence-medium { background: #f59e0b; } /* Amber for 40-69% */
-.confidence-fill.confidence-high { background: #10b981; } /* Green for 70-84% */
-.confidence-fill.confidence-prime { background: #059669; } /* Dark Green for 85%+ */
-</style>
-
-</head>
-<body class="bg-brand-gray-50">
-
-  <div class="main-container pt-4 pb-20">
-      
-      <header class="text-center mb-3">
-   <a href="/" aria-label="AskArti Home" class="inline-block">
-       <img src="/images/asklite.png" alt="AskArti Logo" class="h-20 w-auto mx-auto sm:h-24">
-   </a>
-</header>
-
-      <main id="main-content">
-   <!-- Quick Mode (Game Plans) -->
-   <div id="quick-mode" class="mode-content fade-in">
-       <div class="io-card">
-           <label for="situation-input" class="block text-sm font-bold text-brand-gray-700 mb-3" id="greeting-label">
-               Good morning! I'm Arti! Ready to tackle the day?
-           </label>
-           <div class="textarea-container">
-               <textarea 
-                   id="situation-input" 
-                   rows="3"
-                   class="w-full p-3 pr-12 text-base border border-gray-300 rounded-lg resize-none auto-expand focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300"
-                   placeholder="Paste a news article, describe a deal, or outline a sales challenge..."
-                   maxlength="2500"></textarea>
-               <button id="clear-btn" class="clear-btn" title="Clear input" aria-label="Clear input">
-                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                   </svg>
-               </button>
-           </div>
-
-           <div class="text-xs text-gray-500 mt-1.5">
-               <span class="hint-text">Customize any example below, then press 'Ask Arti'.</span>
-               <span id="char-count" class="hidden">0/2500</span>
-           </div>
-           <div class="mt-3 text-sm text-gray-600 leading-relaxed">
-               <div class="grid grid-cols-1 gap-2 text-xs">
-                   <!-- RED -->
-                   <div class="bg-gray-50 p-2 rounded border-l-3 border-red-300">
-                       <strong>🎯 Prospecting:</strong> 
-                       <a href="#" class="sample-link" data-text="Prospect: Just took over Fed Sales at Staples. Need to prospect for office supplies and facility management services at the VA. What's my best approach?">Copy this format</a> 
-                       with your company and target agency
-                   </div>
-                   
-                   <!-- ORANGE -->
-                   <div class="bg-gray-50 p-2 rounded border-l-3 border-orange-300">
-                       <strong>📋 Sales Playbooks:</strong> 
-                       <a href="#" class="sample-link" data-text="Create a comprehensive sales playbook for selling cloud migration services to the Department of Veterans Affairs. Focus on healthcare modernization, data analytics, and patient experience improvements. Include key stakeholders like CIOs, CTOs, and healthcare administrators.">Try this example</a>, 
-                       then swap in your agency and solution
-                   </div>
-                   
-                   <!-- YELLOW -->
-                   <div class="bg-gray-50 p-2 rounded border-l-3 border-yellow-300">
-                       <strong>📄 GTM from Text:</strong> 
-                       <a href="#" class="sample-link" data-text="Analyze this news: Today, the Chief Digital and Artificial Intelligence Office (CDAO) announced contract awards to leading U.S. frontier AI companies to accelerate Department of Defense (DoD) adoption of advanced AI capabilities to address critical national security challenges. Frontier AI companies lead development of the most advanced AI models and technologies, conduct insightful research into the use of frontier AI, and pioneer efforts to address both the potential benefits and risks of frontier AI technologies. 
-
-The awards to Anthropic, Google, OpenAI, and xAI – each with a $200M ceiling – will enable the Department to leverage the technology and talent of U.S. frontier AI companies to develop agentic AI workflows across a variety of mission areas.  Establishing these partnerships will broaden DoD use of and experience in frontier AI capabilities and increase the ability of these companies to understand and address critical national security needs with the most advanced AI capabilities U.S. industry has to offer. 
-
-“The adoption of AI is transforming the Department’s ability to support our warfighters and maintain strategic advantage over our adversaries,” said Chief Digital and AI Officer Dr. Doug Matty. “Leveraging commercially available solutions into an integrated capabilities approach will accelerate the use of advanced AI as part of our Joint mission essential tasks in our warfighting domain as well as intelligence, business, and enterprise information systems.” 
-
-DoD is implementing a commercial-first approach to accelerating DoD adoption of AI. Today’s awards bring in the best U.S.-based frontier AI talent to help apply cutting-edge AI to solve DoD use cases.  CDAO is also providing access to many of the latest generative AI (GenAI) models for general purpose use to Combatant Commands, the Office of the Secretary of Defense, and the Joint Staff via Army’s Enterprise Large Language Model Workspace powered by Ask Sage, and to the broader enterprise via embedded AI models within DoD enterprise data and AI platforms, including the Advancing Analytics (Advana) platform, Maven Smart System, and Edge Data Mesh nodes, which enable AI integration into workflows that occur within these data environments themselves. Finally, DoD is partnering with the General Services Administration (GSA) to bring the best AI technologies to the federal government while leveraging whole-of-government buying power for AI production and compute resources.">Use this template</a> 
-                       or just paste any article/press release
-                   </div>
-                   
-                   <!-- GREEN -->
-                   <div class="bg-gray-50 p-2 rounded border-l-3 border-green-300">
-                       <strong>📈 Bull/Bear Takes:</strong> 
-                       <a href="#" class="sample-link" data-text="Earnings: (NASDAQ: AMZN) today announced financial results for
-its first quarter ended March 31, 2025.
-- Net sales increased 9% to $155.7 billion in the first quarter, compared with $143.3 billion in first quarter 2024.
-Excluding the $1.4 billion unfavorable impact from year-over-year changes in foreign exchange rates throughout the
-quarter, net sales increased 10% compared with first quarter 2024.
-- North America segment sales increased 8% year-over-year to $92.9 billion.
-- International segment sales increased 5% year-over-year to $33.5 billion, or increased 8% excluding changes
-in foreign exchange rates.
-- AWS segment sales increased 17% year-over-year to $29.3 billion.
-- Operating income increased to $18.4 billion in the first quarter, compared with $15.3 billion in first quarter 2024.
-- North America segment operating income was $5.8 billion, compared with $5.0 billion in first quarter 2024.
-- International segment operating income was $1.0 billion, compared with $0.9 billion in first quarter 2024.
-- AWS segment operating income was $11.5 billion, compared with $9.4 billion in first quarter 2024.
-- Net income increased to $17.1 billion in the first quarter, or $1.59 per diluted share, compared with $10.4 billion, or
-$0.98 per diluted share, in first quarter 2024.
-- Operating cash flow increased 15% to $113.9 billion for the trailing twelve months, compared with $99.1 billion for
-the trailing twelve months ended March 31, 2024.
-- Free cash flow decreased to $25.9 billion for the trailing twelve months, compared with $50.1 billion for the trailing
-twelve months ended March 31, 2024.
-We're pleased with the start to 2025, especially our pace of innovation and progress in continuing to improve customer
-experiences, said Andy Jassy, President and CEO, Amazon.">Try this earnings example</a> 
-                       or paste any financial news
-                   </div>
-                   
-                   <!-- BLUE -->
-                   <div class="bg-gray-50 p-2 rounded border-l-3 border-blue-300">
-                       <strong>📰 Daily Brief:</strong> 
-                       <a href="#" class="sample-link" data-text="Get today's federal sales briefing" data-type="digest">Get today's federal news</a> 
-                       with contract opportunities and market intel
-                   </div>
-               </div>
-           </div>
-       </div>
-
-       <div class="mt-4 border-t border-gray-200 pt-4">
-           <button id="ask-arti-btn" class="btn btn-primary w-full transition-all duration-300">
-               <span id="ask-arti-text">Ask Arti</span>
-               <div id="ask-arti-loader" class="loader hidden ml-2"></div>
-           </button>
-           
-           <div id="loading-message-container" class="text-center py-2 hidden">
-               <p id="loading-message" class="text-gray-600 font-medium"></p>
-           </div>
-       </div>
-   </div>
-
-   <!-- Chat Mode -->
-   <div id="chat-mode" class="mode-content hidden fade-in">
-       <div class="io-card">
-           <div class="chat-container mb-4" id="chat-container">
-               <div id="chat-messages" class="space-y-4">
-                   <div class="flex justify-start">
-                       <div class="chat-message-arti p-3 text-sm max-w-[85%]">
-                           <p id="chat-greeting">Hey! I'm Arti. I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.</p>
-                       </div>
-                   </div>
-               </div>
-           </div>
-           <div class="flex gap-2">
-               <input type="text" id="chat-input" class="flex-1 p-3 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300" placeholder="Type your message..." maxlength="2000">
-               <button id="chat-send-btn" class="btn btn-primary px-4">
-                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" /></svg>
-               </button>
-           </div>
-       </div>
-   </div>
-
-   <!-- NEW: Pipeliner Mode -->
-   <div id="pipeliner-mode" class="mode-content hidden fade-in">
-       <!-- ICP Configuration Section -->
-       <div class="io-card mb-4">
-           <h3 class="text-lg font-bold text-brand-gray-800 mb-4">Choose a Persona (Beta Feature)</h3>
-           
-           <!-- Predefined ICPs -->
-           <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
-    <div class="icp-profile-card" data-icp="si-bd-lead">
-        <div class="text-center">
-            <div class="w-10 h-10 bg-gradient-to-br from-gray-500 to-gray-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
-                <span class="text-white font-bold text-sm">SI</span>
-            </div>
-            <h4 class="font-semibold text-gray-800 text-sm mb-1">SI BD Lead</h4>
-            <p class="text-gray-600 text-xs">Systems Integrator</p>
-        </div>
-    </div>
-
-    <div class="icp-profile-card" data-icp="csp-bd-lead">
-        <div class="text-center">
-            <div class="w-10 h-10 bg-gradient-to-br from-brand-purple to-gray-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
-                <span class="text-white font-bold text-sm">CSP</span>
-            </div>
-            <h4 class="font-semibold text-gray-800 text-sm mb-1">CSP BD Lead</h4>
-            <p class="text-gray-600 text-xs">Cloud Provider</p>
-        </div>
-    </div>
-
-    <div class="icp-profile-card" data-icp="saas-cro">
-        <div class="text-center">
-            <div class="w-10 h-10 bg-gradient-to-br from-brand-purple to-brand-purple rounded-lg mx-auto mb-2 flex items-center justify-center opacity-80">
-                <span class="text-white font-bold text-sm">CRO</span>
-            </div>
-            <h4 class="font-semibold text-gray-800 text-sm mb-1">SaaS CRO</h4>
-            <p class="text-gray-600 text-xs">Revenue Leader</p>
-        </div>
-    </div>
-
-    <div class="icp-profile-card" data-icp="smb-bd-lead">
-        <div class="text-center">
-            <div class="w-10 h-10 bg-gradient-to-br from-gray-500 to-brand-purple rounded-lg mx-auto mb-2 flex items-center justify-center opacity-75">
-                <span class="text-white font-bold text-sm">SMB</span>
-            </div>
-            <h4 class="font-semibold text-gray-800 text-sm mb-1">SMB BD Lead</h4>
-            <p class="text-gray-600 text-xs">Small Business</p>
-        </div>
-    </div>
-</div>
-
-           <!-- Custom Profile Configuration -->
-           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-               <div>
-                   <label class="block text-sm font-medium text-gray-700 mb-2">Target Agencies</label>
-                   <select id="target-agencies" multiple class="w-full p-3 border border-gray-300 rounded-lg">
-                       <option value="dod">Department of Defense</option>
-                       <option value="dhs">Department of Homeland Security</option>
-                       <option value="va">Veterans Affairs</option>
-                       <option value="hhs">Health & Human Services</option>
-                       <option value="treasury">Treasury</option>
-                       <option value="gsa">General Services Administration</option>
-                       <option value="nasa">NASA</option>
-                       <option value="doe">Department of Energy</option>
-                   </select>
-               </div>
-               <div>
-                   <label class="block text-sm font-medium text-gray-700 mb-2">Solution Categories</label>
-                   <select id="solution-categories" multiple class="w-full p-3 border border-gray-300 rounded-lg">
-                       <option value="cloud">Cloud Services</option>
-                       <option value="cybersecurity">Cybersecurity</option>
-                       <option value="ai-ml">AI/Machine Learning</option>
-                       <option value="data-analytics">Data & Analytics</option>
-                       <option value="modernization">IT Modernization</option>
-                       <option value="infrastructure">Infrastructure</option>
-                       <option value="software">Software Development</option>
-                       <option value="professional-services">Professional Services</option>
-                   </select>
-               </div>
-               <div>
-                   <label class="block text-sm font-medium text-gray-700 mb-2">Deal Size Range</label>
-                   <select id="deal-size" class="w-full p-3 border border-gray-300 rounded-lg">
-                       <option value="all">All Sizes</option>
-                       <option value="small">$250K - $5M</option>
-                       <option value="medium">$5M - $50M</option>
-                       <option value="large">$50M - $500M</option>
-                       <option value="enterprise">$500M+</option>
-                   </select>
-               </div>
-           </div>
-           
-           <div class="flex flex-col sm:flex-row gap-3">
-               <button id="generate-pipeline" class="btn btn-primary flex-1">
-                   <span id="generate-text">Generate Pipeline</span>
-                   <div id="generate-loader" class="loader hidden ml-2"></div>
-               </button>
-               <button id="save-profile" class="btn btn-secondary">Save Profile</button>
-           </div>
-       </div>
-
-       <!-- Pipeline Loading Message -->
-       <div id="pipeline-loading-container" class="text-center py-8 hidden">
-           <div class="inline-flex items-center space-x-3">
-               <div class="loader"></div>
-               <p id="pipeline-loading-message" class="text-gray-600 font-medium">Analyzing federal opportunities...</p>
-           </div>
-       </div>
-
-       <!-- Pipeline Results Container -->
-       <div id="pipeline-results-container" class="fade-in"></div>
-   </div>
-</main>
-
-<!-- Error message -->
-<div id="error-message" class="bg-red-100 border border-red-300 rounded-lg p-4 text-center my-4 hidden">
-   <p class="text-red-800 font-semibold mb-1">¯\_(ツ)_/¯ Oops, that didn't work.</p>
-   <p class="text-red-700 text-sm" id="error-details">We're having trouble connecting to Arti.</p>
-</div>
-
-<!-- Results container -->
-<div id="results-container" class="fade-in"></div>
-
-<!-- Updated Mode Switcher with Pipeliner -->
-<div class="mt-2 text-center">
-   <p class="text-sm text-gray-500 mb-2">Need something different? Switch modes.</p>
-   <div class="io-card max-w-lg mx-auto p-2">
-       <div class="flex bg-brand-gray-100 p-1 rounded-xl">
-           <button class="mode-btn flex-1 px-2 py-2 rounded-lg font-semibold text-xs transition-all active" data-mode="quick">
-               ⚡️ Game Plans
-           </button>
-           <button class="mode-btn flex-1 px-2 py-2 rounded-lg font-semibold text-xs transition-all" data-mode="chat">
-               💬 Chat
-           </button>
-           <button class="mode-btn flex-1 px-2 py-2 rounded-lg font-semibold text-xs transition-all" data-mode="pipeliner">
-               📊 Pipeliner
-           </button>
-       </div>
-   </div>
-</div>
+    margin-left: 8px;
+  }
   
-  <!-- Enhanced Footer Section -->
-       <footer class="text-center mt-8 sm:mt-12 space-y-4 sm:space-y-6 pb-20">
-           <!-- Quick Links -->
-           <div class="flex flex-wrap justify-center gap-6 text-sm mb-6">
-               <a href="#" id="about-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">About AskArti</a>
-               <a href="#" id="share-btn" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Share</a>
-               <a href="mailto:mark@subhoo.com" class="text-customPurple-500 hover:text-customPurple-700 font-medium">Contact</a>
-           </div>
-
-           <!-- Sponsor Section -->
-           <div class="sponsor-ad rounded-lg p-3 mb-4 text-sm bg-white border border-gray-200 not-italic text-left leading-normal text-gray-700">
-               <div class="flex items-center gap-2 mb-2">
-                   <span class="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded-full">SPONSOR</span>
-                   <span class="text-gray-800 font-semibold">Hey there! Enjoyin' these results?</span>
-               </div>
-               <p class="text-sm leading-relaxed text-gray-700">
-                   By the time I pay off all my scientists, all the lab coats, and my Lambda bill…I'm losin' money every time you press that Ask Arti button.
-               </p>
-               <p class="mt-2 text-xs italic text-gray-500">
-                   Don't let my loss be your loss. Sponsor this ad for the low low price of $99/mo.
-               </p>
-               <p class="mt-2 text-xs text-customPurple-600 font-medium">
-                   <a href="mailto:mark@subhoo.com" class="hover:underline">Contact me to reserve this premium spot →</a>
-               </p>
-           </div>
-
-           <!-- Federal Intelligence Suite Header -->
-           <div class="mb-6">
-               <h3 class="text-lg font-bold text-customPurple-500 mb-2">Complete Federal Intelligence Suite</h3>
-               <p class="text-sm text-gray-600 max-w-2xl mx-auto">
-                   Three powerful tools to navigate federal contracting: real-time guidance, contractor intelligence, and contract analysis
-               </p>
-           </div>
-
-           <!-- Three Product Cards -->
-           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8 max-w-6xl mx-auto">
-               <!-- AskArti Card (Current Site) -->
-               <div class="bg-white border-2 border-customPurple-500 rounded-lg p-4 shadow-md">
-                   <div class="flex items-center gap-3 mb-3">
-                       <div class="w-10 h-10 bg-customPurple-500 rounded-lg flex items-center justify-center">
-                           <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8.955 8.955 0 01-2.563-.37l-3.168 1.263a.75.75 0 01-.945-.945l1.263-3.168A7.955 7.955 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8z"/>
-                           </svg>
-                       </div>
-                       <div>
-                           <h4 class="font-bold text-customPurple-700">AskArti</h4>
-                           <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">YOU ARE HERE</span>
-                       </div>
-                   </div>
-                   <p class="text-sm text-gray-600 mb-3">Your 24/7 AI sales coach for federal contracting. Get instant advice on stuck deals, meeting prep, and strategy.</p>
-                   <div class="flex flex-wrap gap-1 mb-3">
-                       <span class="text-xs bg-gray-100 px-2 py-1 rounded">Sales Coaching</span>
-                       <span class="text-xs bg-gray-100 px-2 py-1 rounded">Deal Strategy</span>
-                       <span class="text-xs bg-gray-100 px-2 py-1 rounded">Meeting Prep</span>
-                   </div>
-                   <button class="w-full bg-gray-100 text-gray-500 px-4 py-2 rounded-md text-sm cursor-not-allowed">
-                       Currently Using
-                   </button>
-               </div>
-
-               <!-- Subhoo Card -->
-               <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow">
-                   <div class="flex items-center gap-3 mb-3">
-                       <div class="w-10 h-10 bg-customPurple-500 rounded-lg flex items-center justify-center">
-                           <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                           </svg>
-                       </div>
-                       <div>
-                           <h4 class="font-bold text-customPurple-700">Subhoo</h4>
-                           <span class="text-xs text-gray-500">Contractor Intel</span>
-                       </div>
-                   </div>
-                   <p class="text-sm text-gray-600 mb-3">Discover federal prime contractors with mandatory subcontracting plans. Find partners and unlock opportunities.</p>
-                   <div class="flex flex-wrap gap-1 mb-3">
-                       <span class="text-xs bg-gray-100 px-2 py-1 rounded">Prime Discovery</span>
-                       <span class="text-xs bg-gray-100 px-2 py-1 rounded">Subcontracting</span>
-                       <span class="text-xs bg-gray-100 px-2 py-1 rounded">Geographic Maps</span>
-                   </div>
-                   <a href="https://subhoo.com" target="_blank" rel="noopener noreferrer" 
-                      class="w-full bg-customPurple-500 hover:bg-customPurple-600 text-white px-4 py-2 rounded-md text-sm transition-colors flex items-center justify-center gap-2">
-                       Explore Subhoo
-                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                       </svg>
-                   </a>
-               </div>
-
-               <!-- PostAward Card -->
-               <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow">
-                   <div class="flex items-center gap-3 mb-3">
-                       <div class="w-10 h-10 bg-customPurple-500 rounded-lg flex items-center justify-center">
-                           <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                           </svg>
-                       </div>
-                       <div>
-                           <h4 class="font-bold text-customPurple-700">PostAward</h4>
-                           <span class="text-xs text-gray-500">Contract Analysis</span>
-                       </div>
-                   </div>
-                   <p class="text-sm text-gray-600 mb-3">Upload FPDS.gov CSV files to visualize spending patterns, track contracts, and identify opportunities.</p>
-                   <div class="flex flex-wrap gap-1 mb-3">
-                       <span class="text-xs bg-gray-100 px-2 py-1 rounded">Data Analysis</span>
-                       <span class="text-xs bg-gray-100 px-2 py-1 rounded">Visualizations</span>
-                       <span class="text-xs bg-gray-100 px-2 py-1 rounded">CSV Upload</span>
-                   </div>
-                   <a href="https://postaward.com" target="_blank" rel="noopener noreferrer" 
-                      class="w-full bg-customPurple-500 hover:bg-customPurple-600 text-white px-4 py-2 rounded-md text-sm transition-colors flex items-center justify-center gap-2">
-                       Try PostAward
-                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                       </svg>
-                   </a>
-               </div>
-           </div>
-
-           <!-- Workflow Section -->
-           <div class="bg-gradient-to-r from-customPurple-50 to-customPurple-100 rounded-lg p-6 mb-8 max-w-4xl mx-auto">
-               <h4 class="font-bold text-gray-800 mb-4">Your Complete Federal Sales Workflow</h4>
-               <div class="flex flex-col md:flex-row items-center justify-center gap-4 text-sm">
-                   <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg shadow-sm">
-                       <span class="w-6 h-6 bg-customPurple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
-                       <span class="font-medium">Discover primes with Subhoo</span>
-                   </div>
-                   <svg class="w-6 h-6 text-gray-400 rotate-90 md:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                   </svg>
-                   <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg shadow-sm">
-                       <span class="w-6 h-6 bg-customPurple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
-                       <span class="font-medium">Analyze contracts with PostAward</span>
-                   </div>
-                   <svg class="w-6 h-6 text-gray-400 rotate-90 md:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                   </svg>
-                   <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg shadow-sm">
-                       <span class="w-6 h-6 bg-customPurple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
-                       <span class="font-medium">Get sales coaching with AskArti</span>
-                   </div>
-               </div>
-           </div>
-
-           <!-- Legal Footer -->
-           <div class="text-xs text-gray-400 space-y-2 max-w-4xl mx-auto">
-               <p>
-                   All tools provide information for educational purposes only and do not constitute professional business advice. 
-                   AI can make errors. Please consult qualified professionals before making important business decisions.
-               </p>
-               <p>© 2025 AskArti.com Made for Federal Sellers by Federal Sellers.</p>
-           </div>
-       </footer>
-
-</div>
-
-<div id="about-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
-        <div class="flex justify-between items-start mb-4">
-            <h2 class="text-xl font-bold text-gray-900">About AskArti</h2>
-            <button id="close-about" class="text-gray-400 hover:text-gray-600">
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  /* Footer */
+  footer {
+    padding: 40px 0;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  
+  .footer-text {
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    :root {
+      --section-padding: 64px;
+    }
+    
+    .container {
+      padding: 0 20px;
+    }
+    
+    .nav-items {
+      display: none;
+    }
+    
+    .demo-header h2 {
+      font-size: 36px;
+    }
+    
+    .chat-input-container {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .chat-send-btn {
+      margin-top: 12px;
+    }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <a href="#" class="logo">AskArti</a>
+        <div class="nav-items">
+          <a href="#features" class="nav-link">Features</a>
+          <a href="#pricing" class="nav-link">Pricing</a>
+          <a href="#testimonials" class="nav-link">Testimonials</a>
+          <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Book a Free Call</a>
         </div>
-        <div class="space-y-4 text-gray-700 text-sm">
-            <p>AskArti is your 24/7 AI sales coach, designed for federal sales professionals. Get instant advice on stuck deals, meeting preparation, and sales strategy.</p>
-            <div class="mt-4 pt-4 border-t">
-                <h3 class="font-semibold text-gray-800 mb-2">Privacy & Technology</h3>
-                <p class="text-gray-600">AskArti uses advanced AI models. We do not store, log, or persist any conversation data. All processing occurs in-memory and is discarded.</p>
-            </div>
-        </div>
+      </div>
     </div>
-</div>
+  </header>
+
+  <main>
+    <!-- Demo Section -->
+    <section id="demo" class="demo-section">
+      <div class="container">
+        <div class="demo-header">
+          <h2>AI Prompt Coach for Federal Sales</h2>
+          <p>Enter your sales challenge and we'll teach you how to write better prompts while solving your problem.</p>
+        </div>
+        
+        <div class="chat-container">
+          <div class="chat-input-area">
+            <div class="chat-input-container">
+              <textarea class="chat-input" id="problemInput" placeholder="e.g., need to meet with VA CTO about cloud migration" rows="3"></textarea>
+              <button class="chat-send-btn" id="generateBtn">
+                <span id="btnText">Improve My Prompt</span>
+                <div id="btnLoader" class="loader hidden"></div>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Results -->
+        <div class="results-section" id="resultsSection">
+          <!-- Results will be inserted here -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-text">© 2025 AskArti.com • AI-powered sales coaching for professionals who want to win more</div>
+    </div>
+  </footer>
 
 <script>
-// --- Time-based greeting functionality ---
-function getTimeBasedGreeting() {
- const hour = new Date().getHours();
- const name = "I'm Arti!";
- 
- if (hour >= 5 && hour < 12) {
-     return `Good morning! ${name} Ready to tackle the day?`;
- } else if (hour >= 12 && hour < 17) {
-     return `Good afternoon! ${name} How can I help?`;
- } else if (hour >= 17 && hour < 21) {
-     return `Good evening! ${name} What's on your mind?`;
- } else {
-     return `Burning the midnight oil? ${name} I'm here to help.`;
- }
-}
-
-function updateGreetings() {
- const greeting = getTimeBasedGreeting();
- const greetingLabel = document.getElementById('greeting-label');
- const chatGreeting = document.getElementById('chat-greeting');
- 
- if (greetingLabel) {
-     greetingLabel.textContent = greeting;
- }
- 
- if (chatGreeting) {
-     const chatText = greeting.replace('Hey, I\'m Arti!', 'I\'m Arti.');
-     chatGreeting.textContent = `${chatText} I can help with stuck deals, boss problems, or whatever's on your mind. If you need a structured plan, flip to the "Game Plans" tab.`;
- }
-}
-
-// Configuration
-const CONFIG = {
-   API_ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI',
-   REQUEST_TIMEOUT: 45000,
-   LOADING_MESSAGES: [
-       "Hang on. I'm...Working Backwards", 
-       "...Diving Deep", 
-       "...Unpacking This", 
-       "...Putting a Pin in it", 
-       "...Circling Back", 
-       "...Thinking Big"
-   ],
-   PIPELINE_LOADING_MESSAGES: [
-       "Analyzing federal opportunities...",
-       "Scanning contract vehicles...", 
-       "Mapping stakeholder networks...",
-       "Calculating win probabilities...",
-       "Identifying shaping windows...",
-       "Processing tribal knowledge..."
-   ]
+// Configuration - using same API endpoint from old system
+const API_CONFIG = {
+  ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI'
 };
 
-// Updated ICP Profiles Configuration - 4 profiles only
-const ICP_PROFILES = {
-    'si-bd-lead': {
-        name: 'SI BD Lead',
-        agencies: ['dod', 'dhs', 'va'],
-        solutions: ['cloud', 'cybersecurity', 'modernization'],
-        dealSize: 'large',
-        focus: 'Prime contractor opportunities, teaming partnerships, and recompetes'
-    },
-    'csp-bd-lead': {
-        name: 'CSP BD Lead', 
-        agencies: ['gsa', 'dod', 'treasury'],
-        solutions: ['cloud', 'ai-ml', 'data-analytics'],
-        dealSize: 'medium',
-        focus: 'Cloud adoption, FedRAMP opportunities, and multi-agency solutions'
-    },
-    'saas-cro': {
-        name: 'SaaS CRO',
-        agencies: ['gsa', 'treasury', 'hhs'],
-        solutions: ['software', 'ai-ml', 'data-analytics'],
-        dealSize: 'medium',
-        focus: 'Software licensing, platform adoption, and recurring revenue'
-    },
-    'smb-bd-lead': {
-        name: 'SMB BD Lead',
-        agencies: ['gsa', 'va', 'nasa'],
-        solutions: ['professional-services', 'software', 'cybersecurity'],
-        dealSize: 'small',
-        focus: 'Set-aside opportunities, subcontracting, and niche specializations'
-    }
+// Problem type templates for different sales challenges
+const COACHING_TEMPLATES = {
+  prospecting: {
+    template: `Act as a senior federal seller coach. Build a specific outreach plan for "{problem}". 
+
+Return a table with columns: Hook, Why it matters to {target}, Next step.
+- Use plain language and one idea per row
+- Focus on proof, deadlines, funding, compliance, and incumbent pain
+- Include 3-5 tactical approaches
+- Keep current for 2025
+
+Close with a one paragraph follow-up script I can send today that feels natural and builds relationship.`
+  },
+  nurturing: {
+    template: `Act as a senior relationship-building coach for federal sales. Help solve: "{problem}"
+
+Create a nurturing strategy with:
+1. Three touchpoint ideas that add value
+2. Key questions to understand their priorities  
+3. Proof points that build credibility
+4. Timing recommendations for each interaction
+
+End with a template message I can customize and send this week that moves the relationship forward without being pushy.`
+  },
+  closing: {
+    template: `Act as a senior closing coach for government sales. Address this challenge: "{problem}"
+
+Build a closing framework with:
+1. Key objections to anticipate and responses
+2. Three trial close techniques for this situation
+3. Required proof/validation they'll need
+4. Timeline and next steps to get to signature
+
+Include a script template for the critical conversation that gets commitment while addressing their concerns.`
+  },
+  objections: {
+    template: `Act as an objection handling expert for federal sales. Help overcome: "{problem}"
+
+Structure your response as:
+1. Root cause analysis - why this objection comes up
+2. Three different response techniques with examples
+3. Questions to uncover the real concern behind the objection
+4. Proof points or evidence that addresses their fear
+
+Provide word-for-word responses I can practice and use in real conversations.`
+  },
+  general: {
+    template: `Act as a federal sales expert with 30+ years of experience. Help solve this challenge: "{problem}"
+
+Provide a structured response with:
+1. Quick assessment of the situation
+2. Three specific actions to take (prioritized)
+3. Key talking points or questions to use
+4. Template language if applicable
+5. Next steps and timeline
+
+Focus on practical, actionable advice that can be implemented immediately.`
+  }
 };
 
-class AskArti {
-constructor() {
-this.elements = this.getElements();
-this.state = {
-    pendingRequest: false,
-    lastRequestTime: 0,
-    loadingInterval: null,
-    abortController: null,
-    lastQuery: '',
-    currentMode: 'quick',
-    chatHistory: [],
-    selectedICP: null,
-    customProfile: {}
-};
-this.init();
-}
+// Global state
+let isGenerating = false;
 
-getElements() {
-   return {
-       situationInput: document.getElementById('situation-input'),
-       clearBtn: document.getElementById('clear-btn'),
-       charCount: document.getElementById('char-count'),
-       loadingMessageContainer: document.getElementById('loading-message-container'),
-       loadingMessage: document.getElementById('loading-message'),
-       errorMessage: document.getElementById('error-message'),
-       errorDetails: document.getElementById('error-details'),
-       resultsContainer: document.getElementById('results-container'),
-       aboutBtn: document.getElementById('about-btn'),
-       aboutModal: document.getElementById('about-modal'),
-       closeAbout: document.getElementById('close-about'),
-       modeButtons: document.querySelectorAll('.mode-btn'),
-       quickMode: document.getElementById('quick-mode'),
-       chatMode: document.getElementById('chat-mode'),
-       pipelinerMode: document.getElementById('pipeliner-mode'),
-       chatMessages: document.getElementById('chat-messages'),
-       chatInput: document.getElementById('chat-input'),
-       chatSendBtn: document.getElementById('chat-send-btn'),
-       // Pipeliner elements
-       icpCards: document.querySelectorAll('.icp-profile-card'),
-       targetAgencies: document.getElementById('target-agencies'),
-       solutionCategories: document.getElementById('solution-categories'),
-       dealSize: document.getElementById('deal-size'),
-       generateBtn: document.getElementById('generate-pipeline'),
-       generateText: document.getElementById('generate-text'),
-       generateLoader: document.getElementById('generate-loader'),
-       saveProfile: document.getElementById('save-profile'),
-       pipelineLoadingContainer: document.getElementById('pipeline-loading-container'),
-       pipelineLoadingMessage: document.getElementById('pipeline-loading-message'),
-       pipelineResultsContainer: document.getElementById('pipeline-results-container')
-   };
-}
-
-init() {
-  updateGreetings();
+// Detect problem type from user input
+function detectProblemType(problemText) {
+  const text = problemText.toLowerCase();
   
-  mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'base', themeVariables: {
-        primaryColor: '#F3F4F6',
-        primaryTextColor: '#1F2937',
-        primaryBorderColor: '#D1D5DB',
-        lineColor: '#6B7280',
-        textColor: '#111827',
-        fontSize: '14px'
-  }});
-  this.setupEventListeners();
-  this.setupAutoExpand();
-  this.elements.situationInput.focus();
-  this.updateCharCount();
-  this.setupModeToggle();
+  if (text.includes('prospect') || text.includes('outreach') || text.includes('cold') || text.includes('meet with')) {
+    return 'prospecting';
+  } else if (text.includes('nurtur') || text.includes('relationship') || text.includes('follow up') || text.includes('stay in touch')) {
+    return 'nurturing';
+  } else if (text.includes('clos') || text.includes('signature') || text.includes('contract') || text.includes('objection')) {
+    return 'closing';
+  } else if (text.includes('objection') || text.includes('concern') || text.includes('pushback') || text.includes('hesitat')) {
+    return 'objections';
+  } else {
+    return 'general';
+  }
 }
 
-setupModeToggle() {
-   // Set initial active state
-   this.elements.modeButtons.forEach(btn => {
-       btn.classList.remove('active', 'bg-white', 'text-brand-purple');
-       btn.classList.add('text-gray-600');
-   });
-   
-   // Set quick mode as default active
-   const quickBtn = document.querySelector('.mode-btn[data-mode="quick"]');
-   if (quickBtn) {
-       quickBtn.classList.add('active', 'bg-white', 'text-brand-purple');
-       quickBtn.classList.remove('text-gray-600');
-   }
-}
+// Generate prompt using the old backend
+async function generatePrompt() {
+  const problemText = document.getElementById('problemInput').value.trim();
+  
+  if (!problemText) {
+    alert('Please describe your sales challenge first.');
+    return;
+  }
 
-updateCharCount() {
-   if (!this.elements.situationInput) return;
-   const current = this.elements.situationInput.value.length;
-   const max = 2500;
-   this.elements.charCount.textContent = `${current}/${max}`;
-   
-   if (current > 0) {
-       this.elements.clearBtn.classList.add('show');
-   } else {
-       this.elements.clearBtn.classList.remove('show');
-   }
-}
-
-clearInput() {
- this.elements.situationInput.value = '';
- this.elements.situationInput.style.height = 'auto';
- this.elements.situationInput.classList.remove('scrollable');
- this.elements.situationInput.scrollTop = 0;
- delete this.elements.situationInput.dataset.forceType;
- 
- const askBtn = document.getElementById('ask-arti-btn');
- if (askBtn) {
-     askBtn.classList.remove('btn-highlight', 'btn-pulse');
- }
- 
- this.updateCharCount();
- this.elements.situationInput.focus();
-}
-
-setupEventListeners() {
-   // Main text area and clear button
-   this.elements.situationInput.addEventListener('input', () => {
-       this.updateCharCount();
-       this.updateButtonState();
-   });
-   this.elements.situationInput.addEventListener('focus', () => {
-       this.updateCharCount();
-       setTimeout(() => this.elements.situationInput.scrollTop = 0, 10);
-   });
-   this.elements.situationInput.addEventListener('blur', () => {
-       this.elements.clearBtn.classList.remove('show');
-   });
-   this.elements.clearBtn.addEventListener('click', () => this.clearInput());
-
-   // Sample link handlers
-   document.querySelectorAll('.sample-link').forEach(link => {
-       link.addEventListener('click', (e) => {
-           e.preventDefault();
-           const text = e.currentTarget.dataset.text;
-           const type = e.currentTarget.dataset.type;
-           
-           if (type === 'digest' || text.toLowerCase().includes('federal sales briefing') || text.toLowerCase().includes('federal news')) {
-               this.loadFederalIntelligenceFromLink(e.currentTarget);
-               return;
-           }
-           
-           this.elements.situationInput.value = text;
-           this.updateCharCount();
-           
-           if (type) {
-               this.elements.situationInput.dataset.forceType = type;
-           } else {
-               delete this.elements.situationInput.dataset.forceType;
-           }
-           
-           this.triggerButtonHighlight();
-           this.elements.situationInput.focus();
-           
-           setTimeout(() => {
-               this.elements.situationInput.scrollTop = 0;
-               const askBtn = document.getElementById('ask-arti-btn');
-               if (askBtn) {
-                   askBtn.scrollIntoView({ 
-                       behavior: 'smooth', 
-                       block: 'nearest' 
-                   });
-               }
-           }, 100);
-       });
-   });
-
-   // Ask Arti button - main submission
-const askBtn = document.getElementById('ask-arti-btn');
-if (askBtn) {
-    askBtn.addEventListener('click', () => {
-        const forceType = this.elements.situationInput.dataset.forceType;
-        this.getAdvice(forceType, askBtn);
-        askBtn.classList.remove('btn-highlight');
+  if (isGenerating) return;
+  
+  setButtonLoading(true);
+  
+  try {
+    // Use the exact same API call structure as the old system
+    const response = await fetch(API_CONFIG.ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        situation: problemText
+        // Removed forceType to let the new Lambda handle it automatically
+      })
     });
-}
 
-   // Enter key submission
-   this.elements.situationInput.addEventListener('keydown', (e) => {
-       if (e.key === 'Enter' && !e.shiftKey) {
-           e.preventDefault();
-           const forceType = this.elements.situationInput.dataset.forceType;
-           this.getAdvice(forceType, document.getElementById('ask-arti-btn'));
-       }
-   });
-
-   // Modal handlers
-   this.elements.aboutBtn.addEventListener('click', () => this.showModal());
-   this.elements.closeAbout.addEventListener('click', () => this.hideModal());
-   this.elements.aboutModal.addEventListener('click', (e) => {
-       if (e.target === this.elements.aboutModal) this.hideModal();
-   });
-   document.addEventListener('keydown', (e) => {
-       if (e.key === 'Escape') this.hideModal();
-   });
-
-   // Mode switching
-   this.elements.modeButtons.forEach(btn => {
-       btn.addEventListener('click', (e) => this.switchMode(e.target.dataset.mode));
-   });
-
-   // Chat mode
-   this.elements.chatSendBtn.addEventListener('click', () => this.sendChatMessage());
-   this.elements.chatInput.addEventListener('keydown', (e) => {
-       if (e.key === 'Enter' && !e.shiftKey) {
-           e.preventDefault();
-           this.sendChatMessage();
-       }
-   });
-
-   // Pipeliner mode event listeners
-   this.setupPipelinerEventListeners();
-}
-
-setupPipelinerEventListeners() {
-   // ICP Card Selection
-   this.elements.icpCards.forEach(card => {
-       card.addEventListener('click', (e) => {
-           const icpType = e.currentTarget.dataset.icp;
-           this.selectICP(icpType);
-       });
-   });
-
-   // Generate Pipeline
-   this.elements.generateBtn.addEventListener('click', () => {
-       this.generatePipeline();
-   });
-
-   // Save Profile
-   this.elements.saveProfile.addEventListener('click', () => {
-       this.saveCustomProfile();
-   });
-
-   // Form Changes
-   [this.elements.targetAgencies, this.elements.solutionCategories, this.elements.dealSize].forEach(el => {
-       el.addEventListener('change', () => {
-           this.updateCustomProfile();
-       });
-   });
-}
-
-selectICP(icpType) {
-   // Clear previous selection
-   this.elements.icpCards.forEach(card => {
-       card.classList.remove('selected');
-   });
-
-   // Select new ICP
-   const selectedCard = document.querySelector(`[data-icp="${icpType}"]`);
-   if (selectedCard) {
-       selectedCard.classList.add('selected');
-       this.state.selectedICP = icpType;
-       
-       // Apply ICP configuration
-       this.applyICPConfiguration(icpType);
-   }
-}
-
-applyICPConfiguration(icpType) {
-   const profile = ICP_PROFILES[icpType];
-   if (!profile) return;
-
-   // Set agencies
-   Array.from(this.elements.targetAgencies.options).forEach(option => {
-       option.selected = profile.agencies.includes(option.value);
-   });
-
-   // Set solutions
-   Array.from(this.elements.solutionCategories.options).forEach(option => {
-       option.selected = profile.solutions.includes(option.value);
-   });
-
-   // Set deal size
-   this.elements.dealSize.value = profile.dealSize;
-
-   // Add glow effect to generate button
-   this.elements.generateBtn.classList.add('btn-highlight');
-}
-
-updateCustomProfile() {
-   this.state.customProfile = {
-       agencies: Array.from(this.elements.targetAgencies.selectedOptions).map(o => o.value),
-       solutions: Array.from(this.elements.solutionCategories.selectedOptions).map(o => o.value),
-       dealSize: this.elements.dealSize.value
-   };
-}
-
-async generatePipeline() {
-   if (this.state.pendingRequest) return;
-
-   this.state.pendingRequest = true;
-   this.setPipelineButtonLoading(true);
-   this.showPipelineLoadingMessages();
-   this.elements.errorMessage.classList.add('hidden');
-   this.elements.pipelineResultsContainer.innerHTML = '';
-
-   try {
-       // Build request payload
-       const profile = this.state.selectedICP ? ICP_PROFILES[this.state.selectedICP] : null;
-       const customProfile = this.state.customProfile;
-
-       const agencies = customProfile.agencies?.length ? customProfile.agencies : profile?.agencies || [];
-       const solutions = customProfile.solutions?.length ? customProfile.solutions : profile?.solutions || [];
-       const dealSize = customProfile.dealSize || profile?.dealSize || 'all';
-
-       const situation = `Generate a federal opportunity pipeline for ${profile?.name || 'Federal Sales Professional'}. 
-       Target agencies: ${agencies.join(', ')}. 
-       Solution focus: ${solutions.join(', ')}. 
-       Deal size preference: ${dealSize}.
-       Focus area: ${profile?.focus || 'Federal sales opportunities'}.`;
-
-       const response = await fetch(CONFIG.API_ENDPOINT, {
-           method: 'POST',
-           headers: { 'Content-Type': 'application/json' },
-           body: JSON.stringify({
-               situation: situation,
-               forceType: 'opportunity_pipeline',
-               icp_profile: {
-                   type: this.state.selectedICP,
-                   agencies: agencies,
-                   solutions: solutions,
-                   dealSize: dealSize,
-                   name: profile?.name
-               }
-           })
-       });
-
-       if (!response.ok) {
-           throw new Error(`Server error: ${response.status}`);
-       }
-
-       const data = await response.json();
-       if (data.error) {
-           throw new Error(data.message || data.error);
-       }
-
-       this.displayPipeline(data);
-
-   } catch (error) {
-       console.error('Pipeline generation failed:', error);
-       this.showError(error.message || 'Failed to generate pipeline');
-   } finally {
-       this.setPipelineButtonLoading(false);
-       this.hidePipelineLoadingMessages();
-       this.state.pendingRequest = false;
-   }
-}
-
-displayPipeline(data) {
-   const html = this.renderOpportunityPipeline(data);
-   this.elements.pipelineResultsContainer.innerHTML = html;
-   
-   // Scroll to results
-   setTimeout(() => {
-       this.elements.pipelineResultsContainer.scrollIntoView({ 
-           behavior: 'smooth', 
-           block: 'start' 
-       });
-   }, 100);
-}
-
-renderOpportunityPipeline(data) {
-   const { 
-       pipeline_summary, opportunities, market_intelligence, 
-       icp_insights, strategic_recommendations, confidence_overview 
-   } = data;
-
-   return `
-       <div class="results-card">
-           <div class="results-card-header">
-               <div class="flex justify-between items-start">
-                   <div>
-                       <h2 class="text-xl font-bold text-gray-800 mb-2">📊 Daily Federal Pipeline</h2>
-                       <p class="text-gray-600">${pipeline_summary || 'Opportunities tailored to your ICP'}</p>
-                   </div>
-                   <div class="text-right">
-                       <div class="text-2xl font-bold text-brand-purple">${opportunities?.length || 0}</div>
-                       <div class="text-gray-500 text-sm">Active Opportunities</div>
-                   </div>
-               </div>
-           </div>
-           
-           <div class="results-card-body">
-               ${confidence_overview ? `
-               <div class="mb-6">
-                   <h3 class="text-lg font-semibold text-gray-800 mb-3">Pipeline Health</h3>
-                   <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                       <div class="text-center p-3 bg-purple-50 rounded-lg">
-                           <div class="text-2xl font-bold text-purple-600">${confidence_overview.prime || 0}</div>
-                           <div class="text-xs text-gray-500">Prime Targets</div>
-                       </div>
-                       <div class="text-center p-3 bg-green-50 rounded-lg">
-                           <div class="text-2xl font-bold text-green-600">${confidence_overview.high || 0}</div>
-                           <div class="text-xs text-gray-500">High Confidence</div>
-                       </div>
-                       <div class="text-center p-3 bg-yellow-50 rounded-lg">
-                           <div class="text-2xl font-bold text-yellow-600">${confidence_overview.medium || 0}</div>
-                           <div class="text-xs text-gray-500">Medium Confidence</div>
-                       </div>
-                       <div class="text-center p-3 bg-red-50 rounded-lg">
-                           <div class="text-2xl font-bold text-red-600">${confidence_overview.low || 0}</div>
-                           <div class="text-xs text-gray-500">Watch List</div>
-                       </div>
-                   </div>
-               </div>` : ''}
-
-               ${market_intelligence ? `
-               <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                   <h3 class="text-lg font-semibold text-gray-800 mb-2">🎯 Market Intelligence</h3>
-                   <p class="text-gray-700">${market_intelligence}</p>
-               </div>` : ''}
-
-               ${opportunities && opportunities.length > 0 ? `
-               <div class="mb-6">
-                   <h3 class="text-lg font-semibold text-gray-800 mb-4">Priority Opportunities</h3>
-                   <div class="space-y-4">
-                       ${opportunities.map((opp, index) => this.renderOpportunityCard(opp, index)).join('')}
-                   </div>
-               </div>` : ''}
-
-               ${icp_insights && icp_insights.length > 0 ? `
-               <div class="mb-6">
-                   <h3 class="text-lg font-semibold text-gray-800 mb-4">ICP-Specific Insights</h3>
-                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                       ${icp_insights.map(insight => `
-                           <div class="p-4 bg-brand-purple-faint border border-brand-purple rounded-lg">
-                               <h4 class="font-semibold text-gray-800 mb-2">${insight.category}</h4>
-                               <p class="text-gray-700 text-sm">${insight.insight}</p>
-                           </div>
-                       `).join('')}
-                   </div>
-               </div>` : ''}
-
-               ${strategic_recommendations && strategic_recommendations.length > 0 ? `
-               <div class="mb-6">
-                   <h3 class="text-lg font-semibold text-gray-800 mb-4">Strategic Recommendations</h3>
-                   <div class="space-y-3">
-                       ${strategic_recommendations.map((rec, index) => `
-                           <div class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
-                               <div class="flex-shrink-0 w-6 h-6 bg-brand-purple rounded-full flex items-center justify-center text-xs text-white font-bold">
-                                   ${index + 1}
-                               </div>
-                               <div>
-                                   <h4 class="font-semibold text-gray-800 text-sm">${rec.action}</h4>
-                                   <p class="text-gray-600 text-xs mt-1">${rec.rationale}</p>
-                               </div>
-                           </div>
-                       `).join('')}
-                   </div>
-               </div>` : ''}
-           </div>
-       </div>
-   `;
-}
-
-renderOpportunityCard(opportunity, index) {
-   const confidence = opportunity.confidence_score || 0.5;
-   const confidenceClass = this.getConfidenceClass(confidence);
-   const confidenceLabel = this.getConfidenceLabel(confidence);
-   
-   return `
-       <div class="opportunity-card ${confidenceClass}">
-           <div class="flex justify-between items-start mb-3">
-               <div class="flex-1">
-                   <div class="flex items-center space-x-2 mb-2">
-                       <h4 class="font-bold text-gray-800 text-base">${opportunity.title}</h4>
-                       <span class="tag ${opportunity.urgency === 'high' ? 'tag-urgent' : opportunity.stage === 'shaping' ? 'tag-shaping' : 'tag-active'}">
-                           ${opportunity.stage || 'Active'}
-                       </span>
-                   </div>
-                   <p class="text-gray-600 text-sm mb-2">${opportunity.agency} • ${opportunity.value || 'TBD'}</p>
-                   <p class="text-gray-700 text-sm">${opportunity.description}</p>
-               </div>
-               <div class="text-right ml-4">
-                   <div class="text-sm font-semibold text-gray-800 mb-1">${(confidence * 100).toFixed(0)}%</div>
-                   <div class="confidence-meter w-16">
-    <div class="confidence-fill ${confidenceClass}" style="width: ${confidence * 100}%"></div>
-</div>
-                   <div class="text-xs text-gray-500 mt-1">${confidenceLabel}</div>
-               </div>
-           </div>
-
-           ${opportunity.key_insights && opportunity.key_insights.length > 0 ? `
-           <div class="mb-3">
-               <div class="text-xs font-semibold text-gray-600 mb-2">KEY INSIGHTS</div>
-               <div class="space-y-1">
-                   ${opportunity.key_insights.map(insight => `
-                       <div class="text-sm text-gray-700">• ${insight}</div>
-                   `).join('')}
-               </div>
-           </div>` : ''}
-
-           ${opportunity.stakeholders && opportunity.stakeholders.length > 0 ? `
-           <div class="mb-3">
-               <div class="text-xs font-semibold text-gray-600 mb-2">KEY STAKEHOLDERS</div>
-               <div class="flex flex-wrap gap-2">
-                   ${opportunity.stakeholders.map(stakeholder => `
-                       <span class="tag">${stakeholder}</span>
-                   `).join('')}
-               </div>
-           </div>` : ''}
-
-           <div class="flex justify-between items-center pt-3 border-t border-gray-200">
-               <div class="flex space-x-4 text-xs text-gray-500">
-                   ${opportunity.timeline ? `<span>Timeline: ${opportunity.timeline}</span>` : ''}
-                   ${opportunity.competition ? `<span>Competition: ${opportunity.competition}</span>` : ''}
-               </div>
-               <button class="btn btn-secondary text-xs px-3 py-1" onclick="app.analyzeOpportunity('${opportunity.id || index}')">
-                   Analyze
-               </button>
-           </div>
-       </div>
-   `;
-}
-
-getConfidenceClass(score) {
-    if (score >= 0.85) return 'confidence-prime';   // Dark Green (85%+)
-    if (score >= 0.7) return 'confidence-high';     // Green (70-84%)
-    if (score >= 0.4) return 'confidence-medium';   // Amber (40-69%)
-    return 'confidence-low';                         // Red (0-39%)
-}
-
-getConfidenceLabel(score) {
-    if (score >= 0.85) return 'Prime';
-    if (score >= 0.7) return 'High';
-    if (score >= 0.4) return 'Medium';
-    return 'Low';
-}
-
-async analyzeOpportunity(opportunityId) {
-   // This would trigger a deeper analysis of a specific opportunity
-   const situation = `Provide detailed analysis for opportunity ${opportunityId} including competitive landscape, win strategy, and tactical next steps.`;
-   
-   try {
-       const response = await fetch(CONFIG.API_ENDPOINT, {
-           method: 'POST',
-           headers: { 'Content-Type': 'application/json' },
-           body: JSON.stringify({
-               situation: situation,
-               forceType: 'opportunity_analysis'
-           })
-       });
-
-       const data = await response.json();
-       // Handle detailed analysis display
-       this.displayDetailedAnalysis(data);
-       
-   } catch (error) {
-       console.error('Analysis failed:', error);
-   }
-}
-
-setPipelineButtonLoading(loading) {
-   this.elements.generateBtn.disabled = loading;
-   
-   if (loading) {
-       this.elements.generateText.classList.add('hidden');
-       this.elements.generateLoader.classList.remove('hidden');
-   } else {
-       this.elements.generateText.classList.remove('hidden');
-       this.elements.generateLoader.classList.add('hidden');
-   }
-}
-
-showPipelineLoadingMessages() {
-   this.elements.pipelineLoadingContainer.classList.remove('hidden');
-   let i = 0;
-   this.elements.pipelineLoadingMessage.textContent = CONFIG.PIPELINE_LOADING_MESSAGES[i];
-   
-   this.state.loadingInterval = setInterval(() => {
-       i = (i + 1) % CONFIG.PIPELINE_LOADING_MESSAGES.length;
-       this.elements.pipelineLoadingMessage.textContent = CONFIG.PIPELINE_LOADING_MESSAGES[i];
-   }, 3000);
-}
-
-hidePipelineLoadingMessages() {
-   clearInterval(this.state.loadingInterval);
-   this.elements.pipelineLoadingContainer.classList.add('hidden');
-}
-
-saveCustomProfile() {
-   // Save profile to localStorage
-   const profile = {
-       selectedICP: this.state.selectedICP,
-       customProfile: this.state.customProfile,
-       timestamp: Date.now()
-   };
-   
-   localStorage.setItem('fed_opportunity_profile', JSON.stringify(profile));
-   
-   // Show success feedback
-   const originalText = this.elements.saveProfile.textContent;
-   this.elements.saveProfile.textContent = 'Saved!';
-   this.elements.saveProfile.classList.add('text-green-600');
-   
-   setTimeout(() => {
-       this.elements.saveProfile.textContent = originalText;
-       this.elements.saveProfile.classList.remove('text-green-600');
-   }, 2000);
-}
-
-async loadFederalIntelligenceFromLink(linkElement) {
-   try {
-       const originalText = linkElement.textContent;
-       linkElement.textContent = 'Loading...';
-       linkElement.style.pointerEvents = 'none';
-       linkElement.style.opacity = '0.6';
-
-       this.elements.resultsContainer.innerHTML = '';
-       this.elements.errorMessage.classList.add('hidden');
-       this.showLoadingMessages();
-
-       const response = await fetch(CONFIG.API_ENDPOINT, {
-           method: 'POST',
-           headers: { 'Content-Type': 'application/json' },
-           body: JSON.stringify({ 
-               situation: "Get today's federal sales briefing", 
-               forceType: "digest" 
-           }),
-       });
-
-       if (!response.ok) {
-           throw new Error(`Server error: ${response.status}`);
-       }
-
-       const data = await response.json();
-       if (data.error) throw new Error(data.message || data.error);
-
-       this.displayAdvice(data);
-       linkElement.textContent = originalText;
-       linkElement.style.pointerEvents = 'auto';
-       linkElement.style.opacity = '1';
-       this.hideLoadingMessages();
-
-   } catch (error) {
-       console.error('Federal intelligence load failed:', error);
-       
-       linkElement.textContent = originalText;
-       linkElement.style.pointerEvents = 'auto';
-       linkElement.style.opacity = '1';
-       this.hideLoadingMessages();
-       this.showError(error.message || "Failed to load federal intelligence");
-   }
-}
-
-triggerButtonHighlight() {
-   const askBtn = document.getElementById('ask-arti-btn');
-   if (askBtn) {
-       askBtn.classList.add('btn-pulse', 'btn-highlight');
-       
-       setTimeout(() => {
-           askBtn.classList.remove('btn-pulse');
-       }, 4500);
-   }
-   
-   setTimeout(() => {
-       if (this.elements.situationInput) {
-           this.elements.situationInput.scrollTop = 0;
-       }
-   }, 50);
-}
-
-updateButtonState() {
-   const askBtn = document.getElementById('ask-arti-btn');
-   if (!askBtn) return;
-   
-   const hasContent = this.elements.situationInput.value.trim().length > 0;
-   
-   if (hasContent && !askBtn.classList.contains('btn-highlight')) {
-       askBtn.classList.add('btn-highlight');
-   } else if (!hasContent) {
-       askBtn.classList.remove('btn-highlight', 'btn-pulse');
-   }
-}
-
-setupAutoExpand() {
-  const textarea = this.elements.situationInput;
-  
-  const debounce = (func, wait) => {
-    let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  };
-  
-  const adjustHeight = () => {
-      textarea.style.height = 'auto';
-      const scrollHeight = textarea.scrollHeight;
-      const maxHeight = parseInt(getComputedStyle(textarea).maxHeight, 10);
-
-      if (scrollHeight > maxHeight) {
-          textarea.style.height = maxHeight + 'px';
-          textarea.classList.add('scrollable');
-      } else {
-          textarea.style.height = scrollHeight + 'px';
-          textarea.classList.remove('scrollable');
-      }
-  };
-  
-  const debouncedAdjustHeight = debounce(adjustHeight, 50);
-  
-  textarea.addEventListener('input', debouncedAdjustHeight);
-  textarea.addEventListener('paste', () => {
-      setTimeout(adjustHeight, 10);
-      setTimeout(debouncedAdjustHeight, 100);
-  });
-  textarea.addEventListener('focus', () => {
-      setTimeout(() => textarea.scrollTop = 0, 10);
-  });
-  
-  adjustHeight();
-}
-
-switchMode(mode) {
-   this.state.currentMode = mode;
-   this.elements.resultsContainer.innerHTML = '';
-   this.elements.pipelineResultsContainer.innerHTML = '';
-   this.elements.errorMessage.classList.add('hidden');
-   this.hideLoadingMessages();
-   this.hidePipelineLoadingMessages();
-
-   // Update mode button states
-   this.elements.modeButtons.forEach(btn => {
-       btn.classList.remove('active', 'bg-white', 'text-brand-purple');
-       btn.classList.add('text-gray-600');
-   });
-
-   const activeBtn = document.querySelector(`.mode-btn[data-mode="${mode}"]`);
-   if (activeBtn) {
-       activeBtn.classList.add('active', 'bg-white', 'text-brand-purple');
-       activeBtn.classList.remove('text-gray-600');
-   }
-
-   // Show/hide mode content
-   this.elements.quickMode.classList.add('hidden');
-   this.elements.chatMode.classList.add('hidden');
-   this.elements.pipelinerMode.classList.add('hidden');
-
-   if (mode === 'quick') {
-       this.elements.quickMode.classList.remove('hidden');
-       this.elements.situationInput.focus();
-   } else if (mode === 'chat') {
-       this.elements.chatMode.classList.remove('hidden');
-       this.elements.chatInput.focus();
-   } else if (mode === 'pipeliner') {
-       this.elements.pipelinerMode.classList.remove('hidden');
-   }
-}
-
-// Rest of the existing methods (addChatMessage, sendChatMessage, etc.) remain the same...
-addChatMessage(content, isUser = false) {
-   let processedContent = isUser ? content : marked.parse(content.replace(/<action>(.*?)<\/action>/g, '<span class="bg-yellow-50 px-1 py-0.5 rounded">$1</span>'));
-   const messageClass = isUser ? 'chat-message-user justify-end' : 'chat-message-arti justify-start';
-   const alignClass = isUser ? 'justify-end' : 'justify-start';
-
-   const messageHtml = `
-       <div class="flex ${alignClass} fade-in">
-           <div class="${messageClass} p-3 text-sm max-w-[85%]">
-               ${processedContent}
-           </div>
-       </div>
-   `;
-   this.elements.chatMessages.insertAdjacentHTML('beforeend', messageHtml);
-   this.scrollChatToBottom();
-}
-
-showTypingIndicator() {
-   const typingHtml = `<div id="typing-indicator" class="flex justify-start"><div class="chat-message-arti p-3 text-sm">...</div></div>`;
-   this.elements.chatMessages.insertAdjacentHTML('beforeend', typingHtml);
-   this.scrollChatToBottom();
-}
-
-hideTypingIndicator() {
-   const indicator = document.getElementById('typing-indicator');
-   if (indicator) indicator.remove();
-}
-
-scrollChatToBottom() {
-   const chatContainer = document.getElementById('chat-container');
-   if (chatContainer) {
-       chatContainer.scrollTop = chatContainer.scrollHeight;
-   }
-}
-
-async sendChatMessage() {
-   const message = this.elements.chatInput.value.trim();
-   if (!message || this.state.pendingRequest) return;
-
-   this.state.pendingRequest = true;
-   this.addChatMessage(message, true);
-   this.state.chatHistory.push({ role: 'user', content: message });
-   this.elements.chatInput.value = '';
-   this.showTypingIndicator();
-
-   try {
-       const response = await fetch(CONFIG.API_ENDPOINT, {
-           method: 'POST',
-           headers: { 'Content-Type': 'application/json' },
-           body: JSON.stringify({ situation: message, mode: 'chat', conversationHistory: this.state.chatHistory }),
-       });
-       if (!response.ok) throw new Error(`Server error (${response.status})`);
-       
-       const data = await response.json();
-       this.hideTypingIndicator();
-       this.addChatMessage(data.message);
-       this.state.chatHistory.push({ role: 'assistant', content: data.message });
-
-   } catch (error) {
-       this.hideTypingIndicator();
-       this.addChatMessage("Sorry, I'm having trouble connecting right now. Please try again in a moment.", false);
-   } finally {
-       this.state.pendingRequest = false;
-   }
-}
-
-setButtonLoading(loading, clickedButton) {
- this.state.pendingRequest = loading;
- this.elements.errorMessage.classList.add('hidden');
-
- const askBtn = document.getElementById('ask-arti-btn');
- const askText = document.getElementById('ask-arti-text');
- const askLoader = document.getElementById('ask-arti-loader');
-
- if (askBtn && askText && askLoader) {
-     askBtn.disabled = loading;
-
-     if (loading) {
-         askText.classList.add('hidden');
-         askLoader.classList.remove('hidden');
-         askBtn.classList.remove('btn-highlight', 'btn-pulse');
-     } else {
-         askText.classList.remove('hidden');
-         askLoader.classList.add('hidden');
-     }
- }
-}
-
-showLoadingMessages() {
-   this.elements.loadingMessageContainer.classList.remove('hidden');
-   let i = 0;
-   this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[i];
-   this.state.loadingInterval = setInterval(() => {
-       i = (i + 1) % CONFIG.LOADING_MESSAGES.length;
-       this.elements.loadingMessage.textContent = CONFIG.LOADING_MESSAGES[i];
-   }, 2000);
-}
-
-hideLoadingMessages() {
-   clearInterval(this.state.loadingInterval);
-   this.elements.loadingMessageContainer.classList.add('hidden');
-}
-
-showError(message) {
-   this.elements.errorMessage.classList.remove('hidden');
-   this.elements.errorDetails.textContent = message;
-}
-
-async getAdvice(forceType = null, clickedButton = null) {
-let situation = this.elements.situationInput.value.trim();
-situation = situation.replace(/[""]/g, '"').replace(/['']/g, "'");
-if (!situation) { this.showError("Please type or paste something into the box above."); return; }
-if (this.state.pendingRequest) return;
-
-this.state.lastQuery = situation;
-this.elements.resultsContainer.innerHTML = '';
-this.setButtonLoading(true, clickedButton);
-this.showLoadingMessages();
-
-try {
-    const body = { situation };
-    if (forceType) body.forceType = forceType;
-
-    const response = await fetch(CONFIG.API_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-    });
-    
     if (!response.ok) {
-        let errorMessage = `Server error: ${response.status}`;
-        try {
-            const errorData = await response.json();
-            errorMessage = errorData.error || errorData.message || errorMessage;
-        } catch (parseError) {
-            console.error('Error parsing error response:', parseError);
-        }
-        throw new Error(errorMessage);
+      throw new Error(`Server error: ${response.status}`);
     }
-    
+
     const data = await response.json();
-    if(data.error) throw new Error(data.message || data.error);
     
-    this.displayAdvice(data);
-
-} catch (error) {
-    console.error('Request failed:', error);
-    this.showError(error.message || "An unknown error occurred.");
-} finally {
-    this.setButtonLoading(false, clickedButton);
-    this.hideLoadingMessages();
-}
-}
-
-displayAdvice(data) {
- const { response_type } = data;
- let html = '';
-
- switch (response_type) {
-     case 'digest':
-         html = this.renderDailyDigest(data);
-         break;
-     case 'playbook':
-         html = this.renderSalesPlaybook(data);
-         break;
-     case 'news':
-         html = this.renderNewsAdvice(data);
-         break;
-     case 'investment':
-         html = this.renderMarketAnalysis(data);
-         break;
-     case 'prospect':
-         html = this.renderProspectAdvice(data);
-         break;
-     case 'deal':
-     case 'interview':
-     case 'meeting':
-         html = this.renderGeneralAdvice(data);
-         break;
-     default:
-         html = this.renderGeneralAdvice(data);
-         break;
- }
- 
- this.elements.resultsContainer.innerHTML = html;
- this.setupInteractiveElements();
-
- if (data.mermaid_chart) {
-     this.renderMermaidChart().then(() => {
-         this.setupMermaidDownloadButton();
-     });
- }
- 
-setTimeout(() => {
-    const resultsCard = this.elements.resultsContainer.querySelector('.results-card');
-    if (resultsCard) {
-        resultsCard.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start',
-            inline: 'nearest'
-        });
-    } else {
-        this.elements.resultsContainer.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
-        });
+    if (data.error) {
+      throw new Error(data.message || data.error);
     }
-}, 100);
+
+    // Convert the AI response to a coaching prompt
+    const prompt = convertToCoachingPrompt(data, problemText);
+    showResult(prompt, problemText);
+
+  } catch (error) {
+    console.error('Generation failed:', error);
+    alert('Failed to generate prompt. Please try again.');
+  } finally {
+    setButtonLoading(false);
+  }
 }
 
-// RENDERER 1: DAILY DIGEST - COMPLETE VERSION
-renderDailyDigest(data) {
-    const { 
-        digest_date, key_intelligence, deal_drivers, action_items, 
-        market_temperature, status 
-    } = data;
-    const sources = deal_drivers && deal_drivers.length > 0 ? [...new Set(deal_drivers.map(d => d.source))].join(' • ') : 'Internal Analysis';
-    const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-
-    return `
-        <div class="results-card digest-card" style="max-width: 100%; width: 100%; box-sizing: border-box;">
-            <div class="results-card-body" style="max-width: 100%; box-sizing: border-box;">
-                <header class="digest-header" style="max-width: 100%;">
-                    <img src="/images/arti_right.png" alt="Arti" />
-                    <div style="flex: 1; min-width: 0;">
-                        <h2 style="word-wrap: break-word;">Daily News</h2>
-                        <p class="digest-header-meta">${date}<br>MARKET TEMP: ${market_temperature || 'COOL'}</p>
-                    </div>
-                </header>
-                <section class="digest-section" style="max-width: 100%;">
-                    <h3 class="digest-section-title">Key Intelligence</h3>
-                    <p class="digest-item-summary text-base" style="max-width: 100%; word-wrap: break-word; overflow-wrap: break-word;">${key_intelligence}</p>
-                </section>
-                ${deal_drivers && deal_drivers.length > 0 ? `
-                <section class="digest-section" style="max-width: 100%;">
-                    <h3 class="digest-section-title">Today's Deal Drivers</h3>
-                    ${deal_drivers.map((driver, index) => `
-                        <div class="digest-item" style="max-width: 100%;">
-                            <div class="digest-item-number">${index + 1}</div>
-                            <div style="min-width: 0; flex: 1;">
-                                <h4 class="digest-item-headline" style="word-wrap: break-word;">
-                                    ${driver.link ? `<a href="${driver.link}" target="_blank" rel="noopener noreferrer">${driver.headline}</a>` : driver.headline}
-                                </h4>
-                                <p class="digest-item-summary" style="word-wrap: break-word; overflow-wrap: break-word;">${driver.summary}</p>
-                                <p class="digest-item-insight" style="word-wrap: break-word; overflow-wrap: break-word;">→ ${driver.action_insight}</p>
-                                <div class="digest-item-meta"><span class="text-xs text-gray-500 font-semibold">${driver.source ? driver.source.toUpperCase() : ''}</span></div>
-                            </div>
-                        </div>`).join('')}
-                </section>` : ''}
-                ${data.quick_intel && data.quick_intel.length > 0 ? `
-                <section class="digest-section" style="max-width: 100%;">
-                    <h3 class="digest-section-title">Quick Intel</h3>
-                    <div class="space-y-2">
-                    ${data.quick_intel.map(item => `
-                        <p class="digest-item-summary" style="word-wrap: break-word; overflow-wrap: break-word;">
-                            <strong class="font-semibold text-gray-900">${item.category}:</strong> ${item.insight}
-                        </p>
-                    `).join('')}
-                    </div>
-                </section>
-                ` : ''}
-                ${action_items && action_items.length > 0 ? `
-                <section class="digest-section" style="max-width: 100%;">
-                    <h3 class="digest-section-title">Your Moves Today</h3>
-                    ${action_items.map((action, index) => `
-                        <div class="digest-item" style="max-width: 100%;">
-                            <div class="digest-item-number">${index + 1}</div>
-                            <div style="min-width: 0; flex: 1;">
-                                <h4 class="digest-item-headline" style="word-wrap: break-word;">${action.action}</h4>
-                                <p class="digest-item-summary" style="word-wrap: break-word; overflow-wrap: break-word;">${action.why}</p>
-                            </div>
-                        </div>`).join('')}
-                </section>` : ''}
-                <footer class="digest-section" style="max-width: 100%;">
-                    <h3 class="digest-section-title">Sources</h3>
-                    <p class="text-sm text-gray-600" style="word-wrap: break-word;">${sources}</p>
-                </footer>
-            </div>
-        </div>`;
-}
-// RENDERER 2: SALES PLAYBOOK - COMPLETE VERSION
-renderSalesPlaybook(data) {
-    const { 
-        sales_play_title, sales_play_summary, key_services, key_partners, 
-        competitive_positioning, success_metrics, timeline_milestones, 
-        target_personas, insider_tips, risk_mitigation, next_actions, mermaid_chart 
-    } = data;
+// Convert AI response to coaching format
+function convertToCoachingPrompt(aiResponse, originalProblem) {
+  // Handle the new prompt coaching format
+  if (aiResponse.response_type === 'prompt_coaching') {
     
-    const renderSimpleList = (items) => items?.map(item => `<li class="digest-item-summary">${item}</li>`).join('') || '';
-
-    return `
-        <div class="results-card digest-card">
-            <div class="results-card-body">
-                <header class="digest-header">
-                    <img src="/images/arti_right.png" alt="Arti" />
-                    <div>
-                        <h2>${sales_play_title}</h2>
-                        <p class="digest-header-meta">Sales Playbook</p>
-                    </div>
-                </header>
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Executive Summary</h3>
-                    <p class="digest-item-summary text-base">${sales_play_summary}</p>
-                </section>
-                ${key_services && key_services.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Key Services & Products</h3>
-                    <ul class="list-disc list-inside space-y-2">${renderSimpleList(key_services)}</ul>
-                </section>` : ''}
-                ${key_partners && key_partners.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Strategic Partners</h3>
-                    <ul class="list-disc list-inside space-y-2">${renderSimpleList(key_partners)}</ul>
-                </section>` : ''}
-                ${competitive_positioning ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Competitive Positioning</h3>
-                    <p class="digest-item-summary">${competitive_positioning}</p>
-                </section>` : ''}
-                ${success_metrics && success_metrics.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Success Metrics & Timeline</h3>
-                    <ul class="list-disc list-inside space-y-2">${renderSimpleList(success_metrics)}</ul>
-                </section>` : ''}
-                ${mermaid_chart ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Visual Strategy</h3>
-                    <div class="mermaid-container">
-                        <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                    </div>
-                    <div class="flex justify-end gap-2 mt-2">
-                        <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
-                    </div>
-                </section>` : ''}
-                ${target_personas && target_personas.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Stakeholder Guide</h3>
-                    ${target_personas.map((persona, index) => `
-                        <div class="digest-item">
-                            <div class="digest-item-number">${index + 1}</div>
-                            <div>
-                                <h4 class="digest-item-headline">${persona.persona_title}</h4>
-                                <p class="digest-item-summary"><strong>Priorities:</strong> ${persona.business_priorities?.join(', ') || 'Not specified'}</p>
-                                <p class="digest-item-summary mt-2"><strong>Starters:</strong> ${persona.conversation_starters?.join(', ') || 'Not specified'}</p>
-                            </div>
-                        </div>`).join('')}
-                </section>` : ''}
-                 ${next_actions && next_actions.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Next Actions</h3>
-                    ${next_actions.map((action, index) => `
-                        <div class="digest-item">
-                            <div class="digest-item-number">${index + 1}</div>
-                            <div>
-                                <p class="digest-item-summary">${action}</p>
-                            </div>
-                        </div>`).join('')}
-                </section>` : ''}
-            </div>
-        </div>`;
-}
-
-// RENDERER 3: NEWS & GTM ANALYSIS - COMPLETE VERSION
-renderNewsAdvice(data) {
-    const { 
-        quick_take, key_people_and_titles, money_keywords, 
-        suggested_discovery_questions, suggested_opening_lines, 
-        immediate_actions, strategic_moves, mermaid_chart 
-    } = data;
-
-    return `
-        <div class="results-card digest-card">
-            <div class="results-card-body">
-                <header class="digest-header">
-                    <img src="/images/arti_right.png" alt="Arti" />
-                    <div>
-                        <h2>News & GTM Analysis</h2>
-                        <p class="digest-header-meta">Actionable Intelligence</p>
-                    </div>
-                </header>
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Quick Take</h3>
-                    <p class="digest-item-summary text-base">${quick_take}</p>
-                </section>
-                ${money_keywords && money_keywords.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Money Keywords</h3>
-                    <div>${money_keywords.map(k => `<span class="digest-tag">${k}</span>`).join('')}</div>
-                </section>` : ''}
-                ${key_people_and_titles && key_people_and_titles.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Key People</h3>
-                    <ul class="list-disc list-inside space-y-2">${key_people_and_titles.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
-                </section>` : ''}
-                ${suggested_discovery_questions && suggested_discovery_questions.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Discovery Questions</h3>
-                    ${suggested_discovery_questions.map((q, index) => `
-                        <div class="digest-item">
-                            <div class="digest-item-number">${index + 1}</div>
-                            <div><p class="digest-item-summary">${q}</p></div>
-                        </div>`).join('')}
-                </section>` : ''}
-                ${suggested_opening_lines && suggested_opening_lines.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Email Openers</h3>
-                    ${suggested_opening_lines.map((line, index) => `
-                        <div class="digest-item">
-                            <div class="digest-item-number">${index + 1}</div>
-                            <div>
-                                <div class="digest-code-block copy-target">${line}</div>
-                                <button class="copy-btn" title="Copy to clipboard">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                                </button>
-                            </div>
-                        </div>`).join('')}
-                </section>` : ''}
-                ${mermaid_chart ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">GTM Flow</h3>
-                    <div class="mermaid-container">
-                        <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                    </div>
-                    <div class="flex justify-end gap-2 mt-2">
-                        <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
-                    </div>
-                </section>` : ''}
-                ${immediate_actions && immediate_actions.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Immediate Actions (0-30 Days)</h3>
-                    ${immediate_actions.map((action, index) => `
-                        <div class="digest-item">
-                            <div class="digest-item-number">${index + 1}</div>
-                            <div>
-                                <h4 class="digest-item-headline">${action.action}</h4>
-                                <p class="digest-item-summary">${action.why}</p>
-                            </div>
-                        </div>`).join('')}
-                </section>` : ''}
-            </div>
-        </div>`;
-}
-
-// RENDERER 4: INVESTMENT / MARKET ANALYSIS - COMPLETE VERSION
-renderMarketAnalysis(data) {
-    const { 
-        investment_thesis, executive_summary, key_people_mentioned, leadership_quotes,
-        financial_health, market_position, bull_signals, bear_signals, 
-        key_financial_metrics, segment_analysis, guidance_and_outlook,
-        bull_case, bear_case, missing_information, analyst_price_targets, next_catalyst
-    } = data;
-
-    return `
-        <div class="results-card digest-card">
-            <div class="results-card-body">
-                <header class="digest-header">
-                    <img src="/images/arti_right.png" alt="Arti" />
-                    <div>
-                        <h2>Market Analysis</h2>
-                        <p class="digest-header-meta">Bull vs Bear</p>
-                    </div>
-                </header>
-                
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Summary</h3>
-                    <p class="digest-item-summary text-base font-semibold">${investment_thesis}</p>
-                </section>
-
-                ${executive_summary ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Executive Summary</h3>
-                    <p class="digest-item-summary">${executive_summary}</p>
-                </section>` : ''}
-                
-                ${key_financial_metrics && key_financial_metrics.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Key Financial Metrics</h3>
-                    <div class="grid grid-cols-1 gap-2">
-                        ${key_financial_metrics.map(metric => `<span class="digest-tag">${metric}</span>`).join('')}
-                    </div>
-                </section>` : ''}
-
-                ${leadership_quotes && leadership_quotes.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Leadership Quotes</h3>
-                    ${leadership_quotes.map((item, index) => `
-                        <div class="digest-item">
-                            <div class="digest-item-number">${index + 1}</div>
-                            <div>
-                                <h4 class="digest-item-headline">${item.person}</h4>
-                                <div class="digest-code-block mb-2">"${item.quote}"</div>
-                                <div class="text-xs font-semibold ${
-                                    item.bull_or_bear_signal === 'bull' ? 'text-green-600' : 
-                                    item.bull_or_bear_signal === 'bear' ? 'text-red-600' : 'text-gray-600'
-                                }">
-                                    ${item.bull_or_bear_signal?.toUpperCase()} SIGNAL
-                                </div>
-                            </div>
-                        </div>`).join('')}
-                </section>` : ''}
-
-                ${key_people_mentioned && key_people_mentioned.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Key People Mentioned</h3>
-                    <div class="space-y-1">
-                        ${key_people_mentioned.map(person => `<p class="digest-item-summary text-sm">${person}</p>`).join('')}
-                    </div>
-                </section>` : ''}
-
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Financial Health & Market Position</h3>
-                    <p class="digest-item-summary"><strong>Financial Health:</strong> ${financial_health || 'Not specified'}</p>
-                    <p class="digest-item-summary mt-2"><strong>Market Position:</strong> ${market_position || 'Not specified'}</p>
-                </section>
-
-                ${segment_analysis ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Segment Analysis</h3>
-                    <p class="digest-item-summary">${segment_analysis}</p>
-                </section>` : ''}
-
-                ${guidance_and_outlook ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Guidance & Outlook</h3>
-                    <p class="digest-item-summary">${guidance_and_outlook}</p>
-                </section>` : ''}
-
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Bull vs Bear Signals</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${bull_signals && bull_signals.length > 0 ? `
-                        <div>
-                            <h4 class="font-semibold text-green-600 mb-2">🐂 Bull Signals</h4>
-                            <ul class="list-disc list-inside space-y-1 text-sm">
-                                ${bull_signals.map(signal => `<li class="text-green-700">${signal}</li>`).join('')}
-                            </ul>
-                        </div>` : ''}
-                        
-                        ${bear_signals && bear_signals.length > 0 ? `
-                        <div>
-                            <h4 class="font-semibold text-red-600 mb-2">🐻 Bear Signals</h4>
-                            <ul class="list-disc list-inside space-y-1 text-sm">
-                                ${bear_signals.map(signal => `<li class="text-red-700">${signal}</li>`).join('')}
-                            </ul>
-                        </div>` : ''}
-                    </div>
-                </section>
-
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Investment Cases</h3>
-                    <div class="space-y-4">
-                        <div class="p-3 bg-green-50 border-l-4 border-green-400 rounded">
-                            <h4 class="font-semibold text-green-800 mb-2">Bull Case</h4>
-                            <p class="text-green-700 digest-item-summary">${bull_case || 'Not specified'}</p>
-                        </div>
-                        <div class="p-3 bg-red-50 border-l-4 border-red-400 rounded">
-                            <h4 class="font-semibold text-red-800 mb-2">Bear Case</h4>
-                            <p class="text-red-700 digest-item-summary">${bear_case || 'Not specified'}</p>
-                        </div>
-                    </div>
-                </section>
-
-                ${missing_information && missing_information.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Red Flags: Missing Information</h3>
-                    <ul class="list-disc list-inside space-y-1">
-                        ${missing_information.map(item => `<li class="digest-item-summary text-orange-600">${item}</li>`).join('')}
-                    </ul>
-                </section>` : ''}
-
-                ${analyst_price_targets && analyst_price_targets.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Analyst Activity</h3>
-                    <ul class="list-disc list-inside space-y-1">
-                        ${analyst_price_targets.map(target => `<li class="digest-item-summary">${target}</li>`).join('')}
-                    </ul>
-                </section>` : ''}
-
-                ${next_catalyst ? `
-                <footer class="digest-section">
-                    <h3 class="digest-section-title">Next Catalyst</h3>
-                    <p class="digest-item-summary font-semibold">${next_catalyst}</p>
-                </footer>` : ''}
-
-                <div class="p-3 mt-4 text-xs text-gray-500 bg-gray-50 rounded-lg border border-gray-200">
-                    <strong>Disclaimer:</strong> This content is for informational purposes only and does not constitute financial or investment advice. It is not a recommendation to buy or sell any security. You should always conduct your own research and consult a qualified financial professional before making any investment decisions.
-                </div>
-            </div>
-        </div>`;
-}
-
-// RENDERER 5: PROSPECTING INTELLIGENCE - COMPLETE VERSION
-renderProspectAdvice(data) {
-    const { 
-        summary, top_s_is, top_software_and_cloud, 
-        naics_codes, prospect_recommendations 
-    } = data;
+    // Build the improvements section
+    const improvements = aiResponse.prompt_improvements.map(imp => 
+      `**${imp.improvement}:** ${imp.why}`
+    ).join('\n\n');
     
-    const renderPartnerList = (items) => items?.map(item => `<div class="mb-2"><h4 class="font-semibold text-gray-800">${item.company || 'N/A'}</h4><p class="text-sm text-gray-600">${item.value || ''}</p></div>`).join('') || '';
+    // Build the executed result table
+    let resultTable = '';
+    if (aiResponse.executed_result && aiResponse.executed_result.outreach_table) {
+      const tableRows = aiResponse.executed_result.outreach_table.map(row => 
+        `| ${row.hook} | ${row.why_it_matters} | ${row.next_step} |`
+      ).join('\n');
+      
+      resultTable = `
+### **Executed Result - Outreach Plan**
+| Hook | Why it matters to [Target] | Next Step |
+| :--- | :--- | :--- |
+${tableRows}
 
-    return `
-        <div class="results-card digest-card">
-            <div class="results-card-body">
-                <header class="digest-header">
-                    <img src="/images/arti_right.png" alt="Arti" />
-                    <div>
-                        <h2>Prospecting Intelligence</h2>
-                        <p class="digest-header-meta">Market Analysis</p>
-                    </div>
-                </header>
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Summary</h3>
-                    <p class="digest-item-summary text-base">${summary}</p>
-                </section>
-                ${top_s_is && top_s_is.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Top Service Providers / SIs</h3>
-                    <div>${renderPartnerList(top_s_is)}</div>
-                </section>` : ''}
-                ${top_software_and_cloud && top_software_and_cloud.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Top Software & Cloud Partners</h3>
-                    <div>${renderPartnerList(top_software_and_cloud)}</div>
-                </section>` : ''}
-                ${naics_codes && naics_codes.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">NAICS Codes</h3>
-                    <div>${naics_codes.map(k => `<span class="digest-tag">${k.code || k}</span>`).join('')}</div>
-                </section>` : ''}
-                ${prospect_recommendations && prospect_recommendations.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Recommendations</h3>
-                    <ul class="list-disc list-inside space-y-2">${prospect_recommendations.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
-                </section>` : ''}
-            </div>
-        </div>`;
+**Follow-up Script:**
+${aiResponse.executed_result.follow_up_script}
+
+${aiResponse.executed_result.intelligence_brief ? `**Intelligence Brief:**
+${aiResponse.executed_result.intelligence_brief.map(item => `• ${item}`).join('\n')}` : ''}`;
+    }
+
+    return `## 🎯 Prompt Coaching Session
+
+**Your Original Request:** "${originalProblem}"
+
+**Analysis:** ${aiResponse.original_analysis}
+
+---
+
+## ✨ Your Improved Prompt
+\`\`\`
+${aiResponse.improved_prompt}
+\`\`\`
+
+---
+
+## 🧠 What Made This Better
+${improvements}
+
+---
+
+## 💡 Coaching Tips for Next Time
+${aiResponse.coaching_tips.map(tip => `• ${tip}`).join('\n')}
+
+---
+
+## 📊 See the Difference - Executed Result
+${aiResponse.executed_result.strategic_context}
+${resultTable}
+
+---
+
+**🚀 Next Steps:**
+1. **Copy the improved prompt above** and try it in Claude, ChatGPT, or your preferred AI tool
+2. **Adapt the prompt structure** for your future sales challenges
+3. **Practice the coaching tips** to become a better prompt engineer
+
+*This is what happens when you give AI proper context, structure, and specific instructions!*`;
+  }
+  
+  // Fallback for other formats (shouldn't happen with new system)
+  return `Your coaching prompt for: "${originalProblem}"
+
+${JSON.stringify(aiResponse, null, 2)}`;
 }
 
-// RENDERER 6: GENERAL ADVICE - COMPLETE VERSION
-renderGeneralAdvice(data) {
-    const { 
-        response_type, quick_take, key_moves, talking_points, 
-        email_template, next_steps, mermaid_chart 
-    } = data;
-
-    const titles = {
-        deal: 'Deal Game Plan',
-        interview: 'Interview Prep Plan',
-        meeting: 'Meeting Strategy',
-        default: 'Your Game Plan'
-    };
-    const title = titles[response_type] || titles.default;
-
-    return `
-        <div class="results-card digest-card">
-            <div class="results-card-body">
-                <header class="digest-header">
-                    <img src="/images/arti_right.png" alt="Arti" />
-                    <div>
-                        <h2>${title}</h2>
-                        <p class="digest-header-meta">Actionable Advice</p>
-                    </div>
-                </header>
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Quick Take</h3>
-                    <p class="digest-item-summary text-base">${quick_take}</p>
-                </section>
-                ${key_moves && key_moves.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Your Next Moves</h3>
-                    ${key_moves.map((move, index) => `
-                        <div class="digest-item">
-                            <div class="digest-item-number">${index + 1}</div>
-                            <div>
-                                <h4 class="digest-item-headline">${move.action}</h4>
-                                <p class="digest-item-summary">${move.why}</p>
-                            </div>
-                        </div>`).join('')}
-                </section>` : ''}
-                ${mermaid_chart ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Visual Strategy</h3>
-                    <div class="mermaid-container">
-                        <div id="mermaid-diagram" class="mermaid">${mermaid_chart}</div>
-                    </div>
-                    <div class="flex justify-end gap-2 mt-2">
-                        <button class="btn btn-secondary text-xs py-1 px-2" id="download-png-btn">Download PNG</button>
-                    </div>
-                </section>` : ''}
-                ${talking_points && talking_points.length > 0 ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Key Talking Points</h3>
-                    <ul class="list-disc list-inside space-y-2">${talking_points.map(p => `<li class="digest-item-summary">${p}</li>`).join('')}</ul>
-                </section>` : ''}
-                ${email_template ? `
-                <section class="digest-section">
-                    <h3 class="digest-section-title">Email Template</h3>
-                    <div class="digest-code-block copy-target">${email_template}</div>
-                    <button class="copy-btn" title="Copy to clipboard">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                    </button>
-                </section>` : ''}
-                ${next_steps ? `
-                <footer class="digest-section">
-                    <h3 class="digest-section-title">Closing Thought</h3>
-                    <p class="digest-item-summary">${next_steps}</p>
-                </footer>` : ''}
-            </div>
-        </div>`;
-}
-setupInteractiveElements() {
-   this.setupCopyButtons();
+// Extract target from problem text
+function extractTarget(problemText) {
+  const targets = ['CTO', 'CISO', 'PMO', 'VA', 'DOD', 'Navy', 'Army', 'Air Force', 'DHS', 'GSA', 'CEO', 'CFO'];
+  const foundTarget = targets.find(target => 
+    problemText.toLowerCase().includes(target.toLowerCase())
+  );
+  return foundTarget;
 }
 
-setupCopyButtons() {
-   const copyButtons = this.elements.resultsContainer.querySelectorAll('.copy-btn');
-   copyButtons.forEach(btn => {
-       btn.addEventListener('click', (e) => {
-           const target = e.currentTarget.parentElement.querySelector('.copy-target');
-           if (target) {
-               navigator.clipboard.writeText(target.innerText).then(() => {
-                   const originalContent = e.currentTarget.innerHTML;
-                   e.currentTarget.classList.add('copied');
-                   e.currentTarget.innerHTML = `
-                       <svg class="checkmark" viewBox="0 0 24 24">
-                           <path d="M9 12l2 2 4-4"></path>
-                       </svg>
-                       <span>Copied!</span>
-                   `;
-                   
-                   const parent = e.currentTarget.parentElement;
-                   parent.classList.add('copy-flash');
-                   
-                   setTimeout(() => {
-                       e.currentTarget.classList.remove('copied');
-                       e.currentTarget.innerHTML = originalContent;
-                       parent.classList.remove('copy-flash');
-                   }, 2000);
-               }).catch(err => {
-                   console.error('Failed to copy text: ', err);
-               });
-           }
-       });
-   });
+// Show results
+function showResult(prompt, problemText) {
+  const resultsSection = document.getElementById('resultsSection');
+  
+  resultsSection.innerHTML = `
+    <div class="result-header">
+      <h3 class="result-title">Your Prompt Coaching Session</h3>
+      <div class="result-actions">
+        <button class="btn btn-secondary" onclick="copyPrompt()">Copy Prompt</button>
+        <button class="btn btn-secondary" onclick="downloadPrompt()">Download</button>
+      </div>
+    </div>
+    <div class="prompt-display" id="promptDisplay">${prompt}</div>
+    <div class="result-note">
+      <strong>How this works:</strong> We analyzed your request, created a much better prompt, explained why it's superior, then executed it to show you the quality difference. Copy the improved prompt above to use with any AI tool.
+    </div>
+  `;
+  
+  // Store for copying/downloading
+  window.currentPrompt = prompt;
+  window.currentProblem = problemText;
+  
+  resultsSection.classList.add('show');
+  resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-setupMermaidDownloadButton() {
-   const downloadPngBtn = document.getElementById('download-png-btn');
-   if (downloadPngBtn) {
-       downloadPngBtn.addEventListener('click', () => this.downloadMermaidAsPNG());
-   }
+// Set button loading state
+function setButtonLoading(loading) {
+  isGenerating = loading;
+  const btn = document.getElementById('generateBtn');
+  const btnText = document.getElementById('btnText');
+  const btnLoader = document.getElementById('btnLoader');
+  
+  btn.disabled = loading;
+  
+  if (loading) {
+    btnText.classList.add('hidden');
+    btnLoader.classList.remove('hidden');
+  } else {
+    btnText.classList.remove('hidden');
+    btnLoader.classList.add('hidden');
+  }
 }
 
-downloadMermaidAsPNG() {
-   const mermaidContainer = document.querySelector('.mermaid-container');
-   if (!mermaidContainer || typeof html2canvas === 'undefined') {
-       console.error("Mermaid container or html2canvas library not found.");
-       return;
-   }
-   html2canvas(mermaidContainer, { backgroundColor: '#ffffff' }).then(canvas => {
-       const a = document.createElement("a");
-       a.href = canvas.toDataURL("image/png");
-       a.download = "askarti-diagram.png";
-       document.body.appendChild(a);
-       a.click();
-       document.body.removeChild(a);
-   });
+// Copy prompt to clipboard
+function copyPrompt() {
+  const promptText = window.currentPrompt;
+  
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(promptText).then(() => {
+      showCopySuccess();
+    }).catch(() => {
+      fallbackCopy(promptText);
+    });
+  } else {
+    fallbackCopy(promptText);
+  }
 }
 
-async renderMermaidChart() {
-   try {
-       await mermaid.run({
-           nodes: document.querySelectorAll('.mermaid'),
-       });
-   } catch (error) {
-       console.error('Mermaid rendering error:', error);
-       const container = document.querySelector('.mermaid-container');
-       if (container) container.innerHTML = '<p class="text-red-500 text-sm">Could not render visual plan.</p>';
-   }
+// Fallback copy method
+function fallbackCopy(text) {
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';
+  textArea.style.left = '-999999px';
+  textArea.style.top = '-999999px';
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    const successful = document.execCommand('copy');
+    if (successful) {
+      showCopySuccess();
+    } else {
+      alert('Could not copy. Please select and copy manually.');
+    }
+  } catch (err) {
+    alert('Could not copy. Please select and copy manually.');
+  } finally {
+    document.body.removeChild(textArea);
+  }
 }
 
-showModal() { 
-   this.elements.aboutModal.classList.remove('hidden'); 
+// Show copy success feedback
+function showCopySuccess() {
+  const button = document.querySelector('[onclick="copyPrompt()"]');
+  if (button) {
+    const originalText = button.textContent;
+    button.textContent = 'Copied!';
+    button.style.background = 'var(--success)';
+    button.style.color = 'white';
+    button.style.borderColor = 'var(--success)';
+    
+    setTimeout(() => {
+      button.textContent = originalText;
+      button.style.background = '';
+      button.style.color = '';
+      button.style.borderColor = '';
+    }, 2000);
+  }
 }
 
-hideModal() { 
-   this.elements.aboutModal.classList.add('hidden'); 
+// Download prompt as file
+function downloadPrompt() {
+  const content = `# Sales Coaching Prompt
+
+**Problem:** ${window.currentProblem}
+
+**Prompt:**
+${window.currentPrompt}
+
+---
+*Generated by AskArti.com AI Sales Coach*
+*Book a strategy call: https://calendly.com/markflournoy/intro`;
+
+  const blob = new Blob([content], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'sales-coaching-prompt.md';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
+
+// Setup event listeners
+function setupEventListeners() {
+  const generateBtn = document.getElementById('generateBtn');
+  const problemInput = document.getElementById('problemInput');
+  
+  generateBtn.addEventListener('click', generatePrompt);
+  
+  problemInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      generatePrompt();
+    }
+  });
+  
+  // Auto-resize textarea
+  problemInput.addEventListener('input', () => {
+    problemInput.style.height = 'auto';
+    problemInput.style.height = Math.min(problemInput.scrollHeight, 120) + 'px';
+  });
 }
-// Initialize the app when DOM is ready
-let app;
+
+// Make functions global for onclick handlers
+Object.assign(window, { 
+  generatePrompt,
+  copyPrompt,
+  downloadPrompt
+});
+
+// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  app = new AskArti();
-  window.askArti = app;
+  setupEventListeners();
 });
 </script>
 </body>
