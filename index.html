@@ -162,33 +162,44 @@
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     overflow: hidden;
+	margin-bottom: 20px;
   }
   
   .chat-input-area {
     padding: 20px 24px;
     background: var(--panel);
   }
-  
-  .chat-input-container {
-    display: flex;
-    gap: 12px;
-    align-items: flex-end;
-  }
-  
-  .chat-input {
-    flex: 1;
-    padding: 16px 20px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--bg);
-    font-size: 15px;
-    resize: none;
-    min-height: 48px;
-    max-height: 120px;
-    font-family: inherit;
-    outline: none;
-    transition: border-color 0.2s ease;
-  }
+
+.chat-input {
+  width: 100%;
+  padding: 16px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  font-size: 15px;
+  resize: none;
+  min-height: 48px;
+  max-height: 120px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.chat-send-btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
   
   .chat-input:focus {
     border-color: var(--accent);
@@ -196,19 +207,6 @@
   
   .chat-input::placeholder {
     color: var(--text-muted);
-  }
-  
-  .chat-send-btn {
-    padding: 16px 24px;
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: var(--radius-sm);
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    white-space: nowrap;
   }
   
   .chat-send-btn:hover {
@@ -285,6 +283,23 @@
     font-weight: 600;
     font-size: 18px;
     color: var(--text);
+  }
+  
+  .explanation-section {
+    margin-bottom: 24px;
+  }
+  
+  .explanation-title {
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  
+  .explanation-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
   }
   
   .result-actions {
@@ -461,10 +476,6 @@
       margin-top: 16px;
       align-self: stretch;
     }
-    
-    .result-actions .btn {
-      flex: 1;
-    }
   }
 </style>
 </head>
@@ -495,18 +506,13 @@
         <div class="chat-container">
           <div class="chat-input-area">
             <div class="chat-input-container">
-              <textarea class="chat-input" id="problemInput" placeholder="e.g., need to meet with VA CTO about cloud migration" rows="3"></textarea>
-            </div>
-            <button class="chat-send-btn" id="generateBtn">
-              <span id="btnText">Improve My Prompt</span>
-              <div id="btnLoader" class="loader hidden"></div>
-            </button>
+  <textarea class="chat-input" id="problemInput" placeholder="e.g., need to meet with VA CTO about cloud migration" rows="3"></textarea>
+</div><br>
+<button class="chat-send-btn" id="generateBtn">
+  <span id="btnText">Improve My Prompt</span>
+  <div id="btnLoader" class="loader hidden"></div>
+</button>
           </div>
-        </div>
-        
-        <!-- Explanation Container -->
-        <div class="explanation-container" id="explanationContainer" style="display: none;">
-          <!-- Explanation will be inserted here -->
         </div>
         
         <!-- Results -->
@@ -690,27 +696,21 @@ function extractTarget(problemText) {
 
 // Show results
 function showResult(prompt, problemText) {
-  const explanationContainer = document.getElementById('explanationContainer');
   const resultsSection = document.getElementById('resultsSection');
   
-  // Show explanation in separate container
+  // Get the explanation text if it was set by the coaching response
   const explanationText = window.promptExplanation || 'Here\'s your improved prompt with better context, structure, and specific instructions.';
   
-  explanationContainer.innerHTML = `
-    <h3 class="explanation-title">What We Improved</h3>
-    <p class="explanation-text">${explanationText}</p>
-  `;
-  explanationContainer.style.display = 'block';
-  explanationContainer.classList.add('show');
-  
-  // Show clean results
   resultsSection.innerHTML = `
     <div class="result-header">
       <h3 class="result-title">Your Improved Prompt</h3>
       <div class="result-actions">
         <button class="btn btn-secondary" onclick="copyPrompt()">Copy Prompt</button>
-        <button class="btn btn-secondary" onclick="downloadPrompt()">Download</button>
       </div>
+    </div>
+    <div class="explanation-section">
+      <h4 class="explanation-title">What We Improved</h4>
+      <p class="explanation-text">${explanationText}</p>
     </div>
     <div class="prompt-display" id="promptDisplay">${prompt}</div>
     <div class="result-note">
@@ -723,11 +723,7 @@ function showResult(prompt, problemText) {
   window.currentProblem = problemText;
   
   resultsSection.classList.add('show');
-  
-  // Scroll to explanation first
-  setTimeout(() => {
-    explanationContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 100);
+  resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // Set button loading state
@@ -807,29 +803,8 @@ function showCopySuccess() {
   }
 }
 
-// Download prompt as file
-function downloadPrompt() {
-  const content = `# Sales Coaching Prompt
-
-**Problem:** ${window.currentProblem}
-
-**Prompt:**
-${window.currentPrompt}
-
----
-*Generated by AskArti.com AI Sales Coach*
-*Book a strategy call: https://calendly.com/yourname/intro*`;
-
-  const blob = new Blob([content], { type: 'text/markdown' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'sales-coaching-prompt.md';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
+// Download prompt as file - removed since not needed
+// function downloadPrompt() { ... }
 
 // Setup event listeners
 function setupEventListeners() {
@@ -855,8 +830,7 @@ function setupEventListeners() {
 // Make functions global for onclick handlers
 Object.assign(window, { 
   generatePrompt,
-  copyPrompt,
-  downloadPrompt
+  copyPrompt
 });
 
 // Initialize when DOM is ready
