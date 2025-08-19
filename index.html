@@ -222,6 +222,35 @@
     transform: none;
   }
   
+  /* Explanation Container */
+  .explanation-container {
+    max-width: 800px;
+    margin: 40px auto 0;
+    padding: 24px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    animation: slideUp 0.4s ease-out;
+  }
+  
+  .explanation-container.show {
+    display: block;
+  }
+  
+  .explanation-title {
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  
+  .explanation-text {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  
   /* Results Section */
   .results-section {
     margin-top: 40px;
@@ -246,29 +275,16 @@
   .result-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 24px;
     padding-bottom: 20px;
     border-bottom: 1px solid var(--border);
-  }
-  
-  .result-header-content {
-    flex: 1;
-    margin-right: 20px;
   }
   
   .result-title {
     font-weight: 600;
     font-size: 18px;
     color: var(--text);
-    margin-bottom: 8px;
-  }
-  
-  .result-explanation {
-    font-size: 14px;
-    color: var(--text-secondary);
-    line-height: 1.5;
-    margin: 0;
   }
   
   .result-actions {
@@ -429,12 +445,11 @@
     }
     
     .chat-input-container {
-      flex-direction: column;
-      align-items: stretch;
+      margin-bottom: 16px;
     }
     
     .chat-send-btn {
-      margin-top: 12px;
+      width: 100%;
     }
     
     .result-header {
@@ -442,12 +457,8 @@
       align-items: stretch;
     }
     
-    .result-header-content {
-      margin-right: 0;
-      margin-bottom: 16px;
-    }
-    
     .result-actions {
+      margin-top: 16px;
       align-self: stretch;
     }
     
@@ -485,12 +496,17 @@
           <div class="chat-input-area">
             <div class="chat-input-container">
               <textarea class="chat-input" id="problemInput" placeholder="e.g., need to meet with VA CTO about cloud migration" rows="3"></textarea>
-              <button class="chat-send-btn" id="generateBtn">
-                <span id="btnText">Improve My Prompt</span>
-                <div id="btnLoader" class="loader hidden"></div>
-              </button>
             </div>
+            <button class="chat-send-btn" id="generateBtn">
+              <span id="btnText">Improve My Prompt</span>
+              <div id="btnLoader" class="loader hidden"></div>
+            </button>
           </div>
+        </div>
+        
+        <!-- Explanation Container -->
+        <div class="explanation-container" id="explanationContainer" style="display: none;">
+          <!-- Explanation will be inserted here -->
         </div>
         
         <!-- Results -->
@@ -646,8 +662,9 @@ function convertToCoachingPrompt(aiResponse, originalProblem) {
   // Handle the new simplified prompt coaching format
   if (aiResponse.response_type === 'prompt_coaching') {
     
-    // Create the explanation text that goes under the title
-    const explanationText = `Your original request "${originalProblem}" was too vague. Here's what we improved: ${aiResponse.key_improvements.join(', ')}. ${aiResponse.why_better} ${aiResponse.coaching_tip}`;
+    // Create a concise explanation (3-4 sentences max)
+    const improvements = aiResponse.key_improvements.slice(0, 2).join(' and '); // Take only first 2 improvements
+    const explanationText = `Your original request "${originalProblem}" was too vague. We improved it by ${improvements.toLowerCase()}. ${aiResponse.why_better} This will get you much more specific and actionable results.`;
     
     // Store the explanation for the UI to use
     window.promptExplanation = explanationText;
@@ -673,17 +690,23 @@ function extractTarget(problemText) {
 
 // Show results
 function showResult(prompt, problemText) {
+  const explanationContainer = document.getElementById('explanationContainer');
   const resultsSection = document.getElementById('resultsSection');
   
-  // Get the explanation text if it was set by the coaching response
+  // Show explanation in separate container
   const explanationText = window.promptExplanation || 'Here\'s your improved prompt with better context, structure, and specific instructions.';
   
+  explanationContainer.innerHTML = `
+    <h3 class="explanation-title">What We Improved</h3>
+    <p class="explanation-text">${explanationText}</p>
+  `;
+  explanationContainer.style.display = 'block';
+  explanationContainer.classList.add('show');
+  
+  // Show clean results
   resultsSection.innerHTML = `
     <div class="result-header">
-      <div class="result-header-content">
-        <h3 class="result-title">Your Improved Prompt</h3>
-        <p class="result-explanation">${explanationText}</p>
-      </div>
+      <h3 class="result-title">Your Improved Prompt</h3>
       <div class="result-actions">
         <button class="btn btn-secondary" onclick="copyPrompt()">Copy Prompt</button>
         <button class="btn btn-secondary" onclick="downloadPrompt()">Download</button>
@@ -700,7 +723,11 @@ function showResult(prompt, problemText) {
   window.currentProblem = problemText;
   
   resultsSection.classList.add('show');
-  resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  
+  // Scroll to explanation first
+  setTimeout(() => {
+    explanationContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
 }
 
 // Set button loading state
