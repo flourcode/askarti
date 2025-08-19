@@ -246,16 +246,29 @@
   .result-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 24px;
     padding-bottom: 20px;
     border-bottom: 1px solid var(--border);
+  }
+  
+  .result-header-content {
+    flex: 1;
+    margin-right: 20px;
   }
   
   .result-title {
     font-weight: 600;
     font-size: 18px;
     color: var(--text);
+    margin-bottom: 8px;
+  }
+  
+  .result-explanation {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
   }
   
   .result-actions {
@@ -399,18 +412,47 @@
   }
   
   @media (max-width: 768px) {
-    .prompt-comparison {
-      grid-template-columns: 1fr;
-      gap: 16px;
+    :root {
+      --section-padding: 64px;
     }
     
-    .coaching-session h3 {
-      font-size: 16px;
+    .container {
+      padding: 0 20px;
     }
     
-    .prompt-text {
-      font-size: 12px;
-      max-height: 200px;
+    .nav-items {
+      display: none;
+    }
+    
+    .demo-header h2 {
+      font-size: 36px;
+    }
+    
+    .chat-input-container {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .chat-send-btn {
+      margin-top: 12px;
+    }
+    
+    .result-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .result-header-content {
+      margin-right: 0;
+      margin-bottom: 16px;
+    }
+    
+    .result-actions {
+      align-self: stretch;
+    }
+    
+    .result-actions .btn {
+      flex: 1;
     }
   }
 </style>
@@ -604,37 +646,14 @@ function convertToCoachingPrompt(aiResponse, originalProblem) {
   // Handle the new simplified prompt coaching format
   if (aiResponse.response_type === 'prompt_coaching') {
     
-    return `<div class="coaching-session">
-      <div class="problem-analysis">
-        <h3>📝 What Was Wrong With Your Original Request</h3>
-        <p>${aiResponse.original_problem}</p>
-      </div>
-      
-      <div class="improvements-section">
-        <h3>🔧 Key Improvements Made</h3>
-        <ul>
-          ${aiResponse.key_improvements.map(improvement => `<li>${improvement}</li>`).join('')}
-        </ul>
-        <p><strong>Why this works better:</strong> ${aiResponse.why_better}</p>
-      </div>
-      
-      <div class="coaching-tip">
-        <h3>💡 Pro Tip for Next Time</h3>
-        <p>${aiResponse.coaching_tip}</p>
-      </div>
-    </div>
+    // Create the explanation text that goes under the title
+    const explanationText = `Your original request "${originalProblem}" was too vague. Here's what we improved: ${aiResponse.key_improvements.join(', ')}. ${aiResponse.why_better} ${aiResponse.coaching_tip}`;
     
-    <div class="prompt-comparison">
-      <div class="original-prompt-card">
-        <h3>❌ Your Original Request</h3>
-        <div class="prompt-text original">"${originalProblem}"</div>
-      </div>
-      
-      <div class="improved-prompt-card">
-        <h3>✅ Your Improved Prompt</h3>
-        <div class="prompt-text improved">${aiResponse.improved_prompt}</div>
-      </div>
-    </div>`;
+    // Store the explanation for the UI to use
+    window.promptExplanation = explanationText;
+    
+    // Return only the clean improved prompt
+    return aiResponse.improved_prompt;
   }
   
   // Fallback for other formats
@@ -656,9 +675,15 @@ function extractTarget(problemText) {
 function showResult(prompt, problemText) {
   const resultsSection = document.getElementById('resultsSection');
   
+  // Get the explanation text if it was set by the coaching response
+  const explanationText = window.promptExplanation || 'Here\'s your improved prompt with better context, structure, and specific instructions.';
+  
   resultsSection.innerHTML = `
     <div class="result-header">
-      <h3 class="result-title">Your Prompt Coaching Session</h3>
+      <div class="result-header-content">
+        <h3 class="result-title">Your Improved Prompt</h3>
+        <p class="result-explanation">${explanationText}</p>
+      </div>
       <div class="result-actions">
         <button class="btn btn-secondary" onclick="copyPrompt()">Copy Prompt</button>
         <button class="btn btn-secondary" onclick="downloadPrompt()">Download</button>
@@ -666,7 +691,7 @@ function showResult(prompt, problemText) {
     </div>
     <div class="prompt-display" id="promptDisplay">${prompt}</div>
     <div class="result-note">
-      <strong>How this works:</strong> We analyzed your request, explained what was wrong, then created a much better prompt. The improved prompt is clean and ready to copy-paste into Claude, ChatGPT, or any AI tool.
+      <strong>How to use:</strong> Copy this improved prompt and paste it into Claude, ChatGPT, or your favorite AI tool to get much better results.
     </div>
   `;
   
