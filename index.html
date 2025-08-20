@@ -907,7 +907,6 @@
       <div class="container">
         <div class="section-header">
           <h2 class="section-title">See the Difference</h2>
-          <p class="section-subtitle">Real examples of how we transform vague prompts into powerful AI instructions</p>
         </div>
         
         <div class="examples-carousel">
@@ -961,22 +960,19 @@
       <div class="container">
         <div class="section-header">
           <h2 class="section-title">Perfect Prompt Maker</h2>
-          <p class="section-subtitle">
-            Enter what you want help with and we'll create the perfect prompt for amazing results.
-          </p>
         </div>
         
         <div class="prompt-tool-container">
           <div class="tool-input-area">
             <div class="tool-input-container">
-              <textarea class="tool-input" id="problemInput" placeholder="e.g., help me write better emails, plan a family vacation, improve my marketing strategy..." rows="4"></textarea>
+              <textarea class="tool-input" id="problemInput" placeholder="e.g., create an account plan for selling cyber to DHS, write my GTM strategy, give me a side hustle so I can quit my job..." rows="4"></textarea>
             </div>
             <div class="button-container">
               <button class="tool-submit-btn" id="generateBtn">
                 <span id="btnText">Create My Perfect Prompt</span>
                 <div id="btnLoader" class="loader hidden"></div>
               </button>
-              <div id="loadingMessage" class="loading-message hidden">Crafting your optimal prompt...</div>
+              <div id="loadingMessage" class="loading-message hidden">Baking your perfect prompt...</div>
             </div>
           </div>
         </div>
@@ -1118,19 +1114,18 @@
     </section>
 
     <!-- Newsletter Section -->
-    <section class="newsletter-section">
-      <div class="container">
-        <h2 class="section-title" style="color: white; margin-bottom: 16px;">Stay Sharp</h2>
-        <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 0;">
-          Weekly AI prompting tips and strategies
-        </p>
-        
-        <form class="newsletter-form">
-          <input type="email" class="newsletter-input" placeholder="Enter your email" required>
-          <button type="submit" class="newsletter-btn">Subscribe</button>
-        </form>
-      </div>
-    </section>
+    <!-- Footer Section (replace the newsletter section) -->
+<section class="newsletter-section">
+  <div class="container">
+    <h2 class="section-title" style="color: white; margin-bottom: 16px;">Get In Touch</h2>
+    <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 16px;">
+      Questions about AI prompting or federal sales coaching?
+    </p>
+    <a href="mailto:mark@askarti.com" style="color: white; font-size: 18px; font-weight: 600; text-decoration: underline;">
+      mark@askarti.com
+    </a>
+  </div>
+</section>
   </main>
 
   <footer>
@@ -1201,6 +1196,10 @@ async function generatePrompt() {
 
   if (isGenerating) return;
   
+  // Hide existing results first
+  const resultsSection = document.getElementById('resultsSection');
+  resultsSection.classList.remove('show');
+  
   setButtonLoading(true);
   
   try {
@@ -1210,7 +1209,7 @@ async function generatePrompt() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        situation: problemText // Using backward compatibility
+        situation: problemText
       })
     });
 
@@ -1237,7 +1236,6 @@ async function generatePrompt() {
     setButtonLoading(false);
   }
 }
-
 // Convert AI response to improved prompt format
 function convertToImprovedPrompt(aiResponse, originalPrompt) {
   // Handle different response formats from your API
@@ -1352,7 +1350,7 @@ function showResult(prompt, problemText) {
   
   resultsSection.innerHTML = `
     <div class="result-header">
-      <h3 class="result-title">🎉 Here's Your Optimized Prompt</h3>
+      <h3 class="result-title">😊 Here's Your Prompt</h3>
       <div class="result-actions">
         <button class="btn btn-success" onclick="copyPrompt()">Copy to Clipboard</button>
       </div>
@@ -1363,7 +1361,7 @@ function showResult(prompt, problemText) {
       <strong>How to use:</strong> Copy this optimized prompt and paste it into Claude, ChatGPT, or your favorite AI tool for dramatically better results.
     </div>
     <div class="next-steps">
-      <h4>🚀 What's Next?</h4>
+      <h4>Need Help?</h4>
       <p>Want to master AI prompting for your specific field? Book a free 15-minute call to learn advanced techniques.</p>
       <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-success">Book Free Strategy Call</a>
     </div>
@@ -1511,23 +1509,6 @@ function setupEventListeners() {
   });
 }
 
-// Newsletter form handler
-function setupNewsletter() {
-  const form = document.querySelector('.newsletter-form');
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const email = form.querySelector('.newsletter-input').value;
-    
-    // Simple validation
-    if (email && email.includes('@')) {
-      alert('Thanks for subscribing! You\'ll receive weekly AI prompting tips.');
-      form.querySelector('.newsletter-input').value = '';
-    } else {
-      alert('Please enter a valid email address.');
-    }
-  });
-}
-
 // Make functions global for onclick handlers
 Object.assign(window, { 
   generatePrompt,
@@ -1540,7 +1521,6 @@ Object.assign(window, {
 document.addEventListener('DOMContentLoaded', () => {
   setupEventListeners();
   setupSmoothScrolling();
-  setupNewsletter();
   startExampleRotation();
 });
 </script>
