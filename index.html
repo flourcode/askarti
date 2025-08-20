@@ -33,7 +33,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background: var(--bg);
     color: var(--text);
     line-height: 1.6;
@@ -93,12 +93,19 @@
   }
   
   .nav-link.free-highlight {
-  background: var(--success); /* Change from gradient to forest green */
-  color: white;
-  padding: 8px 16px;
-  border-radius: var(--radius-sm);
-  font-weight: 600;
-}
+    background: var(--success);
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .nav-link.free-highlight:hover {
+    background: #3d4f3d;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
   
   @keyframes subtle-pulse {
     0%, 100% { transform: scale(1); }
@@ -120,6 +127,11 @@
     border: none;
     font-family: inherit;
     letter-spacing: -0.01em;
+  }
+
+  .btn-lg {
+    padding: 14px 28px;
+    font-size: 16px;
   }
   
   .btn-primary {
@@ -611,6 +623,13 @@
     justify-content: center;
   }
   
+  /* CTA Before FAQ Section */
+  .cta-before-faq {
+    padding: var(--section-padding) 0;
+    background: var(--bg-secondary);
+    text-align: center;
+  }
+
   /* FAQ Section */
   .faq-section {
     padding: var(--section-padding) 0;
@@ -745,6 +764,13 @@
     display: none;
   }
 
+  .text-success {
+    color: var(--success) !important;
+  }
+
+  .text-center {
+    text-align: center;
+  }
   
   .loading-message {
     font-size: 14px;
@@ -840,6 +866,11 @@
       width: 100%;
       max-width: 280px;
     }
+
+    .btn-lg {
+      width: 100%;
+      max-width: 300px;
+    }
   }
   html, body {
   overflow-x: hidden;
@@ -859,7 +890,7 @@
           <img src="asklite.png" alt="AskArti Logo">
         </a>
         <div class="nav-items">
-          <a href="#prompt-tool" class="nav-link free-highlight">Free Prompt Maker</a>
+          <a href="#prompt-tool" class="nav-link free-highlight">DIY Prompt Maker</a>
           <a href="#services" class="nav-link">Services</a>
           <a href="#faq" class="nav-link">FAQ</a>
           <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-success">Book Call</a>
@@ -869,19 +900,18 @@
   </header>
 
   <main>
-    <!-- Hero Section -->
     <section class="hero-section">
       <div class="container">
         <div class="hero-content">
           <div class="hero-text">
-            <h1 class="hero-title">Get Better Results<br>From Your AI Tools</h1>
-            <p class="hero-subtitle">
-              Transform vague prompts into powerful AI instructions. Get specific, actionable results from ChatGPT, Claude, and any AI tool.
-            </p>
+            <h1 class="hero-title">Make AI Do What You Want.<br><span class="text-success"></span></h1>
+<p class="hero-subtitle">Start with my free prompt maker and get better prompts instantly. When you want to level up, book a free call and I'll share my Jedi tricks with you or your team.</p>
+
+
             
             <div class="hero-cta">
-              <a href="#prompt-tool" class="btn btn-success">Try Free Prompt Maker</a>
-              <a href="#services" class="btn btn-secondary">View Services</a>
+              <a href="#prompt-tool" class="btn btn-success btn-lg">DIY Prompt Maker</a>
+              <a href="#services" class="btn btn-secondary">Need More Help?</a>
             </div>
             
             <div class="social-proof">
@@ -902,96 +932,129 @@
       </div>
     </section>
 
-    <!-- Examples Section -->
-    <section class="examples-section">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">See the Difference</h2>
-        </div>
-        
-        <div class="examples-carousel">
-          <div class="example-card active">
-            <div class="example-before">
-              <strong>Before:</strong> "Help me win this government contract"
-            </div>
-            <div class="example-after">
-              <strong>After:</strong> "You are a federal contracting expert. I'm responding to a government RFP for cybersecurity services. Help me create a winning strategy by providing: 1) Key elements that government evaluators prioritize in cybersecurity proposals, 2) How to structure my technical approach to stand out from competitors, 3) Common compliance requirements I should address upfront, 4) Pricing strategies that balance competitiveness with profitability. Format this as a proposal checklist with priority rankings."
-            </div>
-            <div class="example-why">
-              <strong>Why it's better:</strong> Adds government contracting context, requests specific evaluation criteria, and asks for structured checklists.
-            </div>
-          </div>
-          
-          <div class="example-card">
-            <div class="example-before">
-              <strong>Before:</strong> "Find potential government customers"
-            </div>
-            <div class="example-after">
-              <strong>After:</strong> "You are a business development strategist specializing in government sales. I sell cloud software solutions and need to identify high-potential government prospects. Provide: 1) Types of government agencies most likely to need cloud solutions, 2) Research methods to identify agencies with upcoming procurement needs, 3) Key decision-makers and influencers I should target, 4) Timing strategies for when to engage in the procurement cycle. Structure this as an action plan with specific steps and timeline."
-            </div>
-            <div class="example-why">
-              <strong>Why it's better:</strong> Focuses on government market research, identifies decision-makers, and requests actionable timeline.
-            </div>
-          </div>
-          
-          <div class="example-card">
-            <div class="example-before">
-              <strong>Before:</strong> "Write a sales proposal"
-            </div>
-            <div class="example-after">
-              <strong>After:</strong> "You are an experienced proposal writer for government contracts. Help me create a compelling executive summary for my IT services proposal. Include: 1) How to clearly articulate our solution's value to government stakeholders, 2) Key differentiators that matter most to government buyers, 3) Risk mitigation statements that address common government concerns, 4) Call-to-action language appropriate for government decision-makers. Format as a structured template with specific sections and word count guidelines."
-            </div>
-            <div class="example-why">
-              <strong>Why it's better:</strong> Targets government audience, addresses risk concerns, and provides structured template format.
-            </div>
-          </div>
-        </div>
-        
-        <div class="carousel-nav">
-          <div class="carousel-dot active" onclick="showExample(0)"></div>
-          <div class="carousel-dot" onclick="showExample(1)"></div>
-          <div class="carousel-dot" onclick="showExample(2)"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Prompt Tool Section -->
     <section id="prompt-tool" class="prompt-tool-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">Perfect Prompt Maker</h2>
+          <h2 class="section-title">Do It Yourself Prompt Maker</h2>
+		  <p class="section-subtitle">Use this free tool and you may not even need my help.</p>
         </div>
         
         <div class="prompt-tool-container">
           <div class="tool-input-area">
             <div class="tool-input-container">
-              <textarea class="tool-input" id="problemInput" placeholder="e.g., create an account plan for selling cyber to DHS, write my GTM strategy, give me a side hustle so I can quit my job..." rows="4"></textarea>
+              <textarea class="tool-input" id="problemInput" placeholder="e.g., help me sell cloud to DHS, write my GTM strategy, give me a side hustle so I can quit this job..." rows="4"></textarea>
             </div>
             <div class="button-container">
               <button class="tool-submit-btn" id="generateBtn">
                 <span id="btnText">Create My Perfect Prompt</span>
                 <div id="btnLoader" class="loader hidden"></div>
               </button>
-              <div id="loadingMessage" class="loading-message hidden">Baking your perfect prompt...</div>
+              <div id="loadingMessage" class="loading-message hidden">Crafting your perfect prompt...</div>
             </div>
           </div>
         </div>
         
-        <!-- Results -->
         <div class="results-section" id="resultsSection">
-          <!-- Results will be inserted here -->
-        </div>
+          </div>
       </div>
     </section>
 
-    <!-- Services Section -->
+    <section class="examples-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">See the Difference</h2>
+    </div>
+    
+    <div class="examples-carousel">
+      <div class="example-card active">
+        <div class="example-before">
+          <strong>Before:</strong> "Help me win this government contract"
+        </div>
+        <div class="example-after">
+          <strong>Your Optimized Prompt:</strong>
+
+You are a federal contracting expert with 15+ years of experience winning government RFPs. I'm responding to a cybersecurity services RFP and need a comprehensive strategy.
+
+Please provide:
+1. Key evaluation criteria that government reviewers prioritize for cybersecurity proposals
+2. How to structure my technical approach to differentiate from competitors
+3. Essential compliance requirements I must address (FedRAMP, FISMA, etc.)
+4. Pricing strategies that balance competitiveness with profitability
+5. Common proposal weaknesses that cause automatic disqualification
+
+Format this as a detailed proposal checklist with priority rankings and specific action items for each section.
+        </div>
+        <div class="example-why">
+          <strong>Why it's better:</strong> Adds specific expertise, requests actionable checklist format, and includes compliance details.
+        </div>
+      </div>
+      
+      <div class="example-card">
+        <div class="example-before">
+          <strong>Before:</strong> "Find potential government customers"
+        </div>
+        <div class="example-after">
+          <strong>Your Optimized Prompt:</strong>
+
+You are a government market research specialist. I sell cloud software solutions and need to identify high-potential federal prospects.
+
+Provide a comprehensive prospecting strategy including:
+1. Government agencies most likely to procure cloud solutions in 2025
+2. Research methods to identify upcoming procurement opportunities
+3. Key decision-makers and influencers I should target at each agency
+4. Optimal timing for engagement during the procurement cycle
+5. Budget ranges and contract vehicles commonly used
+
+Structure this as a 90-day action plan with specific research tasks, target lists, and engagement timeline.
+        </div>
+        <div class="example-why">
+          <strong>Why it's better:</strong> Focuses on actionable research methods, includes timeline, and requests specific deliverables.
+        </div>
+      </div>
+      
+      <div class="example-card">
+        <div class="example-before">
+          <strong>Before:</strong> "Write a sales proposal"
+        </div>
+        <div class="example-after">
+          <strong>Your Optimized Prompt:</strong>
+
+You are an expert government proposal writer. Help me create a compelling executive summary for my IT services proposal to [Agency Name].
+
+Include these essential elements:
+1. Clear value proposition that addresses the agency's mission-critical needs
+2. Three key differentiators that matter most to government evaluators
+3. Risk mitigation statements addressing common government concerns
+4. Past performance examples demonstrating similar mission success
+5. Call-to-action language appropriate for government decision-makers
+
+Format as a structured template with:
+- Opening hook (50 words)
+- Problem/solution overview (150 words)
+- Key benefits section (100 words)
+- Closing statement (50 words)
+
+Make it scannable with bullet points and clear section headers.
+        </div>
+        <div class="example-why">
+          <strong>Why it's better:</strong> Provides specific word counts, structure requirements, and government-focused content guidance.
+        </div>
+      </div>
+    </div>
+    
+    <div class="carousel-nav">
+      <div class="carousel-dot active" onclick="showExample(0)"></div>
+      <div class="carousel-dot" onclick="showExample(1)"></div>
+      <div class="carousel-dot" onclick="showExample(2)"></div>
+    </div>
+  </div>
+</section>
+
     <section id="services" class="services-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">Let's Chat</h2>
-          <p class="section-subtitle">
-            From quick wins to comprehensive coaching programs
-          </p>
+          <h2 class="section-title">Get better results from any AI tool.</h2>
+          <p class="section-subtitle">Whether you use ChatGPT, Claude, Gemini, or Grok, my short sessions teach prompts that work.</p>
         </div>
         
         <div class="services-grid">
@@ -1049,7 +1112,13 @@
       </div>
     </section>
 
-    <!-- FAQ Section -->
+    <section class="cta-before-faq">
+      <div class="container">
+        <h2 class="section-title">Ready to get more out of AI?</h2>
+        <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-success btn-lg">Book Your Free Intro Call</a>
+      </div>
+    </section>
+
     <section id="faq" class="faq-section">
       <div class="container">
         <div class="section-header">
@@ -1113,9 +1182,7 @@
       </div>
     </section>
 
-    <!-- Newsletter Section -->
-    <!-- Footer Section (replace the newsletter section) -->
-<section class="newsletter-section">
+    <section class="newsletter-section">
   <div class="container">
     <h2 class="section-title" style="color: white; margin-bottom: 16px;">Get In Touch</h2>
     <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 16px;">
@@ -1361,7 +1428,7 @@ function showResult(prompt, problemText) {
       <strong>How to use:</strong> Copy this optimized prompt and paste it into Claude, ChatGPT, or your favorite AI tool for dramatically better results.
     </div>
     <div class="next-steps">
-      <h4>Need Help?</h4>
+      <h4>Need More Help?</h4>
       <p>Want to master AI prompting for your specific field? Book a free 15-minute call to learn advanced techniques.</p>
       <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-success">Book Free Strategy Call</a>
     </div>
