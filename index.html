@@ -3,849 +3,872 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AskArti – AI Sales Coach for Federal Sellers</title>
-<meta name="description" content="30+ years of federal sales expertise meets AI. Get better results from ChatGPT, Claude, and other AI tools with proven prompting techniques for government contracting." />
+<title>AskArti – AI Prompt Maker for Better Results</title>
+<meta name="description" content="Transform vague prompts into powerful AI instructions. Get specific, actionable results from ChatGPT, Claude, and other AI tools with our free prompt maker." />
 <style>
   :root{
-  --bg: #FAFAFA;
-  --bg-secondary: #F5F5F5;
-  --panel: #FFFFFF;
-  --text: #1A1A1A;
-  --text-secondary: #6B6B6B;
-  --text-muted: #9B9B9B;
-  --border: #E6E6E6;
-  --border-light: #F0F0F0;
-  --accent: #2A2A2A;
-  --accent-light: #4A4A4A;
-  --accent-bg: rgba(42, 42, 42, 0.04);
-  --success: #4A5D4A;
-  --radius: 12px;
-  --radius-sm: 6px;
-  --radius-lg: 16px;
-  --shadow-xs: 0px 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-sm: 0px 2px 4px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0px 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0px 8px 24px rgba(0, 0, 0, 0.12);
-  --max-width: 1200px;
-  --section-padding: 20px;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  letter-spacing: -0.01em;
-}
-
-.container {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-/* Header */
-header {
-  background: var(--panel);
-  border-bottom: 1px solid var(--border);
-}
-
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 0;
-}
-
-.logo {
-  height: 100px;
-  width: auto;
-}
-
-.logo img {
-  height: 100%;
-  width: auto;
-  object-fit: contain;
-}
-
-.nav-items {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-}
-
-.nav-link {
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-weight: 400;
-  font-size: 15px;
-  transition: color 0.2s ease;
-}
-
-.nav-link:hover {
-  color: var(--text);
-}
-
-/* Buttons */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 20px;
-  border-radius: var(--radius-sm);
-  font-weight: 500;
-  font-size: 14px;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  border: none;
-  font-family: inherit;
-  letter-spacing: -0.01em;
-}
-
-.btn-primary {
-  background: var(--accent);
-  color: white;
-  box-shadow: var(--shadow-xs);
-}
-
-.btn-primary:hover {
-  background: var(--accent-light);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
-}
-
-.btn-secondary {
-  background: var(--panel);
-  color: var(--text);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-xs);
-}
-
-.btn-secondary:hover {
-  background: var(--accent-bg);
-  border-color: var(--accent);
-}
-
-/* Hero Section */
-.hero-section {
-  padding: var(--section-padding) 0;
-  background: var(--panel);
-}
-
-.hero-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  align-items: center;
-}
-
-.hero-text {
-  text-align: left;
-}
-
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
-  margin-bottom: 24px;
-}
-
-.hero-title {
-  font-size: 56px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  margin-bottom: 20px;
-  line-height: 1.1;
-}
-
-.hero-subtitle {
-  font-size: 20px;
-  color: var(--text-secondary);
-  margin-bottom: 32px;
-  max-width: 500px;
-}
-
-.hero-cta {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 48px;
-}
-
-.hero-image {
-  width: 100%;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-}
-
-.hero-image img {
-  width: 100%;
-  height: auto;
-  border-radius: var(--radius-lg);
-}
-
-.social-proof {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  color: var(--text-muted);
-  font-size: 14px;
-}
-
-.avatars {
-  display: flex;
-  margin-right: 12px;
-}
-
-.avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--border);
-  border: 2px solid white;
-  margin-left: -8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-secondary);
-}
-
-/* Section Headers */
-.section-header {
-  text-align: center;
-  margin-bottom: 32px;
-}
-
-.section-title {
-  font-size: 36px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  margin-bottom: 16px;
-}
-
-.section-subtitle {
-  font-size: 18px;
-  color: var(--text-secondary);
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-/* Prompt Tool Section */
-.prompt-tool-section {
-  padding: var(--section-padding) 0;
-  background: var(--bg);
-}
-
-.prompt-tool-container {
-  max-width: 800px;
-  margin: 0 auto;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-}
-
-.tool-input-area {
-  padding: 32px;
-}
-
-.tool-input-container {
-  margin-bottom: 20px;
-}
-
-.tool-input {
-  width: 100%;
-  padding: 16px 20px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--bg);
-  font-size: 15px;
-  resize: none;
-  min-height: 120px;
-  font-family: inherit;
-  outline: none;
-  transition: border-color 0.2s ease;
-  box-sizing: border-box;
-}
-
-.tool-input:focus {
-  border-color: var(--accent);
-}
-
-.tool-input::placeholder {
-  color: var(--text-muted);
-}
-
-.tool-submit-btn {
-  width: 100%;
-  padding: 16px 24px;
-  background: var(--accent);
-  color: white;
-  border: none;
-  border-radius: var(--radius);
-  font-weight: 500;
-  font-size: 15px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-sizing: border-box;
-}
-
-.tool-submit-btn:hover {
-  background: var(--accent-light);
-}
-
-.tool-submit-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* Results Section */
-.results-section {
-  margin-top: 32px;
-  padding: 32px;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  display: none;
-}
-
-.results-section.show {
-  display: block;
-  animation: slideUp 0.4s ease-out;
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.result-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border);
-}
-
-.result-title {
-  font-weight: 600;
-  font-size: 18px;
-  color: var(--text);
-}
-
-.explanation-section {
-  margin-bottom: 24px;
-}
-
-.explanation-title {
-  font-weight: 600;
-  font-size: 16px;
-  color: var(--text);
-  margin-bottom: 12px;
-}
-
-.explanation-text {
-  font-size: 14px;
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-.prompt-display {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px;
-  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-  font-size: 14px;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  max-height: 400px;
-  overflow-y: auto;
-  margin-bottom: 20px;
-}
-
-.result-note {
-  font-size: 14px;
-  color: var(--text-muted);
-  line-height: 1.5;
-}
-
-/* Testimonials Section */
-.testimonials-section {
-  padding: var(--section-padding) 0;
-  background: var(--panel);
-}
-
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 32px;
-  margin-top: 32px;
-}
-
-.testimonial-card {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 32px;
-  box-shadow: var(--shadow-xs);
-  transition: all 0.2s ease;
-}
-
-.testimonial-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.testimonial-rating {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 16px;
-}
-
-.star {
-  width: 16px;
-  height: 16px;
-  background: var(--accent);
-  border-radius: 2px;
-}
-
-.testimonial-text {
-  font-size: 16px;
-  line-height: 1.6;
-  margin-bottom: 24px;
-  color: var(--text);
-}
-
-.testimonial-author {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.author-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-secondary);
-}
-
-.author-info h4 {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-
-.author-info p {
-  font-size: 13px;
-  color: var(--text-muted);
-}
-
-/* Services Section */
-.services-section {
-  padding: var(--section-padding) 0;
-  background: var(--bg);
-}
-
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 32px;
-  margin-top: 32px;
-}
-
-.service-card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 32px;
-  box-shadow: var(--shadow-xs);
-  transition: all 0.2s ease;
-  position: relative;
-}
-
-.service-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.service-card.featured {
-  border: 2px solid var(--accent);
-}
-
-.service-badge {
-  position: absolute;
-  top: -12px;
-  left: 24px;
-  background: var(--accent);
-  color: white;
-  padding: 6px 12px;
-  border-radius: 16px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.service-title {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-.service-price {
-  font-size: 32px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  color: var(--accent);
-}
-
-.service-description {
-  color: var(--text-secondary);
-  margin-bottom: 24px;
-  line-height: 1.6;
-}
-
-.service-features {
-  list-style: none;
-  margin-bottom: 32px;
-}
-
-.service-features li {
-  padding: 8px 0;
-  font-size: 14px;
-  color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.service-features li::before {
-  content: "✓";
-  color: var(--success);
-  font-weight: 600;
-  width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* About Section */
-.about-section {
-  padding: var(--section-padding) 0;
-  background: var(--panel);
-}
-
-.about-content {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 64px;
-  align-items: center;
-  margin-top: 32px;
-}
-
-.about-image {
-  width: 100%;
-  background: var(--border);
-  border-radius: var(--radius-lg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  font-size: 16px;
-  overflow: hidden;
-}
-
-.about-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: var(--radius-lg);
-}
-
-.about-text h3 {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-.about-text p {
-  color: var(--text-secondary);
-  line-height: 1.7;
-  margin-bottom: 16px;
-}
-
-.about-stats {
-  display: flex;
-  gap: 32px;
-  margin-top: 32px;
-}
-
-.stat {
-  text-align: center;
-}
-
-.stat-number {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--accent);
-}
-
-.stat-label {
-  font-size: 12px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* FAQ Section */
-.faq-section {
-  padding: var(--section-padding) 0;
-  background: var(--bg);
-}
-
-.faq-list {
-  max-width: 800px;
-  margin: 64px auto 0;
-}
-
-.faq-item {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  margin-bottom: 16px;
-  overflow: hidden;
-}
-
-.faq-question {
-  padding: 24px;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
-}
-
-.faq-question:hover {
-  background: var(--bg);
-}
-
-.faq-icon {
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  color: var(--text-muted);
-  transition: transform 0.2s ease;
-}
-
-.faq-answer {
-  padding: 0 24px 24px;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  display: none;
-}
-
-.faq-item.active .faq-answer {
-  display: block;
-}
-
-.faq-item.active .faq-icon {
-  transform: rotate(45deg);
-}
-
-/* Newsletter Section */
-.newsletter-section {
-  padding: var(--section-padding) 0;
-  background: var(--accent);
-  color: white;
-  text-align: center;
-}
-
-.newsletter-form {
-  max-width: 400px;
-  margin: 32px auto 0;
-  display: flex;
-  gap: 12px;
-}
-
-.newsletter-input {
-  flex: 1;
-  padding: 12px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  font-size: 14px;
-  outline: none;
-}
-
-.newsletter-input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.newsletter-btn {
-  padding: 12px 24px;
-  background: white;
-  color: var(--accent);
-  border: none;
-  border-radius: var(--radius);
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.newsletter-btn:hover {
-  background: var(--bg);
-}
-
-/* Footer */
-footer {
-  padding: 32px 0;
-  background: var(--accent);
-  color: rgba(255, 255, 255, 0.8);
-  text-align: center;
-  font-size: 14px;
-}
-
-/* Utilities */
-.loader {
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top: 2px solid white;
-  border-radius: 50%;
-  width: 1.25rem;
-  height: 1.25rem;
-  animation: spin 1s linear infinite;
-  margin-left: 8px;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.hidden {
-  display: none;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  :root {
-    --section-padding: 14px;
+    --bg: #FAFAFA;
+    --bg-secondary: #F5F5F5;
+    --panel: #FFFFFF;
+    --text: #1A1A1A;
+    --text-secondary: #6B6B6B;
+    --text-muted: #9B9B9B;
+    --border: #E6E6E6;
+    --border-light: #F0F0F0;
+    --accent: #2A2A2A;
+    --accent-light: #4A4A4A;
+    --accent-bg: rgba(42, 42, 42, 0.04);
+    --success: #4A5D4A;
+    --radius: 12px;
+    --radius-sm: 6px;
+    --radius-lg: 16px;
+    --shadow-xs: 0px 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-sm: 0px 2px 4px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0px 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0px 8px 24px rgba(0, 0, 0, 0.12);
+    --max-width: 1200px;
+    --section-padding: 40px;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
   }
   
   .container {
-    padding: 0 16px;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  
+  /* Header */
+  header {
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+  }
+  
+  .logo {
+    height: 100px;
+    width: auto;
+  }
+
+  .logo img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
   }
   
   .nav-items {
-    display: none;
-  }
-  
-  .logo {
-    height: 60px;
-  }
-  
-  .hero-content {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-  
-  .hero-text {
-    text-align: center;
-  }
-  
-  .hero-title {
-    font-size: 36px;
-    margin-bottom: 16px;
-  }
-  
-  .hero-subtitle {
-    font-size: 18px;
-    margin-bottom: 24px;
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .hero-cta {
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  
-  .section-title {
-    font-size: 28px;
-  }
-  
-  .about-content {
-    grid-template-columns: 1fr;
+    display: flex;
+    align-items: center;
     gap: 32px;
   }
   
-  .about-stats {
+  .nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 15px;
+    transition: color 0.2s ease;
+  }
+  
+  .nav-link:hover {
+    color: var(--text);
+  }
+  
+  .nav-link.free-highlight {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+  }
+  
+  @keyframes subtle-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    letter-spacing: -0.01em;
+  }
+  
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    box-shadow: var(--shadow-xs);
+  }
+  
+  .btn-primary:hover {
+    background: var(--accent-light);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .btn-secondary {
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-xs);
+  }
+  
+  .btn-secondary:hover {
+    background: var(--accent-bg);
+    border-color: var(--accent);
+  }
+  
+  .btn-success {
+    background: var(--success);
+    color: white;
+    box-shadow: var(--shadow-xs);
+  }
+  
+  .btn-success:hover {
+    background: #3d4f3d;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    padding: var(--section-padding) 0;
+    background: var(--panel);
+  }
+
+  .hero-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  .hero-text {
+    text-align: left;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    animation: gentle-glow 2s ease-in-out infinite alternate;
+  }
+  
+  @keyframes gentle-glow {
+    from { box-shadow: 0 0 5px rgba(76, 175, 80, 0.3); }
+    to { box-shadow: 0 0 20px rgba(76, 175, 80, 0.6); }
+  }
+
+  .hero-title {
+    font-size: 56px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+    line-height: 1.1;
+  }
+
+  .hero-subtitle {
+    font-size: 20px;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+    max-width: 500px;
+  }
+
+  .hero-cta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .hero-image {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+  }
+
+  .hero-image img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+  }
+  
+  .social-proof {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  
+  .avatars {
+    display: flex;
+    margin-right: 12px;
+  }
+  
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--border);
+    border: 2px solid white;
+    margin-left: -8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+  
+  /* Example Carousel */
+  .examples-section {
+    padding: 32px 0;
+    background: var(--bg-secondary);
+  }
+  
+  .examples-carousel {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+  }
+  
+  .example-card {
+    background: var(--panel);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+    display: none;
+  }
+  
+  .example-card.active {
+    display: block;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .example-before {
+    background: #ffebee;
+    padding: 16px;
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+  }
+  
+  .example-after {
+    background: #e8f5e8;
+    padding: 16px;
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+  }
+  
+  .example-why {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-style: italic;
+  }
+  
+  .carousel-nav {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  
+  .carousel-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--border);
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  .carousel-dot.active {
+    background: var(--accent);
+  }
+  
+  /* Section Headers */
+  .section-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  
+  .section-title {
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+  
+  .section-subtitle {
+    font-size: 18px;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  /* Prompt Tool Section */
+  .prompt-tool-section {
+    padding: var(--section-padding) 0;
+    background: var(--bg);
+  }
+  
+  .prompt-tool-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+  
+  .tool-input-area {
+    padding: 32px;
+  }
+  
+  .tool-input-container {
+    margin-bottom: 20px;
+  }
+  
+  .tool-input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    font-size: 15px;
+    resize: none;
+    min-height: 120px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+  }
+  
+  .tool-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(42, 42, 42, 0.1);
+  }
+  
+  .tool-input::placeholder {
+    color: var(--text-muted);
+  }
+  
+  .tool-submit-btn {
+    width: 100%;
+    padding: 16px 24px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 500;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    position: relative;
+  }
+  
+  .tool-submit-btn:hover {
+    background: var(--accent-light);
+    transform: translateY(-1px);
+  }
+  
+  .tool-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  /* Results Section */
+  .results-section {
+    margin-top: 32px;
+    padding: 32px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    display: none;
+  }
+  
+  .results-section.show {
+    display: block;
+    animation: slideUp 0.4s ease-out;
+  }
+  
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .result-title {
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--text);
+  }
+  
+  .explanation-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  
+  .prompt-display {
+    background: #e8f5e8;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  
+  .copy-floating {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 8px 12px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .copy-floating:hover {
+    background: var(--accent-light);
+  }
+  
+  .result-note {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  
+  .next-steps {
+    background: var(--bg-secondary);
+    padding: 20px;
+    border-radius: var(--radius);
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .next-steps h4 {
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+  
+  .next-steps p {
+    margin-bottom: 16px;
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+  
+  /* Services Section */
+  .services-section {
+    padding: var(--section-padding) 0;
+    background: var(--bg);
+  }
+  
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 32px;
+    margin-top: 32px;
+  }
+  
+  .service-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: var(--shadow-xs);
+    transition: all 0.2s ease;
+    position: relative;
+  }
+  
+  .service-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .service-card.featured {
+    border: 2px solid var(--accent);
+  }
+  
+  .service-badge {
+    position: absolute;
+    top: -12px;
+    left: 24px;
+    background: var(--accent);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  
+  .service-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .service-price {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--accent);
+  }
+  
+  .service-description {
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  
+  .service-features {
+    list-style: none;
+    margin-bottom: 32px;
+  }
+  
+  .service-features li {
+    padding: 8px 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .service-features li::before {
+    content: "✓";
+    color: var(--success);
+    font-weight: 600;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
     justify-content: center;
   }
   
-  .newsletter-form {
-    flex-direction: column;
+  /* FAQ Section */
+  .faq-section {
+    padding: var(--section-padding) 0;
+    background: var(--panel);
   }
   
-  .testimonials-grid,
-  .services-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 480px) {
-  .logo {
-    height: 48px;
+  .faq-list {
+    max-width: 800px;
+    margin: 32px auto 0;
   }
   
-  .hero-title {
-    font-size: 28px;
-    line-height: 1.2;
+  .faq-item {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    overflow: hidden;
   }
   
-  .hero-subtitle {
-    font-size: 16px;
-  }
-  
-  .hero-cta {
-    flex-direction: column;
+  .faq-question {
+    padding: 24px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
   }
   
-  .btn {
-    width: 100%;
-    max-width: 280px;
+  .faq-question:hover {
+    background: var(--bg-secondary);
   }
-}
+  
+  .faq-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: var(--text-muted);
+    transition: transform 0.2s ease;
+  }
+  
+  .faq-answer {
+    padding: 0 24px 24px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    display: none;
+  }
+  
+  .faq-item.active .faq-answer {
+    display: block;
+  }
+  
+  .faq-item.active .faq-icon {
+    transform: rotate(45deg);
+  }
+  
+  /* Newsletter Section */
+  .newsletter-section {
+    padding: var(--section-padding) 0;
+    background: var(--accent);
+    color: white;
+    text-align: center;
+  }
+  
+  .newsletter-form {
+    max-width: 400px;
+    margin: 16px auto 0;
+    display: flex;
+    gap: 12px;
+  }
+  
+  .newsletter-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 14px;
+    outline: none;
+  }
+  
+  .newsletter-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
+  .newsletter-btn {
+    padding: 12px 24px;
+    background: white;
+    color: var(--accent);
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .newsletter-btn:hover {
+    background: var(--bg);
+  }
+  
+  /* Footer */
+  footer {
+    padding: 32px 0;
+    background: var(--accent);
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  /* Utilities */
+  .loader {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    width: 1.25rem;
+    height: 1.25rem;
+    animation: spin 1s linear infinite;
+    margin-left: 8px;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  .confetti {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+  }
+  
+  .confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #4CAF50;
+    animation: confetti-fall 3s linear forwards;
+  }
+  
+  @keyframes confetti-fall {
+    0% {
+      transform: translateY(-100vh) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100vh) rotate(720deg);
+      opacity: 0;
+    }
+  }
+  
+  .loading-message {
+    font-size: 14px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 10px;
+    font-style: italic;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    :root {
+      --section-padding: 24px;
+    }
+    
+    .container {
+      padding: 0 16px;
+    }
+    
+    .nav-items {
+      display: none;
+    }
+    
+    .logo {
+      height: 60px;
+    }
+    
+    .hero-content {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    
+    .hero-text {
+      text-align: center;
+    }
+    
+    .hero-title {
+      font-size: 36px;
+      margin-bottom: 16px;
+    }
+    
+    .hero-subtitle {
+      font-size: 18px;
+      margin-bottom: 24px;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .hero-cta {
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    
+    .social-proof {
+      justify-content: center;
+    }
+    
+    .section-title {
+      font-size: 28px;
+    }
+    
+    .newsletter-form {
+      flex-direction: column;
+    }
+    
+    .services-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .logo {
+      height: 48px;
+    }
+    
+    .hero-title {
+      font-size: 28px;
+      line-height: 1.2;
+    }
+    
+    .hero-subtitle {
+      font-size: 16px;
+    }
+    
+    .hero-cta {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .btn {
+      width: 100%;
+      max-width: 280px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -853,13 +876,13 @@ footer {
     <div class="container">
       <div class="header-content">
         <a href="#" class="logo">
-  <img src="asklite.png" alt="AskArti Logo">
-</a>
+          <img src="asklite.png" alt="AskArti Logo">
+        </a>
         <div class="nav-items">
-          <a href="#prompt-tool" class="nav-link">Prompt Maker</a>
+          <a href="#prompt-tool" class="nav-link free-highlight">Free Prompt Maker</a>
           <a href="#services" class="nav-link">Services</a>
           <a href="#faq" class="nav-link">FAQ</a>
-          <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Book Call</a>
+          <a href="https://calendly.com/yourname/intro" target="_blank" class="btn btn-primary">Book Call</a>
         </div>
       </div>
     </div>
@@ -868,57 +891,112 @@ footer {
   <main>
     <!-- Hero Section -->
     <section class="hero-section">
-  <div class="container">
-    <div class="hero-content">
-      <div class="hero-text">        
-        <h1 class="hero-title">Get Better Results<br>From Your AI Tools</h1>
-        <p class="hero-subtitle">
-          Learn how to write prompts that get you specific, actionable federal sales advice instead of generic business tips.
-        </p>
-        
-        <div class="hero-cta">
-          <a href="#prompt-tool" class="btn btn-primary">Free Prompt Maker</a>
-          <a href="#services" class="btn btn-secondary">View Services</a>
-        </div>
-        
-        <div class="social-proof">
-          <div class="avatars">
-            <div class="avatar">JS</div>
-            <div class="avatar">AM</div>
-            <div class="avatar">RK</div>
-            <div class="avatar">+</div>
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-text">
+            <h1 class="hero-title">Get Better Results<br>From Your AI Tools</h1>
+            <p class="hero-subtitle">
+              Transform vague prompts into powerful AI instructions. Get specific, actionable results from ChatGPT, Claude, and any AI tool.
+            </p>
+            
+            <div class="hero-cta">
+              <a href="#prompt-tool" class="btn btn-primary">Try Free Prompt Maker</a>
+              <a href="#services" class="btn btn-secondary">View Services</a>
+            </div>
+            
+            <div class="social-proof">
+              <div class="avatars">
+                <div class="avatar">JS</div>
+                <div class="avatar">AM</div>
+                <div class="avatar">RK</div>
+                <div class="avatar">+</div>
+              </div>
+              <span>Over 500+ sales professionals helped.</span>
+            </div>
           </div>
-          <span>Trusted by 500+ federal sellers</span>
+          
+          <div class="hero-image">
+            <img src="chatcal.png" alt="AI Prompt Transformation">
+          </div>
         </div>
       </div>
-      
-      <div class="hero-image">
-        <img src="chatcal.png" alt="Federal Sales Coaching">
+    </section>
+
+    <!-- Examples Section -->
+    <section class="examples-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">See the Difference</h2>
+          <p class="section-subtitle">Real examples of how we transform vague prompts into powerful AI instructions</p>
+        </div>
+        
+        <div class="examples-carousel">
+          <div class="example-card active">
+            <div class="example-before">
+              <strong>Before:</strong> "Help me win this government contract"
+            </div>
+            <div class="example-after">
+              <strong>After:</strong> "You are a federal contracting expert. I'm responding to a government RFP for cybersecurity services. Help me create a winning strategy by providing: 1) Key elements that government evaluators prioritize in cybersecurity proposals, 2) How to structure my technical approach to stand out from competitors, 3) Common compliance requirements I should address upfront, 4) Pricing strategies that balance competitiveness with profitability. Format this as a proposal checklist with priority rankings."
+            </div>
+            <div class="example-why">
+              <strong>Why it's better:</strong> Adds government contracting context, requests specific evaluation criteria, and asks for structured checklists.
+            </div>
+          </div>
+          
+          <div class="example-card">
+            <div class="example-before">
+              <strong>Before:</strong> "Find potential government customers"
+            </div>
+            <div class="example-after">
+              <strong>After:</strong> "You are a business development strategist specializing in government sales. I sell cloud software solutions and need to identify high-potential government prospects. Provide: 1) Types of government agencies most likely to need cloud solutions, 2) Research methods to identify agencies with upcoming procurement needs, 3) Key decision-makers and influencers I should target, 4) Timing strategies for when to engage in the procurement cycle. Structure this as an action plan with specific steps and timeline."
+            </div>
+            <div class="example-why">
+              <strong>Why it's better:</strong> Focuses on government market research, identifies decision-makers, and requests actionable timeline.
+            </div>
+          </div>
+          
+          <div class="example-card">
+            <div class="example-before">
+              <strong>Before:</strong> "Write a sales proposal"
+            </div>
+            <div class="example-after">
+              <strong>After:</strong> "You are an experienced proposal writer for government contracts. Help me create a compelling executive summary for my IT services proposal. Include: 1) How to clearly articulate our solution's value to government stakeholders, 2) Key differentiators that matter most to government buyers, 3) Risk mitigation statements that address common government concerns, 4) Call-to-action language appropriate for government decision-makers. Format as a structured template with specific sections and word count guidelines."
+            </div>
+            <div class="example-why">
+              <strong>Why it's better:</strong> Targets government audience, addresses risk concerns, and provides structured template format.
+            </div>
+          </div>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active" onclick="showExample(0)"></div>
+          <div class="carousel-dot" onclick="showExample(1)"></div>
+          <div class="carousel-dot" onclick="showExample(2)"></div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
     <!-- Prompt Tool Section -->
     <section id="prompt-tool" class="prompt-tool-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">Free Prompt Maker</h2>
+          <h2 class="section-title">Perfect Prompt Maker</h2>
           <p class="section-subtitle">
-            Enter your goals and we'll create the perfect prompt for optimal results.
+            Enter what you want help with and we'll create the perfect prompt for amazing results.
           </p>
         </div>
         
         <div class="prompt-tool-container">
           <div class="tool-input-area">
             <div class="tool-input-container">
-              <textarea class="tool-input" id="problemInput" placeholder="e.g., need to meet with VA CTO about cloud migration but can't get past gatekeepers" rows="4"></textarea>
+              <textarea class="tool-input" id="problemInput" placeholder="e.g., help me write better emails, plan a family vacation, improve my marketing strategy..." rows="4"></textarea>
             </div>
             <div class="button-container">
               <button class="tool-submit-btn" id="generateBtn">
-                <span id="btnText">Improve My Prompt</span>
+                <span id="btnText">Create My Perfect Prompt</span>
                 <div id="btnLoader" class="loader hidden"></div>
               </button>
+              <div id="loadingMessage" class="loading-message hidden">Crafting your optimal prompt...</div>
             </div>
           </div>
         </div>
@@ -929,7 +1007,6 @@ footer {
         </div>
       </div>
     </section>
-
 
     <!-- Services Section -->
     <section id="services" class="services-section">
@@ -942,62 +1019,59 @@ footer {
         </div>
         
         <div class="services-grid">
-          <div class="services-grid">
-  <div class="service-card">
-    <h3 class="service-title">Free Intro Call</h3>
-    <div class="service-price">Free</div>
-    <p class="service-description">
-      15-minute discovery call to understand your federal sales challenges
-    </p>
-    <ul class="service-features">
-      <li>Quick assessment of your situation</li>
-      <li>Identify your biggest AI prompt gaps</li>
-      <li>Custom recommendation for next steps</li>
-      <li>No sales pitch, just helpful advice</li>
-      <li>Perfect for exploring what's possible</li>
-    </ul>
-    <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-secondary" style="width: 100%;">Book Free Call</a>
-  </div>
-  
-  <div class="service-card featured">
-    <div class="service-badge">Most Popular</div>
-    <h3 class="service-title">1:1 Coaching Session</h3>
-    <div class="service-price">$99</div>
-    <p class="service-description">
-      One hour of focused coaching on your specific federal sales challenge
-    </p>
-    <ul class="service-features">
-      <li>Deep dive on one specific deal or challenge</li>
-      <li>Custom AI prompts for your situation</li>
-      <li>Live prompt engineering session</li>
-      <li>Actionable next steps you can use today</li>
-      <li>Follow-up email with session recap</li>
-      <li>Perfect for stuck deals or urgent needs</li>
-    </ul>
-    <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary" style="width: 100%;">Book Session</a>
-  </div>
-  
-  <div class="service-card">
-    <h3 class="service-title">Team Workshop</h3>
-    <div class="service-price">$499</div>
-    <p class="service-description">
-      2-hour interactive workshop for your sales team (up to 8 people)
-    </p>
-    <ul class="service-features">
-      <li>Federal sales AI prompting fundamentals</li>
-      <li>Live prompt building exercises</li>
-      <li>Team-specific use cases and examples</li>
-      <li>Custom prompt library for your team</li>
-      <li>30-day email follow-up support</li>
-      <li>Perfect for getting everyone on same page</li>
-    </ul>
-    <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-secondary" style="width: 100%;">Schedule Workshop</a>
-  </div>
-</div>
+          <div class="service-card">
+            <h3 class="service-title">Free Intro Call</h3>
+            <div class="service-price">Free</div>
+            <p class="service-description">
+              15-minute discovery call to understand your AI and business challenges
+            </p>
+            <ul class="service-features">
+              <li>Quick assessment of your situation</li>
+              <li>Identify your biggest AI prompt gaps</li>
+              <li>Custom recommendation for next steps</li>
+              <li>No sales pitch, just helpful advice</li>
+              <li>Perfect for exploring what's possible</li>
+            </ul>
+            <a href="https://calendly.com/yourname/intro" target="_blank" class="btn btn-secondary" style="width: 100%;">Book Free Call</a>
+          </div>
+          
+          <div class="service-card featured">
+            <div class="service-badge">Most Popular</div>
+            <h3 class="service-title">1:1 Coaching Session</h3>
+            <div class="service-price">$99</div>
+            <p class="service-description">
+              One hour of focused coaching on your specific challenge
+            </p>
+            <ul class="service-features">
+              <li>Deep dive on one specific challenge</li>
+              <li>Custom AI prompts for your situation</li>
+              <li>Live prompt engineering session</li>
+              <li>Actionable next steps you can use today</li>
+              <li>Follow-up email with session recap</li>
+              <li>Perfect for stuck projects or urgent needs</li>
+            </ul>
+            <a href="https://calendly.com/yourname/coaching" target="_blank" class="btn btn-primary" style="width: 100%;">Book Session</a>
+          </div>
+          
+          <div class="service-card">
+            <h3 class="service-title">Team Workshop</h3>
+            <div class="service-price">$499</div>
+            <p class="service-description">
+              2-hour interactive workshop for your team (up to 8 people)
+            </p>
+            <ul class="service-features">
+              <li>AI prompting fundamentals for your industry</li>
+              <li>Live prompt building exercises</li>
+              <li>Team-specific use cases and examples</li>
+              <li>Custom prompt library for your team</li>
+              <li>30-day email follow-up support</li>
+              <li>Perfect for getting everyone on same page</li>
+            </ul>
+            <a href="https://calendly.com/yourname/workshop" target="_blank" class="btn btn-secondary" style="width: 100%;">Schedule Workshop</a>
+          </div>
         </div>
       </div>
     </section>
-
 
     <!-- FAQ Section -->
     <section id="faq" class="faq-section">
@@ -1005,73 +1079,70 @@ footer {
         <div class="section-header">
           <h2 class="section-title">Frequently Asked Questions</h2>
           <p class="section-subtitle">
-            Everything you need to know about AI coaching for federal sales
+            Everything you need to know about AI prompt optimization
           </p>
         </div>
         
         <div class="faq-list">
           <div class="faq-item">
             <div class="faq-question" onclick="toggleFaq(this)">
-              <span>How is this different from generic sales coaching?</span>
+              <span>How is this different from just using AI directly?</span>
               <div class="faq-icon">+</div>
             </div>
             <div class="faq-answer">
-              I focus specifically on federal sales realities - procurement processes, budget cycles, compliance requirements, and stakeholder complexity that you won't find in generic business advice. Every technique is field-tested in government contracting.
+              Most people get generic, surface-level answers because their prompts are too vague. Our tool teaches AI to be an expert in your specific domain and ask for structured, actionable output that you can actually use.
             </div>
           </div>
           
           <div class="faq-item">
             <div class="faq-question" onclick="toggleFaq(this)">
-              <span>What AI tools do you teach?</span>
+              <span>What AI tools do these prompts work with?</span>
               <div class="faq-icon">+</div>
             </div>
             <div class="faq-answer">
-              The prompting techniques work with any AI tool - ChatGPT, Claude, Gemini, or whatever comes next. I teach you the underlying principles so you're not dependent on any specific platform.
+              The improved prompts work with any AI tool - ChatGPT, Claude, Gemini, or whatever comes next. We teach you the underlying principles so you're not dependent on any specific platform.
             </div>
           </div>
           
           <div class="faq-item">
             <div class="faq-question" onclick="toggleFaq(this)">
-              <span>Do you work with small businesses or just primes?</span>
+              <span>Do you work with all industries or just sales?</span>
               <div class="faq-icon">+</div>
             </div>
             <div class="faq-answer">
-              Both! I understand the unique challenges of small business set-asides, subcontracting opportunities, and working with large primes. Many of my best success stories come from small federal contractors.
+              All industries! Our prompt maker automatically detects your topic - whether it's business, travel, writing, technology, marketing, or anything else - and creates expert-level prompts for your specific field.
             </div>
           </div>
           
           <div class="faq-item">
             <div class="faq-question" onclick="toggleFaq(this)">
-              <span>How quickly will I see results?</span>
+              <span>How quickly will I see better results?</span>
               <div class="faq-icon">+</div>
             </div>
             <div class="faq-answer">
-              Most people see immediate improvement in their AI outputs after the first session. For sales results, expect to see better meeting quality within 2-3 weeks and pipeline acceleration within 30-60 days.
+              Immediately! You'll see dramatically better AI outputs the moment you use an improved prompt. Most people are amazed at the difference in quality and actionability of the results.
             </div>
           </div>
           
           <div class="faq-item">
             <div class="faq-question" onclick="toggleFaq(this)">
-              <span>What if I'm new to federal sales?</span>
+              <span>What if I'm new to using AI tools?</span>
               <div class="faq-icon">+</div>
             </div>
             <div class="faq-answer">
-              Perfect! I'll teach you both federal sales fundamentals AND how to use AI effectively. Many of my clients are transitioning from commercial sales or starting their federal sales career.
+              Perfect! Our prompts are designed to help beginners get expert-level results right away. We'll teach you both how to use AI effectively AND how to create great prompts for any situation.
             </div>
           </div>
         </div>
       </div>
     </section>
-<!-- Calendly inline widget begin -->
-<div class="calendly-inline-widget" data-url="https://calendly.com/markflournoy/intro?hide_event_type_details=1&hide_gdpr_banner=1" style="min-width:320px;height:700px;"></div>
-<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-<!-- Calendly inline widget end -->
+
     <!-- Newsletter Section -->
     <section class="newsletter-section">
       <div class="container">
         <h2 class="section-title" style="color: white; margin-bottom: 16px;">Stay Sharp</h2>
         <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 0;">
-          Weekly federal sales intelligence and AI prompting tips
+          Weekly AI prompting tips and strategies
         </p>
         
         <form class="newsletter-form">
@@ -1084,7 +1155,7 @@ footer {
 
   <footer>
     <div class="container">
-      <p>© 2025 AskArti.com • AI-powered sales coaching for federal professionals</p>
+      <p>© 2025 AskArti.com • AI prompt optimization for professionals</p>
     </div>
   </footer>
 
@@ -1096,6 +1167,49 @@ const API_CONFIG = {
 
 // Global state
 let isGenerating = false;
+let currentExampleIndex = 0;
+
+// Example carousel functionality
+function showExample(index) {
+  const cards = document.querySelectorAll('.example-card');
+  const dots = document.querySelectorAll('.carousel-dot');
+  
+  // Hide all cards and deactivate dots
+  cards.forEach(card => card.classList.remove('active'));
+  dots.forEach(dot => dot.classList.remove('active'));
+  
+  // Show selected card and activate dot
+  cards[index].classList.add('active');
+  dots[index].classList.add('active');
+  
+  currentExampleIndex = index;
+}
+
+// Auto-rotate examples
+function startExampleRotation() {
+  setInterval(() => {
+    currentExampleIndex = (currentExampleIndex + 1) % 3;
+    showExample(currentExampleIndex);
+  }, 5000);
+}
+
+// Dynamic placeholder text based on user input
+function updatePlaceholder() {
+  const input = document.getElementById('problemInput');
+  const text = input.value.toLowerCase();
+  
+  if (text.includes('sales') || text.includes('business')) {
+    input.placeholder = "e.g., help me close more deals with government agencies";
+  } else if (text.includes('travel') || text.includes('vacation')) {
+    input.placeholder = "e.g., plan a 5-day family trip to Disney World";
+  } else if (text.includes('write') || text.includes('content')) {
+    input.placeholder = "e.g., write compelling blog posts for my business";
+  } else if (text.includes('marketing')) {
+    input.placeholder = "e.g., create a social media strategy for my startup";
+  } else if (!text) {
+    input.placeholder = "e.g., help me write better emails, plan a family vacation, improve my marketing strategy...";
+  }
+}
 
 // Generate prompt using the backend
 async function generatePrompt() {
@@ -1111,16 +1225,13 @@ async function generatePrompt() {
   setButtonLoading(true);
   
   try {
-    // Send a universal prompt improvement request
     const response = await fetch(API_CONFIG.ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        task: 'improve_prompt',
-        original_prompt: problemText,
-        instructions: 'Transform this into a high-quality AI prompt that will get specific, actionable results. Add context, structure, and clear instructions. Keep responses concise - 3 key points max.'
+        situation: problemText // Using backward compatibility
       })
     });
 
@@ -1137,6 +1248,9 @@ async function generatePrompt() {
     // Convert the AI response to improved prompt
     const prompt = convertToImprovedPrompt(data, problemText);
     showResult(prompt, problemText);
+    
+    // Add confetti celebration
+    createConfetti();
 
   } catch (error) {
     console.error('Generation failed:', error);
@@ -1219,51 +1333,42 @@ Format your response clearly with headings or bullet points where appropriate.`;
 function detectTopic(text) {
   const lowerText = text.toLowerCase();
   
-  // Business/Sales keywords
   if (lowerText.match(/\b(sales|business|revenue|client|customer|deal|proposal|meeting|negotiation|contract|procurement|government|federal|va|dod)\b/)) {
     return { expert: 'sales strategist and business development professional', category: 'business' };
   }
   
-  // Travel keywords
   if (lowerText.match(/\b(travel|vacation|trip|disney|flight|hotel|itinerary|destination|tourism)\b/)) {
     return { expert: 'travel planner and destination specialist', category: 'travel' };
   }
   
-  // Writing keywords
   if (lowerText.match(/\b(write|writing|novel|book|story|article|blog|content|author|publish)\b/)) {
     return { expert: 'professional writer and editor', category: 'writing' };
   }
   
-  // Technology keywords
   if (lowerText.match(/\b(code|coding|programming|software|app|website|development|tech|ai|data)\b/)) {
     return { expert: 'software engineer and technology consultant', category: 'technology' };
   }
   
-  // Marketing keywords
   if (lowerText.match(/\b(marketing|social media|seo|content|brand|advertising|campaign|leads)\b/)) {
     return { expert: 'marketing strategist and digital specialist', category: 'marketing' };
   }
   
-  // Finance keywords
   if (lowerText.match(/\b(invest|investment|finance|money|budget|financial|retirement|stocks|crypto)\b/)) {
     return { expert: 'financial advisor and investment specialist', category: 'finance' };
   }
   
-  // Health/Fitness keywords
   if (lowerText.match(/\b(health|fitness|diet|exercise|workout|nutrition|wellness|medical)\b/)) {
     return { expert: 'health and wellness specialist', category: 'health' };
   }
   
-  // Education keywords
   if (lowerText.match(/\b(learn|learning|study|education|course|skill|training|teach)\b/)) {
     return { expert: 'educational specialist and learning consultant', category: 'education' };
   }
   
-  // Default to general consultant
   return { expert: 'experienced consultant and problem-solving specialist', category: 'general' };
 }
 
-// Show results
+// Show results with enhanced UX
 function showResult(prompt, problemText) {
   const resultsSection = document.getElementById('resultsSection');
   
@@ -1271,17 +1376,23 @@ function showResult(prompt, problemText) {
   
   resultsSection.innerHTML = `
     <div class="result-header">
-      <h3 class="result-title">😊 Here's Your Prompt!</h3>
+      <h3 class="result-title">🎉 Here's Your Optimized Prompt</h3>
       <div class="result-actions">
-        <button class="btn btn-secondary" onclick="copyPrompt()">Copy Prompt</button>
+        <button class="btn btn-success" onclick="copyPrompt()">Copy to Clipboard</button>
       </div>
     </div>
-    <div class="explanation-section">
-      <p class="explanation-text">${explanationText}</p>
+    <div class="explanation-text">${explanationText}</div>
+    <div class="prompt-display" id="promptDisplay">
+      <button class="copy-floating" onclick="copyPrompt()">Copy</button>
+      ${prompt}
     </div>
-    <div class="prompt-display" id="promptDisplay">${prompt}</div>
     <div class="result-note">
-      <strong>How to use:</strong> Copy this improved prompt and paste it into Claude, ChatGPT, or your favorite AI tool to get much better results.
+      <strong>How to use:</strong> Copy this optimized prompt and paste it into Claude, ChatGPT, or your favorite AI tool for dramatically better results.
+    </div>
+    <div class="next-steps">
+      <h4>🚀 What's Next?</h4>
+      <p>Want to master AI prompting for your specific field? Book a free 15-minute call to learn advanced techniques.</p>
+      <a href="https://calendly.com/yourname/intro" target="_blank" class="btn btn-primary">Book Free Strategy Call</a>
     </div>
   `;
   
@@ -1293,25 +1404,28 @@ function showResult(prompt, problemText) {
   resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// Set button loading state
+// Set button loading state with better UX
 function setButtonLoading(loading) {
   isGenerating = loading;
   const btn = document.getElementById('generateBtn');
   const btnText = document.getElementById('btnText');
   const btnLoader = document.getElementById('btnLoader');
+  const loadingMessage = document.getElementById('loadingMessage');
   
   btn.disabled = loading;
   
   if (loading) {
     btnText.classList.add('hidden');
     btnLoader.classList.remove('hidden');
+    loadingMessage.classList.remove('hidden');
   } else {
     btnText.classList.remove('hidden');
     btnLoader.classList.add('hidden');
+    loadingMessage.classList.add('hidden');
   }
 }
 
-// Copy prompt to clipboard
+// Copy prompt to clipboard with enhanced feedback
 function copyPrompt() {
   const promptText = window.currentPrompt;
   
@@ -1351,12 +1465,12 @@ function fallbackCopy(text) {
   }
 }
 
-// Show copy success feedback
+// Enhanced copy success feedback
 function showCopySuccess() {
-  const button = document.querySelector('[onclick="copyPrompt()"]');
-  if (button) {
+  const buttons = document.querySelectorAll('button[onclick="copyPrompt()"]');
+  buttons.forEach(button => {
     const originalText = button.textContent;
-    button.textContent = 'Copied!';
+    button.textContent = '✓ Copied!';
     button.style.background = 'var(--success)';
     button.style.color = 'white';
     button.style.borderColor = 'var(--success)';
@@ -1367,7 +1481,33 @@ function showCopySuccess() {
       button.style.color = '';
       button.style.borderColor = '';
     }, 2000);
+  });
+  
+  // Add small confetti burst
+  createConfetti(50);
+}
+
+// Create confetti animation
+function createConfetti(pieces = 100) {
+  const colors = ['#4CAF50', '#2196F3', '#FF9800', '#E91E63', '#9C27B0'];
+  const confettiContainer = document.createElement('div');
+  confettiContainer.className = 'confetti';
+  document.body.appendChild(confettiContainer);
+  
+  for (let i = 0; i < pieces; i++) {
+    const confettiPiece = document.createElement('div');
+    confettiPiece.className = 'confetti-piece';
+    confettiPiece.style.left = Math.random() * 100 + '%';
+    confettiPiece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    confettiPiece.style.animationDelay = Math.random() * 2 + 's';
+    confettiPiece.style.animationDuration = (Math.random() * 3 + 2) + 's';
+    confettiContainer.appendChild(confettiPiece);
   }
+  
+  // Remove confetti after animation
+  setTimeout(() => {
+    confettiContainer.remove();
+  }, 5000);
 }
 
 // FAQ toggle functionality
@@ -1420,6 +1560,7 @@ function setupEventListeners() {
   problemInput.addEventListener('input', () => {
     problemInput.style.height = 'auto';
     problemInput.style.height = Math.min(problemInput.scrollHeight, 200) + 'px';
+    updatePlaceholder();
   });
 }
 
@@ -1432,7 +1573,7 @@ function setupNewsletter() {
     
     // Simple validation
     if (email && email.includes('@')) {
-      alert('Thanks for subscribing! You\'ll receive weekly federal sales tips.');
+      alert('Thanks for subscribing! You\'ll receive weekly AI prompting tips.');
       form.querySelector('.newsletter-input').value = '';
     } else {
       alert('Please enter a valid email address.');
@@ -1444,7 +1585,8 @@ function setupNewsletter() {
 Object.assign(window, { 
   generatePrompt,
   copyPrompt,
-  toggleFaq
+  toggleFaq,
+  showExample
 });
 
 // Initialize when DOM is ready
@@ -1452,6 +1594,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupEventListeners();
   setupSmoothScrolling();
   setupNewsletter();
+  startExampleRotation();
 });
 </script>
 </body>
