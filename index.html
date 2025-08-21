@@ -1185,16 +1185,7 @@ const API_CONFIG = {
 
 // Global state
 let isGenerating = false;
-let currentExampleIndex = 0;
 
-
-// Auto-rotate examples
-function startExampleRotation() {
-  setInterval(() => {
-    currentExampleIndex = (currentExampleIndex + 1) % 3;
-    showExample(currentExampleIndex);
-  }, 5000);
-}
 
 // Dynamic placeholder text based on user input
 function updatePlaceholder() {
@@ -1542,15 +1533,13 @@ function setupEventListeners() {
 Object.assign(window, { 
   generatePrompt,
   copyPrompt,
-  toggleFaq,
-  showExample
+  toggleFaq
 });
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   setupEventListeners();
   setupSmoothScrolling();
-  startExampleRotation();
 });
 </script>
 </body>
