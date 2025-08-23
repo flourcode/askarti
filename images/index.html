@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Make AI Work Better For You</title>
+<meta name="description" content="Two simple tools to help you get better results from AI. Free prompt improvement and business idea planning." />
+<link rel="icon" href="/images/favicon.ico" sizes="any">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WLGEPY5H4G"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-WLGEPY5H4G');
+</script>
+<style>
+  :root {
+    /* Notion + Untitled UI Aesthetic */
+    --bg: #F8FAFC;
+    --panel: #FFFFFF;
+    --text: #111827;
+    --text-secondary: #374151;
+    --text-muted: #6B7280;
+    --text-light: #9CA3AF;
+    --border: #E5E7EB;
+    --border-light: #F3F4F6;
+    --accent: #3B82F6;
+    --accent-hover: #2563EB;
+    --accent-light: #EFF6FF;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --error: #EF4444;
+    --shadow: 0 1px 2px rgba(0,0,0,.06);
+    --shadow-hover: 0 4px 12px rgba(0,0,0,.1);
+    --radius: 12px;
+    --radius-lg: 16px;
+    --max-width: 1120px;
+  }
+  
+  * { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+  }
+  
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* Typography Hierarchy */
+  h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  h3 {
+    font-size: 1.875rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text);
+  }
+
+  h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--text);
+  }
+
+  h5 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--text);
+  }
+
+  h6 {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.875rem;
+  }
+
+  p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .lead {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .small {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  /* Navigation */
+  .nav {
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+  }
+
+  .nav-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    height: 40px;
+    width: auto;
+  }
+
+  .logo img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .nav-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: color 0.2s ease;
+  }
+
+  .nav-link:hover {
+    color: var(--text);
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    font-weight: 500;
+    font-size: 0.875rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    box-shadow: var(--shadow);
+  }
+
+  .btn-primary:hover {
+    background: var(--accent-hover);
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+
+  .btn-secondary:hover {
+    background: var(--border-light);
+    transform: translateY(-1px);
+  }
+
+  .btn-large {
+    padding: 16px 32px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  /* Hero Section */
+  .hero {
+    padding: 60px 0;
+    text-align: center;
+  }
+
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: var(--accent-light);
+    color: var(--accent);
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+  }
+
+  .hero h1 {
+    margin-bottom: 20px;
+  }
+
+  .hero .lead {
+    margin-bottom: 40px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  /* Tools Section */
+  .tools-section {
+    padding: 80px 0;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .section-header h2 {
+    margin-bottom: 16px;
+  }
+
+  .section-header .lead {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .tool-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: var(--shadow);
+    transition: all 0.2s ease;
+  }
+
+  .tool-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+  }
+
+  .tool-header {
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  .tool-header h3 {
+    margin-bottom: 12px;
+  }
+
+  .tool-header p {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Form Elements */
+  .input-group {
+    margin-bottom: 20px;
+  }
+
+  .input-field {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    font-size: 0.875rem;
+    color: var(--text);
+    font-family: inherit;
+    resize: vertical;
+    min-height: 120px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+  }
+
+  .input-field:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-light);
+  }
+
+  .input-field::placeholder {
+    color: var(--text-muted);
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow);
+  }
+
+  .submit-btn:hover:not(:disabled) {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+  }
+
+  .submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Loading State */
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+    margin-left: 8px;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .loading-message {
+    text-align: center;
+    margin-top: 12px;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    font-style: italic;
+  }
+
+  /* Results Display */
+  .results {
+    margin-top: 32px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+  }
+
+  .results.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .result-header h4 {
+    margin: 0;
+  }
+
+  .result-content {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    max-height: 400px;
+    overflow-y: auto;
+    position: relative;
+    color: var(--text);
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+  }
+
+  .copy-btn:hover {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  .copy-btn.copied {
+    background: var(--success);
+    color: white;
+    border-color: var(--success);
+  }
+
+  /* MVP Results */
+  .mvp-results {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .mvp-section {
+    margin-bottom: 24px;
+  }
+
+  .mvp-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .mvp-section h5 {
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .mvp-section p {
+    margin-bottom: 8px;
+  }
+
+  .mvp-timeline {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .timeline-item {
+    background: var(--border-light);
+    padding: 16px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+
+  .timeline-item strong {
+    color: var(--text);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* Help Section */
+  .help-section {
+    padding: 80px 0;
+    background: var(--panel);
+    border-top: 1px solid var(--border);
+  }
+
+  .help-content {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .help-content h2 {
+    margin-bottom: 16px;
+  }
+
+  .help-content p {
+    margin-bottom: 32px;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 40px 0;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    background: var(--panel);
+  }
+
+  .footer p {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  /* Error States */
+  .error-state {
+    text-align: center;
+    padding: 40px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .error-state h4 {
+    color: var(--error);
+    margin-bottom: 12px;
+  }
+
+  .error-state p {
+    margin-bottom: 20px;
+    color: var(--text-muted);
+  }
+
+  /* Usage Instructions */
+  .usage-note {
+    margin-top: 16px;
+    padding: 16px;
+    background: var(--border-light);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+
+  .usage-note p {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .usage-note strong {
+    color: var(--text);
+  }
+
+  /* CTA Cards */
+  .cta-card {
+    margin-top: 32px;
+    padding: 24px;
+    background: var(--accent-light);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    text-align: center;
+  }
+
+  .cta-card h4 {
+    margin-bottom: 12px;
+  }
+
+  .cta-card p {
+    margin-bottom: 20px;
+    color: var(--text-muted);
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Utilities */
+  .hidden { display: none !important; }
+  .text-center { text-align: center; }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .container {
+      padding: 0 16px;
+    }
+
+    .nav-links {
+      display: none;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+    }
+
+    .tools-grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .hero-cta {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .btn {
+      width: 100%;
+      max-width: 280px;
+    }
+
+    .tool-card {
+      padding: 24px;
+    }
+
+    .result-header {
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .copy-btn {
+      position: relative;
+      width: 100%;
+      margin-top: 16px;
+    }
+
+    .mvp-timeline {
+      grid-template-columns: 1fr;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .tool-card {
+      padding: 20px;
+    }
+
+    .hero {
+      padding: 40px 0;
+    }
+
+    .tools-section {
+      padding: 60px 0;
+    }
+
+    .help-section {
+      padding: 60px 0;
+    }
+  }
+
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--border-light);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <div class="nav-content">
+        <a href="#" class="logo">
+          <img src="asklite.png" alt="AskArti Logo">
+        </a>
+        <div class="nav-links">
+          <a href="#tools" class="nav-link">Tools</a>
+          <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Book Free Call</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-badge">Free Tools</div>
+          <h1>Make AI Work Better For You</h1>
+          <p class="lead">
+            Two simple tools to help you get better results from AI. No tricks, no gimmicks - just practical help to make your prompts clearer and your ideas stronger.
+          </p>
+          <div class="hero-cta">
+            <a href="#tools" class="btn btn-primary btn-large">Try the Tools</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section id="tools" class="tools-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Two Ways I Can Help</h2>
+          <p class="lead">
+            Choose the tool that fits what you're working on right now. Both are free and designed to give you something useful in under a minute.
+          </p>
+        </div>
+        
+        <div class="tools-grid">
+          <!-- Perfect Prompt Tool -->
+          <div class="tool-card">
+            <div class="tool-header">
+              <h3>Perfect Prompt Maker</h3>
+              <p>
+                Turn any vague request into a clear, structured prompt that gets you better AI results. Works with Claude, ChatGPT, or any AI tool.
+              </p>
+            </div>
+            
+            <div class="input-group">
+              <textarea 
+                class="input-field" 
+                id="promptInput" 
+                placeholder="e.g., help me write better emails, create a marketing strategy, plan a presentation..."
+                rows="4"
+              ></textarea>
+            </div>
+            <button class="submit-btn" id="generatePromptBtn">
+              <span id="promptBtnText">Improve This Prompt</span>
+              <div id="promptSpinner" class="spinner hidden"></div>
+            </button>
+            <div id="promptLoading" class="loading-message hidden">
+              Working on your prompt...
+            </div>
+            
+            <div class="results" id="promptResults"></div>
+          </div>
+
+          <!-- MVP Tool -->
+          <div class="tool-card">
+            <div class="tool-header">
+              <h3>MVP Launch Plan</h3>
+              <p>
+                Have a business idea? Get a simple launch plan with timeline, validation steps, and a ready-to-use prompt for building your MVP landing page.
+              </p>
+            </div>
+            
+            <div class="input-group">
+              <textarea 
+                class="input-field" 
+                id="mvpInput" 
+                placeholder="e.g., a tool that helps freelancers track time, an app for dog walking scheduling, a service for LinkedIn optimization..."
+                rows="4"
+              ></textarea>
+            </div>
+            <button class="submit-btn" id="generateMvpBtn">
+              <span id="mvpBtnText">Create Launch Plan</span>
+              <div id="mvpSpinner" class="spinner hidden"></div>
+            </button>
+            <div id="mvpLoading" class="loading-message hidden">
+              Building your plan...
+            </div>
+            
+            <div class="results" id="mvpResults"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Help Section -->
+    <section class="help-section">
+      <div class="container">
+        <div class="help-content">
+          <h2>Need More Help?</h2>
+          <p>
+            These tools are a good start, but sometimes you need someone to walk through your specific situation with you. I'm happy to chat for 15 minutes and see if I can point you in the right direction.
+          </p>
+          <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary btn-large">
+            Book a Quick Call
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 AskArti &bull; mark@askarti.com</p>
+    </div>
+  </footer>
+
+<script>
+// Configuration - same endpoint as before
+const API_CONFIG = {
+  ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI'
+};
+
+// Global state
+let isGeneratingPrompt = false;
+let isGeneratingMvp = false;
+
+// Smooth scroll to element
+function scrollToElement(elementId) {
+  const element = document.getElementById(elementId);
+  if (element) {
+    const elementPosition = element.offsetTop - 20;
+    window.scrollTo({
+      top: elementPosition,
+      behavior: 'smooth'
+    });
+  }
+}
+
+// Generate improved prompt
+async function generatePrompt() {
+  const input = document.getElementById('promptInput').value.trim();
+  
+  if (!input) {
+    alert('Please describe what you want help with.');
+    return;
+  }
+
+  if (isGeneratingPrompt) return;
+  
+  setPromptLoading(true);
+  
+  try {
+    const response = await fetch(API_CONFIG.ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        situation: input,
+        request_type: 'prompt_improvement'
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    if (data.error) {
+      throw new Error(data.message || data.error);
+    }
+
+    showPromptResult(data.improved_prompt || data.content, input, data.explanation);
+
+  } catch (error) {
+    console.error('Prompt generation failed:', error);
+    showPromptError(error.message);
+  } finally {
+    setPromptLoading(false);
+  }
+}
+
+// Generate MVP launch plan
+async function generateMvpPlan() {
+  const input = document.getElementById('mvpInput').value.trim();
+  
+  if (!input) {
+    alert('Please describe your business idea.');
+    return;
+  }
+
+  if (isGeneratingMvp) return;
+  
+  setMvpLoading(true);
+  
+  try {
+    const response = await fetch(API_CONFIG.ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        situation: input,
+        request_type: 'mvp_launch_plan'
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    if (data.error) {
+      throw new Error(data.message || data.error);
+    }
+
+    showMvpResult(data.launchPlan, input);
+
+  } catch (error) {
+    console.error('MVP generation failed:', error);
+    showMvpError(error.message);
+  } finally {
+    setMvpLoading(false);
+  }
+}
+
+// Set prompt loading state
+function setPromptLoading(loading) {
+  isGeneratingPrompt = loading;
+  const btn = document.getElementById('generatePromptBtn');
+  const btnText = document.getElementById('promptBtnText');
+  const spinner = document.getElementById('promptSpinner');
+  const loadingMsg = document.getElementById('promptLoading');
+  
+  btn.disabled = loading;
+  
+  if (loading) {
+    btnText.classList.add('hidden');
+    spinner.classList.remove('hidden');
+    loadingMsg.classList.remove('hidden');
+  } else {
+    btnText.classList.remove('hidden');
+    spinner.classList.add('hidden');
+    loadingMsg.classList.add('hidden');
+  }
+}
+
+// Set MVP loading state
+function setMvpLoading(loading) {
+  isGeneratingMvp = loading;
+  const btn = document.getElementById('generateMvpBtn');
+  const btnText = document.getElementById('mvpBtnText');
+  const spinner = document.getElementById('mvpSpinner');
+  const loadingMsg = document.getElementById('mvpLoading');
+  
+  btn.disabled = loading;
+  
+  if (loading) {
+    btnText.classList.add('hidden');
+    spinner.classList.remove('hidden');
+    loadingMsg.classList.remove('hidden');
+  } else {
+    btnText.classList.remove('hidden');
+    spinner.classList.add('hidden');
+    loadingMsg.classList.add('hidden');
+  }
+}
+
+// Show prompt results with clean typography
+function showPromptResult(prompt, originalInput, explanation) {
+  const resultsSection = document.getElementById('promptResults');
+  
+  resultsSection.innerHTML = `
+    <div class="result-header">
+      <h4>Your Improved Prompt</h4>
+      <button class="btn btn-secondary" onclick="copyToClipboard('prompt-content')">Copy Prompt</button>
+    </div>
+    <p class="small" style="margin-bottom: 20px; color: var(--text-muted);">
+      ${explanation || 'We transformed your basic request into a structured, professional prompt that will get you dramatically better AI results.'}
+    </p>
+    <div class="result-content" id="prompt-content">
+      <button class="copy-btn" onclick="copyToClipboard('prompt-content')">Copy</button>
+      ${prompt}
+    </div>
+    <div class="usage-note">
+      <p><strong>How to use:</strong> Copy this prompt and paste it into Claude, ChatGPT, or any AI tool for dramatically better results.</p>
+    </div>
+    
+    <div class="cta-card">
+      <h4>Want to learn more techniques like this?</h4>
+      <p>These tools are a good start, but I can show you advanced prompting strategies tailored to your specific work.</p>
+      <div class="cta-buttons">
+        <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Book Free Strategy Call</a>
+        <a href="https://calendly.com/markflournoy/deepdive" target="_blank" class="btn btn-secondary">1:1 Deep Dive - $99</a>
+      </div>
+    </div>
+  `;
+  
+  resultsSection.classList.add('show');
+  setTimeout(() => {
+    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+// Show MVP results with clean typography
+function showMvpResult(launchPlan, originalInput) {
+  const resultsSection = document.getElementById('mvpResults');
+  
+  resultsSection.innerHTML = `
+    <div class="result-header">
+      <h4>Your Launch Plan</h4>
+      <button class="btn btn-secondary" onclick="copyToClipboard('mvp-prompt')">Copy MVP Prompt</button>
+    </div>
+    
+    <div class="mvp-results">
+      <div class="mvp-section">
+        <h5>Product Name</h5>
+        <p>${launchPlan.productName || 'Your Solution'}</p>
+      </div>
+      
+      <div class="mvp-section">
+        <h5>What You're Building</h5>
+        <p>${launchPlan.strategy?.whatYoureBuilding || 'Solution definition needed'}</p>
+      </div>
+      
+      <div class="mvp-section">
+        <h5>Target Customer</h5>
+        <p>${launchPlan.strategy?.targetCustomer || 'Customer analysis needed'}</p>
+      </div>
+      
+      <div class="mvp-section">
+        <h5>Value Proposition</h5>
+        <p>${launchPlan.strategy?.valueProposition || 'Value proposition needed'}</p>
+      </div>
+      
+      <div class="mvp-section">
+        <h5>Validation Goal</h5>
+        <p>${launchPlan.strategy?.validationGoal || 'Validation metrics needed'}</p>
+      </div>
+      
+      <div class="mvp-section">
+        <h5>Quick Start Timeline</h5>
+        <div class="mvp-timeline">
+          <div class="timeline-item">
+            <strong>Day 1</strong>
+            ${launchPlan.timeline?.day1 || 'Plan validation approach'}
+          </div>
+          <div class="timeline-item">
+            <strong>Day 2</strong>
+            ${launchPlan.timeline?.day2 || 'Build MVP'}
+          </div>
+        </div>
+      </div>
+      
+      <div class="mvp-section">
+        <h5>Success Metrics</h5>
+        <p><strong>Week 1 Target:</strong> ${launchPlan.successMetrics?.week1 || 'Measure engagement'}</p>
+        <p><strong>Pivot Signal:</strong> ${launchPlan.successMetrics?.pivotSignal || 'Low interest'}</p>
+      </div>
+      
+      <div class="mvp-section">
+        <h5>Ready-to-Use MVP Prompt</h5>
+        <p class="small" style="margin-bottom: 16px;">Copy this prompt into Claude, ChatGPT, or any AI tool to build your landing page:</p>
+        <div class="result-content" id="mvp-prompt">
+          <button class="copy-btn" onclick="copyToClipboard('mvp-prompt')">Copy</button>
+          ${launchPlan.mvpPrompt || 'MVP prompt generation failed - please try again'}
+        </div>
+      </div>
+      
+      ${launchPlan.realityCheck ? `
+      <div class="mvp-section">
+        <h5>Reality Check</h5>
+        <p>${launchPlan.realityCheck}</p>
+      </div>
+      ` : ''}
+    </div>
+    
+    <div class="usage-note">
+      <p><strong>How to use:</strong> Follow the timeline, use the MVP prompt to build your landing page, and track the success metrics to validate your idea.</p>
+    </div>
+    
+    <div class="cta-card">
+      <h4>Ready to Execute This Plan?</h4>
+      <p>Get personalized guidance and hands-on help executing your launch strategy.</p>
+      <div class="cta-buttons">
+        <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Book Free Strategy Call</a>
+        <a href="https://calendly.com/markflournoy/deepdive" target="_blank" class="btn btn-secondary">1:1 Launch Coaching - $99</a>
+      </div>
+    </div>
+  `;
+  
+  resultsSection.classList.add('show');
+  setTimeout(() => {
+    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+// Show error messages with clean design
+function showPromptError(message) {
+  const resultsSection = document.getElementById('promptResults');
+  resultsSection.innerHTML = `
+    <div class="error-state">
+      <h4>Something went wrong</h4>
+      <p>${message}</p>
+      <p class="small">Don't worry - I can help you create the perfect prompts manually.</p>
+      <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Get Personal Help - Free Call</a>
+    </div>
+  `;
+  resultsSection.classList.add('show');
+}
+
+function showMvpError(message) {
+  const resultsSection = document.getElementById('mvpResults');
+  resultsSection.innerHTML = `
+    <div class="error-state">
+      <h4>Something went wrong</h4>
+      <p>${message}</p>
+      <p class="small">Let's create your launch plan together on a call.</p>
+      <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Get Personal Help - Free Call</a>
+    </div>
+  `;
+  resultsSection.classList.add('show');
+}
+
+// Copy to clipboard functionality
+function copyToClipboard(elementId) {
+  const element = document.getElementById(elementId);
+  const text = element.textContent.replace('Copy', '').trim();
+  
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(() => {
+      showCopySuccess(elementId);
+    }).catch(() => {
+      fallbackCopy(text);
+    });
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+// Fallback copy method
+function fallbackCopy(text) {
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';
+  textArea.style.left = '-999999px';
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    document.execCommand('copy');
+    showCopySuccess();
+  } catch (err) {
+    alert('Please copy the text manually');
+  } finally {
+    document.body.removeChild(textArea);
+  }
+}
+
+// Show copy success feedback
+function showCopySuccess(elementId) {
+  const buttons = elementId ? 
+    [document.querySelector(`#${elementId} .copy-btn`)] : 
+    document.querySelectorAll('.copy-btn');
+  
+  buttons.forEach(button => {
+    if (button) {
+      const originalText = button.textContent;
+      button.textContent = 'Copied!';
+      button.classList.add('copied');
+      
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.classList.remove('copied');
+      }, 2000);
+    }
+  });
+}
+
+// Auto-resize textareas
+function autoResize(textarea) {
+  textarea.style.height = 'auto';
+  textarea.style.height = Math.min(textarea.scrollHeight, 300) + 'px';
+}
+
+// Smooth scrolling for anchor links
+function setupSmoothScrolling() {
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = this.getAttribute('href').substring(1);
+      scrollToElement(target);
+    });
+  });
+}
+
+// Initialize event listeners
+function initializeApp() {
+  // Prompt tool
+  const promptBtn = document.getElementById('generatePromptBtn');
+  const promptInput = document.getElementById('promptInput');
+  
+  promptBtn.addEventListener('click', generatePrompt);
+  
+  promptInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      generatePrompt();
+    }
+  });
+  
+  promptInput.addEventListener('input', () => autoResize(promptInput));
+  
+  // MVP tool
+  const mvpBtn = document.getElementById('generateMvpBtn');
+  const mvpInput = document.getElementById('mvpInput');
+  
+  mvpBtn.addEventListener('click', generateMvpPlan);
+  
+  mvpInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      generateMvpPlan();
+    }
+  });
+  
+  mvpInput.addEventListener('input', () => autoResize(mvpInput));
+  
+  // Setup smooth scrolling
+  setupSmoothScrolling();
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', initializeApp);
+
+// Make functions available globally for onclick handlers
+window.copyToClipboard = copyToClipboard;
+</script>
+</body>
+</html>
