@@ -3,1409 +3,823 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AskArti â€" AI Prompt Maker for Better Results</title>
-<meta name="description" content="Transform vague prompts into powerful AI instructions. Get specific, actionable results from ChatGPT, Claude, and other AI tools with our free prompt maker." />
+<title>Transform Any Idea Into Perfect AI Prompts</title>
+<meta name="description" content="Turn your big ideas into powerful AI instructions that get results. Free tools for prompts and MVP planning." />
 <link rel="icon" href="/images/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WLGEPY5H4G"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-WLGEPY5H4G');
-    </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #FAFAFA;
-    --bg-secondary: #F5F5F5;
-    --panel: #FFFFFF;
-    --text: #1A1A1A;
-    --text-secondary: #6B6B6B;
-    --text-muted: #9B9B9B;
-    --border: #E6E6E6;
-    --border-light: #F0F0F0;
-    --accent: #2A2A2A;
-    --accent-light: #4A4A4A;
-    --accent-bg: rgba(42, 42, 42, 0.04);
-    --success: #44B1FF;
-    --mvp-color: #7C3AED;
-    --mvp-light: #8B5CF6;
+    /* Dark Premium Theme */
+    --bg: #0A0A0A;
+    --bg-secondary: #111111;
+    --panel: #1A1A1A;
+    --panel-hover: #222222;
+    --text: #FFFFFF;
+    --text-secondary: #A1A1AA;
+    --text-muted: #71717A;
+    --border: #27272A;
+    --border-light: #3F3F46;
+    --accent: #3B82F6;
+    --accent-hover: #2563EB;
+    --accent-light: rgba(59, 130, 246, 0.1);
+    --success: #10B981;
+    --success-hover: #059669;
+    --warning: #F59E0B;
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.3);
     --radius: 12px;
-    --radius-sm: 6px;
-    --radius-lg: 16px;
-    --shadow-xs: 0px 1px 2px rgba(0, 0, 0, 0.04);
-    --shadow-sm: 0px 2px 4px rgba(0, 0, 0, 0.06);
-    --shadow-md: 0px 4px 12px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0px 8px 24px rgba(0, 0, 0, 0.12);
+    --radius-lg: 24px;
     --max-width: 1200px;
-    --section-padding: 40px;
   }
   
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+  }
   
   body {
-    font-family: -apple-system, BlinkMacMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     background: var(--bg);
     color: var(--text);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     letter-spacing: -0.01em;
   }
-  
+
   .container {
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 0 24px;
   }
-  
-  /* Header */
-  header {
-    background: var(--panel);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+
+  /* Elegant Typography */
+  .display-large {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    background: linear-gradient(135deg, #FFFFFF 0%, #A1A1AA 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
-  
-  .header-content {
+
+  .display-medium {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  .headline {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    color: var(--text-secondary);
+  }
+
+  .body-large {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  /* Navigation */
+  .nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    z-index: 1000;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .nav-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 0;
-  }
-  
-  .logo {
-    height: 100px;
-    width: auto;
+    padding: 20px 0;
   }
 
-  .logo img {
-    height: 100%;
-    width: auto;
-    object-fit: contain;
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
   }
-  
-  .nav-items {
+
+  .logo:hover {
+    opacity: 0.8;
+  }
+
+  .nav-links {
     display: flex;
     align-items: center;
     gap: 32px;
   }
-  
+
   .nav-link {
     color: var(--text-secondary);
     text-decoration: none;
     font-weight: 400;
-    font-size: 15px;
     transition: color 0.2s ease;
+    position: relative;
   }
-  
+
   .nav-link:hover {
     color: var(--text);
   }
-  
-  .nav-link.free-highlight {
-    background: var(--success);
-    color: white;
-    padding: 8px 16px;
-    border-radius: var(--radius-sm);
-    font-weight: 600;
-    transition: all 0.2s ease;
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    transition: width 0.2s ease;
   }
 
-  .nav-link.free-highlight:hover {
-    background: #159BFF;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
+  .nav-link:hover::after {
+    width: 100%;
   }
 
-  .nav-link.mvp-highlight {
-    background: var(--mvp-color);
-    color: white;
-    padding: 8px 16px;
-    border-radius: var(--radius-sm);
-    font-weight: 600;
-    transition: all 0.2s ease;
-  }
-
-  .nav-link.mvp-highlight:hover {
-    background: var(--mvp-light);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
-  }
-  
-  @keyframes subtle-pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-  }
-  
   /* Buttons */
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 20px;
-    border-radius: var(--radius-sm);
+    padding: 12px 24px;
+    border-radius: var(--radius);
     font-weight: 500;
-    font-size: 14px;
+    font-size: 0.9rem;
     text-decoration: none;
-    transition: all 0.2s ease;
-    cursor: pointer;
     border: none;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     font-family: inherit;
-    letter-spacing: -0.01em;
+    position: relative;
+    overflow: hidden;
   }
 
-  .btn-lg {
-    padding: 14px 28px;
-    font-size: 16px;
-  }
-  
   .btn-primary {
     background: var(--accent);
     color: white;
-    box-shadow: var(--shadow-xs);
+    box-shadow: var(--shadow-md);
   }
-  
+
   .btn-primary:hover {
-    background: var(--accent-light);
+    background: var(--accent-hover);
     transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
   }
-  
+
   .btn-secondary {
     background: var(--panel);
     color: var(--text);
     border: 1px solid var(--border);
-    box-shadow: var(--shadow-xs);
-  }
-  
-  .btn-secondary:hover {
-    background: var(--accent-bg);
-    border-color: var(--accent);
-  }
-  
-  .btn-success {
-    background: var(--success);
-    color: white;
-    box-shadow: var(--shadow-xs);
-  }
-  
-  .btn-success:hover {
-    background: #159BFF;
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
   }
 
-  .btn-mvp {
-    background: var(--mvp-color);
-    color: white;
-    box-shadow: var(--shadow-xs);
-  }
-  
-  .btn-mvp:hover {
-    background: var(--mvp-light);
+  .btn-secondary:hover {
+    background: var(--panel-hover);
+    border-color: var(--border-light);
     transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
   }
-  
-  /* Hero Section */
-  .hero-section {
-    padding: var(--section-padding) 0;
+
+  .btn-large {
+    padding: 16px 32px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+
+  .btn-ghost:hover {
     background: var(--panel);
+    color: var(--text);
+    border-color: var(--accent);
+  }
+
+  /* Hero Section */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
   }
 
   .hero-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 64px;
-    align-items: center;
-  }
-
-  .hero-text {
-    text-align: left;
+    max-width: 900px;
+    margin: 0 auto;
+    z-index: 2;
   }
 
   .hero-badge {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: linear-gradient(45deg, #4CAF50, #45a049);
-    color: white;
+    background: var(--accent-light);
+    color: var(--accent);
     padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 24px;
-    animation: gentle-glow 2s ease-in-out infinite alternate;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 32px;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    animation: float 3s ease-in-out infinite;
   }
-  
-  @keyframes gentle-glow {
-    from { box-shadow: 0 0 5px rgba(76, 175, 80, 0.3); }
-    to { box-shadow: 0 0 20px rgba(76, 175, 80, 0.6); }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
   }
 
   .hero-title {
-    font-size: 56px;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    margin-bottom: 20px;
-    line-height: 1.1;
+    margin-bottom: 24px;
+    animation: slideUp 0.8s ease-out;
   }
 
   .hero-subtitle {
-    font-size: 20px;
-    color: var(--text-secondary);
-    margin-bottom: 32px;
-    max-width: 500px;
+    margin-bottom: 48px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    animation: slideUp 0.8s ease-out 0.1s both;
   }
 
   .hero-cta {
     display: flex;
-    align-items: center;
     gap: 16px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    animation: slideUp 0.8s ease-out 0.2s both;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Background Animation */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(147, 197, 253, 0.1) 0%, transparent 50%);
+    animation: backgroundMove 20s ease-in-out infinite;
+  }
+
+  @keyframes backgroundMove {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.1) rotate(1deg); }
+  }
+
+  /* Tool Sections */
+  .tool-section {
+    padding: 80px 0;
+    position: relative;
+  }
+
+  .tool-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 48px;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tool-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-primary);
+  }
+
+  .section-header {
+    text-align: center;
     margin-bottom: 48px;
   }
 
-  .hero-image {
-    width: 100%;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
+  .section-title {
+    margin-bottom: 16px;
   }
 
-  .hero-image img {
-    width: 100%;
-    height: auto;
-    border-radius: var(--radius-lg);
-  }
-  
-  .social-proof {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 16px;
-    color: var(--text-muted);
-    font-size: 14px;
-  }
-  
-  .avatars {
-    display: flex;
-    margin-right: 12px;
-  }
-  
-  .avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--border);
-    border: 2px solid white;
-    margin-left: -8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-secondary);
-  }
-  
-  /* Example Carousel */
-  .examples-section {
-    padding: 32px 0;
-    background: var(--bg-secondary);
-  }
-  
-  .examples-carousel {
-    max-width: 800px;
-    margin: 0 auto;
-    position: relative;
-  }
-  
-  .example-card {
-    background: var(--panel);
-    border-radius: var(--radius-lg);
-    padding: 24px;
-    margin-bottom: 16px;
-    box-shadow: var(--shadow-sm);
-    display: none;
-  }
-  
-  .example-card.active {
-    display: block;
-    animation: fadeIn 0.5s ease-in-out;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  .example-before {
-    background: #ffebee;
-    padding: 16px;
-    border-radius: var(--radius);
-    margin-bottom: 16px;
-  }
-  
-  .example-after {
-  background: #e8f5e8;
-  padding: 16px;
-  border-radius: var(--radius);
-  margin-bottom: 16px;
-  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-  font-size: 13px;
-  line-height: 1.5;
-  border: 1px solid var(--border);
-  max-height: 250px;
-  overflow-y: auto;
-  }
-  
-  .example-why {
-    font-size: 14px;
-    color: var(--text-secondary);
-    font-style: italic;
-  }
-  
-  .carousel-nav {
-  display: none;
-}
-  
-  .carousel-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--border);
-    cursor: pointer;
-    transition: background 0.2s ease;
-  }
-  
-  .carousel-dot.active {
-    background: var(--accent);
-  }
-  
-  /* Section Headers */
-  .section-header {
-    text-align: center;
-    margin-bottom: 32px;
-  }
-  
-  .section-title {
-    font-size: 36px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    margin-bottom: 16px;
-  }
-  
   .section-subtitle {
-    font-size: 18px;
-    color: var(--text-secondary);
     max-width: 600px;
     margin: 0 auto;
   }
-  
-  /* Prompt Tool Section */
-  .prompt-tool-section {
-    padding: var(--section-padding) 0;
-    background: var(--bg);
-  }
-  
-  .prompt-tool-container {
-    max-width: 800px;
-    margin: 0 auto;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    overflow: hidden;
-  }
-  
-  /* MVP Tool Section */
-  .mvp-tool-section {
-    padding: var(--section-padding) 0;
-    background: var(--bg-secondary);
-  }
-  
-  .mvp-tool-container {
-    max-width: 800px;
-    margin: 0 auto;
-    background: var(--panel);
-    border: 2px solid var(--mvp-color);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    overflow: hidden;
-  }
-  
-  .tool-input-area {
-    padding: 32px;
-  }
-  
-  .tool-input-container {
-    margin-bottom: 20px;
-  }
-  
-  .tool-input {
-    width: 100%;
-    padding: 16px 20px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--bg);
-    font-size: 15px;
-    resize: none;
-    min-height: 120px;
-    font-family: inherit;
-    outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    box-sizing: border-box;
-  }
-  
-  .tool-input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(42, 42, 42, 0.1);
+
+  /* Input Styling */
+  .input-group {
+    margin-bottom: 32px;
   }
 
-  .mvp-tool-container .tool-input:focus {
-    border-color: var(--mvp-color);
-    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  .input-field {
+    width: 100%;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    font-size: 1rem;
+    color: var(--text);
+    font-family: inherit;
+    resize: vertical;
+    min-height: 120px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
   }
-  
-  .tool-input::placeholder {
+
+  .input-field:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-light);
+    background: var(--panel);
+  }
+
+  .input-field::placeholder {
     color: var(--text-muted);
   }
-  
-  .tool-submit-btn {
+
+  .submit-btn {
     width: 100%;
-    padding: 16px 24px;
-    background: var(--success);
+    padding: 20px;
+    background: var(--accent);
     color: white;
     border: none;
     border-radius: var(--radius);
-    font-weight: 500;
-    font-size: 15px;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-sizing: border-box;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-  }
-  
-  .tool-submit-btn:hover {
-    background: #159BFF;
-    transform: translateY(-1px);
+    overflow: hidden;
   }
 
-  .mvp-tool-container .tool-submit-btn {
-    background: var(--mvp-color);
+  .submit-btn:hover:not(:disabled) {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
   }
-  
-  .mvp-tool-container .tool-submit-btn:hover {
-    background: var(--mvp-light);
-    transform: translateY(-1px);
-  }
-  
-  .tool-submit-btn:disabled {
+
+  .submit-btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
   }
-  
-  /* Results Section */
-  .results-section {
-    margin-top: 32px;
-    padding: 32px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    display: none;
+
+  .submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
   }
-  
-  .results-section.show {
-    display: block;
-    animation: slideUp 0.4s ease-out;
+
+  .submit-btn:hover::before {
+    left: 100%;
   }
-  
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+
+  /* Loading State */
+  .spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+    margin-left: 8px;
   }
-  
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .loading-message {
+    text-align: center;
+    margin-top: 16px;
+    color: var(--text-muted);
+    font-style: italic;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  /* Results Display */
+  .results {
+    margin-top: 48px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .results.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   .result-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
-    padding-bottom: 20px;
+    padding-bottom: 16px;
     border-bottom: 1px solid var(--border);
   }
-  
+
   .result-title {
+    font-size: 1.25rem;
     font-weight: 600;
-    font-size: 18px;
-    color: var(--text);
   }
-  
-  .explanation-text {
-    font-size: 14px;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: 24px;
-  }
-  
-  .prompt-display {
-    background: #e8f5e8;
+
+  .result-content {
+    background: var(--bg-secondary);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 24px;
-    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-    font-size: 14px;
+    padding: 32px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 0.9rem;
     line-height: 1.6;
     white-space: pre-wrap;
     max-height: 400px;
     overflow-y: auto;
-    margin-bottom: 20px;
     position: relative;
   }
 
-  /* MVP Launch Plan Display */
-  .launch-plan-display {
-    background: #faf5ff;
-    border: 1px solid var(--mvp-color);
-    border-radius: var(--radius);
-    padding: 24px;
-    margin-bottom: 20px;
+  .copy-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
   }
 
-  .launch-plan-section {
+  .copy-btn:hover {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  .copy-btn.copied {
+    background: var(--success);
+    color: white;
+    border-color: var(--success);
+  }
+
+  /* MVP Results */
+  .mvp-results {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
     margin-bottom: 24px;
   }
 
-  .launch-plan-section h4 {
-    color: var(--mvp-color);
+  .mvp-section {
+    margin-bottom: 32px;
+  }
+
+  .mvp-section h4 {
+    color: var(--accent);
     font-weight: 600;
     margin-bottom: 12px;
-    font-size: 16px;
+    font-size: 1.1rem;
   }
 
-  .launch-plan-section p {
-    margin-bottom: 8px;
-    line-height: 1.5;
-  }
-
-  .launch-plan-timeline {
+  .mvp-timeline {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 16px;
-    margin-top: 12px;
+    margin-top: 16px;
   }
 
   .timeline-item {
-    background: white;
-    padding: 16px;
-    border-radius: var(--radius-sm);
+    background: var(--panel);
+    padding: 20px;
+    border-radius: var(--radius);
     border: 1px solid var(--border);
   }
 
   .timeline-item strong {
-    color: var(--mvp-color);
-  }
-
-  .mvp-prompt-display {
-    background: #f3f4f6;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-    font-size: 13px;
-    line-height: 1.5;
-    max-height: 300px;
-    overflow-y: auto;
-    margin-top: 12px;
-    white-space: pre-wrap;
-    position: relative;
-  }
-  
-  .copy-floating {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    padding: 8px 12px;
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: var(--radius-sm);
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .copy-floating:hover {
-    background: var(--accent-light);
-  }
-
-  .mvp-prompt-display .copy-floating {
-    background: var(--mvp-color);
-  }
-
-  .mvp-prompt-display .copy-floating:hover {
-    background: var(--mvp-light);
-  }
-  
-  .result-note {
-    font-size: 14px;
-    color: var(--text-muted);
-    line-height: 1.5;
-  }
-  
-  .next-steps {
-    background: var(--bg-secondary);
-    padding: 20px;
-    border-radius: var(--radius);
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  .next-steps h4 {
-    margin-bottom: 12px;
-    color: var(--text);
-  }
-  
-  .next-steps p {
-    margin-bottom: 16px;
-    color: var(--text-secondary);
-    font-size: 14px;
-  }
-  
-  /* Services Section */
-  .services-section {
-    padding: var(--section-padding) 0;
-    background: var(--bg);
-  }
-  
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 32px;
-    margin-top: 32px;
-  }
-  
-  .service-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 32px;
-    box-shadow: var(--shadow-xs);
-    transition: all 0.2s ease;
-    position: relative;
-  }
-  
-  .service-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-  }
-  
-  .service-card.featured {
-    border: 2px solid var(--accent);
-  }
-  
-  .service-badge {
-    position: absolute;
-    top: -12px;
-    left: 24px;
-    background: var(--accent);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 16px;
-    font-size: 12px;
-    font-weight: 600;
-  }
-  
-  .service-title {
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-  
-  .service-price {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 16px;
     color: var(--accent);
   }
-  
-  .service-description {
-    color: var(--text-secondary);
+
+  /* Call-to-Action */
+  .cta-section {
+    padding: 120px 0;
+    text-align: center;
+    background: var(--bg-secondary);
+  }
+
+  .cta-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .cta-title {
     margin-bottom: 24px;
-    line-height: 1.6;
-  }
-  
-  .service-features {
-    list-style: none;
-    margin-bottom: 32px;
-  }
-  
-  .service-features li {
-    padding: 8px 0;
-    font-size: 14px;
-    color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  
-  .service-features li::before {
-    content: "âœ"";
-    color: var(--success);
-    font-weight: 600;
-    width: 16px;
-    height: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  /* CTA Before FAQ Section */
-  .cta-before-faq {
-    padding: var(--section-padding) 0;
-    background: var(--bg-secondary);
-    text-align: center;
   }
 
-  /* FAQ Section */
-  .faq-section {
-    padding: var(--section-padding) 0;
-    background: var(--panel);
+  .cta-subtitle {
+    margin-bottom: 40px;
   }
-  
-  .faq-list {
-    max-width: 800px;
-    margin: 32px auto 0;
-  }
-  
-  .faq-item {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: 16px;
-    overflow: hidden;
-  }
-  
-  .faq-question {
-    padding: 24px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 500;
-    transition: background-color 0.2s ease;
-  }
-  
-  .faq-question:hover {
-    background: var(--bg-secondary);
-  }
-  
-  .faq-icon {
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    color: var(--text-muted);
-    transition: transform 0.2s ease;
-  }
-  
-  .faq-answer {
-    padding: 0 24px 24px;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    display: none;
-  }
-  
-  .faq-item.active .faq-answer {
-    display: block;
-  }
-  
-  .faq-item.active .faq-icon {
-    transform: rotate(45deg);
-  }
-  
-  /* Newsletter Section */
-  .newsletter-section {
-    padding: var(--section-padding) 0;
-    background: var(--accent);
-    color: white;
-    text-align: center;
-  }
-  
-  .newsletter-form {
-    max-width: 400px;
-    margin: 16px auto 0;
-    display: flex;
-    gap: 12px;
-  }
-  
-  .newsletter-input {
-    flex: 1;
-    padding: 12px 16px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius);
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    font-size: 14px;
-    outline: none;
-  }
-  
-  .newsletter-input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-  }
-  
-  .newsletter-btn {
-    padding: 12px 24px;
-    background: white;
-    color: var(--accent);
-    border: none;
-    border-radius: var(--radius);
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .newsletter-btn:hover {
-    background: var(--bg);
-  }
-  
+
   /* Footer */
-  footer {
-    padding: 32px 0;
-    background: var(--accent);
-    color: rgba(255, 255, 255, 0.8);
+  .footer {
+    padding: 40px 0;
     text-align: center;
-    font-size: 14px;
-  }
-  
-  /* Utilities */
-  .loader {
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-top: 2px solid white;
-    border-radius: 50%;
-    width: 1.25rem;
-    height: 1.25rem;
-    animation: spin 1s linear infinite;
-    margin-left: 8px;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  .hidden {
-    display: none;
-  }
-
-  .text-success {
-    color: var(--success) !important;
-  }
-
-  .text-center {
-    text-align: center;
-  }
-  
-  .loading-message {
-    font-size: 14px;
+    border-top: 1px solid var(--border);
     color: var(--text-muted);
-    text-align: center;
-    margin-top: 10px;
-    font-style: italic;
   }
-  
+
+  /* Utilities */
+  .hidden { display: none !important; }
+  .text-center { text-align: center; }
+
   /* Responsive Design */
   @media (max-width: 768px) {
-    :root {
-      --section-padding: 24px;
-    }
-    
     .container {
-      padding: 0 16px;
+      padding: 0 20px;
     }
-    
-    .nav-items {
+
+    .nav-links {
       display: none;
     }
-    
-    .logo {
-      height: 60px;
-    }
-    
-    .hero-content {
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-    
-    .hero-text {
-      text-align: center;
-    }
-    
-    .hero-title {
-      font-size: 36px;
-      margin-bottom: 16px;
-    }
-    
-    .hero-subtitle {
-      font-size: 18px;
-      margin-bottom: 24px;
-      max-width: 100%;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .hero-cta {
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    
-    .social-proof {
-      justify-content: center;
-    }
-    
-    .section-title {
-      font-size: 28px;
-    }
-    
-    .newsletter-form {
-      flex-direction: column;
-    }
-    
-    .services-grid {
-      grid-template-columns: 1fr;
-    }
 
-    .launch-plan-timeline {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .logo {
-      height: 48px;
-    }
-    
-    .hero-title {
-      font-size: 28px;
-      line-height: 1.2;
-    }
-    
-    .hero-subtitle {
-      font-size: 16px;
-    }
-    
     .hero-cta {
       flex-direction: column;
       align-items: center;
     }
-    
-    .btn {
-      width: 100%;
-      max-width: 280px;
-    }
 
-    .btn-lg {
+    .btn {
       width: 100%;
       max-width: 300px;
     }
-  }
-  html, body {
-  overflow-x: hidden;
-  width: 100%;
-}
 
-* {
-  touch-action: manipulation;
-}
+    .tool-container {
+      padding: 32px 24px;
+    }
+
+    .mvp-timeline {
+      grid-template-columns: 1fr;
+    }
+
+    .result-header {
+      flex-direction: column;
+      gap: 16px;
+      align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .display-large {
+      font-size: 2.5rem;
+    }
+
+    .tool-container {
+      padding: 24px 16px;
+    }
+
+    .copy-btn {
+      position: relative;
+      width: 100%;
+      margin-top: 16px;
+    }
+  }
+
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-light);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+  }
 </style>
 </head>
 <body>
-  <header>
+  <nav class="nav">
     <div class="container">
-      <div class="header-content">
-        <a href="#" class="logo">
-          <img src="asklite.png" alt="AskArti Logo">
-        </a>
-        <div class="nav-items">
-          <a href="#prompt-tool" class="nav-link free-highlight">Perfect Prompt Maker</a>
-          <a href="#mvp-tool" class="nav-link mvp-highlight">MVP Maker</a>
-          <a href="#services" class="nav-link">Services</a>
-          <a href="#faq" class="nav-link">FAQ</a>
-          <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-success">Book Call</a>
+      <div class="nav-content">
+        <a href="#" class="logo">AskArti</a>
+        <div class="nav-links">
+          <a href="#prompt-tool" class="nav-link">Prompt Tool</a>
+          <a href="#mvp-tool" class="nav-link">MVP Tool</a>
+          <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Book Free Call</a>
         </div>
       </div>
     </div>
-  </header>
+  </nav>
 
   <main>
-    <section class="hero-section">
+    <!-- Hero Section -->
+    <section class="hero">
       <div class="container">
         <div class="hero-content">
-          <div class="hero-text">
-            <h1 class="hero-title">Make AI Deliver Results.<br><span class="text-success"></span></h1>
-<p class="hero-subtitle">Start with my free prompt maker and MVP launcher. When you want to level up, book a free call and I'll share my Jedi tricks.</p>
-
-            
-            <div class="hero-cta">
-              <a href="#prompt-tool" class="btn btn-success btn-lg">Perfect Prompt Maker</a>
-              <a href="#mvp-tool" class="btn btn-mvp btn-lg">MVP Maker</a>
-            </div>
-            
-            <div class="social-proof">
-              <div class="avatars">
-                <div class="avatar">JS</div>
-                <div class="avatar">AM</div>
-                <div class="avatar">RK</div>
-                <div class="avatar">+</div>
-              </div>
-              <span>Over 500+ sales professionals helped.</span>
-            </div>
+          <div class="hero-badge">
+            ✨ Free AI Tools
           </div>
-          
-          <div class="hero-image">
-            <img src="chatcal.png" alt="AI Prompt Transformation">
+          <h1 class="display-large hero-title">
+            Transform Ideas Into Perfect AI Prompts
+          </h1>
+          <p class="headline hero-subtitle">
+            Turn your big ideas into precise instructions that get results. Two free tools, infinite possibilities.
+          </p>
+          <div class="hero-cta">
+            <a href="#prompt-tool" class="btn btn-primary btn-large">Perfect Prompt Maker</a>
+            <a href="#mvp-tool" class="btn btn-secondary btn-large">MVP Launch Plan</a>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="prompt-tool" class="prompt-tool-section">
+    <!-- Prompt Tool -->
+    <section id="prompt-tool" class="tool-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">Perfect Prompt Maker</h2>
-		  <p class="section-subtitle">Make any prompt 5x better.</p>
-        </div>
-        
-        <div class="prompt-tool-container">
-          <div class="tool-input-area">
-            <div class="tool-input-container">
-              <textarea class="tool-input" id="problemInput" placeholder="e.g., help me sell cloud to DHS, write my GTM strategy, give me a side hustle so I can quit this job..." rows="4"></textarea>
-            </div>
-            <div class="button-container">
-              <button class="tool-submit-btn" id="generateBtn">
-                <span id="btnText">Create My Perfect Prompt</span>
-                <div id="btnLoader" class="loader hidden"></div>
-              </button>
-              <div id="loadingMessage" class="loading-message hidden">Crafting your perfect prompt...</div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="results-section" id="resultsSection">
-          </div>
-      </div>
-    </section>
-
-    <section id="mvp-tool" class="mvp-tool-section">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">MVP Maker</h2>
-		  <p class="section-subtitle">Turn any business idea into a complete launch plan with ready-to-use prompts for building your MVP landing page.</p>
-        </div>
-        
-        <div class="mvp-tool-container">
-          <div class="tool-input-area">
-            <div class="tool-input-container">
-              <textarea class="tool-input" id="mvpInput" placeholder="e.g., a tool that helps freelancers track time and send invoices, an app that matches dog owners for playdates, a service that optimizes LinkedIn profiles..." rows="4"></textarea>
-            </div>
-            <div class="button-container">
-              <button class="tool-submit-btn" id="generateMvpBtn">
-                <span id="mvpBtnText">Create My Launch Plan</span>
-                <div id="mvpBtnLoader" class="loader hidden"></div>
-              </button>
-              <div id="mvpLoadingMessage" class="loading-message hidden">Building your launch plan...</div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="results-section" id="mvpResultsSection">
-          </div>
-      </div>
-    </section>
-
- <section class="cta-before-faq">
-      <div class="container" align="center">
-<script async data-uid="9a25fe409e" src="https://askarti.kit.com/9a25fe409e/index.js"></script>
-</div>
-</section>
-    <section class="examples-section">
-  <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">See the Difference</h2>
-	  <p class="section-subtitle">Our Perfect Prompt Maker clarifies constraints, assigns the model a defined role with the right sources and format, and sets acceptance criteria so the output is specific and understandable to any AI model.</p>
-    </div>
-    
-    <div class="examples-carousel">
-      <div class="example-card active">
-        <div class="example-before">
-          <strong>Before:</strong> "help me sell cyber saas to dhs"
-        </div>
-        <div class="example-after">
-  <strong>Your Optimized Prompt:</strong>
-  
-  <p>You are a seasoned consultant specializing in federal sales, particularly within the Department of Homeland Security (DHS). I need your expert guidance to improve my company's sales strategy for DHS. My company is a [insert your company type: CSP, VAR, System Integrator, or SMB] offering [insert your product/service].</p>
-  
-  <p>Specifically, I need you to:</p>
-  
-  <p>1. <strong>Identify 3 key challenges</strong> vendors commonly face when selling to DHS and provide actionable strategies to overcome them. Consider the unique aspects of DHS's mission, organizational structure, and procurement processes.</p>
-  
-  <p>2. <strong>Outline the DHS procurement lifecycle</strong>, from initial needs identification to contract award. Highlight key decision-makers and their roles at each stage. Focus on [insert specific DHS component if applicable, e.g., TSA, CBP, FEMA].</p>
-  
-  <p>3. <strong>Develop 3 distinct sales strategies</strong> tailored to different DHS components (e.g., CISA, USCG, ICE). Each strategy should include specific tactics for:</p>
-  <ul>
-    <li>Identifying relevant opportunities (e.g., using SAM.gov, networking events).</li>
-    <li>Building relationships with key stakeholders (e.g., program managers, contracting officers).</li>
-    <li>Crafting compelling proposals that align with DHS's mission priorities.</li>
-  </ul>
-  
-  <p>4. <strong>Explain the role of key contract vehicles</strong> that are relevant to DHS procurements (e.g., SEWP V, Alliant 2, OASIS, GSA Schedules). Explain how to best leverage these vehicles.</p>
-  
-  <p><strong>Constraints:</strong></p>
-  <ul>
-    <li>Adopt a direct, actionable, and confident tone, suitable for a sales professional.</li>
-    <li>Focus on practical strategies and avoid overly theoretical explanations.</li>
-    <li>Assume I have a basic understanding of federal contracting but lack specific knowledge of DHS.</li>
-  </ul>
-  
-  <p><strong>Validation Signals:</strong></p>
-  <ul>
-    <li>The response provides at least 3 actionable strategies for each challenge identified.</li>
-    <li>The DHS procurement lifecycle is clearly outlined with key decision-makers identified.</li>
-    <li>Each sales strategy includes specific tactics for opportunity identification, relationship building, and proposal crafting.</li>
-    <li>The explanation of contract vehicles is clear and concise, with practical guidance on their use.</li>
-  </ul>
-</div>
-        <div class="example-why">
-          <strong>Why it's better:</strong> Transforms 7 words into a comprehensive prompt with specific DHS context and clear success criteria.
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-    <section id="services" class="services-section">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">Get better results from AI.</h2>
-          <p class="section-subtitle">Whether you use ChatGPT, Claude, Gemini, or Grok, I teach prompts that work.</p>
-        </div>
-        
-        <div class="services-grid">
-          <div class="service-card">
-            <h3 class="service-title">Free Intro Call</h3>
-            <div class="service-price">Free</div>
-            <p class="service-description">
-              15-minute discovery call to understand your AI and business challenges
-            </p>
-            <ul class="service-features">
-              <li>Quick assessment of your situation</li>
-              <li>Identify your biggest AI prompt gaps</li>
-              <li>Custom recommendation for next steps</li>
-              <li>No sales pitch, just helpful advice</li>
-              <li>Perfect for exploring what's possible</li>
-            </ul>
-            <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-secondary" style="width: 100%;">Book Free Call</a>
-          </div>
-          
-          <div class="service-card featured">
-            <div class="service-badge">Most Popular</div>
-            <h3 class="service-title">1:1 Coaching Session</h3>
-            <div class="service-price">$99</div>
-            <p class="service-description">
-              One hour of focused coaching on your specific challenge
-            </p>
-            <ul class="service-features">
-              <li>Deep dive on one specific challenge</li>
-              <li>Custom AI prompts for your situation</li>
-              <li>Live prompt engineering session</li>
-              <li>Actionable next steps you can use today</li>
-              <li>Follow-up email with session recap</li>
-              <li>Perfect for stuck projects or urgent needs</li>
-            </ul>
-            <a href="https://calendly.com/markflournoy/deepdive" target="_blank" class="btn btn-success" style="width: 100%;">Book Session</a>
-          </div>
-          
-          <div class="service-card">
-            <h3 class="service-title">Team Workshop</h3>
-            <div class="service-price">$499</div>
-            <p class="service-description">
-              2-hour interactive workshop for your team (up to 8 people)
-            </p>
-            <ul class="service-features">
-              <li>AI prompting fundamentals for your industry</li>
-              <li>Live prompt building exercises</li>
-              <li>Team-specific use cases and examples</li>
-              <li>Custom prompt library for your team</li>
-              <li>30-day email follow-up support</li>
-              <li>Perfect for getting everyone on same page</li>
-            </ul>
-            <a href="https://calendly.com/markflournoy/workshop" target="_blank" class="btn btn-secondary" style="width: 100%;">Schedule Workshop</a>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="cta-before-faq">
-      <div class="container">
-        <h2 class="section-title">Ready to get more out of AI?</h2>
-        <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-success btn-lg">Book Your Free Intro Call</a>
-      </div>
-    </section>
-  
-    <section id="faq" class="faq-section">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">Frequently Asked Questions</h2>
-          <p class="section-subtitle">
-            Everything you need to know about prompts.
+          <h2 class="display-medium section-title">Perfect Prompt Maker</h2>
+          <p class="body-large section-subtitle">
+            Transform any request into a structured, expert-level prompt that gets 5x better results.
           </p>
         </div>
         
-        <div class="faq-list">
-          <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">
-              <span>How is this different from just using AI directly?</span>
-              <div class="faq-icon">+</div>
-            </div>
-            <div class="faq-answer">
-              Most people get generic, surface-level answers because their prompts are too vague. Our tool teaches AI to be an expert in your specific domain and ask for structured, actionable output that you can actually use.
-            </div>
+        <div class="tool-container">
+          <div class="input-group">
+            <textarea 
+              class="input-field" 
+              id="promptInput" 
+              placeholder="e.g., help me sell cloud solutions to government agencies, write my product launch strategy, create a workout plan..."
+              rows="4"
+            ></textarea>
           </div>
-          
-          <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">
-              <span>What AI tools do these prompts work with?</span>
-              <div class="faq-icon">+</div>
-            </div>
-            <div class="faq-answer">
-              The improved prompts work with any AI tool - ChatGPT, Claude, Gemini, or whatever comes next. We teach you the underlying principles so you're not dependent on any specific platform.
-            </div>
+          <button class="submit-btn" id="generatePromptBtn">
+            <span id="promptBtnText">Create Perfect Prompt</span>
+            <div id="promptSpinner" class="spinner hidden"></div>
+          </button>
+          <div id="promptLoading" class="loading-message hidden">
+            Crafting your perfect prompt...
           </div>
-          
-          <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">
-              <span>Do you work with all industries or just sales?</span>
-              <div class="faq-icon">+</div>
-            </div>
-            <div class="faq-answer">
-              All industries! Our prompt maker automatically detects your topic - whether it's business, travel, writing, technology, marketing, or anything else - and creates expert-level prompts for your specific field.
-            </div>
-          </div>
-          
-          <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">
-              <span>How quickly will I see better results?</span>
-              <div class="faq-icon">+</div>
-            </div>
-            <div class="faq-answer">
-              Immediately! You'll see dramatically better AI outputs the moment you use an improved prompt. Most people are amazed at the difference in quality and actionability of the results.
-            </div>
-          </div>
-          
-          <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">
-              <span>What if I'm new to using AI tools?</span>
-              <div class="faq-icon">+</div>
-            </div>
-            <div class="faq-answer">
-              Perfect! Our prompts are designed to help beginners get expert-level results right away. We'll teach you both how to use AI effectively AND how to create great prompts for any situation.
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">
-              <span>What's the difference between the Prompt Maker and MVP Maker?</span>
-              <div class="faq-icon">+</div>
-            </div>
-            <div class="faq-answer">
-              The Prompt Maker improves any request to get better AI results. The MVP Maker specifically helps entrepreneurs turn business ideas into complete launch strategies with timelines, validation metrics, and ready-to-use prompts for building landing pages.
-            </div>
-          </div>
+        </div>
+        
+        <div class="results" id="promptResults">
         </div>
       </div>
     </section>
 
-    <section class="newsletter-section">
-  <div class="container">
-    <h2 class="section-title" style="color: white; margin-bottom: 16px;">Get In Touch</h2>
-    <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 16px;">
-      Questions about AI or sales coaching?
-    </p>
-    <a href="mailto:mark@askarti.com" style="color: white; font-size: 18px; font-weight: 600; text-decoration: underline;">
-      mark@askarti.com
-    </a>
-  </div>
-</section>
+    <!-- MVP Tool -->
+    <section id="mvp-tool" class="tool-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="display-medium section-title">MVP Launch Plan</h2>
+          <p class="body-large section-subtitle">
+            Turn any business idea into a complete launch strategy with timeline and validation metrics.
+          </p>
+        </div>
+        
+        <div class="tool-container">
+          <div class="input-group">
+            <textarea 
+              class="input-field" 
+              id="mvpInput" 
+              placeholder="e.g., a tool that helps freelancers track time and invoice clients, an app that matches dog owners for playdates, a service that optimizes LinkedIn profiles..."
+              rows="4"
+            ></textarea>
+          </div>
+          <button class="submit-btn" id="generateMvpBtn">
+            <span id="mvpBtnText">Create Launch Plan</span>
+            <div id="mvpSpinner" class="spinner hidden"></div>
+          </button>
+          <div id="mvpLoading" class="loading-message hidden">
+            Building your launch strategy...
+          </div>
+        </div>
+        
+        <div class="results" id="mvpResults">
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-content">
+          <h2 class="display-medium cta-title">Ready to Level Up?</h2>
+          <p class="body-large cta-subtitle">
+            Free tools are just the beginning. Book a call to learn advanced AI techniques that transform your business.
+          </p>
+          <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary btn-large">
+            Book Free Strategy Call
+          </a>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <footer>
+  <footer class="footer">
     <div class="container">
-      <p>Â© 2025 AskArti.com â€¢ AI prompt optimization.</p>
+      <p>© 2025 AskArti • AI prompt optimization for professionals</p>
     </div>
   </footer>
+
 <script>
-// Configuration
+// Configuration - same endpoint as before
 const API_CONFIG = {
   ENDPOINT: 'https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI'
 };
 
 // Global state
-let isGenerating = false;
-let isMvpGenerating = false;
+let isGeneratingPrompt = false;
+let isGeneratingMvp = false;
 
-// Dynamic placeholder text based on user input
-function updatePlaceholder() {
-  const input = document.getElementById('problemInput');
-  const text = input.value.toLowerCase();
-  
-  if (text.includes('sales') || text.includes('business')) {
-    input.placeholder = "e.g., help me close more deals with government agencies";
-  } else if (text.includes('travel') || text.includes('vacation')) {
-    input.placeholder = "e.g., plan a 5-day family trip to Disney World";
-  } else if (text.includes('write') || text.includes('content')) {
-    input.placeholder = "e.g., write compelling blog posts for my business";
-  } else if (text.includes('marketing')) {
-    input.placeholder = "e.g., create a social media strategy for my startup";
-  } else if (!text) {
-    input.placeholder = "e.g., help me write better emails, plan a family vacation, improve my marketing strategy...";
+// Smooth scroll to element
+function scrollToElement(elementId) {
+  const element = document.getElementById(elementId);
+  if (element) {
+    const navHeight = 80;
+    const elementPosition = element.offsetTop - navHeight;
+    window.scrollTo({
+      top: elementPosition,
+      behavior: 'smooth'
+    });
   }
 }
 
-function updateMvpPlaceholder() {
-  const input = document.getElementById('mvpInput');
-  const text = input.value.toLowerCase();
-  
-  if (text.includes('app') || text.includes('mobile')) {
-    input.placeholder = "e.g., an app that helps busy parents meal plan for the week";
-  } else if (text.includes('saas') || text.includes('software')) {
-    input.placeholder = "e.g., a SaaS tool that automates social media posting for small businesses";
-  } else if (text.includes('service') || text.includes('consultant')) {
-    input.placeholder = "e.g., a service that optimizes LinkedIn profiles for job seekers";
-  } else if (!text) {
-    input.placeholder = "e.g., a tool that helps freelancers track time and send invoices, an app that matches dog owners for playdates...";
-  }
-}
-
-// Generate prompt using the backend
+// Generate improved prompt
 async function generatePrompt() {
-  const problemText = document.getElementById('problemInput').value.trim();
+  const input = document.getElementById('promptInput').value.trim();
   
-  if (!problemText) {
+  if (!input) {
     alert('Please describe what you want help with.');
     return;
   }
 
-  if (isGenerating) return;
+  if (isGeneratingPrompt) return;
   
-  // Hide existing results first
-  const resultsSection = document.getElementById('resultsSection');
-  resultsSection.classList.remove('show');
-  
-  setButtonLoading(true);
+  setPromptLoading(true);
   
   try {
     const response = await fetch(API_CONFIG.ENDPOINT, {
@@ -1414,7 +828,7 @@ async function generatePrompt() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        situation: problemText,
+        situation: input,
         request_type: 'prompt_improvement'
       })
     });
@@ -1429,36 +843,28 @@ async function generatePrompt() {
       throw new Error(data.message || data.error);
     }
 
-    // Convert the AI response to improved prompt
-    const prompt = convertToImprovedPrompt(data, problemText);
-    showResult(prompt, problemText);
+    showPromptResult(data.improved_prompt || data.content, input, data.explanation);
 
   } catch (error) {
-    console.error('Generation failed:', error);
-    // Fallback to client-side improvement if API fails
-    const fallbackPrompt = createFallbackPrompt(problemText);
-    showResult(fallbackPrompt, problemText);
+    console.error('Prompt generation failed:', error);
+    showPromptError(error.message);
   } finally {
-    setButtonLoading(false);
+    setPromptLoading(false);
   }
 }
 
-// Generate MVP Launch Plan
+// Generate MVP launch plan
 async function generateMvpPlan() {
-  const ideaText = document.getElementById('mvpInput').value.trim();
+  const input = document.getElementById('mvpInput').value.trim();
   
-  if (!ideaText) {
+  if (!input) {
     alert('Please describe your business idea.');
     return;
   }
 
-  if (isMvpGenerating) return;
+  if (isGeneratingMvp) return;
   
-  // Hide existing results first
-  const resultsSection = document.getElementById('mvpResultsSection');
-  resultsSection.classList.remove('show');
-  
-  setMvpButtonLoading(true);
+  setMvpLoading(true);
   
   try {
     const response = await fetch(API_CONFIG.ENDPOINT, {
@@ -1467,7 +873,7 @@ async function generateMvpPlan() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        situation: ideaText,
+        situation: input,
         request_type: 'mvp_launch_plan'
       })
     });
@@ -1482,336 +888,203 @@ async function generateMvpPlan() {
       throw new Error(data.message || data.error);
     }
 
-    showMvpResult(data.launchPlan, ideaText);
+    showMvpResult(data.launchPlan, input);
 
   } catch (error) {
     console.error('MVP generation failed:', error);
-    // Show fallback message
     showMvpError(error.message);
   } finally {
-    setMvpButtonLoading(false);
+    setMvpLoading(false);
   }
 }
 
-// Convert AI response to improved prompt format
-function convertToImprovedPrompt(aiResponse, originalPrompt) {
-  // Handle different response formats from your API
-  if (aiResponse.improved_prompt) {
-    // Store explanation for UI
-    window.promptExplanation = aiResponse.explanation || generateExplanation(originalPrompt, aiResponse.improved_prompt);
-    return aiResponse.improved_prompt;
-  }
+// Set prompt loading state
+function setPromptLoading(loading) {
+  isGeneratingPrompt = loading;
+  const btn = document.getElementById('generatePromptBtn');
+  const btnText = document.getElementById('promptBtnText');
+  const spinner = document.getElementById('promptSpinner');
+  const loadingMsg = document.getElementById('promptLoading');
   
-  if (aiResponse.response_type === 'prompt_coaching') {
-    const improvements = aiResponse.key_improvements?.slice(0, 2).join(' and ') || 'adding more context and structure';
-    window.promptExplanation = `We improved your prompt by ${improvements.toLowerCase()}. This gets you better results.`;
-    return aiResponse.improved_prompt;
+  btn.disabled = loading;
+  
+  if (loading) {
+    btnText.classList.add('hidden');
+    spinner.classList.remove('hidden');
+    loadingMsg.classList.remove('hidden');
+  } else {
+    btnText.classList.remove('hidden');
+    spinner.classList.add('hidden');
+    loadingMsg.classList.add('hidden');
   }
-
-  // Handle raw text response
-  if (typeof aiResponse === 'string') {
-    window.promptExplanation = generateExplanation(originalPrompt, aiResponse);
-    return aiResponse;
-  }
-
-  // Fallback for unknown format
-  window.promptExplanation = 'We enhanced your prompt with better structure and clearer instructions.';
-  return aiResponse.content || aiResponse.message || JSON.stringify(aiResponse, null, 2);
 }
 
-// Generate explanation of improvements
-function generateExplanation(original, improved) {
-  const improvements = [];
+// Set MVP loading state
+function setMvpLoading(loading) {
+  isGeneratingMvp = loading;
+  const btn = document.getElementById('generateMvpBtn');
+  const btnText = document.getElementById('mvpBtnText');
+  const spinner = document.getElementById('mvpSpinner');
+  const loadingMsg = document.getElementById('mvpLoading');
   
-  if (improved.length > original.length * 1.5) {
-    improvements.push('adding context');
-  }
-  if (improved.includes('specific') || improved.includes('examples')) {
-    improvements.push('being more specific');
-  }
-  if (improved.includes('step') || improved.includes('format')) {
-    improvements.push('adding structure');
-  }
+  btn.disabled = loading;
   
-  const improvementText = improvements.length > 0 
-    ? improvements.slice(0, 2).join(' and ')
-    : 'enhancing clarity';
-    
-  return `We improved your prompt by ${improvementText}. This gets you better results.`;
+  if (loading) {
+    btnText.classList.add('hidden');
+    spinner.classList.remove('hidden');
+    loadingMsg.classList.remove('hidden');
+  } else {
+    btnText.classList.remove('hidden');
+    spinner.classList.add('hidden');
+    loadingMsg.classList.add('hidden');
+  }
 }
 
-// Client-side fallback prompt improvement
-function createFallbackPrompt(originalPrompt) {
-  const topic = detectTopic(originalPrompt);
-  
-  window.promptExplanation = 'We enhanced your prompt with better structure and clearer instructions. This gets you more useful results.';
-  
-  return `You are an expert ${topic.expert} with deep knowledge and practical experience. 
-
-Context: ${originalPrompt}
-
-Please provide a comprehensive response that includes:
-1. Specific, actionable advice tailored to this situation
-2. Key considerations or potential challenges to be aware of
-3. Next steps or recommendations for moving forward
-
-Keep your response practical and focused. Use examples where helpful, and explain your reasoning for any recommendations you make.
-
-Format your response clearly with headings or bullet points where appropriate.`;
-}
-
-// Detect topic for fallback prompt
-function detectTopic(text) {
-  const lowerText = text.toLowerCase();
-  
-  if (lowerText.match(/\b(sales|business|revenue|client|customer|deal|proposal|meeting|negotiation|contract|procurement|government|federal|va|dod)\b/)) {
-    return { expert: 'sales strategist and business development professional', category: 'business' };
-  }
-  
-  if (lowerText.match(/\b(travel|vacation|trip|disney|flight|hotel|itinerary|destination|tourism)\b/)) {
-    return { expert: 'travel planner and destination specialist', category: 'travel' };
-  }
-  
-  if (lowerText.match(/\b(write|writing|novel|book|story|article|blog|content|author|publish)\b/)) {
-    return { expert: 'professional writer and editor', category: 'writing' };
-  }
-  
-  if (lowerText.match(/\b(code|coding|programming|software|app|website|development|tech|ai|data)\b/)) {
-    return { expert: 'software engineer and technology consultant', category: 'technology' };
-  }
-  
-  if (lowerText.match(/\b(marketing|social media|seo|content|brand|advertising|campaign|leads)\b/)) {
-    return { expert: 'marketing strategist and digital specialist', category: 'marketing' };
-  }
-  
-  if (lowerText.match(/\b(invest|investment|finance|money|budget|financial|retirement|stocks|crypto)\b/)) {
-    return { expert: 'financial advisor and investment specialist', category: 'finance' };
-  }
-  
-  if (lowerText.match(/\b(health|fitness|diet|exercise|workout|nutrition|wellness|medical)\b/)) {
-    return { expert: 'health and wellness specialist', category: 'health' };
-  }
-  
-  if (lowerText.match(/\b(learn|learning|study|education|course|skill|training|teach)\b/)) {
-    return { expert: 'educational specialist and learning consultant', category: 'education' };
-  }
-  
-  return { expert: 'experienced consultant and problem-solving specialist', category: 'general' };
-}
-
-// Show results with enhanced UX
-function showResult(prompt, problemText) {
-  const resultsSection = document.getElementById('resultsSection');
-  
-  const explanationText = window.promptExplanation || 'We enhanced your prompt with better structure and clearer instructions. This gets you more actionable results.';
+// Show prompt results
+function showPromptResult(prompt, originalInput, explanation) {
+  const resultsSection = document.getElementById('promptResults');
   
   resultsSection.innerHTML = `
     <div class="result-header">
-      <h3 class="result-title">😊 Here's Your Prompt</h3>
-      <div class="result-actions">
-        <button class="btn btn-success" onclick="copyPrompt()">Copy to Clipboard</button>
-      </div>
+      <h3 class="result-title">✨ Your Perfect Prompt</h3>
+      <button class="btn btn-secondary" onclick="copyToClipboard('prompt-content')">Copy Prompt</button>
     </div>
-    <div class="explanation-text">${explanationText}</div>
-    <div class="prompt-display" id="promptDisplay">${prompt}</div>
-    <div class="result-note">
-      <strong>How to use:</strong> Copy this optimized prompt and paste it into Claude, ChatGPT, or your favorite AI tool for dramatically better results.
+    <p class="body-large" style="margin-bottom: 24px; color: var(--text-secondary);">
+      ${explanation || 'We enhanced your prompt with better structure and clearer instructions for dramatically better AI results.'}
+    </p>
+    <div class="result-content" id="prompt-content">
+      <button class="copy-btn" onclick="copyToClipboard('prompt-content')">Copy</button>
+      ${prompt}
     </div>
-    <div class="next-steps">
-      <h4>Need More Help?</h4>
-      <p>Want to master AI prompting for your specific field? Book a free 15-minute call to learn advanced techniques.</p>
-      <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-success">Book Free Strategy Call</a>
+    <div style="margin-top: 24px; padding: 24px; background: var(--accent-light); border-radius: var(--radius); text-align: center;">
+      <p style="color: var(--text-secondary); margin-bottom: 16px;">Ready to master AI prompting for your specific needs?</p>
+      <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Book Free Strategy Call</a>
     </div>
   `;
   
-  // Store for copying
-  window.currentPrompt = prompt;
-  window.currentProblem = problemText;
-  
   resultsSection.classList.add('show');
-  resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setTimeout(() => {
+    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
 }
 
-// Show MVP Results
-function showMvpResult(launchPlan, originalIdea) {
-  const resultsSection = document.getElementById('mvpResultsSection');
+// Show MVP results
+function showMvpResult(launchPlan, originalInput) {
+  const resultsSection = document.getElementById('mvpResults');
   
   resultsSection.innerHTML = `
     <div class="result-header">
       <h3 class="result-title">🚀 Your Launch Plan</h3>
-      <div class="result-actions">
-        <button class="btn btn-mvp" onclick="copyMvpPrompt()">Copy MVP Prompt</button>
-      </div>
+      <button class="btn btn-secondary" onclick="copyToClipboard('mvp-prompt')">Copy MVP Prompt</button>
     </div>
-    <div class="explanation-text">We analyzed your idea and created a complete launch strategy with timeline, validation metrics, and a ready-to-use prompt for building your MVP landing page.</div>
     
-    <div class="launch-plan-display">
-      <div class="launch-plan-section">
-        <h4>📦 ${launchPlan.productName}</h4>
-        
-        <div class="launch-plan-section">
-          <h4>🎯 What You're Building</h4>
-          <p>${launchPlan.strategy.whatYoureBuilding}</p>
-        </div>
-        
-        <div class="launch-plan-section">
-          <h4>👥 Target Customer</h4>
-          <p>${launchPlan.strategy.targetCustomer}</p>
-        </div>
-        
-        <div class="launch-plan-section">
-          <h4>💎 Value Proposition</h4>
-          <p>${launchPlan.strategy.valueProposition}</p>
-        </div>
-        
-        <div class="launch-plan-section">
-          <h4>📊 Validation Goal</h4>
-          <p>${launchPlan.strategy.validationGoal}</p>
-        </div>
-        
-        <div class="launch-plan-section">
-          <h4>📅 Timeline</h4>
-          <div class="launch-plan-timeline">
-            <div class="timeline-item">
-              <strong>Day 1:</strong> ${launchPlan.timeline.day1}
-            </div>
-            <div class="timeline-item">
-              <strong>Day 2:</strong> ${launchPlan.timeline.day2}
-            </div>
+    <div class="mvp-results">
+      <div class="mvp-section">
+        <h4>📦 Product: ${launchPlan.productName || 'Your Solution'}</h4>
+      </div>
+      
+      <div class="mvp-section">
+        <h4>🎯 What You're Building</h4>
+        <p>${launchPlan.strategy?.whatYoureBuilding || 'Solution definition needed'}</p>
+      </div>
+      
+      <div class="mvp-section">
+        <h4>👥 Target Customer</h4>
+        <p>${launchPlan.strategy?.targetCustomer || 'Customer analysis needed'}</p>
+      </div>
+      
+      <div class="mvp-section">
+        <h4>💎 Value Proposition</h4>
+        <p>${launchPlan.strategy?.valueProposition || 'Value proposition needed'}</p>
+      </div>
+      
+      <div class="mvp-section">
+        <h4>📊 Validation Goal</h4>
+        <p>${launchPlan.strategy?.validationGoal || 'Validation metrics needed'}</p>
+      </div>
+      
+      <div class="mvp-section">
+        <h4>📅 Quick Start Timeline</h4>
+        <div class="mvp-timeline">
+          <div class="timeline-item">
+            <strong>Day 1:</strong> ${launchPlan.timeline?.day1 || 'Plan validation approach'}
+          </div>
+          <div class="timeline-item">
+            <strong>Day 2:</strong> ${launchPlan.timeline?.day2 || 'Build MVP'}
           </div>
         </div>
-        
-        <div class="launch-plan-section">
-          <h4>📈 Success Metrics</h4>
-          <p><strong>Week 1 Target:</strong> ${launchPlan.successMetrics.week1}</p>
-          <p><strong>Pivot Signal:</strong> ${launchPlan.successMetrics.pivotSignal}</p>
+      </div>
+      
+      <div class="mvp-section">
+        <h4>📈 Success Metrics</h4>
+        <p><strong>Week 1:</strong> ${launchPlan.successMetrics?.week1 || 'Measure engagement'}</p>
+        <p><strong>Pivot Signal:</strong> ${launchPlan.successMetrics?.pivotSignal || 'Low interest'}</p>
+      </div>
+      
+      <div class="mvp-section">
+        <h4>🛠️ Ready-to-Use MVP Prompt</h4>
+        <p style="margin-bottom: 16px; color: var(--text-secondary);">Copy this prompt into Claude, ChatGPT, or any AI tool to build your landing page:</p>
+        <div class="result-content" id="mvp-prompt">
+          <button class="copy-btn" onclick="copyToClipboard('mvp-prompt')">Copy</button>
+          ${launchPlan.mvpPrompt || 'MVP prompt generation failed - please try again'}
         </div>
-        
-        <div class="launch-plan-section">
-          <h4>🛠️ MVP Landing Page Prompt</h4>
-          <p>Copy this prompt and paste it into Claude, ChatGPT, or any AI tool to build your MVP landing page:</p>
-          <div class="mvp-prompt-display" id="mvpPromptDisplay">
-            <button class="copy-floating" onclick="copyMvpPrompt()">Copy</button>
-            ${launchPlan.mvpPrompt}
-          </div>
-        </div>
-        
-        ${launchPlan.realityCheck ? `
-        <div class="launch-plan-section">
-          <h4>💪 Reality Check</h4>
-          <p>${launchPlan.realityCheck}</p>
-        </div>
-        ` : ''}
       </div>
     </div>
     
-    <div class="result-note">
-      <strong>How to use:</strong> Follow the timeline, use the MVP prompt to build your landing page, and track the success metrics to validate your idea.
-    </div>
-    <div class="next-steps">
-      <h4>Ready to Launch?</h4>
-      <p>Need help executing this plan or want personalized guidance? Book a strategy session to get expert support.</p>
-      <a href="https://calendly.com/markflournoy/deepdive" target="_blank" class="btn btn-mvp">Book Strategy Session - $99</a>
+    <div style="margin-top: 32px; padding: 32px; background: var(--accent-light); border-radius: var(--radius-lg); text-align: center;">
+      <h4 style="color: var(--text); margin-bottom: 16px;">Ready to Execute This Plan?</h4>
+      <p style="color: var(--text-secondary); margin-bottom: 24px;">Get personalized guidance and advanced strategies in a 1:1 session.</p>
+      <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+        <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-secondary">Free Strategy Call</a>
+        <a href="https://calendly.com/markflournoy/deepdive" target="_blank" class="btn btn-primary">1:1 Coaching - $99</a>
+      </div>
     </div>
   `;
   
-  // Store for copying
-  window.currentMvpPrompt = launchPlan.mvpPrompt;
-  window.currentIdea = originalIdea;
-  
   resultsSection.classList.add('show');
-  resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setTimeout(() => {
+    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
 }
 
-// Show MVP Error
-function showMvpError(errorMessage) {
-  const resultsSection = document.getElementById('mvpResultsSection');
-  
+// Show error messages
+function showPromptError(message) {
+  const resultsSection = document.getElementById('promptResults');
   resultsSection.innerHTML = `
-    <div class="result-header">
-      <h3 class="result-title">⚠️ Something Went Wrong</h3>
-    </div>
-    <div class="explanation-text">We encountered an issue generating your launch plan: ${errorMessage}</div>
-    <div class="next-steps">
-      <h4>Let's Get This Fixed</h4>
-      <p>Try again in a moment, or book a free call for personalized help with your business idea.</p>
-      <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-mvp">Book Free Call</a>
+    <div style="text-align: center; padding: 48px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+      <h3 style="color: var(--warning); margin-bottom: 16px;">⚠️ Something went wrong</h3>
+      <p style="color: var(--text-secondary); margin-bottom: 24px;">${message}</p>
+      <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Get Personal Help - Free Call</a>
     </div>
   `;
-  
   resultsSection.classList.add('show');
-  resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// Set button loading state with better UX
-function setButtonLoading(loading) {
-  isGenerating = loading;
-  const btn = document.getElementById('generateBtn');
-  const btnText = document.getElementById('btnText');
-  const btnLoader = document.getElementById('btnLoader');
-  const loadingMessage = document.getElementById('loadingMessage');
-  
-  btn.disabled = loading;
-  
-  if (loading) {
-    btnText.classList.add('hidden');
-    btnLoader.classList.remove('hidden');
-    loadingMessage.classList.remove('hidden');
-  } else {
-    btnText.classList.remove('hidden');
-    btnLoader.classList.add('hidden');
-    loadingMessage.classList.add('hidden');
-  }
+function showMvpError(message) {
+  const resultsSection = document.getElementById('mvpResults');
+  resultsSection.innerHTML = `
+    <div style="text-align: center; padding: 48px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+      <h3 style="color: var(--warning); margin-bottom: 16px;">⚠️ Something went wrong</h3>
+      <p style="color: var(--text-secondary); margin-bottom: 24px;">${message}</p>
+      <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Get Personal Help - Free Call</a>
+    </div>
+  `;
+  resultsSection.classList.add('show');
 }
 
-// Set MVP button loading state
-function setMvpButtonLoading(loading) {
-  isMvpGenerating = loading;
-  const btn = document.getElementById('generateMvpBtn');
-  const btnText = document.getElementById('mvpBtnText');
-  const btnLoader = document.getElementById('mvpBtnLoader');
-  const loadingMessage = document.getElementById('mvpLoadingMessage');
-  
-  btn.disabled = loading;
-  
-  if (loading) {
-    btnText.classList.add('hidden');
-    btnLoader.classList.remove('hidden');
-    loadingMessage.classList.remove('hidden');
-  } else {
-    btnText.classList.remove('hidden');
-    btnLoader.classList.add('hidden');
-    loadingMessage.classList.add('hidden');
-  }
-}
-
-// Copy prompt to clipboard with enhanced feedback
-function copyPrompt() {
-  const promptText = window.currentPrompt;
+// Copy to clipboard functionality
+function copyToClipboard(elementId) {
+  const element = document.getElementById(elementId);
+  const text = element.textContent.replace('Copy', '').trim();
   
   if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(promptText).then(() => {
-      showCopySuccess();
+    navigator.clipboard.writeText(text).then(() => {
+      showCopySuccess(elementId);
     }).catch(() => {
-      fallbackCopy(promptText);
+      fallbackCopy(text);
     });
   } else {
-    fallbackCopy(promptText);
-  }
-}
-
-// Copy MVP prompt to clipboard
-function copyMvpPrompt() {
-  const promptText = window.currentMvpPrompt;
-  
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(promptText).then(() => {
-      showMvpCopySuccess();
-    }).catch(() => {
-      fallbackCopy(promptText);
-    });
-  } else {
-    fallbackCopy(promptText);
+    fallbackCopy(text);
   }
 }
 
@@ -1821,77 +1094,44 @@ function fallbackCopy(text) {
   textArea.value = text;
   textArea.style.position = 'fixed';
   textArea.style.left = '-999999px';
-  textArea.style.top = '-999999px';
   document.body.appendChild(textArea);
   textArea.focus();
   textArea.select();
 
   try {
-    const successful = document.execCommand('copy');
-    if (successful) {
-      showCopySuccess();
-    } else {
-      alert('Could not copy. Please select and copy manually.');
-    }
+    document.execCommand('copy');
+    showCopySuccess();
   } catch (err) {
-    alert('Could not copy. Please select and copy manually.');
+    alert('Please copy the text manually');
   } finally {
     document.body.removeChild(textArea);
   }
 }
 
-// Enhanced copy success feedback
-function showCopySuccess() {
-  const buttons = document.querySelectorAll('button[onclick="copyPrompt()"]');
+// Show copy success feedback
+function showCopySuccess(elementId) {
+  const buttons = elementId ? 
+    [document.querySelector(`#${elementId} .copy-btn`)] : 
+    document.querySelectorAll('.copy-btn');
+  
   buttons.forEach(button => {
-    const originalText = button.textContent;
-    button.textContent = '✓ Copied!';
-    button.style.background = 'var(--success)';
-    button.style.color = 'white';
-    button.style.borderColor = 'var(--success)';
-    
-    setTimeout(() => {
-      button.textContent = originalText;
-      button.style.background = '';
-      button.style.color = '';
-      button.style.borderColor = '';
-    }, 2000);
+    if (button) {
+      const originalText = button.textContent;
+      button.textContent = '✓ Copied!';
+      button.classList.add('copied');
+      
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.classList.remove('copied');
+      }, 2000);
+    }
   });
 }
 
-// MVP copy success feedback
-function showMvpCopySuccess() {
-  const buttons = document.querySelectorAll('button[onclick="copyMvpPrompt()"]');
-  buttons.forEach(button => {
-    const originalText = button.textContent;
-    button.textContent = '✓ Copied!';
-    button.style.background = 'var(--success)';
-    button.style.color = 'white';
-    button.style.borderColor = 'var(--success)';
-    
-    setTimeout(() => {
-      button.textContent = originalText;
-      button.style.background = '';
-      button.style.color = '';
-      button.style.borderColor = '';
-    }, 2000);
-  });
-}
-
-// FAQ toggle functionality
-function toggleFaq(element) {
-  const faqItem = element.parentElement;
-  const isActive = faqItem.classList.contains('active');
-  
-  // Close all FAQ items
-  document.querySelectorAll('.faq-item').forEach(item => {
-    item.classList.remove('active');
-  });
-  
-  // Open clicked item if it wasn't active
-  if (!isActive) {
-    faqItem.classList.add('active');
-  }
+// Auto-resize textareas
+function autoResize(textarea) {
+  textarea.style.height = 'auto';
+  textarea.style.height = Math.min(textarea.scrollHeight, 300) + 'px';
 }
 
 // Smooth scrolling for anchor links
@@ -1899,34 +1139,35 @@ function setupSmoothScrolling() {
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
       e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        target.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
-      }
+      const target = this.getAttribute('href').substring(1);
+      scrollToElement(target);
     });
   });
 }
 
-// Setup event listeners
-function setupEventListeners() {
-  const generateBtn = document.getElementById('generateBtn');
-  const problemInput = document.getElementById('problemInput');
-  const generateMvpBtn = document.getElementById('generateMvpBtn');
-  const mvpInput = document.getElementById('mvpInput');
+// Initialize event listeners
+function initializeApp() {
+  // Prompt tool
+  const promptBtn = document.getElementById('generatePromptBtn');
+  const promptInput = document.getElementById('promptInput');
   
-  generateBtn.addEventListener('click', generatePrompt);
-  generateMvpBtn.addEventListener('click', generateMvpPlan);
+  promptBtn.addEventListener('click', generatePrompt);
   
-  problemInput.addEventListener('keydown', (e) => {
+  promptInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       generatePrompt();
     }
   });
-
+  
+  promptInput.addEventListener('input', () => autoResize(promptInput));
+  
+  // MVP tool
+  const mvpBtn = document.getElementById('generateMvpBtn');
+  const mvpInput = document.getElementById('mvpInput');
+  
+  mvpBtn.addEventListener('click', generateMvpPlan);
+  
   mvpInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -1934,34 +1175,35 @@ function setupEventListeners() {
     }
   });
   
-  // Auto-resize textareas
-  problemInput.addEventListener('input', () => {
-    problemInput.style.height = 'auto';
-    problemInput.style.height = Math.min(problemInput.scrollHeight, 200) + 'px';
-    updatePlaceholder();
-  });
-
-  mvpInput.addEventListener('input', () => {
-    mvpInput.style.height = 'auto';
-    mvpInput.style.height = Math.min(mvpInput.scrollHeight, 200) + 'px';
-    updateMvpPlaceholder();
+  mvpInput.addEventListener('input', () => autoResize(mvpInput));
+  
+  // Setup smooth scrolling
+  setupSmoothScrolling();
+  
+  // Navbar scroll effect
+  let lastScrollY = window.scrollY;
+  const nav = document.querySelector('.nav');
+  
+  window.addEventListener('scroll', () => {
+    const currentScrollY = window.scrollY;
+    
+    if (currentScrollY > 100) {
+      nav.style.background = 'rgba(10, 10, 10, 0.95)';
+      nav.style.backdropFilter = 'blur(20px)';
+    } else {
+      nav.style.background = 'rgba(10, 10, 10, 0.8)';
+      nav.style.backdropFilter = 'blur(20px)';
+    }
+    
+    lastScrollY = currentScrollY;
   });
 }
 
-// Make functions global for onclick handlers
-Object.assign(window, { 
-  generatePrompt,
-  generateMvpPlan,
-  copyPrompt,
-  copyMvpPrompt,
-  toggleFaq
-});
-
 // Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-  setupEventListeners();
-  setupSmoothScrolling();
-});
+document.addEventListener('DOMContentLoaded', initializeApp);
+
+// Make functions available globally for onclick handlers
+window.copyToClipboard = copyToClipboard;
 </script>
 </body>
 </html>
