@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AskArti – AI Prompt Maker for Better Results</title>
+<title>AskArti â€" AI Prompt Maker for Better Results</title>
 <meta name="description" content="Transform vague prompts into powerful AI instructions. Get specific, actionable results from ChatGPT, Claude, and other AI tools with our free prompt maker." />
 <link rel="icon" href="/images/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
@@ -29,6 +29,8 @@
     --accent-light: #4A4A4A;
     --accent-bg: rgba(42, 42, 42, 0.04);
     --success: #44B1FF;
+    --mvp-color: #7C3AED;
+    --mvp-light: #8B5CF6;
     --radius: 12px;
     --radius-sm: 6px;
     --radius-lg: 16px;
@@ -116,6 +118,21 @@
     transform: translateY(-2px);
     box-shadow: var(--shadow-sm);
   }
+
+  .nav-link.mvp-highlight {
+    background: var(--mvp-color);
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .nav-link.mvp-highlight:hover {
+    background: var(--mvp-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
   
   @keyframes subtle-pulse {
     0%, 100% { transform: scale(1); }
@@ -176,6 +193,18 @@
   
   .btn-success:hover {
     background: #159BFF;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn-mvp {
+    background: var(--mvp-color);
+    color: white;
+    box-shadow: var(--shadow-xs);
+  }
+  
+  .btn-mvp:hover {
+    background: var(--mvp-light);
     transform: translateY(-1px);
     box-shadow: var(--shadow-sm);
   }
@@ -389,6 +418,22 @@
     overflow: hidden;
   }
   
+  /* MVP Tool Section */
+  .mvp-tool-section {
+    padding: var(--section-padding) 0;
+    background: var(--bg-secondary);
+  }
+  
+  .mvp-tool-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--panel);
+    border: 2px solid var(--mvp-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+  
   .tool-input-area {
     padding: 32px;
   }
@@ -416,6 +461,11 @@
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(42, 42, 42, 0.1);
   }
+
+  .mvp-tool-container .tool-input:focus {
+    border-color: var(--mvp-color);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  }
   
   .tool-input::placeholder {
     color: var(--text-muted);
@@ -438,6 +488,15 @@
   
   .tool-submit-btn:hover {
     background: #159BFF;
+    transform: translateY(-1px);
+  }
+
+  .mvp-tool-container .tool-submit-btn {
+    background: var(--mvp-color);
+  }
+  
+  .mvp-tool-container .tool-submit-btn:hover {
+    background: var(--mvp-light);
     transform: translateY(-1px);
   }
   
@@ -504,6 +563,64 @@
     margin-bottom: 20px;
     position: relative;
   }
+
+  /* MVP Launch Plan Display */
+  .launch-plan-display {
+    background: #faf5ff;
+    border: 1px solid var(--mvp-color);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .launch-plan-section {
+    margin-bottom: 24px;
+  }
+
+  .launch-plan-section h4 {
+    color: var(--mvp-color);
+    font-weight: 600;
+    margin-bottom: 12px;
+    font-size: 16px;
+  }
+
+  .launch-plan-section p {
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+
+  .launch-plan-timeline {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .timeline-item {
+    background: white;
+    padding: 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+
+  .timeline-item strong {
+    color: var(--mvp-color);
+  }
+
+  .mvp-prompt-display {
+    background: #f3f4f6;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 12px;
+    white-space: pre-wrap;
+    position: relative;
+  }
   
   .copy-floating {
     position: absolute;
@@ -521,6 +638,14 @@
   
   .copy-floating:hover {
     background: var(--accent-light);
+  }
+
+  .mvp-prompt-display .copy-floating {
+    background: var(--mvp-color);
+  }
+
+  .mvp-prompt-display .copy-floating:hover {
+    background: var(--mvp-light);
   }
   
   .result-note {
@@ -626,7 +751,7 @@
   }
   
   .service-features li::before {
-    content: "✓";
+    content: "âœ"";
     color: var(--success);
     font-weight: 600;
     width: 16px;
@@ -854,6 +979,10 @@
     .services-grid {
       grid-template-columns: 1fr;
     }
+
+    .launch-plan-timeline {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (max-width: 480px) {
@@ -904,6 +1033,7 @@
         </a>
         <div class="nav-items">
           <a href="#prompt-tool" class="nav-link free-highlight">Perfect Prompt Maker</a>
+          <a href="#mvp-tool" class="nav-link mvp-highlight">MVP Maker</a>
           <a href="#services" class="nav-link">Services</a>
           <a href="#faq" class="nav-link">FAQ</a>
           <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-success">Book Call</a>
@@ -918,13 +1048,12 @@
         <div class="hero-content">
           <div class="hero-text">
             <h1 class="hero-title">Make AI Deliver Results.<br><span class="text-success"></span></h1>
-<p class="hero-subtitle">Start with my free prompt maker and get better prompts instantly. When you want to level up, book a free call and I'll share my Jedi tricks.</p>
-
+<p class="hero-subtitle">Start with my free prompt maker and MVP launcher. When you want to level up, book a free call and I'll share my Jedi tricks.</p>
 
             
             <div class="hero-cta">
               <a href="#prompt-tool" class="btn btn-success btn-lg">Perfect Prompt Maker</a>
-              <a href="#services" class="btn btn-secondary">Need More Help?</a>
+              <a href="#mvp-tool" class="btn btn-mvp btn-lg">MVP Maker</a>
             </div>
             
             <div class="social-proof">
@@ -971,6 +1100,34 @@
           </div>
       </div>
     </section>
+
+    <section id="mvp-tool" class="mvp-tool-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">MVP Maker</h2>
+		  <p class="section-subtitle">Turn any business idea into a complete launch plan with ready-to-use prompts for building your MVP landing page.</p>
+        </div>
+        
+        <div class="mvp-tool-container">
+          <div class="tool-input-area">
+            <div class="tool-input-container">
+              <textarea class="tool-input" id="mvpInput" placeholder="e.g., a tool that helps freelancers track time and send invoices, an app that matches dog owners for playdates, a service that optimizes LinkedIn profiles..." rows="4"></textarea>
+            </div>
+            <div class="button-container">
+              <button class="tool-submit-btn" id="generateMvpBtn">
+                <span id="mvpBtnText">Create My Launch Plan</span>
+                <div id="mvpBtnLoader" class="loader hidden"></div>
+              </button>
+              <div id="mvpLoadingMessage" class="loading-message hidden">Building your launch plan...</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="results-section" id="mvpResultsSection">
+          </div>
+      </div>
+    </section>
+
  <section class="cta-before-faq">
       <div class="container" align="center">
 <script async data-uid="9a25fe409e" src="https://askarti.kit.com/9a25fe409e/index.js"></script>
@@ -1158,6 +1315,16 @@
               Perfect! Our prompts are designed to help beginners get expert-level results right away. We'll teach you both how to use AI effectively AND how to create great prompts for any situation.
             </div>
           </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <span>What's the difference between the Prompt Maker and MVP Maker?</span>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-answer">
+              The Prompt Maker improves any request to get better AI results. The MVP Maker specifically helps entrepreneurs turn business ideas into complete launch strategies with timelines, validation metrics, and ready-to-use prompts for building landing pages.
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1177,7 +1344,7 @@
 
   <footer>
     <div class="container">
-      <p>© 2025 AskArti.com • AI prompt optimization.</p>
+      <p>Â© 2025 AskArti.com â€¢ AI prompt optimization.</p>
     </div>
   </footer>
 <script>
@@ -1188,7 +1355,7 @@ const API_CONFIG = {
 
 // Global state
 let isGenerating = false;
-
+let isMvpGenerating = false;
 
 // Dynamic placeholder text based on user input
 function updatePlaceholder() {
@@ -1205,6 +1372,21 @@ function updatePlaceholder() {
     input.placeholder = "e.g., create a social media strategy for my startup";
   } else if (!text) {
     input.placeholder = "e.g., help me write better emails, plan a family vacation, improve my marketing strategy...";
+  }
+}
+
+function updateMvpPlaceholder() {
+  const input = document.getElementById('mvpInput');
+  const text = input.value.toLowerCase();
+  
+  if (text.includes('app') || text.includes('mobile')) {
+    input.placeholder = "e.g., an app that helps busy parents meal plan for the week";
+  } else if (text.includes('saas') || text.includes('software')) {
+    input.placeholder = "e.g., a SaaS tool that automates social media posting for small businesses";
+  } else if (text.includes('service') || text.includes('consultant')) {
+    input.placeholder = "e.g., a service that optimizes LinkedIn profiles for job seekers";
+  } else if (!text) {
+    input.placeholder = "e.g., a tool that helps freelancers track time and send invoices, an app that matches dog owners for playdates...";
   }
 }
 
@@ -1232,7 +1414,8 @@ async function generatePrompt() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        situation: problemText
+        situation: problemText,
+        request_type: 'prompt_improvement'
       })
     });
 
@@ -1259,6 +1442,57 @@ async function generatePrompt() {
     setButtonLoading(false);
   }
 }
+
+// Generate MVP Launch Plan
+async function generateMvpPlan() {
+  const ideaText = document.getElementById('mvpInput').value.trim();
+  
+  if (!ideaText) {
+    alert('Please describe your business idea.');
+    return;
+  }
+
+  if (isMvpGenerating) return;
+  
+  // Hide existing results first
+  const resultsSection = document.getElementById('mvpResultsSection');
+  resultsSection.classList.remove('show');
+  
+  setMvpButtonLoading(true);
+  
+  try {
+    const response = await fetch(API_CONFIG.ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        situation: ideaText,
+        request_type: 'mvp_launch_plan'
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    if (data.error) {
+      throw new Error(data.message || data.error);
+    }
+
+    showMvpResult(data.launchPlan, ideaText);
+
+  } catch (error) {
+    console.error('MVP generation failed:', error);
+    // Show fallback message
+    showMvpError(error.message);
+  } finally {
+    setMvpButtonLoading(false);
+  }
+}
+
 // Convert AI response to improved prompt format
 function convertToImprovedPrompt(aiResponse, originalPrompt) {
   // Handle different response formats from your API
@@ -1398,6 +1632,117 @@ function showResult(prompt, problemText) {
   resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+// Show MVP Results
+function showMvpResult(launchPlan, originalIdea) {
+  const resultsSection = document.getElementById('mvpResultsSection');
+  
+  resultsSection.innerHTML = `
+    <div class="result-header">
+      <h3 class="result-title">🚀 Your Launch Plan</h3>
+      <div class="result-actions">
+        <button class="btn btn-mvp" onclick="copyMvpPrompt()">Copy MVP Prompt</button>
+      </div>
+    </div>
+    <div class="explanation-text">We analyzed your idea and created a complete launch strategy with timeline, validation metrics, and a ready-to-use prompt for building your MVP landing page.</div>
+    
+    <div class="launch-plan-display">
+      <div class="launch-plan-section">
+        <h4>📦 ${launchPlan.productName}</h4>
+        
+        <div class="launch-plan-section">
+          <h4>🎯 What You're Building</h4>
+          <p>${launchPlan.strategy.whatYoureBuilding}</p>
+        </div>
+        
+        <div class="launch-plan-section">
+          <h4>👥 Target Customer</h4>
+          <p>${launchPlan.strategy.targetCustomer}</p>
+        </div>
+        
+        <div class="launch-plan-section">
+          <h4>💎 Value Proposition</h4>
+          <p>${launchPlan.strategy.valueProposition}</p>
+        </div>
+        
+        <div class="launch-plan-section">
+          <h4>📊 Validation Goal</h4>
+          <p>${launchPlan.strategy.validationGoal}</p>
+        </div>
+        
+        <div class="launch-plan-section">
+          <h4>📅 Timeline</h4>
+          <div class="launch-plan-timeline">
+            <div class="timeline-item">
+              <strong>Day 1:</strong> ${launchPlan.timeline.day1}
+            </div>
+            <div class="timeline-item">
+              <strong>Day 2:</strong> ${launchPlan.timeline.day2}
+            </div>
+          </div>
+        </div>
+        
+        <div class="launch-plan-section">
+          <h4>📈 Success Metrics</h4>
+          <p><strong>Week 1 Target:</strong> ${launchPlan.successMetrics.week1}</p>
+          <p><strong>Pivot Signal:</strong> ${launchPlan.successMetrics.pivotSignal}</p>
+        </div>
+        
+        <div class="launch-plan-section">
+          <h4>🛠️ MVP Landing Page Prompt</h4>
+          <p>Copy this prompt and paste it into Claude, ChatGPT, or any AI tool to build your MVP landing page:</p>
+          <div class="mvp-prompt-display" id="mvpPromptDisplay">
+            <button class="copy-floating" onclick="copyMvpPrompt()">Copy</button>
+            ${launchPlan.mvpPrompt}
+          </div>
+        </div>
+        
+        ${launchPlan.realityCheck ? `
+        <div class="launch-plan-section">
+          <h4>💪 Reality Check</h4>
+          <p>${launchPlan.realityCheck}</p>
+        </div>
+        ` : ''}
+      </div>
+    </div>
+    
+    <div class="result-note">
+      <strong>How to use:</strong> Follow the timeline, use the MVP prompt to build your landing page, and track the success metrics to validate your idea.
+    </div>
+    <div class="next-steps">
+      <h4>Ready to Launch?</h4>
+      <p>Need help executing this plan or want personalized guidance? Book a strategy session to get expert support.</p>
+      <a href="https://calendly.com/markflournoy/deepdive" target="_blank" class="btn btn-mvp">Book Strategy Session - $99</a>
+    </div>
+  `;
+  
+  // Store for copying
+  window.currentMvpPrompt = launchPlan.mvpPrompt;
+  window.currentIdea = originalIdea;
+  
+  resultsSection.classList.add('show');
+  resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Show MVP Error
+function showMvpError(errorMessage) {
+  const resultsSection = document.getElementById('mvpResultsSection');
+  
+  resultsSection.innerHTML = `
+    <div class="result-header">
+      <h3 class="result-title">⚠️ Something Went Wrong</h3>
+    </div>
+    <div class="explanation-text">We encountered an issue generating your launch plan: ${errorMessage}</div>
+    <div class="next-steps">
+      <h4>Let's Get This Fixed</h4>
+      <p>Try again in a moment, or book a free call for personalized help with your business idea.</p>
+      <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-mvp">Book Free Call</a>
+    </div>
+  `;
+  
+  resultsSection.classList.add('show');
+  resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 // Set button loading state with better UX
 function setButtonLoading(loading) {
   isGenerating = loading;
@@ -1419,6 +1764,27 @@ function setButtonLoading(loading) {
   }
 }
 
+// Set MVP button loading state
+function setMvpButtonLoading(loading) {
+  isMvpGenerating = loading;
+  const btn = document.getElementById('generateMvpBtn');
+  const btnText = document.getElementById('mvpBtnText');
+  const btnLoader = document.getElementById('mvpBtnLoader');
+  const loadingMessage = document.getElementById('mvpLoadingMessage');
+  
+  btn.disabled = loading;
+  
+  if (loading) {
+    btnText.classList.add('hidden');
+    btnLoader.classList.remove('hidden');
+    loadingMessage.classList.remove('hidden');
+  } else {
+    btnText.classList.remove('hidden');
+    btnLoader.classList.add('hidden');
+    loadingMessage.classList.add('hidden');
+  }
+}
+
 // Copy prompt to clipboard with enhanced feedback
 function copyPrompt() {
   const promptText = window.currentPrompt;
@@ -1426,6 +1792,21 @@ function copyPrompt() {
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(promptText).then(() => {
       showCopySuccess();
+    }).catch(() => {
+      fallbackCopy(promptText);
+    });
+  } else {
+    fallbackCopy(promptText);
+  }
+}
+
+// Copy MVP prompt to clipboard
+function copyMvpPrompt() {
+  const promptText = window.currentMvpPrompt;
+  
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(promptText).then(() => {
+      showMvpCopySuccess();
     }).catch(() => {
       fallbackCopy(promptText);
     });
@@ -1478,6 +1859,25 @@ function showCopySuccess() {
   });
 }
 
+// MVP copy success feedback
+function showMvpCopySuccess() {
+  const buttons = document.querySelectorAll('button[onclick="copyMvpPrompt()"]');
+  buttons.forEach(button => {
+    const originalText = button.textContent;
+    button.textContent = '✓ Copied!';
+    button.style.background = 'var(--success)';
+    button.style.color = 'white';
+    button.style.borderColor = 'var(--success)';
+    
+    setTimeout(() => {
+      button.textContent = originalText;
+      button.style.background = '';
+      button.style.color = '';
+      button.style.borderColor = '';
+    }, 2000);
+  });
+}
+
 // FAQ toggle functionality
 function toggleFaq(element) {
   const faqItem = element.parentElement;
@@ -1514,8 +1914,11 @@ function setupSmoothScrolling() {
 function setupEventListeners() {
   const generateBtn = document.getElementById('generateBtn');
   const problemInput = document.getElementById('problemInput');
+  const generateMvpBtn = document.getElementById('generateMvpBtn');
+  const mvpInput = document.getElementById('mvpInput');
   
   generateBtn.addEventListener('click', generatePrompt);
+  generateMvpBtn.addEventListener('click', generateMvpPlan);
   
   problemInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -1523,19 +1926,34 @@ function setupEventListeners() {
       generatePrompt();
     }
   });
+
+  mvpInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      generateMvpPlan();
+    }
+  });
   
-  // Auto-resize textarea
+  // Auto-resize textareas
   problemInput.addEventListener('input', () => {
     problemInput.style.height = 'auto';
     problemInput.style.height = Math.min(problemInput.scrollHeight, 200) + 'px';
     updatePlaceholder();
+  });
+
+  mvpInput.addEventListener('input', () => {
+    mvpInput.style.height = 'auto';
+    mvpInput.style.height = Math.min(mvpInput.scrollHeight, 200) + 'px';
+    updateMvpPlaceholder();
   });
 }
 
 // Make functions global for onclick handlers
 Object.assign(window, { 
   generatePrompt,
+  generateMvpPlan,
   copyPrompt,
+  copyMvpPrompt,
   toggleFaq
 });
 
