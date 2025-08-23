@@ -63,7 +63,7 @@
     font-size: 3.5rem;
     font-weight: 800;
     line-height: 1.1;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
     color: var(--text);
   }
 
@@ -71,39 +71,39 @@
     font-size: 2.5rem;
     font-weight: 700;
     line-height: 1.2;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
     color: var(--text);
   }
 
   h3 {
     font-size: 1.875rem;
-    font-weight: 600;
+    font-weight: 650;
     line-height: 1.3;
+    letter-spacing: -0.01em;
     color: var(--text);
   }
 
   h4 {
     font-size: 1.25rem;
-    font-weight: 600;
+    font-weight: 650;
     line-height: 1.4;
     color: var(--text);
   }
 
   h5 {
     font-size: 1.125rem;
-    font-weight: 600;
+    font-weight: 650;
     line-height: 1.4;
     color: var(--text);
   }
 
   h6 {
-    font-size: 1rem;
-    font-weight: 600;
-    line-height: 1.4;
-    color: var(--text);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     font-size: 0.875rem;
+    font-weight: 650;
+    line-height: 1.4;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
 
   p {
@@ -172,38 +172,47 @@
     justify-content: center;
     padding: 10px 20px;
     border-radius: var(--radius);
-    font-weight: 500;
+    font-weight: 550;
     font-size: 0.875rem;
     text-decoration: none;
     border: none;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     font-family: inherit;
     white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn:active {
+    transform: translateY(0px) scale(0.98);
   }
 
   .btn-primary {
     background: var(--accent);
     color: white;
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--accent);
   }
 
   .btn-primary:hover {
     background: var(--accent-hover);
-    opacity: 0.9;
     transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
   }
 
   .btn-secondary {
     background: var(--panel);
     color: var(--text);
     border: 1px solid var(--border);
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-xs);
   }
 
   .btn-secondary:hover {
     background: var(--border-light);
+    border-color: var(--border-focus);
     transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
   }
 
   .btn-large {
@@ -224,15 +233,24 @@
   }
 
   .hero-badge {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     background: var(--accent-light);
     color: var(--accent);
-    padding: 6px 16px;
+    padding: 8px 16px;
     border-radius: 50px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin-bottom: 24px;
-    border: 1px solid var(--border);
+    font-size: 0.8125rem;
+    font-weight: 550;
+    margin-bottom: 28px;
+    border: 1px solid var(--accent-border);
+    box-shadow: var(--shadow-xs);
+    animation: subtle-float 4s ease-in-out infinite;
+  }
+
+  @keyframes subtle-float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-2px); }
   }
 
   .hero h1 {
@@ -275,37 +293,91 @@
 
   .tools-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 40px;
+    max-width: 800px;
+    margin: 0 auto;
   }
 
   .tool-card {
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 32px;
-    box-shadow: var(--shadow);
-    transition: all 0.2s ease;
+    padding: 36px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
   }
 
   .tool-card:hover {
     box-shadow: var(--shadow-hover);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    border-color: var(--border-focus);
+  }
+
+  .tool-card.active {
+    border-color: var(--accent-border);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .tool-card:nth-child(2).active {
+    border-color: var(--purple-border);
   }
 
   .tool-header {
-    margin-bottom: 24px;
+    margin-bottom: 28px;
     text-align: center;
+    position: relative;
+  }
+
+  .tool-header::before {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 16px;
+    background: var(--accent-light);
+    border-radius: 50%;
+    border: 2px solid var(--accent-border);
+    position: relative;
+  }
+
+  .tool-header::after {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    background: var(--accent);
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z' /%3E%3C/svg%3E") no-repeat center;
+    mask-size: contain;
+  }
+
+  .tool-card:nth-child(2) .tool-header::before {
+    background: var(--purple-light);
+    border-color: var(--purple-border);
+  }
+
+  .tool-card:nth-child(2) .tool-header::after {
+    background: var(--purple);
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M13 10V3L4 14h7v7l9-11h-7z' /%3E%3C/svg%3E") no-repeat center;
+    mask-size: contain;
   }
 
   .tool-header h3 {
     margin-bottom: 12px;
+    position: relative;
   }
 
   .tool-header p {
-    font-size: 0.875rem;
+    font-size: 0.9375rem;
     color: var(--text-muted);
-    line-height: 1.5;
+    line-height: 1.6;
+    max-width: 320px;
+    margin: 0 auto;
   }
 
   /* Form Elements */
@@ -318,23 +390,37 @@
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 16px;
-    font-size: 0.875rem;
+    padding: 18px;
+    font-size: 0.9375rem;
     color: var(--text);
     font-family: inherit;
     resize: vertical;
     min-height: 120px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     outline: none;
+    line-height: 1.6;
   }
 
   .input-field:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-light);
+    background: var(--panel);
+    transform: translateY(-1px);
+  }
+
+  .tool-card:nth-child(2) .input-field:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px var(--purple-light);
   }
 
   .input-field::placeholder {
     color: var(--text-muted);
+    opacity: 0.8;
+  }
+
+  .input-field:hover:not(:focus) {
+    border-color: var(--border-focus);
+    background: #FAFBFC;
   }
 
   .submit-btn {
@@ -390,13 +476,25 @@
   .results {
     margin-top: 32px;
     opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.3s ease;
+    transform: translateY(20px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .results.show {
     opacity: 1;
     transform: translateY(0);
+    animation: slideInResult 0.6s ease-out;
+  }
+
+  @keyframes slideInResult {
+    0% { 
+      opacity: 0; 
+      transform: translateY(30px) scale(0.98);
+    }
+    100% { 
+      opacity: 1; 
+      transform: translateY(0) scale(1);
+    }
   }
 
   .result-header {
@@ -416,42 +514,58 @@
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 24px;
-    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    padding: 28px;
+    font-family: ui-monospace, 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
     font-size: 0.8125rem;
-    line-height: 1.6;
+    line-height: 1.7;
     white-space: pre-wrap;
     max-height: 400px;
     overflow-y: auto;
     position: relative;
     color: var(--text);
+    box-shadow: var(--shadow-xs);
+    border-left: 3px solid var(--accent-border);
+  }
+
+  .tool-card:nth-child(2) .result-content {
+    border-left-color: var(--purple-border);
   }
 
   .copy-btn {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 16px;
+    right: 16px;
     background: var(--panel);
     border: 1px solid var(--border);
-    color: var(--text-muted);
-    padding: 6px 12px;
-    border-radius: 6px;
+    color: var(--text-secondary);
+    padding: 8px 14px;
+    border-radius: 8px;
     font-size: 0.75rem;
+    font-weight: 550;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+    box-shadow: var(--shadow-xs);
+    backdrop-filter: blur(8px);
   }
 
   .copy-btn:hover {
     background: var(--accent);
     color: white;
     border-color: var(--accent);
+    transform: translateY(-1px) scale(1.05);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .copy-btn:active {
+    transform: translateY(0) scale(1);
   }
 
   .copy-btn.copied {
     background: var(--success);
     color: white;
     border-color: var(--success);
+    transform: scale(1.05);
   }
 
   /* MVP Results */
@@ -575,25 +689,49 @@
   /* CTA Cards */
   .cta-card {
     margin-top: 32px;
-    padding: 24px;
+    padding: 28px;
     background: var(--accent-light);
-    border: 1px solid var(--border);
+    border: 1px solid var(--accent-border);
     border-radius: var(--radius-lg);
     text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-xs);
+  }
+
+  .tool-card:nth-child(2) .cta-card {
+    background: var(--purple-light);
+    border-color: var(--purple-border);
+  }
+
+  .cta-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  .tool-card:nth-child(2) .cta-card::before {
+    background: var(--purple);
   }
 
   .cta-card h4 {
     margin-bottom: 12px;
+    color: var(--text);
   }
 
   .cta-card p {
-    margin-bottom: 20px;
-    color: var(--text-muted);
+    margin-bottom: 24px;
+    color: var(--text-secondary);
+    line-height: 1.6;
   }
 
   .cta-buttons {
     display: flex;
-    gap: 12px;
+    gap: 14px;
     justify-content: center;
     flex-wrap: wrap;
   }
@@ -618,11 +756,6 @@
 
     h2 {
       font-size: 2rem;
-    }
-
-    .tools-grid {
-      grid-template-columns: 1fr;
-      gap: 32px;
     }
 
     .hero-cta {
@@ -715,8 +848,8 @@
           <img src="asklite.png" alt="AskArti Logo">
         </a>
         <div class="nav-links">
-          <a href="#tools" class="nav-link">Tools</a>
-          <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Book Free Call</a>
+          <a href="#tools" class="nav-link">Free AI Tools</a>
+          <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Free 15 min chat</a>
         </div>
       </div>
     </div>
@@ -727,12 +860,12 @@
     <section class="hero">
       <div class="container">
         <div class="hero-content">
-          <h1>Make AI Work Better For You</h1>
+          <h1>Free AI tools I use daily.</h1>
           <p class="lead">
-            Two simple tools to help you get better results from AI. No tricks, no gimmicks - just practical help to make your prompts clearer and your ideas stronger.
+            Two simple tools I use to clean up prompts and launch MVPs. Practical help so your AI gives better answers.
           </p>
           <div class="hero-cta">
-            <a href="#tools" class="btn btn-primary btn-large">Try the Tools</a>
+            <a href="#tools" class="btn btn-primary btn-large">Use the free tools</a>
           </div>
         </div>
       </div>
@@ -742,9 +875,9 @@
     <section id="tools" class="tools-section">
       <div class="container">
         <div class="section-header">
-          <h2>Two Ways I Can Help</h2>
+          <h2>Two free tools I actually use</h2>
           <p class="lead">
-            Choose the tool that fits what you're working on right now. Both are free and designed to give you something useful in under a minute.
+           Pick what you are working on. Each tool gives you something useful in under a minute.
           </p>
         </div>
         
@@ -752,9 +885,9 @@
           <!-- Perfect Prompt Tool -->
           <div class="tool-card">
             <div class="tool-header">
-              <h3>Perfect Prompt Maker</h3>
+              <h3>Prompt Fixer</h3>
               <p>
-                Turn any vague request into a clear, structured prompt that gets you better AI results. Works with Claude, ChatGPT, or any AI tool.
+                Paste what you were about to type. Get a clean, structured prompt that AI understands; works in ChatGPT, Claude, Gemini, or Grok.
               </p>
             </div>
             
@@ -767,11 +900,11 @@
               ></textarea>
             </div>
             <button class="submit-btn" id="generatePromptBtn">
-              <span id="promptBtnText">Improve This Prompt</span>
+              <span id="promptBtnText">Fix my prompt</span>
               <div id="promptSpinner" class="spinner hidden"></div>
             </button>
             <div id="promptLoading" class="loading-message hidden">
-              Working on your prompt...
+              Tuning your prompt...
             </div>
             
             <div class="results" id="promptResults"></div>
@@ -782,7 +915,7 @@
             <div class="tool-header">
               <h3>MVP Launch Plan</h3>
               <p>
-                Have a business idea? Get a simple launch plan with timeline, validation steps, and a ready-to-use prompt for building your MVP landing page.
+                Have an idea? Get a simple plan with a timeline, quick validation steps, and a copy-paste MVP prompt.
               </p>
             </div>
             
@@ -795,7 +928,7 @@
               ></textarea>
             </div>
             <button class="submit-btn" id="generateMvpBtn">
-              <span id="mvpBtnText">Create Launch Plan</span>
+              <span id="mvpBtnText">Make my plan</span>
               <div id="mvpSpinner" class="spinner hidden"></div>
             </button>
             <div id="mvpLoading" class="loading-message hidden">
@@ -814,10 +947,10 @@
         <div class="help-content">
           <h2>Need More Help?</h2>
           <p>
-            These tools are a good start, but sometimes you need someone to walk through your specific situation with you. I'm happy to chat for 15 minutes and see if I can point you in the right direction.
+            If you want a second set of eyes on your prompt or your plan, I am happy to look. No pitch; just help.
           </p>
           <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary btn-large">
-            Book a Quick Call
+            Free 15 min chat
           </a>
         </div>
       </div>
@@ -863,6 +996,10 @@ async function generatePrompt() {
 
   if (isGeneratingPrompt) return;
   
+  // Add active state to card
+  const promptCard = document.querySelector('.tool-card:nth-child(1)');
+  promptCard.classList.add('active');
+  
   setPromptLoading(true);
   
   try {
@@ -894,6 +1031,7 @@ async function generatePrompt() {
     showPromptError(error.message);
   } finally {
     setPromptLoading(false);
+    // Keep active state for results
   }
 }
 
@@ -907,6 +1045,10 @@ async function generateMvpPlan() {
   }
 
   if (isGeneratingMvp) return;
+  
+  // Add active state to card
+  const mvpCard = document.querySelector('.tool-card:nth-child(2)');
+  mvpCard.classList.add('active');
   
   setMvpLoading(true);
   
@@ -939,6 +1081,7 @@ async function generateMvpPlan() {
     showMvpError(error.message);
   } finally {
     setMvpLoading(false);
+    // Keep active state for results
   }
 }
 
