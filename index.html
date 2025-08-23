@@ -16,7 +16,7 @@
 <style>
   :root {
     /* Matching the actual reference image */
-    --bg: #E2E8F0;
+    --bg: #DFECF1;
     --panel: #FFFFFF;
     --text: #000000;
     --text-secondary: #374151;
@@ -42,8 +42,8 @@
     --shadow-md: 0 4px 8px rgba(0,0,0,.12);
     --shadow-lg: 0 8px 16px rgba(0,0,0,.15);
     --shadow-hover: 0 12px 24px rgba(0,0,0,.15);
-    --radius: 36px;
-    --radius-lg: 36px;
+    --radius: 24px;
+    --radius-lg: 32px;
     --max-width: 900px;
   }
   
@@ -123,7 +123,7 @@
     font-size: 1.375rem;
     line-height: 1.5;
     color: var(--text-secondary);
-    margin-bottom: 60px;
+    margin-bottom: 30px;
   }
 
   .small {
@@ -145,7 +145,7 @@
   }
 
   .logo {
-    height: 100px;
+    height: 48px;
     width: auto;
   }
 
@@ -179,7 +179,7 @@
     align-items: center;
     justify-content: center;
     padding: 14px 28px;
-    border-radius: var(--radius);
+    border-radius: 32px;
     font-weight: 600;
     font-size: 1rem;
     text-decoration: none;
@@ -231,7 +231,7 @@
 
   /* Hero Section */
   .hero {
-    padding: 30px 0;
+    padding: 50px 0;
     text-align: center;
   }
 
@@ -241,40 +241,42 @@
   }
 
   .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--accent-light);
-    color: var(--accent);
-    padding: 12px 24px;
-    border-radius: 50px;
-    font-size: 1rem;
-    font-weight: 600;
+    display: inline-block;
     margin-bottom: 10px;
-    border: 1px solid var(--accent-border);
-    box-shadow: var(--shadow-xs);
   }
 
-  
+  .hero-badge img {
+    height: 300px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
 
   /* Tools Section */
   .tools-section {
-    padding: 10px 0;
+    padding: 60px 0;
   }
 
   .tools-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 80px;
+    gap: 40px;
     max-width: 800px;
     margin: 0 auto;
   }
 
   .tool-card {
-    background: #1F2937;
+    background: #000000;
     border: 1px solid #374151;
     border-radius: var(--radius-lg);
-    padding: 48px 40px;
+    padding: 24px 20px;
     box-shadow: var(--shadow-sm);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -297,13 +299,20 @@
   }
 
   .tool-header {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     text-align: center;
     position: relative;
   }
 
+  .tool-header img {
+    height: 100px;
+    width: auto;
+    object-fit: contain;
+    margin-bottom: 16px;
+  }
+
   .tool-header h3 {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     color: #FFFFFF;
   }
 
@@ -312,19 +321,19 @@
     color: #9CA3AF;
     line-height: 1.6;
     max-width: 400px;
-    margin: 0 auto 40px;
+    margin: 0 auto 20px;
   }
 
   /* Form Elements */
   .input-group {
-    margin-bottom: 32px;
+    margin-bottom: 16px;
   }
 
   .input-field {
     width: 100%;
     background: #374151;
     border: 1px solid #4B5563;
-    border-radius: var(--radius);
+    border-radius: 24px;
     padding: 24px;
     font-size: 1.125rem;
     color: #FFFFFF;
@@ -361,10 +370,10 @@
   .submit-btn {
     width: 100%;
     padding: 20px 32px;
-    background: #E2E8F0;
-    color: #1F2937;
+    background: #DFECF1;
+    color: #000000;
     border: none;
-    border-radius: var(--radius);
+    border-radius: 32px;
     font-size: 1.125rem;
     font-weight: 700;
     cursor: pointer;
@@ -372,6 +381,7 @@
     box-shadow: var(--shadow-sm);
     position: relative;
     overflow: hidden;
+    margin-bottom: 8px;
   }
 
   .submit-btn:hover:not(:disabled) {
@@ -391,8 +401,8 @@
   }
 
   .tool-card:nth-child(2) .submit-btn {
-    background: #E2E8F0;
-    color: #1F2937;
+    background: #DFECF1;
+    color: #000000;
   }
 
   .tool-card:nth-child(2) .submit-btn:hover:not(:disabled) {
@@ -448,12 +458,13 @@
   .result-header h4 {
     margin: 0;
     font-size: 1.5rem;
+    color: #FFFFFF;
   }
 
   .result-content {
     background: var(--panel);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border-radius: 24px;
     padding: 32px;
     font-family: ui-monospace, 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
     font-size: 0.875rem;
@@ -467,7 +478,7 @@
   }
 
   .tool-card:nth-child(2) .result-content {
-    border-left-color: var(--purple-border);
+    /* Remove the purple border */
   }
 
   .copy-btn {
@@ -478,7 +489,7 @@
     border: 1px solid var(--border);
     color: var(--text-secondary);
     padding: 10px 16px;
-    border-radius: 10px;
+    border-radius: 20px;
     font-size: 0.8125rem;
     font-weight: 600;
     cursor: pointer;
@@ -526,13 +537,14 @@
 
   .mvp-section h5 {
     margin-bottom: 12px;
-    color: var(--text);
+    color: #FFFFFF;
     font-size: 1.25rem;
   }
 
   .mvp-section p {
     margin-bottom: 12px;
     font-size: 1rem;
+    color: #9CA3AF;
   }
 
   .mvp-timeline {
@@ -545,7 +557,7 @@
   .timeline-item {
     background: var(--border-light);
     padding: 20px;
-    border-radius: var(--radius);
+    border-radius: 24px;
     border: 1px solid var(--border);
   }
 
@@ -558,7 +570,7 @@
 
   /* Help Section */
   .help-section {
-    padding: 20px 0;
+    padding: 60px 0;
     background: var(--bg);
     border-top: 1px solid var(--border);
   }
@@ -570,17 +582,17 @@
   }
 
   .help-content h2 {
-    margin-bottom: 24px;
+    margin-bottom: 12px;
   }
 
   .help-content p {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     font-size: 1.25rem;
   }
 
   /* Footer */
   .footer {
-    padding: 20px 0;
+    padding: 60px 0;
     text-align: center;
     border-top: 1px solid var(--border);
     background: var(--bg);
@@ -597,7 +609,7 @@
     padding: 48px;
     background: var(--panel);
     border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
+    border-radius: 32px;
   }
 
   .error-state h4 {
@@ -615,7 +627,7 @@
     margin-top: 24px;
     padding: 20px;
     background: var(--border-light);
-    border-radius: var(--radius);
+    border-radius: 24px;
     border: 1px solid var(--border);
   }
 
@@ -635,7 +647,7 @@
     padding: 32px;
     background: var(--accent-light);
     border: 1px solid var(--accent-border);
-    border-radius: var(--radius-lg);
+    border-radius: 32px;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -813,7 +825,7 @@
         </a>
         <div class="nav-links">
           <a href="#tools" class="nav-link">Tools</a>
-          <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Free 15 min Chat</a>
+          <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Book Free Call</a>
         </div>
       </div>
     </div>
@@ -824,13 +836,14 @@
     <section class="hero">
       <div class="container">
         <div class="hero-content">
-          <a href="#" class="logo">
-          <img src="arti_right.png" alt="AskArti Logo">
-        </a>
-          <h1>Free AI Tools I Use</h1>
+          
+          <h1>Use the tools I use.</h1>
           <p class="lead">
-            I'm sharing the same tools I use every day to create better prompts and launch MVP websites. Both are free and will improve your AI results with ChatGPT, Claude, Gemini, or Grok.
+            I'm sharing the same tools I use every day to create better prompts and launch MVP websites. Both are free and take less than a minute to use.
           </p>
+          <div class="hero-badge">
+            <img src="tools.png" alt="Slingshot">
+          </div>
         </div>
       </div>
     </section>
@@ -907,7 +920,7 @@
             These tools are just the start. If you want to go deeper or need help with something specific, I'm happy to chat and see how I can help.
           </p>
           <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary btn-large">
-            Free 15 min Chat
+            Book a Quick Call
           </a>
         </div>
       </div>
@@ -1108,7 +1121,7 @@ function showPromptResult(prompt, originalInput, explanation) {
       <h4>Want to learn the techniques behind these tools?</h4>
       <p>I can show you advanced prompting strategies and help you apply them to your specific work.</p>
       <div class="cta-buttons">
-        <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary"Free 15 min Chat</a>
+        <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Book Free Strategy Call</a>
         <a href="https://calendly.com/markflournoy/deepdive" target="_blank" class="btn btn-secondary">1:1 Deep Dive - $99</a>
       </div>
     </div>
@@ -1177,10 +1190,12 @@ function showMvpResult(launchPlan, originalInput) {
       </div>
       
       <div class="mvp-section">
-        <h5>Ready-to-Use MVP Prompt</h5>
-        <p class="small" style="margin-bottom: 20px;">Copy this prompt into Claude, ChatGPT, or any AI tool to build your landing page:</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h5>Ready-to-Use MVP Prompt</h5>
+          <button class="btn btn-secondary" onclick="copyToClipboard('mvp-prompt')" style="font-size: 0.875rem; padding: 8px 16px;">Copy MVP Prompt</button>
+        </div>
+        <p class="small" style="margin-bottom: 20px; color: #9CA3AF;">Copy this prompt into Claude, ChatGPT, or any AI tool to build your landing page:</p>
         <div class="result-content" id="mvp-prompt">
-          <button class="copy-btn" onclick="copyToClipboard('mvp-prompt')">Copy</button>
           ${launchPlan.mvpPrompt || 'MVP prompt generation failed - please try again'}
         </div>
       </div>
@@ -1201,8 +1216,8 @@ function showMvpResult(launchPlan, originalInput) {
       <h4>Ready to Execute This Plan?</h4>
       <p>Get personalized guidance and hands-on help executing your launch strategy.</p>
       <div class="cta-buttons">
-        <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Free 15 min Chat</a>
-        <a href="https://calendly.com/markflournoy/deepdive" target="_blank" class="btn btn-secondary">1:1 Vibe Coding Session - $99</a>
+        <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Book Free Strategy Call</a>
+        <a href="https://calendly.com/markflournoy/deepdive" target="_blank" class="btn btn-secondary">1:1 Launch Coaching - $99</a>
       </div>
     </div>
   `;
@@ -1356,4 +1371,4 @@ document.addEventListener('DOMContentLoaded', initializeApp);
 window.copyToClipboard = copyToClipboard;
 </script>
 </body>
-</html
+</html>
