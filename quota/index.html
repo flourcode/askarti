@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quota</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            line-height: 1.3;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 375px;
+            background: white;
+            border-radius: 22px;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.12);
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 32px 24px 24px;
+            background: white;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1d1d1f;
+            letter-spacing: -0.5px;
+        }
+
+        .content {
+            padding: 0 24px 32px;
+        }
+
+        .input-section {
+            margin-bottom: 32px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .input-label {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .input-field {
+            width: 100%;
+            height: 56px;
+            background: #f6f6f6;
+            border: none;
+            border-radius: 12px;
+            padding: 0 16px;
+            font-size: 20px;
+            font-weight: 500;
+            color: #1d1d1f;
+            font-family: inherit;
+            transition: background-color 0.2s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            background: #e8e8ed;
+        }
+
+        .input-field::placeholder {
+            color: #86868b;
+            font-weight: 400;
+        }
+
+        .currency-field {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .calculate-button {
+            width: 100%;
+            height: 56px;
+            background: #007aff;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 17px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 24px;
+        }
+
+        .calculate-button:hover {
+            background: #0051d0;
+        }
+
+        .calculate-button:active {
+            transform: scale(0.98);
+        }
+
+        .results {
+            display: none;
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid #d2d2d7;
+        }
+
+        .results.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .main-result {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .main-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: #007aff;
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .main-label {
+            font-size: 17px;
+            color: #86868b;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e5e5ea;
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #007aff;
+            border-radius: 3px;
+            transition: width 0.8s ease;
+        }
+
+        .progress-fill.over {
+            background: #ff9500;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 16px;
+            background: #f6f6f6;
+            border-radius: 12px;
+        }
+
+        .stat-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1d1d1f;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #86868b;
+            margin-top: 2px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+        }
+
+        .status-good {
+            background: #e8f5e8;
+            color: #1d7324;
+        }
+
+        .status-warning {
+            background: #fff4e6;
+            color: #bf5000;
+        }
+
+        .status-critical {
+            background: #ffe6e6;
+            color: #d70015;
+        }
+
+        @media (min-width: 768px) {
+            .app {
+                max-width: 414px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="header">
+            <div class="title">DAILY RUN RATE</div>
+        </div>
+        
+        <div class="content">
+            <div class="input-section">
+                <div class="input-group">
+                    <label class="input-label">Quota Amount</label>
+                    <input type="text" class="input-field currency-field" id="quota" placeholder="$500,000">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Current Sales</label>
+                    <input type="text" class="input-field currency-field" id="current" placeholder="$125,000">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Time Frame</label>
+                    <select class="input-field" id="period">
+                        <option value="quarter">This Quarter</option>
+                        <option value="year">This Year</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button class="calculate-button" onclick="calculate()">Calculate</button>
+            
+            <div class="results" id="results">
+                <div class="main-result">
+                    <div class="main-number" id="dailyTarget">$0</div>
+                    <div class="main-label">per day to hit quota</div>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress"></div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat">
+                        <div class="stat-number" id="percentage">0%</div>
+                        <div class="stat-label">Complete</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="daysLeft">0</div>
+                        <div class="stat-label">Days Left</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="remaining">$0</div>
+                        <div class="stat-label">Remaining</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="runRate">$0</div>
+                        <div class="stat-label">Current Rate</div>
+                    </div>
+                </div>
+                
+                <div class="status-message" id="statusMessage"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function parseCurrency(value) {
+            return parseFloat(value.replace(/[$,]/g, '')) || 0;
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+
+        function formatCompact(amount) {
+            if (amount >= 1000000) {
+                return '$' + (amount / 1000000).toFixed(1) + 'M';
+            } else if (amount >= 1000) {
+                return '$' + Math.round(amount / 1000) + 'K';
+            }
+            return formatCurrency(amount);
+        }
+
+        function getDaysInPeriod(period) {
+            const now = new Date();
+            const year = now.getFullYear();
+            
+            if (period === 'quarter') {
+                const quarter = Math.floor(now.getMonth() / 3);
+                const quarterStart = new Date(year, quarter * 3, 1);
+                const quarterEnd = new Date(year, (quarter + 1) * 3, 0);
+                
+                const totalDays = Math.ceil((quarterEnd - quarterStart) / (1000 * 60 * 60 * 24)) + 1;
+                const elapsed = Math.ceil((now - quarterStart) / (1000 * 60 * 60 * 24));
+                
+                return {
+                    total: totalDays,
+                    remaining: Math.max(0, totalDays - elapsed)
+                };
+            } else {
+                const yearStart = new Date(year, 0, 1);
+                const yearEnd = new Date(year, 11, 31);
+                
+                const totalDays = Math.ceil((yearEnd - yearStart) / (1000 * 60 * 60 * 24)) + 1;
+                const elapsed = Math.ceil((now - yearStart) / (1000 * 60 * 60 * 24));
+                
+                return {
+                    total: totalDays,
+                    remaining: Math.max(0, totalDays - elapsed)
+                };
+            }
+        }
+
+        function calculate() {
+            const quotaInput = document.getElementById('quota').value;
+            const currentInput = document.getElementById('current').value;
+            const period = document.getElementById('period').value;
+            
+            const quota = parseCurrency(quotaInput);
+            const current = parseCurrency(currentInput);
+            
+            if (!quota) {
+                alert('Please enter your quota amount');
+                return;
+            }
+            
+            const days = getDaysInPeriod(period);
+            const remaining = Math.max(0, quota - current);
+            const dailyTarget = days.remaining > 0 ? remaining / days.remaining : 0;
+            const percentage = Math.min((current / quota) * 100, 150);
+            const currentRunRate = days.total > days.remaining ? current / (days.total - days.remaining) : 0;
+            
+            // Update UI
+            document.getElementById('dailyTarget').textContent = formatCompact(dailyTarget);
+            document.getElementById('percentage').textContent = Math.round(percentage) + '%';
+            document.getElementById('daysLeft').textContent = days.remaining;
+            document.getElementById('remaining').textContent = formatCompact(remaining);
+            document.getElementById('runRate').textContent = formatCompact(currentRunRate * days.total);
+            
+            // Progress bar
+            const progressBar = document.getElementById('progress');
+            progressBar.style.width = Math.min(percentage, 100) + '%';
+            progressBar.classList.toggle('over', percentage > 100);
+            
+            // Status message
+            const statusElement = document.getElementById('statusMessage');
+            let statusClass, statusText;
+            
+            if (current >= quota) {
+                statusClass = 'status-good';
+                statusText = 'Quota achieved! 🎉';
+            } else if (currentRunRate * days.total >= quota * 0.9) {
+                statusClass = 'status-good';
+                statusText = 'On track to hit quota';
+            } else if (currentRunRate * days.total >= quota * 0.7) {
+                statusClass = 'status-warning';
+                statusText = 'Need to accelerate sales';
+            } else {
+                statusClass = 'status-critical';
+                statusText = 'Significantly behind pace';
+            }
+            
+            statusElement.className = 'status-message ' + statusClass;
+            statusElement.textContent = statusText;
+            
+            // Show results
+            document.getElementById('results').classList.add('show');
+        }
+
+        // Format currency inputs as user types
+        function formatCurrencyInput(input) {
+            input.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/[^0-9]/g, '');
+                if (value) {
+                    value = parseInt(value).toLocaleString();
+                    e.target.value = '$' + value;
+                }
+            });
+        }
+
+        formatCurrencyInput(document.getElementById('quota'));
+        formatCurrencyInput(document.getElementById('current'));
+
+        // Enter key support
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                calculate();
+            }
+        });
+    </script>
+</body>
+</html>
