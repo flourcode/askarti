@@ -3,8 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Run Rate</title>
+    <title>Daily Run Rate - AskArti</title>
+    <meta name="description" content="Turn any quota into a daily number. Free tool for sales professionals to calculate daily, monthly, and annual run rates." />
+    <link rel="icon" href="/images/favicon.ico" sizes="any">
     <style>
+        :root {
+            /* Matching the actual reference image */
+            --bg: #E2E8F0;
+            --panel: #FFFFFF;
+            --text: #000000;
+            --text-secondary: #272727;
+            --text-muted: #6B7280;
+            --text-light: #9CA3AF;
+            --border: #E5E7EB;
+            --border-light: #F3F4F6;
+            --border-focus: #D1D5DB;
+            --accent: #000000;
+            --accent-hover: #374151;
+            --accent-light: #F8FAFC;
+            --accent-border: #E5E7EB;
+            --success: #10B981;
+            --success-light: #D1FAE5;
+            --success-border: #6EE7B7;
+            --linkedin: #0077B5;
+            --linkedin-hover: #005582;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --purple: #8B5CF6;
+            --purple-light: #F3E8FF;
+            --purple-border: #C4B5FD;
+            --shadow-xs: 0 1px 2px rgba(0,0,0,.08);
+            --shadow-sm: 0 2px 4px rgba(0,0,0,.1);
+            --shadow-md: 0 4px 8px rgba(0,0,0,.12);
+            --shadow-lg: 0 8px 16px rgba(0,0,0,.15);
+            --shadow-hover: 0 12px 24px rgba(0,0,0,.15);
+            --radius: 12px;
+            --radius-lg: 16px;
+            --max-width: 900px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,12 +49,12 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
-            background: #f5f5f7;
-            color: #1d1d1f;
-            line-height: 1.3;
-            font-weight: 400;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -25,252 +62,556 @@
             padding: 20px;
         }
 
-        .app {
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
             width: 100%;
-            max-width: 375px;
-            background: white;
-            border-radius: 22px;
-            box-shadow: 0 0 0 1px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.12);
-            overflow: hidden;
         }
 
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+            z-index: 100;
+        }
+
+        .nav-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            height: 60px;
+            width: auto;
+        }
+
+        .logo img {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text);
+        }
+
+        /* Main App Card */
+        .app-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 48px;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 100px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .app-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-3px);
+        }
+
+        /* Header */
         .header {
             text-align: center;
-            padding: 32px 24px 24px;
-            background: white;
+            margin-bottom: 40px;
         }
 
         .title {
-            font-size: 28px;
-            font-weight: 700;
-            color: #1d1d1f;
-            letter-spacing: -0.5px;
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.025em;
+            color: var(--text);
+            margin-bottom: 12px;
         }
 
         .subtitle {
-            font-size: 15px;
-            font-weight: 500;
-            color: #86868b;
-            margin-top: 4px;
-            line-height: 1.2;
-        }
-
-        .content {
-            padding: 0 24px 32px;
-        }
-
-        .input-section {
-            margin-bottom: 32px;
-        }
-
-        .input-group {
+            font-size: 1.375rem;
+            line-height: 1.5;
+            color: var(--text-secondary);
             margin-bottom: 20px;
         }
 
-        .input-group:last-child {
-            margin-bottom: 0;
+        /* Input Groups */
+        .input-group {
+            margin-bottom: 24px;
         }
 
         .input-label {
-            font-size: 17px;
-            font-weight: 600;
-            color: #1d1d1f;
-            margin-bottom: 8px;
             display: block;
+            font-size: 1.25rem;
+            font-weight: 650;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
         }
 
         .input-field {
             width: 100%;
-            height: 56px;
-            background: #f6f6f6;
-            border: none;
-            border-radius: 12px;
-            padding: 0 16px;
-            font-size: 20px;
-            font-weight: 500;
-            color: #1d1d1f;
+            background: var(--accent-light);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            font-size: 1.125rem;
+            color: var(--text);
             font-family: inherit;
-            transition: background-color 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+            font-weight: 500;
         }
 
         .input-field:focus {
-            outline: none;
-            background: #e8e8ed;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+            background: var(--panel);
+            transform: translateY(-1px);
         }
 
         .input-field::placeholder {
-            color: #86868b;
-            font-weight: 400;
+            color: var(--text-muted);
+            opacity: 0.8;
         }
 
-        .currency-field {
+        .input-field:hover:not(:focus) {
+            border-color: var(--border-focus);
+            background: var(--panel);
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-weight: 600;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .currency-input {
+            padding-left: 40px !important;
             text-align: right;
             font-variant-numeric: tabular-nums;
         }
 
+        /* Calculate Button */
         .calculate-button {
             width: 100%;
-            height: 56px;
-            background: #007aff;
-            border: none;
-            border-radius: 12px;
+            padding: 20px 40px;
+            background: var(--accent);
             color: white;
-            font-size: 17px;
-            font-weight: 600;
-            font-family: inherit;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1.125rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s ease;
-            margin-top: 24px;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm);
+            margin-top: 32px;
+            font-family: inherit;
         }
 
-        .calculate-button:hover {
-            background: #0051d0;
+        .calculate-button:hover:not(:disabled) {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
         }
 
-        .calculate-button:active {
-            transform: scale(0.98);
+        .calculate-button:active:not(:disabled) {
+            transform: translateY(0px) scale(0.98);
         }
 
+        .calculate-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Results Section */
         .results {
             display: none;
-            margin-top: 32px;
+            margin-top: 40px;
             padding-top: 32px;
-            border-top: 1px solid #d2d2d7;
+            border-top: 1px solid var(--border);
         }
 
         .results.show {
             display: block;
-            animation: fadeIn 0.3s ease;
+            animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
+        /* Main Result */
         .main-result {
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 32px;
+            padding: 24px;
+            background: var(--accent-light);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
         }
 
         .main-number {
-            font-size: 48px;
-            font-weight: 700;
-            color: #007aff;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--accent);
             line-height: 1;
             font-variant-numeric: tabular-nums;
+            margin-bottom: 8px;
         }
 
         .main-label {
-            font-size: 17px;
-            color: #86868b;
-            margin-top: 4px;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            font-weight: 650;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin: 32px 0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .progress-percentage {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .progress-status {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
             font-weight: 500;
         }
 
-        .progress-bar {
+        .progress-track {
             width: 100%;
-            height: 6px;
-            background: #e5e5ea;
-            border-radius: 3px;
-            margin: 20px 0;
+            height: 12px;
+            background: var(--border-light);
+            border-radius: 6px;
             overflow: hidden;
+            margin: 16px 0;
         }
 
         .progress-fill {
             height: 100%;
-            background: #007aff;
-            border-radius: 3px;
-            transition: width 0.8s ease;
+            background: var(--success);
+            border-radius: 6px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .progress-fill.over {
-            background: #ff9500;
+            background: var(--warning);
         }
 
-        .stats-grid {
+        /* Metrics Grid */
+        .metrics-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, 1fr);
             gap: 16px;
-            margin-top: 20px;
+            margin: 32px 0;
         }
 
-        .stat {
+        .metric {
             text-align: center;
-            padding: 16px;
-            background: #f6f6f6;
-            border-radius: 12px;
+            padding: 24px 16px;
+            background: var(--accent-light);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .stat-number {
-            font-size: 20px;
+        .metric:hover {
+            background: var(--panel);
+            border-color: var(--border-focus);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
             font-weight: 700;
-            color: #1d1d1f;
+            color: var(--text);
             font-variant-numeric: tabular-nums;
+            margin-bottom: 4px;
         }
 
-        .stat-label {
-            font-size: 13px;
-            color: #86868b;
-            margin-top: 2px;
-            font-weight: 500;
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
+        /* Additional Metrics */
+        .additional-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .additional-metric {
+            text-align: center;
+            padding: 20px 16px;
+            background: var(--border-light);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .additional-metric-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+            font-variant-numeric: tabular-nums;
+            margin-bottom: 4px;
+        }
+
+        .additional-metric-label {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Status Messages */
         .status-message {
             text-align: center;
-            margin-top: 20px;
-            font-size: 15px;
-            font-weight: 500;
-            padding: 12px 16px;
-            border-radius: 8px;
+            margin-top: 24px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            padding: 16px 24px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
         }
 
         .status-good {
-            background: #e8f5e8;
-            color: #1d7324;
+            background: var(--success-light);
+            color: var(--success);
+            border-color: var(--success-border);
         }
 
         .status-warning {
-            background: #fff4e6;
-            color: #bf5000;
+            background: #FEF3C7;
+            color: var(--warning);
+            border-color: #FCD34D;
         }
 
         .status-critical {
-            background: #ffe6e6;
-            color: #d70015;
+            background: #FEE2E2;
+            color: var(--error);
+            border-color: #FECACA;
         }
 
-        @media (min-width: 768px) {
-            .app {
-                max-width: 414px;
+        /* Footer */
+        .footer {
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .footer-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .footer-text {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .footer-stats {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .footer-stat {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .footer-stat strong {
+            color: var(--text);
+            font-weight: 650;
+        }
+
+        /* Back Link */
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: color 0.2s ease;
+            z-index: 101;
+        }
+
+        .back-link:hover {
+            color: var(--text);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                align-items: flex-start;
+            }
+
+            .app-card {
+                padding: 32px 24px;
+                margin-top: 20px;
+            }
+
+            .nav {
+                position: relative;
+                margin-bottom: 0;
+            }
+
+            .nav-content {
+                padding: 0 10px;
+                justify-content: center;
+            }
+
+            .logo {
+                height: 50px;
+            }
+
+            .title {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.25rem;
+            }
+
+            .main-number {
+                font-size: 2.5rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .additional-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-header {
+                flex-direction: column;
+                gap: 8px;
+                align-items: center;
+            }
+
+            .back-link {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .app-card {
+                padding: 24px 16px;
+            }
+
+            .title {
+                font-size: 2rem;
+            }
+
+            .main-number {
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="app">
-        <div class="header">
-            <div class="title">🏃‍♂️‍➡️💰</div>
-			            <div class="title">Daily Run Rate</div>
-            <div class="subtitle">Turn your quota into a daily number to seize the day!</div>
+    <a href="../" class="back-link">← Back to AskArti</a>
+    
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="../" class="logo">
+                <img src="../asklite.png" alt="AskArti Logo">
+            </a>
         </div>
-        
-        <div class="content">
-            <div class="input-section">
-                <div class="input-group">
-                    <label class="input-label">Quota Amount</label>
-                    <input type="text" class="input-field currency-field" id="quota" placeholder="$500,000">
+    </nav>
+
+    <div class="container">
+        <div class="app-card">
+            <div class="header">
+                <h1 class="title">‍🏃‍♂️‍➡️💰</h1>
+				<h1 class="title">Run Rate</h1>
+                <p class="subtitle">Turn any quota into a Monthly or Daily Run Rate</p>
+            </div>
+            
+            <div class="input-group">
+                <label for="quota" class="input-label">Your Quota</label>
+                <div class="input-wrapper">
+                    <span class="currency-symbol">$</span>
+                    <input type="text" class="input-field currency-input" id="quota" placeholder="500,000">
                 </div>
-                
-                <div class="input-group">
-                    <label class="input-label">Current Sales</label>
-                    <input type="text" class="input-field currency-field" id="current" placeholder="$125,000">
+            </div>
+            
+            <div class="input-group">
+                <label for="current" class="input-label">Current Sales</label>
+                <div class="input-wrapper">
+                    <span class="currency-symbol">$</span>
+                    <input type="text" class="input-field currency-input" id="current" placeholder="125,000">
                 </div>
-                
-                <div class="input-group">
-                    <label class="input-label">Time Frame</label>
+            </div>
+            
+            <div class="input-group">
+                <label for="period" class="input-label">Time Frame</label>
+                <div class="input-wrapper">
                     <select class="input-field" id="period">
                         <option value="quarter">This Quarter</option>
                         <option value="year">This Year</option>
@@ -278,7 +619,7 @@
                 </div>
             </div>
             
-            <button class="calculate-button" onclick="calculate()">Calculate</button>
+            <button class="calculate-button" onclick="calculate()">Calculate My Run Rate</button>
             
             <div class="results" id="results">
                 <div class="main-result">
@@ -286,30 +627,59 @@
                     <div class="main-label">per day to hit quota</div>
                 </div>
                 
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress"></div>
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <span class="progress-percentage" id="percentage">0%</span>
+                        <span class="progress-status" id="status">of quota achieved</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progress"></div>
+                    </div>
                 </div>
                 
-                <div class="stats-grid">
-                    <div class="stat">
-                        <div class="stat-number" id="percentage">0%</div>
-                        <div class="stat-label">Complete</div>
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <div class="metric-value" id="remaining">$0</div>
+                        <div class="metric-label">Remaining</div>
                     </div>
-                    <div class="stat">
-                        <div class="stat-number" id="daysLeft">0</div>
-                        <div class="stat-label">Days Left</div>
+                    <div class="metric">
+                        <div class="metric-value" id="daysLeft">0</div>
+                        <div class="metric-label">Days Left</div>
                     </div>
-                    <div class="stat">
-                        <div class="stat-number" id="remaining">$0</div>
-                        <div class="stat-label">Remaining</div>
+                </div>
+                
+                <div class="additional-metrics">
+                    <div class="additional-metric">
+                        <div class="additional-metric-value" id="monthlyTarget">$0</div>
+                        <div class="additional-metric-label">Monthly (MRR)</div>
                     </div>
-                    <div class="stat">
-                        <div class="stat-number" id="runRate">$0</div>
-                        <div class="stat-label">Current Rate</div>
+                    <div class="additional-metric">
+                        <div class="additional-metric-value" id="annualTarget">$0</div>
+                        <div class="additional-metric-label">Annual (ARR)</div>
                     </div>
                 </div>
                 
                 <div class="status-message" id="statusMessage"></div>
+            </div>
+            
+            <div class="footer">
+                <div class="footer-title">How it works</div>
+                <div class="footer-text">Enter your quota and current sales to see your daily target. The app automatically calculates how much you need to sell each remaining day to hit your goal.</div>
+                
+                <div class="footer-stats">
+                    <div class="footer-stat">
+                        <strong>Remaining:</strong> Dollar amount still needed to hit quota
+                    </div>
+                    <div class="footer-stat">
+                        <strong>Days Left:</strong> Working days remaining in your selected period
+                    </div>
+                    <div class="footer-stat">
+                        <strong>Monthly (MRR):</strong> Monthly recurring revenue if you hit your target
+                    </div>
+                    <div class="footer-stat">
+                        <strong>Annual (ARR):</strong> Annual recurring revenue if you maintain this pace
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -386,12 +756,17 @@
             const percentage = Math.min((current / quota) * 100, 150);
             const currentRunRate = days.total > days.remaining ? current / (days.total - days.remaining) : 0;
             
+            // Calculate MRR and ARR
+            const monthlyTarget = dailyTarget * 30.44; // Average days per month
+            const annualTarget = period === 'quarter' ? dailyTarget * 365.25 : quota; // If annual, ARR is the quota itself
+            
             // Update UI
             document.getElementById('dailyTarget').textContent = formatCompact(dailyTarget);
             document.getElementById('percentage').textContent = Math.round(percentage) + '%';
             document.getElementById('daysLeft').textContent = days.remaining;
             document.getElementById('remaining').textContent = formatCompact(remaining);
-            document.getElementById('runRate').textContent = formatCompact(currentRunRate * days.total);
+            document.getElementById('monthlyTarget').textContent = formatCompact(monthlyTarget);
+            document.getElementById('annualTarget').textContent = formatCompact(annualTarget);
             
             // Progress bar
             const progressBar = document.getElementById('progress');
@@ -400,24 +775,29 @@
             
             // Status message
             const statusElement = document.getElementById('statusMessage');
-            let statusClass, statusText;
+            const statusText = document.getElementById('status');
+            let statusClass, message;
             
             if (current >= quota) {
                 statusClass = 'status-good';
-                statusText = 'Quota achieved! 🎉';
+                message = 'Quota achieved! 🎉';
+                statusText.textContent = 'quota exceeded!';
             } else if (currentRunRate * days.total >= quota * 0.9) {
                 statusClass = 'status-good';
-                statusText = 'On track to hit quota';
+                message = 'On track to hit quota';
+                statusText.textContent = 'of quota achieved';
             } else if (currentRunRate * days.total >= quota * 0.7) {
                 statusClass = 'status-warning';
-                statusText = 'Need to accelerate sales';
+                message = 'Need to accelerate sales';
+                statusText.textContent = 'of quota achieved';
             } else {
                 statusClass = 'status-critical';
-                statusText = 'Significantly behind pace';
+                message = 'Significantly behind pace';
+                statusText.textContent = 'of quota achieved';
             }
             
             statusElement.className = 'status-message ' + statusClass;
-            statusElement.textContent = statusText;
+            statusElement.textContent = message;
             
             // Show results
             document.getElementById('results').classList.add('show');
