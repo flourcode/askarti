@@ -536,6 +536,13 @@ p {
   color: white;
   border-color: var(--success);
   transform: scale(1.05);
+  position: relative;
+}
+
+.copy-btn.copied::before {
+  content: "✓ ";
+  font-weight: bold;
+  margin-right: 4px;
 }
 
 /* MVP Results */
@@ -813,7 +820,17 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
+/* Input Error Animation */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -878,7 +895,7 @@ html {
               <textarea 
   class="input-field" 
   id="promptInput" 
-  placeholder="Paste what you’re trying to do...'Build an account plan for zero-trust at VA' or 'Prep for an AWS interview'"
+  placeholder="Paste what you want the AI to do...'Build an account plan for zero-trust at VA' or 'Prep for an AWS interview'"
   rows="4"
 ></textarea>
 
@@ -983,11 +1000,15 @@ function scrollToElement(elementId) {
 // Generate improved prompt
 async function generatePrompt() {
   const input = document.getElementById('promptInput').value.trim();
+  const inputField = document.getElementById('promptInput');
   
   if (!input) {
-    alert('Please describe what you want help with.');
+    showInputError(inputField, 'Please describe what you want help with.');
     return;
   }
+
+  // Clear any previous errors
+  clearInputError(inputField);
 
   if (isGeneratingPrompt) return;
   
@@ -1033,11 +1054,15 @@ async function generatePrompt() {
 // Generate MVP launch plan
 async function generateMvpPlan() {
   const input = document.getElementById('mvpInput').value.trim();
+  const inputField = document.getElementById('mvpInput');
   
   if (!input) {
-    alert('Please describe your big idea.');
+    showInputError(inputField, 'Please describe your big idea.');
     return;
   }
+
+  // Clear any previous errors
+  clearInputError(inputField);
 
   if (isGeneratingMvp) return;
   
@@ -1277,24 +1302,30 @@ function showMvpError(message) {
   resultsSection.classList.add('show');
 }
 
-// Copy to clipboard functionality
+// Copy to clipboard functionality with better error handling
 function copyToClipboard(elementId) {
   const element = document.getElementById(elementId);
+  if (!element) {
+    console.error('Element not found:', elementId);
+    return;
+  }
+  
   const text = element.textContent.replace('Copy', '').trim();
   
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(text).then(() => {
       showCopySuccess(elementId);
-    }).catch(() => {
-      fallbackCopy(text);
+    }).catch((err) => {
+      console.error('Clipboard write failed:', err);
+      fallbackCopy(text, elementId);
     });
   } else {
-    fallbackCopy(text);
+    fallbackCopy(text, elementId);
   }
 }
 
 // Fallback copy method
-function fallbackCopy(text) {
+function fallbackCopy(text, elementId) {
   const textArea = document.createElement('textarea');
   textArea.value = text;
   textArea.style.position = 'fixed';
@@ -1304,20 +1335,45 @@ function fallbackCopy(text) {
   textArea.select();
 
   try {
-    document.execCommand('copy');
-    showCopySuccess();
+    const successful = document.execCommand('copy');
+    if (successful) {
+      showCopySuccess(elementId);
+    } else {
+      throw new Error('Copy command failed');
+    }
   } catch (err) {
-    alert('Please copy the text manually');
+    console.error('Fallback copy failed:', err);
+    alert('Please copy the text manually (Ctrl+C or Cmd+C)');
   } finally {
     document.body.removeChild(textArea);
   }
 }
 
-// Show copy success feedback
+// Show copy success feedback with improved UX
 function showCopySuccess(elementId) {
-  const buttons = elementId ? 
-    [document.querySelector(`#${elementId} .copy-btn`)] : 
-    document.querySelectorAll('.copy-btn');
+  // Find the copy button - either in a specific element or find all copy buttons
+  let buttons = [];
+  
+  if (elementId) {
+    const parentElement = document.getElementById(elementId);
+    const copyBtn = parentElement ? parentElement.querySelector('.copy-btn') : null;
+    if (copyBtn) buttons = [copyBtn];
+  }
+  
+  // If no specific button found, find the copy button in the current context
+  if (buttons.length === 0) {
+    // Look for copy buttons in result sections that are currently visible
+    const visibleResults = document.querySelectorAll('.results.show');
+    visibleResults.forEach(result => {
+      const copyBtn = result.querySelector('.copy-btn');
+      if (copyBtn) buttons.push(copyBtn);
+    });
+  }
+  
+  // Fallback to all copy buttons
+  if (buttons.length === 0) {
+    buttons = Array.from(document.querySelectorAll('.copy-btn'));
+  }
   
   buttons.forEach(button => {
     if (button) {
@@ -1325,15 +1381,69 @@ function showCopySuccess(elementId) {
       button.textContent = 'Copied!';
       button.classList.add('copied');
       
+      // Add a more satisfying animation
+      button.style.transform = 'translateY(-1px) scale(1.05)';
+      
       setTimeout(() => {
         button.textContent = originalText;
         button.classList.remove('copied');
-      }, 2000);
+        button.style.transform = '';
+      }, 2500);
     }
   });
 }
 
-// Auto-resize textareas
+// Show elegant input validation errors
+function showInputError(inputField, message) {
+  // Remove any existing error
+  clearInputError(inputField);
+  
+  // Add error styling to input
+  inputField.style.borderColor = 'var(--error)';
+  inputField.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.1)';
+  
+  // Create error message element
+  const errorMsg = document.createElement('div');
+  errorMsg.className = 'input-error-message';
+  errorMsg.textContent = message;
+  errorMsg.style.cssText = `
+    color: var(--error);
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 8px;
+    animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  `;
+  
+  // Insert error message after input
+  inputField.parentNode.appendChild(errorMsg);
+  
+  // Focus the input field
+  inputField.focus();
+  
+  // Auto-clear error when user starts typing
+  const clearOnInput = () => {
+    clearInputError(inputField);
+    inputField.removeEventListener('input', clearOnInput);
+  };
+  inputField.addEventListener('input', clearOnInput);
+}
+
+// Clear input validation errors
+function clearInputError(inputField) {
+  // Reset input styling
+  inputField.style.borderColor = '';
+  inputField.style.boxShadow = '';
+  
+  // Remove error message
+  const errorMsg = inputField.parentNode.querySelector('.input-error-message');
+  if (errorMsg) {
+    errorMsg.remove();
+  }
+}
 function autoResize(textarea) {
   textarea.style.height = 'auto';
   textarea.style.height = Math.min(textarea.scrollHeight, 300) + 'px';
