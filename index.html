@@ -502,9 +502,6 @@ p {
 }
 
 .copy-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
   background: var(--panel);
   border: 1px solid var(--border);
   color: var(--text-secondary);
@@ -517,6 +514,13 @@ p {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;
   box-shadow: var(--shadow-xs);
   backdrop-filter: blur(8px);
+}
+
+/* Copy button in result content (positioned absolutely) */
+.result-content .copy-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }
 
 .copy-btn:hover {
@@ -1154,7 +1158,7 @@ function showPromptResult(prompt, originalInput, explanation) {
   resultsSection.innerHTML = `
     <div class="result-header">
       <h4>Your Improved Prompt</h4>
-      <button class="btn btn-secondary" onclick="copyToClipboard('prompt-content')">Copy Prompt</button>
+      <button class="copy-btn" onclick="copyToClipboard('prompt-content')">Copy Prompt</button>
     </div>
     <p class="small" style="margin-bottom: 24px; color: #ffffff;">
       ${explanation || 'We transformed your basic request into a structured, professional prompt that will get you dramatically better AI results.'}
@@ -1189,7 +1193,7 @@ function showMvpResult(launchPlan, originalInput) {
   resultsSection.innerHTML = `
     <div class="result-header">
       <h4>Your Slingshot Plan</h4>
-      <button class="btn btn-secondary" onclick="copyToClipboard('mvp-prompt')">Copy Website Prompt</button>
+      <button class="copy-btn" onclick="copyToClipboard('mvp-prompt')">Copy Website Prompt</button>
     </div>
     
     <div class="mvp-results">
@@ -1351,46 +1355,47 @@ function fallbackCopy(text, elementId) {
 
 // Show copy success feedback with improved UX
 function showCopySuccess(elementId) {
-  // Find the copy button - either in a specific element or find all copy buttons
-  let buttons = [];
+  // Find the copy button that was clicked
+  let targetButton = null;
   
   if (elementId) {
-    const parentElement = document.getElementById(elementId);
-    const copyBtn = parentElement ? parentElement.querySelector('.copy-btn') : null;
-    if (copyBtn) buttons = [copyBtn];
+    // First, look for copy button in the result header that called this function
+    const resultSection = document.getElementById(elementId).closest('.results');
+    if (resultSection) {
+      targetButton = resultSection.querySelector('.result-header .copy-btn');
+    }
+    
+    // If not found, look for copy button inside the content area
+    if (!targetButton) {
+      const parentElement = document.getElementById(elementId);
+      targetButton = parentElement ? parentElement.querySelector('.copy-btn') : null;
+    }
   }
   
-  // If no specific button found, find the copy button in the current context
-  if (buttons.length === 0) {
-    // Look for copy buttons in result sections that are currently visible
+  // Fallback to any visible copy buttons
+  if (!targetButton) {
     const visibleResults = document.querySelectorAll('.results.show');
     visibleResults.forEach(result => {
       const copyBtn = result.querySelector('.copy-btn');
-      if (copyBtn) buttons.push(copyBtn);
+      if (copyBtn && !targetButton) targetButton = copyBtn;
     });
   }
   
-  // Fallback to all copy buttons
-  if (buttons.length === 0) {
-    buttons = Array.from(document.querySelectorAll('.copy-btn'));
+  // Apply success styling to the target button
+  if (targetButton) {
+    const originalText = targetButton.textContent;
+    targetButton.textContent = 'Copied!';
+    targetButton.classList.add('copied');
+    
+    // Add a more satisfying animation
+    targetButton.style.transform = 'translateY(-1px) scale(1.05)';
+    
+    setTimeout(() => {
+      targetButton.textContent = originalText;
+      targetButton.classList.remove('copied');
+      targetButton.style.transform = '';
+    }, 2500);
   }
-  
-  buttons.forEach(button => {
-    if (button) {
-      const originalText = button.textContent;
-      button.textContent = 'Copied!';
-      button.classList.add('copied');
-      
-      // Add a more satisfying animation
-      button.style.transform = 'translateY(-1px) scale(1.05)';
-      
-      setTimeout(() => {
-        button.textContent = originalText;
-        button.classList.remove('copied');
-        button.style.transform = '';
-      }, 2500);
-    }
-  });
 }
 
 // Show elegant input validation errors
