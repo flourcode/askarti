@@ -3419,30 +3419,55 @@ const quickWinManager = {
   
   showResults(data) {
   const resultsDiv = elements.quickWinResults;
-  const memoContent = this.formatAsMemo(data);
   
-  resultsDiv.innerHTML = `
-    <div class="ai-results-container">
-      <div class="ai-results-header">
-        <h4 class="ai-results-title">Federal Sales Strategy</h4>
-        <button id="copyQuickWinBtn" class="ai-copy-button" onclick="quickWinManager.copyResults()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-          </svg>
-          <span id="copyQuickWinText">Copy Strategy</span>
-        </button>
-      </div>
-      
-      <div id="quickWinMemoContent" class="ai-memo-content">${memoContent}</div>
-      
-      <div class="ai-usage-note">
-        <div class="ai-usage-text">
-          <strong>Ready to share:</strong> This professional memo is formatted for forwarding to stakeholders, pasting into emails, or using as talking points in sales meetings.
+  // Handle no-match case
+  if (data.match_found === false) {
+    resultsDiv.innerHTML = `
+      <div class="ai-results-container">
+        <div class="ai-results-header">
+          <h4 class="ai-results-title">No Match Found</h4>
+        </div>
+        
+        <div style="padding: var(--space-xl); text-align: center;">
+          <div style="background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; border-radius: var(--radius); padding: var(--space-lg); margin-bottom: var(--space-lg);">
+            <h5 style="color: #856404; margin-bottom: var(--space);">Capability Mismatch</h5>
+            <p style="margin-bottom: var(--space-sm);">${data.no_match_reason}</p>
+            <p style="margin: 0;"><strong>Suggestion:</strong> ${data.suggestion}</p>
+          </div>
+          
+          <div style="color: var(--text-secondary); font-size: 0.875rem;">
+            <p>Load a dataset that matches your capabilities, or try describing your capabilities differently to find relevant opportunities.</p>
+          </div>
         </div>
       </div>
-    </div>
-  `;
+    `;
+  } else {
+    // Original logic for successful matches
+    const memoContent = this.formatAsMemo(data);
+    
+    resultsDiv.innerHTML = `
+      <div class="ai-results-container">
+        <div class="ai-results-header">
+          <h4 class="ai-results-title">Federal Sales Strategy</h4>
+          <button id="copyQuickWinBtn" class="ai-copy-button" onclick="quickWinManager.copyResults()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+            </svg>
+            <span id="copyQuickWinText">Copy Strategy</span>
+          </button>
+        </div>
+        
+        <div id="quickWinMemoContent" class="ai-memo-content">${memoContent}</div>
+        
+        <div class="ai-usage-note">
+          <div class="ai-usage-text">
+            <strong>Ready to share:</strong> This professional memo is formatted for forwarding to stakeholders, pasting into emails, or using as talking points in sales meetings.
+          </div>
+        </div>
+      </div>
+    `;
+  }
   
   resultsDiv.classList.remove('hidden');
   resultsDiv.classList.add('show');
