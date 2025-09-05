@@ -644,6 +644,348 @@ body {
     overflow-x: hidden;
   }
 }
+/* AI Quick Win Enhanced Styles */
+.ai-quick-win-section {
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl);
+  margin-bottom: var(--space-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-quick-win-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), #73C69D, var(--primary));
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 200% 0; }
+  50% { background-position: -200% 0; }
+}
+
+.ai-feature-header {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+}
+
+.ai-feature-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: var(--primary);
+  color: var(--primary-text);
+  padding: var(--space-xs) var(--space);
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space);
+  box-shadow: var(--shadow);
+}
+
+.ai-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-feature-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+  line-height: 1.2;
+}
+
+.ai-feature-subtitle {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.ai-input-section {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.input-group-enhanced {
+  margin-bottom: var(--space-xl);
+}
+
+.input-label-enhanced {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space);
+  text-align: center;
+}
+
+.input-wrapper-enhanced {
+  position: relative;
+}
+
+.ai-textarea {
+  width: 100%;
+  background: var(--bg-primary);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow);
+}
+
+.ai-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(115, 198, 157, 0.1);
+  transform: translateY(-2px);
+}
+
+.ai-textarea::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+.input-enhancement {
+  margin-top: var(--space-sm);
+  text-align: center;
+}
+
+.input-hint {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.ai-cta-button {
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary) 0%, #5FAA83 100%);
+  color: var(--primary-text);
+  border: none;
+  border-radius: var(--radius);
+  padding: var(--space-lg) var(--space-xl);
+  font-size: 1.125rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-cta-button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.ai-cta-button:active:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.ai-cta-button:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ai-button-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space);
+}
+
+.ai-button-icon {
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.ai-cta-button:hover .ai-button-icon {
+  transform: scale(1.1);
+}
+
+.ai-spinner {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.spinner-dot {
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+  border-radius: 50%;
+  animation: pulse 1.4s ease-in-out infinite both;
+}
+
+.spinner-dot:nth-child(1) { animation-delay: -0.32s; }
+.spinner-dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes pulse {
+  0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+.ai-results-section {
+  margin-top: var(--space-2xl);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+}
+
+.ai-results-section.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Enhanced Results Styling */
+.ai-results-container {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.ai-results-header {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ai-results-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.ai-results-title::before {
+  content: '🎯';
+  font-size: 1.5rem;
+}
+
+.ai-copy-button {
+  background: var(--primary);
+  color: var(--primary-text);
+  border: none;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.ai-copy-button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.ai-copy-button.copied {
+  background: var(--success);
+  transform: scale(1.05);
+}
+
+.ai-memo-content {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-xl);
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  white-space: pre-line;
+  color: var(--text-primary);
+  margin: var(--space-lg);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.ai-usage-note {
+  background: var(--bg-tertiary);
+  padding: var(--space-lg);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: var(--space);
+}
+
+.ai-usage-note::before {
+  content: '💡';
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.ai-usage-text {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.ai-usage-text strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .ai-feature-title {
+    font-size: 2rem;
+  }
+  
+  .ai-feature-subtitle {
+    font-size: 1rem;
+  }
+  
+  .ai-cta-button {
+    padding: var(--space) var(--space-lg);
+    font-size: 1rem;
+  }
+  
+  .ai-results-header {
+    flex-direction: column;
+    gap: var(--space);
+    align-items: stretch;
+  }
+  
+  .ai-copy-button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .ai-memo-content {
+    font-size: 0.8rem;
+    margin: var(--space);
+    padding: var(--space);
+  }
+}
 </style>
 </head>
 <body>
@@ -762,29 +1104,56 @@ body {
           <div class="chart-container industry-chart-container"><canvas id="industryChart"></canvas></div>
         </div>
       </section>
-	   <!-- Quick Win Identifier Section -->
-<div class="chart-section" id="quickWinSection" style="display: none;">
-  <div class="chart-header">
-    <h2 class="section-title">AI Quick Win Identifier</h2>
+	   <!-- AI Quick Win Identifier Section -->
+<div class="chart-section ai-quick-win-section" id="quickWinSection" style="display: none;">
+  <div class="ai-feature-header">
+    <div class="ai-feature-badge">
+      <div class="ai-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+        </svg>
+      </div>
+      <span>AI-Powered</span>
+    </div>
+    <h2 class="ai-feature-title">Quick Win Identifier</h2>
+    <p class="ai-feature-subtitle">Get personalized federal sales intelligence based on your capabilities and current data</p>
   </div>
   
-  <div class="input-group" style="margin-bottom: 20px;">
-    <label class="form-label">What does your company do? (capabilities, NAICS codes, services)</label>
-    <textarea 
-      id="capabilitiesInput" 
-      class="form-input" 
-      placeholder="e.g., Cybersecurity services, cloud migration, NAICS 541512, data analytics, AWS solutions"
-      rows="3"
-      style="resize: vertical; min-height: 80px;">
-    </textarea>
+  <div class="ai-input-section">
+    <div class="input-group-enhanced">
+      <label class="input-label-enhanced">What does your company do?</label>
+      <div class="input-wrapper-enhanced">
+        <textarea 
+          id="capabilitiesInput" 
+          class="ai-textarea" 
+          placeholder="e.g., Cybersecurity services, cloud migration, NAICS 541512, data analytics, AWS solutions..."
+          rows="3">
+        </textarea>
+        <div class="input-enhancement">
+          <span class="input-hint">Be specific about your capabilities, NAICS codes, and services</span>
+        </div>
+      </div>
+    </div>
+    
+    <button id="findQuickWins" class="ai-cta-button">
+      <div class="ai-button-content">
+        <div class="ai-button-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+          </svg>
+        </div>
+        <span id="quickWinBtnText">Find My Quick Wins</span>
+        <div id="quickWinSpinner" class="ai-spinner hidden">
+          <div class="spinner-dot"></div>
+          <div class="spinner-dot"></div>
+          <div class="spinner-dot"></div>
+        </div>
+      </div>
+    </button>
   </div>
   
-  <button id="findQuickWins" class="btn btn-primary" style="width: 100%; margin-bottom: 20px;">
-    <span id="quickWinBtnText">Find My Quick Wins</span>
-    <div id="quickWinSpinner" class="loading-spinner hidden"></div>
-  </button>
-  
-  <div id="quickWinResults" class="results hidden"></div>
+  <div id="quickWinResults" class="ai-results-section hidden"></div>
 </div>
       <section class="chart-section">
         <h2 class="section-title" style="margin-bottom: var(--space);">Seasonal Buying Pattern</h2>
@@ -3049,61 +3418,142 @@ const quickWinManager = {
   },
   
   showResults(data) {
-    const resultsDiv = elements.quickWinResults;
-    
-    resultsDiv.innerHTML = `
-      <div style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: var(--radius); padding: var(--space-xl); margin-top: var(--space);">
-        <h4 style="color: var(--text-primary); margin-bottom: var(--space);">Your Quick Win Strategy</h4>
-        
-        <div style="margin-bottom: var(--space-lg);">
-          <h5 style="color: var(--text-primary); margin-bottom: var(--space-sm);">Immediate Opportunities</h5>
-          <div style="color: var(--text-secondary); line-height: 1.6; white-space: pre-line;">${data.immediate_opportunities || data.analysis}</div>
-        </div>
-        
-        <div style="margin-bottom: var(--space-lg);">
-          <h5 style="color: var(--text-primary); margin-bottom: var(--space-sm);">Next Steps</h5>
-          <div style="color: var(--text-secondary); line-height: 1.6; white-space: pre-line;">${data.next_steps || data.recommendations}</div>
-        </div>
-        
-        <div style="margin-bottom: var(--space-lg);">
-          <h5 style="color: var(--text-primary); margin-bottom: var(--space-sm);">Partnership Opportunities</h5>
-          <div style="color: var(--text-secondary); line-height: 1.6; white-space: pre-line;">${data.partnerships || data.competitive_insights}</div>
-        </div>
-        
-        <div style="background: var(--bg-secondary); padding: var(--space); border-radius: var(--radius); border: 1px solid var(--border);">
-          <strong style="color: var(--text-primary);">Pro Tip:</strong>
-          <span style="color: var(--text-secondary);">${data.pro_tip || 'Use the filters above to narrow down to specific agencies or time periods for more targeted analysis.'}</span>
+  const resultsDiv = elements.quickWinResults;
+  const memoContent = this.formatAsMemo(data);
+  
+  resultsDiv.innerHTML = `
+    <div class="ai-results-container">
+      <div class="ai-results-header">
+        <h4 class="ai-results-title">Federal Sales Strategy</h4>
+        <button id="copyQuickWinBtn" class="ai-copy-button" onclick="quickWinManager.copyResults()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg>
+          <span id="copyQuickWinText">Copy Strategy</span>
+        </button>
+      </div>
+      
+      <div id="quickWinMemoContent" class="ai-memo-content">${memoContent}</div>
+      
+      <div class="ai-usage-note">
+        <div class="ai-usage-text">
+          <strong>Ready to share:</strong> This professional memo is formatted for forwarding to stakeholders, pasting into emails, or using as talking points in sales meetings.
         </div>
       </div>
-    `;
-    
-    resultsDiv.classList.remove('hidden');
-    resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  },
+    </div>
+  `;
   
-  showError(message) {
-    const resultsDiv = elements.quickWinResults;
-    resultsDiv.innerHTML = `
-      <div style="background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: var(--radius); padding: var(--space-xl); text-align: center;">
-        <h4>Analysis Failed</h4>
-        <p>${message}</p>
-		<p style="margin-top: var(--space);">Try adjusting your filters or contact support.</p>
-      </div>
-    `;
-    resultsDiv.classList.remove('hidden');
-  },
+  resultsDiv.classList.remove('hidden');
+  resultsDiv.classList.add('show');
+  resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+},
+
+formatAsMemo(data) {
+  const today = new Date().toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
   
-  showInputError(message) {
-    const input = elements.capabilitiesInput;
-    input.style.borderColor = '#dc3545';
-    input.focus();
-    
-    const clearError = () => {
-      input.style.borderColor = '';
-      input.removeEventListener('input', clearError);
-    };
-    input.addEventListener('input', clearError);
+  return `FEDERAL SALES STRATEGY MEMO
+Date: ${today}
+Subject: Quick Win Opportunities Analysis
+
+EXECUTIVE SUMMARY:
+Based on analysis of current federal procurement data, we have identified immediate opportunities that align with our capabilities. This memo outlines specific actions to pursue high-probability wins in the federal market.
+
+IMMEDIATE OPPORTUNITIES:
+${data.immediate_opportunities || data.analysis}
+
+ACTION ITEMS (Next 30 Days):
+${data.next_steps || data.recommendations}
+
+PARTNERSHIP STRATEGY:
+${data.partnerships || data.competitive_insights}
+
+KEY INSIGHT:
+${data.pro_tip || 'Focus on agencies with proven spending patterns in your capabilities area.'}
+
+NEXT REVIEW: 30 days from today
+
+---
+Generated by Hoowon Federal Contract Intelligence Platform`;
+},
+
+copyResults() {
+  const content = document.getElementById('quickWinMemoContent');
+  if (!content) return;
+  
+  const text = content.textContent;
+  const copyBtn = document.getElementById('copyQuickWinBtn');
+  const copyText = document.getElementById('copyQuickWinText');
+  
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(() => {
+      this.showCopySuccess(copyBtn, copyText);
+    }).catch((err) => {
+      console.error('Clipboard write failed:', err);
+      this.fallbackCopy(text, copyBtn, copyText);
+    });
+  } else {
+    this.fallbackCopy(text, copyBtn, copyText);
   }
+},
+
+fallbackCopy(text, copyBtn, copyText) {
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';
+  textArea.style.left = '-999999px';
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    const successful = document.execCommand('copy');
+    if (successful) {
+      this.showCopySuccess(copyBtn, copyText);
+    } else {
+      throw new Error('Copy command failed');
+    }
+  } catch (err) {
+    console.error('Fallback copy failed:', err);
+    copyText.textContent = 'Copy Failed';
+    setTimeout(() => {
+      copyText.textContent = 'Copy Strategy';
+    }, 2000);
+  } finally {
+    document.body.removeChild(textArea);
+  }
+},
+
+showCopySuccess(copyBtn, copyText) {
+  const originalText = copyText.textContent;
+  copyText.textContent = 'Copied!';
+  copyBtn.classList.add('btn-primary');
+  copyBtn.classList.remove('btn-secondary');
+  copyBtn.style.transform = 'translateY(-1px) scale(1.05)';
+  
+  setTimeout(() => {
+    copyText.textContent = originalText;
+    copyBtn.classList.remove('btn-primary');
+    copyBtn.classList.add('btn-secondary');
+    copyBtn.style.transform = '';
+ }, 2500);
+},
+
+showInputError(message) {
+  const input = elements.capabilitiesInput;
+  input.style.borderColor = '#dc3545';
+  input.focus();
+  
+  const clearError = () => {
+    input.style.borderColor = '';
+    input.removeEventListener('input', clearError);
+  };
+  input.addEventListener('input', clearError);
+}
 };
 
 const eventListeners = {
