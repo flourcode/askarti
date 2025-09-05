@@ -3444,14 +3444,19 @@ const quickWinManager = {
 },
 
 formatTactical(data) {
+  const today = new Date();
+  const next30 = new Date(today.getTime() + (30 * 24 * 60 * 60 * 1000));
+  
   return `TARGETS:
-${data.targets?.map(target => `• ${target}`).join('\n') || '• No specific targets identified'}
+${data.targets?.map(target => `• ${target}`).join('\n') || '• No specific targets identified in current data'}
 
 PARTNERS:
-${data.partners?.map(partner => `• ${partner}`).join('\n') || '• No strategic partners identified'}
+${data.partners?.map(partner => `• ${partner}`).join('\n') || '• No strategic partners identified in current data'}
 
 NEXT STEPS:
-${data.next_steps?.map((step, i) => `${i + 1}. ${step}`).join('\n') || '1. Refine targeting strategy'}`;
+${data.next_steps?.map((step, i) => `${i + 1}. ${step}`).join('\n') || '1. Load more relevant contract data for better analysis'}
+
+Based on: ${app.filteredData.length} contracts, ${Object.keys(app.agencies).length} agencies, ${Object.keys(app.vendors).length} vendors`;
 },
 formatAsMemo(data) {
   const today = new Date().toLocaleDateString('en-US', { 
