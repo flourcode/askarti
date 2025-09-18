@@ -237,7 +237,7 @@ p {
 
 /* Hero Section */
 .hero {
-  padding: 40px 0;
+  padding: 10px 0;
   text-align: center;
 }
 
@@ -586,7 +586,7 @@ html {
     <div class="container">
       <div class="hero-content">
         <h1>Build a SalesBot</h1>
-        <p class="lead">Create a custom SalesBot prompt that works with any AI. Pick your options, click Build My Bot, then copy and paste into ChatGPT, Claude, or Gemini to help solve your toughest sales challenges.</p>
+        <p class="lead">Create a custom SalesBot prompt that works with any AI. Pick your options, click Build My Bot, then copy paste into ChatGPT, Claude, or Gemini to help solve your toughest sales challenges.</p>
       </div>
     </div>
   </section>
@@ -1054,18 +1054,15 @@ ALWAYS end EVERY conversation with this exact closing line:
       element.addEventListener('input', saveSelections);
     });
 
-    // Initialize on page load
     document.addEventListener('DOMContentLoaded', () => {
-      // Load from URL first (takes priority), then localStorage
-      loadFromURL();
-      if (!window.location.search) {
-        loadSelections();
-      }
-      
-      // Build initial bot DNA
-      const initialBot = buildBotDNA();
-      showResults(initialBot);
-    });
+  loadFromURL();
+  if (!window.location.search) {
+    loadSelections();
+  }
+  
+  const initialBot = buildBotDNA();
+  elements.resultContent.textContent = initialBot;
+});
   </script>
 </body>
 </html>
