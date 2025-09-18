@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GTM Prompt - Turn Any AI Into Your Sales Coach</title>
+<meta name="description" content="Create custom federal sales prompts in 30 seconds. Pick 5 options and get a specialized sales expert that works in ChatGPT, Claude, or any AI tool." />
+<link rel="icon" href="/images/favicon.ico" sizes="any">
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://askarti.com/gtmprompt/" />
+<meta property="og:title" content="GTM Prompt - Turn Any AI Into Your Sales Coach" />
+<meta property="og:description" content="Create custom federal sales prompts in 30 seconds. Federal sales ready." />
+<meta property="og:image" content="https://askarti.com/social.png" />
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WLGEPY5H4G"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-WLGEPY5H4G');
+</script>
+<style>
+:root {
+  --bg: #E2E8F0;
+  --panel: #FFFFFF;
+  --text: #000000;
+  --text-secondary: #272727;
+  --text-muted: #6B7280;
+  --text-light: #9CA3AF;
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+  --border-focus: #D1D5DB;
+  --accent: #000000;
+  --accent-hover: #374151;
+  --accent-light: #F8FAFC;
+  --accent-border: #E5E7EB;
+  --success: #10B981;
+  --success-light: #D1FAE5;
+  --success-border: #6EE7B7;
+  --linkedin: #0077B5;
+  --linkedin-hover: #005582;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,.08);
+  --shadow-sm: 0 2px 4px rgba(0,0,0,.1);
+  --shadow-md: 0 4px 8px rgba(0,0,0,.12);
+  --shadow-lg: 0 8px 16px rgba(0,0,0,.15);
+  --shadow-hover: 0 12px 24px rgba(0,0,0,.15);
+  --radius: 12px;
+  --radius-lg: 16px;
+  --max-width: 900px;
+}
+
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+h1 {
+  font-size: 4.5rem;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+
+h2 {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+h3 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+p {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.lead {
+  font-size: 1.375rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+/* Navigation */
+.nav {
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 0;
+}
+
+.nav-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  height: 100px;
+  width: auto;
+}
+
+.logo img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--text);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:active {
+  transform: translateY(0px) scale(0.98);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: white;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--accent);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
+}
+
+.btn-secondary:hover {
+  background: var(--border-light);
+  border-color: var(--border-focus);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-large {
+  padding: 20px 40px;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+/* Hero Section */
+.hero {
+  padding: 40px 0;
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-badges {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.pill {
+  display: inline-block;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: var(--panel);
+  box-shadow: var(--shadow-xs);
+}
+
+/* Main Content */
+.main-content {
+  padding: 20px 0 60px;
+}
+
+.tool-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.tool-panel.active {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-lg);
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--text);
+  text-align: center;
+}
+
+/* Form */
+.simple-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.form-group select, 
+.form-group input {
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  outline: none;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.form-group select:focus, 
+.form-group input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+
+.btn-group {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
+
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(0,0,0,0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  margin-left: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-message {
+  text-align: center;
+  margin-top: 16px;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+/* Results Section */
+.results {
+  margin-top: 40px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.results.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.result-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text);
+}
+
+.result-content {
+  background: var(--border-light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  font-family: ui-monospace, 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  white-space: pre-line;
+  max-height: 600px;
+  overflow-y: auto;
+  position: relative;
+  color: var(--text);
+  box-shadow: var(--shadow-xs);
+}
+
+.copy-btn {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 12px 20px;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  box-shadow: var(--shadow-xs);
+}
+
+.copy-btn:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.copy-btn.copied {
+  background: var(--success);
+  color: white;
+  border-color: var(--success);
+}
+
+.copy-btn.copied::before {
+  content: "✓ ";
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+/* Usage Note */
+.usage-note {
+  margin-top: 24px;
+  padding: 20px;
+  background: var(--border-light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.usage-note p {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.usage-note strong {
+  color: var(--text);
+}
+
+/* Footer */
+.footer {
+  margin-top: 60px;
+  padding: 30px 0;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.footer p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+/* Utilities */
+.hidden { display: none !important; }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 24px;
+  }
+
+  .nav-content {
+    justify-content: center;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  h1 {
+    font-size: 3rem;
+  }
+
+  h2 {
+    font-size: 2.5rem;
+  }
+
+  .hero {
+    padding: 30px 0;
+  }
+
+  .tool-panel {
+    padding: 24px 20px;
+  }
+
+  .btn-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .result-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .copy-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero {
+    padding: 20px 0;
+  }
+
+  .tool-panel {
+    padding: 20px 16px;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+</style>
+</head>
+
+<body>
+  <nav class="nav">
+    <div class="container">
+      <div class="nav-content">
+        <a href="/" class="logo">
+          <img src="/asklite.png" alt="AskArti Logo">
+        </a>
+        <div class="nav-links">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/quota/" class="btn btn-secondary">Run Rate</a>
+          <a href="https://calendly.com/markflournoy/intro" target="_blank" class="btn btn-primary">Free Intro Chat</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Build a SalesBot</h1>
+        <p class="lead">Create a custom SalesBot prompt that works with any AI. Pick your options, click Build My Bot, then copy and paste your prompt into ChatGPT, Claude, or Gemini and it help you solve your toughest sales challenges.</p>
+      </div>
+    </div>
+  </section>
+
+  <main class="main-content">
+    <div class="container">
+      <div class="tool-panel" id="toolPanel">
+        <h2 class="section-title">SalesBot Customizer</h2>
+        
+        <form class="simple-form">
+          <div class="form-group">
+            <label for="solution">What do you sell?</label>
+            <select id="solution">
+              <option value="Cloud Security Platform">Cloud Security Platform</option>
+              <option value="Cybersecurity Solutions">Cybersecurity Solutions</option>
+              <option value="Cloud Infrastructure">Cloud Infrastructure</option>
+              <option value="DevSecOps Platform">DevSecOps Platform</option>
+              <option value="AI/ML Platform">AI/ML Platform</option>
+              <option value="Data Analytics">Data Analytics</option>
+              <option value="Professional Services">Professional Services</option>
+              <option value="IT Modernization">IT Modernization</option>
+              <option value="Other">Other - Specify in Optional Details</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="outcome">What outcome do you deliver?</label>
+            <select id="outcome">
+              <option value="Zero Trust Architecture">Zero Trust Architecture</option>
+              <option value="Risk Reduction & Compliance">Risk Reduction & Compliance</option>
+              <option value="Cloud Migration & Modernization">Cloud Migration & Modernization</option>
+              <option value="ATO Acceleration">ATO Acceleration</option>
+              <option value="Cost Optimization">Cost Optimization</option>
+              <option value="AI Readiness">AI Readiness</option>
+              <option value="Digital Transformation">Digital Transformation</option>
+              <option value="DevSecOps Implementation">DevSecOps Implementation</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="targetMarket">Target market</label>
+            <select id="targetMarket">
+              <option value="Federal Civilian">Federal Civilian</option>
+              <option value="Defense/DoD">Defense/DoD</option>
+              <option value="Intelligence Community">Intelligence Community</option>
+              <option value="State & Local">State & Local</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="primaryBuyer">Primary buyer</label>
+            <select id="primaryBuyer">
+              <option value="CIO/CTO">CIO/CTO (technical decision maker)</option>
+              <option value="CISO">CISO (security focused)</option>
+              <option value="Contracting Officer">Contracting Officer (procurement focused)</option>
+              <option value="Program Manager">Program Manager (delivery focused)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="roleLevel">Your role level</label>
+            <select id="roleLevel">
+              <option value="VP/GM">VP/GM</option>
+              <option value="Sales Director">Sales Director</option>
+              <option value="BD Lead">BD Lead</option>
+              <option value="Account Executive">Account Executive</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="customization">Optional Details (add your company, product, or service details)</label>
+            <input type="text" id="customization" placeholder="Acme Corp's FedRAMP High cloud platform with real-time threat detection" />
+          </div>
+        </form>
+
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary btn-large" id="buildBtn">
+            <span id="buildBtnText">Build My Bot</span>
+            <div id="buildSpinner" class="spinner hidden"></div>
+          </button>
+          <button type="button" class="btn btn-secondary hidden" id="copyBtn">Copy to Clipboard</button>
+        </div>
+
+        <div id="loadingMessage" class="loading-message hidden">
+          Building your custom sales coach prompt...
+        </div>
+
+        <div class="results" id="resultsSection">
+          <div class="result-header">
+            <h3>Your SalesBot Prompt</h3>
+            <button class="copy-btn" id="copyResultBtn" onclick="copyToClipboard()">Copy Prompt</button>
+          </div>
+          <div class="result-content" id="resultContent"></div>
+          <div class="usage-note">
+            <p><strong>How to use:</strong> Copy this entire prompt and paste it into ChatGPT, Claude, or any AI tool. Your AI will stay in character and help you with federal sales tasks, account planning, and meeting prep.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 AskArti &bull; <a href="mailto:mark@askarti.com">mark@askarti.com</a> &bull; <a href="/">Back to AskArti</a></p>
+    </div>
+  </footer>
+
+  <script>
+    let isGenerating = false;
+
+    const elements = {
+      toolPanel: document.getElementById('toolPanel'),
+      buildBtn: document.getElementById('buildBtn'),
+      copyBtn: document.getElementById('copyBtn'),
+      copyResultBtn: document.getElementById('copyResultBtn'),
+      buildBtnText: document.getElementById('buildBtnText'),
+      buildSpinner: document.getElementById('buildSpinner'),
+      loadingMessage: document.getElementById('loadingMessage'),
+      resultsSection: document.getElementById('resultsSection'),
+      resultContent: document.getElementById('resultContent'),
+      
+      solution: document.getElementById('solution'),
+      outcome: document.getElementById('outcome'),
+      targetMarket: document.getElementById('targetMarket'),
+      primaryBuyer: document.getElementById('primaryBuyer'),
+      roleLevel: document.getElementById('roleLevel'),
+      customization: document.getElementById('customization')
+    };
+
+    function val(elementId) {
+      return elements[elementId].value.trim();
+    }
+
+    function setLoading(isLoading) {
+      isGenerating = isLoading;
+      elements.buildBtn.disabled = isLoading;
+      
+      if (isLoading) {
+        elements.loadingMessage.classList.remove('hidden');
+        elements.buildBtnText.classList.add('hidden');
+        elements.buildSpinner.classList.remove('hidden');
+        elements.toolPanel.classList.add('active');
+      } else {
+        elements.loadingMessage.classList.add('hidden');
+        elements.buildBtnText.classList.remove('hidden');
+        elements.buildSpinner.classList.add('hidden');
+      }
+    }
+
+    function buildBotDNA() {
+      let solution = val('solution');
+      const outcome = val('outcome');
+      const targetMarket = val('targetMarket');
+      const primaryBuyer = val('primaryBuyer');
+      const roleLevel = val('roleLevel');
+      const customization = val('customization');
+
+      if (solution === 'Other') {
+        if (customization) {
+          const customWords = customization.split(' ');
+          const potentialSolution = customWords.slice(0, 3).join(' ').replace(/[^a-zA-Z\s]/g, '').trim();
+          solution = potentialSolution || 'Custom Solution';
+        } else {
+          solution = 'Custom Solution';
+        }
+      }
+
+      const contexts = {
+        'Federal Civilian': {
+          agencies: 'civilian agencies like GSA, VA, DHS, and department-level organizations',
+          focus: 'modernization, digital transformation, citizen services, operational efficiency'
+        },
+        'Defense/DoD': {
+          agencies: 'defense organizations including DISA, military branches, and defense contractors',
+          focus: 'mission readiness, force protection, warfighter advantage, operational security'
+        },
+        'Intelligence Community': {
+          agencies: 'intelligence agencies and related organizations',
+          focus: 'national security, threat intelligence, operational security, classified environments'
+        },
+        'State & Local': {
+          agencies: 'state CIO offices, city IT departments, county systems, and local government',
+          focus: 'citizen services, budget efficiency, operational effectiveness, local compliance'
+        }
+      };
+
+      const buyerContexts = {
+        'CIO/CTO': {
+          focus: 'technical architecture, scalability, integration',
+          pain: 'legacy system modernization, technical debt, innovation'
+        },
+        'CISO': {
+          focus: 'security posture, risk management, compliance',
+          pain: 'threat landscape, regulatory compliance, security gaps'
+        },
+        'Contracting Officer': {
+          focus: 'procurement efficiency, contract vehicles, compliance',
+          pain: 'acquisition speed, vendor management, regulatory adherence'
+        },
+        'Program Manager': {
+          focus: 'delivery success, timeline management, stakeholder satisfaction',
+          pain: 'project delivery, resource optimization, outcome achievement'
+        }
+      };
+
+      const context = contexts[targetMarket];
+      const buyerContext = buyerContexts[primaryBuyer];
+      const competitors = "market leader competitors in your space";
+      const botName = "SalesBot";
+      
+      let customContext = '';
+      if (customization) {
+        if (val('solution') === 'Other') {
+          customContext = `\n\nSolution Details: ${customization}`;
+        } else {
+          customContext = `\n\nKey Context: ${customization}`;
+        }
+      }
+
+      return `You are now ${botName}, my ${roleLevel} Federal Sales Buddy for ${solution}.
+
+From this moment forward, you speak only as ${botName}. You never explain what you are doing — you simply act in role.
+
+ALWAYS begin EVERY conversation with this exact message:
+"I'm ${botName}, your ${roleLevel} Federal Sales Buddy for ${solution}, specializing in ${outcome}."
+
+Your mission is to help grow pipeline, beat ${competitors}, and prep for executive-level meetings with ${context.agencies}. You focus exclusively on ${outcome} outcomes that a CRO would care about within 12 months. Every answer you give will start with an Executive Summary and include Market Analysis, Partner Attach, and 5 SMART KPIs."
+
+Stay in a coaching, practical tone like a seasoned federal sales leader. Use your knowledge to identify the most relevant federal mandates, executive orders, and policies that drive ${outcome} requirements in ${targetMarket}. Recommend appropriate channel partners and contract vehicles based on the market context.
+
+TARGET MARKET CONTEXT: Focus on ${targetMarket} - emphasize ${context.focus} and use your expertise to suggest the most effective procurement strategies.
+
+PRIMARY BUYER FOCUS: Tailor all messaging for ${primaryBuyer} - address ${buyerContext.focus} and solve ${buyerContext.pain} challenges.
+
+OUTCOME FOCUS: Every recommendation must directly support ${outcome}. Show how our ${solution} delivers measurable ${outcome} results that ${primaryBuyer} can defend to leadership.${customContext}
+
+INITIAL RESPONSE FORMAT: For your first response to any new conversation, use this GTM framework:
+
+Market Analysis – identify and cite the 3 most relevant federal mandates, executive orders, or policies that create urgency for ${outcome} in ${targetMarket}.
+Competitive Differentiation – position our ${solution} vs ${competitors} on ${outcome} delivery, showing clear advantages in risk reduction, cost, and compliance.
+Channel Partner Strategy – recommend the best channel partners and procurement vehicles for ${targetMarket}, including enablement approaches and partner incentives.
+Sales & Marketing Initiatives – provide 3 specific pipeline plays for ${context.agencies} that create ${outcome} urgency and buying momentum.
+KPIs – define 5 SMART metrics that prove ${outcome} success and resonate with ${primaryBuyer}.
+
+FOLLOW-UP RESPONSES: After the initial GTM framework response, adapt your format based on the user's questions and needs. Stay in character but be conversational and helpful rather than rigidly structured.
+
+PROACTIVE SUGGESTIONS: At the end of responses, offer relevant next steps like:
+- "Would you like me to generate a 1-page competitive battlecard for [specific agency]?"
+- "Should I create a strategic account plan for your top prospect?"
+- "Would you like me to prep you for your upcoming ${primaryBuyer} call?"
+- "Should I build you an executive presentation for this opportunity?"
+
+ADVANCED DELIVERABLES: When asked to create complex sales documents, use these detailed frameworks:
+
+QBR (Quarterly Business Review) Template:
+"Create a comprehensive QBR with these sections: 1) Executive Summary (wins, challenges, outlook), 2) Revenue Performance (actual vs plan, pipeline analysis, deal breakdown), 3) Market Intelligence (mandate updates, competitive landscape shifts, agency priorities), 4) Account Health Metrics (relationship strength, expansion opportunities, risk factors), 5) Partner Performance (channel contribution, joint opportunities, enablement needs), 6) Next Quarter Priorities (specific targets, key initiatives, resource requirements), 7) Executive Asks (support needed, investment requests, strategic guidance). Include specific numbers, names, and actionable next steps."
+
+Strategic Account Plan Template:
+"Develop a strategic account plan covering: 1) Account Overview (org chart, budget cycles, decision makers, current vendors), 2) Business Case Analysis (pain points, mandate drivers, compelling events, ROI framework), 3) Competitive Landscape (incumbent solutions, competitive threats, differentiation strategy), 4) Relationship Map (champions, influencers, blockers, access strategy), 5) Technical Strategy (solution architecture, integration requirements, security considerations), 6) Commercial Strategy (pricing approach, contract vehicles, partner leverage), 7) Sales Campaign Plan (milestone timeline, resource allocation, success metrics), 8) Risk Assessment (deal risks, mitigation strategies, contingency plans). Make it actionable with specific dates, owners, and measurable outcomes."
+
+Executive Presentation Template:
+"Build an executive presentation with: 1) Situation Analysis (current state challenges, mandate requirements, market pressures), 2) Solution Overview (capabilities, differentiation, federal proof points), 3) Business Impact (quantified benefits, risk mitigation, compliance outcomes), 4) Implementation Approach (timeline, phases, success criteria), 5) Investment Overview (cost breakdown, financing options, ROI projections), 6) Next Steps (pilot approach, contract vehicle options, timeline to decision). Focus on business outcomes, not technical features. Include compelling visuals concepts and executive-level messaging."
+
+RFP Response Strategy:
+"Create an RFP response strategy including: 1) Requirements Analysis (must-haves vs nice-to-haves, scoring criteria, evaluation process), 2) Win Strategy (competitive advantages, proposal themes, discriminators), 3) Solution Architecture (technical approach, compliance strategy, risk mitigation), 4) Team Structure (key personnel, past performance examples, capability statements), 5) Pricing Strategy (cost model, competitive positioning, value justification), 6) Compliance Matrix (requirements traceability, exception handling), 7) Review Process (color team schedule, key reviewers, final polish timeline). Make it comprehensive and actionable."
+
+ALWAYS end EVERY conversation with this exact closing line:
+"What else may I help you with?"`;
+    }
+
+    function showResults(content) {
+      elements.resultContent.textContent = content;
+      elements.resultsSection.classList.add('show');
+      elements.copyBtn.classList.remove('hidden');
+      
+      setTimeout(() => {
+        elements.resultsSection.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      }, 100);
+    }
+
+    function showError(message) {
+      elements.resultsSection.innerHTML = `
+        <div style="text-align: center; padding: 40px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);">
+          <h4 style="color: var(--error); margin-bottom: 12px;">Something went wrong</h4>
+          <p style="margin-bottom: 16px; color: var(--text-muted);">${message}</p>
+          <p style="color: var(--text-muted);">Please try again or contact support if the issue persists.</p>
+        </div>
+      `;
+      elements.resultsSection.classList.add('show');
+    }
+
+    function copyToClipboard() {
+      const content = elements.resultContent.textContent;
+      if (!content) return;
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(content).then(() => {
+          showCopySuccess();
+        }).catch(() => {
+          fallbackCopy(content);
+        });
+      } else {
+        fallbackCopy(content);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          showCopySuccess();
+        } else {
+          alert('Please copy the text manually (Ctrl+C or Cmd+C)');
+        }
+      } catch (err) {
+        alert('Please copy the text manually (Ctrl+C or Cmd+C)');
+      } finally {
+        document.body.removeChild(textArea);
+      }
+    }
+
+    function showCopySuccess() {
+      const copyBtns = [elements.copyBtn, elements.copyResultBtn];
+      
+      copyBtns.forEach(btn => {
+        if (btn && !btn.classList.contains('hidden')) {
+          const originalText = btn.textContent;
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          
+          setTimeout(() => {
+            btn.textContent = originalText;
+            btn.classList.remove('copied');
+          }, 2000);
+        }
+      });
+    }
+
+    elements.buildBtn.addEventListener('click', () => {
+      if (isGenerating) return;
+      
+      const botDNA = buildBotDNA();
+      showResults(botDNA);
+      
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'prompt_built', {
+          event_category: 'gtm_prompt',
+          event_label: 'local_build'
+        });
+      }
+    });
+
+    elements.copyBtn.addEventListener('click', copyToClipboard);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const initialBot = buildBotDNA();
+      showResults(initialBot);
+    });
+
+    window.copyToClipboard = copyToClipboard;
+  </script>
+</body>
+</html>
