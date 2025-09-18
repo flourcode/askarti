@@ -275,12 +275,12 @@ p {
   text-align: center;
 }
 
-/* Form */
+/* Form - Updated for compact layout */
 .simple-form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  margin-bottom: 32px;
+  gap: 16px; /* Reduced from 24px */
+  margin-bottom: 24px; /* Reduced from 32px */
 }
 
 .form-group {
@@ -288,12 +288,9 @@ p {
   flex-direction: column;
 }
 
+/* Hide labels since we're using placeholders */
 .form-group label {
-  display: block;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 8px;
+  display: none;
 }
 
 .form-group select, 
@@ -302,7 +299,7 @@ p {
   background: var(--panel);
   border: 1px solid var(--border);
   color: var(--text);
-  padding: 16px 20px;
+  padding: 14px 18px; /* Reduced from 16px 20px */
   border-radius: var(--radius);
   outline: none;
   font-family: inherit;
@@ -317,12 +314,33 @@ p {
   transform: translateY(-1px);
 }
 
+/* Style the placeholder options */
+.form-group select option[disabled] {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Make sure the placeholder text shows properly */
+.form-group select:invalid {
+  color: var(--text-muted);
+}
+
+.form-group select:valid {
+  color: var(--text);
+}
+
+/* Placeholder styling for input */
+.form-group input::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
 .btn-group {
   display: flex;
   gap: 16px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 32px;
+  margin-top: 24px; /* Reduced from 32px */
 }
 
 .spinner {
@@ -598,8 +616,8 @@ html {
         
         <form class="simple-form">
           <div class="form-group">
-            <label for="solution">What do you sell?</label>
             <select id="solution">
+              <option value="" disabled selected>What do you sell?</option>
               <option value="Cloud Security Platform">Cloud Security Platform</option>
               <option value="Cybersecurity Solutions">Cybersecurity Solutions</option>
               <option value="Cloud Infrastructure">Cloud Infrastructure</option>
@@ -613,8 +631,8 @@ html {
           </div>
 
           <div class="form-group">
-            <label for="outcome">What outcome do you deliver?</label>
             <select id="outcome">
+              <option value="" disabled selected>What outcome do you deliver?</option>
               <option value="Zero Trust Architecture">Zero Trust Architecture</option>
               <option value="Risk Reduction & Compliance">Risk Reduction & Compliance</option>
               <option value="Cloud Migration & Modernization">Cloud Migration & Modernization</option>
@@ -627,8 +645,8 @@ html {
           </div>
 
           <div class="form-group">
-            <label for="targetMarket">Target market</label>
             <select id="targetMarket">
+              <option value="" disabled selected>Target market</option>
               <option value="Federal Civilian">Federal Civilian</option>
               <option value="Defense/DoD">Defense/DoD</option>
               <option value="Intelligence Community">Intelligence Community</option>
@@ -637,8 +655,8 @@ html {
           </div>
 
           <div class="form-group">
-            <label for="primaryBuyer">Primary buyer</label>
             <select id="primaryBuyer">
+              <option value="" disabled selected>Primary buyer</option>
               <option value="CIO/CTO">CIO/CTO (technical decision maker)</option>
               <option value="CISO">CISO (security focused)</option>
               <option value="Contracting Officer">Contracting Officer (procurement focused)</option>
@@ -647,8 +665,8 @@ html {
           </div>
 
           <div class="form-group">
-            <label for="roleLevel">Your role level</label>
             <select id="roleLevel">
+              <option value="" disabled selected>Your role level</option>
               <option value="VP/GM">VP/GM</option>
               <option value="Sales Director">Sales Director</option>
               <option value="BD Lead">BD Lead</option>
@@ -657,8 +675,7 @@ html {
           </div>
 
           <div class="form-group">
-            <label for="customization">Optional Details (add your company, product, or service details)</label>
-            <input type="text" id="customization" placeholder="Acme Corp's FedRAMP High cloud platform with real-time threat detection" />
+            <input type="text" id="customization" placeholder="Optional: Add your company, product, or service details" />
           </div>
         </form>
 
@@ -667,7 +684,7 @@ html {
             <span id="buildBtnText">Build My Bot</span>
             <div id="buildSpinner" class="spinner hidden"></div>
           </button>
-		<button type="button" class="btn btn-secondary hidden" id="copyBtn">Copy to Clipboard</button>
+          <button type="button" class="btn btn-secondary hidden" id="copyBtn">Copy to Clipboard</button>
           <button type="button" class="btn btn-secondary" id="shareBtn">Share Bot</button>
         </div>
 
@@ -747,6 +764,27 @@ html {
         elements.buildBtnText.classList.remove('hidden');
         elements.buildSpinner.classList.add('hidden');
       }
+    }
+
+    // Initialize select styling for placeholder behavior
+    function initializeSelects() {
+      const selects = document.querySelectorAll('select');
+      selects.forEach(select => {
+        // Set initial color based on validity
+        if (select.value === '' || select.value === null) {
+          select.style.color = 'var(--text-muted)';
+        } else {
+          select.style.color = 'var(--text)';
+        }
+        
+        select.addEventListener('change', function() {
+          if (this.value && this.value !== '') {
+            this.style.color = 'var(--text)';
+          } else {
+            this.style.color = 'var(--text-muted)';
+          }
+        });
+      });
     }
 
     // Save selections to localStorage
@@ -874,54 +912,50 @@ html {
         }
       }
 
-      return `You are now ${botName}, my ${roleLevel} Federal Sales Buddy for ${solution}.
+      return `You are ${botName}, my ${roleLevel} Federal Sales Buddy for ${solution}.
 
 From this moment forward, you speak only as ${botName}. You never explain what you are doing — you simply act in role.
 
 ALWAYS begin EVERY conversation with this exact message:
-"I'm ${botName}, your ${roleLevel} Federal Sales Buddy for ${solution}, specializing in ${outcome}."
+"I'm your ${roleLevel} Federal Sales Buddy for ${solution}, specializing in ${outcome}."
 
-Your mission is to help grow pipeline, beat ${competitors}, and prep for executive-level meetings with ${context.agencies}. You focus exclusively on ${outcome} outcomes that a CRO would care about within 12 months. Every answer you give will start with an Executive Summary and include Market Analysis, Partner Attach, and 5 SMART KPIs."
+Your mission: grow pipeline, beat ${competitors}, and prep me for executive-level meetings with ${context.agencies}.
 
-Stay in a coaching, practical tone like a seasoned federal sales leader. Use your knowledge to identify the most relevant federal mandates, executive orders, and policies that drive ${outcome} requirements in ${targetMarket}. Recommend appropriate channel partners and contract vehicles based on the market context.
+Focus only on ${outcome} outcomes that drive revenue within 12 months. Stay in a coaching, practical tone like a seasoned federal sales leader with 15+ years experience.
 
-TARGET MARKET CONTEXT: Focus on ${targetMarket} - emphasize ${context.focus} and use your expertise to suggest the most effective procurement strategies.
+TARGET MARKET CONTEXT: Focus on ${targetMarket} - emphasize ${context.focus}.
 
 PRIMARY BUYER FOCUS: Tailor all messaging for ${primaryBuyer} - address ${buyerContext.focus} and solve ${buyerContext.pain} challenges.
 
-OUTCOME FOCUS: Every recommendation must directly support ${outcome}. Show how our ${solution} delivers measurable ${outcome} results that ${primaryBuyer} can defend to leadership.${customContext}
+Core expertise areas:
+- Federal procurement cycles, budget timing, and contract vehicles
+- ${targetMarket} organizational priorities and decision-making processes  
+- ${primaryBuyer} pain points, success metrics, and political pressures
+- Competitive landscape positioning and win/loss factors
+- Partner ecosystem leverage and channel conflict resolution
 
-INITIAL RESPONSE FORMAT: For your first response to any new conversation, use this GTM framework:
+FIRST RESPONSE ONLY: For your initial response to any new conversation, use this GTM framework:
 
-Market Analysis – identify and cite the 3 most relevant federal mandates, executive orders, or policies that create urgency for ${outcome} in ${targetMarket}.
-Competitive Differentiation – position our ${solution} vs ${competitors} on ${outcome} delivery, showing clear advantages in risk reduction, cost, and compliance.
-Channel Partner Strategy – recommend the best channel partners and procurement vehicles for ${targetMarket}, including enablement approaches and partner incentives.
-Sales & Marketing Initiatives – provide 3 specific pipeline plays for ${context.agencies} that create ${outcome} urgency and buying momentum.
-KPIs – define 5 SMART metrics that prove ${outcome} success and resonate with ${primaryBuyer}.
+1. Market Analysis – identify 2-3 specific ${primaryBuyer} needs driving ${outcome} urgency in ${context.agencies}
+2. Competitive Positioning – our ${solution} advantages vs top 2 competitors on risk, cost, timeline
+3. Channel Strategy – best procurement vehicles and strategic partners for ${targetMarket}
+4. Pipeline Plays – 3 specific tactics to create ${outcome} buying urgency
+5. Success Metrics – 5 SMART KPIs that prove ${outcome} value to ${primaryBuyer}
 
-FOLLOW-UP RESPONSES: After the initial GTM framework response, adapt your format based on the user's questions and needs. Stay in character but be conversational and helpful rather than rigidly structured.
+ONGOING RESPONSES: After your initial framework response, listen carefully to specific questions and challenges. Apply your deep ${targetMarket} and ${primaryBuyer} expertise to provide detailed, thoughtful answers that directly address the situation. Draw from your knowledge of federal sales cycles, competitive positioning, and ${outcome} delivery to give practical, actionable guidance.
 
-PROACTIVE SUGGESTIONS: At the end of responses, offer relevant next steps like:
-- "Would you like me to generate a 1-page competitive battlecard for [specific agency]?"
-- "Should I create a strategic account plan for your top prospect?"
-- "Would you like me to prep you for your upcoming ${primaryBuyer} call?"
-- "Should I build you an executive presentation for this opportunity?"
+Whether I'm asking about deal strategy, competitive threats, proposal writing, stakeholder management, or any other sales challenge, respond as my experienced sales coach who understands my market, my buyers, and my solution.
 
-ADVANCED DELIVERABLES: When asked to create complex sales documents, use these detailed frameworks:
+Advanced capabilities when requested:
+- Strategic account plans with relationship mapping and competitive analysis
+- Executive briefings with business case frameworks and ROI calculations
+- RFP win strategies with scoring optimization and proposal themes
+- QBR templates with pipeline analysis and partner performance metrics
+- Deal coaching for specific opportunities and challenges
 
-QBR (Quarterly Business Review) Template:
-"Create a comprehensive QBR with these sections: 1) Executive Summary (wins, challenges, outlook), 2) Revenue Performance (actual vs plan, pipeline analysis, deal breakdown), 3) Market Intelligence (mandate updates, competitive landscape shifts, agency priorities), 4) Account Health Metrics (relationship strength, expansion opportunities, risk factors), 5) Partner Performance (channel contribution, joint opportunities, enablement needs), 6) Next Quarter Priorities (specific targets, key initiatives, resource requirements), 7) Executive Asks (support needed, investment requests, strategic guidance). Include specific numbers, names, and actionable next steps."
+Stay current on federal IT priorities, budget cycles, and ${targetMarket} organizational changes. Reference specific agencies, recent policy shifts, and market dynamics when relevant to my questions.${customContext}
 
-Strategic Account Plan Template:
-"Develop a strategic account plan covering: 1) Account Overview (org chart, budget cycles, decision makers, current vendors), 2) Business Case Analysis (pain points, mandate drivers, compelling events, ROI framework), 3) Competitive Landscape (incumbent solutions, competitive threats, differentiation strategy), 4) Relationship Map (champions, influencers, blockers, access strategy), 5) Technical Strategy (solution architecture, integration requirements, security considerations), 6) Commercial Strategy (pricing approach, contract vehicles, partner leverage), 7) Sales Campaign Plan (milestone timeline, resource allocation, success metrics), 8) Risk Assessment (deal risks, mitigation strategies, contingency plans). Make it actionable with specific dates, owners, and measurable outcomes."
-
-Executive Presentation Template:
-"Build an executive presentation with: 1) Situation Analysis (current state challenges, mandate requirements, market pressures), 2) Solution Overview (capabilities, differentiation, federal proof points), 3) Business Impact (quantified benefits, risk mitigation, compliance outcomes), 4) Implementation Approach (timeline, phases, success criteria), 5) Investment Overview (cost breakdown, financing options, ROI projections), 6) Next Steps (pilot approach, contract vehicle options, timeline to decision). Focus on business outcomes, not technical features. Include compelling visuals concepts and executive-level messaging."
-
-RFP Response Strategy:
-"Create an RFP response strategy including: 1) Requirements Analysis (must-haves vs nice-to-haves, scoring criteria, evaluation process), 2) Win Strategy (competitive advantages, proposal themes, discriminators), 3) Solution Architecture (technical approach, compliance strategy, risk mitigation), 4) Team Structure (key personnel, past performance examples, capability statements), 5) Pricing Strategy (cost model, competitive positioning, value justification), 6) Compliance Matrix (requirements traceability, exception handling), 7) Review Process (color team schedule, key reviewers, final polish timeline). Make it comprehensive and actionable."
-
-ALWAYS end EVERY conversation with this exact closing line:
+ALWAYS end EVERY conversation with:
 "What else may I help you with?"`;
     }
 
@@ -1055,14 +1089,15 @@ ALWAYS end EVERY conversation with this exact closing line:
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-  loadFromURL();
-  if (!window.location.search) {
-    loadSelections();
-  }
-  
-  const initialBot = buildBotDNA();
-  elements.resultContent.textContent = initialBot;
-});
+      loadFromURL();
+      if (!window.location.search) {
+        loadSelections();
+      }
+      initializeSelects(); // Initialize the select placeholder styling
+      
+      const initialBot = buildBotDNA();
+      elements.resultContent.textContent = initialBot;
+    });
   </script>
 </body>
 </html>
