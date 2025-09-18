@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>GTM Prompt - Turn Any AI Into Your Sales Coach</title>
+<title>Build a SalesBot - Turn Any AI Into Your Sales Coach</title>
 <meta name="description" content="Create custom federal sales prompts in 30 seconds. Pick 5 options and get a specialized sales expert that works in ChatGPT, Claude, or any AI tool." />
 <link rel="icon" href="/images/favicon.ico" sizes="any">
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://askarti.com/gtmprompt/" />
-<meta property="og:title" content="GTM Prompt - Turn Any AI Into Your Sales Coach" />
+<meta property="og:url" content="https://askarti.com/basb/" />
+<meta property="og:title" content="Build a SalesBot - Turn Any AI Into Your Sales Coach" />
 <meta property="og:description" content="Create custom federal sales prompts in 30 seconds. Federal sales ready." />
 <meta property="og:image" content="https://askarti.com/social.png" />
 
@@ -64,6 +64,24 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Accessibility - Skip to content link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--accent);
+  color: white;
+  padding: 8px;
+  z-index: 1000;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 6px;
 }
 
 .container {
@@ -178,6 +196,12 @@ p {
   transform: translateY(0px) scale(0.98);
 }
 
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .btn-primary {
   background: var(--accent);
   color: white;
@@ -185,7 +209,7 @@ p {
   border: 1px solid var(--accent);
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
   background: var(--accent-hover);
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
@@ -198,7 +222,7 @@ p {
   box-shadow: var(--shadow-xs);
 }
 
-.btn-secondary:hover {
+.btn-secondary:hover:not(:disabled) {
   background: var(--border-light);
   border-color: var(--border-focus);
   transform: translateY(-1px);
@@ -220,26 +244,6 @@ p {
 .hero-content {
   max-width: 800px;
   margin: 0 auto;
-}
-
-.hero-badges {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 32px;
-}
-
-.pill {
-  display: inline-block;
-  padding: 8px 16px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  color: var(--text-muted);
-  font-size: 0.875rem;
-  font-weight: 600;
-  background: var(--panel);
-  box-shadow: var(--shadow-xs);
 }
 
 /* Main Content */
@@ -342,6 +346,28 @@ p {
   color: var(--text-muted);
   font-size: 0.875rem;
   font-style: italic;
+}
+
+/* Share URL display */
+.share-section {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--border-light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.share-url {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin: 8px 0;
+  font-family: monospace;
+  font-size: 0.875rem;
+  word-break: break-all;
+  color: var(--text);
 }
 
 /* Results Section */
@@ -538,6 +564,9 @@ html {
 </head>
 
 <body>
+  <!-- Skip to content for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  
   <nav class="nav">
     <div class="container">
       <div class="nav-content">
@@ -562,7 +591,7 @@ html {
     </div>
   </section>
 
-  <main class="main-content">
+  <main id="main-content" class="main-content">
     <div class="container">
       <div class="tool-panel" id="toolPanel">
         <h2 class="section-title">SalesBot Customizer</h2>
@@ -638,6 +667,7 @@ html {
             <span id="buildBtnText">Build My Bot</span>
             <div id="buildSpinner" class="spinner hidden"></div>
           </button>
+          <button type="button" class="btn btn-secondary" id="shareBtn">Share Bot</button>
           <button type="button" class="btn btn-secondary hidden" id="copyBtn">Copy to Clipboard</button>
         </div>
 
@@ -645,10 +675,18 @@ html {
           Building your custom sales coach prompt...
         </div>
 
-        <div class="results" id="resultsSection">
+        <!-- Share section (hidden by default) -->
+        <div id="shareSection" class="share-section hidden">
+          <p><strong>Shareable Link:</strong></p>
+          <div id="shareUrl" class="share-url"></div>
+          <button type="button" class="btn btn-secondary" id="copyShareBtn">Copy Link</button>
+        </div>
+
+        <!-- Results section with aria-live for screen readers -->
+        <div class="results" id="resultsSection" aria-live="polite" aria-label="Generated SalesBot prompt">
           <div class="result-header">
             <h3>Your SalesBot Prompt</h3>
-            <button class="copy-btn" id="copyResultBtn" onclick="copyToClipboard()">Copy Prompt</button>
+            <button class="copy-btn" id="copyResultBtn">Copy Prompt</button>
           </div>
           <div class="result-content" id="resultContent"></div>
           <div class="usage-note">
@@ -671,13 +709,17 @@ html {
     const elements = {
       toolPanel: document.getElementById('toolPanel'),
       buildBtn: document.getElementById('buildBtn'),
+      shareBtn: document.getElementById('shareBtn'),
       copyBtn: document.getElementById('copyBtn'),
       copyResultBtn: document.getElementById('copyResultBtn'),
+      copyShareBtn: document.getElementById('copyShareBtn'),
       buildBtnText: document.getElementById('buildBtnText'),
       buildSpinner: document.getElementById('buildSpinner'),
       loadingMessage: document.getElementById('loadingMessage'),
       resultsSection: document.getElementById('resultsSection'),
       resultContent: document.getElementById('resultContent'),
+      shareSection: document.getElementById('shareSection'),
+      shareUrl: document.getElementById('shareUrl'),
       
       solution: document.getElementById('solution'),
       outcome: document.getElementById('outcome'),
@@ -705,6 +747,61 @@ html {
         elements.buildBtnText.classList.remove('hidden');
         elements.buildSpinner.classList.add('hidden');
       }
+    }
+
+    // Save selections to localStorage
+    function saveSelections() {
+      const selections = {
+        solution: val('solution'),
+        outcome: val('outcome'),
+        targetMarket: val('targetMarket'),
+        primaryBuyer: val('primaryBuyer'),
+        roleLevel: val('roleLevel'),
+        customization: val('customization')
+      };
+      localStorage.setItem('salesbot-selections', JSON.stringify(selections));
+    }
+
+    // Load selections from localStorage
+    function loadSelections() {
+      const saved = localStorage.getItem('salesbot-selections');
+      if (saved) {
+        const selections = JSON.parse(saved);
+        Object.keys(selections).forEach(key => {
+          if (elements[key] && selections[key]) {
+            elements[key].value = selections[key];
+          }
+        });
+      }
+    }
+
+    // Load from URL parameters
+    function loadFromURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const fields = ['solution', 'outcome', 'targetMarket', 'primaryBuyer', 'roleLevel', 'customization'];
+      
+      fields.forEach(field => {
+        const value = urlParams.get(field);
+        if (value && elements[field]) {
+          elements[field].value = decodeURIComponent(value);
+        }
+      });
+    }
+
+    // Generate shareable URL
+    function generateShareUrl() {
+      const baseUrl = window.location.origin + window.location.pathname;
+      const params = new URLSearchParams();
+      
+      const fields = ['solution', 'outcome', 'targetMarket', 'primaryBuyer', 'roleLevel', 'customization'];
+      fields.forEach(field => {
+        const value = val(field);
+        if (value) {
+          params.set(field, value);
+        }
+      });
+      
+      return params.toString() ? `${baseUrl}?${params.toString()}` : baseUrl;
     }
 
     function buildBotDNA() {
@@ -852,22 +949,22 @@ ALWAYS end EVERY conversation with this exact closing line:
       elements.resultsSection.classList.add('show');
     }
 
-    function copyToClipboard() {
-      const content = elements.resultContent.textContent;
+    function copyToClipboard(text, targetBtn) {
+      const content = text || elements.resultContent.textContent;
       if (!content) return;
 
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(content).then(() => {
-          showCopySuccess();
+          showCopySuccess(targetBtn);
         }).catch(() => {
-          fallbackCopy(content);
+          fallbackCopy(content, targetBtn);
         });
       } else {
-        fallbackCopy(content);
+        fallbackCopy(content, targetBtn);
       }
     }
 
-    function fallbackCopy(text) {
+    function fallbackCopy(text, targetBtn) {
       const textArea = document.createElement('textarea');
       textArea.value = text;
       textArea.style.position = 'fixed';
@@ -879,7 +976,7 @@ ALWAYS end EVERY conversation with this exact closing line:
       try {
         const successful = document.execCommand('copy');
         if (successful) {
-          showCopySuccess();
+          showCopySuccess(targetBtn);
         } else {
           alert('Please copy the text manually (Ctrl+C or Cmd+C)');
         }
@@ -890,45 +987,85 @@ ALWAYS end EVERY conversation with this exact closing line:
       }
     }
 
-    function showCopySuccess() {
-      const copyBtns = [elements.copyBtn, elements.copyResultBtn];
+    function showCopySuccess(targetBtn) {
+      const btn = targetBtn || elements.copyResultBtn;
       
-      copyBtns.forEach(btn => {
-        if (btn && !btn.classList.contains('hidden')) {
-          const originalText = btn.textContent;
-          btn.textContent = 'Copied!';
-          btn.classList.add('copied');
-          
-          setTimeout(() => {
-            btn.textContent = originalText;
-            btn.classList.remove('copied');
-          }, 2000);
-        }
-      });
+      const originalText = btn.textContent;
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.classList.remove('copied');
+      }, 2000);
     }
 
+    // Event listeners
     elements.buildBtn.addEventListener('click', () => {
       if (isGenerating) return;
       
-      const botDNA = buildBotDNA();
-      showResults(botDNA);
+      setLoading(true);
+      
+      // Simulate brief delay to show spinner
+      setTimeout(() => {
+        const botDNA = buildBotDNA();
+        saveSelections();
+        showResults(botDNA);
+        setLoading(false);
+        
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'prompt_built', {
+            event_category: 'salesbot',
+            event_label: 'local_build'
+          });
+        }
+      }, 500);
+    });
+
+    elements.shareBtn.addEventListener('click', () => {
+      const shareUrl = generateShareUrl();
+      elements.shareUrl.textContent = shareUrl;
+      elements.shareSection.classList.remove('hidden');
       
       if (typeof gtag !== 'undefined') {
-        gtag('event', 'prompt_built', {
-          event_category: 'gtm_prompt',
-          event_label: 'local_build'
+        gtag('event', 'bot_shared', {
+          event_category: 'salesbot',
+          event_label: 'share_url'
         });
       }
     });
 
-    elements.copyBtn.addEventListener('click', copyToClipboard);
+    elements.copyBtn.addEventListener('click', () => {
+      copyToClipboard();
+    });
 
+    elements.copyResultBtn.addEventListener('click', () => {
+      copyToClipboard(null, elements.copyResultBtn);
+    });
+
+    elements.copyShareBtn.addEventListener('click', () => {
+      copyToClipboard(elements.shareUrl.textContent, elements.copyShareBtn);
+    });
+
+    // Auto-save selections when they change
+    const formElements = [elements.solution, elements.outcome, elements.targetMarket, elements.primaryBuyer, elements.roleLevel, elements.customization];
+    formElements.forEach(element => {
+      element.addEventListener('change', saveSelections);
+      element.addEventListener('input', saveSelections);
+    });
+
+    // Initialize on page load
     document.addEventListener('DOMContentLoaded', () => {
+      // Load from URL first (takes priority), then localStorage
+      loadFromURL();
+      if (!window.location.search) {
+        loadSelections();
+      }
+      
+      // Build initial bot DNA
       const initialBot = buildBotDNA();
       showResults(initialBot);
     });
-
-    window.copyToClipboard = copyToClipboard;
   </script>
 </body>
 </html>
