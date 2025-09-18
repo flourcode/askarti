@@ -841,83 +841,84 @@ html {
       
       return params.toString() ? `${baseUrl}?${params.toString()}` : baseUrl;
     }
+function buildBotDNA() {
+  let solution = val('solution') || 'your solution';
+  const outcome = val('outcome') || 'your desired outcome';
+  const targetMarket = val('targetMarket') || 'Federal Civilian';
+  const primaryBuyer = val('primaryBuyer') || 'CIO/CTO';
+  const roleLevel = val('roleLevel') || 'Sales Director';
+  const customization = val('customization');
 
-    function buildBotDNA() {
-      let solution = val('solution');
-      const outcome = val('outcome');
-      const targetMarket = val('targetMarket');
-      const primaryBuyer = val('primaryBuyer');
-      const roleLevel = val('roleLevel');
-      const customization = val('customization');
+  if (solution === 'Other') {
+    if (customization) {
+      const customWords = customization.split(' ');
+      const potentialSolution = customWords.slice(0, 3).join(' ').replace(/[^a-zA-Z\s]/g, '').trim();
+      solution = potentialSolution || 'Custom Solution';
+    } else {
+      solution = 'Custom Solution';
+    }
+  }
 
-      if (solution === 'Other') {
-        if (customization) {
-          const customWords = customization.split(' ');
-          const potentialSolution = customWords.slice(0, 3).join(' ').replace(/[^a-zA-Z\s]/g, '').trim();
-          solution = potentialSolution || 'Custom Solution';
-        } else {
-          solution = 'Custom Solution';
-        }
-      }
+  const contexts = {
+    'Federal Civilian': {
+      agencies: 'civilian agencies like GSA, VA, DHS, and department-level organizations',
+      focus: 'modernization, digital transformation, citizen services, operational efficiency'
+    },
+    'Defense/DoD': {
+      agencies: 'defense organizations including DISA, military branches, and defense contractors',
+      focus: 'mission readiness, force protection, warfighter advantage, operational security'
+    },
+    'Intelligence Community': {
+      agencies: 'intelligence agencies and related organizations',
+      focus: 'national security, threat intelligence, operational security, classified environments'
+    },
+    'State & Local': {
+      agencies: 'state CIO offices, city IT departments, county systems, and local government',
+      focus: 'citizen services, budget efficiency, operational effectiveness, local compliance'
+    }
+  };
 
-      const contexts = {
-        'Federal Civilian': {
-          agencies: 'civilian agencies like GSA, VA, DHS, and department-level organizations',
-          focus: 'modernization, digital transformation, citizen services, operational efficiency'
-        },
-        'Defense/DoD': {
-          agencies: 'defense organizations including DISA, military branches, and defense contractors',
-          focus: 'mission readiness, force protection, warfighter advantage, operational security'
-        },
-        'Intelligence Community': {
-          agencies: 'intelligence agencies and related organizations',
-          focus: 'national security, threat intelligence, operational security, classified environments'
-        },
-        'State & Local': {
-          agencies: 'state CIO offices, city IT departments, county systems, and local government',
-          focus: 'citizen services, budget efficiency, operational effectiveness, local compliance'
-        }
-      };
+  const buyerContexts = {
+    'CIO/CTO': {
+      focus: 'technical architecture, scalability, integration',
+      pain: 'legacy system modernization, technical debt, innovation'
+    },
+    'CISO': {
+      focus: 'security posture, risk management, compliance',
+      pain: 'threat landscape, regulatory compliance, security gaps'
+    },
+    'Contracting Officer': {
+      focus: 'procurement efficiency, contract vehicles, compliance',
+      pain: 'acquisition speed, vendor management, regulatory adherence'
+    },
+    'Program Manager': {
+      focus: 'delivery success, timeline management, stakeholder satisfaction',
+      pain: 'project delivery, resource optimization, outcome achievement'
+    }
+  };
 
-      const buyerContexts = {
-        'CIO/CTO': {
-          focus: 'technical architecture, scalability, integration',
-          pain: 'legacy system modernization, technical debt, innovation'
-        },
-        'CISO': {
-          focus: 'security posture, risk management, compliance',
-          pain: 'threat landscape, regulatory compliance, security gaps'
-        },
-        'Contracting Officer': {
-          focus: 'procurement efficiency, contract vehicles, compliance',
-          pain: 'acquisition speed, vendor management, regulatory adherence'
-        },
-        'Program Manager': {
-          focus: 'delivery success, timeline management, stakeholder satisfaction',
-          pain: 'project delivery, resource optimization, outcome achievement'
-        }
-      };
+  // Add fallback defaults to prevent undefined errors
+  const context = contexts[targetMarket] || contexts['Federal Civilian'];
+  const buyerContext = buyerContexts[primaryBuyer] || buyerContexts['CIO/CTO'];
+  
+  const competitors = "market leader competitors in your space";
+  const botName = "SalesBot";
+  
+  let customContext = '';
+  if (customization) {
+    if (val('solution') === 'Other') {
+      customContext = `\n\nSolution Details: ${customization}`;
+    } else {
+      customContext = `\n\nKey Context: ${customization}`;
+    }
+  }
 
-      const context = contexts[targetMarket];
-      const buyerContext = buyerContexts[primaryBuyer];
-      const competitors = "market leader competitors in your space";
-      const botName = "SalesBot";
-      
-      let customContext = '';
-      if (customization) {
-        if (val('solution') === 'Other') {
-          customContext = `\n\nSolution Details: ${customization}`;
-        } else {
-          customContext = `\n\nKey Context: ${customization}`;
-        }
-      }
-
-      return `You are ${botName}, my ${roleLevel} Federal Sales Buddy for ${solution}.
+  return `You are ${botName}, my ${roleLevel} Federal Sales Buddy for ${solution}.
 
 From this moment forward, you speak only as ${botName}. You never explain what you are doing — you simply act in role.
 
-ALWAYS begin EVERY conversation with this exact message:
-"I'm your ${roleLevel} Federal Sales Buddy for ${solution}, specializing in ${outcome}."
+Begin FIRST RESPONSE ONLY with this exact message:
+"Hi, I'm your ${roleLevel} Federal Sales Buddy for ${solution}, specializing in ${outcome}."
 
 Your mission: grow pipeline, beat ${competitors}, and prep me for executive-level meetings with ${context.agencies}.
 
@@ -934,7 +935,7 @@ Core expertise areas:
 - Competitive landscape positioning and win/loss factors
 - Partner ecosystem leverage and channel conflict resolution
 
-FIRST RESPONSE ONLY: For your initial response to any new conversation, use this GTM framework:
+FIRST RESPONSE ONLY: For your initial response to any new conversation, after the greeting above, use this GTM framework:
 
 1. Market Analysis – identify 2-3 specific ${primaryBuyer} needs driving ${outcome} urgency in ${context.agencies}
 2. Competitive Positioning – our ${solution} advantages vs top 2 competitors on risk, cost, timeline
@@ -942,7 +943,7 @@ FIRST RESPONSE ONLY: For your initial response to any new conversation, use this
 4. Pipeline Plays – 3 specific tactics to create ${outcome} buying urgency
 5. Success Metrics – 5 SMART KPIs that prove ${outcome} value to ${primaryBuyer}
 
-ONGOING RESPONSES: After your initial framework response, listen carefully to specific questions and challenges. Apply your deep ${targetMarket} and ${primaryBuyer} expertise to provide detailed, thoughtful answers that directly address the situation. Draw from your knowledge of federal sales cycles, competitive positioning, and ${outcome} delivery to give practical, actionable guidance.
+ONGOING RESPONSES: After your initial framework response, remain in character as my ${roleLevel} sales coach but listen carefully to my specific questions and challenges. Apply your deep ${targetMarket} and ${primaryBuyer} expertise to provide detailed, thoughtful answers that directly address my situation. Draw from your knowledge of federal sales cycles, competitive positioning, and ${outcome} delivery to give practical, actionable guidance.
 
 Whether I'm asking about deal strategy, competitive threats, proposal writing, stakeholder management, or any other sales challenge, respond as my experienced sales coach who understands my market, my buyers, and my solution.
 
@@ -957,8 +958,7 @@ Stay current on federal IT priorities, budget cycles, and ${targetMarket} organi
 
 ALWAYS end EVERY conversation with:
 "What else may I help you with?"`;
-    }
-
+}
     function showResults(content) {
       elements.resultContent.textContent = content;
       elements.resultsSection.classList.add('show');
