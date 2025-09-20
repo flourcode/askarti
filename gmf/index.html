@@ -723,9 +723,14 @@
           <div id="emailPreview" class="email-preview"></div>
           
           <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
-            <button style="width: 100%; padding: 10px; background: #f3f4f6; color: #6b7280; border: none; border-radius: 8px; cursor: pointer;" onclick="showNextStepForm()">
-              Update Next Step Instead
-            </button>
+            <div style="display: flex; gap: 8px;">
+              <button style="flex: 1; padding: 10px; background: #f3f4f6; color: #6b7280; border: none; border-radius: 8px; cursor: pointer;" onclick="showNextStepForm()">
+                Update Next Step
+              </button>
+              <button style="flex: 1; padding: 10px; background: #f3f4f6; color: #6b7280; border: none; border-radius: 8px; cursor: pointer;" onclick="showObjectionForm()">
+                Handle Objection
+              </button>
+            </div>
           </div>
         `;
         
@@ -774,6 +779,129 @@
         selectOpportunity(selectedOpportunity);
       }, 1000);
     }
+function showObjectionForm() {
+  const actionContent = document.getElementById('actionContent');
+  
+  actionContent.innerHTML = `
+    <div style="margin-bottom: 16px;">
+      <div style="font-size: 18px; font-weight: 600; color: #1c1917; margin-bottom: 4px;">Objection Assistant</div>
+      <div style="font-size: 14px; color: #78716c;">for ${selectedOpportunity.name}</div>
+    </div>
+    
+    <div class="input-group">
+      <label>Common Objection</label>
+      <select id="objectionType">
+        <option>Still finalizing specs</option>
+        <option>Capacity risk concern</option>
+        <option>Approved vendor list</option>
+        <option>Need NADCAP documentation</option>
+        <option>First article timing</option>
+        <option>PO approval process</option>
+        <option>Price is too high</option>
+        <option>Need multiple quotes</option>
+      </select>
+    </div>
+    
+    <div class="input-group">
+      <label>Additional Context (Optional)</label>
+      <textarea id="objectionContext" rows="2" placeholder="Any specific details about this objection..."></textarea>
+    </div>
+    
+    <button class="primary-button" onclick="generateObjectionResponse()" id="objectionBtn">
+      Generate Response
+    </button>
+    
+    <div id="objectionOut" class="email-preview" style="display: none;"></div>
+    
+    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+      <button style="width: 100%; padding: 10px; background: #f3f4f6; color: #6b7280; border: none; border-radius: 8px; cursor: pointer;" onclick="showActionPanel(selectedOpportunity)">
+        Back to Follow-up
+      </button>
+    </div>
+  `;
+}	
+async function generateObjectionResponse() {
+  const objectionType = document.getElementById('objectionType').value;
+  const context = document.getElementById('objectionContext').value;
+  
+  const btn = document.getElementById('objectionBtn');
+  btn.innerHTML = '<span class="loading"></span> Generating...';
+  btn.disabled = true;
+  
+  const objectionOutput = document.getElementById('objectionOut');
+  objectionOutput.style.display = 'block';
+  objectionOutput.innerHTML = 'Generating response...';
+  
+  try {
+    const response = await fetch('https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        request_type: 'generate_objection_response',
+        objection_text: objectionType,
+        context: context || 'RFQ-to-first-order, move fast, reduce risk'
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    if (data.error) {
+      throw new Error(data.message || data.error);
+    }
+    
+    objectionOutput.innerHTML = `
+      <div style="font-weight: 600; margin-bottom: 12px;">Action Checklist:</div>
+      <div style="margin-bottom: 16px;">
+        ${data.checklist.map((item, index) => `${index + 1}. ${item}`).join('<br>')}
+      </div>
+      <div style="font-weight: 600; margin-bottom: 8px;">Response:</div>
+      <div style="font-style: italic;">${data.reply}</div>
+    `;
+    objectionOutput.classList.add('show');
+    
+  } catch (error) {
+    console.error('Objection response failed:', error);
+    
+    // Fallback to static response
+    const fallbackResponses = {
+      'Still finalizing specs': {
+        checklist: [
+          'Review current specification gaps with engineering team',
+          'Set internal deadline for spec finalization',
+          'Prepare preliminary quote with clear assumptions',
+          'Schedule follow-up meeting with procurement',
+          'Identify critical vs. nice-to-have requirements'
+        ],
+        reply: 'I understand you\'re still working through the specifications. To help speed this along, I can provide a preliminary quote based on current specs with clear callouts for areas that might change. This gives you budget numbers while finalizing details. Would a 15-minute spec review call help identify remaining gaps?'
+      }
+    };
+    
+    const fallback = fallbackResponses[objectionType] || fallbackResponses['Still finalizing specs'];
+    
+    objectionOutput.innerHTML = `
+      <div style="font-weight: 600; margin-bottom: 12px;">Action Checklist:</div>
+      <div style="margin-bottom: 16px;">
+        ${fallback.checklist.map((item, index) => `${index + 1}. ${item}`).join('<br>')}
+      </div>
+      <div style="font-weight: 600; margin-bottom: 8px;">Response:</div>
+      <div style="font-style: italic;">${fallback.reply}</div>
+      <div style="margin-top: 12px; font-size: 12px; color: #6b7280;">
+        <em>Template response (API error: ${error.message})</em>
+      </div>
+    `;
+    objectionOutput.classList.add('show');
+    
+  } finally {
+    btn.innerHTML = 'Generate Response';
+    btn.disabled = false;
+  }
+}
 async function generateEmail() {
   const quoteSummary = document.getElementById('quoteSummary').value.trim();
   
