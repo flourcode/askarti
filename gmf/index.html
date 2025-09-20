@@ -1,0 +1,1112 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>RFQ Coach</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+      background: #fafaf9;
+      color: #1c1917;
+      line-height: 1.5;
+      font-size: 16px;
+      padding: 32px;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    h1 { 
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      margin-bottom: 8px;
+      color: #0c0a09;
+    }
+    
+    .subtitle {
+      font-size: 18px;
+      color: #78716c;
+      margin-bottom: 48px;
+      font-weight: 400;
+    }
+    
+    .main-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid #f5f5f4;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .card:hover {
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+    
+    .card-header {
+      padding: 24px 24px 0 24px;
+      border-bottom: 1px solid #f5f5f4;
+      margin-bottom: 24px;
+    }
+    
+    .card-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #0c0a09;
+      margin-bottom: 4px;
+    }
+    
+    .card-subtitle {
+      font-size: 14px;
+      color: #78716c;
+    }
+    
+    .card-content {
+      padding: 0 24px 24px 24px;
+    }
+    
+    /* Performance Indicators */
+    .metric {
+      text-align: center;
+      padding: 20px 16px;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #f5f5f4;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    
+    .metric:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .metric-indicator {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+    
+    .metric-indicator.green { background: #22c55e; box-shadow: 0 0 8px rgba(34, 197, 94, 0.3); }
+    .metric-indicator.amber { background: #f59e0b; box-shadow: 0 0 8px rgba(245, 158, 11, 0.3); }
+    .metric-indicator.red { background: #ef4444; box-shadow: 0 0 8px rgba(239, 68, 68, 0.3); }
+    
+    .metric-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #0c0a09;
+      margin-bottom: 4px;
+      letter-spacing: -0.025em;
+    }
+    
+    .metric-label {
+      font-size: 12px;
+      color: #78716c;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+    
+    .metric-benchmark {
+      font-size: 11px;
+      color: #a8a29e;
+      font-weight: 400;
+    }
+    
+    /* Import Button */
+    .import-button {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .import-button:hover {
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      transform: translateY(-1px);
+    }
+    
+    /* Opportunity Table Headers */
+    .opportunity-header {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr 80px;
+      gap: 16px;
+      padding: 12px 0;
+      border-bottom: 2px solid #f1f5f9;
+      margin-bottom: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #78716c;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    /* Updated Opportunity Layout */
+    .opportunity {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr 80px;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid #f5f5f4;
+      align-items: center;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    
+    .opportunity:last-child {
+      border-bottom: none;
+    }
+    
+    .opportunity:hover {
+      background: #fafaf9;
+      margin: 0 -24px;
+      padding: 16px 24px;
+      border-radius: 12px;
+    }
+    
+    .opportunity.selected {
+      background: #f0f9ff;
+      border: 1px solid #0284c7;
+      margin: 0 -24px;
+      padding: 15px 23px;
+      border-radius: 12px;
+    }
+    
+    .opp-main, .opp-stage, .opp-owner, .opp-next, .opp-aging {
+      min-width: 0;
+    }
+    
+    .opp-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #0c0a09;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .opp-details {
+      font-size: 14px;
+      color: #78716c;
+    }
+    
+    .next-step {
+      font-size: 14px;
+      color: #1c1917;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .next-date {
+      font-size: 12px;
+      color: #78716c;
+    }
+    
+    .aging {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    
+    .aging.fresh { background: #dcfce7; color: #166534; }
+    .aging.warning { background: #fef3c7; color: #92400e; }
+    .aging.stale { background: #fecaca; color: #991b1b; }
+    
+    .stage-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+    }
+    
+    .stage-qualified { background: #dbeafe; color: #1d4ed8; }
+    .stage-quoted { background: #fef3c7; color: #d97706; }
+    .stage-negotiation { background: #fed7d7; color: #dc2626; }
+    .stage-closed { background: #d1fae5; color: #059669; }
+    
+    /* Elegant Action Panel */
+    .action-panel {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .input-group {
+      margin-bottom: 20px;
+    }
+    
+    .input-group:last-child {
+      margin-bottom: 0;
+    }
+    
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 6px;
+      letter-spacing: 0.025em;
+    }
+    
+    input, textarea, select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: inherit;
+      background: white;
+      transition: all 0.2s ease;
+    }
+    
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+      transform: translateY(-1px);
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+      line-height: 1.5;
+    }
+    
+    .primary-button {
+      width: 100%;
+      padding: 14px 24px;
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 8px;
+    }
+    
+    .primary-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+    }
+    
+    .primary-button:active {
+      transform: translateY(0);
+    }
+    
+    .primary-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    /* Magic Email Output */
+    .email-preview {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .email-preview.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .email-subject {
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    
+    .email-body {
+      color: #374151;
+      white-space: pre-line;
+    }
+    
+    /* Loading States */
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #f3f4f6;
+      border-radius: 50%;
+      border-top-color: #3b82f6;
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Success States */
+    .success-message {
+      background: #dcfce7;
+      color: #166534;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-top: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+    }
+    
+    .success-message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Scorecard */
+    .metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: 16px;
+      }
+      
+      .main-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+      
+      .opportunity, .opportunity-header {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      
+      .opportunity-header {
+        display: none;
+      }
+    }
+    
+    /* Hidden by default */
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Three Things</h1>
+    <p class="subtitle">Turn quotes into orders</p>
+    
+    <!-- Performance Dashboard -->
+    <div class="card" style="margin-bottom: 32px;">
+      <div class="card-header">
+        <div class="card-title">Performance Dashboard</div>
+      </div>
+      <div class="card-content">
+        <div class="metrics">
+          <div class="metric" id="winRateMetric">
+            <div class="metric-indicator"></div>
+            <div class="metric-value">32%</div>
+            <div class="metric-label">Win Rate</div>
+            <div class="metric-benchmark">Target: >40%</div>
+          </div>
+          <div class="metric" id="cycleTimeMetric">
+            <div class="metric-indicator"></div>
+            <div class="metric-value">18</div>
+            <div class="metric-label">Cycle Days</div>
+            <div class="metric-benchmark">Target: <14 days</div>
+          </div>
+          <div class="metric" id="hygieneMetric">
+            <div class="metric-indicator"></div>
+            <div class="metric-value">86%</div>
+            <div class="metric-label">Next Steps Set</div>
+            <div class="metric-benchmark">Target: >90%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="main-grid">
+      <!-- The One Thing: Opportunities -->
+      <div class="card">
+        <div class="card-header">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div class="card-title">Active Opportunities</div>
+              <div class="card-subtitle">Click to select, then take action</div>
+            </div>
+            <label class="import-button">
+              <span>Import CSV</span>
+              <input type="file" accept=".csv" multiple style="display: none;" id="csvInput">
+            </label>
+          </div>
+        </div>
+        <div class="card-content">
+          <!-- Opportunity Headers -->
+          <div class="opportunity-header">
+            <div class="opp-main">Opportunity</div>
+            <div class="opp-stage">Stage</div>
+            <div class="opp-owner">Owner</div>
+            <div class="opp-next">Next Step</div>
+            <div class="opp-aging">Aging</div>
+          </div>
+          <div id="opportunities"></div>
+        </div>
+      </div>
+      
+      <!-- Elegant Action Panel -->
+      <div class="action-panel">
+        <div id="actionContent">
+          <div style="text-align: center; padding: 40px 20px; color: #78716c;">
+            Select an opportunity to get started
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sample data with proper stages
+    let opportunities = [
+      {
+        id: '1',
+        name: 'Boeing 737 Brackets',
+        customer: 'Boeing Commercial',
+        amount: 125000,
+        stage: 'Quoted',
+        owner: 'Kristie',
+        nextStep: 'Send revised drawing checklist',
+        nextDate: '2025-09-25',
+        daysAging: 8
+      },
+      {
+        id: '2',
+        name: 'Airbus A320 Components',
+        customer: 'Airbus Industries',
+        amount: 89000,
+        stage: 'Negotiation',
+        owner: 'Mike',
+        nextStep: '',
+        nextDate: '',
+        daysAging: 15
+      },
+      {
+        id: '3',
+        name: 'F-35 Landing Gear Parts',
+        customer: 'Lockheed Martin',
+        amount: 245000,
+        stage: 'Qualified',
+        owner: 'Sarah',
+        nextStep: 'Schedule first article review',
+        nextDate: '2025-09-22',
+        daysAging: 4
+      },
+      {
+        id: '4',
+        name: 'Defense Prototype Parts',
+        customer: 'Raytheon',
+        amount: 156000,
+        stage: 'Quoted',
+        owner: 'Kristie',
+        nextStep: 'Confirm NADCAP requirements',
+        nextDate: '2025-09-24',
+        daysAging: 12
+      },
+      {
+        id: '5',
+        name: 'Commercial Engine Parts',
+        customer: 'GE Aviation',
+        amount: 89000,
+        stage: 'Closed Won',
+        owner: 'Tom',
+        nextStep: 'Production kickoff meeting',
+        nextDate: '2025-09-21',
+        daysAging: 25
+      }
+    ];
+    
+    let selectedOpportunity = null;
+    let currentGoal = 'Clarify requirements';
+
+    // Initialize app
+    function init() {
+      renderOpportunities();
+      updatePerformanceMetrics();
+      setupCSVImport();
+      
+      // Auto-select first opportunity
+      setTimeout(() => {
+        selectOpportunity(opportunities[0]);
+      }, 500);
+    }
+    
+    function renderOpportunities() {
+      const container = document.getElementById('opportunities');
+      container.innerHTML = '';
+      
+      opportunities.forEach(opp => {
+        const oppEl = document.createElement('div');
+        oppEl.className = 'opportunity';
+        oppEl.onclick = (event) => selectOpportunity(opp, event.currentTarget);
+        
+        const agingClass = opp.daysAging <= 7 ? 'fresh' : opp.daysAging <= 14 ? 'warning' : 'stale';
+        const stageClass = getStageClass(opp.stage);
+        
+        oppEl.innerHTML = `
+          <div class="opp-main">
+            <div class="opp-name">${opp.name}</div>
+            <div class="opp-details">${opp.customer} • $${opp.amount.toLocaleString()}</div>
+          </div>
+          <div class="opp-stage">
+            <span class="stage-badge ${stageClass}">${opp.stage}</span>
+          </div>
+          <div class="opp-owner">${opp.owner}</div>
+          <div class="opp-next">
+            <div class="next-step">${opp.nextStep || 'No next step'}</div>
+            <div class="next-date">${opp.nextDate || ''}</div>
+          </div>
+          <div class="aging ${agingClass}">${opp.daysAging}d</div>
+        `;
+        
+        container.appendChild(oppEl);
+      });
+    }
+    
+    function selectOpportunity(opp, clickedElement = null) {
+      selectedOpportunity = opp;
+      
+      // Visual selection
+      document.querySelectorAll('.opportunity').forEach(el => {
+        el.classList.remove('selected');
+      });
+      
+      // If called from click event, highlight the clicked element
+      if (clickedElement) {
+        clickedElement.classList.add('selected');
+      } else {
+        // If called programmatically, find and highlight the matching element
+        const oppElements = document.querySelectorAll('.opportunity');
+        oppElements.forEach((el, index) => {
+          if (opportunities[index].id === opp.id) {
+            el.classList.add('selected');
+          }
+        });
+      }
+      
+      // Show action panel
+      showActionPanel(opp);
+    }
+    
+    function showActionPanel(opp) {
+      const actionContent = document.getElementById('actionContent');
+      
+      if (!opp.nextStep) {
+        // Show "Set Next Step" form
+        actionContent.innerHTML = `
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 18px; font-weight: 600; color: #1c1917; margin-bottom: 4px;">Set Next Step</div>
+            <div style="font-size: 14px; color: #78716c;">for ${opp.name}</div>
+          </div>
+          
+          <div class="input-group">
+            <label>What's the next action?</label>
+            <input type="text" id="nextStepInput" placeholder="Send revised drawing checklist" />
+          </div>
+          
+          <div class="input-group">
+            <label>When?</label>
+            <input type="date" id="nextDateInput" />
+          </div>
+          
+          <button class="primary-button" onclick="saveNextStep()">
+            Set Next Step
+          </button>
+          
+          <div id="saveMessage" class="success-message"></div>
+        `;
+        
+        // Set default date to tomorrow
+        document.getElementById('nextDateInput').valueAsDate = new Date(Date.now() + 86400000);
+      } else {
+        // Show "Generate Follow-up" form
+        actionContent.innerHTML = `
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 18px; font-weight: 600; color: #1c1917; margin-bottom: 4px;">Generate Follow-up</div>
+            <div style="font-size: 14px; color: #78716c;">for ${opp.name}</div>
+          </div>
+          
+          <label>Follow-up Goal</label>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px;">
+            <button class="goal-btn active" data-goal="Clarify requirements">Clarify Requirements</button>
+            <button class="goal-btn" data-goal="Schedule first article">Schedule First Article</button>
+            <button class="goal-btn" data-goal="Confirm PO timing">Confirm PO Timing</button>
+            <button class="goal-btn" data-goal="Competitive takeaway">Competitive Takeaway</button>
+          </div>
+          
+          <div class="input-group">
+            <label>Quote summary</label>
+            <textarea id="quoteSummary" placeholder="50 brackets, 7075-T6 aluminum, anodized black finish, +/-0.005 tolerance, quantity 1000, delivery needed by March 15"></textarea>
+          </div>
+          
+          <button class="primary-button" onclick="generateEmail()" id="generateBtn">
+            Generate Email
+          </button>
+          
+          <div id="emailPreview" class="email-preview"></div>
+          
+          <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            <button style="width: 100%; padding: 10px; background: #f3f4f6; color: #6b7280; border: none; border-radius: 8px; cursor: pointer;" onclick="showNextStepForm()">
+              Update Next Step Instead
+            </button>
+          </div>
+        `;
+        
+        // Re-setup goal button event listeners
+        setupGoalButtons();
+      }
+    }
+    
+    function setupGoalButtons() {
+      document.querySelectorAll('.goal-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.goal-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          currentGoal = this.dataset.goal;
+        });
+      });
+    }
+    
+    function showNextStepForm() {
+      selectedOpportunity.nextStep = '';
+      selectedOpportunity.nextDate = '';
+      showActionPanel(selectedOpportunity);
+    }
+    
+    async function saveNextStep() {
+      const nextStep = document.getElementById('nextStepInput').value.trim();
+      const nextDate = document.getElementById('nextDateInput').value;
+      
+      if (!nextStep || !nextDate) {
+        return;
+      }
+      
+      // Update opportunity
+      selectedOpportunity.nextStep = nextStep;
+      selectedOpportunity.nextDate = nextDate;
+      
+      // Show success
+      const saveMessage = document.getElementById('saveMessage');
+      saveMessage.textContent = 'Next step saved';
+      saveMessage.classList.add('show');
+      
+      // Refresh UI
+      setTimeout(() => {
+        renderOpportunities();
+        updatePerformanceMetrics();
+        selectOpportunity(selectedOpportunity);
+      }, 1000);
+    }
+    
+    async function generateEmail() {
+      const quoteSummary = document.getElementById('quoteSummary').value.trim();
+      
+      if (!quoteSummary) {
+        return;
+      }
+      
+      const btn = document.getElementById('generateBtn');
+      btn.innerHTML = '<span class="loading"></span> Generating...';
+      btn.disabled = true;
+      
+      try {
+        // Call the same Lambda endpoint as AskArti
+        const response = await fetch('https://vd823jgh0a.execute-api.us-east-1.amazonaws.com/prod/AskArtiAPI', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            request_type: 'generate_followup',
+            opportunity_data: {
+              name: selectedOpportunity.name,
+              customer: selectedOpportunity.customer,
+              owner: selectedOpportunity.owner,
+              stage: selectedOpportunity.stage
+            },
+            quote_summary: quoteSummary,
+            goal: currentGoal
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`API Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.error) {
+          throw new Error(data.message || data.error);
+        }
+
+        // Display the generated email
+        const preview = document.getElementById('emailPreview');
+        preview.innerHTML = `
+          <div class="email-subject">Subject: ${data.subject}</div>
+          <div class="email-body">${data.body}</div>
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #6b7280;">
+            Suggested next touch: ${data.next_touch_date}
+          </div>
+        `;
+        preview.classList.add('show');
+        
+      } catch (error) {
+        console.error('Email generation failed:', error);
+        
+        // Fallback to the existing template logic
+        const email = {
+          subject: `Quick follow-up on ${selectedOpportunity.name}`,
+          body: `Hi there,
+
+I wanted to follow up on our quote for ${selectedOpportunity.name}. 
+
+${quoteSummary.includes('delivery') ? 'I noticed you mentioned a specific delivery date.' : 'Our team has reviewed the specifications.'} We can meet your requirements and would love to move forward.
+
+Could we schedule a brief 15-minute call this week to address any questions and discuss next steps?
+
+I'm available Thursday afternoon or Friday morning. Which works better for you?
+
+Best regards,
+${selectedOpportunity.owner}`
+        };
+        
+        const preview = document.getElementById('emailPreview');
+        preview.innerHTML = `
+          <div class="email-subject">Subject: ${email.subject}</div>
+          <div class="email-body">${email.body}</div>
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #6b7280;">
+            <em>Note: AI generation failed, showing template. Error: ${error.message}</em>
+          </div>
+        `;
+        preview.classList.add('show');
+      } finally {
+        btn.innerHTML = 'Generate Email';
+        btn.disabled = false;
+      }
+    }
+    
+    function getStageClass(stage) {
+      const stageMap = {
+        'Qualified': 'stage-qualified',
+        'Quoted': 'stage-quoted', 
+        'Negotiation': 'stage-negotiation',
+        'Closed Won': 'stage-closed'
+      };
+      return stageMap[stage] || 'stage-qualified';
+    }
+    
+    function updatePerformanceMetrics() {
+      // Calculate metrics based on current data
+      const totalOpps = opportunities.length;
+      const closedWonOpps = opportunities.filter(opp => opp.stage === 'Closed Won').length;
+      const oppsWithNextSteps = opportunities.filter(opp => opp.nextStep && opp.nextStep.trim()).length;
+      
+      // Industry benchmark calculations
+      const winRate = totalOpps > 0 ? Math.round((closedWonOpps / totalOpps) * 100) : 0;
+      const avgCycleTime = Math.round(opportunities.reduce((sum, opp) => sum + opp.daysAging, 0) / totalOpps);
+      const hygieneScore = totalOpps > 0 ? Math.round((oppsWithNextSteps / totalOpps) * 100) : 0;
+      
+      // Update display
+      updateMetric('winRateMetric', winRate, '%', 'Win Rate', '>40%', 40, 25);
+      updateMetric('cycleTimeMetric', avgCycleTime, '', 'Cycle Days', '<14 days', 14, 21, true);
+      updateMetric('hygieneMetric', hygieneScore, '%', 'Next Steps Set', '>90%', 90, 75);
+    }
+    
+    function updateMetric(elementId, value, suffix, label, benchmark, greenThreshold, amberThreshold, reverse = false) {
+      const element = document.getElementById(elementId);
+      const indicator = element.querySelector('.metric-indicator');
+      const valueEl = element.querySelector('.metric-value');
+      const labelEl = element.querySelector('.metric-label');
+      const benchmarkEl = element.querySelector('.metric-benchmark');
+      
+      // Update values
+      valueEl.textContent = value + suffix;
+      labelEl.textContent = label;
+      benchmarkEl.textContent = `Target: ${benchmark}`;
+      
+      // Set indicator color based on industry thresholds
+      let indicatorClass;
+      if (reverse) {
+        // For cycle time, lower is better
+        indicatorClass = value <= greenThreshold ? 'green' : value <= amberThreshold ? 'amber' : 'red';
+      } else {
+        // For win rate and hygiene, higher is better  
+        indicatorClass = value >= greenThreshold ? 'green' : value >= amberThreshold ? 'amber' : 'red';
+      }
+      
+      indicator.className = `metric-indicator ${indicatorClass}`;
+    }
+    
+    function setupCSVImport() {
+      const csvInput = document.getElementById('csvInput');
+      csvInput.addEventListener('change', handleCSVFiles);
+    }
+    
+    function handleCSVFiles(event) {
+      const files = event.target.files;
+      
+      console.log('Files selected:', files.length);
+      
+      Array.from(files).forEach(file => {
+        console.log('Processing file:', file.name, 'Type:', file.type);
+        
+        if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            console.log('File loaded, content length:', e.target.result.length);
+            parseCSV(e.target.result, file.name);
+          };
+          reader.onerror = function(e) {
+            console.error('File read error:', e);
+            showImportError('Failed to read file: ' + file.name);
+          };
+          reader.readAsText(file);
+        } else {
+          showImportError('Please select a CSV file');
+        }
+      });
+      
+      // Reset the input so the same file can be selected again
+      event.target.value = '';
+    }
+    
+    function parseCSV(csvText, filename) {
+      console.log('Parsing CSV:', filename);
+      console.log('First 200 chars:', csvText.substring(0, 200));
+      
+      const lines = csvText.split('\n').filter(line => line.trim());
+      if (lines.length < 2) {
+        showImportError('CSV file appears to be empty or invalid');
+        return;
+      }
+      
+      console.log('Total lines:', lines.length);
+      
+      const headers = lines[0].split(',').map(h => h.trim().replace(/['"]/g, '').toLowerCase());
+      console.log('Headers found:', headers);
+      
+      const newOpportunities = [];
+      
+      for (let i = 1; i < lines.length; i++) {
+        const values = parseCSVLine(lines[i]);
+        console.log(`Line ${i} values:`, values);
+        
+        if (values.length >= headers.length - 2) { // Allow some flexibility
+          const opp = createOpportunityFromCSV(headers, values);
+          console.log('Created opportunity:', opp);
+          
+          if (opp.name && opp.name.trim()) {
+            newOpportunities.push(opp);
+          }
+        }
+      }
+      
+      console.log('New opportunities created:', newOpportunities.length);
+      
+      if (newOpportunities.length > 0) {
+        opportunities = newOpportunities;
+        renderOpportunities();
+        updatePerformanceMetrics();
+        
+        // Auto-select first opportunity
+        setTimeout(() => {
+          selectOpportunity(opportunities[0]);
+        }, 100);
+        
+        // Show success message
+        showImportSuccess(newOpportunities.length, filename);
+      } else {
+        showImportError('No valid opportunities found in CSV. Please check the format.');
+      }
+    }
+    
+    function parseCSVLine(line) {
+      const values = [];
+      let current = '';
+      let inQuotes = false;
+      
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        
+        if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+          values.push(current.trim());
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      
+      values.push(current.trim());
+      return values;
+    }
+    
+    function createOpportunityFromCSV(headers, values) {
+      const opp = {
+        id: Date.now() + Math.random(),
+        name: '',
+        customer: '',
+        amount: 0,
+        stage: 'Qualified',
+        owner: '',
+        nextStep: '',
+        nextDate: '',
+        daysAging: 0
+      };
+      
+      headers.forEach((header, index) => {
+        const value = values[index] ? values[index].replace(/['"]/g, '') : '';
+        
+        // Map common HubSpot/Paperless Parts fields
+        if (header.includes('name') || header.includes('deal') || header.includes('opportunity')) {
+          opp.name = value;
+        } else if (header.includes('company') || header.includes('customer') || header.includes('account')) {
+          opp.customer = value;
+        } else if (header.includes('amount') || header.includes('value') || header.includes('revenue')) {
+          opp.amount = parseFloat(value.replace(/[$,]/g, '')) || 0;
+        } else if (header.includes('stage') || header.includes('status')) {
+          opp.stage = mapStage(value);
+        } else if (header.includes('owner') || header.includes('assigned') || header.includes('rep')) {
+          opp.owner = value;
+        } else if (header.includes('next') && header.includes('step')) {
+          opp.nextStep = value;
+        } else if (header.includes('next') && header.includes('date')) {
+          opp.nextDate = value;
+        } else if (header.includes('created') || header.includes('age') || header.includes('days')) {
+          opp.daysAging = parseInt(value) || 0;
+        }
+      });
+      
+      return opp;
+    }
+    
+    function mapStage(stageValue) {
+      const stage = stageValue.toLowerCase();
+      if (stage.includes('qualified') || stage.includes('discovery')) return 'Qualified';
+      if (stage.includes('quoted') || stage.includes('proposal')) return 'Quoted';
+      if (stage.includes('negotiation') || stage.includes('review')) return 'Negotiation';
+      if (stage.includes('closed') || stage.includes('won')) return 'Closed Won';
+      return 'Qualified';
+    }
+    
+    function showImportSuccess(count, filename) {
+      // Create temporary success message
+      const message = document.createElement('div');
+      message.className = 'success-message show';
+      message.textContent = `Imported ${count} opportunities from ${filename}`;
+      message.style.position = 'fixed';
+      message.style.top = '24px';
+      message.style.right = '24px';
+      message.style.zIndex = '1000';
+      
+      document.body.appendChild(message);
+      
+      setTimeout(() => {
+        message.remove();
+      }, 3000);
+    }
+    
+    function showImportError(errorMessage) {
+      // Create temporary error message
+      const message = document.createElement('div');
+      message.className = 'success-message show';
+      message.style.background = '#fecaca';
+      message.style.color = '#991b1b';
+      message.textContent = errorMessage;
+      message.style.position = 'fixed';
+      message.style.top = '24px';
+      message.style.right = '24px';
+      message.style.zIndex = '1000';
+      
+      document.body.appendChild(message);
+      
+      setTimeout(() => {
+        message.remove();
+      }, 5000);
+    }
+    
+    // Initialize
+    init();
+  </script>
+  
+  <style>
+    .goal-btn {
+      padding: 8px 12px;
+      border: 1px solid #d1d5db;
+      background: white;
+      color: #374151;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .goal-btn.active {
+      background: #3b82f6;
+      color: white;
+      border-color: #3b82f6;
+    }
+  </style>
+</body>
+</html>
